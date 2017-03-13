@@ -2,5 +2,5 @@
 *
 # Except this file
 !.gitignore
-!extraOutputSubroutines.f
-!mechanism-rate-declarations.f
+!extraOutputSubroutines.f90
+!mechanism-rate-declarations.f90

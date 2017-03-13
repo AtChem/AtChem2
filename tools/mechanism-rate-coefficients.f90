@@ -16,12 +16,9 @@
   ro2 = ro2 + y(79)!CH3COCH2O2
   ro2 = ro2 + y(80)!C2H5CO3
   ro2 = ro2 + y(81)!HCOCO3
-   ! error RO2 not in mechanism: HOC2H4CO3 ;
+	 ! error RO2 not in mechanism: HOC2H4CO3 ;
 
 
-!*;
-!* Reaction definitions. ;
-!*;
   p(1) =  5.6D-34*N2*(TEMP/300)**-2.6*O2   !% 5.6D-34*N2*(TEMP/300)@-2.6*O2 : O = O3 ;
 
   p(2) =  6.0D-34*O2*(TEMP/300)**-2.6*O2   !% 6.0D-34*O2*(TEMP/300)@-2.6*O2 : O = O3 ;
@@ -668,9 +665,5 @@
 
   p(323) =  KBPAN   !% KBPAN : C3PAN1 = HOC2H4CO3 + NO2 ;
 
-  p(324) =  4.51D-12   !% 4.51D-12 : OH + C3PAN1 = HOCH2CHO + CO + NO2 ;
-
-!*;
-!* End of Subset.  No. of Species = 105, No. of Reactions = 324 ;
-
+  p(324) =  4.51D-12   !% 4.51D-12 : OH + C3PAN1 = HOCH2CHO + CO + NO2 ; 
 

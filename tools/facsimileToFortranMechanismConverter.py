@@ -88,10 +88,10 @@ for line in s:
                     reactantNums.append(speciesListCounter)
                     print "adding ", x.strip(), " to speciesList" 
 
-        #       print "SpeciesList = ",speciesList
-        #       print "reactantNums = ", reactantNums
+            # print "SpeciesList = ",speciesList
+            # print "reactantNums = ", reactantNums
         
-        #       WRITE THE REACTANTS TO mechanism.reactemp FILE
+            # WRITE THE REACTANTS TO mechanism.reactemp FILE
             for z in reactantNums:
                 temp = str(reactionNumber) + ' ' + str(z)
                 reac.write(temp)
@@ -121,10 +121,10 @@ for line in s:
                     productNums.append(speciesListCounter)
                     print "adding ", x.strip(), " to speciesList" 
                 i += 1
-        # print "SpeciesList = ",speciesList
-        # print "productNums = ", reactantNums
+            # print "SpeciesList = ",speciesList
+            # print "productNums = ", reactantNums
         
-        # WRITE THE PRODUCTS TO mechanism.prod FILE
+            # WRITE THE PRODUCTS TO mechanism.prod FILE
             for z in productNums:
                 temp = str(reactionNumber) + ' ' + str(z)
                 prod.write(temp)
@@ -188,21 +188,21 @@ for x in rateConstants:
         string = x.replace("@", "**")
         string = string.replace("<", "(")
         string = string.replace(">", ")")
-        st = "\tp(" + str(i) + ") = " + string + "  !" + s[counter]
+        st = "  p(" + str(i) + ") = " + string + "  !" + s[counter]
         mechRates.write(st)
         mechRates.write('\n')
         i += 1
         counter += 1
     
-#   for x in reactants[:]:
-#       x = x.strip()
-#       print x
-#   for x in products[:]:
-#       x = x.strip()
-#       print x
-        
-#   print reactants
-#   print products
+# for x in reactants[:]:
+#     x = x.strip()
+#     print x
+# for x in products[:]:
+#     x = x.strip()
+#     print x
+
+#     print reactants
+#     print products
 mechRates.close()
 
 fortranFile = open('./mechanism-rate-coefficients.f90', 'w')
@@ -257,7 +257,7 @@ for ro2i in ro2List:
 counter = 0
 speciesFound = 0
 # fortranFile.write(str(ro2List))
-fortranFile.write("\tro2 = 0.00e+00\n")
+fortranFile.write("  ro2 = 0.00e+00\n")
 for ro2i in ro2List:
     speciesFound = 0
     print "ro2i: " + ro2i
@@ -269,7 +269,7 @@ for ro2i in ro2List:
         counter += 1
 
     if speciesFound == 1:
-        st = "\tro2 = ro2 + y(" + str(speciesNumber) + ")!" + ro2i.strip() + "\n"
+        st = "  ro2 = ro2 + y(" + str(speciesNumber) + ")!" + ro2i.strip() + "\n"
         fortranFile.write(st)
     elif speciesFound == 0:
         fortranFile.write("\t ! error RO2 not in mechanism: ")

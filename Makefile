@@ -3,10 +3,11 @@
 .SUFFIXES:
 .SUFFIXES: .f .o
 
+CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
 # gfortran flags
 F77      =  gfortran 
 FFLAGS   =  -ffree-form -Wall 
-LIBDIR   = 
+LIBDIR   = /usr/lib/:$(CVODELIB)
 # Intel Fortran flags
 #F77 = ifort
 #FFLAGS   = -free -warn
@@ -32,11 +33,11 @@ svnversion:
 
 include makefile.local
 
-SRCS = atchem.f mechanism-rates.f dataStructures.f modelConfigFunctions.f zenith.f  temperature.f solverFunctions.f  inputFunctions.f  outputFunctions.f  interpolationFunctions.f  constraintFunctions.f  instantaneousRatesFunctions.f  facsmileFunctions.f  conversionFunctions.f 
+SRCS = atchem.f mechanism-rates.f dataStructures.f modelConfigFunctions.f zenith.f  temperature.f solverFunctions.f  inputFunctions.f  outputFunctions.f  interpolationFunctions.f  constraintFunctions.f  instantaneousRatesFunctions.f  facsimileFunctions.f  conversionFunctions.f 
 
-OBJS = atchem.o mechanism-rates.o dataStructures.o modelConfigFunctions.o zenith.o  temperature.o solverFunctions.o  inputFunctions.o  outputFunctions.o  interpolationFunctions.o  constraintFunctions.o  instantaneousRatesFunctions.o  facsmileFunctions.o  conversionFunctions.o 
+OBJS = atchem.o mechanism-rates.o dataStructures.o modelConfigFunctions.o zenith.o  temperature.o solverFunctions.o  inputFunctions.o  outputFunctions.o  interpolationFunctions.o  constraintFunctions.o  instantaneousRatesFunctions.o  facsimileFunctions.o  conversionFunctions.o 
 
-LDFLAGS  = -lm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
+LDFLAGS  = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 $(AOUT): svnversion $(OBJS) 
 	$(F77) -c $(FFLAGS) svn_version.f 
@@ -66,7 +67,7 @@ constraintFunctions.o : constraintFunctions.f dataStructures.o dataStructures.o
 conversionFunctions.o : conversionFunctions.f 
 dataStructures.o : dataStructures.f 
 errorHandling.o : errorHandling.f 
-facsmileFunctions.o : facsmileFunctions.f 
+facsimileFunctions.o : facsimileFunctions.f 
 inputFunctions.o : inputFunctions.f dataStructures.o dataStructures.o dataStructures.o dataStructures.o dataStructures.o 
 instantaneousRatesFunctions.o : instantaneousRatesFunctions.f 
 interpolationFunctions.o : interpolationFunctions.f dataStructures.o dataStructures.o 
@@ -77,3 +78,4 @@ solverFunctions.o : solverFunctions.f dataStructures.o dataStructures.o dataStru
 temperature.o : temperature.f 
 zenith.o : zenith.f dataStructures.o dataStructures.o 
 svn_version.o : svn_version.f
+

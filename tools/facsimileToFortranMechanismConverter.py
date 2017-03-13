@@ -280,53 +280,53 @@ for ro2i in ro2List:
 
 fortranFile.write('\n\n')		
 # DO NOY SUM
-NOYFac = open('./NOY.fac')
-
-
-NOY = NOYFac.readlines()
-counter = 0
-NOYList = []
-for n in NOY:
-	counter = counter + 1
-	if (counter==1):
-		strArray = n.split("=")
-		n = strArray[1]
-	
-	strArray = n.split("+")
-	
-	print strArray
-	for x in strArray[:]:
-		x = x.strip()
-		if(x==''):
-			print "doing nothing"
-		else:
-			print x
-			NOYList.append(x)
-
-# loop over NOY to get species numbers and write
-counter = 0
-speciesFound = 0
-fortranFile.write("\tNOY = 0.00e+00\n")
-for NOYi in NOYList:
-	speciesFound = 0
-	print "NOYi: " + NOYi
-	counter = 0
-	for y in speciesList:
-		if(NOYi.strip()==y.strip()):
-			speciesNumber = counter + 1
-			speciesFound = 1
-		counter = counter + 1
-		
-		
-	if (speciesFound == 1):
-		st = "\tNOY = NOY + y("+str(speciesNumber)+")!"+NOYi.strip() +"\n"
-		fortranFile.write(st)
-	elif (speciesFound == 0):
-		fortranFile.write("\t !error NOY not in mechanism: " )
-		fortranFile.write(NOYi)
-		fortranFile.write("\n")
-
-fortranFile.write('\n\n')	
+#NOYFac = open('./NOY.fac')
+#
+#
+#NOY = NOYFac.readlines()
+#counter = 0
+#NOYList = []
+#for n in NOY:
+#	counter = counter + 1
+#	if (counter==1):
+#		strArray = n.split("=")
+#		n = strArray[1]
+#	
+#	strArray = n.split("+")
+#	
+#	print strArray
+#	for x in strArray[:]:
+#		x = x.strip()
+#		if(x==''):
+#			print "doing nothing"
+#		else:
+#			print x
+#			NOYList.append(x)
+#
+## loop over NOY to get species numbers and write
+#counter = 0
+#speciesFound = 0
+#fortranFile.write("\tNOY = 0.00e+00\n")
+#for NOYi in NOYList:
+#	speciesFound = 0
+#	print "NOYi: " + NOYi
+#	counter = 0
+#	for y in speciesList:
+#		if(NOYi.strip()==y.strip()):
+#			speciesNumber = counter + 1
+#			speciesFound = 1
+#		counter = counter + 1
+#		
+#		
+#	if (speciesFound == 1):
+#		st = "\tNOY = NOY + y("+str(speciesNumber)+")!"+NOYi.strip() +"\n"
+#		fortranFile.write(st)
+#	elif (speciesFound == 0):
+#		fortranFile.write("\t !error NOY not in mechanism: " )
+#		fortranFile.write(NOYi)
+#		fortranFile.write("\n")
+#
+#fortranFile.write('\n\n')	
 # Combine mechanism rates and RO2 / NOY sum files
 rates = open('./mechanism-rate-coefficients.ftemp')
 rs = rates.readlines()

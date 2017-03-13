@@ -24,7 +24,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
     double precision:: RH,dilute,jfac,roofOpen
 
     ! delcare variables missed in MCM definition
-    double precision:: kroprim,krosec,kdec,kno3al,kapno,kapho2
+    double precision:: kroprim,krosec,kdec,kno3al,kapno,kapho2, K298CH3O2, KCH3O2
     double precision :: kro2ho2,kro2no, fa2,fa4
     integer :: i
     double precision :: dec

@@ -400,13 +400,13 @@ flush(6)
         call FCVSPGMR(0,1,lookBack,deltaMain,IER)
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
     else if(solverType.eq.2) then
+        call FCVSPGMR(1,1,lookBack,deltaMain,IER)
         call FCVBPINIT(neq,preconBandUpper,preconBandLower,IER)
         if(IER .ne. 0 ) then
             write(6,*) 'SUNDIALS_ERROR: preconditioner returned IER = ', IER ;
             call FCVFREE
             stop
         end if
-        call FCVBPSPGMR(1,1,lookBack,deltaMain,IER)
     ! DENSE SOLVER
     else if(solverType.eq.3) then
         ! make sure no Jacobian approximation is required

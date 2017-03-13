@@ -27,9 +27,9 @@ Run make makefile.local and set the macro LIBDIR to the location of the CVODE li
 * Converting FACSMILE to AtChem
 ******************************
 
-You need to provide a set of files defining your species, reactions, reaction rates and constraints. Internally, AtChem doesn't use FACSIMILE files, but its own format, consisting of several files, all to be placed in directory modelConfiguration. An apprpriate converter is supplied in web_tools/run_atchem. It is called facsmileToFortranMechanismConverter.py and it should be able to translate an aribtrary set of FACSIMILE reactions to the AtChem internal format. You have to run the converter in a directory containing file mechanism.fac (with the FACSIMILE reactions) and mechanism-rates.f (one of AtChem source files). Run the tranlator using the command
+You need to provide a set of files defining your species, reactions, reaction rates and constraints. Internally, AtChem doesn't use FACSIMILE files, but its own format, consisting of several files, all to be placed in directory modelConfiguration. An apprpriate converter is supplied in web_tools/run_atchem. It is called facsmileToFortranMechanismConverter.py and it should be able to translate an aribtrary set of FACSIMILE reactions to the AtChem internal format. You have to run the converter in a directory containing file mechanism.fac (with the FACSIMILE reactions) and mechanism-rates.f90 (one of AtChem source files). Run the tranlator using the command
     python [path-to-atchem-sources]/web_tools/run_atchem/facsmileToFortranMechanismConverter.py
-replacing [path-to-atchem-sources] by the appropriate path. This will create several files that need to be placed in modelConfiguration.f (thus overwriting the existing files with the default configuration).
+replacing [path-to-atchem-sources] by the appropriate path. This will create several files that need to be placed in modelConfiguration.f90 (thus overwriting the existing files with the default configuration).
 
 ******************************
 * Running AtChem

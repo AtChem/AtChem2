@@ -206,7 +206,7 @@ for x in rateConstants:
 # 	print products
 mechRates.close()
 
-fortranFile = open('./mechanism-rate-coefficients.f','w')
+fortranFile = open('./mechanism-rate-coefficients.f90','w')
 
 # DO RO2 SUM
 roFac = open('./RO2.fac')

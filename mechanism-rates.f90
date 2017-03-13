@@ -31,7 +31,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
     double precision::  photoRateAtT
     double precision:: blh, pressure, dummy
 	
-	include 'modelConfiguration/mechanism-rate-declarations.f'
+	include 'modelConfiguration/mechanism-rate-declarations.f90'
 	
     call ro2sum(ro2, y)
     dummy = y(1)
@@ -265,8 +265,8 @@ subroutine mechanism_rates(p,t,y,mnsp)
         j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     enddo
 
-    include 'modelConfiguration/mechanism-rate-coefficients.f'	
+    include 'modelConfiguration/mechanism-rate-coefficients.f90'	
     return
 end
 
-include 'modelConfiguration/extraOutputSubroutines.f'
+include 'modelConfiguration/extraOutputSubroutines.f90'

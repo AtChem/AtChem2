@@ -67,22 +67,21 @@ for line in s:
         
         if not reactantsList.isspace():
             # SEARCH FOR EXISTING REACTANTS
-            speciesNumFound = 0
             reactantNums = []
             for x in reactants[:]:
                 j = 0
-                speciesNumFound = 0
+                speciesNumFound = False
                 # reactantNums = []
                 for y in speciesList:
                     # print "j = ", j
                     # print "speciesList = ", speciesList
                     if y == x.strip():
                         reactantNums.append(j+1)
-                        speciesNumFound = 1
+                        speciesNumFound = True
                         print "found: ", y, "j = ", j
                     j += 1
                 
-                if speciesNumFound == 0:
+                if not speciesNumFound:
                     speciesList.append(x.strip())
                     speciesListCounter += 1
                     reactantNums.append(speciesListCounter)
@@ -100,22 +99,21 @@ for line in s:
         if not productsList.isspace():
             # SEARCH FOR EXISTING REACTANTS
             i = 0
-            speciesNumFound = 0
             productNums = []
             for x in products[:]:
                 j = 0
-                speciesNumFound = 0
+                speciesNumFound = False
                 # productNums = []
                 for y in speciesList:
                     # print "j = ", j
                     # print "speciesList = ", speciesList
                     if y == x.strip():
                         productNums.append(j+1)
-                        speciesNumFound = 1
+                        speciesNumFound = True
                         print "found: ", y, "j = ", j
                     j += 1
-                print "speciesNumFound = ", speciesNumFound
-                if speciesNumFound == 0:
+
+                if not speciesNumFound:
                     speciesList.append(x.strip())
                     speciesListCounter += 1
                     productNums.append(speciesListCounter)

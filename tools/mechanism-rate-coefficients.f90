@@ -1,4 +1,3 @@
-! HOC2H4CO3 ; is not in the MCM list of RO2 species. Should it be in the RO2 sum?
   ro2 = 0.00e+00
   ro2 = ro2 + y(26)!HOCH2CH2O2
   ro2 = ro2 + y(28)!BUT2OLO2
@@ -16,7 +15,7 @@
   ro2 = ro2 + y(79)!CH3COCH2O2
   ro2 = ro2 + y(80)!C2H5CO3
   ro2 = ro2 + y(81)!HCOCO3
-	 ! error RO2 not in mechanism: HOC2H4CO3 ;
+  ro2 = ro2 + y(101)!HOC2H4CO3
 
 
   p(1) =  5.6D-34*N2*(TEMP/300)**-2.6*O2   !% 5.6D-34*N2*(TEMP/300)@-2.6*O2 : O = O3 ;

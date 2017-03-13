@@ -218,10 +218,10 @@ for l in ro2:
         l = strArray[1]
     
     strArray = l.split('+')
-    
+
     print strArray
     for x in strArray[:]:
-        x = x.strip()
+        x = x.replace(';', '').strip()
         if x == '':
             print 'doing nothing'
         else:
@@ -245,9 +245,9 @@ for ro2i in ro2List:
             inFullList = 1
             
     if inFullList == 1:
-        print ro2i.strip() + ' found in ro2List'
+        print ro2i.strip() + ' found in RO2List'
     elif inFullList == 0:
-        print ro2i.strip() + ' not found in ro2List'
+        print ro2i.strip() + ' not found in RO2List'
         s = '! ' + ro2i.strip() + ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n'
         fortranFile.write(s)
 

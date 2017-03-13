@@ -56,13 +56,13 @@ subroutine readPhotoloysisConstants(ck,cl,cmm,cnn,str,tf)
     write(*,*) 'Looking for photolysis constants file...'
     open(13,file='modelConfiguration/photolysisConstants.config', status='old',  iostat=ierr)
     if(ierr .ne. 0) then
-        useConstantValues = 0	
-	    write(*,*) 'Photolysis constants file not found, trying photolysis rates file...'
-	    call readPhotoloysisRates(ck,cl,cmm,cnn,str,tf)
-		return
-	endif
+        useConstantValues = 0  
+      write(*,*) 'Photolysis constants file not found, trying photolysis rates file...'
+      call readPhotoloysisRates(ck,cl,cmm,cnn,str,tf)
+    return
+  endif
     useConstantValues = 1
-	write(*,*) 'Reading photolysis constants from file...'
+  write(*,*) 'Reading photolysis constants from file...'
     read(13,*)
     do i = 1, maxNrOfPhotoRates
         read(13,*,iostat=ierr) ck(i), cl(i),str(i)
@@ -156,7 +156,7 @@ subroutine readPhotoRates(maxNumberOfDataPoints)
     write(*,*) 'Finished reading names of constrained photolysis rates.'
     write(*,*) 'Number of constrained photorates:', numConPhotoRates
     if(numConPhotoRates .gt. 0)  write(*,*) 1, constrainedPhotoRates(1)
-    if(numConPhotoRates .gt. 2)	 write(*,*) '...'
+    if(numConPhotoRates .gt. 2)   write(*,*) '...'
     if(numConPhotoRates .gt. 1) write(*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
 
     ! GET NUMBERS OF CONSTRAINED PHOTO RATES
@@ -269,7 +269,7 @@ SUBROUTINE readConcentrations(concSpeciesName, concentration, concCounter,nsp)
     write(*,*)i-1,' ',concspeciesName(i-1),' ',concentration(i-1)
 
     write(*,*) 'Finished reading initial concentrations.'
-		    
+        
     concCounter = i - 1
 
     if(concCounter>nsp) then
@@ -352,14 +352,14 @@ subroutine readReactantsOfInterest(r,i)
     implicit none
 
     integer:: i,j, k, dataNumberOfPoints,neq, id
-	integer :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
+  integer :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
     character*13 string
     character*10:: speciesName(*), name
     CHARACTER(LEN=21)::  fileLocationPrefix
     CHARACTER(LEN=57):: fileLocation
-	DOUBLE PRECISION :: concAtT, t, value
-	DOUBLE PRECISION :: Y(*)
-	
+  DOUBLE PRECISION :: concAtT, t, value
+  DOUBLE PRECISION :: Y(*)
+  
     ! READ IN SPECIES TO BE CONSTRAINED
     write(*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
     open(5, file='modelConfiguration/constrainedSpecies.config',status = 'old') ! input file
@@ -371,48 +371,48 @@ subroutine readReactantsOfInterest(r,i)
         read(5,*)string
     end do
     close(5,status = 'keep')
-	countOfVarConSpecNames = i 
-	
+  countOfVarConSpecNames = i 
+  
     write(*,*) 'Finished counting the names of the species to be constrained.'
-	write(*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
-	
-	! read in numberOfFixedConstrainedSpecies
-	
-	write(*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
+  write(*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
+  
+  ! read in numberOfFixedConstrainedSpecies
+  
+  write(*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
     open(9, file='modelConfiguration/constrainedFixedSpecies.config',status = 'old') ! input file
-	i =0
+  i =0
     read(9,*)string
     do while (string.ne.'end')
         i = i + 1
         read(9,*)string
     end do
     close(9,status = 'keep')
-	write(*,*) 'Finished counting the names of fixed-concentration species'
+  write(*,*) 'Finished counting the names of fixed-concentration species'
     countOfFixConSpecNames = i 
-	write(*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
-	
-	countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
+  write(*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
+  
+  countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
     ALLOCATE (constrainedSpecies(countOfConNames),constrainedName(countOfConNames))
 
 
 
-   write(*,*) 'Reading in the names of variable constrained species...'		    
+   write(*,*) 'Reading in the names of variable constrained species...'        
     open(5, file='modelConfiguration/constrainedSpecies.config',status = 'old') ! input file
     i =0
     read(5,*),name
     do while (name .ne.'end')
-		call matchOneNameToNumber(speciesName,name,neq,id)
-		if(id.ne.0) then
-			i = i + 1
-			constrainedName(i)=name
-			constrainedSpecies(i)=id
+    call matchOneNameToNumber(speciesName,name,neq,id)
+    if(id.ne.0) then
+      i = i + 1
+      constrainedName(i)=name
+      constrainedSpecies(i)=id
         endif
         read(5,*),name
     end do
     close(5,status = 'keep')
-	numberOfVariableConstrainedSpecies = i
+  numberOfVariableConstrainedSpecies = i
     write(*,*) 'Finished reading the names of variable constrained species'
-	write(*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
+  write(*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
 
     write(*,*)'maxNumberOfDataPoints:',maxNumberOfDataPoints
     write(*,*) 'Allocating storage for variable constrained species...'
@@ -431,14 +431,14 @@ subroutine readReactantsOfInterest(r,i)
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
     write(*,*) 'Reading concentration data for constrained species...'
-	ALLOCATE(speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
+  ALLOCATE(speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
     do i =1,numberOfVariableConstrainedSpecies
         if(i.lt.3 .or. i.eq.numberOfVariableConstrainedSpecies) then
             write(*,*) constrainedName(i), '...'
         else
-			if (i.eq.2) write(*,*) '...'
+      if (i.eq.2) write(*,*) '...'
         endif
-		
+    
         fileLocation = fileLocationPrefix // trim(constrainedName(i))
         open(13,file=fileLocation, status='old')
 
@@ -453,43 +453,43 @@ subroutine readReactantsOfInterest(r,i)
             read(13,*)dataX(i,k),dataY(i,k) !,dataY2(i,k)
         enddo
         close(13,status = 'keep')
-		
+    
     enddo
 
-	
-	! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
-	ALLOCATE (dataFixedY(countOfFixConSpecNames))
-	write(*,*) 'Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...'
+  
+  ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
+  ALLOCATE (dataFixedY(countOfFixConSpecNames))
+  write(*,*) 'Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...'
     open(9, file='modelConfiguration/constrainedFixedSpecies.config',status = 'old') ! input file
-	id=0
-	j = 0
-	DO i = 1, countOfFixConSpecNames
-		read(9,*) name, value
-		call matchOneNameToNumber(speciesName,name,neq,id)
-		if(id.ne.0) then
-			j = j+1	
-			constrainedName(j+numberOfVariableConstrainedSpecies)=name
-			dataFixedY(j)=value
-			constrainedSpecies(j+numberOfVariableConstrainedSpecies)=id
-		endif
+  id=0
+  j = 0
+  DO i = 1, countOfFixConSpecNames
+    read(9,*) name, value
+    call matchOneNameToNumber(speciesName,name,neq,id)
+    if(id.ne.0) then
+      j = j+1  
+      constrainedName(j+numberOfVariableConstrainedSpecies)=name
+      dataFixedY(j)=value
+      constrainedSpecies(j+numberOfVariableConstrainedSpecies)=id
+    endif
     end do
     close(9,status = 'keep')
-	numberOfFixedConstrainedSpecies = j
-	write(94,*) 'Number of fixed constrained species:',numberOfFixedConstrainedSpecies
+  numberOfFixedConstrainedSpecies = j
+  write(94,*) 'Number of fixed constrained species:',numberOfFixedConstrainedSpecies
 
-	if(numberOfFixedConstrainedSpecies.gt.0) THEN
-		write(*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY(1)
-	ENDIF
+  if(numberOfFixedConstrainedSpecies.gt.0) THEN
+    write(*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY(1)
+  ENDIF
     if(numberOfFixedConstrainedSpecies.gt.2) write(*,*) '...'
     if(numberOfFixedConstrainedSpecies.gt.1) THEN
-		write(*,*) numberOfFixedConstrainedSpecies, &
-		constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
-		dataFixedY(numberOfFixedConstrainedSpecies)
-	ENDIF
-	write(*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
+    write(*,*) numberOfFixedConstrainedSpecies, &
+    constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
+    dataFixedY(numberOfFixedConstrainedSpecies)
+  ENDIF
+  write(*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
-	numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-	write(94,*) "Number of constrained species:",numberOfConstrainedSpecies
+  numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
+  write(94,*) "Number of constrained species:",numberOfConstrainedSpecies
 
     ! ERROR HANDLING
     if(numberOfConstrainedSpecies.ge.neq) then
@@ -505,21 +505,21 @@ subroutine readReactantsOfInterest(r,i)
 
     write(*,*)'Finished reading constrained species.'
 
-	! initialise concentrations of constrained species
-	write(*,*) 'Initialising concentrations of constrained species...'
+  ! initialise concentrations of constrained species
+  write(*,*) 'Initialising concentrations of constrained species...'
    do i=1, numberOfConstrainedSpecies
-		if (i<=numberOfVariableConstrainedSpecies) THEN
-			call    getConstrainedQuantAtT2D(t,datax,datay,datay2,speciesNumberOfPoints(i),concAtT,1,i, &
-				maxNumberOfDataPoints,numberOfVariableConstrainedSpecies)
-		ELSE
-			concAtT = dataFixedY(i-numberOfVariableConstrainedSpecies)
-		ENDIF
+    if (i<=numberOfVariableConstrainedSpecies) THEN
+      call    getConstrainedQuantAtT2D(t,datax,datay,datay2,speciesNumberOfPoints(i),concAtT,1,i, &
+        maxNumberOfDataPoints,numberOfVariableConstrainedSpecies)
+    ELSE
+      concAtT = dataFixedY(i-numberOfVariableConstrainedSpecies)
+    ENDIF
         constrainedConcs(i) = concAtT
-		call setConstrainedConc(i,concAtT)
-		y(constrainedSpecies(i))=concAtT
+    call setConstrainedConc(i,concAtT)
+    y(constrainedSpecies(i))=concAtT
     enddo
-	write(*,*) 'Finished initialising concentrations of constrained species.'
-	
+  write(*,*) 'Finished initialising concentrations of constrained species.'
+  
     return
 end
 
@@ -580,7 +580,7 @@ subroutine readEnvVar(maxNumberOfDataPoints)
 
     write(*,*) 'Finished reading environment variables.'
     write(*,*) 
-		    
+        
     ALLOCATE (envVarX(numEnvVars,maxNumberOfDataPoints))
     ALLOCATE (envVarY(numEnvVars,maxNumberOfDataPoints))
     ALLOCATE (envVarY2(numEnvVars,maxNumberOfDataPoints))

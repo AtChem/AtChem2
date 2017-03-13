@@ -2,7 +2,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
     USE photolysisRates
     USE zenithData1
     USE constraints
-	use envVars, only: ro2
+  use envVars, only: ro2
 
     implicit none
 
@@ -30,9 +30,9 @@ subroutine mechanism_rates(p,t,y,mnsp)
     double precision :: dec
     double precision::  photoRateAtT
     double precision:: blh, pressure, dummy
-	
-	include 'modelConfiguration/mechanism-rate-declarations.f90'
-	
+  
+  include 'modelConfiguration/mechanism-rate-declarations.f90'
+  
     call ro2sum(ro2, y)
     dummy = y(1)
 
@@ -40,7 +40,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
 
     call getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
 
-	call atmosphere(O2, N2,m)
+  call atmosphere(O2, N2,m)
    
 
 
@@ -256,7 +256,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
             endif
         else
             j(ck(i)) = cl(i)
-        endif		
+        endif    
     enddo
 
     do  i =1,numConPhotoRates
@@ -265,7 +265,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
         j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     enddo
 
-    include 'modelConfiguration/mechanism-rate-coefficients.f90'	
+    include 'modelConfiguration/mechanism-rate-coefficients.f90'  
     return
 end
 

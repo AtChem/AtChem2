@@ -3,7 +3,7 @@ subroutine outputEnvVar(t)
 
     integer:: i
     double precision:: t
-	if(ro2<0) ro2 = 0.0
+  if(ro2<0) ro2 = 0.0
     write(95,*) t, (currentEnvVarValues(i), i=1,numEnvVars), ro2
 
     return
@@ -169,11 +169,11 @@ end
 subroutine outputInteresting(t,yInt,yIntSize)
     double precision t,yInt(*)
     integer yIntSize,i
-	do i=1, yIntSize
-		if(yInt(i) < 0) then
-			yInt(i) = 0d0
-		endif
-	end do
+  do i=1, yIntSize
+    if(yInt(i) < 0) then
+      yInt(i) = 0d0
+    endif
+  end do
     write(91,'(100(x,e15.5e3))')t, (yInt(i), i=1,yIntSize)
     return
 end

@@ -24,7 +24,7 @@ MODULE envVars
 
     DOUBLE PRECISION, ALLOCATABLE::envVarX(:,:),envVarY(:,:),envVarY2(:,:)
     integer, ALLOCATABLE:: envVarNumberOfPoints(:)
-	DOUBLE PRECISION :: ro2
+  DOUBLE PRECISION :: ro2
 
 END MODULE envVars
 
@@ -33,7 +33,7 @@ MODULE constraints
     IMPLICIT NONE
     SAVE
     INTEGER :: numberOfConstrainedSpecies,  maxNumberOfDataPoints
-	INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
+  INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
     INTEGER, ALLOCATABLE ::      constrainedSpecies(:)
     REAL(8), ALLOCATABLE::    constrainedConcs(:)
 

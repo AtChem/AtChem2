@@ -9,7 +9,7 @@
 !  3rd Comment to test svn, local connection on chmlin10 - CM 20/11/2008
 
 PROGRAM ATCHEM
- 
+
     USE species
     USE constraints
     USE interpolationMethod
@@ -22,7 +22,7 @@ PROGRAM ATCHEM
     USE envVars
     USE SZACalcVars
     USE date
- 
+
     IMPLICIT NONE
 
 !    ********************************************************************************************************
@@ -89,12 +89,12 @@ PROGRAM ATCHEM
     character (len = 400) :: fmt
 
 !   DECLARATIONS FOR IR OUTPUT
-    CHARACTER(LEN=21)::  irfileLocationPrefix 
+    CHARACTER(LEN=21)::  irfileLocationPrefix
     CHARACTER(LEN=57):: irfileLocation
     integer::irOutStepSize
     character (len = 30)::strTime
     character(10) svn_revision
-		    
+
 !    MISC
     character(len=40) :: solverTypeName(3)
     character(len=40) :: InterpolationMethodName(4)
@@ -130,7 +130,7 @@ PROGRAM ATCHEM
     open(unit=93, file="modelOutput/jacobian.output")
     open(unit=94, file="modelOutput/errors.output")
     open(unit=95, file="modelOutput/envVar.output")
-	flush(6)
+  flush(6)
 
 !    OPEN FILES FOR INPUT
     open(5, file='modelConfiguration/mechanism.reac',status = 'old') ! input file
@@ -181,7 +181,7 @@ PROGRAM ATCHEM
     call readConcentrations(concSpeciesName, concentration, concCounter,np)
     call setConcentrations(y,speciesName,concSpeciesName,concentration,concCounter,neq)
     write(*,*)
-		    
+        
 !   READ IN PHOTOLYSIS RATE INFORMATION
     call readPhotoloysisConstants(ck,cl,cmm,cnn,photoRateNames,transmissionFactor)
     write(*,*)
@@ -262,7 +262,7 @@ PROGRAM ATCHEM
     write(*,*) 'Solver parameters:'
     write(*,*) 'atol: ', atol, 'rtol:', rtol, 'JacVApprox:', JvApprox, 'deltaJv:', deltaJv
     write(*,*) 'deltaMain:', deltaMain, 'lookBack:', lookBack, 'max_step:', max_step, &
-        'precondBandUpper:', preconBandUpper, 'preconBandLower', preconBandLower 
+        'precondBandUpper:', preconBandUpper, 'preconBandLower', preconBandLower
     write(*,*) 'solverType:', solverTypeName(solverType)
     write(*,*)
 
@@ -290,7 +290,7 @@ PROGRAM ATCHEM
     write(*,*) 'Model parameters:'
     write(*,*) 'number of steps: ', nout, 'step size (seconds):', tout
     write(*,*) 'species interpolation method: ', InterpolationMethodName(SpeciesIntMethod)
-    write(*,*) 'conditions interpolation method: ', InterpolationMethodName(conditionsIntMethod)		    
+    write(*,*) 'conditions interpolation method: ', InterpolationMethodName(conditionsIntMethod)
     write(*,*) 'dec interpolation method: ', InterpolationMethodName(decIntMethod)
     write(*,*) 'maximum number of data points in constraint file:', maxNumberOfDataPoints
     write(*,*) 'maximum number of constrained species:', numberOfConstrainedSpecies
@@ -352,8 +352,8 @@ flush(6)
 
     write(*,*)
 !test
-	call getConcForSpecInt(y,yInt,SORNumber,SORNumberSize,neq+numberOfConstrainedSpecies)
-	call outputInteresting(t,yInt,SORNumberSize)
+  call getConcForSpecInt(y,yInt,SORNumber,SORNumberSize,neq+numberOfConstrainedSpecies)
+  call outputInteresting(t,yInt,SORNumberSize)
 
     call removeConstrainedSpeciesFromProbSpec(y,z,numberOfConstrainedSpecies,constrainedSpecies,neq)
 
@@ -441,7 +441,7 @@ flush(6)
 
     ! check JFac data consistency:
     call test_jfac()
-			
+
 !    ********************************************************************************************************
 !    RUN MODEL
 !    ********************************************************************************************************
@@ -450,9 +450,9 @@ flush(6)
         ! GET CONCENTRATIONS FOR SOLVED SPECIES
         write(49,*)t,secx,cosx,lat,longt,lha,sinld,cosld
         CALL FCVODE(TOUT, T, Z, ITASK, IER)
-		if (IER.ne.0) then
-			WRITE (*,*)'IER POST FCVODE = ', IER
-		endif 
+    if (IER.ne.0) then
+      WRITE (*,*)'IER POST FCVODE = ', IER
+    endif
 flush(6)
         ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
         do i=1,numberOfConstrainedSpecies
@@ -464,12 +464,12 @@ flush(6)
 
         ! OUTPUT ON SCREEN
         fmt = "('At t = ', E12.4, '   y = ', 3E14.6)"
-		! printing concentration of two first species - seems unnecessary at the moment
+    ! printing concentration of two first species - seems unnecessary at the moment
         ! WRITE(6,fmt) T, Y(1), Y(2)
 
         ! OUTPUT RATES OF PRODIUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
         time = int(t)
-		elapsed = int(t-modelStartTime)
+    elapsed = int(t-modelStartTime)
         if (mod(elapsed,ratesOutputStepSize).EQ.0) then
             call outputRates(prodIntSpecies,t,productionRates,1,np,rateOfProdNS,prodLossArrayLen,rateOfLossNS, prodArrayLen, &
                 lossArrayLen ,speciesName)
@@ -485,7 +485,7 @@ flush(6)
         endif
 
         call getConcForSpecInt(y,yInt,SORNumber,SORNumberSize,neq+numberOfConstrainedSpecies)
-		call outputInteresting(t,yInt,SORNumberSize)
+    call outputInteresting(t,yInt,SORNumberSize)
         call outputPhotolysisRates(j,t)
 
 
@@ -511,11 +511,11 @@ flush(6)
         write(22,*)t,' ',ROUT(3),' ',ROUT(2)
 
         !OUTPUT ENVVAR VALUES
-		call ro2sum(ro2, y)
+    call ro2sum(ro2, y)
         call outputEnvVar(t)
 
         ! CALCULATE AND OUTPUT RUNTIME
-		! not using timing at the moment
+    ! not using timing at the moment
         ! call system_clock(current, rate)
         ! currentSeconds = (current - runStart) / rate
         ! stepTime = currentSeconds - previousSeconds
@@ -571,8 +571,8 @@ flush(6)
 !   deallocate all
     write(*,*) 'Deallocating memory.'
 !   deallocate CVODE internal data
-	
-	CALL FCVFREE
+
+  CALL FCVFREE
     DEALLOCATE (y, speciesName, concSpeciesName,speciesNumber,z,concentration)
     DEALLOCATE (prodIntSpecies,returnArray,reacIntSpecies)
     DEALLOCATE (SORNumber, yInt, prodIntName,reacIntName,speciesOutputRequired)

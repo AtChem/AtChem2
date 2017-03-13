@@ -9,7 +9,7 @@ subroutine calcDateParameters()
     enddo
 
     totalDays = totalDays + day -1
-	fractionYear = totalDays
+  fractionYear = totalDays
     fractionYear = fractionYear / 365
     secYear = 3.6525d+02*2.40d+01*3.60d+03
     return
@@ -61,7 +61,7 @@ subroutine matchNameToNumber(speciesName,speciesList,listSize,neq,returnArray,re
         ! substitute empty strings for invalid species 
         if (match.eq.0) then
             speciesList(i)=''
-        endif	
+        endif  
     enddo
     return
 end
@@ -70,14 +70,14 @@ subroutine matchOneNameToNumber(speciesName,oneSpecies,neq,id)
     character*10 oneSpecies,speciesName(*),m
     integer j, neq
 
-	id=0
-	do j=1,neq
-		m = speciesName(j)
-		if (m.eq.oneSpecies) then
-			id=j
-			return
-		endif
-	enddo
+  id=0
+  do j=1,neq
+    m = speciesName(j)
+    if (m.eq.oneSpecies) then
+      id=j
+      return
+    endif
+  enddo
 end
 
 

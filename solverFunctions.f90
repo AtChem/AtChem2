@@ -57,14 +57,14 @@ SUBROUTINE FCVFUN(T, Y, YDOT, IPAR, RPAR, IER)
     ALLOCATE(dy(np), z(np))
 
     do i=1, numberOfConstrainedSpecies
-		if (i<=numberOfVariableConstrainedSpecies) THEN
-			call    getConstrainedQuantAtT2D(t,datax,datay,datay2,speciesNumberOfPoints(i),concAtT, &
-				1,i,maxNumberOfDataPoints,numberOfVariableConstrainedSpecies)
-		ELSE
-			concAtT = dataFixedY(i-numberOfVariableConstrainedSpecies)
-		ENDIF
+    if (i<=numberOfVariableConstrainedSpecies) THEN
+      call    getConstrainedQuantAtT2D(t,datax,datay,datay2,speciesNumberOfPoints(i),concAtT, &
+        1,i,maxNumberOfDataPoints,numberOfVariableConstrainedSpecies)
+    ELSE
+      concAtT = dataFixedY(i-numberOfVariableConstrainedSpecies)
+    ENDIF
         constrainedConcs(i) = concAtT
-		call setConstrainedConc(i,concAtT)
+    call setConstrainedConc(i,concAtT)
 
     enddo
 

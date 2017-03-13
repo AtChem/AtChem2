@@ -136,7 +136,7 @@ st = str(size) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions
 reac.write(st)
 reac.close()
 
-# REARRANGE MECHANISM.REAC FORMAT TO MAKE IT READABLE BY THE MODEL
+# Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model
 reac1 = open('./mechanism.reactemp')
 reacFin = open('./mechanism.reac', 'w')
 st = reac1.readlines()
@@ -239,37 +239,34 @@ for r in fRO2l:
 for ro2i in ro2List:
     print 'looping over inputted ro2s'
     print ro2List
-    inFullList = 0
+    inFullList = False
     for ro2j in fRO2l:
         if ro2i.strip() == ro2j.strip():
-            inFullList = 1
+            inFullList = True
             
-    if inFullList == 1:
+    if inFullList:
         print ro2i.strip() + ' found in RO2List'
-    elif inFullList == 0:
+    else:
         print ro2i.strip() + ' not found in RO2List'
         s = '! ' + ro2i.strip() + ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n'
         fortranFile.write(s)
 
 # loop over RO2 to get species numbers and write
 counter = 0
-speciesFound = 0
-# fortranFile.write(str(ro2List))
 fortranFile.write('  ro2 = 0.00e+00\n')
 for ro2i in ro2List:
-    speciesFound = 0
     print 'ro2i: ' + ro2i
     counter = 0
     for y in speciesList:
         if ro2i.strip() == y.strip():
             speciesNumber = counter + 1
-            speciesFound = 1
+            st = '  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2i.strip() + '\n'
+            fortranFile.write(st)
+            # Exit loop early if species found
+            break
         counter += 1
-
-    if speciesFound == 1:
-        st = '  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2i.strip() + '\n'
-        fortranFile.write(st)
-    elif speciesFound == 0:
+    # This code only executes if the break is NOT called, i.e. if the loop exits cleanly
+    else:
         fortranFile.write('\t ! error RO2 not in mechanism: ')
         fortranFile.write(ro2i)
         fortranFile.write('\n')

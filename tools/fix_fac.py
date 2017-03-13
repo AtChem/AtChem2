@@ -75,7 +75,12 @@ def compare_files_for_subset(master_filename, compare_filename):
 
 def main():
     # Pass argument from command line as path to file.
-    fix_fac_file(sys.argv[1])
+    if (len(sys.argv) > 1):
+        fix_fac_file(sys.argv[1])
+    else:
+        print '******************************'
+        print "Please pass a filename as argument. This script will then fix this file to remove incorrect newlines."
+        print '******************************'
     return
 
 if __name__ == '__main__':

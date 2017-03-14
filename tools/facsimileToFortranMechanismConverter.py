@@ -1,13 +1,13 @@
 import re
 import os
 
-f = open('./mechanism.fac')
-reac = open('./mechanism.reactemp', 'w')
-prod = open('./mechanism.prod', 'w')
-species = open('./mechanism.species', 'w')
-mechRates = open('./mechanism-rate-coefficients.ftemp', 'w')
+input_file = open('./mechanism.fac')
+reac_temp_file = open('./mechanism.reactemp', 'w')
+prod_file = open('./mechanism.prod', 'w')
+species_file = open('./mechanism.species', 'w')
+mech_rates_temp_file = open('./mechanism-rate-coefficients.ftemp', 'w')
 
-s = f.readlines()
+s = input_file.readlines()
 print s
 
 speciesList = []
@@ -43,11 +43,9 @@ for line in s:
         print rateConstant
 
         # Process the reaction: split by = into reactants and products
-        reaction = a[1]
+        print 'reaction = ', a[1]
 
-        print 'reaction = ', reaction
-
-        reaction_parts = re.split('=', reaction)
+        reaction_parts = re.split('=', a[1])
         print reaction_parts
 
         reactantsList = reaction_parts[0]
@@ -88,7 +86,7 @@ for line in s:
 
             # Write the reactants to mechanism.reactemp
             for z in reactantNums:
-                reac.write(str(reactionNumber) + ' ' + str(z) + '\n')
+                reac_temp_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
 
         if not productsList.isspace():
             # Compare each product against known species.
@@ -114,61 +112,59 @@ for line in s:
 
             # Write the products to mechanism.prod
             for z in productNums:
-                prod.write(str(reactionNumber) + ' ' + str(z) + '\n')
+                prod_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
 
 # Mark end of file with zeros
-reac.write('0\t0\t0\t0 \n')
-prod.write('0\t0\t0\t0')
+reac_temp_file.write('0\t0\t0\t0 \n')
+prod_file.write('0\t0\t0\t0')
 # Output number of species and number of reactions
-st = str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n'
-reac.write(st)
-reac.close()
+reac_temp_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+reac_temp_file.close()
 
 # Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model (move the last line to
 # the first line).
-reac1 = open('./mechanism.reactemp')
-reacFin = open('./mechanism.reac', 'w')
-st = reac1.readlines()
+reac_temp_file = open('./mechanism.reactemp')
+reac_file = open('./mechanism.reac', 'w')
+st = reac_temp_file.readlines()
 # Write last line
-reacFin.write(st[len(st) - 1])
+reac_file.write(st[len(st) - 1])
 # Write all other lines
 for line in st[:-1]:
-    reacFin.write(line)
+    reac_file.write(line)
 
-reac.close()
-reacFin.close()
+reac_temp_file.close()
+reac_file.close()
 
 # Write speciesList to mechanism.species, indexed by (1 to len(speciesList))
 for i, x in zip(range(1, len(speciesList)+1), speciesList):
-    species.write(str(i) + ' ' + str(x) + '\n')
+    species_file.write(str(i) + ' ' + str(x) + '\n')
 
 # Write out rate coefficients
 i = 1
 for rate_counter, x in zip(range(len(s)), rateConstants):
     if (re.match('!', x) is not None) | (x.isspace()):
-        mechRates.write(str(x))
+        mech_rates_temp_file.write(str(x))
     else:
         string = x.replace('@', '**')
         string = string.replace('<', '(')
         string = string.replace('>', ')')
-        mechRates.write('  p(' + str(i) + ') = ' + string + '  !' + s[rate_counter] + '\n')
+        mech_rates_temp_file.write('  p(' + str(i) + ') = ' + string + '  !' + s[rate_counter] + '\n')
         i += 1
 
-mechRates.close()
+mech_rates_temp_file.close()
 
-fortranFile = open('./mechanism-rate-coefficients.f90', 'w')
+mech_rates_file = open('./mechanism-rate-coefficients.f90', 'w')
 
 # Read in RO2 data, which is arrange as 'RO2 = blah + blah + blah \n + blah + blah ;'
-roFac = open('./RO2.fac')
-ro2 = roFac.readlines()
+ro2_fac_file = open('./RO2.fac')
+ro2_input = ro2_fac_file.readlines()
 
 ro2List = []
-for l in ro2:
+for l in ro2_input:
     # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
     # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
-    l2 = l.split('=')[-1]
-    # Then split by +
-    strArray = l2.split('+')
+    # Then split by +.
+    strArray = l.split('=')[-1].split('+')
 
     print strArray
     # For each element, remove any semi-colons, strip, and then append if non-empty.
@@ -181,10 +177,10 @@ for l in ro2:
             ro2List.append(x)
 
 # check RO2s are in RO2 list
-fullRO2List = open('./RO2List')
-fRO2l = fullRO2List.readlines()
+RO2List_file = open('./RO2List')
+RO2List_input = RO2List_file.readlines()
 
-for r in fRO2l:
+for r in RO2List_input:
     r = r.strip()
     print r
 
@@ -192,43 +188,43 @@ for r in fRO2l:
 # mechanism-rate-coefficients.f90 for each errant species.
 print 'looping over inputted ro2s'
 print 'The RO2List is: ', ro2List
-for ro2i in ro2List:
-    for ro2j in fRO2l:
-        if ro2i.strip() == ro2j.strip():
-            print ro2i.strip() + ' found in RO2List'
+for ro2List_i in ro2List:
+    for ro2List_input_j in RO2List_input:
+        if ro2List_i.strip() == ro2List_input_j.strip():
+            print ro2List_i.strip() + ' found in RO2List'
             break
     # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the species being
     # found in the RO2 list
     else:
-        print ' ****** Warning: ' + ro2i.strip() + ' NOT found in RO2List ****** '
-        fortranFile.write('! ' + ro2i.strip() + ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
+        print ' ****** Warning: ' + ro2List_i.strip() + ' NOT found in RO2List ****** '
+        mech_rates_file.write('! ' + ro2List_i.strip() +
+                              ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
 
 # loop over RO2 and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the RO2
-fortranFile.write('  ro2 = 0.00e+00\n')
-for ro2i in ro2List:
-    print 'ro2i: ' + ro2i
+mech_rates_file.write('  ro2 = 0.00e+00\n')
+for ro2List_i in ro2List:
+    print 'ro2List_i: ' + ro2List_i
     for speciesNumber, y in zip(range(1, len(speciesList)+1), speciesList):
-        if ro2i.strip() == y.strip():
-            fortranFile.write('  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2i.strip() + '\n')
+        if ro2List_i.strip() == y.strip():
+            mech_rates_file.write('  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2List_i.strip() + '\n')
             # Exit loop early if species found
             break
     # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the RO2 being
     # found in the species list
     else:
-        fortranFile.write('\t ! error RO2 not in mechanism: ' + ro2i + '\n')
+        mech_rates_file.write('\t ! error RO2 not in mechanism: ' + ro2List_i + '\n')
 
-fortranFile.write('\n\n')
+mech_rates_file.write('\n\n')
 # Read in NOY data, which is arrange as 'NOY = blah + blah + blah \n + blah + blah ;'
-# NOYFac = open('./NOY.fac')
-# NOY = NOYFac.readlines()
+# NOY_fac_file = open('./NOY.fac')
+# NOY_input = NOY_fac_file.readlines()
 #
 # NOYList = []
-# for n in NOY:
+# for n in NOY_input:
 # # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
 # # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
-#   n2 = n.split('=')[-1]
 # # Then split by +
-#	strArray = n.split('+')
+#   strArray = n.split('=')[-1].split('+')
 #
 #	print strArray
 # # For each element, remove any semi-colons, strip, and then append if non-empty.
@@ -241,26 +237,26 @@ fortranFile.write('\n\n')
 #			NOYList.append(x)
 #
 # # loop over NOY and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the NOY
-# fortranFile.write('\tNOY = 0.00e+00\n')
-# for NOYi in NOYList:
-#	print 'NOYi: ' + NOYi
+# mech_rates_file.write('\tNOY = 0.00e+00\n')
+# for NOYList_i in NOYList:
+#	print 'NOYList_i: ' + NOYList_i
 #	for speciesNumber, y in zip(range(1, len(speciesList)+1), speciesList):
-#		if NOYi.strip() == y.strip():
-#			fortranFile.write('  NOY = NOY + y(' + str(speciesNumber) + ')!' + NOYi.strip() + '\n')
+#		if NOYList_i.strip() == y.strip():
+#			mech_rates_file.write('  NOY = NOY + y(' + str(speciesNumber) + ')!' + NOYList_i.strip() + '\n')
 #			# Exit loop early if species found
 #		    break
 # # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the NOY being
 # # found in the species list
 #   else:
-#		fortranFile.write('\t !error NOY not in mechanism: ' + NOYi + '\n')
+#		mech_rates_file.write('\t !error NOY not in mechanism: ' + NOYList_i + '\n')
 #
-# fortranFile.write('\n\n')
+# mech_rates_file.write('\n\n')
 # # Combine mechanism rates and RO2 / NOY sum files
 rates = open('./mechanism-rate-coefficients.ftemp')
 rs = rates.readlines()
 
 for r in rs:
-    fortranFile.write(r)
+    mech_rates_file.write(r)
 
 os.remove('./mechanism.reactemp')
 os.remove('./mechanism-rate-coefficients.ftemp')

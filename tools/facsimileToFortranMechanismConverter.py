@@ -1,5 +1,8 @@
 import re
 import os
+import fix_mechanism_fac
+
+fix_mechanism_fac.fix_fac_file('./mechanism.fac')
 
 input_file = open('./mechanism.fac')
 reac_temp_file = open('./mechanism.reactemp', 'w')

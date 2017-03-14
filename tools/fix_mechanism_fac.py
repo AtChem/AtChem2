@@ -1,4 +1,6 @@
-# This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
+# This file was written by Sam Cox, University of Leicester, 2017
+
+#  This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
 # Call with a single parameter containing the file to fix.
 import sys
 import re
@@ -43,6 +45,7 @@ def fix_fac_file(filename):
     # stretching over two full lines, but should probably then give an error as output.
     # All the heavy lifting is done by fix_fac_contents - here we just provide a simple wrapper to write back to the
     # same file.
+    print 'Running fix_fac_file on ' + str(filename)
     contents = fix_fac_contents(filename)
     contents = [item + '\n' for item in contents]
     with open(filename, 'w') as file_open:
@@ -75,7 +78,7 @@ def compare_files_for_subset(master_filename, compare_filename):
 
 def main():
     # Pass argument from command line as path to file.
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         fix_fac_file(sys.argv[1])
     else:
         print '******************************'

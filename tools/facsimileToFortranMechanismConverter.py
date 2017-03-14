@@ -79,8 +79,8 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                             print 'found: ', y, 'j = ', j
                             break
                         j += 1
-                    # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the
-                    # reactant being found in the known species
+                    # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
+                    # the reactant being found in the known species
                     else:
                         # Add reactant to speciesList, and add this number to
                         # reactantNums to record this reaction.
@@ -105,8 +105,8 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                             print 'found: ', y, 'j = ', j
                             break
                         j += 1
-                    # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the
-                    # product being found in the known species
+                    # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
+                    # the product being found in the known species
                     else:
                         # Add product to speciesList, add this number to
                         # productNums to record this reaction.
@@ -192,8 +192,8 @@ with open('./mechanism-rate-coefficients.f90', 'w') as mech_rates_file:
             if ro2List_i.strip() == ro2List_input_j.strip():
                 print ro2List_i.strip() + ' found in RO2List'
                 break
-        # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the species being
-        # found in the RO2 list
+        # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the species
+        # being found in the RO2 list
         else:
             print ' ****** Warning: ' + ro2List_i.strip() + ' NOT found in RO2List ****** '
             mech_rates_file.write('! ' + ro2List_i.strip() +

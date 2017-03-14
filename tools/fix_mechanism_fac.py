@@ -1,9 +1,70 @@
 # This file was written by Sam Cox, University of Leicester, 2017
 
-#  This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
+# This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
 # Call with a single parameter containing the file to fix.
 import sys
 import re
+
+
+def fix_fac_full_contents(filename):
+    # Given a filename, return the contents of the file, but with incorrect newline characters removed, and the affected
+    # lines concatenated correctly. This will probably fail if a line is REALLY long, stretching over two full lines,
+    # but should probably then give an error as output.
+
+    # Using splitlines rather than readlines(), we take out the errant carriage returns, and for any line with such on
+    # it, we return to members of the list.
+    with open(filename, 'r') as file_open:
+        contents = file_open.read().splitlines()
+    # print contents
+    orig_contents_len = len(contents)
+    print str(filename) + ': file read in ' + str(orig_contents_len) + ' items'
+    contents_count = 0
+    # This variable will hold the indices to be deleted once their contents have been concatenated onto the
+    # previous element.
+    to_delete = []
+    # Firstly wait until we reach a line containing 'Reaction definitions'.
+    # Then ignore comment lines. Then correct the lines which don't start with a % - they should be concatenated
+    # onto the previous entry
+    in_reaction_definition_section = False
+    for i in range(len(contents)):
+        if not in_reaction_definition_section:
+            # Check to see whether we are entering the 'Reaction definitions' section
+            if 'Reaction definitions.' in contents[i]:
+                in_reaction_definition_section = True
+        # Only do other checks if we've reached 'Reaction definitions' sections
+        else:
+            if re.match(r'\*', contents[i]):
+                pass
+            else:
+                if not re.match(r'%', contents[i]):
+                    # print 'fail'
+                    # print contents[i - 1], 'XX', contents[i], 'XX', contents[i + 1]
+                    contents[i - 1] += ' ' + contents[i]
+                    # print contents[i - 1]
+                    contents_count += 1
+                    to_delete.append(i)
+
+    print str(contents_count) + ' corrections made - now removing old'
+    # Remove old elements which have now been concatenated onto previous
+    for i in reversed(to_delete):
+        del contents[i]
+    assert orig_contents_len == contents_count + len(contents), \
+        str(filename) + ': file is probably too messed up with carriage returns for this simple script to fix.'
+    return contents
+
+
+def fix_fac_full_file(filename):
+    # Given a filename, overwrite the contents of the file with the same contents, but with incorrect newline characters
+    # removed, and the affected lines concatenated correctly. This will probably fail if a line is REALLY long,
+    # stretching over two full lines, but should probably then give an error as output.
+    # All the heavy lifting is done by fix_fac_contents - here we just provide a simple wrapper to write back to the
+    # same file.
+    print 'Running fix_fac_file on ' + str(filename)
+    contents = fix_fac_full_contents(filename)
+    contents = [item + '\n' for item in contents]
+    with open(filename, 'w') as file_open:
+        file_open.writelines(contents)
+    return
 
 
 def fix_fac_reaction_definition_contents(filename):
@@ -79,7 +140,7 @@ def compare_files_for_subset(master_filename, compare_filename):
 def main():
     # Pass argument from command line as path to file.
     if len(sys.argv) > 1:
-        fix_fac_reaction_definition_file(sys.argv[1])
+        fix_fac_full_contents(sys.argv[1])
     else:
         print '******************************'
         print "Please pass a filename as argument. This script will then fix this file to remove incorrect newlines."

@@ -136,7 +136,7 @@ for line in s:
                 prod.write(temp)
                 prod.write('\n')
 
-# MARK END OF FILE WITH ZEROS
+# Mark end of file with zeros
 reac.write('0\t0\t0\t0 \n')
 prod.write('0\t0\t0\t0')
 # Output number of species and number of reactions
@@ -157,18 +157,6 @@ for line in st[:-1]:
 
 reac.close()
 reacFin.close()
-# reac.seek(0)
-# l = reac.readlines()
-# # # print l
-# st = str(len(speciesList))+' '+str(reactionNumber) + ' '
-# # # print st
-# # # reac.seek(0)
-# # # reac.write(st)
-# reac1 = open('./mech.reac1','w')
-# reac1.write(st)
-# for lines in l:
-#	 reac1.write(lines)
-
 
 # Write speciesList to mechanism.species, indexed by (1 to speciesListCounter)
 for i, x in zip(range(1, speciesListCounter+1), speciesList):
@@ -190,22 +178,21 @@ mechRates.close()
 
 fortranFile = open('./mechanism-rate-coefficients.f90', 'w')
 
-# DO RO2 SUM
+# Read in RO2 data, which is arrange as 'RO2 = blah + blah + blah \n + blah + blah ;'
 roFac = open('./RO2.fac')
-
 ro2 = roFac.readlines()
-counter = 0
+
 ro2List = []
 for l in ro2:
-    counter += 1
-    if counter == 1:
-        strArray = l.split('=')
-        l = strArray[1]
-
-    strArray = l.split('+')
+    # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
+    # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
+    l2 = l.split('=')[-1]
+    # Then split by +
+    strArray = l2.split('+')
 
     print strArray
-    for x in strArray[:]:
+    # For each element, remove any semi-colons, strip, and then append if non-empty.
+    for x in strArray:
         x = x.replace(';', '').strip()
         if x == '':
             print 'doing nothing'

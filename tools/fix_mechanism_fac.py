@@ -6,7 +6,7 @@ import sys
 import re
 
 
-def fix_fac_contents(filename):
+def fix_fac_reaction_definition_contents(filename):
     # Given a filename, return the contents of the file, but with incorrect newline characters removed, and the affected
     # lines concatenated correctly. This will probably fail if a line is REALLY long, stretching over two full lines,
     # but should probably then give an error as output.
@@ -39,14 +39,14 @@ def fix_fac_contents(filename):
     return contents
 
 
-def fix_fac_file(filename):
+def fix_fac_reaction_definition_file(filename):
     # Given a filename, overwrite the contents of the file with the same contents, but with incorrect newline characters
     # removed, and the affected lines concatenated correctly. This will probably fail if a line is REALLY long,
     # stretching over two full lines, but should probably then give an error as output.
     # All the heavy lifting is done by fix_fac_contents - here we just provide a simple wrapper to write back to the
     # same file.
     print 'Running fix_fac_file on ' + str(filename)
-    contents = fix_fac_contents(filename)
+    contents = fix_fac_reaction_definition_contents(filename)
     contents = [item + '\n' for item in contents]
     with open(filename, 'w') as file_open:
         file_open.writelines(contents)
@@ -57,8 +57,8 @@ def compare_files_for_subset(master_filename, compare_filename):
     # Given two FACSIMILE format files, output whether or not the reactions contained in compare_filename are a subset
     # of the reactions defined in master_filename. This includes a step to fix both files in the case of incorrect
     # newlines, but this is not saved back to file.
-    m = fix_fac_contents(master_filename)
-    c = fix_fac_contents(compare_filename)
+    m = fix_fac_reaction_definition_contents(master_filename)
+    c = fix_fac_reaction_definition_contents(compare_filename)
 
     # Check per element whether c is a subset of m. Could use issubset() but I'm not sure of that re repetitions etc.
     print len(m)
@@ -79,7 +79,7 @@ def compare_files_for_subset(master_filename, compare_filename):
 def main():
     # Pass argument from command line as path to file.
     if len(sys.argv) > 1:
-        fix_fac_file(sys.argv[1])
+        fix_fac_reaction_definition_file(sys.argv[1])
     else:
         print '******************************'
         print "Please pass a filename as argument. This script will then fix this file to remove incorrect newlines."

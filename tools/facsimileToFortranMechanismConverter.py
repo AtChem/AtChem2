@@ -5,7 +5,7 @@ import os
 import fix_mechanism_fac
 
 # Fix the input file of any errant newlines
-fix_mechanism_fac.fix_fac_file('./mechanism.fac')
+fix_mechanism_fac.fix_fac_reaction_definition_file('./mechanism.fac')
 
 # Read in the input file
 with open('./mechanism.fac') as input_file:

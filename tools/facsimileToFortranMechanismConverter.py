@@ -218,52 +218,41 @@ for ro2i in ro2List:
         fortranFile.write('\t ! error RO2 not in mechanism: ' + ro2i + '\n')
 
 fortranFile.write('\n\n')
-# # DO NOY SUM
+# Read in NOY data, which is arrange as 'NOY = blah + blah + blah \n + blah + blah ;'
 # NOYFac = open('./NOY.fac')
-#
-#
 # NOY = NOYFac.readlines()
-# counter = 0
+#
 # NOYList = []
 # for n in NOY:
-#	counter = counter + 1
-#	if counter == 1:
-#		strArray = n.split('=')
-#		n = strArray[1]
-#
+# # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
+# # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
+#   n2 = n.split('=')[-1]
+# # Then split by +
 #	strArray = n.split('+')
 #
 #	print strArray
-#	for x in strArray[:]:
-#		x = x.strip()
+# # For each element, remove any semi-colons, strip, and then append if non-empty.
+#	for x in strArray:
+#		x = x.replace(';', '').strip()
 #		if x == '':
 #			print 'doing nothing'
 #		else:
 #			print x
 #			NOYList.append(x)
 #
-# # loop over NOY to get species numbers and write
-# counter = 0
-# speciesFound = 0
+# # loop over NOY and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the NOY
 # fortranFile.write('\tNOY = 0.00e+00\n')
 # for NOYi in NOYList:
-#	speciesFound = 0
 #	print 'NOYi: ' + NOYi
-#	counter = 0
-#	for y in speciesList:
+#	for speciesNumber, y in zip(range(1, len(speciesList)+1), speciesList):
 #		if NOYi.strip() == y.strip():
-#			speciesNumber = counter + 1
-#			speciesFound = 1
-#		counter = counter + 1
-#
-#
-#	if (speciesFound == 1):
-#		st = '\tNOY = NOY + y(' + str(speciesNumber) + ')!' + NOYi.strip() + '\n'
-#		fortranFile.write(st)
-#	elif (speciesFound == 0):
-#		fortranFile.write('\t !error NOY not in mechanism: ')
-#		fortranFile.write(NOYi)
-#		fortranFile.write('\n')
+#			fortranFile.write('  NOY = NOY + y(' + str(speciesNumber) + ')!' + NOYi.strip() + '\n')
+#			# Exit loop early if species found
+#		    break
+# # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the NOY being
+# # found in the species list
+#   else:
+#		fortranFile.write('\t !error NOY not in mechanism: ' + NOYi + '\n')
 #
 # fortranFile.write('\n\n')
 # # Combine mechanism rates and RO2 / NOY sum files

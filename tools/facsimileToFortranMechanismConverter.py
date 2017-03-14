@@ -315,3 +315,99 @@ with open('./mechanism-rate-coefficients.f90', 'w') as mech_rates_file:
 
 os.remove('./mechanism.reactemp')
 os.remove('./mechanism-rate-coefficients.ftemp')
+
+mechanism_rates_list = ["""subroutine mechanism_rates(p,t,y,mnsp)
+    USE photolysisRates
+    USE zenithData1
+    USE constraints
+  use envVars, only: ro2
+
+    implicit none
+
+    ! calculates rate constants from arrhenius informtion
+    double precision, intent(out) :: p(*)
+    double precision, intent(in) :: t
+    integer, intent(in) :: mnsp
+    double precision, intent(in) :: y(mnsp)
+    double precision:: kro2no3, temp
+    double precision:: m, o2, n2, h2o, k0, ki, fc, f, k1, k2, k3, k4, kmt01, kmt02
+    double precision:: kmt03, kmt04, kmt05, kmt06, kmt07, kmt08, kmt09,kmt10,kmt11
+    double precision:: kmt12, kmt13, kmt14, kmt15, kmt16, kmt17, kfpan, kbpan
+    double precision:: fcc,krc,fcd,krd,fc2,fc1,fc3,fc4,kr1,kr2,kr3,kr4
+    double precision:: fc7,fc8,fc9,fc10,fc13,fc14,kr7,kr8,kr9,kr10,kr13,kr14
+    double precision:: kc0, kci,kd0,kdi,fd,k10,k1i,f1,k20,k2i,k30,k3i,f3
+    double precision:: k40,k4i,k70,k7i,f7,k80,k8i,f8
+    double precision:: k90,k9i,f9,k100,k10i,f10,k130,k13i,f13,k140,k14i,f14
+    double precision:: k160,k16i,kr16,fc16,f16
+    double precision:: RH,dilute,jfac,roofOpen
+
+    ! delcare variables missed in MCM definition
+    double precision:: kroprim,krosec,kdec,kno3al,kapno,kapho2, K298CH3O2, KCH3O2
+    double precision:: K14ISOM1, NCD, NC, NC1, NC2, NC3, NC4, NC7, NC8, NC9, NC10, NC12, NC13, NC14, NC15, NC16, NC17
+    double precision:: F2, F4, F12, F15, F17
+    double precision:: K120, K12I, KR12, FC12
+    double precision:: K150, K15I, KR15, FC15
+    double precision:: K170, K17I, KR17, FC17
+    double precision:: KMT18, KPPN0, KPPNI, KRPPN, FCPPN, NCPPN, FPPN, KBPPN
+    double precision :: kro2ho2,kro2no, fa2,fa4
+    integer :: i
+    double precision :: dec
+    double precision::  photoRateAtT
+    double precision:: blh, pressure, dummy
+
+  include 'modelConfiguration/mechanism-rate-declarations.f90'
+
+    call ro2sum(ro2, y)
+    dummy = y(1)
+
+    dec = -1e16
+
+    call getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
+
+  call atmosphere(O2, N2,m)
+
+
+
+
+    !O2 = 0.2095*m
+    !N2 = 0.7809*m
+
+
+
+    ! * **** SIMPLE RATE COEFFICIENTS *****                     *"""]
+
+for item in generic_rate_coefficients:
+    if re.match('\*', item):
+        item = '!' + item
+    mechanism_rates_list.append('    ' + item.replace(';', '').strip() + '\n')
+for item in complex_reactions:
+    if re.match('\*', item):
+        item = '!' + item
+    mechanism_rates_list.append('    ' + item.replace(';', '').strip().replace('@', '**') + '\n')
+mechanism_rates_list.append("""    do i = 1, nrOfPhotoRates
+        if (useConstantValues .eq. 0) then
+            if (cosx.lt.1.00d-10) then
+                j(ck(i)) = 1.0d-30
+            else
+                j(ck(i)) = cl(i)*cosx**( cmm(i))*exp(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
+            endif
+        else
+            j(ck(i)) = cl(i)
+        endif
+    enddo
+
+    do  i =1,numConPhotoRates
+        call getConstrainedQuantAtT2D(t,photoX,photoY,photoY2,photoNumberOfPoints(i),photoRateAtT, 2,i, &
+            maxNumberOfDataPoints,numConPhotoRates)
+        j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
+    enddo
+
+    include 'modelConfiguration/mechanism-rate-coefficients.f90'
+    return
+end
+
+include 'modelConfiguration/extraOutputSubroutines.f90'
+""")
+with open('../mechanism-rates2.f90', 'w+') as mr2_file:
+    for item in mechanism_rates_list:
+        mr2_file.write(item)

@@ -87,6 +87,8 @@ for line in s:
                 # This code only executes if the break is NOT called, i.e. if the loop exits cleanly without the
                 # reactant being found in the known species
                 else:
+                    # Add reactant to speciesList, and increase the speciesListCounter. Finally, add this number to
+                    # reactantNums to record this reaction.
                     speciesList.append(x)
                     speciesListCounter += 1
                     reactantNums.append(speciesListCounter)
@@ -118,6 +120,8 @@ for line in s:
                 # This code only executes if the break is NOT called, i.e. if the loop exits cleanly without the
                 # product being found in the known species
                 else:
+                    # Add product to speciesList, and increase the speciesListCounter. Finally, add this number to
+                    # productNums to record this reaction.
                     speciesList.append(x)
                     speciesListCounter += 1
                     productNums.append(speciesListCounter)
@@ -135,22 +139,21 @@ for line in s:
 # MARK END OF FILE WITH ZEROS
 reac.write('0\t0\t0\t0 \n')
 prod.write('0\t0\t0\t0')
-size = len(speciesList)
-st = str(size) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n'
+# Output number of species and number of reactions
+st = str(speciesListCounter) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n'
 reac.write(st)
 reac.close()
 
-# Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model
+# Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model (move the last line to
+# the first line).
 reac1 = open('./mechanism.reactemp')
 reacFin = open('./mechanism.reac', 'w')
 st = reac1.readlines()
+# Write last line
 reacFin.write(st[len(st) - 1])
-
-counter = 0
-for line in st:
-    counter += 1
-    if counter < len(st):
-        reacFin.write(line)
+# Write all other lines
+for line in st[:-1]:
+    reacFin.write(line)
 
 reac.close()
 reacFin.close()
@@ -167,43 +170,22 @@ reacFin.close()
 #	 reac1.write(lines)
 
 
-# WRITE OUT TO mechanism.species
-i = 1
-for x in speciesList:
-    st = str(i) + ' ' + str(x)
-    species.write(st)
-    species.write('\n')
-    i += 1
+# Write speciesList to mechanism.species, indexed by (1 to speciesListCounter)
+for i, x in zip(range(1, speciesListCounter+1), speciesList):
+    species.write(str(i) + ' ' + str(x) + '\n')
 
-# WRITE OUT RATE COEFFICIENTS
+# Write out rate coefficients
 i = 1
-counter = 0
-for x in rateConstants:
-    if re.match('!', x) is not None:
+for rate_counter, x in zip(range(len(s)), rateConstants):
+    if (re.match('!', x) is not None) | (x.isspace()):
         mechRates.write(str(x))
-        counter += 1
-    elif x.isspace():
-        mechRates.write(str(x))
-        counter += 1
     else:
         string = x.replace('@', '**')
         string = string.replace('<', '(')
         string = string.replace('>', ')')
-        st = '  p(' + str(i) + ') = ' + string + '  !' + s[counter]
-        mechRates.write(st)
-        mechRates.write('\n')
+        mechRates.write('  p(' + str(i) + ') = ' + string + '  !' + s[rate_counter] + '\n')
         i += 1
-        counter += 1
 
-# for x in reactants[:]:
-#	 x = x.strip()
-#	 print x
-# for x in products[:]:
-#	 x = x.strip()
-#	 print x
-
-#	 print reactants
-#	 print products
 mechRates.close()
 
 fortranFile = open('./mechanism-rate-coefficients.f90', 'w')

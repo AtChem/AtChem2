@@ -4,22 +4,64 @@ import re
 import os
 import fix_mechanism_fac
 
-# Fix the input file of any errant newlines
-fix_mechanism_fac.fix_fac_reaction_definition_file('./mechanism.fac')
+# Fix the input contents of any errant newlines
+fix_mechanism_fac.fix_fac_full_file('./mcm_subset.fac')
 
 # Read in the input file
-with open('./mechanism.fac') as input_file:
+with open('./mcm_subset.fac') as input_file:
     s = input_file.readlines()
     print s
 
+# split the lines into the following sections:
+# - Ignore everything up to Generic Rate Coefficients
+# - Generic Rate Coefficients
+# - Complex reactions
+# - Peroxy radicals
+# - Reaction definitions
+section_headers_indices = [0, 1, 2, 3]
+section_headers = ['Generic Rate Coefficients', 'Complex reactions', 'Peroxy radicals', 'Reaction definitions']
+generic_rate_coefficients = []
+complex_reactions = []
+peroxy_radicals = []
+reaction_definitions = []
+
+section = 0
+for line in s:
+    for header_index in section_headers_indices:
+        if section_headers[header_index] in line:
+            section += 1
+    if section == 1:
+        print line
+        generic_rate_coefficients.append(line)
+    elif section == 2:
+        print line
+        complex_reactions.append(line)
+    elif section == 3:
+        print line
+        peroxy_radicals.append(line)
+    elif section == 4:
+        print line
+        reaction_definitions.append(line)
+    else:
+        assert section == 0, "Error, section is not in [0,4]"
+        print line
+
+print 'generic_rate_coefficients'
+print generic_rate_coefficients
+print 'complex_reactions'
+print complex_reactions
+print 'peroxy_radicals'
+print peroxy_radicals
+print 'reaction_definitions'
+print reaction_definitions
 # Initialise a few variables
 speciesList = []
 rateConstants = []
 reactionNumber = 0
 
 with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod', 'w') as prod_file:
-    # Loop over all lines in the input file
-    for line in s:
+    # Loop over all lines in the reaction_definitions section of the input file
+    for line in reaction_definitions:
 
         # Check for comments (beginning with a !), or blank lines
         if (re.match('!', line) is not None) | (line.isspace()):
@@ -149,8 +191,22 @@ with open('./mechanism-rate-coefficients.ftemp', 'w') as mech_rates_temp_file:
             string = x.replace('@', '**')
             string = string.replace('<', '(')
             string = string.replace('>', ')')
-            mech_rates_temp_file.write('  p(' + str(i) + ') = ' + string + '  !' + s[rate_counter] + '\n')
+            mech_rates_temp_file.write('  p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
             i += 1
+
+# Write RO2 data to file
+in_RO2_lines = False
+with open('./RO2.fac', 'w') as ro2_fac_file:
+    for item in peroxy_radicals:
+        if not in_RO2_lines:
+            # Check to see whether we are entering the 'Reaction definitions' section
+            if 'RO2 = ' in item:
+                in_RO2_lines = True
+        if in_RO2_lines:
+            if not re.match('\*', item):
+                ro2_fac_file.write(item)
+            else:
+                in_RO2_lines = False
 
 # Read in RO2 data, which is arrange as 'RO2 = blah + blah + blah \n + blah + blah ;'
 with open('./RO2.fac') as ro2_fac_file:

@@ -7,8 +7,6 @@ prod = open('./mechanism.prod', 'w')
 species = open('./mechanism.species', 'w')
 mechRates = open('./mechanism-rate-coefficients.ftemp', 'w')
 
-reac.write('numberOfSpecies numberOfReactions \n')
-
 s = f.readlines()
 print s
 
@@ -18,111 +16,117 @@ rateConstants = []
 reactionNumber = 0
 reacFileCounter = 0
 
-
+# Loop over all lines in the input file
 for line in s:
 
-    # CHECK FOR COMMENTS (ANY LINE STARTING WITH !)
+    # Check for comments (beginning with a !)
     if re.match('!', line) is not None:
         rateConstants.append(line)
-    # CHECK FOR BLANK LINES
+    # Check for blank lines
     elif line.isspace():
         rateConstants.append(line)
+    # Check for lines starting with either ; or *
     elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
-        st = '!'+line
+        st = '!' + line
         rateConstants.append(st)
-    # OTHERWISE ASSUME ALL REACTIONS ARE IN THE CORRECT FORMAT SO PROCESS
+    # Otherwise assume all remaining lines are in the correct format, and so process them
     else:
+        # reactionNumber keeps track of the line we are processing
         reactionNumber += 1
         print 'line =', line
+        # strip whitespace, ; and %
         line = line.strip()
         line = line.strip('[;]')
         line = line.strip('[%]')
         print 'line =', line
+        # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
         a = re.split(':', line)
         print 'a = ', a
-        
+
+        # Add reaction rate to rateConstants
         rateConstant = a[0]
         rateConstants.append(rateConstant)
         print rateConstant
-        
+
+        # Process the reaction: split by = into reactants and products
         reaction = a[1]
-        
-        r = reaction.split(' ')
+
         print 'reaction = ', reaction
-        
-        string = re.split('=', reaction)
-        print string
-        
-        reactantsList = string[0]
-        productsList = string[1]
-        
+
+        reaction_parts = re.split('=', reaction)
+        print reaction_parts
+
+        reactantsList = reaction_parts[0]
+        productsList = reaction_parts[1]
+
         print 'reactantlist = ', reactantsList
         print 'productlist = ', productsList
-        
-        reactants = re.split('[+]', reactantsList)
-        products = re.split('[+]', productsList)
-        
+
+        # Process each of reactants and products by splitting by +. Strip each at this stage.
+        reactants = [item.strip() for item in re.split('[+]', reactantsList)]
+        products = [item.strip() for item in re.split('[+]', productsList)]
+
         print 'reactants = ', reactants
         print 'products = ', products
-        
+
+        # Ignore empty reactantsList
         if not reactantsList.isspace():
-            # SEARCH FOR EXISTING REACTANTS
+            # Compare each reactant against known species.
             reactantNums = []
-            for x in reactants[:]:
+            for x in reactants:
                 j = 0
                 speciesNumFound = False
-                # reactantNums = []
                 for y in speciesList:
-                    # print 'j = ', j
-                    # print 'speciesList = ', speciesList
-                    if y == x.strip():
-                        reactantNums.append(j+1)
-                        speciesNumFound = True
+                    # Check for equality: if equality, then the reactant is a known species and its number should be
+                    # added to the reactantNums variable
+                    if x == y:
+                        reactantNums.append(j + 1)
                         print 'found: ', y, 'j = ', j
+                        break
                     j += 1
-                
-                if not speciesNumFound:
-                    speciesList.append(x.strip())
+                # This code only executes if the break is NOT called, i.e. if the loop exits cleanly without the
+                # reactant being found in the known species
+                else:
+                    speciesList.append(x)
                     speciesListCounter += 1
                     reactantNums.append(speciesListCounter)
-                    print 'adding ', x.strip(), ' to speciesList' 
+                    print 'adding ', x, ' to speciesList'
 
             # print 'SpeciesList = ',speciesList
             # print 'reactantNums = ', reactantNums
-        
-            # WRITE THE REACTANTS TO mechanism.reactemp FILE
+
+            # Write the reactants to mechanism.reactemp
             for z in reactantNums:
                 temp = str(reactionNumber) + ' ' + str(z)
                 reac.write(temp)
                 reac.write('\n')
-        
+
         if not productsList.isspace():
-            # SEARCH FOR EXISTING REACTANTS
-            i = 0
+            # Compare each product against known species.
             productNums = []
-            for x in products[:]:
+            for x in products:
                 j = 0
                 speciesNumFound = False
-                # productNums = []
                 for y in speciesList:
-                    # print 'j = ', j
-                    # print 'speciesList = ', speciesList
-                    if y == x.strip():
-                        productNums.append(j+1)
-                        speciesNumFound = True
+                    # Check for equality: if equality, then the product is a known species and its number should be
+                    # added to the productNums variable
+                    if x == y:
+                        productNums.append(j + 1)
                         print 'found: ', y, 'j = ', j
+                        break
                     j += 1
-
-                if not speciesNumFound:
-                    speciesList.append(x.strip())
+                # This code only executes if the break is NOT called, i.e. if the loop exits cleanly without the
+                # product being found in the known species
+                else:
+                    speciesList.append(x)
                     speciesListCounter += 1
                     productNums.append(speciesListCounter)
-                    print 'adding ', x.strip(), ' to speciesList' 
-                i += 1
+                    print 'adding ', x, ' to speciesList'
+
             # print 'SpeciesList = ',speciesList
             # print 'productNums = ', reactantNums
-        
-            # WRITE THE PRODUCTS TO mechanism.prod FILE
+
+            # Write the products to mechanism.prod
             for z in productNums:
                 temp = str(reactionNumber) + ' ' + str(z)
                 prod.write(temp)
@@ -132,7 +136,7 @@ for line in s:
 reac.write('0\t0\t0\t0 \n')
 prod.write('0\t0\t0\t0')
 size = len(speciesList)
-st = str(size) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions'
+st = str(size) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n'
 reac.write(st)
 reac.close()
 
@@ -140,14 +144,13 @@ reac.close()
 reac1 = open('./mechanism.reactemp')
 reacFin = open('./mechanism.reac', 'w')
 st = reac1.readlines()
-reacFin.write(st[len(st)-1])
+reacFin.write(st[len(st) - 1])
 
 counter = 0
 for line in st:
     counter += 1
     if counter < len(st):
         reacFin.write(line)
-    
 
 reac.close()
 reacFin.close()
@@ -161,7 +164,7 @@ reacFin.close()
 # reac1 = open('./mech.reac1','w')
 # reac1.write(st)
 # for lines in l:
-#     reac1.write(lines)
+#	 reac1.write(lines)
 
 
 # WRITE OUT TO mechanism.species
@@ -171,7 +174,7 @@ for x in speciesList:
     species.write(st)
     species.write('\n')
     i += 1
-    
+
 # WRITE OUT RATE COEFFICIENTS
 i = 1
 counter = 0
@@ -191,16 +194,16 @@ for x in rateConstants:
         mechRates.write('\n')
         i += 1
         counter += 1
-    
-# for x in reactants[:]:
-#     x = x.strip()
-#     print x
-# for x in products[:]:
-#     x = x.strip()
-#     print x
 
-#     print reactants
-#     print products
+# for x in reactants[:]:
+#	 x = x.strip()
+#	 print x
+# for x in products[:]:
+#	 x = x.strip()
+#	 print x
+
+#	 print reactants
+#	 print products
 mechRates.close()
 
 fortranFile = open('./mechanism-rate-coefficients.f90', 'w')
@@ -216,7 +219,7 @@ for l in ro2:
     if counter == 1:
         strArray = l.split('=')
         l = strArray[1]
-    
+
     strArray = l.split('+')
 
     print strArray
@@ -235,7 +238,7 @@ fRO2l = fullRO2List.readlines()
 for r in fRO2l:
     r = r.strip()
     print r
-    
+
 for ro2i in ro2List:
     print 'looping over inputted ro2s'
     print ro2List
@@ -243,7 +246,7 @@ for ro2i in ro2List:
     for ro2j in fRO2l:
         if ro2i.strip() == ro2j.strip():
             inFullList = True
-            
+
     if inFullList:
         print ro2i.strip() + ' found in RO2List'
     else:
@@ -280,44 +283,44 @@ fortranFile.write('\n\n')
 # counter = 0
 # NOYList = []
 # for n in NOY:
-#    counter = counter + 1
-#    if counter == 1:
-#        strArray = n.split('=')
-#        n = strArray[1]
+#	counter = counter + 1
+#	if counter == 1:
+#		strArray = n.split('=')
+#		n = strArray[1]
 #
-#    strArray = n.split('+')
+#	strArray = n.split('+')
 #
-#    print strArray
-#    for x in strArray[:]:
-#        x = x.strip()
-#        if x == '':
-#            print 'doing nothing'
-#        else:
-#            print x
-#            NOYList.append(x)
+#	print strArray
+#	for x in strArray[:]:
+#		x = x.strip()
+#		if x == '':
+#			print 'doing nothing'
+#		else:
+#			print x
+#			NOYList.append(x)
 #
 # # loop over NOY to get species numbers and write
 # counter = 0
 # speciesFound = 0
 # fortranFile.write('\tNOY = 0.00e+00\n')
 # for NOYi in NOYList:
-#    speciesFound = 0
-#    print 'NOYi: ' + NOYi
-#    counter = 0
-#    for y in speciesList:
-#        if NOYi.strip() == y.strip():
-#            speciesNumber = counter + 1
-#            speciesFound = 1
-#        counter = counter + 1
+#	speciesFound = 0
+#	print 'NOYi: ' + NOYi
+#	counter = 0
+#	for y in speciesList:
+#		if NOYi.strip() == y.strip():
+#			speciesNumber = counter + 1
+#			speciesFound = 1
+#		counter = counter + 1
 #
 #
-#    if (speciesFound == 1):
-#        st = '\tNOY = NOY + y(' + str(speciesNumber) + ')!' + NOYi.strip() + '\n'
-#        fortranFile.write(st)
-#    elif (speciesFound == 0):
-#        fortranFile.write('\t !error NOY not in mechanism: ')
-#        fortranFile.write(NOYi)
-#        fortranFile.write('\n')
+#	if (speciesFound == 1):
+#		st = '\tNOY = NOY + y(' + str(speciesNumber) + ')!' + NOYi.strip() + '\n'
+#		fortranFile.write(st)
+#	elif (speciesFound == 0):
+#		fortranFile.write('\t !error NOY not in mechanism: ')
+#		fortranFile.write(NOYi)
+#		fortranFile.write('\n')
 #
 # fortranFile.write('\n\n')
 # # Combine mechanism rates and RO2 / NOY sum files
@@ -326,6 +329,6 @@ rs = rates.readlines()
 
 for r in rs:
     fortranFile.write(r)
-        
+
 os.remove('./mechanism.reactemp')
 os.remove('./mechanism-rate-coefficients.ftemp')

@@ -188,7 +188,12 @@ with open('./mechanism-rate-coefficients.ftemp', 'w') as mech_rates_temp_file:
         if (re.match('!', x) is not None) | (x.isspace()):
             mech_rates_temp_file.write(str(x))
         else:
-            string = x.replace('@', '**')
+            # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
+            # then matches - and any combination of digits and decimal points. This replaces the negative number by its
+            # bracketed version.
+            string = re.sub('(?<=@)-[0-9.]*', '(\g<0>)', x)
+            # Now convert all @ to ** etc.
+            string = string.replace('@', '**')
             string = string.replace('<', '(')
             string = string.replace('>', ')')
             mech_rates_temp_file.write('  p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
@@ -329,31 +334,12 @@ mechanism_rates_list = ["""subroutine mechanism_rates(p,t,y,mnsp)
     double precision, intent(in) :: t
     integer, intent(in) :: mnsp
     double precision, intent(in) :: y(mnsp)
-    double precision:: kro2no3, temp
-    double precision:: m, o2, n2, h2o, k0, ki, fc, f, k1, k2, k3, k4, kmt01, kmt02
-    double precision:: kmt03, kmt04, kmt05, kmt06, kmt07, kmt08, kmt09,kmt10,kmt11
-    double precision:: kmt12, kmt13, kmt14, kmt15, kmt16, kmt17, kfpan, kbpan
-    double precision:: fcc,krc,fcd,krd,fc2,fc1,fc3,fc4,kr1,kr2,kr3,kr4
-    double precision:: fc7,fc8,fc9,fc10,fc13,fc14,kr7,kr8,kr9,kr10,kr13,kr14
-    double precision:: kc0, kci,kd0,kdi,fd,k10,k1i,f1,k20,k2i,k30,k3i,f3
-    double precision:: k40,k4i,k70,k7i,f7,k80,k8i,f8
-    double precision:: k90,k9i,f9,k100,k10i,f10,k130,k13i,f13,k140,k14i,f14
-    double precision:: k160,k16i,kr16,fc16,f16
-    double precision:: RH,dilute,jfac,roofOpen
-
-    ! delcare variables missed in MCM definition
-    double precision:: kroprim,krosec,kdec,kno3al,kapno,kapho2, K298CH3O2, KCH3O2
-    double precision:: K14ISOM1, NCD, NC, NC1, NC2, NC3, NC4, NC7, NC8, NC9, NC10, NC12, NC13, NC14, NC15, NC16, NC17
-    double precision:: F2, F4, F12, F15, F17
-    double precision:: K120, K12I, KR12, FC12
-    double precision:: K150, K15I, KR15, FC15
-    double precision:: K170, K17I, KR17, FC17
-    double precision:: KMT18, KPPN0, KPPNI, KRPPN, FCPPN, NCPPN, FPPN, KBPPN
-    double precision :: kro2ho2,kro2no, fa2,fa4
+    double precision:: temp, pressure, dummy
+"""]
+mechanism_rates_list.append("""
+    ! declare variables missed in MCM definition
     integer :: i
-    double precision :: dec
     double precision::  photoRateAtT
-    double precision:: blh, pressure, dummy
 
   include 'modelConfiguration/mechanism-rate-declarations.f90'
 
@@ -374,16 +360,123 @@ mechanism_rates_list = ["""subroutine mechanism_rates(p,t,y,mnsp)
 
 
 
-    ! * **** SIMPLE RATE COEFFICIENTS *****                     *"""]
+    ! * **** SIMPLE RATE COEFFICIENTS *****                     *""")
+coeffSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
+reactionNumber = 0
+# P
+for line in generic_rate_coefficients + complex_reactions:
+    # Check for comments (beginning with a !), or blank lines
+    if (re.match('!', line) is not None) | (line.isspace()):
+        mechanism_rates_list.append('    ' + line)
+    # Check for lines starting with either ; or *, and write these as comments
+    elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
+        mechanism_rates_list.append('    !' + line)
+    # Otherwise assume all remaining lines are in the correct format, and so process them
+    else:
+        # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
+        # then matches - and any combination of digits and decimal points. This replaces the negative number by its
+        # bracketed version.
+        # It also then converts all @ to ** etc.
+        # Save the resulting string to mechanism_rates_list
+        mechanism_rates_list.append('    ' +
+                                    re.sub('(?<=@)-[0-9.]*', '(\g<0>)', line.replace(';', '').strip()).replace('@', '**') +
+                                    '\n')
 
-for item in generic_rate_coefficients:
-    if re.match('\*', item):
-        item = '!' + item
-    mechanism_rates_list.append('    ' + item.replace(';', '').strip() + '\n')
-for item in complex_reactions:
-    if re.match('\*', item):
-        item = '!' + item
-    mechanism_rates_list.append('    ' + item.replace(';', '').strip().replace('@', '**') + '\n')
+        # Now we need to find the list of all species that are used in these equations, so we can declare them
+        # at the top of the Fortran source file.
+
+        # reactionNumber keeps track of the line we are processing
+        reactionNumber += 1
+        print 'line =', line
+        # strip whitespace, ; and %
+        line = line.strip()
+        line = line.strip('[;]')
+        line = line.strip('[%]')
+        print 'line =', line
+        # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
+        a = line
+        print 'a = ', a
+
+        # Add reaction rate to rateConstants
+        # rateConstant = a[0]
+        # rateConstants.append(rateConstant)
+        # print rateConstant
+
+        # Process the reaction: split by = into reactants and products
+        print 'reaction = ', a
+
+        reaction_parts = re.split('=', a)
+        print reaction_parts
+
+        LHSList = reaction_parts[0]
+        RHSList = reaction_parts[1]
+
+        print 'reactantlist = ', LHSList
+        print 'productlist = ', RHSList
+
+        # Process each of reactants and products by splitting by +. Strip each at this stage.
+        reactant = LHSList.strip()  # [item.strip() for item in re.split('[+]', LHSList)]
+        products = RHSList  # [item.strip() for item in re.split('[+]', RHSList)]
+
+        print 'reactants = ', reactants
+        print 'products = ', products
+
+        # Compare reactant against known species.
+        if reactant in coeffSpeciesList:
+            print 'found: ', reactant
+        else:
+            # Add reactant to coeffSpeciesList, and add this number to
+            # reactantNums to record this reaction.
+            coeffSpeciesList.append(reactant)
+            print 'adding ', reactant, ' to coeffSpeciesList'
+
+        if not RHSList.isspace():
+            # Compare each product against known species.
+            productNums = []
+            print RHSList
+            # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
+            # Now, each string in the sublist will:
+            # - start with a digit
+            # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESSURE
+            # - otherwise, be a species
+            RHSList_sub = re.sub('[()\-+*@/]', ' ', RHSList).split(' ')
+            print RHSList_sub
+            RHSList_sub = [item.upper() for item in RHSList_sub]
+            for x in RHSList_sub:
+                # Filter out spaces, numbers, and maths symbols
+                if (not re.match('[0-9]', x)) and (not x == ''):
+                    # Filter out our 'reserved words'
+                    if not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESSURE', 'LOG10', 'T']):
+                        print x
+                        if x in coeffSpeciesList:
+                            print 'found: ', x
+                        else:
+                            coeffSpeciesList.append(x)
+                            print 'adding ', x, ' to coeffSpeciesList'
+
+# Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
+# Begin wthe first line as necessary
+newline = '    double precision::'
+mechanism_rates_decl = []
+# Loop over all species
+for i, item in zip(range(1, len(coeffSpeciesList)+1), coeffSpeciesList):
+    # Add the next species
+    newline += ' ' + item.strip()
+    # If it's the last species, then exit the loop with some extra newlines
+    if i == len(coeffSpeciesList):
+        mechanism_rates_decl.append(newline + '\n\n\n')
+        continue
+    # Otherwise, every tenth species gets rounded off with a newline and a prefix to the next line
+    if i % 10 == 0:
+        mechanism_rates_decl.append(newline + '\n')
+        newline = '    double precision::'
+    else:
+        # If not, add a spacer
+        newline += ','
+
+# Insert the list generated above into the right place in the master list
+mechanism_rates_list = list(mechanism_rates_list[0]) + mechanism_rates_decl + list(mechanism_rates_list[1:])
+
 mechanism_rates_list.append("""    do i = 1, nrOfPhotoRates
         if (useConstantValues .eq. 0) then
             if (cosx.lt.1.00d-10) then
@@ -408,6 +501,7 @@ end
 
 include 'modelConfiguration/extraOutputSubroutines.f90'
 """)
-with open('../mechanism-rates2.f90', 'w+') as mr2_file:
+print mechanism_rates_list
+with open('../mechanism-rates.f90', 'w+') as mr2_file:
     for item in mechanism_rates_list:
         mr2_file.write(item)

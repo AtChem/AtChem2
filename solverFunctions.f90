@@ -3,7 +3,9 @@ subroutine FCVJTIMES(v,fjv,t,y,fy,h,ipar,rpar,work,ier)
 
     USE species
 
-    integer neq,i,j,ier,ipar(*),np
+    INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
+    INTEGER (KIND=LongInt_Kind) IPAR(*), IER, NEQ, I
+    integer j,np
     double precision t,h,rpar(*),y(*),v(*),fjv(*),fy(*),work(*),delta, deltaV, dummy
     DOUBLE PRECISION, ALLOCATABLE:: yPlusV(:),yPlusVi(:)
     call getNumberOfSpecies(np)
@@ -44,10 +46,11 @@ SUBROUTINE FCVFUN(T, Y, YDOT, IPAR, RPAR, IER)
     ! Fortran routine for right-hand side function.
     IMPLICIT NONE
     !
-    INTEGER*4 IPAR(*), IER,nConSpec
+    INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
+    INTEGER (KIND=LongInt_Kind) IPAR(*), IER,nConSpec, NP, numReactions
     DOUBLE PRECISION T, Y(*), YDOT(*), RPAR(*),concAtT, dummy
     DOUBLE PRECISION, ALLOCATABLE::  dy(:), z(:)
-    integer np, numReactions, i
+    integer i
 
     np = ipar(1) + numberOfConstrainedSpecies
     numReactions = ipar(2)
@@ -88,7 +91,7 @@ subroutine data(lhs, rhs, coeff, size1, size2)
     integer:: lhs(3,size1), rhs(2,size2)
     double precision:: coeff(size2)
 
-    write(*,*)'Reading reactants (lhs) from mechanism.rec...' 
+    write(*,*)'Reading reactants (lhs) from mechanism.rec...'
     open (4,file='modelConfiguration/mechanism.reac',status = 'old') ! input file for lhs of equations
     open (14,file = 'modelConfiguration/mechanism.prod',status = 'old') ! input file for rhs of equations
 
@@ -132,9 +135,10 @@ subroutine resid(nsp,nr,clocktime,y,dy, lhs, rhs, coeff, size1, size2)
     USE productionAndLossRates
 
     implicit none
-    integer:: i
-    integer:: nsp ! number of species involved
-    integer:: nr ! number of reactions
+    INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
+    integer (KIND=LongInt_Kind) :: i
+    integer (KIND=LongInt_Kind) :: nsp ! number of species involved
+    integer (KIND=LongInt_Kind) :: nr ! number of reactions
     integer:: size1, size2 !number of entries in each equation array
     integer:: lhs(3,size1), rhs(2,size2)
     double precision:: coeff(*) ! coeff term of rhs

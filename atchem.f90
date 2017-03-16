@@ -34,8 +34,9 @@ PROGRAM ATCHEM
     INTEGER LNST, LNFE, LNSETUP, LNNI, LNCF, LNETF, LNJE
     INTEGER NFELS,NJTV,NPE,NPS
     INTEGER METH, ITMETH, ITOL, ITASK, JOUT, NOUT
-    INTEGER*4 IOUT(21), IPAR(10)
-    INTEGER*4 NEQ
+    INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
+    INTEGER (KIND=LongInt_Kind) :: IOUT(21), IPAR(10)
+    INTEGER :: NEQ
     DOUBLE PRECISION RTOL, T, T0, TOUT
     DOUBLE PRECISION  ATOL, ROUT(6)
     DOUBLE PRECISION :: RPAR(1)
@@ -48,7 +49,8 @@ PROGRAM ATCHEM
     integer ::  JvApprox, lookBack
     integer:: SpeciesIntMethod, conditionsIntMethod, decIntMethod
     integer:: preconBandUpper,preconBandLower, solverType
-    real*8 :: d
+    INTEGER, PARAMETER :: LongReal_Kind = SELECTED_REAL_KIND (10, 300)
+    real (KIND=LongReal_Kind) :: d
 
 !   DECLARATIONS FOR TIME PARAMETERS
     integer runStart, runEnd, runTime, rate, previousSeconds

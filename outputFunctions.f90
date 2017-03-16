@@ -49,11 +49,11 @@ end
 subroutine getReaction(speciesNames, reactionNumber,reaction)
     use reactionStructure
     implicit none
-    character*10:: reactants(10), products(10)
-    character*10:: speciesNames(*)
+    character(LEN=10):: reactants(10), products(10)
+    character(LEN=10):: speciesNames(*)
     integer:: reactionNumber,i, numReactants, numProducts
-    character*1000:: str1
-    character*1000::reaction, reactantStr, productStr
+    character(LEN=1000):: str1
+    character(LEN=1000)::reaction, reactantStr, productStr
     numReactants = 0
     numProducts = 0
 
@@ -121,8 +121,8 @@ subroutine outputRates(r,t,p,flag,nsp,rateOfProdNS,prodLossArrayLen,rateOfLossNS
     integer nsp,rateOfProdNS,prodLossArrayLen,rateOfLossNS,prodArrayLen(*),lossArrayLen(*)
     integer i,j,r(nsp,prodLossArrayLen),flag,x
     double precision t,p(*)
-    character*10 speciesNames(*)
-    character*1000::reaction
+    character(LEN=10) speciesNames(*)
+    character(LEN=1000)::reaction
 
 
     ! Flag = 1 for production
@@ -160,7 +160,7 @@ end
 
 !     ----------------------------------------------------------------
 subroutine outputInterestingNames(names,namesSize)
-    character*10 names(*)
+    character(LEN=10) names(*)
     integer i,namesSize
     write(91,'(100(x,a))')'t         ', (names(i), i=1,namesSize)
     return

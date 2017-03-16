@@ -15,7 +15,7 @@ subroutine outputjfy(fy,nsp,t)
     double precision :: fy(nsp,nsp), t
 
     do i=1,nsp
-    write (93,'(100(x,e12.5))') t, (fy(i,j), j=1,nsp)
+    write (93,'(100(1x,e12.5))') t, (fy(i,j), j=1,nsp)
     enddo
     write(93,*)'---------------'
 end
@@ -26,7 +26,7 @@ subroutine outputPhotolysisRates(j,t)
     double precision:: j(*),t
     integer:: i
 
-    write(86,'(100(x,e12.5))')t, (j(ck(i)), i=1,nrOfPhotoRates)
+    write(86,'(100(1x,e12.5))')t, (j(ck(i)), i=1,nrOfPhotoRates)
     return
 end
 
@@ -162,7 +162,7 @@ end
 subroutine outputInterestingNames(names,namesSize)
     character(LEN=10) names(*)
     integer i,namesSize
-    write(91,'(100(x,a))')'t         ', (names(i), i=1,namesSize)
+    write(91,'(100(1x,a))')'t         ', (names(i), i=1,namesSize)
     return
 end
 
@@ -174,6 +174,6 @@ subroutine outputInteresting(t,yInt,yIntSize)
       yInt(i) = 0d0
     endif
   end do
-    write(91,'(100(x,e15.5e3))')t, (yInt(i), i=1,yIntSize)
+    write(91,'(100(1x,e15.5e3))')t, (yInt(i), i=1,yIntSize)
     return
 end

@@ -196,7 +196,7 @@ end
 
 subroutine readSpeciesOutputRequired(r,i, nsp)
 
-    character*10 c,r(*)
+    character(LEN=10) c,r(*)
     integer i, nsp
     write(*,*)'Reading concentration output from file...'
     open (4,file='modelConfiguration/concentrationOutput.config',status = 'old')
@@ -229,7 +229,7 @@ end
 subroutine readSpecies(y,neq,speciesName, speciesNumber)
     double precision y(*)
     integer neq,speciesNumber(*), j
-    character*10 speciesName(*)
+    character(LEN=10) speciesName(*)
 
     ! READ IN INITIAL CONCENTRATIONS
     open(5, file='modelConfiguration/mechanism.species') ! input file
@@ -244,7 +244,7 @@ end
 
 SUBROUTINE readConcentrations(concSpeciesName, concentration, concCounter,nsp)
 
-    character*10 concSpeciesName(*), k
+    character(LEN=10) concSpeciesName(*), k
     double precision concentration(*),l
     integer i, concCounter,nsp
 
@@ -283,7 +283,7 @@ end
 
 subroutine readProductsOfInterest(r,i)
 
-    character*10 c,r(*)
+    character(LEN=10) c,r(*)
     integer i
 
     write(*,*) 'Reading products of interest...'
@@ -313,7 +313,7 @@ end
 
 subroutine readReactantsOfInterest(r,i)
 
-    character*10 c,r(*)
+    character(LEN=10) c,r(*)
     integer i
     write(*,*) 'Reading reactants of interest...'
     open (4,file='modelConfiguration/lossRatesOutput.config',status = 'old')
@@ -353,8 +353,8 @@ subroutine readReactantsOfInterest(r,i)
 
     integer:: i,j, k, dataNumberOfPoints,neq, id
   integer :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-    character*13 string
-    character*10:: speciesName(*), name
+    character(LEN=13):: string
+    character(LEN=10):: speciesName(*), name
     CHARACTER(LEN=21)::  fileLocationPrefix
     CHARACTER(LEN=57):: fileLocation
   DOUBLE PRECISION :: concAtT, t, value

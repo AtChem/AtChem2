@@ -137,7 +137,7 @@ PROGRAM ATCHEM
 !    OPEN FILES FOR INPUT
     open(5, file='modelConfiguration/mechanism.reac',status = 'old') ! input file
 
-!   READ IN MECHANSIM PARAMETERS
+!   READ IN MECHANISM PARAMETERS
     read(5,*) np,numReactions
     write(*,*)
     write(*,*)'Number of Species',np

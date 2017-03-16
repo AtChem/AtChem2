@@ -338,7 +338,7 @@ subroutine mechanism_rates(p,t,y,mnsp)
 
     implicit none
 
-    ! calculates rate constants from arrhenius informtion
+    ! calculates rate constants from arrhenius information
     double precision, intent(out) :: p(*)
     double precision, intent(in) :: t
     integer, intent(in) :: mnsp

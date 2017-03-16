@@ -23,10 +23,10 @@ subroutine writeFileHeaders(photoRateNamesForHeader)
 
     ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t=0
     ! OUTPUT FOR CVODE MAIN SOLVER
-    write(23,*),'t LNST LNFE LNETF LNGE'
+    write(23,*)'t LNST LNFE LNETF LNGE'
 
     ! OUTPUT FOR SPARSE SOLVER
-    write(21,*),'t NFELS NJTV NPE NPS'
+    write(21,*)'t NFELS NJTV NPE NPS'
     write(89,*)'time speciesNumber speciesName reactionNumber rate'
     write(90,*)'time speciesNumber speciesName reactionNumber rate'
 
@@ -58,10 +58,10 @@ subroutine matchNameToNumber(speciesName,speciesList,listSize,neq,returnArray,re
                 returnArraySize = returnArraySize + 1
             endif
         enddo
-        ! substitute empty strings for invalid species 
+        ! substitute empty strings for invalid species
         if (match.eq.0) then
             speciesList(i)=''
-        endif  
+        endif
     enddo
     return
 end

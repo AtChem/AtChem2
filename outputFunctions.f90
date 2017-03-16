@@ -177,5 +177,3 @@ subroutine outputInteresting(t,yInt,yIntSize)
     write(91,'(100(x,e15.5e3))')t, (yInt(i), i=1,yIntSize)
     return
 end
-
-

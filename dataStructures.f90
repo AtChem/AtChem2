@@ -226,7 +226,7 @@ MODULE chemcialConstraints
     DOUBLE PRECISION, ALLOCATABLE::dataX(:,:),dataY(:,:),dataY2(:,:),dataFixedY(:)
     DOUBLE PRECISION, ALLOCATABLE::constrainedConcs(:)
     integer:: numberOfConstrainedSpecies, maxNumberOfChemDataPoints
-    character*10, ALLOCATABLE:: constrainedName(:)
+    character(LEN=10), ALLOCATABLE:: constrainedName(:)
     integer, ALLOCATABLE:: speciesNumberOfPoints(:), constrainedSpecies(:)
 
 END MODULE chemcialConstraints

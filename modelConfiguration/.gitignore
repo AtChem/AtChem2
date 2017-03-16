@@ -1,6 +1,8 @@
 # Ignore everything in this directory
 *
-# Except this file
+# Except the following
+!*.config
+!*.parameters
 !.gitignore
 !extraOutputSubroutines.f90
 !mechanism-rate-declarations.f90

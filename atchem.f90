@@ -58,14 +58,14 @@ PROGRAM ATCHEM
 !   DECLARATIONS FOR SPECIES PARAMETERS
     integer  concCounter
     double precision, allocatable:: concentration(:)
-    character*10, allocatable:: speciesName(:), concSpeciesName(:)
+    character(LEN=10), allocatable:: speciesName(:), concSpeciesName(:)
     integer, allocatable::  speciesNumber(:)
 
 !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
     integer, allocatable:: prodIntSpecies(:,:),returnArray(:),SORNumber(:),reacIntSpecies(:,:)
     integer speciesOutputRequiredSize,SORNumberSize,prodIntNameSize,returnArraySize,reacIntNameSize
     double precision, allocatable::  yInt(:)
-    character*10, allocatable::  prodIntName(:),reacIntName(:),speciesOutputRequired(:)
+    character(LEN=10), allocatable::  prodIntName(:),reacIntName(:),speciesOutputRequired(:)
     integer rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize,time, elapsed
     integer, allocatable:: prodArrayLen(:), lossArrayLen(:)
 

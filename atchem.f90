@@ -181,7 +181,7 @@ PROGRAM ATCHEM
     call readConcentrations(concSpeciesName, concentration, concCounter,np)
     call setConcentrations(y,speciesName,concSpeciesName,concentration,concCounter,neq)
     write(*,*)
-        
+
 !   READ IN PHOTOLYSIS RATE INFORMATION
     call readPhotoloysisConstants(ck,cl,cmm,cnn,photoRateNames,transmissionFactor)
     write(*,*)
@@ -491,7 +491,7 @@ flush(6)
 
         !OUTPUT INSTANTANEOUS RATES
         if (mod(elapsed,irOutStepSize).EQ.0) then
-            write(strTime,*),time
+            write(strTime,*) time
 
             irfileLocationPrefix = './instantaneousRates/'
             irfileLocation = irfileLocationPrefix // ADJUSTL(strTime)
@@ -504,9 +504,9 @@ flush(6)
         endif
 
         ! OUTPUT FOR CVODE MAIN SOLVER
-        write(23,*),t,' ',IOUT(LNST),' ', IOUT(LNFE),' ',IOUT(LNETF)
+        write(23,*) t,' ',IOUT(LNST),' ', IOUT(LNFE),' ',IOUT(LNETF)
         ! OUTPUT FOR SPARSE SOLVER
-        write(21,*),t,' ',IOUT(NFELS),' ',IOUT(NJTV),' ',IOUT(NPE),' ',IOUT(NPS)
+        write(21,*) t,' ',IOUT(NFELS),' ',IOUT(NJTV),' ',IOUT(NPE),' ',IOUT(NPS)
         ! OUTPUT STEP SIZE
         write(22,*)t,' ',ROUT(3),' ',ROUT(2)
 

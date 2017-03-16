@@ -42,7 +42,7 @@ end
 
 
 subroutine matchNameToNumber(speciesName,speciesList,listSize,neq,returnArray,returnArraySize)
-    character*10 speciesList(*),speciesName(*),k,m
+    character(LEN=10) speciesList(*),speciesName(*),k,m
     integer i,j,match, matched_j, neq,returnArray(*),returnArraySize, listSize
     returnArraySize = 1
 
@@ -67,7 +67,7 @@ subroutine matchNameToNumber(speciesName,speciesList,listSize,neq,returnArray,re
 end
 
 subroutine matchOneNameToNumber(speciesName,oneSpecies,neq,id)
-    character*10 oneSpecies,speciesName(*),m
+    character(LEN=10) oneSpecies,speciesName(*),m
     integer j, neq
 
   id=0
@@ -82,7 +82,7 @@ end
 
 
 subroutine setConcentrations(y,speciesName,concSpeciesName,concentration,concCounter,neq)
-    character*10 concSpeciesName(*),speciesName(*),k, m
+    character(LEN=10) concSpeciesName(*),speciesName(*),k, m
     double precision concentration(*),y(*)
     integer concCounter,neq,i,j, match
 

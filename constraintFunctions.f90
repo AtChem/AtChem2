@@ -3,16 +3,16 @@ subroutine calcJFac(jfac,t)
     use zenithData1
     use photolysisRates
     use constraints
-	
+
     implicit none
     double precision:: jfac, JSpeciesAtT,t
     integer:: basePhotoRateNum,i
-	integer:: firstTime=1
-	if(firstTime .eq. 1) then
+  integer:: firstTime=1
+  if(firstTime .eq. 1) then
         write(*,*)"basePhotoRate: ",jfacBase
-		firstTime=0
-	endif
-		
+        firstTime=0
+  endif
+
     !GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY
     basePhotoRateNum=0
     do i=1,numConPhotoRates
@@ -28,7 +28,7 @@ subroutine calcJFac(jfac,t)
         stop 2
     endif
 
-    !GET CURRENT VALUE OF basePhotoRate	
+    !GET CURRENT VALUE OF basePhotoRate
 
     call getConstrainedQuantAtT2D(t,photoX,photoY,photoY2,photoNumberOfPoints(basePhotoRateNum),JSpeciesAtT, 2, &
     basePhotoRateNum, maxNumberOfDataPoints,numConPhotoRates)
@@ -50,9 +50,9 @@ end
 
 subroutine calcM(PRESSURE, TEMP, M)
     implicit none
-    double precision PRESSURE, TEMP, M 
+    double precision PRESSURE, TEMP, M
     M= 9.6576d18*(PRESSURE/TEMP)
-	
+
     return
 end
 
@@ -178,7 +178,7 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
         H2O = envVarFixedValues(envVarNum)
     endif
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-	envVarNumH2O = envVarNum
+  envVarNumH2O = envVarNum
     currentEnvVarValues(envVarNum) = H2O
     ! ********************************************************************************************************************
     ! GET M AT T
@@ -266,13 +266,13 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
     currentEnvVarValues(envVarNum) = rh
     currentEnvVarValues(envVarNumH2O) = H2O
 
-    !*******************************************************************************************************	
+    !*******************************************************************************************************
     !GET DILUTE AT T
-    !***********************************************************************************************************	
+    !***********************************************************************************************************
     call getEnvVarNum('DILUTE',envVarNum,envVarNames,numEnvVars)
     !IF CALCULATED
     if(envVarTypesNum(envVarNum).eq.1) then
-    !IF CONSTRAINED	
+    !IF CONSTRAINED
     else if(envVarTypesNum(envVarNum).eq.2) then
         call getConstrainedQuantAtT2D(t,envVarX,envVarY,envVarY2,envVarNumberOfPoints(envVarNum) &
         ,envVarAtT, 2,envVarNum,maxNumberOfDataPoints,numEnvVars)
@@ -292,17 +292,17 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
 
 	!**************************************************************************************************
     !COMPUTE PARAMETERS FOR PHOTOLYSIS RATES
-    !*************************************************************************************************	
-	 call zenith(theta, secx, cosx, t,dec)
-	
+    !*************************************************************************************************
+    call zenith(theta, secx, cosx, t,dec)
+
     !**************************************************************************************************
     !GET JFAC AT T
-    !*************************************************************************************************	
+    !*************************************************************************************************
     call getEnvVarNum('JFAC',envVarNum,envVarNames,numEnvVars)
     !IF CALCULATED
     if(envVarTypesNum(envVarNum).eq.1) then
         call calcJFac(jfac,t)
-    !IF CONSTRAINED	
+    !IF CONSTRAINED
     else if(envVarTypesNum(envVarNum).eq.2) then
         call getConstrainedQuantAtT2D(t,envVarX,envVarY,envVarY2,envVarNumberOfPoints(envVarNum) &
         ,envVarAtT, 2,envVarNum,maxNumberOfDataPoints,numEnvVars)
@@ -313,7 +313,7 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
 
     !IF NOT USED
     else
-        !set jfac = , so no effect on photolysis calculations	
+        !set jfac = , so no effect on photolysis calculations
         jfac = 1
     endif
 
@@ -322,12 +322,12 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
 
     !**************************************************************************************************
     !GET ROOFOPEN AT T
-    !************************************************************************************************************	
+    !************************************************************************************************************
     call getEnvVarNum('ROOFOPEN',envVarNum,envVarNames,numEnvVars)
     !IF CALCULATED
     if(envVarTypesNum(envVarNum).eq.1) then
         write(*,*)"No calculation available for ROOFOPEN Variable"
-    !IF CONSTRAINED	
+    !IF CONSTRAINED
     else if(envVarTypesNum(envVarNum).eq.2) then
         call getConstrainedQuantAtT2D(t,envVarX,envVarY,envVarY2,envVarNumberOfPoints(envVarNum) &
         ,envVarAtT, 2,envVarNum,maxNumberOfDataPoints,numEnvVars)
@@ -338,7 +338,7 @@ subroutine getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
 
     !IF NOT USED
     else
-    !set roofopen = , so no effect on photolysis calculations	
+    !set roofopen = , so no effect on photolysis calculations
     roofOpen = 1
     endif
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
@@ -364,11 +364,11 @@ end
 subroutine test_jfac()
 ! check jfac data consistency
     use photolysisRates
-    use envVars	
-    implicit none	
+    use envVars
+    implicit none
     integer :: envVarNum
     ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
-    envVarNum = 0 
+    envVarNum = 0
    call getEnvVarNum('JFAC',envVarNum,envVarNames,numEnvVars)
     !IF CALCULATED
    ! If JFAC is CALC and there's no JFAC species, the program should complain
@@ -381,7 +381,7 @@ subroutine test_jfac()
         if (jfacSpeciesLine .eq. 0 ) then
             write(*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', jfacBase
         endif
-    !IF CONSTRAINED	
+    !IF CONSTRAINED
     else if(envVarTypesNum(envVarNum).eq.2) then
     !IF FIXED
     else if(envVarTypesNum(envVarNum).eq.3) then
@@ -395,4 +395,3 @@ subroutine test_jfac()
         endif
     endif
 end
-		

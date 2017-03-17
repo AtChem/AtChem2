@@ -178,11 +178,11 @@ PROGRAM ATCHEM
   CALL readPhotoloysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
   !   Set default value for photonames array
-  DO i=1, 200
+  DO i = 1, 200
      photoRateNamesForHeader(i) = 'na'
   ENDDO
 
-  DO i=1, nrOfPhotoRates
+  DO i = 1, nrOfPhotoRates
      photoRateNamesForHeader(ck(i)) = photoRateNames(i)
   ENDDO
 
@@ -198,7 +198,7 @@ PROGRAM ATCHEM
   rateOfProdNS = returnArraySize - 1
   ALLOCATE (prodArrayLen(rateOfProdNS))
 
-  DO i=1, rateOfProdNS
+  DO i = 1, rateOfProdNS
      prodIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
@@ -216,7 +216,7 @@ PROGRAM ATCHEM
 
   ALLOCATE (lossArrayLen(rateOfLossNS))
 
-  DO i=1, rateOfLossNS
+  DO i = 1, rateOfLossNS
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
@@ -273,10 +273,10 @@ PROGRAM ATCHEM
   modelStartTime = modelParameters(9)
   jacobianOutputStepSize = modelParameters(10)
   latitude = modelParameters(11)
-  longitude =modelParameters(12)
-  day =modelParameters(13)
-  month =modelParameters(14)
-  year =modelParameters(15)
+  longitude = modelParameters(12)
+  day = modelParameters(13)
+  month = modelParameters(14)
+  year = modelParameters(15)
   irOutStepSize = modelParameters(16)
 
   WRITE (*,*) 'Model parameters:'
@@ -326,7 +326,7 @@ PROGRAM ATCHEM
      WRITE (*,*) '...'
      WRITE (*,*) speciesOutputRequiredSize, speciesOutputRequired(speciesOutputRequiredSize)
   ELSE
-     DO i=1, speciesOutputRequiredSize
+     DO i = 1, speciesOutputRequiredSize
         WRITE (*,*) i, speciesOutputRequired(i)
      ENDDO
   ENDIF
@@ -447,12 +447,12 @@ PROGRAM ATCHEM
      ENDIF
      flush(6)
      ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-     DO i=1, numberOfConstrainedSpecies
+     DO i = 1, numberOfConstrainedSpecies
         CALL getConstrainedConc (i, d)
         constrainedConcs(i) = d
      ENDDO
 
-     CALL addConstrainedSpeciesToProbSpec(z, y, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
+     CALL addConstrainedSpeciesToProbSpec (z, y, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
 
      ! OUTPUT ON SCREEN
      fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
@@ -489,10 +489,10 @@ PROGRAM ATCHEM
         irfileLocation = irfileLocationPrefix // ADJUSTL (strTime)
 
         OPEN (27, file=irfileLocation)
-        DO i=1, numReactions
+        DO i = 1, numReactions
            WRITE (27,*) ir(i)
         ENDDO
-        CLOSE (27, status = 'keep')
+        CLOSE (27, status='keep')
      ENDIF
 
      ! OUTPUT FOR CVODE MAIN SOLVER
@@ -540,7 +540,7 @@ PROGRAM ATCHEM
   ENDIF
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
-  DO i=1, np
+  DO i = 1, np
      WRITE (92,*) speciesName(i), y(i)
   ENDDO
 

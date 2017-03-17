@@ -12,8 +12,8 @@ with open(filename, 'w') as output_file:
     outputs = []
     for line in lines:
         # Replacements happen in reverse order on this line:
-        # A comma followed by
-        to_output = re.sub(",(?=[A-Z0-9('-])", ', ',
+        # A comma followed by any letter, digit, ( ' or - should have a space trailing.
+        to_output = re.sub(",(?=[a-zA-Z0-9('-])", ', ',
                            # Opening bracket preceded by an uppercase letter or a number should have a space in front.
                            re.sub('(?<=[A-Z0-9])\(', ' (',
                                   # Replace .LT. etc with lowercase and with no whitespace. This and the next 3 are all case-insensitive

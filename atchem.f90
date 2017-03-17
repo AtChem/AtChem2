@@ -48,8 +48,8 @@ PROGRAM ATCHEM
 
 !   DECLARATIONS FOR TIME PARAMETERS
     integer runStart, runEnd, runTime, rate, previousSeconds
-    integer np, numReactions, outputStepSize, numSteps
-    double precision tminus1
+    integer np, numReactions, numSteps
+    double precision tminus1, outputStepSize
 
 !   DECLARATIONS FOR SPECIES PARAMETERS
     integer  concCounter

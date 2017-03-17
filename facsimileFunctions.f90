@@ -1,7 +1,7 @@
-subroutine ramp (arg1,rampValue)
-    double precision arg1, arg2, rampValue
+SUBROUTINE ramp (arg1, rampValue)
+  DOUBLE PRECISION arg1, arg2, rampValue
 
-    arg2 = abs(arg1)
-    rampValue = (arg1 + arg2) / 2
-    return
-end
+  arg2 = ABS (arg1)
+  rampValue = (arg1 + arg2) / 2
+  RETURN
+END SUBROUTINE ramp

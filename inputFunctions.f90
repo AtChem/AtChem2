@@ -1,615 +1,615 @@
-subroutine readJFacSpecies()
-    use photolysisRates
-    implicit none
-    integer :: i
+SUBROUTINE readJFacSpecies ()
+  USE photolysisRates
+  IMPLICIT NONE
+  INTEGER :: i
 
-    jfacSpeciesLine = 0
-    write(*,*) 'Reading JFacSpecies...'
-    open (63,file='modelConfiguration/JFacSpecies.config', status='old')
-    read(63,*)jfacBase
-    write(*,*)'JFacSpecies = ', jfacBase
-    close(63,status = 'keep')
-    write(*,*) 'Finished reading JFacSpecies.'
-    ! get line number for the JFac base species:
-    do i=1,nrOfPhotoRates
-        if((trim(photoRateNames(i))).eq.(trim(jfacBase))) then
+  jfacSpeciesLine = 0
+  WRITE (*,*) 'Reading JFacSpecies...'
+  OPEN (63, file='modelConfiguration/JFacSpecies.config', status='old')
+  READ (63,*) jfacBase
+  WRITE (*,*) 'JFacSpecies = ', jfacBase
+  CLOSE (63, status='keep')
+  WRITE (*,*) 'Finished reading JFacSpecies.'
+  ! get line number for the JFac base species:
+  DO i = 1, nrOfPhotoRates
+     IF ((TRIM (photoRateNames(i))).EQ.(TRIM (jfacBase))) THEN
         jfacSpeciesLine = i
-        endif
-    enddo
-    return
-end
+     ENDIF
+  ENDDO
+  RETURN
+END SUBROUTINE readJFacSpecies
 
-subroutine readPhotoloysisRates(ck,cl,cmm,cnn,str,tf)
-    use photolysisRates, only: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
-    implicit none
-    integer:: i,ck(*), ierr
-    double precision:: cl(*),cmm(*),cnn(*),tf(*)
-    character (len = 30):: str(*)
+SUBROUTINE readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
+  USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
+  IMPLICIT NONE
+  INTEGER :: i, ck(*), ierr
+  DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
+  CHARACTER (LEN=30) :: str(*)
 
-    write(*,*) 'Reading photolysis rates from file...'
-    open(13,file='modelConfiguration/photolysisRates.config', status='old')
-    read(13,*)
-    do i = 1, maxNrOfPhotoRates
-        read(13,*,iostat=ierr) ck(i), cl(i), cmm(i), cnn(i),str(i),tf(i)
-        if(ierr .ne. 0) then
-            exit
-        endif
-    enddo
-    nrOfPhotoRates = i-1
-    close(13,status = 'keep')
-    i = 1
-    write(*,*) ck(i), cl(i), cmm(i), cnn(i),str(i),tf(i)
-    i = nrOfPhotoRates
-    write(*,*) ck(i), cl(i), cmm(i), cnn(i),str(i),tf(i)
-    write(*,*)'Finished reading photolysis rates.'
-    write(*,*) 'Number of photolysis rates:', nrOfPhotoRates
-    return
-end
+  WRITE (*,*) 'Reading photolysis rates from file...'
+  OPEN (13, file='modelConfiguration/photolysisRates.config', status='old')
+  READ (13,*)
+  DO i = 1, maxNrOfPhotoRates
+     READ (13,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+     IF (ierr.NE.0) THEN
+        EXIT
+     ENDIF
+  ENDDO
+  nrOfPhotoRates = i-1
+  CLOSE (13, status='keep')
+  i = 1
+  WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+  i = nrOfPhotoRates
+  WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+  WRITE (*,*) 'Finished reading photolysis rates.'
+  WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
+  RETURN
+END SUBROUTINE readPhotoloysisRates
 
-subroutine readPhotoloysisConstants(ck,cl,cmm,cnn,str,tf)
-    use photolysisRates, only: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
-    implicit none
-    integer:: i,ck(*), ierr
-    double precision::  cl(*),cmm(*),cnn(*),tf(*)
-    character (len = 30):: str(*)
+SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
+  USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
+  IMPLICIT NONE
+  INTEGER :: i, ck(*), ierr
+  DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
+  CHARACTER (LEN=30) :: str(*)
 
-    write(*,*) 'Looking for photolysis constants file...'
-    open(13,file='modelConfiguration/photolysisConstants.config', status='old',  iostat=ierr)
-    if(ierr .ne. 0) then
-        useConstantValues = 0
-      write(*,*) 'Photolysis constants file not found, trying photolysis rates file...'
-      call readPhotoloysisRates(ck,cl,cmm,cnn,str,tf)
-    return
-  endif
-    useConstantValues = 1
-  write(*,*) 'Reading photolysis constants from file...'
-    read(13,*)
-    do i = 1, maxNrOfPhotoRates
-        read(13,*,iostat=ierr) ck(i), cl(i),str(i)
-        if(ierr .ne. 0) then
-            exit
-        endif
-    enddo
-    nrOfPhotoRates = i-1
-    close(13,status = 'keep')
-    i = 1
-    write(*,*) ck(i), cl(i),str(i)
-    i = nrOfPhotoRates
-    write(*,*) ck(i), cl(i), str(i)
-    write(*,*)'Finished reading photolysis constants.'
-    write(*,*) 'Number of photolysis rates:', nrOfPhotoRates
-    return
-end
+  WRITE (*,*) 'Looking for photolysis constants file...'
+  OPEN (13, file='modelConfiguration/photolysisConstants.config', status='old', iostat=ierr)
+  IF (ierr.NE.0) THEN
+     useConstantValues = 0
+     WRITE (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
+     CALL readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
+     RETURN
+  ENDIF
+  useConstantValues = 1
+  WRITE (*,*) 'Reading photolysis constants from file...'
+  READ (13,*)
+  DO i = 1, maxNrOfPhotoRates
+     READ (13,*, iostat=ierr) ck(i), cl(i), str(i)
+     IF (ierr.NE.0) THEN
+        EXIT
+     ENDIF
+  ENDDO
+  nrOfPhotoRates = i-1
+  CLOSE (13, status='keep')
+  i = 1
+  WRITE (*,*) ck(i), cl(i), str(i)
+  i = nrOfPhotoRates
+  WRITE (*,*) ck(i), cl(i), str(i)
+  WRITE (*,*) 'Finished reading photolysis constants.'
+  WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
+  RETURN
+END SUBROUTINE readPhotoloysisConstants
 
 
-subroutine getReactionListSizes(csize1,csize2)
-    integer:: csize1,csize2,k,l
+SUBROUTINE getReactionListSizes (csize1, csize2)
+  INTEGER :: csize1, csize2, k, l
 
-    open (13,file='modelConfiguration/mechanism.reac',status = 'old') ! input file for lhs of equations
-    open (14,file = 'modelConfiguration/mechanism.prod',status = 'old') ! input file for rhs of equations
+  OPEN (13, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
+  OPEN (14, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
 
-    csize1=0
-    read(13,*)
-    do
-        read(13,*) k,l
-        if (k.eq.0) exit
-        csize1=csize1+1
-    enddo
+  csize1 = 0
+  READ (13,*)
+  DO
+     READ (13,*) k, l
+     IF (k.EQ.0) EXIT
+     csize1 = csize1+1
+  ENDDO
 
-    csize2=0
-    do
-        read(14,*) k,l
-        if (k.eq.0) exit
-        csize2=csize2+1
-    enddo
+  csize2 = 0
+  DO
+     READ (14,*) k, l
+     IF (k.EQ.0) EXIT
+     csize2 = csize2+1
+  ENDDO
 
-    close(13,status = 'keep')
-    close(14,status = 'keep')
+  CLOSE (13, status='keep')
+  CLOSE (14, status='keep')
 
-    return
-end
+  RETURN
+END SUBROUTINE getReactionListSizes
 
-subroutine getParametersFromFile(str, parameterArray)
-    character:: str*(*)
-    double precision:: parameterArray(*)
-    integer :: i
+SUBROUTINE getParametersFromFile (str, parameterArray)
+  CHARACTER :: str*(*)
+  DOUBLE PRECISION :: parameterArray(*)
+  INTEGER :: i
 
-    ! READ IN SOLVER PARAMETERS
-    open(5, file=str,status = 'old') ! input file
-    i =1
-    read(5,*) parameterArray(i)
-    do while (parameterArray(i) .ne.-9999)
-        i = i + 1
-        read(5,*) parameterArray(i)
-    end do
-    close(5,status = 'keep')
+  ! READ IN SOLVER PARAMETERS
+  OPEN (5, file=str, status='old') ! input file
+  i = 1
+  READ (5,*) parameterArray(i)
+  DO WHILE (parameterArray(i).NE.-9999)
+     i = i + 1
+     READ (5,*) parameterArray(i)
+  END DO
+  CLOSE (5, status='keep')
 
-    return
-end
+  RETURN
+END SUBROUTINE getParametersFromFile
 
-subroutine readPhotoRates(maxNumberOfDataPoints)
+SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
-    use photolysisRates
-    implicit none
+  USE photolysisRates
+  IMPLICIT NONE
 
-    INTEGER:: counter,i,k
-    INTEGER:: maxNumberOfDataPoints
-    CHARACTER(LEN=30)::  string
-    CHARACTER(LEN=27)::  fileLocationPrefix
-    CHARACTER(LEN=57):: fileLocation
+  INTEGER :: counter, i, k
+  INTEGER :: maxNumberOfDataPoints
+  CHARACTER (LEN=30) :: string
+  CHARACTER (LEN=27) :: fileLocationPrefix
+  CHARACTER (LEN=57) :: fileLocation
 
-    ! GET NAMES OF PHOTO RATES
-    call readPhotoloysisConstants(ck,cl,cmm,cnn,photoRateNames,transmissionFactor)
-    write(*,*)
-    ! GET NAMES OF CONSTRAINED PHOTO RATES
-    write(*,*) 'Reading names of constrained photolysis rates from file...'
-    open(5, file='modelConfiguration/constrainedPhotoRates.config',status = 'old') ! input file
+  ! GET NAMES OF PHOTO RATES
+  CALL readPhotoloysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
+  WRITE (*,*)
+  ! GET NAMES OF CONSTRAINED PHOTO RATES
+  WRITE (*,*) 'Reading names of constrained photolysis rates from file...'
+  OPEN (5, file='modelConfiguration/constrainedPhotoRates.config', status='old') ! input file
 
-    counter = 0
-    do
-        counter = counter + 1
-        read(5,*)constrainedPhotoRates(counter)
-        if(constrainedPhotoRates(counter).eq.'end') exit
-    enddo
-    numConPhotoRates = counter -1
-    close(5,status = 'keep')
-    write(*,*) 'Finished reading names of constrained photolysis rates.'
-    write(*,*) 'Number of constrained photorates:', numConPhotoRates
-    if(numConPhotoRates .gt. 0)  write(*,*) 1, constrainedPhotoRates(1)
-    if(numConPhotoRates .gt. 2)   write(*,*) '...'
-    if(numConPhotoRates .gt. 1) write(*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
+  counter = 0
+  DO
+     counter = counter + 1
+     READ (5,*) constrainedPhotoRates(counter)
+     IF (constrainedPhotoRates(counter).EQ.'end') EXIT
+  ENDDO
+  numConPhotoRates = counter -1
+  CLOSE (5, status='keep')
+  WRITE (*,*) 'Finished reading names of constrained photolysis rates.'
+  WRITE (*,*) 'Number of constrained photorates:', numConPhotoRates
+  IF (numConPhotoRates.GT.0) WRITE (*,*) 1, constrainedPhotoRates(1)
+  IF (numConPhotoRates.GT.2) WRITE (*,*) '...'
+  IF (numConPhotoRates.GT.1) WRITE (*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
 
-    ! GET NUMBERS OF CONSTRAINED PHOTO RATES
-    do i=1, numConPhotoRates
-        do k =1,nrOfPhotoRates
-            if(constrainedPhotoRates(i).eq.photoRateNames(k)) then
-                constrainedPhotoRatesNumbers(i) = ck(k)
-            endif
-        enddo
-    enddo
-    ! ALLOCATE ARRAY SIZE FOR STOREAGE OF PHOTOLYSIS CONSTRAINT DATA
-    ALLOCATE (photoX(numConPhotoRates,maxNumberOfDataPoints))
-    ALLOCATE (photoY(numConPhotoRates,maxNumberOfDataPoints))
-    ALLOCATE (photoY2(numConPhotoRates,maxNumberOfDataPoints))
-    ALLOCATE(photoNumberOfPoints(numConPhotoRates))
+  ! GET NUMBERS OF CONSTRAINED PHOTO RATES
+  DO i = 1, numConPhotoRates
+     DO k = 1, nrOfPhotoRates
+        IF (constrainedPhotoRates(i).EQ.photoRateNames(k)) THEN
+           constrainedPhotoRatesNumbers(i) = ck(k)
+        ENDIF
+     ENDDO
+  ENDDO
+  ! ALLOCATE ARRAY SIZE FOR STOREAGE OF PHOTOLYSIS CONSTRAINT DATA
+  ALLOCATE (photoX (numConPhotoRates, maxNumberOfDataPoints))
+  ALLOCATE (photoY (numConPhotoRates, maxNumberOfDataPoints))
+  ALLOCATE (photoY2 (numConPhotoRates, maxNumberOfDataPoints))
+  ALLOCATE (photoNumberOfPoints(numConPhotoRates))
 
-    fileLocationPrefix = './environmentalConstraints/'
+  fileLocationPrefix = './environmentalConstraints/'
 
-    ! READ IN PHOTOLYSIS DATA
-    if(numConPhotoRates .gt. 0) then
-        write(*,*)'Reading in constraint data for photolysis rates...'
-        do i =1,numConPhotoRates
-            string = constrainedPhotoRates(i)
-            write(*,*) string, '...'
-            fileLocation = fileLocationPrefix // string
-            open(13,file=fileLocation, status='old')
-            read(13,*) photoNumberOfPoints(i)
-            do k = 1, photoNumberOfPoints(i)
-                read(13,*)photoX(i,k),photoY(i,k) !,photoY2(i,k)
-            enddo
-            close(13,status = 'keep')
-        enddo
-        write(*,*)'Finished reading constraint data for photolysis rates.'
-    endif
-    return
-end
+  ! READ IN PHOTOLYSIS DATA
+  IF (numConPhotoRates.GT.0) THEN
+     WRITE (*,*) 'Reading in constraint data for photolysis rates...'
+     DO i = 1, numConPhotoRates
+        string = constrainedPhotoRates(i)
+        WRITE (*,*) string, '...'
+        fileLocation = fileLocationPrefix // string
+        OPEN (13, file=fileLocation, status='old')
+        READ (13,*) photoNumberOfPoints(i)
+        DO k = 1, photoNumberOfPoints(i)
+           READ (13,*) photoX (i, k), photoY (i, k) !, photoY2 (i, k)
+        ENDDO
+        CLOSE (13, status='keep')
+     ENDDO
+     WRITE (*,*) 'Finished reading constraint data for photolysis rates.'
+  ENDIF
+  RETURN
+END SUBROUTINE readPhotoRates
 
-subroutine readSpeciesOutputRequired(r,i, nsp)
+SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
 
-    character(LEN=10) c,r(*)
-    integer i, nsp
-    write(*,*)'Reading concentration output from file...'
-    open (4,file='modelConfiguration/concentrationOutput.config',status = 'old')
+  CHARACTER (LEN=10) c, r(*)
+  INTEGER i, nsp
+  WRITE (*,*) 'Reading concentration output from file...'
+  OPEN (4, file='modelConfiguration/concentrationOutput.config', status='old')
 
-    i=1
-    c='abc'
+  i = 1
+  c = 'abc'
 
-    read(4,*) c
-    do while (c.ne.'end' .and. i.le.nsp )
-        r(i) = c
-        i = i + 1
-        read(4,*) c
-    enddo
+  READ (4,*) c
+  DO WHILE (c.NE.'end' .AND. i.LE.nsp )
+     r(i) = c
+     i = i + 1
+     READ (4,*) c
+  ENDDO
 
-    close(4,status = 'keep')
-    write(*,*)'Finished reading concentration output from file.'
-    i = i - 1
+  CLOSE (4, status='keep')
+  WRITE (*,*) 'Finished reading concentration output from file.'
+  i = i - 1
 
-    ! ERROR HANDLING
-    if(i>nsp) then
-        write(94,*)'Error: Number of (number of species output is required for) > (number of species)'
-        write(94,*)"(number of species output is required for) = ",i
-        write(94,*)"(number of  species) = ",nsp
-        stop 2
-    endif
+  ! ERROR HANDLING
+  IF (i>nsp) THEN
+     WRITE (94,*) 'Error: Number of (number of species output is required for) > (number of species) '
+     WRITE (94,*) "(number of species output is required for) = ", i
+     WRITE (94,*) "(number of species) = ", nsp
+     STOP 2
+  ENDIF
 
-    return
-end
+  RETURN
+END SUBROUTINE readSpeciesOutputRequired
 
-subroutine readSpecies(y,neq,speciesName, speciesNumber)
-    double precision y(*)
-    integer neq,speciesNumber(*), j
-    character(LEN=10) speciesName(*)
+SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
+  DOUBLE PRECISION y(*)
+  INTEGER neq, speciesNumber(*), j
+  CHARACTER (LEN=10) speciesName(*)
 
-    ! READ IN INITIAL CONCENTRATIONS
-    open(5, file='modelConfiguration/mechanism.species') ! input file
-    do j=1,neq
-        read(5,*) speciesNumber(j), speciesName(j)
-        y(j) = 0
-    enddo
-    close(5,status = 'keep')
+  ! READ IN INITIAL CONCENTRATIONS
+  OPEN (5, file='modelConfiguration/mechanism.species') ! input file
+  DO j = 1, neq
+     READ (5,*) speciesNumber(j), speciesName(j)
+     y(j) = 0
+  ENDDO
+  CLOSE (5, status='keep')
 
-    return
-end
+  RETURN
+END SUBROUTINE readSpecies
 
-SUBROUTINE readConcentrations(concSpeciesName, concentration, concCounter,nsp)
+SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
 
-    character(LEN=10) concSpeciesName(*), k
-    double precision concentration(*),l
-    integer i, concCounter,nsp
+  CHARACTER (LEN=10) concSpeciesName(*), k
+  DOUBLE PRECISION concentration(*), l
+  INTEGER i, concCounter, nsp
 
-    write(*,*) 'Reading initial concentrations...'
-    open (4,file='modelConfiguration/initialConcentrations.config',status = 'old') ! input file for lhs of equations
+  WRITE (*,*) 'Reading initial concentrations...'
+  OPEN (4, file='modelConfiguration/initialConcentrations.config', status='old') ! input file for lhs of equations
 
-    i = 1
+  i = 1
 
-    do
-        read(4,*) k,l
-        if (l.eq.-1) exit
-        concentration(i) =  l
-        concspeciesName(i) = k
+  DO
+     READ (4,*) k, l
+     IF (l.EQ.-1) EXIT
+     concentration(i) = l
+     concspeciesName(i) = k
 
-        i = i + 1
-    enddo
+     i = i + 1
+  ENDDO
 
-    close(4,status = 'keep')
+  CLOSE (4, status='keep')
 
-    write(*,*)1,' ',concspeciesName(1),' ',concentration(1)
-    write(*,*) '...'
-    write(*,*)i-1,' ',concspeciesName(i-1),' ',concentration(i-1)
+  WRITE (*,*) 1, ' ', concspeciesName(1), ' ', concentration(1)
+  WRITE (*,*) '...'
+  WRITE (*,*) i-1, ' ', concspeciesName(i-1), ' ', concentration(i-1)
 
-    write(*,*) 'Finished reading initial concentrations.'
+  WRITE (*,*) 'Finished reading initial concentrations.'
 
-    concCounter = i - 1
+  concCounter = i - 1
 
-    if(concCounter>nsp) then
-        write(94,*)"Error:(number of species initial concentrations are set for) > (number of species)"
-        write(94,*)"(number of species initial concentrations are set for) = ",concCounter
-        write(94,*)"(number of  species) = ",nsp
-    endif
+  IF (concCounter>nsp) THEN
+     WRITE (94,*) "Error:(number of species initial concentrations are set for) > (number of species) "
+     WRITE (94,*) "(number of species initial concentrations are set for) = ", concCounter
+     WRITE (94,*) "(number of species) = ", nsp
+  ENDIF
 
-    return
-end
+  RETURN
+END SUBROUTINE readConcentrations
 
-subroutine readProductsOfInterest(r,i)
+SUBROUTINE readProductsOfInterest (r, i)
 
-    character(LEN=10) c,r(*)
-    integer i
+  CHARACTER (LEN=10) c, r(*)
+  INTEGER i
 
-    write(*,*) 'Reading products of interest...'
-    open (4,file='modelConfiguration/productionRatesOutput.config',status = 'old')
+  WRITE (*,*) 'Reading products of interest...'
+  OPEN (4, file='modelConfiguration/productionRatesOutput.config', status='old')
 
-    i=0
-    c='abc'
-    read(4,*) c
-    do while (c.ne.'end')
-        i = i + 1
-        r(i) = c
-        read(4,*) c
-    enddo
-    if(i.gt.0) then
-        write(*,*) 1, r(1)
-    endif
-    if(i.gt.2) then
-        write(*,*) '...'
-    endif
-    if(i.gt.1) then
-        write(*,*) i, r(i)
-    endif
-    close(4,status = 'keep')
-    write(*,*) 'Finished reading products of interest.'
-    return
-end
+  i = 0
+  c = 'abc'
+  READ (4,*) c
+  DO WHILE (c.NE.'end')
+     i = i + 1
+     r(i) = c
+     READ (4,*) c
+  ENDDO
+  IF (i.GT.0) THEN
+     WRITE (*,*) 1, r(1)
+  ENDIF
+  IF (i.GT.2) THEN
+     WRITE (*,*) '...'
+  ENDIF
+  IF (i.GT.1) THEN
+     WRITE (*,*) i, r(i)
+  ENDIF
+  CLOSE (4, status='keep')
+  WRITE (*,*) 'Finished reading products of interest.'
+  RETURN
+END SUBROUTINE readProductsOfInterest
 
-subroutine readReactantsOfInterest(r,i)
+SUBROUTINE readReactantsOfInterest (r, i)
 
-    character(LEN=10) c,r(*)
-    integer i
-    write(*,*) 'Reading reactants of interest...'
-    open (4,file='modelConfiguration/lossRatesOutput.config',status = 'old')
+  CHARACTER (LEN=10) c, r(*)
+  INTEGER i
+  WRITE (*,*) 'Reading reactants of interest...'
+  OPEN (4, file='modelConfiguration/lossRatesOutput.config', status='old')
 
-    i=0
-    c='abc'
-    read(4,*) c
-    do while (c.ne.'end')
-        i = i + 1
-        r(i) = c
-        read(4,*) c
-    enddo
-    if(i.gt.0) then
-        write(*,*) 1, r(1)
-    endif
-    if(i.gt.2) then
-        write(*,*) '...'
-    endif
-    if(i.gt.1) then
-        write(*,*) i, r(i)
-    endif
-    close(4,status = 'keep')
-    write(*,*) 'Finished reading reactants of interest.'
-    return
-    close(4,status = 'keep')
+  i = 0
+  c = 'abc'
+  READ (4,*) c
+  DO WHILE (c.NE.'end')
+     i = i + 1
+     r(i) = c
+     READ (4,*) c
+  ENDDO
+  IF (i.GT.0) THEN
+     WRITE (*,*) 1, r(1)
+  ENDIF
+  IF (i.GT.2) THEN
+     WRITE (*,*) '...'
+  ENDIF
+  IF (i.GT.1) THEN
+     WRITE (*,*) i, r(i)
+  ENDIF
+  CLOSE (4, status='keep')
+  WRITE (*,*) 'Finished reading reactants of interest.'
+  RETURN
+  CLOSE (4, status='keep')
 
-    return
-    end
+  RETURN
+END SUBROUTINE readReactantsOfInterest
 
-    subroutine readSpeciesConstraints (speciesName,neq,y,t)
+SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
-    USE species
-    USE constraints
-    USE chemcialConstraints
+  USE species
+  USE constraints
+  USE chemcialConstraints
 
-    implicit none
+  IMPLICIT NONE
 
-    integer:: i,j, k, dataNumberOfPoints,neq, id
-  integer :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-    character(LEN=13):: string
-    character(LEN=10):: speciesName(*), name
-    CHARACTER(LEN=21)::  fileLocationPrefix
-    CHARACTER(LEN=57):: fileLocation
+  INTEGER :: i, j, k, dataNumberOfPoints, neq, id
+  INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
+  CHARACTER (LEN=13) :: string
+  CHARACTER (LEN=10) :: speciesName(*), name
+  CHARACTER (LEN=21) :: fileLocationPrefix
+  CHARACTER (LEN=57) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
-  DOUBLE PRECISION :: Y(*)
+  DOUBLE PRECISION :: Y (*)
 
-    ! READ IN SPECIES TO BE CONSTRAINED
-    write(*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
-    open(5, file='modelConfiguration/constrainedSpecies.config',status = 'old') ! input file
+  ! READ IN SPECIES TO BE CONSTRAINED
+  WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
+  OPEN (5, file='modelConfiguration/constrainedSpecies.config', status='old') ! input file
 
-    i =0
-    read(5,*)string
-    do while (string.ne.'end')
-        i = i + 1
-        read(5,*)string
-    end do
-    close(5,status = 'keep')
+  i = 0
+  READ (5,*) string
+  DO WHILE (string.NE.'end')
+     i = i + 1
+     READ (5,*) string
+  END DO
+  CLOSE (5, status='keep')
   countOfVarConSpecNames = i
 
-    write(*,*) 'Finished counting the names of the species to be constrained.'
-  write(*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
+  WRITE (*,*) 'Finished counting the names of the species to be constrained.'
+  WRITE (*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
 
   ! read in numberOfFixedConstrainedSpecies
 
-  write(*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
-    open(9, file='modelConfiguration/constrainedFixedSpecies.config',status = 'old') ! input file
-  i =0
-    read(9,*)string
-    do while (string.ne.'end')
-        i = i + 1
-        read(9,*)string
-    end do
-    close(9,status = 'keep')
-  write(*,*) 'Finished counting the names of fixed-concentration species'
-    countOfFixConSpecNames = i
-  write(*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
+  WRITE (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
+  OPEN (9, file='modelConfiguration/constrainedFixedSpecies.config', status='old') ! input file
+  i = 0
+  READ (9,*) string
+  DO WHILE (string.NE.'end')
+     i = i + 1
+     READ (9,*) string
+  END DO
+  CLOSE (9, status='keep')
+  WRITE (*,*) 'Finished counting the names of fixed-concentration species'
+  countOfFixConSpecNames = i
+  WRITE (*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
 
   countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
-    ALLOCATE (constrainedSpecies(countOfConNames),constrainedName(countOfConNames))
+  ALLOCATE (constrainedSpecies(countOfConNames), constrainedName(countOfConNames))
 
 
 
-   write(*,*) 'Reading in the names of variable constrained species...'
-    open(5, file='modelConfiguration/constrainedSpecies.config',status = 'old') ! input file
-    i =0
-    read(5,*) name
-    do while (name .ne.'end')
-    call matchOneNameToNumber(speciesName,name,neq,id)
-    if(id.ne.0) then
-      i = i + 1
-      constrainedName(i)=name
-      constrainedSpecies(i)=id
-        endif
-        read(5,*) name
-    end do
-    close(5,status = 'keep')
+  WRITE (*,*) 'Reading in the names of variable constrained species...'
+  OPEN (5, file='modelConfiguration/constrainedSpecies.config', status='old') ! input file
+  i = 0
+  READ (5,*) name
+  DO WHILE (name.NE.'end')
+     CALL matchOneNameToNumber (speciesName, name, neq, id)
+     IF (id.NE.0) THEN
+        i = i + 1
+        constrainedName(i) = name
+        constrainedSpecies(i) = id
+     ENDIF
+     READ (5,*) name
+  END DO
+  CLOSE (5, status='keep')
   numberOfVariableConstrainedSpecies = i
-    write(*,*) 'Finished reading the names of variable constrained species'
-  write(*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
+  WRITE (*,*) 'Finished reading the names of variable constrained species'
+  WRITE (*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
 
-    write(*,*)'maxNumberOfDataPoints:',maxNumberOfDataPoints
-    write(*,*) 'Allocating storage for variable constrained species...'
-    ALLOCATE (dataX(numberOfVariableConstrainedSpecies,maxNumberOfDataPoints))
-    ALLOCATE (dataY(numberOfVariableConstrainedSpecies,maxNumberOfDataPoints))
-    ALLOCATE (dataY2(numberOfVariableConstrainedSpecies,maxNumberOfDataPoints))
-    write(*,*) 'Finished allocating storage for variable constrained species.'
+  WRITE (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
+  WRITE (*,*) 'Allocating storage for variable constrained species...'
+  ALLOCATE (dataX (numberOfVariableConstrainedSpecies, maxNumberOfDataPoints))
+  ALLOCATE (dataY (numberOfVariableConstrainedSpecies, maxNumberOfDataPoints))
+  ALLOCATE (dataY2 (numberOfVariableConstrainedSpecies, maxNumberOfDataPoints))
+  WRITE (*,*) 'Finished allocating storage for variable constrained species.'
 
 
-    if(numberOfVariableConstrainedSpecies.gt.0) write(*,*) 1, constrainedName(1)
-    if(numberOfVariableConstrainedSpecies.gt.2) write(*,*) '...'
-    if(numberOfVariableConstrainedSpecies.gt.1) write(*,*) numberOfVariableConstrainedSpecies, &
-        constrainedName(numberOfVariableConstrainedSpecies)
+  IF (numberOfVariableConstrainedSpecies.GT.0) WRITE (*,*) 1, constrainedName(1)
+  IF (numberOfVariableConstrainedSpecies.GT.2) WRITE (*,*) '...'
+  IF (numberOfVariableConstrainedSpecies.GT.1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
+       constrainedName(numberOfVariableConstrainedSpecies)
 
-    fileLocationPrefix = './speciesConstraints/'
+  fileLocationPrefix = './speciesConstraints/'
 
-    ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
-    write(*,*) 'Reading concentration data for constrained species...'
-  ALLOCATE(speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
-    do i =1,numberOfVariableConstrainedSpecies
-        if(i.lt.3 .or. i.eq.numberOfVariableConstrainedSpecies) then
-            write(*,*) constrainedName(i), '...'
-        else
-      if (i.eq.2) write(*,*) '...'
-        endif
+  ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
+  WRITE (*,*) 'Reading concentration data for constrained species...'
+  ALLOCATE (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
+  DO i = 1, numberOfVariableConstrainedSpecies
+     IF (i.LT.3 .OR. i.EQ.numberOfVariableConstrainedSpecies) THEN
+        WRITE (*,*) constrainedName(i), '...'
+     ELSE
+        IF (i.EQ.2) WRITE (*,*) '...'
+     ENDIF
 
-        fileLocation = fileLocationPrefix // trim(constrainedName(i))
-        open(13,file=fileLocation, status='old')
+     fileLocation = fileLocationPrefix // TRIM (constrainedName(i))
+     OPEN (13, file=fileLocation, status='old')
 
-        read(13,*) dataNumberOfPoints
-        if(dataNumberOfPoints.gt.maxNumberOfDataPoints) then
-            dataNumberOfPoints = maxNumberOfDataPoints
-            write(*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'
-        endif
+     READ (13,*) dataNumberOfPoints
+     IF (dataNumberOfPoints.GT.maxNumberOfDataPoints) THEN
+        dataNumberOfPoints = maxNumberOfDataPoints
+        WRITE (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'
+     ENDIF
 
-        speciesNumberOfPoints(i) = dataNumberOfPoints
-        do k = 1, dataNumberOfPoints
-            read(13,*)dataX(i,k),dataY(i,k) !,dataY2(i,k)
-        enddo
-        close(13,status = 'keep')
+     speciesNumberOfPoints(i) = dataNumberOfPoints
+     DO k = 1, dataNumberOfPoints
+        READ (13,*) dataX (i, k), dataY (i, k) !, dataY2 (i, k)
+     ENDDO
+     CLOSE (13, status='keep')
 
-    enddo
+  ENDDO
 
 
   ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
-  ALLOCATE (dataFixedY(countOfFixConSpecNames))
-  write(*,*) 'Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...'
-    open(9, file='modelConfiguration/constrainedFixedSpecies.config',status = 'old') ! input file
-  id=0
+  ALLOCATE (dataFixedY (countOfFixConSpecNames))
+  WRITE (*,*) 'Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...'
+  OPEN (9, file='modelConfiguration/constrainedFixedSpecies.config', status='old') ! input file
+  id = 0
   j = 0
   DO i = 1, countOfFixConSpecNames
-    read(9,*) name, value
-    call matchOneNameToNumber(speciesName,name,neq,id)
-    if(id.ne.0) then
-      j = j+1
-      constrainedName(j+numberOfVariableConstrainedSpecies)=name
-      dataFixedY(j)=value
-      constrainedSpecies(j+numberOfVariableConstrainedSpecies)=id
-    endif
-    end do
-    close(9,status = 'keep')
+     READ (9,*) name, value
+     CALL matchOneNameToNumber (speciesName, name, neq, id)
+     IF (id.NE.0) THEN
+        j = j+1
+        constrainedName(j+numberOfVariableConstrainedSpecies) = name
+        dataFixedY (j) = value
+        constrainedSpecies(j+numberOfVariableConstrainedSpecies) = id
+     ENDIF
+  END DO
+  CLOSE (9, status='keep')
   numberOfFixedConstrainedSpecies = j
-  write(94,*) 'Number of fixed constrained species:',numberOfFixedConstrainedSpecies
+  WRITE (94,*) 'Number of fixed constrained species:', numberOfFixedConstrainedSpecies
 
-  if(numberOfFixedConstrainedSpecies.gt.0) THEN
-    write(*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY(1)
+  IF (numberOfFixedConstrainedSpecies.GT.0) THEN
+     WRITE (*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY (1)
   ENDIF
-    if(numberOfFixedConstrainedSpecies.gt.2) write(*,*) '...'
-    if(numberOfFixedConstrainedSpecies.gt.1) THEN
-    write(*,*) numberOfFixedConstrainedSpecies, &
-    constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
-    dataFixedY(numberOfFixedConstrainedSpecies)
+  IF (numberOfFixedConstrainedSpecies.GT.2) WRITE (*,*) '...'
+  IF (numberOfFixedConstrainedSpecies.GT.1) THEN
+     WRITE (*,*) numberOfFixedConstrainedSpecies, &
+          constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
+          dataFixedY (numberOfFixedConstrainedSpecies)
   ENDIF
-  write(*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
+  WRITE (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
   numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-  write(94,*) "Number of constrained species:",numberOfConstrainedSpecies
+  WRITE (94,*) "Number of constrained species:", numberOfConstrainedSpecies
 
-    ! ERROR HANDLING
-    if(numberOfConstrainedSpecies.ge.neq) then
-        write(94,*)"Error: Number of (number of constrained species) => (number of species)"
-        write(94,*)"(number of constrained species) = ",numberOfConstrainedSpecies
-        write(94,*)"(number of  species) = ",neq
-        stop 2
-    endif
+  ! ERROR HANDLING
+  IF (numberOfConstrainedSpecies.GE.neq) THEN
+     WRITE (94,*) "Error: Number of (number of constrained species) => (number of species) "
+     WRITE (94,*) "(number of constrained species) = ", numberOfConstrainedSpecies
+     WRITE (94,*) "(number of species) = ", neq
+     STOP 2
+  ENDIF
 
-    ALLOCATE (constrainedConcs(numberOfConstrainedSpecies))
+  ALLOCATE (constrainedConcs(numberOfConstrainedSpecies))
 
-    call setNumberOfConstrainedSpecies(numberOfConstrainedSpecies)
+  CALL setNumberOfConstrainedSpecies (numberOfConstrainedSpecies)
 
-    write(*,*)'Finished reading constrained species.'
+  WRITE (*,*) 'Finished reading constrained species.'
 
   ! initialise concentrations of constrained species
-  write(*,*) 'Initialising concentrations of constrained species...'
-   do i=1, numberOfConstrainedSpecies
-    if (i<=numberOfVariableConstrainedSpecies) THEN
-      call    getConstrainedQuantAtT2D(t,datax,datay,datay2,speciesNumberOfPoints(i),concAtT,1,i, &
-        maxNumberOfDataPoints,numberOfVariableConstrainedSpecies)
-    ELSE
-      concAtT = dataFixedY(i-numberOfVariableConstrainedSpecies)
-    ENDIF
-        constrainedConcs(i) = concAtT
-    call setConstrainedConc(i,concAtT)
-    y(constrainedSpecies(i))=concAtT
-    enddo
-  write(*,*) 'Finished initialising concentrations of constrained species.'
+  WRITE (*,*) 'Initialising concentrations of constrained species...'
+  DO i = 1, numberOfConstrainedSpecies
+     IF (i.LE.numberOfVariableConstrainedSpecies) THEN
+        CALL getConstrainedQuantAtT2D (t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, 1, i, &
+             maxNumberOfDataPoints, numberOfVariableConstrainedSpecies)
+     ELSE
+        concAtT = dataFixedY (i-numberOfVariableConstrainedSpecies)
+     ENDIF
+     constrainedConcs(i) = concAtT
+     CALL setConstrainedConc (i, concAtT)
+     y(constrainedSpecies(i)) = concAtT
+  ENDDO
+  WRITE (*,*) 'Finished initialising concentrations of constrained species.'
 
-    return
-end
+  RETURN
+END SUBROUTINE readSpeciesConstraints
 
-subroutine readEnvVar(maxNumberOfDataPoints)
+SUBROUTINE readEnvVar (maxNumberOfDataPoints)
 
-    use envVars
+  USE envVars
 
-    implicit none
+  IMPLICIT NONE
 
-    integer:: i, counter,numConEnvVar,k,maxNumberOfDataPoints
-    character(len=30) dummy
-    CHARACTER(LEN=27)::  fileLocationPrefix
-    CHARACTER(LEN=57):: fileLocation
-    double precision, allocatable:: testArray(:)
+  INTEGER :: i, counter, numConEnvVar, k, maxNumberOfDataPoints
+  CHARACTER (LEN=30) dummy
+  CHARACTER (LEN=27) :: fileLocationPrefix
+  CHARACTER (LEN=57) :: fileLocation
+  DOUBLE PRECISION, ALLOCATABLE :: testArray(:)
 
-    write(*,*) 'Reading environment variables...'
-    open(5, file='modelConfiguration/environmentVariables.config',status = 'old') ! input file
-    maxNumberOfDataPoints = 10000
+  WRITE (*,*) 'Reading environment variables...'
+  OPEN (5, file='modelConfiguration/environmentVariables.config', status='old') ! input file
+  maxNumberOfDataPoints = 10000
 
-    ! FIND NUMBER OF ENVIRONMENTAL VARIABLES
-    counter = 0
-    do
-        counter = counter + 1
-        read(5,*)dummy
-        if(dummy.eq.'end') exit
-    enddo
+  ! FIND NUMBER OF ENVIRONMENTAL VARIABLES
+  counter = 0
+  DO
+     counter = counter + 1
+     READ (5,*) dummy
+     IF (dummy.EQ.'end') EXIT
+  ENDDO
 
-    numEnvVars = counter -1
+  numEnvVars = counter -1
 
-    !ALLOCATE STOREAGE FOR CURRENT VALUES OF ENV VARS USED FOR OUTPUT
-    ALLOCATE (currentEnvVarValues(numEnvVars))
+  !ALLOCATE STOREAGE FOR CURRENT VALUES OF ENV VARS USED FOR OUTPUT
+  ALLOCATE (currentEnvVarValues(numEnvVars))
 
-    write(*,*) 'Number of environment variables: ', numEnvVars
-    ALLOCATE(testArray(3))
-    ALLOCATE(envVarTypesNum(numEnvVars),envVarNames(numEnvVars), envVarTypes(numEnvVars))
-    ALLOCATE(envVarFixedValues(numEnvVars))
-    rewind(5)
-    ! READ IN ENV VARIABLES
-    numConEnvVar = 0
-    do i=1,numEnvVars
-        read(5,*)dummy,envVarNames(i), envVarTypes(i)
-        write(*,*)dummy,envVarNames(i), envVarTypes(i)
+  WRITE (*,*) 'Number of environment variables: ', numEnvVars
+  ALLOCATE (testArray(3))
+  ALLOCATE (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars))
+  ALLOCATE (envVarFixedValues(numEnvVars))
+  REWIND (5)
+  ! READ IN ENV VARIABLES
+  numConEnvVar = 0
+  DO i = 1, numEnvVars
+     READ (5,*) dummy, envVarNames(i), envVarTypes(i)
+     WRITE (*,*) dummy, envVarNames(i), envVarTypes(i)
 
-        if (trim(envVarTypes(i)).eq.'CALC') then
-            envVarTypesNum(i) = 1
-        else if (trim(envVarTypes(i)).eq.'CONSTRAINED') then
-            envVarTypesNum(i) = 2
-            numConEnvVar = numConEnvVar + 1
-        else if (trim(envVarTypes(i)).eq.'NOTUSED') then
-            envVarTypesNum(i) = 4
-        ! OTHERWISE ASSUME  A FIXED VALUE
-        else
-            envVarTypesNum(i) = 3
-            read(envVarTypes(i),*) envVarFixedValues(i)
-        endif
-    enddo
-        close(5,status = 'keep')
+     IF (TRIM (envVarTypes(i)).EQ.'CALC') THEN
+        envVarTypesNum(i) = 1
+     ELSE IF (TRIM (envVarTypes(i)).EQ.'CONSTRAINED') THEN
+        envVarTypesNum(i) = 2
+        numConEnvVar = numConEnvVar + 1
+     ELSE IF (TRIM (envVarTypes(i)).EQ.'NOTUSED') THEN
+        envVarTypesNum(i) = 4
+        ! OTHERWISE ASSUME A FIXED VALUE
+     ELSE
+        envVarTypesNum(i) = 3
+        READ (envVarTypes(i),*) envVarFixedValues(i)
+     ENDIF
+  ENDDO
+  CLOSE (5, status='keep')
 
-    write(*,*) 'Finished reading environment variables.'
-    write(*,*)
+  WRITE (*,*) 'Finished reading environment variables.'
+  WRITE (*,*)
 
-    ALLOCATE (envVarX(numEnvVars,maxNumberOfDataPoints))
-    ALLOCATE (envVarY(numEnvVars,maxNumberOfDataPoints))
-    ALLOCATE (envVarY2(numEnvVars,maxNumberOfDataPoints))
-    ALLOCATE(envVarNumberOfPoints(numEnvVars))
+  ALLOCATE (envVarX (numEnvVars, maxNumberOfDataPoints))
+  ALLOCATE (envVarY (numEnvVars, maxNumberOfDataPoints))
+  ALLOCATE (envVarY2 (numEnvVars, maxNumberOfDataPoints))
+  ALLOCATE (envVarNumberOfPoints(numEnvVars))
 
-    fileLocationPrefix = './environmentalConstraints/'
-    ! READ IN CONSTRAINT DATA FOR CONSTRAINED ENV VARIABLES
-    write(*,*) 'Checking for constrained environmental variables...'
-    do i =1,numEnvVars
-        if(envVarTypes(i).eq.'CONSTRAINED') then
+  fileLocationPrefix = './environmentalConstraints/'
+  ! READ IN CONSTRAINT DATA FOR CONSTRAINED ENV VARIABLES
+  WRITE (*,*) 'Checking for constrained environmental variables...'
+  DO i = 1, numEnvVars
+     IF (envVarTypes(i).EQ.'CONSTRAINED') THEN
 
-            write(*,*) 'Reading constraint data for', envVarNames(i)
+        WRITE (*,*) 'Reading constraint data for', envVarNames(i)
 
-            fileLocation = fileLocationPrefix // trim(envVarNames(i))
+        fileLocation = fileLocationPrefix // TRIM (envVarNames(i))
 
-            open(13,file=fileLocation, status='old')
+        OPEN (13, file=fileLocation, status='old')
 
-            read(13,*) envVarNumberOfPoints(i)
-            do k = 1, envVarNumberOfPoints(i)
-                read(13,*) envVarX(i,k), envVarY(i,k) ! envVarY2(i,k)
+        READ (13,*) envVarNumberOfPoints(i)
+        DO k = 1, envVarNumberOfPoints(i)
+           READ (13,*) envVarX (i, k), envVarY (i, k) ! envVarY2 (i, k)
 
-            enddo
-            close(13,status = 'keep')
-            write(*,*) 'Finished reading constraint data.'
-        endif
-    enddo
-    ! deallocate data
-    deallocate(testArray)
-    write(*,*) 'Finished checking for constrained environmental variables.'
+        ENDDO
+        CLOSE (13, status='keep')
+        WRITE (*,*) 'Finished reading constraint data.'
+     ENDIF
+  ENDDO
+  ! deallocate data
+  DEALLOCATE (testArray)
+  WRITE (*,*) 'Finished checking for constrained environmental variables.'
 
-    return
-end
+  RETURN
+END SUBROUTINE readEnvVar

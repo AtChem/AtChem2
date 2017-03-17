@@ -47,6 +47,10 @@ with open(filename, 'w') as output_file:
         if re.match('\s*CALL \w+\s*\(', to_output):
             if re.search('(?<=[a-zA-Z0-9])\(', to_output):
                 to_output = re.sub('(?<=[a-zA-Z0-9])\(', ' (', to_output, 1)
+        # If it's a SUBROUTINE line, then make the first opening bracket be preceded by exactly one space
+        if re.match('\s*SUBROUTINE \w+\s*\(', to_output):
+            if re.search('(?<=[a-zA-Z0-9])\(', to_output):
+                to_output = re.sub('(?<=[a-zA-Z0-9])\(', ' (', to_output, 1)
         # Append this line
         outputs.append(to_output)
     # Print all lines

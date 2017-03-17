@@ -1,12 +1,6 @@
-!     --------------------------------------------------
-!     Revision: $Revision: 101 $
-!     Date: $Date: 2010-05-26 17:36:18 +0100 (Wed, 26 May 2010) $
 !     ----------------------------------------------------------------
 !     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT
 !     ----------------------------------------------------------------
-!  Comment to test svn- CM 20/11/2008
-!  2nd Comment to test svn, connecting using TortoiseSVN from windows - CM 20/11/2008
-!  3rd Comment to test svn, local connection on chmlin10 - CM 20/11/2008
 
 PROGRAM ATCHEM
 
@@ -95,7 +89,6 @@ PROGRAM ATCHEM
     CHARACTER(LEN=57):: irfileLocation
     integer::irOutStepSize
     character (len = 30)::strTime
-    character(10) svn_revision
 
 !    MISC
     character(len=40) :: solverTypeName(3)
@@ -111,9 +104,6 @@ PROGRAM ATCHEM
 !    ********************************************************************************************************
 !    MODEL SETUP AND CONFIGURATION
 !    ********************************************************************************************************
-
-!   PRINT THE SVN REVISION NUMBER
-    write(*,"(a)") "Atchem code -- Revision " // trim(svn_revision()) // "."
 
     call system_clock(runStart)
     previousSeconds=0

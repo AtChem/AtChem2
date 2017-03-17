@@ -17,22 +17,25 @@ with open(filename, 'w') as output_file:
                            # Opening bracket preceded by an uppercase letter or a number should have a space in front.
                            re.sub('(?<=[A-Z0-9])\(', ' (',
                                   # Replace .LT. etc with lowercase and with no whitespace. This and the next 3 are all case-insensitive
-                                  re.sub('\s*\.LT\.\s*', '.lt.',
-                                         re.sub('\s*\.GT\.\s*', '.gt.',
-                                                re.sub('\s*\.EQ\.\s*', '.eq.',
-                                                       re.sub('\s*\.NE\.\s*', '.ne.',
-                                                              # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, single-quote, or spaces
-                                                              re.sub("\)(?=[\w\d\s'])", ') ',
-                                                                     # Any ending bracket followed by a double-quote, should have a single space.
-                                                                     re.sub('\)(?=")', ') ',
-                                                                            # Place all :: with exactly one space either side.
-                                                                            re.sub('\s*::\s*', ' :: ',
-                                                                                   # Replace e.g. ( Len =  by (LEN=
-                                                                                   re.sub('\(\s*LEN\s*=\s*', '(LEN=',
-                                                                                          line, flags=re.IGNORECASE
+                                  re.sub('\s*\.LT\.\s*', '.LT.',
+                                         re.sub('\s*\.GT\.\s*', '.GT.',
+                                                re.sub('\s*\.EQ\.\s*', '.EQ.',
+                                                       re.sub('\s*\.NE\.\s*', '.NE.',
+                                                              # Any ending bracket followed by whitespace should be followed by exactly one space
+                                                              re.sub('\)[ \t]+', ') ',
+                                                                     # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, or single-quote
+                                                                     re.sub("\)(?=[\w\d'])", ') ',
+                                                                            # Any ending bracket followed by a double-quote, should have a single space.
+                                                                            re.sub('\)(?=")', ') ',
+                                                                                  # Place all :: with exactly one space either side.
+                                                                                   re.sub('\s*::\s*', ' :: ',
+                                                                                          # Replace e.g. ( Len =  by (LEN=
+                                                                                          re.sub('\(\s*LEN\s*=\s*', '(LEN=',
+                                                                                                 line, flags=re.IGNORECASE
+                                                                                                )
                                                                                           )
-                                                                                   )
-                                                                            )
+                                                                                  )
+                                                                            ),
                                                                      ),
                                                               flags=re.IGNORECASE),
                                                        flags=re.IGNORECASE),

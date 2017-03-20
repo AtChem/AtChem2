@@ -68,7 +68,7 @@ END SUBROUTINE matchNameToNumber
 
 SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
   CHARACTER (LEN=10) oneSpecies, speciesName(*), m
-  INTEGER j, neq
+  INTEGER j, neq, id
 
   id = 0
   DO j = 1, neq

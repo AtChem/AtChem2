@@ -30,12 +30,12 @@ with open(filename, 'w') as output_file:
                )
 
         # Replace .LT. etc with lowercase and with no whitespace. These are all case-insensitive
-        to_output = re.sub('\s*\.LT\.\s*', '.LT.',
-                           re.sub('\s*\.LE\.\s*', '.LE.',
-                                  re.sub('\s*\.GT\.\s*', '.GT.',
-                                         re.sub('\s*\.GE\.\s*', '.GE.',
-                                                re.sub('\s*\.EQ\.\s*', '.EQ.',
-                                                       re.sub('\s*\.NE\.\s*', '.NE.',
+        to_output = re.sub('\s*\.LT\.\s*', '<',
+                           re.sub('\s*\.LE\.\s*', '<=',
+                                  re.sub('\s*\.GT\.\s*', '>',
+                                         re.sub('\s*\.GE\.\s*', '>=',
+                                                re.sub('\s*\.EQ\.\s*', '==',
+                                                       re.sub('\s*\.NE\.\s*', '/=',
                                                               to_output,
                                                               flags=re.IGNORECASE),
                                                        flags=re.IGNORECASE),

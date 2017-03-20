@@ -321,7 +321,7 @@ PROGRAM ATCHEM
   SORNumberSize = SORNumberSize -1
 
   WRITE (*,*) 'Output required for concentration of', speciesOutputRequiredSize, 'species:'
-  IF (speciesOutputRequiredSize.GT.2) THEN
+  IF (speciesOutputRequiredSize>2) THEN
      WRITE (*,*) 1, speciesOutputRequired(1)
      WRITE (*,*) '...'
      WRITE (*,*) speciesOutputRequiredSize, speciesOutputRequired(speciesOutputRequiredSize)
@@ -365,7 +365,7 @@ PROGRAM ATCHEM
   ipar(2) = numReactions
 
   CALL fnvinits (1, neq, ier)
-  IF (ier.NE.0) THEN
+  IF (ier/=0) THEN
      WRITE (6, 20) ier
 20   FORMAT (///' SUNDIALS_ERROR: FNVINITS returned ier = ', I5)
      STOP
@@ -374,7 +374,7 @@ PROGRAM ATCHEM
   WRITE (*,*) 't0 = ', t0
   CALL fcvmalloc (t0, z, meth, itmeth, itol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
-  IF (ier.NE.0) THEN
+  IF (ier/=0) THEN
      WRITE (6, 30) ier
 30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC returned ier = ', I5)
      STOP
@@ -388,21 +388,21 @@ PROGRAM ATCHEM
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER
-  IF (solverType.EQ.1) THEN
+  IF (solverType==1) THEN
      CALL fcvspgmr (0, 1, lookBack, deltaMain, ier)
      ! SPGMR SOLVER WITH BANDED PRECONDITIONER
-  ELSE IF (solverType.EQ.2) THEN
+  ELSE IF (solverType==2) THEN
      CALL fcvspgmr (1, 1, lookBack, deltaMain, ier)
      CALL fcvbpinit (neq, preconBandUpper, preconBandLower, ier)
-     IF (ier.NE.0 ) THEN
+     IF (ier/=0 ) THEN
         WRITE (6,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
         CALL fcvfree
         STOP
      END IF
      ! DENSE SOLVER
-  ELSE IF (solverType.EQ.3) THEN
+  ELSE IF (solverType==3) THEN
      ! make sure no Jacobian approximation is required
-     IF (JVapprox.EQ.1) THEN
+     IF (JVapprox==1) THEN
         WRITE (6,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
         WRITE (6,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
         STOP
@@ -413,18 +413,18 @@ PROGRAM ATCHEM
      WRITE (*,*) 'error with solverType input, error = ', solverType
   ENDIF
   ! ERROR HANDLING
-  IF (ier.NE.0) THEN
+  IF (ier/=0) THEN
      WRITE (6,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
      CALL fcvfree
      STOP
   ENDIF
 
   !    USE JACOBIAN APPROXIMATION IF REQUIRED
-  IF (JVapprox.EQ.1) THEN
+  IF (JVapprox==1) THEN
      CALL fcvspilssetjac (1, ier)
   ENDIF
 
-  IF (ier.NE.0) THEN
+  IF (ier/=0) THEN
      WRITE (6, 40) ier
 40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE returned ier = ', I5)
      CALL fcvfree
@@ -438,11 +438,11 @@ PROGRAM ATCHEM
   !    RUN MODEL
   !    ********************************************************************************************************
 
-  DO WHILE (jout.LT.nout)
+  DO WHILE (jout<nout)
      ! GET CONCENTRATIONS FOR SOLVED SPECIES
      WRITE (49,*) t, secx, cosx, lat, longt, lha, sinld, cosld
      CALL fcvode (tout, t, z, itask, ier)
-     IF (ier.NE.0) THEN
+     IF (ier/=0) THEN
         WRITE (*,*) 'ier POST FCVODE = ', ier
      ENDIF
      flush(6)
@@ -462,7 +462,7 @@ PROGRAM ATCHEM
      ! OUTPUT RATES OF PRODIUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
      time = INT (t)
      elapsed = INT (t-modelStartTime)
-     IF (MOD (elapsed, ratesOutputStepSize).EQ.0) THEN
+     IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
         CALL outputRates (prodIntSpecies, t, productionRates, 1, np, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen, &
              lossArrayLen , speciesName)
         CALL outputRates (reacIntSpecies, t, lossRates, 0, np, rateOfProdNS, prodLossArrayLen, rateOfProdNS, prodArrayLen, &
@@ -471,7 +471,7 @@ PROGRAM ATCHEM
 
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
      WRITE (*,*) 'time = ', time
-     IF (MOD (elapsed, jacobianOutputStepSize).EQ.0) THEN
+     IF (MOD (elapsed, jacobianOutputStepSize)==0) THEN
         CALL jfy (np, numReactions, y, fy, t)
         CALL outputjfy (fy, np, t)
      ENDIF
@@ -482,7 +482,7 @@ PROGRAM ATCHEM
 
 
      !OUTPUT INSTANTANEOUS RATES
-     IF (MOD (elapsed, irOutStepSize).EQ.0) THEN
+     IF (MOD (elapsed, irOutStepSize)==0) THEN
         WRITE (strTime,*) time
 
         irfileLocationPrefix = './instantaneousRates/'
@@ -515,7 +515,7 @@ PROGRAM ATCHEM
      ! previousSeconds = currentSeconds
 
      ! ERROR HANDLING
-     IF (ier.LT.0) THEN
+     IF (ier<0) THEN
         fmt = "(///' SUNDIALS_ERROR: FCVODE returned ier = ', I5, /, '                 Linear Solver returned ier = ', I5) "
         WRITE (6, fmt) ier, iout (15)
         ! free memory
@@ -523,7 +523,7 @@ PROGRAM ATCHEM
         STOP
      ENDIF
 
-     IF (ier.EQ.0) THEN
+     IF (ier==0) THEN
         tminus1 = t
         tout = tout + outputStepSize
         jout = jout + 1
@@ -532,7 +532,7 @@ PROGRAM ATCHEM
   ENDDO
 
   CALL fcvdky (t, 1, z, ier)
-  IF (ier.NE.0) THEN
+  IF (ier/=0) THEN
      fmt = "(///' SUNDIALS_ERROR: FCVDKY returned ier = ', I4) "
      WRITE (6, fmt) ier
      CALL fcvfree

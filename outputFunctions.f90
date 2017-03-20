@@ -3,7 +3,7 @@ SUBROUTINE outputEnvVar (t)
 
   INTEGER :: i
   DOUBLE PRECISION :: t
-  IF (ro2.LT.0) ro2 = 0.0
+  IF (ro2<0) ro2 = 0.0
   WRITE (95,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
   RETURN
@@ -37,7 +37,7 @@ SUBROUTINE getConcForSpecInt (y, yInt, specInt, specIntSize, neq)
 
   DO i = 1, neq
      DO j = 1, specIntSize
-        IF (specInt(j).EQ.i) THEN
+        IF (specInt(j)==i) THEN
            yInt(j) = y(i)
         ENDIF
      ENDDO
@@ -59,7 +59,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
 
   ! LOOP OVER REACTANTS
   DO i = 1, csize1
-     IF (clhs(1, i).EQ.reactionNumber) THEN
+     IF (clhs(1, i)==reactionNumber) THEN
         numReactants = numReactants +1
         reactants(numReactants) = speciesNames(clhs(2, i))
      ENDIF
@@ -73,7 +73,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
      reactantStr = TRIM (str1) // TRIM (reactants(i))
      reactantStr = ADJUSTL (reactantStr)
      reactantStr = TRIM (reactantStr)
-     IF (i.LT.numReactants) THEN
+     IF (i<numReactants) THEN
         reactantStr = TRIM (reactantStr)// '+'
      ENDIF
 
@@ -85,7 +85,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   !     LOOP OVER PRODUCTS
   numProducts = 0
   DO i = 1, csize2
-     IF (crhs(1, i).EQ.reactionNumber) THEN
+     IF (crhs(1, i)==reactionNumber) THEN
         numProducts = numProducts +1
         products(numProducts) = speciesNames(crhs(2, i))
      ENDIF
@@ -100,7 +100,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
      productStr = TRIM (str1) // TRIM (products(i))
      productStr = ADJUSTL (productStr)
      productStr = TRIM (productStr)
-     IF (i.LT.numProducts) THEN
+     IF (i<numProducts) THEN
         productStr = TRIM (productStr)// '+'
      ENDIF
 
@@ -126,14 +126,14 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 
 
   ! Flag = 1 for production
-  IF (flag.EQ.1) THEN
+  IF (flag==1) THEN
 
      DO i = 1, rateOfProdNS
 
         x = 2+prodArrayLen(i)
         DO j = 2, prodArrayLen(i)
 
-           IF (r(i, j).NE.0) THEN
+           IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
               WRITE (89,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
            ENDIF
@@ -142,13 +142,13 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
   ENDIF
 
   ! Flag = 0 for loss
-  IF (flag.EQ.0) THEN
+  IF (flag==0) THEN
 
      DO i = 1, rateOfLossNS
 
         DO j = 2, lossArrayLen(i)
 
-           IF (r(i, j).NE.0) THEN
+           IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
               WRITE (90,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
            ENDIF
@@ -170,7 +170,7 @@ SUBROUTINE outputInteresting (t, yInt, yIntSize)
   DOUBLE PRECISION t, yInt(*)
   INTEGER yIntSize, i
   DO i = 1, yIntSize
-     IF (yInt(i).LT.0) THEN
+     IF (yInt(i)<0) THEN
         yInt(i) = 0d0
      ENDIF
   END DO

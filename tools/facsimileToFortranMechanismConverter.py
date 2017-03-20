@@ -484,8 +484,8 @@ for i, item in zip(range(1, len(coeffSpeciesList)+1), coeffSpeciesList):
 mechanism_rates_list = list(mechanism_rates_list[0]) + mechanism_rates_decl + list(mechanism_rates_list[1:])
 
 mechanism_rates_list.append("""  DO i = 1, nrOfPhotoRates
-     IF (useConstantValues.EQ.0) THEN
-        IF (cosx.LT.1.00d-10) THEN
+     IF (useConstantValues==0) THEN
+        IF (cosx<1.00d-10) THEN
            j(ck(i)) = 1.0d-30
         ELSE
            j(ck(i)) = cl(i)*cosx**(cmm(i))*EXP(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac

@@ -12,7 +12,7 @@ SUBROUTINE readJFacSpecies ()
   WRITE (*,*) 'Finished reading JFacSpecies.'
   ! get line number for the JFac base species:
   DO i = 1, nrOfPhotoRates
-     IF ((TRIM (photoRateNames(i))).EQ.(TRIM (jfacBase))) THEN
+     IF ((TRIM (photoRateNames(i)))==(TRIM (jfacBase))) THEN
         jfacSpeciesLine = i
      ENDIF
   ENDDO
@@ -31,7 +31,7 @@ SUBROUTINE readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
   READ (13,*)
   DO i = 1, maxNrOfPhotoRates
      READ (13,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
-     IF (ierr.NE.0) THEN
+     IF (ierr/=0) THEN
         EXIT
      ENDIF
   ENDDO
@@ -55,7 +55,7 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
 
   WRITE (*,*) 'Looking for photolysis constants file...'
   OPEN (13, file='modelConfiguration/photolysisConstants.config', status='old', iostat=ierr)
-  IF (ierr.NE.0) THEN
+  IF (ierr/=0) THEN
      useConstantValues = 0
      WRITE (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
      CALL readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
@@ -66,7 +66,7 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
   READ (13,*)
   DO i = 1, maxNrOfPhotoRates
      READ (13,*, iostat=ierr) ck(i), cl(i), str(i)
-     IF (ierr.NE.0) THEN
+     IF (ierr/=0) THEN
         EXIT
      ENDIF
   ENDDO
@@ -92,14 +92,14 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   READ (13,*)
   DO
      READ (13,*) k, l
-     IF (k.EQ.0) EXIT
+     IF (k==0) EXIT
      csize1 = csize1+1
   ENDDO
 
   csize2 = 0
   DO
      READ (14,*) k, l
-     IF (k.EQ.0) EXIT
+     IF (k==0) EXIT
      csize2 = csize2+1
   ENDDO
 
@@ -118,7 +118,7 @@ SUBROUTINE getParametersFromFile (str, parameterArray)
   OPEN (5, file=str, status='old') ! input file
   i = 1
   READ (5,*) parameterArray(i)
-  DO WHILE (parameterArray(i).NE.-9999)
+  DO WHILE (parameterArray(i)/=-9999)
      i = i + 1
      READ (5,*) parameterArray(i)
   END DO
@@ -149,20 +149,20 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   DO
      counter = counter + 1
      READ (5,*) constrainedPhotoRates(counter)
-     IF (constrainedPhotoRates(counter).EQ.'end') EXIT
+     IF (constrainedPhotoRates(counter)=='end') EXIT
   ENDDO
   numConPhotoRates = counter -1
   CLOSE (5, status='keep')
   WRITE (*,*) 'Finished reading names of constrained photolysis rates.'
   WRITE (*,*) 'Number of constrained photorates:', numConPhotoRates
-  IF (numConPhotoRates.GT.0) WRITE (*,*) 1, constrainedPhotoRates(1)
-  IF (numConPhotoRates.GT.2) WRITE (*,*) '...'
-  IF (numConPhotoRates.GT.1) WRITE (*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
+  IF (numConPhotoRates>0) WRITE (*,*) 1, constrainedPhotoRates(1)
+  IF (numConPhotoRates>2) WRITE (*,*) '...'
+  IF (numConPhotoRates>1) WRITE (*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
 
   ! GET NUMBERS OF CONSTRAINED PHOTO RATES
   DO i = 1, numConPhotoRates
      DO k = 1, nrOfPhotoRates
-        IF (constrainedPhotoRates(i).EQ.photoRateNames(k)) THEN
+        IF (constrainedPhotoRates(i)==photoRateNames(k)) THEN
            constrainedPhotoRatesNumbers(i) = ck(k)
         ENDIF
      ENDDO
@@ -176,7 +176,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   fileLocationPrefix = './environmentalConstraints/'
 
   ! READ IN PHOTOLYSIS DATA
-  IF (numConPhotoRates.GT.0) THEN
+  IF (numConPhotoRates>0) THEN
      WRITE (*,*) 'Reading in constraint data for photolysis rates...'
      DO i = 1, numConPhotoRates
         string = constrainedPhotoRates(i)
@@ -205,7 +205,7 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   c = 'abc'
 
   READ (4,*) c
-  DO WHILE (c.NE.'end' .AND. i.LE.nsp )
+  DO WHILE (c/='end' .AND. i<=nsp )
      r(i) = c
      i = i + 1
      READ (4,*) c
@@ -255,7 +255,7 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
 
   DO
      READ (4,*) k, l
-     IF (l.EQ.-1) EXIT
+     IF (l==-1) EXIT
      concentration(i) = l
      concspeciesName(i) = k
 
@@ -292,18 +292,18 @@ SUBROUTINE readProductsOfInterest (r, i)
   i = 0
   c = 'abc'
   READ (4,*) c
-  DO WHILE (c.NE.'end')
+  DO WHILE (c/='end')
      i = i + 1
      r(i) = c
      READ (4,*) c
   ENDDO
-  IF (i.GT.0) THEN
+  IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
-  IF (i.GT.2) THEN
+  IF (i>2) THEN
      WRITE (*,*) '...'
   ENDIF
-  IF (i.GT.1) THEN
+  IF (i>1) THEN
      WRITE (*,*) i, r(i)
   ENDIF
   CLOSE (4, status='keep')
@@ -321,18 +321,18 @@ SUBROUTINE readReactantsOfInterest (r, i)
   i = 0
   c = 'abc'
   READ (4,*) c
-  DO WHILE (c.NE.'end')
+  DO WHILE (c/='end')
      i = i + 1
      r(i) = c
      READ (4,*) c
   ENDDO
-  IF (i.GT.0) THEN
+  IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
-  IF (i.GT.2) THEN
+  IF (i>2) THEN
      WRITE (*,*) '...'
   ENDIF
-  IF (i.GT.1) THEN
+  IF (i>1) THEN
      WRITE (*,*) i, r(i)
   ENDIF
   CLOSE (4, status='keep')
@@ -366,7 +366,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
   i = 0
   READ (5,*) string
-  DO WHILE (string.NE.'end')
+  DO WHILE (string/='end')
      i = i + 1
      READ (5,*) string
   END DO
@@ -382,7 +382,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   OPEN (9, file='modelConfiguration/constrainedFixedSpecies.config', status='old') ! input file
   i = 0
   READ (9,*) string
-  DO WHILE (string.NE.'end')
+  DO WHILE (string/='end')
      i = i + 1
      READ (9,*) string
   END DO
@@ -400,9 +400,9 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   OPEN (5, file='modelConfiguration/constrainedSpecies.config', status='old') ! input file
   i = 0
   READ (5,*) name
-  DO WHILE (name.NE.'end')
+  DO WHILE (name/='end')
      CALL matchOneNameToNumber (speciesName, name, neq, id)
-     IF (id.NE.0) THEN
+     IF (id/=0) THEN
         i = i + 1
         constrainedName(i) = name
         constrainedSpecies(i) = id
@@ -422,9 +422,9 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   WRITE (*,*) 'Finished allocating storage for variable constrained species.'
 
 
-  IF (numberOfVariableConstrainedSpecies.GT.0) WRITE (*,*) 1, constrainedName(1)
-  IF (numberOfVariableConstrainedSpecies.GT.2) WRITE (*,*) '...'
-  IF (numberOfVariableConstrainedSpecies.GT.1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
+  IF (numberOfVariableConstrainedSpecies>0) WRITE (*,*) 1, constrainedName(1)
+  IF (numberOfVariableConstrainedSpecies>2) WRITE (*,*) '...'
+  IF (numberOfVariableConstrainedSpecies>1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
        constrainedName(numberOfVariableConstrainedSpecies)
 
   fileLocationPrefix = './speciesConstraints/'
@@ -433,17 +433,17 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   WRITE (*,*) 'Reading concentration data for constrained species...'
   ALLOCATE (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
   DO i = 1, numberOfVariableConstrainedSpecies
-     IF (i.LT.3 .OR. i.EQ.numberOfVariableConstrainedSpecies) THEN
+     IF (i<3 .OR. i==numberOfVariableConstrainedSpecies) THEN
         WRITE (*,*) constrainedName(i), '...'
      ELSE
-        IF (i.EQ.2) WRITE (*,*) '...'
+        IF (i==2) WRITE (*,*) '...'
      ENDIF
 
      fileLocation = fileLocationPrefix // TRIM (constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints
-     IF (dataNumberOfPoints.GT.maxNumberOfDataPoints) THEN
+     IF (dataNumberOfPoints>maxNumberOfDataPoints) THEN
         dataNumberOfPoints = maxNumberOfDataPoints
         WRITE (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'
      ENDIF
@@ -466,7 +466,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   DO i = 1, countOfFixConSpecNames
      READ (9,*) name, value
      CALL matchOneNameToNumber (speciesName, name, neq, id)
-     IF (id.NE.0) THEN
+     IF (id/=0) THEN
         j = j+1
         constrainedName(j+numberOfVariableConstrainedSpecies) = name
         dataFixedY (j) = value
@@ -477,11 +477,11 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   numberOfFixedConstrainedSpecies = j
   WRITE (94,*) 'Number of fixed constrained species:', numberOfFixedConstrainedSpecies
 
-  IF (numberOfFixedConstrainedSpecies.GT.0) THEN
+  IF (numberOfFixedConstrainedSpecies>0) THEN
      WRITE (*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY (1)
   ENDIF
-  IF (numberOfFixedConstrainedSpecies.GT.2) WRITE (*,*) '...'
-  IF (numberOfFixedConstrainedSpecies.GT.1) THEN
+  IF (numberOfFixedConstrainedSpecies>2) WRITE (*,*) '...'
+  IF (numberOfFixedConstrainedSpecies>1) THEN
      WRITE (*,*) numberOfFixedConstrainedSpecies, &
           constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
           dataFixedY (numberOfFixedConstrainedSpecies)
@@ -492,8 +492,8 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   WRITE (94,*) "Number of constrained species:", numberOfConstrainedSpecies
 
   ! ERROR HANDLING
-  IF (numberOfConstrainedSpecies.GE.neq) THEN
-     WRITE (94,*) "Error: Number of (number of constrained species) => (number of species) "
+  IF (numberOfConstrainedSpecies>=neq) THEN
+     WRITE (94,*) "Error: Number of (number of constrained species) >= (number of species) "
      WRITE (94,*) "(number of constrained species) = ", numberOfConstrainedSpecies
      WRITE (94,*) "(number of species) = ", neq
      STOP 2
@@ -508,7 +508,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   ! initialise concentrations of constrained species
   WRITE (*,*) 'Initialising concentrations of constrained species...'
   DO i = 1, numberOfConstrainedSpecies
-     IF (i.LE.numberOfVariableConstrainedSpecies) THEN
+     IF (i<=numberOfVariableConstrainedSpecies) THEN
         CALL getConstrainedQuantAtT2D (t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, 1, i, &
              maxNumberOfDataPoints, numberOfVariableConstrainedSpecies)
      ELSE
@@ -544,7 +544,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   DO
      counter = counter + 1
      READ (5,*) dummy
-     IF (dummy.EQ.'end') EXIT
+     IF (dummy=='end') EXIT
   ENDDO
 
   numEnvVars = counter -1
@@ -563,12 +563,12 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
      READ (5,*) dummy, envVarNames(i), envVarTypes(i)
      WRITE (*,*) dummy, envVarNames(i), envVarTypes(i)
 
-     IF (TRIM (envVarTypes(i)).EQ.'CALC') THEN
+     IF (TRIM (envVarTypes(i))=='CALC') THEN
         envVarTypesNum(i) = 1
-     ELSE IF (TRIM (envVarTypes(i)).EQ.'CONSTRAINED') THEN
+     ELSE IF (TRIM (envVarTypes(i))=='CONSTRAINED') THEN
         envVarTypesNum(i) = 2
         numConEnvVar = numConEnvVar + 1
-     ELSE IF (TRIM (envVarTypes(i)).EQ.'NOTUSED') THEN
+     ELSE IF (TRIM (envVarTypes(i))=='NOTUSED') THEN
         envVarTypesNum(i) = 4
         ! OTHERWISE ASSUME A FIXED VALUE
      ELSE
@@ -590,7 +590,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   ! READ IN CONSTRAINT DATA FOR CONSTRAINED ENV VARIABLES
   WRITE (*,*) 'Checking for constrained environmental variables...'
   DO i = 1, numEnvVars
-     IF (envVarTypes(i).EQ.'CONSTRAINED') THEN
+     IF (envVarTypes(i)=='CONSTRAINED') THEN
 
         WRITE (*,*) 'Reading constraint data for', envVarNames(i)
 

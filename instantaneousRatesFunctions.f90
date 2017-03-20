@@ -9,7 +9,7 @@ SUBROUTINE findReactionsWithProductX (r, crhs, csize2, rateOfProdNS, prodArrayLe
   ! loop over interesting species
   DO i = 1, rateOfProdNS
      DO j = 1, csize2
-        IF (crhs(2, j).EQ.r(i, 1)) THEN
+        IF (crhs(2, j)==r(i, 1)) THEN
            r(i, rCounter) = crhs(1, j)
            rCounter = rCounter + 1
         ENDIF
@@ -32,7 +32,7 @@ SUBROUTINE findReactionsWithReactant (r, clhs, csize1, rateOfLossNS, lossArrayLe
   ! loop over interesting species
   DO i = 1, rateOfLossNS
      DO j = 1, csize1
-        IF (clhs(2, j).EQ.r(i, 1)) THEN
+        IF (clhs(2, j)==r(i, 1)) THEN
            r(i, rCounter) = clhs(1, j)
            rCounter = rCounter + 1
         ENDIF

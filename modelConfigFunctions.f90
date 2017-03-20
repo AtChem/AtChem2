@@ -51,7 +51,7 @@ SUBROUTINE matchNameToNumber (speciesName, speciesList, listSize, neq, returnArr
      match = 0
      DO j = 1, neq
         m = speciesName(j)
-        IF (m.EQ.k) THEN
+        IF (m==k) THEN
            match = 1
            matched_j = j
            returnArray(returnArraySize) = j
@@ -59,7 +59,7 @@ SUBROUTINE matchNameToNumber (speciesName, speciesList, listSize, neq, returnArr
         ENDIF
      ENDDO
      ! substitute empty strings for invalid species
-     IF (match.EQ.0) THEN
+     IF (match==0) THEN
         speciesList(i) = ''
      ENDIF
   ENDDO
@@ -73,7 +73,7 @@ SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
   id = 0
   DO j = 1, neq
      m = speciesName(j)
-     IF (m.EQ.oneSpecies) THEN
+     IF (m==oneSpecies) THEN
         id = j
         RETURN
      ENDIF
@@ -92,7 +92,7 @@ SUBROUTINE setConcentrations (y, speciesName, concSpeciesName, concentration, co
      match = 0
      DO j = 1, neq
         m = speciesName(j)
-        IF (m.EQ.k) THEN
+        IF (m==k) THEN
            ! Set concentration in y()
            y(j) = concentration(i)
            match = 1
@@ -101,7 +101,7 @@ SUBROUTINE setConcentrations (y, speciesName, concSpeciesName, concentration, co
            WRITE (99,*) 'no match, m', m, ' != k! = ', k, ' concentration = ', concentration(i)
         ENDIF
      ENDDO
-     IF (match.EQ.0) THEN
+     IF (match==0) THEN
         WRITE (94,*) "Error in setConcentrations"
         WRITE (94,*) "Can't find species: ", k," in species list"
      END IF

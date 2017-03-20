@@ -8,55 +8,55 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   INTEGER :: indexBefore, indexAfter, intMethod, ind, facintfound, i
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
-  IF (constraintType.EQ.1) THEN
+  IF (constraintType==1) THEN
      CALL getSpeciesIntMethod (intMethod)
-  ELSE IF (constraintType.EQ.2) THEN
+  ELSE IF (constraintType==2) THEN
      CALL getConditionIntMethod (intMethod)
-  ELSE IF (constraintType.EQ.3) THEN
+  ELSE IF (constraintType==3) THEN
      CALL getDecIntMethod (intMethod)
   ELSE
      WRITE (*,*) 'Error in setting constraintType, error = ', constraintType
   ENDIF
 
   ! CUBIC SPLINE INTERPOLATION
-  IF (intMethod.EQ.1) THEN
+  IF (intMethod==1) THEN
      CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
-     IF (concAtT.LE.0) THEN
+     IF (concAtT<=0) THEN
         concAtT = 0
      ENDIF
      ! CUBIC SPLINE INTERPOLATION (LN)
-  ELSE IF (intMethod.EQ.2) THEN
+  ELSE IF (intMethod==2) THEN
      CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
      concAtT = EXP (concAtT)
      ! PIECEWISE CONSTANT INTERPOLATION
-  ELSE IF (intMethod.EQ.3) THEN
+  ELSE IF (intMethod==3) THEN
      facintfound = 0
      DO i = 1, dataNumberOfPoints
-        IF ((t.GE.X (ind, i)).AND.(t.LT.X (ind, i+1))) THEN
+        IF ((t>=X (ind, i)).AND.(t<X (ind, i+1))) THEN
            concAtT = Y (ind, i)
            facintfound = 1
         ENDIF
      ENDDO
-     IF (facintfound.EQ.0) THEN
+     IF (facintfound==0) THEN
         WRITE (*,*) 'error in peicewise constant interpolation'
         WRITE (*,*) t, dataNumberOfPoints, concAtT
         concAtT = y(ind, dataNumberOfPoints)
      ENDIF
      ! PIECEWISE LINEAR INTERPOLATION
-  ELSE IF (intMethod.EQ.4) THEN
+  ELSE IF (intMethod==4) THEN
      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
      linintsuc = 0
      DO i = 1, dataNumberOfPoints
-        IF ((t.GE.x(ind, i)).AND.(t.LT.x(ind, i+1))) THEN
+        IF ((t>=x(ind, i)).AND.(t<x(ind, i+1))) THEN
            indexBefore = i
            indexAfter = i + 1
            linintsuc = 1
         ENDIF
      ENDDO
-     IF (linintsuc.EQ.0) THEN
+     IF (linintsuc==0) THEN
         concAtT = y(ind, dataNumberOfPoints)
         WRITE (*,*) 'Failed to lin int'
-     ELSE IF (linintsuc.EQ.1) THEN
+     ELSE IF (linintsuc==1) THEN
         ! INDENTIFY COORIDANTES OF ENCLOSING DATA POINTS
         xBefore = x(ind, indexBefore)
         yBefore = y(ind, indexBefore)
@@ -85,9 +85,9 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
   klo = 1 !We will find the right place in the table by means of bisection.
   ! This is optimal if sequential calls to this routine are at random values of x. If sequential calls are in order, and closely spaced, one would do better to store previous values of klo and khi and test if they remain appropriate on the next call.
   khi = n
-  DO WHILE (khi-klo.GT.1)
+  DO WHILE (khi-klo>1)
      k = (khi+klo)/2
-     IF (xa(ind, k).GT.x) THEN
+     IF (xa(ind, k)>x) THEN
         khi = k
      ELSE
         klo = k
@@ -95,7 +95,7 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
   ENDDO !klo and khi now bracket the input value of x.
   h = xa(ind, khi)-xa(ind, klo)
 
-  IF (h.EQ.0.) THEN
+  IF (h==0.) THEN
      PRINT *, 'Bad input in splint2D! The xa''s must be distinct'
      STOP
   END IF
@@ -116,9 +116,9 @@ SUBROUTINE splint (xa, ya, y2a, n, x, y)
   klo = 1 !We will find the right place in the table by means of bisection.
   ! This is optimal if sequential calls to this routine are at random values of x. If sequential calls are in order, and closely spaced, one would do better to store previous values of klo and khi and test if they remain appropriate on the next call.
   khi = n
-  DO WHILE (khi-klo.GT.1)
+  DO WHILE (khi-klo>1)
      k = (khi+klo)/2
-     IF (xa(k).GT.x) THEN
+     IF (xa(k)>x) THEN
         khi = k
      ELSE
         klo = k
@@ -126,7 +126,7 @@ SUBROUTINE splint (xa, ya, y2a, n, x, y)
   ENDDO !klo and khi now bracket the input value of x.
   h = xa(khi)-xa(klo)
 
-  IF (h.EQ.0.) THEN
+  IF (h==0.) THEN
      PRINT *, 'bad xa input in splint! The xa''s must be distinct.'
      STOP
   END IF
@@ -145,52 +145,52 @@ SUBROUTINE getConstrainedQuantAtT (t, x, y, y2, dataNumberOfPoints, concAtT, con
   INTEGER :: indexBefore, indexAfter, intMethod, facintfound, i
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
-  IF (constraintType.EQ.1) THEN
+  IF (constraintType==1) THEN
      CALL getSpeciesIntMethod (intMethod)
-  ELSE IF (constraintType.EQ.2) THEN
+  ELSE IF (constraintType==2) THEN
      CALL getConditionIntMethod (intMethod)
-  ELSE IF (constraintType.EQ.3) THEN
+  ELSE IF (constraintType==3) THEN
      CALL getDecIntMethod (intMethod)
   ELSE
      WRITE (*,*) 'Error in setting constraintType, error = ', constraintType
   ENDIF
 
   ! CUBIC SPLINE INTERPOLATION
-  IF (intMethod.EQ.1) THEN
+  IF (intMethod==1) THEN
      CALL splint (x, y, y2, dataNumberOfPoints, t, concAtT)
      ! CUBIC SPLINE INTERPOLATION (LN)
-  ELSE IF (intMethod.EQ.2) THEN
+  ELSE IF (intMethod==2) THEN
      CALL splint (x, y, y2, dataNumberOfPoints, t, concAtT)
      concAtT = EXP (concAtT)
      ! PIECEWISE CONSTANT INTERPOLATION
-  ELSE IF (intMethod.EQ.3) THEN
+  ELSE IF (intMethod==3) THEN
      facintfound = 0
      DO i = 1, dataNumberOfPoints
-        IF ((t.GE.x(i)).AND.(t.LT.x(i+1))) THEN
+        IF ((t>=x(i)).AND.(t<x(i+1))) THEN
            concAtT = y(i)
            facintfound = 1
         ENDIF
      ENDDO
-     IF (facintfound.EQ.0) THEN
+     IF (facintfound==0) THEN
         WRITE (*,*) 'error in peicewise constant interpolation'
         WRITE (*,*) t, dataNumberOfPoints, concAtT
         concAtT = y(dataNumberOfPoints)
      ENDIF
      ! PIECEWISE LINEAR INTERPOLATION
-  ELSE IF (intMethod.EQ.4) THEN
+  ELSE IF (intMethod==4) THEN
      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
      linintsuc = 0
      DO i = 1, dataNumberOfPoints
-        IF ((t.GE.x(i)).AND.(t.LT.x(i+1))) THEN
+        IF ((t>=x(i)).AND.(t<x(i+1))) THEN
            indexBefore = i
            indexAfter = i + 1
            linintsuc = 1
         ENDIF
      ENDDO
-     IF (linintsuc.EQ.0) THEN
+     IF (linintsuc==0) THEN
         concAtT = y(dataNumberOfPoints)
         WRITE (*,*) 'Failed to lin int'
-     ELSE IF (linintsuc.EQ.1) THEN
+     ELSE IF (linintsuc==1) THEN
         ! INDENTIFY COORIDANTES OF ENCLOSING DATA POINTS
         xBefore = x(indexBefore)
         yBefore = y(indexBefore)

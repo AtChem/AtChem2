@@ -29,7 +29,7 @@ with open(filename, 'w') as output_file:
                       ),
                )
 
-        # Replace .LT. etc with lowercase and with no whitespace. These are all case-insensitive
+        # Replace .LT. etc with symbols and with no whitespace. These are all case-insensitive
         to_output = re.sub('\s*\.LT\.\s*', '<',
                            re.sub('\s*\.LE\.\s*', '<=',
                                   re.sub('\s*\.GT\.\s*', '>',

@@ -60,7 +60,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   ALLOCATE (dy(np), z(np))
 
   DO i = 1, numberOfConstrainedSpecies
-     IF (i.LE.numberOfVariableConstrainedSpecies) THEN
+     IF (i<=numberOfVariableConstrainedSpecies) THEN
         CALL getConstrainedQuantAtT2D (t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, &
              1, i, maxNumberOfDataPoints, numberOfVariableConstrainedSpecies)
      ELSE
@@ -101,7 +101,7 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
   DO
      READ (4,*) k, l
 
-     IF (k.EQ.0) EXIT
+     IF (k==0) EXIT
      size1 = size1+1
      lhs(1, size1) = k
      lhs(2, size1) = l
@@ -114,7 +114,7 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
   size2 = 0
   DO
      READ (14,*) k, l
-     IF (k.EQ.0) EXIT
+     IF (k==0) EXIT
      size2 = size2+1
      rhs(1, size2) = k
      rhs(2, size2) = l
@@ -225,12 +225,12 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   DO j = 1, ny
      r(1:nr) = 0.0
      DO is = 1, csize1
-        IF (clhs(2, is).EQ.j) THEN
+        IF (clhs(2, is)==j) THEN
            r(clhs(1, is)) = p(clhs(1, is))
         ENDIF
      ENDDO
      DO is = 1, csize1
-        IF (clhs(2, is).EQ.j) THEN
+        IF (clhs(2, is)==j) THEN
            r(clhs(1, is)) = r(clhs(1, is))*clhs(3, is)*y(clhs(2, is))**(clhs(3, is)-1)
         ELSE
            r(clhs(1, is)) = r(clhs(1, is))*y(clhs(2, is))**clhs(3, is)

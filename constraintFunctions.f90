@@ -8,7 +8,7 @@ SUBROUTINE calcJFac(jfac, t)
   DOUBLE PRECISION :: jfac, JSpeciesAtT, t
   INTEGER :: basePhotoRateNum, i
   INTEGER :: firstTime = 1
-  IF (firstTime.EQ.1) THEN
+  IF (firstTime==1) THEN
      WRITE (*,*) "basePhotoRate: ", jfacBase
      firstTime = 0
   ENDIF
@@ -17,13 +17,13 @@ SUBROUTINE calcJFac(jfac, t)
   basePhotoRateNum = 0
   DO i = 1, numConPhotoRates
 
-     IF ((TRIM (constrainedPhotoRates(i))).EQ.(TRIM (jfacBase))) THEN
+     IF ((TRIM (constrainedPhotoRates(i)))==(TRIM (jfacBase))) THEN
         basePhotoRateNum = i
      ENDIF
 
   ENDDO
 
-  IF (basePhotoRateNum.EQ.0) THEN
+  IF (basePhotoRateNum==0) THEN
      WRITE (*,*) 'Error! Missing constrained photo rate data for the JFAC species provided: ', TRIM (jfacBase)
      STOP 2
   ENDIF
@@ -34,10 +34,10 @@ SUBROUTINE calcJFac(jfac, t)
        basePhotoRateNum, maxNumberOfDataPoints, numConPhotoRates)
 
 
-  IF (JSpeciesAtT.EQ.0) THEN
+  IF (JSpeciesAtT==0) THEN
      JFAC = 0
   ELSE
-     IF (useConstantValues.EQ.0) THEN
+     IF (useConstantValues==0) THEN
         JFAC = JspeciesAtT/(transmissionFactor(jfacSpeciesLine)* cl(jfacSpeciesLine)* &
              (COSX**(cmm(jfacSpeciesLine)))* EXP (-cnn(jfacSpeciesLine)*SECX))
      ELSE
@@ -76,13 +76,13 @@ SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, con
   DO i = 1, numberOfConstrainedSpecies + neq
      speciesConstrained = 0
      DO j = 1, numberOfConstrainedSpecies
-        IF (i.EQ.constrainedSpecies(j)) THEN
+        IF (i==constrainedSpecies(j)) THEN
            speciesConstrained = j
         ENDIF
      ENDDO
-     IF (speciesConstrained.GT.0) THEN
+     IF (speciesConstrained>0) THEN
         x(i) = constrainedConcs(speciesConstrained)
-     ELSE IF (speciesConstrained.EQ.0) THEN
+     ELSE IF (speciesConstrained==0) THEN
         x(i) = z(zCounter)
         zCounter = zCounter + 1
      ELSE
@@ -103,13 +103,13 @@ SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies
      speciesConstrained = 0
      ! loop through constrained species
      DO k = 1, numberOfConstrainedSpecies
-        IF (i.EQ.constrainedSpecies(k)) THEN
+        IF (i==constrainedSpecies(k)) THEN
            speciesConstrained = 1
         ENDIF
      ENDDO
-     IF (speciesConstrained.EQ.1) THEN
+     IF (speciesConstrained==1) THEN
         ! do nothing
-     ELSE IF (speciesConstrained.EQ.0) THEN
+     ELSE IF (speciesConstrained==0) THEN
         z(zCounter) = y(i)
         zCounter = zCounter + 1
      ELSE
@@ -133,14 +133,14 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('PRESSURE', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      pressure = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      pressure = envVarFixedValues(envVarNum)
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
@@ -150,14 +150,14 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('TEMP', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      temp = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      temp = envVarFixedValues(envVarNum)
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
@@ -167,14 +167,14 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('H2O', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      H2O = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      H2O = envVarFixedValues(envVarNum)
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
@@ -185,15 +185,15 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('M', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcM (PRESSURE, TEMP, M)
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      m = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      m = envVarFixedValues(envVarNum)
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
@@ -203,15 +203,15 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('DEC', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcDec (dec, t)
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      dec = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      dec = envVarFixedValues(envVarNum)
      ! IF NOT USED
   ELSE
@@ -227,14 +227,14 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('BOUNDARYLAYERHEIGHT', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      blh = envVarAtT
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      blh = envVarFixedValues(envVarNum)
      ! IF NOT USED
   ELSE
@@ -247,15 +247,15 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   CALL getEnvVarNum ('RH', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      RH = envVarAtT
      CALL convertRHtoConcH2O (H2o, temp, RH)
      ! IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      RH = envVarFixedValues(envVarNum)
      CALL convertRHtoConcH2O (H2o, temp, RH)
      ! IF NOT USED
@@ -271,14 +271,14 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !***********************************************************************************************************
   CALL getEnvVarNum ('DILUTE', envVarNum, envVarNames, numEnvVars)
   !IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      !IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum) &
           , envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      dilute = envVarAtT
      !IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      dilute = envVarFixedValues(envVarNum)
 
      !IF NOT USED
@@ -300,15 +300,15 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !*************************************************************************************************
   CALL getEnvVarNum ('JFAC', envVarNum, envVarNames, numEnvVars)
   !IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcJFac (jfac, t)
      !IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum) &
           , envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      JFAC = envVarAtT
      !IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      JFAC = envVarFixedValues(envVarNum)
 
      !IF NOT USED
@@ -325,15 +325,15 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !************************************************************************************************************
   CALL getEnvVarNum ('ROOFOPEN', envVarNum, envVarNames, numEnvVars)
   !IF CALCULATED
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
      WRITE (*,*) "No calculation available for ROOFOPEN Variable"
      !IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum) &
           , envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      roofOpen = envVarAtT
      !IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      roofOpen = envVarFixedValues(envVarNum)
 
      !IF NOT USED
@@ -354,7 +354,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum, envVarNames, numEnvVars)
 
   DO i = 1, numEnvVars
 
-     IF (name.EQ.TRIM (envVarNames(i))) THEN
+     IF (name==TRIM (envVarNames(i))) THEN
         envVarNum = i
      ENDIF
   ENDDO
@@ -372,23 +372,23 @@ SUBROUTINE test_jfac()
   CALL getEnvVarNum ('JFAC', envVarNum, envVarNames, numEnvVars)
   !IF CALCULATED
   ! If JFAC is CALC and there's no JFAC species, the program should complain
-  IF (envVarTypesNum(envVarNum).EQ.1) THEN
-     IF ( ''.EQ.(TRIM (jfacBase)) .OR. TRIM (jfacBase).EQ.'end' ) THEN
+  IF (envVarTypesNum(envVarNum)==1) THEN
+     IF ( ''==(TRIM (jfacBase)) .OR. TRIM (jfacBase)=='end' ) THEN
         WRITE (*,*) 'Error! JFAC was set to CALC, but JFac species was not provided!'
         STOP 2
      ENDIF
      ! If jfacSpeciesLine = 0 (no line in photolysis rates matches the JFac species), program should complain
-     IF (jfacSpeciesLine.EQ.0 ) THEN
+     IF (jfacSpeciesLine==0 ) THEN
         WRITE (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', jfacBase
      ENDIF
      !IF CONSTRAINED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.2) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      !IF FIXED
-  ELSE IF (envVarTypesNum(envVarNum).EQ.3) THEN
+  ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      !IF NOT USED
      ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
   ELSE
-     IF ( ''.NE.(TRIM (jfacBase)) .AND. TRIM (jfacBase).NE.'end' ) THEN
+     IF ( ''/=(TRIM (jfacBase)) .AND. TRIM (jfacBase)/='end' ) THEN
         WRITE (*,*) 'Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'
         WRITE (*,*) 'JFac species: ', jfacBase
         STOP 2

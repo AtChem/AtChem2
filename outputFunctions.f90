@@ -1,179 +1,179 @@
-subroutine outputEnvVar(t)
-    use envVars
+SUBROUTINE outputEnvVar (t)
+  USE envVars
 
-    integer:: i
-    double precision:: t
-  if(ro2<0) ro2 = 0.0
-    write(95,*) t, (currentEnvVarValues(i), i=1,numEnvVars), ro2
+  INTEGER :: i
+  DOUBLE PRECISION :: t
+  IF (ro2.LT.0) ro2 = 0.0
+  WRITE (95,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
-    return
-end
+  RETURN
+END SUBROUTINE outputEnvVar
 
 !--------------------------------------------------------------------
-subroutine outputjfy(fy,nsp,t)
-    integer:: nsp,i,j
-    double precision :: fy(nsp,nsp), t
+SUBROUTINE outputjfy (fy, nsp, t)
+  INTEGER :: nsp, i, j
+  DOUBLE PRECISION :: fy(nsp, nsp), t
 
-    do i=1,nsp
-    write (93,'(100(1x,e12.5))') t, (fy(i,j), j=1,nsp)
-    enddo
-    write(93,*)'---------------'
-end
-
-!     ---------------------------------------------------------------
-subroutine outputPhotolysisRates(j,t)
-    use photolysisRates, only: nrOfPhotoRates, ck
-    double precision:: j(*),t
-    integer:: i
-
-    write(86,'(100(1x,e12.5))')t, (j(ck(i)), i=1,nrOfPhotoRates)
-    return
-end
+  DO i = 1, nsp
+     WRITE (93, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
+  ENDDO
+  WRITE (93,*) '---------------'
+END SUBROUTINE outputjfy
 
 !     ---------------------------------------------------------------
-subroutine getConcForSpecInt(y,yInt,specInt,specIntSize,neq)
-    double precision y(*),yInt(*)
-    integer specIntSize,neq,i,j,specInt(*)
+SUBROUTINE outputPhotolysisRates (j, t)
+  USE photolysisRates, ONLY: nrOfPhotoRates, ck
+  DOUBLE PRECISION :: j(*), t
+  INTEGER :: i
 
-    do i=1,neq
-        do j=1,specIntSize
-            if (specInt(j) == i) then
-                yInt(j) = y(i)
-            endif
-        enddo
-    enddo
-    return
-end
+  WRITE (86, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+  RETURN
+END SUBROUTINE outputPhotolysisRates
 
 !     ---------------------------------------------------------------
-subroutine getReaction(speciesNames, reactionNumber,reaction)
-    use reactionStructure
-    implicit none
-    character(LEN=10):: reactants(10), products(10)
-    character(LEN=10):: speciesNames(*)
-    integer:: reactionNumber,i, numReactants, numProducts
-    character(LEN=1000):: str1
-    character(LEN=1000)::reaction, reactantStr, productStr
-    numReactants = 0
-    numProducts = 0
+SUBROUTINE getConcForSpecInt (y, yInt, specInt, specIntSize, neq)
+  DOUBLE PRECISION y(*), yInt(*)
+  INTEGER specIntSize, neq, i, j, specInt(*)
 
-    ! LOOP OVER REACTANTS
-    do i=1, csize1
-        if(clhs(1,i).eq.reactionNumber) then
-            numReactants = numReactants +1
-            reactants(numReactants) = speciesNames(clhs(2,i))
-        endif
-    enddo
+  DO i = 1, neq
+     DO j = 1, specIntSize
+        IF (specInt(j).EQ.i) THEN
+           yInt(j) = y(i)
+        ENDIF
+     ENDDO
+  ENDDO
+  RETURN
+END SUBROUTINE getConcForSpecInt
 
-    str1 =' '
-    reactantStr=' '
-    do i=1,numReactants
-        str1 = reactantStr
+!     ---------------------------------------------------------------
+SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
+  USE reactionStructure
+  IMPLICIT NONE
+  CHARACTER (LEN=10) :: reactants(10), products(10)
+  CHARACTER (LEN=10) :: speciesNames(*)
+  INTEGER :: reactionNumber, i, numReactants, numProducts
+  CHARACTER (LEN=1000) :: str1
+  CHARACTER (LEN=1000) :: reaction, reactantStr, productStr
+  numReactants = 0
+  numProducts = 0
 
-        reactantStr = trim(str1) // trim(reactants(i))
-        reactantStr = adjustl(reactantStr)
-        reactantStr = trim(reactantStr)
-        if(i<numReactants) then
-            reactantStr = trim(reactantStr)// '+'
-        endif
+  ! LOOP OVER REACTANTS
+  DO i = 1, csize1
+     IF (clhs(1, i).EQ.reactionNumber) THEN
+        numReactants = numReactants +1
+        reactants(numReactants) = speciesNames(clhs(2, i))
+     ENDIF
+  ENDDO
 
-    enddo
-    reactantStr = adjustl(reactantStr)
-    reactantStr = trim(reactantStr)// '='
+  str1 = ' '
+  reactantStr = ' '
+  DO i = 1, numReactants
+     str1 = reactantStr
 
+     reactantStr = TRIM (str1) // TRIM (reactants(i))
+     reactantStr = ADJUSTL (reactantStr)
+     reactantStr = TRIM (reactantStr)
+     IF (i.LT.numReactants) THEN
+        reactantStr = TRIM (reactantStr)// '+'
+     ENDIF
 
-!     LOOP OVER PRODUCTS
-    numProducts = 0
-    do i=1, csize2
-        if(crhs(1,i).eq.reactionNumber) then
-            numProducts = numProducts +1
-            products(numProducts) = speciesNames(crhs(2,i))
-        endif
-    enddo
-
-    str1 =' '
-    productStr = ' '
-
-    do i=1,numProducts
-        str1 = productStr
-
-        productStr = trim(str1) // trim(products(i))
-        productStr = adjustl(productStr)
-        productStr = trim(productStr)
-        if(i<numProducts) then
-            productStr = trim(productStr)// '+'
-        endif
-
-    enddo
-
-    productStr = adjustl(productStr)
+  ENDDO
+  reactantStr = ADJUSTL (reactantStr)
+  reactantStr = TRIM (reactantStr)// '='
 
 
-    reaction = trim(reactantStr) // trim(productStr)
+  !     LOOP OVER PRODUCTS
+  numProducts = 0
+  DO i = 1, csize2
+     IF (crhs(1, i).EQ.reactionNumber) THEN
+        numProducts = numProducts +1
+        products(numProducts) = speciesNames(crhs(2, i))
+     ENDIF
+  ENDDO
 
-    return
-end
+  str1 = ' '
+  productStr = ' '
 
-subroutine outputRates(r,t,p,flag,nsp,rateOfProdNS,prodLossArrayLen,rateOfLossNS, prodArrayLen, &
-    lossArrayLen, speciesNames)
+  DO i = 1, numProducts
+     str1 = productStr
 
-    use reactionStructure
-    integer nsp,rateOfProdNS,prodLossArrayLen,rateOfLossNS,prodArrayLen(*),lossArrayLen(*)
-    integer i,j,r(nsp,prodLossArrayLen),flag,x
-    double precision t,p(*)
-    character(LEN=10) speciesNames(*)
-    character(LEN=1000)::reaction
+     productStr = TRIM (str1) // TRIM (products(i))
+     productStr = ADJUSTL (productStr)
+     productStr = TRIM (productStr)
+     IF (i.LT.numProducts) THEN
+        productStr = TRIM (productStr)// '+'
+     ENDIF
+
+  ENDDO
+
+  productStr = ADJUSTL (productStr)
 
 
-    ! Flag = 1 for production
-    if(flag==1) then
+  reaction = TRIM (reactantStr) // TRIM (productStr)
 
-        do i=1,rateOfProdNS
+  RETURN
+END SUBROUTINE getReaction
 
-            x = 2+prodArrayLen(i)
-            do j=2,prodArrayLen(i)
+SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen, &
+     lossArrayLen, speciesNames)
 
-                if (r(i,j)/=0) then
-                    call getReaction(speciesNames,r(i,j),reaction)
-                    write(89,*)t,' ',r(i,1),' ',speciesNames(r(i,1)),' ',r(i,j),' ',p(r(i,j)),' ',trim(reaction)
-                endif
-            enddo
-        enddo
-    endif
+  USE reactionStructure
+  INTEGER nsp, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen(*), lossArrayLen(*)
+  INTEGER i, j, r(nsp, prodLossArrayLen), flag, x
+  DOUBLE PRECISION t, p(*)
+  CHARACTER (LEN=10) speciesNames(*)
+  CHARACTER (LEN=1000) :: reaction
 
-    ! Flag = 0 for loss
-    if(flag==0) then
 
-        do i=1,rateOfLossNS
+  ! Flag = 1 for production
+  IF (flag.EQ.1) THEN
 
-            do j=2,lossArrayLen(i)
+     DO i = 1, rateOfProdNS
 
-                if (r(i,j)/=0) then
-                    call getReaction(speciesNames,r(i,j),reaction)
-                    write(90,*)t,' ',r(i,1),' ',speciesNames(r(i,1)),' ',r(i,j),' ',p(r(i,j)),' ',trim(reaction)
-                endif
-            enddo
-        enddo
-    endif
-    return
-end
+        x = 2+prodArrayLen(i)
+        DO j = 2, prodArrayLen(i)
+
+           IF (r(i, j).NE.0) THEN
+              CALL getReaction (speciesNames, r(i, j), reaction)
+              WRITE (89,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+           ENDIF
+        ENDDO
+     ENDDO
+  ENDIF
+
+  ! Flag = 0 for loss
+  IF (flag.EQ.0) THEN
+
+     DO i = 1, rateOfLossNS
+
+        DO j = 2, lossArrayLen(i)
+
+           IF (r(i, j).NE.0) THEN
+              CALL getReaction (speciesNames, r(i, j), reaction)
+              WRITE (90,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+           ENDIF
+        ENDDO
+     ENDDO
+  ENDIF
+  RETURN
+END SUBROUTINE outputRates
 
 !     ----------------------------------------------------------------
-subroutine outputInterestingNames(names,namesSize)
-    character(LEN=10) names(*)
-    integer i,namesSize
-    write(91,'(100(1x,a))')'t         ', (names(i), i=1,namesSize)
-    return
-end
+SUBROUTINE outputInterestingNames (names, namesSize)
+  CHARACTER (LEN=10) names(*)
+  INTEGER i, namesSize
+  WRITE (91, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
+  RETURN
+END SUBROUTINE outputInterestingNames
 
-subroutine outputInteresting(t,yInt,yIntSize)
-    double precision t,yInt(*)
-    integer yIntSize,i
-  do i=1, yIntSize
-    if(yInt(i) < 0) then
-      yInt(i) = 0d0
-    endif
-  end do
-    write(91,'(100(1x,e15.5e3))')t, (yInt(i), i=1,yIntSize)
-    return
-end
+SUBROUTINE outputInteresting (t, yInt, yIntSize)
+  DOUBLE PRECISION t, yInt(*)
+  INTEGER yIntSize, i
+  DO i = 1, yIntSize
+     IF (yInt(i).LT.0) THEN
+        yInt(i) = 0d0
+     ENDIF
+  END DO
+  WRITE (91, '(100 (1x, e15.5e3)) ') t, (yInt(i), i = 1, yIntSize)
+  RETURN
+END SUBROUTINE outputInteresting

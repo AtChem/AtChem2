@@ -18,8 +18,10 @@ with open(filename, 'w') as output_file:
                            re.sub('(?<=[A-Z0-9])\(', ' (',
                                   # Replace .LT. etc with lowercase and with no whitespace. This and the next 3 are all case-insensitive
                                   re.sub('\s*\.LT\.\s*', '.LT.',
-                                         re.sub('\s*\.GT\.\s*', '.GT.',
-                                                re.sub('\s*\.EQ\.\s*', '.EQ.',
+                                  re.sub('\s*\.LE\.\s*', '.LE.',
+                                        re.sub('\s*\.GT\.\s*', '.GT.',
+                                        re.sub('\s*\.GE\.\s*', '.GE.',
+                                               re.sub('\s*\.EQ\.\s*', '.EQ.',
                                                        re.sub('\s*\.NE\.\s*', '.NE.',
                                                               # Any ending bracket followed by whitespace should be followed by exactly one space
                                                               re.sub('\)[ \t]+', ') ',
@@ -39,7 +41,9 @@ with open(filename, 'w') as output_file:
                                                                      ),
                                                               flags=re.IGNORECASE),
                                                        flags=re.IGNORECASE),
-                                                flags=re.IGNORECASE),
+                                               flags=re.IGNORECASE),
+                                               flags=re.IGNORECASE),
+                                         flags=re.IGNORECASE),
                                          flags=re.IGNORECASE),
                                   )
                            )

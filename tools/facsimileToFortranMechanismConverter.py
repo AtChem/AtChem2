@@ -495,7 +495,7 @@ mechanism_rates_list.append("""  DO i = 1, nrOfPhotoRates
      ENDIF
   ENDDO
 
-  DO  i = 1, numConPhotoRates
+  DO i = 1, numConPhotoRates
      CALL getConstrainedQuantAtT2D (t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
           maxNumberOfDataPoints, numConPhotoRates)
      j(constrainedPhotoRatesNumbers(i)) = photoRateAtT

@@ -31,7 +31,7 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
      ! PIECEWISE CONSTANT INTERPOLATION
   ELSE IF (intMethod.EQ.3) THEN
      facintfound = 0
-     DO i=1, dataNumberOfPoints
+     DO i = 1, dataNumberOfPoints
         IF ((t.GE.X (ind, i)).AND.(t.LT.X (ind, i+1))) THEN
            concAtT = Y (ind, i)
            facintfound = 1
@@ -46,7 +46,7 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   ELSE IF (intMethod.EQ.4) THEN
      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
      linintsuc = 0
-     DO i=1, dataNumberOfPoints
+     DO i = 1, dataNumberOfPoints
         IF ((t.GE.x(ind, i)).AND.(t.LT.x(ind, i+1))) THEN
            indexBefore = i
            indexAfter = i + 1

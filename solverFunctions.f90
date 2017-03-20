@@ -48,7 +48,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   !
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
   INTEGER (KIND=LongInt_Kind) ipar(*), ier, nConSpec, np, numReactions
-  DOUBLE PRECISION t, y(*), ydot(*), RPAR (*), concAtT, dummy
+  DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
   INTEGER i
 
@@ -78,7 +78,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   CALL removeConstrainedSpeciesFromProbSpec (dy, ydot, numberOfConstrainedSpecies, constrainedSpecies, np)
 
   DEALLOCATE (dy, z)
-  IER = 0
+  ier = 0
 
   RETURN
 END SUBROUTINE FCVFUN

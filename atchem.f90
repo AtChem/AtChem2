@@ -43,8 +43,7 @@ PROGRAM ATCHEM
   INTEGER :: JvApprox, lookBack
   INTEGER :: SpeciesIntMethod, conditionsIntMethod, decIntMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
-  INTEGER, PARAMETER :: LongReal_Kind = SELECTED_REAL_KIND (10, 300)
-  REAL (KIND=LongReal_Kind) :: d
+  DOUBLE PRECISION :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds

@@ -8,9 +8,10 @@ import fix_mechanism_fac
 fix_mechanism_fac.fix_fac_full_file('./mcm_subset.fac')
 
 # Read in the input file
+print 'Reading input file'
 with open('./mcm_subset.fac') as input_file:
     s = input_file.readlines()
-    print s
+    # print s
 
 # split the lines into the following sections:
 # - Ignore everything up to Generic Rate Coefficients
@@ -31,29 +32,29 @@ for line in s:
         if section_headers[header_index] in line:
             section += 1
     if section == 1:
-        print line
+        # print line
         generic_rate_coefficients.append(line)
     elif section == 2:
-        print line
+        # print line
         complex_reactions.append(line)
     elif section == 3:
-        print line
+        # print line
         peroxy_radicals.append(line)
     elif section == 4:
-        print line
+        # print line
         reaction_definitions.append(line)
     else:
         assert section == 0, "Error, section is not in [0,4]"
-        print line
+        # print line
 
-print 'generic_rate_coefficients'
-print generic_rate_coefficients
-print 'complex_reactions'
-print complex_reactions
-print 'peroxy_radicals'
-print peroxy_radicals
-print 'reaction_definitions'
-print reaction_definitions
+# print 'generic_rate_coefficients'
+# print generic_rate_coefficients
+# print 'complex_reactions'
+# print complex_reactions
+# print 'peroxy_radicals'
+# print peroxy_radicals
+# print 'reaction_definitions'
+# print reaction_definitions
 # Initialise a few variables
 speciesList = []
 rateConstants = []
@@ -73,39 +74,38 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
         else:
             # reactionNumber keeps track of the line we are processing
             reactionNumber += 1
-            print 'line =', line
+            # print 'line =', line
             # strip whitespace, ; and %
-            line = line.strip()
-            line = line.strip('[;]')
-            line = line.strip('[%]')
+            line = line.strip().strip('%').strip(';').strip()
+
+            print ''
             print 'line =', line
             # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
             a = re.split(':', line)
-            print 'a = ', a
+            # print 'a = ', a
 
             # Add reaction rate to rateConstants
-            rateConstant = a[0]
-            rateConstants.append(rateConstant)
-            print rateConstant
+            rateConstants.append(a[0])
+            # print 'rate =', a[0]
 
             # Process the reaction: split by = into reactants and products
-            print 'reaction = ', a[1]
+            # print 'reaction = ', a[1]
 
             reaction_parts = re.split('=', a[1])
-            print reaction_parts
+            # print reaction_parts
 
             reactantsList = reaction_parts[0]
             productsList = reaction_parts[1]
 
-            print 'reactantlist = ', reactantsList
-            print 'productlist = ', productsList
+            # print 'reactantlist = ', reactantsList
+            # print 'productlist = ', productsList
 
             # Process each of reactants and products by splitting by +. Strip each at this stage.
             reactants = [item.strip() for item in re.split('[+]', reactantsList)]
             products = [item.strip() for item in re.split('[+]', productsList)]
 
-            print 'reactants = ', reactants
-            print 'products = ', products
+            # print 'reactants =', reactants
+            # print 'products =', products
 
             # Ignore empty reactantsList
             if not reactantsList.isspace():
@@ -118,7 +118,7 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                         # added to the reactantNums variable
                         if x == y:
                             reactantNums.append(j + 1)
-                            print 'found: ', y, 'j = ', j
+                            # print 'found:', y + ', j =', j
                             break
                         j += 1
                     # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
@@ -128,7 +128,7 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                         # reactantNums to record this reaction.
                         speciesList.append(x)
                         reactantNums.append(len(speciesList))
-                        print 'adding ', x, ' to speciesList'
+                        print 'adding', x, 'to speciesList'
 
                 # Write the reactants to mechanism.reactemp
                 for z in reactantNums:
@@ -144,7 +144,7 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                         # added to the productNums variable
                         if x == y:
                             productNums.append(j + 1)
-                            print 'found: ', y, 'j = ', j
+                            # print 'found:', y + ', j =', j
                             break
                         j += 1
                     # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
@@ -154,7 +154,7 @@ with open('./mechanism.reactemp', 'w') as reac_temp_file, open('./mechanism.prod
                         # productNums to record this reaction.
                         speciesList.append(x)
                         productNums.append(len(speciesList))
-                        print 'adding ', x, ' to speciesList'
+                        print 'adding', x, 'to speciesList'
 
                 # Write the products to mechanism.prod
                 for z in productNums:
@@ -224,28 +224,29 @@ for l in ro2_input:
     # Then split by +.
     strArray = l.split('=')[-1].split('+')
 
-    print strArray
+    # print strArray
     # For each element, remove any semi-colons, strip, and then append if non-empty.
     for x in strArray:
         x = x.replace(';', '').strip()
         if x == '':
-            print 'doing nothing'
+            pass
+            # print 'doing nothing'
         else:
-            print x
+            # print x
             ro2List.append(x)
 
 # check RO2s are in RO2 list
-with open('./RO2List') as RO2List_file:
+with open('./RO2Listv3.3.1') as RO2List_file:
     RO2List_input = RO2List_file.readlines()
 
 for r in RO2List_input:
     r = r.strip()
-    print r
+    # print r
 
 # Check that each species is in the RO2 list. If so, just print to screen. Otherwise, print a warning at the top of
 # mechanism-rate-coefficients.f90 for each errant species.
 print 'looping over inputted ro2s'
-print 'The RO2List is: ', ro2List
+# print 'The RO2List is: ', ro2List
 
 with open('./mechanism-rate-coefficients.f90', 'w') as mech_rates_file:
     mech_rates_file.write("""! Note that this file is generated by tools/facsimileToFortranMechanismConverter.py,
@@ -255,7 +256,7 @@ with open('./mechanism-rate-coefficients.f90', 'w') as mech_rates_file:
     for ro2List_i in ro2List:
         for ro2List_input_j in RO2List_input:
             if ro2List_i.strip() == ro2List_input_j.strip():
-                print ro2List_i.strip() + ' found in RO2List'
+                # print ro2List_i.strip() + ' found in RO2List'
                 break
         # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the species
         # being found in the RO2 list
@@ -266,8 +267,9 @@ with open('./mechanism-rate-coefficients.f90', 'w') as mech_rates_file:
 
     # loop over RO2 and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the RO2
     mech_rates_file.write('  ro2 = 0.00e+00\n')
+    print 'adding RO2 to mechanism-rate-coefficients.f90'
     for ro2List_i in ro2List:
-        print 'ro2List_i: ' + ro2List_i
+        # print 'ro2List_i: ' + ro2List_i
         for speciesNumber, y in zip(range(1, len(speciesList)+1), speciesList):
             if ro2List_i.strip() == y.strip():
                 mech_rates_file.write('  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2List_i.strip() + '\n')
@@ -330,56 +332,51 @@ mechanism_rates_list = ["""
 ! based upon the file tools/mcm_subset.fac. Any manual edits to this file will be overwritten
 ! when calling tools/facsimileToFortranMechanismConverter.py
 
-subroutine mechanism_rates(p,t,y,mnsp)
-    USE photolysisRates
-    USE zenithData1
-    USE constraints
-  use envVars, only: ro2
+SUBROUTINE mechanism_rates (p, t, y, mnsp)
+  USE photolysisRates
+  USE zenithData1
+  USE constraints
+  USE envVars, ONLY: ro2
 
-    implicit none
+  IMPLICIT NONE
 
-    ! calculates rate constants from arrhenius information
-    double precision, intent(out) :: p(*)
-    double precision, intent(in) :: t
-    integer, intent(in) :: mnsp
-    double precision, intent(in) :: y(mnsp)
-    double precision:: temp, pressure, dummy
+  ! calculates rate constants from arrhenius information
+  DOUBLE PRECISION, INTENT (out) :: p(*)
+  DOUBLE PRECISION, INTENT (in) :: t
+  INTEGER, INTENT (in) :: mnsp
+  DOUBLE PRECISION, INTENT (in) :: y(mnsp)
+  DOUBLE PRECISION :: temp, pressure, dummy
 """]
 mechanism_rates_list.append("""
-    ! declare variables missed in MCM definition
-    integer :: i
-    double precision::  photoRateAtT
+  ! declare variables missed in MCM definition
+  INTEGER :: i
+  DOUBLE PRECISION :: photoRateAtT
 
-  include 'modelConfiguration/mechanism-rate-declarations.f90'
+  INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'
 
-    call ro2sum(ro2, y)
-    dummy = y(1)
+  CALL ro2sum (ro2, y)
+  dummy = y(1)
 
-    dec = -1e16
+  dec = -1e16
 
-    call getEnvVarsAtT(t,temp,rh,h2o,dec,pressure,m,blh,dilute,jfac,roofOpen)
+  CALL getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen)
 
-  call atmosphere(O2, N2,m)
+  CALL atmosphere (o2, n2, m)
 
+  !O2 = 0.2095*m
+  !N2 = 0.7809*m
 
-
-
-    !O2 = 0.2095*m
-    !N2 = 0.7809*m
-
-
-
-    ! * **** SIMPLE RATE COEFFICIENTS *****                     *""")
+  ! * **** SIMPLE RATE COEFFICIENTS *****                     *""")
 coeffSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
 reactionNumber = 0
 # P
 for line in generic_rate_coefficients + complex_reactions:
     # Check for comments (beginning with a !), or blank lines
     if (re.match('!', line) is not None) | (line.isspace()):
-        mechanism_rates_list.append('    ' + line)
+        mechanism_rates_list.append('  ' + line)
     # Check for lines starting with either ; or *, and write these as comments
     elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
-        mechanism_rates_list.append('    !' + line)
+        mechanism_rates_list.append('  !' + line)
     # Otherwise assume all remaining lines are in the correct format, and so process them
     else:
         # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
@@ -387,7 +384,7 @@ for line in generic_rate_coefficients + complex_reactions:
         # bracketed version.
         # It also then converts all @ to ** etc.
         # Save the resulting string to mechanism_rates_list
-        mechanism_rates_list.append('    ' +
+        mechanism_rates_list.append('  ' +
                                     re.sub('(?<=@)-[0-9.]*', '(\g<0>)', line.replace(';', '').strip()).replace('@', '**') +
                                     '\n')
 
@@ -396,15 +393,13 @@ for line in generic_rate_coefficients + complex_reactions:
 
         # reactionNumber keeps track of the line we are processing
         reactionNumber += 1
-        print 'line =', line
+        # print 'line =', line
         # strip whitespace, ; and %
-        line = line.strip()
-        line = line.strip('[;]')
-        line = line.strip('[%]')
+        line = line.strip().strip('%').strip(';').strip()
         print 'line =', line
         # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
         a = line
-        print 'a = ', a
+        # print 'a = ', a
 
         # Add reaction rate to rateConstants
         # rateConstant = a[0]
@@ -412,60 +407,62 @@ for line in generic_rate_coefficients + complex_reactions:
         # print rateConstant
 
         # Process the reaction: split by = into reactants and products
-        print 'reaction = ', a
+        # print 'reaction =', a
 
         reaction_parts = re.split('=', a)
-        print reaction_parts
+        # print reaction_parts
 
         LHSList = reaction_parts[0]
         RHSList = reaction_parts[1]
 
-        print 'reactantlist = ', LHSList
-        print 'productlist = ', RHSList
+        # print 'reactantlist = ', LHSList
+        # print 'productlist = ', RHSList
 
         # Process each of reactants and products by splitting by +. Strip each at this stage.
         reactant = LHSList.strip()  # [item.strip() for item in re.split('[+]', LHSList)]
-        products = RHSList  # [item.strip() for item in re.split('[+]', RHSList)]
+        products = RHSList.strip()  # [item.strip() for item in re.split('[+]', RHSList)]
 
-        print 'reactants = ', reactants
-        print 'products = ', products
+        # print 'reactants = ', reactants
+        # print 'products = ', products
 
         # Compare reactant against known species.
         if reactant in coeffSpeciesList:
-            print 'found: ', reactant
+            pass
+            # print 'found:', reactant
         else:
             # Add reactant to coeffSpeciesList, and add this number to
             # reactantNums to record this reaction.
             coeffSpeciesList.append(reactant)
-            print 'adding ', reactant, ' to coeffSpeciesList'
+            print 'adding', reactant, 'to coeffSpeciesList'
 
         if not RHSList.isspace():
             # Compare each product against known species.
             productNums = []
-            print RHSList
+            # print RHSList
             # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
             # Now, each string in the sublist will:
             # - start with a digit
             # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESSURE
             # - otherwise, be a species
             RHSList_sub = re.sub('[()\-+*@/]', ' ', RHSList).split(' ')
-            print RHSList_sub
+            # print RHSList_sub
             RHSList_sub = [item.upper() for item in RHSList_sub]
             for x in RHSList_sub:
                 # Filter out spaces, numbers, and maths symbols
                 if (not re.match('[0-9]', x)) and (not x == ''):
                     # Filter out our 'reserved words'
                     if not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESSURE', 'LOG10', 'T']):
-                        print x
+                        # print x
                         if x in coeffSpeciesList:
-                            print 'found: ', x
+                            pass
+                            # print 'found: ', x
                         else:
                             coeffSpeciesList.append(x)
-                            print 'adding ', x, ' to coeffSpeciesList'
+                            print 'adding', x, 'to coeffSpeciesList'
 
 # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
 # Begin wthe first line as necessary
-newline = '    double precision::'
+newline = '  DOUBLE PRECISION ::'
 mechanism_rates_decl = []
 # Loop over all species
 for i, item in zip(range(1, len(coeffSpeciesList)+1), coeffSpeciesList):
@@ -478,7 +475,7 @@ for i, item in zip(range(1, len(coeffSpeciesList)+1), coeffSpeciesList):
     # Otherwise, every tenth species gets rounded off with a newline and a prefix to the next line
     if i % 10 == 0:
         mechanism_rates_decl.append(newline + '\n')
-        newline = '    double precision::'
+        newline = '  DOUBLE PRECISION ::'
     else:
         # If not, add a spacer
         newline += ','
@@ -486,31 +483,31 @@ for i, item in zip(range(1, len(coeffSpeciesList)+1), coeffSpeciesList):
 # Insert the list generated above into the right place in the master list
 mechanism_rates_list = list(mechanism_rates_list[0]) + mechanism_rates_decl + list(mechanism_rates_list[1:])
 
-mechanism_rates_list.append("""    do i = 1, nrOfPhotoRates
-        if (useConstantValues .eq. 0) then
-            if (cosx.lt.1.00d-10) then
-                j(ck(i)) = 1.0d-30
-            else
-                j(ck(i)) = cl(i)*cosx**( cmm(i))*exp(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
-            endif
-        else
-            j(ck(i)) = cl(i)
-        endif
-    enddo
+mechanism_rates_list.append("""  DO i = 1, nrOfPhotoRates
+     IF (useConstantValues.EQ.0) THEN
+        IF (cosx.LT.1.00d-10) THEN
+           j(ck(i)) = 1.0d-30
+        ELSE
+           j(ck(i)) = cl(i)*cosx**(cmm(i))*EXP(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
+        ENDIF
+     ELSE
+        j(ck(i)) = cl(i)
+     ENDIF
+  ENDDO
 
-    do  i =1,numConPhotoRates
-        call getConstrainedQuantAtT2D(t,photoX,photoY,photoY2,photoNumberOfPoints(i),photoRateAtT, 2,i, &
-            maxNumberOfDataPoints,numConPhotoRates)
-        j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
-    enddo
+  DO  i = 1, numConPhotoRates
+     CALL getConstrainedQuantAtT2D (t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
+          maxNumberOfDataPoints, numConPhotoRates)
+     j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
+  ENDDO
 
-    include 'modelConfiguration/mechanism-rate-coefficients.f90'
-    return
-end
+  INCLUDE 'modelConfiguration/mechanism-rate-coefficients.f90'
+  RETURN
+END SUBROUTINE mechanism_rates
 
-include 'modelConfiguration/extraOutputSubroutines.f90'
+INCLUDE 'modelConfiguration/extraOutputSubroutines.f90'
 """)
-print mechanism_rates_list
+# print mechanism_rates_list
 with open('../mechanism-rates.f90', 'w+') as mr2_file:
     for item in mechanism_rates_list:
         mr2_file.write(item)

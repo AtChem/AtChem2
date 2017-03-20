@@ -4,7 +4,7 @@ SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
   USE species
 
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) IPAR (*), IER, NEQ, I
+  INTEGER (KIND=LongInt_Kind) ipar (*), ier, neq, i
   INTEGER j, np
   DOUBLE PRECISION t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
   DOUBLE PRECISION, ALLOCATABLE :: yPlusV (:), yPlusVi(:)
@@ -25,7 +25,7 @@ SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
   ENDDO
 
   ! get f(y + delta v)
-  CALL FCVFUN (T, yPlusV, yPlusVi, IPAR, RPAR, IER)
+  CALL FCVFUN (t, yPlusV, yPlusVi, ipar, rpar, ier)
 
   ! JVminus1 + deltaJV
   DO i = 1, neq
@@ -37,7 +37,7 @@ SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
 END SUBROUTINE FCVJTIMES
 
 !     ---------------------------------------------------------------
-SUBROUTINE FCVFUN (T, Y, YDOT, IPAR, RPAR, IER)
+SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   USE species
   USE constraints
   USE reactionStructure
@@ -47,8 +47,8 @@ SUBROUTINE FCVFUN (T, Y, YDOT, IPAR, RPAR, IER)
   IMPLICIT NONE
   !
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) IPAR (*), IER, nConSpec, NP, numReactions
-  DOUBLE PRECISION T, Y (*), YDOT (*), RPAR (*), concAtT, dummy
+  INTEGER (KIND=LongInt_Kind) ipar(*), ier, nConSpec, np, numReactions
+  DOUBLE PRECISION t, y(*), ydot(*), RPAR (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
   INTEGER i
 
@@ -71,7 +71,7 @@ SUBROUTINE FCVFUN (T, Y, YDOT, IPAR, RPAR, IER)
 
   ENDDO
 
-  CALL addConstrainedSpeciesToProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
+  CALL addConstrainedSpeciesToProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
 
   CALL resid (np, numReactions, t, z, dy, clhs, crhs, ccoeff, csize1, csize2)
 

@@ -201,21 +201,17 @@ with open('./mechanism-rate-coefficients.ftemp', 'w') as mech_rates_temp_file:
 
 # Write RO2 data to file
 in_RO2_lines = False
-with open('./RO2.fac', 'w') as ro2_fac_file:
-    for item in peroxy_radicals:
-        if not in_RO2_lines:
-            # Check to see whether we are entering the 'Reaction definitions' section
-            if 'RO2 = ' in item:
-                in_RO2_lines = True
-        if in_RO2_lines:
-            if not re.match('\*', item):
-                ro2_fac_file.write(item)
-            else:
-                in_RO2_lines = False
-
-# Read in RO2 data, which is arrange as 'RO2 = blah + blah + blah \n + blah + blah ;'
-with open('./RO2.fac') as ro2_fac_file:
-    ro2_input = ro2_fac_file.readlines()
+ro2_input = []
+for item in peroxy_radicals:
+    if not in_RO2_lines:
+        # Check to see whether we are entering the 'Reaction definitions' section
+        if 'RO2 = ' in item:
+            in_RO2_lines = True
+    if in_RO2_lines:
+        if not re.match('\*', item):
+            ro2_input.append(item)
+        else:
+            in_RO2_lines = False
 
 ro2List = []
 for l in ro2_input:

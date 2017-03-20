@@ -1,110 +1,110 @@
-subroutine calcDateParameters()
-    use date
-    integer:: i
+SUBROUTINE calcDateParameters ()
+  USE date
+  INTEGER :: i
 
-    monthList = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
-    totalDays = 0
-    do i=1, month-1
-        totalDays = totalDays + monthList(i)
-    enddo
+  monthList = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
+  totalDays = 0
+  DO i = 1, month-1
+     totalDays = totalDays + monthList(i)
+  ENDDO
 
-    totalDays = totalDays + day -1
+  totalDays = totalDays + day -1
   fractionYear = totalDays
-    fractionYear = fractionYear / 365
-    secYear = 3.6525d+02*2.40d+01*3.60d+03
-    return
-end
+  fractionYear = fractionYear / 365
+  secYear = 3.6525d+02*2.40d+01*3.60d+03
+  RETURN
+END SUBROUTINE calcDateParameters
 
-subroutine writeFileHeaders(photoRateNamesForHeader)
-    use envVars
-    use photolysisRates, only: nrOfPhotoRates, ck
-    character (len = 30):: photoRateNamesForHeader(*)
-    integer :: i
+SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
+  USE envVars
+  USE photolysisRates, ONLY: nrOfPhotoRates, ck
+  CHARACTER (LEN=30) :: photoRateNamesForHeader(*)
+  INTEGER :: i
 
-    ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t=0
-    ! OUTPUT FOR CVODE MAIN SOLVER
-    write(23,*)'t LNST LNFE LNETF LNGE'
+  ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
+  ! OUTPUT FOR CVODE MAIN SOLVER
+  WRITE (23,*) 't LNST LNFE LNETF LNGE'
 
-    ! OUTPUT FOR SPARSE SOLVER
-    write(21,*)'t NFELS NJTV NPE NPS'
-    write(89,*)'time speciesNumber speciesName reactionNumber rate'
-    write(90,*)'time speciesNumber speciesName reactionNumber rate'
+  ! OUTPUT FOR SPARSE SOLVER
+  WRITE (21,*) 't NFELS NJTV NPE NPS'
+  WRITE (89,*) 'time speciesNumber speciesName reactionNumber rate'
+  WRITE (90,*) 'time speciesNumber speciesName reactionNumber rate'
 
-    ! OTHER OUPUT
-    ! write(85,*),'t temp m h2o'
-    write(86,*)'t ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i=1,nrOfPhotoRates)
-    write(22,*)'t currentStepSize previousStepSize'
-    write(49,*)'t secx cosx lat longt lha sinld cosld'
-    write(95,*)'time ', (envVarNames(i), i=1,numEnvVars), 'RO2'
+  ! OTHER OUPUT
+  ! write(85,*), 't temp m h2o'
+  WRITE (86,*) 't ', (TRIM (photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
+  WRITE (22,*) 't currentStepSize previousStepSize'
+  WRITE (49,*) 't secx cosx lat longt lha sinld cosld'
+  WRITE (95,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
 
-    return
-end
-
-
-subroutine matchNameToNumber(speciesName,speciesList,listSize,neq,returnArray,returnArraySize)
-    character(LEN=10) speciesList(*),speciesName(*),k,m
-    integer i,j,match, matched_j, neq,returnArray(*),returnArraySize, listSize
-    returnArraySize = 1
-
-    do i=1,listSize
-        k = speciesList(i)
-        match = 0
-        do j=1,neq
-            m = speciesName(j)
-            if (m.eq.k) then
-                match = 1
-                matched_j = j
-                returnArray(returnArraySize) = j
-                returnArraySize = returnArraySize + 1
-            endif
-        enddo
-        ! substitute empty strings for invalid species
-        if (match.eq.0) then
-            speciesList(i)=''
-        endif
-    enddo
-    return
-end
-
-subroutine matchOneNameToNumber(speciesName,oneSpecies,neq,id)
-    character(LEN=10) oneSpecies,speciesName(*),m
-    integer j, neq
-
-  id=0
-  do j=1,neq
-    m = speciesName(j)
-    if (m.eq.oneSpecies) then
-      id=j
-      return
-    endif
-  enddo
-end
+  RETURN
+END SUBROUTINE writeFileHeaders
 
 
-subroutine setConcentrations(y,speciesName,concSpeciesName,concentration,concCounter,neq)
-    character(LEN=10) concSpeciesName(*),speciesName(*),k, m
-    double precision concentration(*),y(*)
-    integer concCounter,neq,i,j, match
+SUBROUTINE matchNameToNumber (speciesName, speciesList, listSize, neq, returnArray, returnArraySize)
+  CHARACTER (LEN=10) speciesList(*), speciesName(*), k, m
+  INTEGER i, j, match, matched_j, neq, returnArray(*), returnArraySize, listSize
+  returnArraySize = 1
 
-    do i=1,concCounter
-        k = concSpeciesName(i)
-        ! flag for matching of string names
-        match = 0
-        do j=1,neq
-            m = speciesName(j)
-            if (m.eq.k) then
-                ! Set concentration in y()
-                y(j) = concentration(i)
-                match = 1
-                write(99,*)'match, m = k = ',m,' concentration = ',concentration(i)
-            else
-                write(99,*)'no match, m',m,' != k! = ',k,' concentration = ',concentration(i)
-            endif
-        enddo
-        if(match.eq.0) then
-            write(94,*)"Error in  setConcentrations"
-            write(94,*)"Can't find species: ",k," in species list"
-        end if
-    enddo
-    return
-end
+  DO i = 1, listSize
+     k = speciesList(i)
+     match = 0
+     DO j = 1, neq
+        m = speciesName(j)
+        IF (m.EQ.k) THEN
+           match = 1
+           matched_j = j
+           returnArray(returnArraySize) = j
+           returnArraySize = returnArraySize + 1
+        ENDIF
+     ENDDO
+     ! substitute empty strings for invalid species
+     IF (match.EQ.0) THEN
+        speciesList(i) = ''
+     ENDIF
+  ENDDO
+  RETURN
+END SUBROUTINE matchNameToNumber
+
+SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
+  CHARACTER (LEN=10) oneSpecies, speciesName(*), m
+  INTEGER j, neq
+
+  id = 0
+  DO j = 1, neq
+     m = speciesName(j)
+     IF (m.EQ.oneSpecies) THEN
+        id = j
+        RETURN
+     ENDIF
+  ENDDO
+END SUBROUTINE matchOneNameToNumber
+
+
+SUBROUTINE setConcentrations (y, speciesName, concSpeciesName, concentration, concCounter, neq)
+  CHARACTER (LEN=10) concSpeciesName(*), speciesName(*), k, m
+  DOUBLE PRECISION concentration(*), y(*)
+  INTEGER concCounter, neq, i, j, match
+
+  DO i = 1, concCounter
+     k = concSpeciesName(i)
+     ! flag for matching of string names
+     match = 0
+     DO j = 1, neq
+        m = speciesName(j)
+        IF (m.EQ.k) THEN
+           ! Set concentration in y()
+           y(j) = concentration(i)
+           match = 1
+           WRITE (99,*) 'match, m = k = ', m, ' concentration = ', concentration(i)
+        ELSE
+           WRITE (99,*) 'no match, m', m, ' != k! = ', k, ' concentration = ', concentration(i)
+        ENDIF
+     ENDDO
+     IF (match.EQ.0) THEN
+        WRITE (94,*) "Error in setConcentrations"
+        WRITE (94,*) "Can't find species: ", k," in species list"
+     END IF
+  ENDDO
+  RETURN
+END SUBROUTINE setConcentrations

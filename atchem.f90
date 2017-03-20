@@ -153,7 +153,7 @@ PROGRAM ATCHEM
   ALLOCATE (clhs(3, csize1), crhs(2, csize2), ccoeff(csize2))
 
   !   READ IN CHEMICAL REACTIONS
-  CALL DATA (clhs, crhs, ccoeff, csize1, csize2)
+  CALL data (clhs, crhs, ccoeff, csize1, csize2)
   neq = np
 
   WRITE (*,*) 'Size of lhs =', csize1, 'size of rhs2 = ', csize2, '.'

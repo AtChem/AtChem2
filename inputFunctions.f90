@@ -358,7 +358,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   CHARACTER (LEN=21) :: fileLocationPrefix
   CHARACTER (LEN=57) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
-  DOUBLE PRECISION :: Y (*)
+  DOUBLE PRECISION :: y (*)
 
   ! READ IN SPECIES TO BE CONSTRAINED
   WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'

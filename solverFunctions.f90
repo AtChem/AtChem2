@@ -41,7 +41,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   USE species
   USE constraints
   USE reactionStructure
-  USE chemcialConstraints
+  USE chemicalConstraints
 
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE

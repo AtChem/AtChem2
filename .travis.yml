@@ -3,16 +3,13 @@
   notifications:
     email: false
 
-  language: Fortran
+  language: fortran
 
   compiler:
     - gfortran
 
   install:
     - ./tools/build.sh
-
-  script:
-    - ./contrib/utilities/check_indentation.sh
 
   branches:
     only:

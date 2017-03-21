@@ -9,7 +9,7 @@
     - gfortran
 
   install:
-    - ./tools/build.sh ./tools/mcm_subset.fac
+    - ./tools/build.sh ./mcm_subset.fac
 
   branches:
     only:

@@ -1,14 +1,10 @@
 #!/bin/sh
 
 # $1 is the input file
+set -e
 echo $1
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo "call run_atchem.py"
-python $DIR/run_atchem.py $1
-echo "cd"
-cd $DIR/..
+
+echo "call ./tools/run_atchem.py"
+python ./tools/run_atchem.py $1
 echo "make"
 make
-echo "run"
-./atchem
-echo "complete"

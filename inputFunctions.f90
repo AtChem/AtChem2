@@ -347,7 +347,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
   USE species
   USE constraints
-  USE chemcialConstraints
+  USE chemicalConstraints
 
   IMPLICIT NONE
 

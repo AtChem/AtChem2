@@ -9,7 +9,7 @@ PROGRAM ATCHEM
   USE interpolationMethod
   USE reactionStructure
   USE photolysisRates
-  USE chemcialConstraints
+  USE chemicalConstraints
   USE zenithData
   USE zenithData1
   USE productionAndLossRates
@@ -579,7 +579,7 @@ PROGRAM ATCHEM
   CALL deallocateConstrainedSpecies ()
   !   deallocate arrays from module species
   CALL deallocateSpeciesList
-  !   deallocate arrays from module chemcialConstraints
+  !   deallocate arrays from module chemicalConstraints
   DEALLOCATE (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedName)
   DEALLOCATE (speciesNumberOfPoints, constrainedSpecies)
   !   deallocate arrays from module envVars

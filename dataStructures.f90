@@ -217,7 +217,7 @@ END MODULE photolysisRates
 !    ********************************************************************************************************
 !    CHEMICAL CONSTRAINTS MODULE
 !    ********************************************************************************************************
-MODULE chemcialConstraints
+MODULE chemicalConstraints
   IMPLICIT NONE
 
   SAVE
@@ -227,7 +227,7 @@ MODULE chemcialConstraints
   CHARACTER(LEN=10), ALLOCATABLE :: constrainedName(:)
   INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
 
-END MODULE chemcialConstraints
+END MODULE chemicalConstraints
 
 !    ********************************************************************************************************
 !    PHOTOLYSIS RATES PARAMETERS MODULE

@@ -3,7 +3,7 @@ sudo : false
 notifications:
   email: false
 
-language: fortran
+language: Fortran
 
 compiler:
     - gfortran

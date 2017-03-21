@@ -1,4 +1,4 @@
-60		number of steps
+5		number of steps
 900.0e+00		step size (seconds)
 4			Species Interpolation Method (cs = 1, cs ln = 2, pw constant = 3, pw linear = 4)
 4			Conditions Interpolation Method (cs = 1, cs ln = 2, pw constant = 3, pw linear = 4)

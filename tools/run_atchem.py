@@ -16,7 +16,7 @@ def setup_files_for_atchem(in_file):
     print os.path.abspath(os.path.join(script_directory, '../modelConfiguration/mechanism.species'))
     file_list = ['mechanism.species', 'mechanism.prod', 'mechanism.reac', 'mechanism-rate-coefficients.f90']
     assert os.path.exists(os.path.join(script_directory, '../modelConfiguration/'))
-    for filename in filelist:
+    for filename in file_list:
         assert os.path.isfile(os.path.join(in_directory, filename))
         shutil.copy(os.path.join(in_directory, filename), os.path.join(script_directory, '../modelConfiguration/'+filename))
 

@@ -1,0 +1,19 @@
+sudo : false
+
+notifications:
+  email: false
+
+language: fortran
+
+compiler:
+    - gfortran
+
+install:
+    - ./tools/build.sh
+
+script:
+    - ./contrib/utilities/check_indentation.sh
+
+branches:
+  only:
+- master

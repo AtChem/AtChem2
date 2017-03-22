@@ -2,8 +2,9 @@
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
+.PHONY: all
 
-CVODELIB=
+CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
 # gfortran flags
 F77      =  gfortran
 FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic
@@ -15,24 +16,23 @@ LIBDIR   = /usr/lib/:$(CVODELIB)
 
 AOUT = atchem
 
-ALL: $(AOUT)
+all: $(AOUT)
 
 LOCAL = makefile.$$(uname -n | perl -pe 's/\..+//')
 
 makefile.local:
-	 touch $(LOCAL)
-	 ln  $(LOCAL) makefile.local
+	touch $(LOCAL)
+	ln  $(LOCAL) makefile.local
 
 include makefile.local
 
 SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 modelConfigFunctions.f90 zenith.f90  temperature.f90 solverFunctions.f90  inputFunctions.f90  outputFunctions.f90  interpolationFunctions.f90  constraintFunctions.f90  instantaneousRatesFunctions.f90  facsimileFunctions.f90  conversionFunctions.f90
 
-OBJS = atchem.o mechanism-rates.o dataStructures.o modelConfigFunctions.o zenith.o  temperature.o solverFunctions.o  inputFunctions.o  outputFunctions.o  interpolationFunctions.o  constraintFunctions.o  instantaneousRatesFunctions.o  facsimileFunctions.o  conversionFunctions.o
+LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
-LDFLAGS  = -L$(LIBDIR) -Wl,-rpath,$(LIBDIR) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
-
-$(AOUT):
-	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(LIBDIR) $(LDFLAGS)
+# prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
+$(AOUT): $(SRCS)
+	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(CVODELIB) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
 .f90.o:

@@ -1,7 +1,5 @@
 #!/bin/sh
-
-ls -al
-pwd
-echo "run"
+set -e
+echo "./atchem"
 ./atchem
 echo "complete"

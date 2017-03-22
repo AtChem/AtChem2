@@ -1,6 +1,6 @@
 import os
 import sys
-import facsimileToFortranMechanismConverter as fTFMC
+import mech_converter as mc
 import shutil
 """This script builds and runs the program atchem"""
 
@@ -8,7 +8,7 @@ import shutil
 def setup_files_for_atchem(in_file):
     assert os.path.isfile(in_file), 'Failed find file ' + in_file
     # Convert MCM input file to generated files
-    fTFMC.convert(in_file)
+    mc.convert(in_file)
     in_directory = os.path.dirname(os.path.abspath(in_file))
     script_directory = os.path.dirname(os.path.abspath(__file__))
     # copy the generated files to modelConfiguration directory

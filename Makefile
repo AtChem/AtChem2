@@ -32,6 +32,8 @@ OBJS = atchem.o mechanism-rates.o dataStructures.o modelConfigFunctions.o zenith
 LDFLAGS  = -L$(LIBDIR) -Wl,-rpath,$(LIBDIR) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 $(AOUT):
+	pwd
+	ls -al
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(LIBDIR) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 

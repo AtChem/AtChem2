@@ -12,4 +12,4 @@ python $DIR/tools/run_atchem.py $1
 echo "cd"
 cd $DIR/..
 echo "make"
-make
+make ALL -f $DIR/Makefile

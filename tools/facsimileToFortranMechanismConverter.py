@@ -244,7 +244,7 @@ def convert(input_file):
                 ro2List.append(x)
 
     # check RO2s are in RO2 list
-    with open(os.path.join(script_directory, 'RO2Listv3.3.1')) as RO2List_file:
+    with open(os.path.join(script_directory, 'RO2listv3.3.1')) as RO2List_file:
         RO2List_input = RO2List_file.readlines()
 
     for r in RO2List_input:

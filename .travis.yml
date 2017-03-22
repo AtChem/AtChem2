@@ -6,11 +6,12 @@
   language: fortran
 
   compiler:
-    - gfortran
+    - gcc
 
   before_install:
     - sudo apt-get -qq update
     - sudo apt-get install libsundials-serial-dev
+    - sudo apt-get install -y gfortran
   install:
     - ./tools/build.sh ./mcm_subset.fac
 

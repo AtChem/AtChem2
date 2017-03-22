@@ -8,8 +8,14 @@
   compiler:
     - gfortran
 
+  before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install libsundials-serial-dev
   install:
     - ./tools/build.sh ./mcm_subset.fac
+
+  script:
+    - ./tools/run.sh
 
   branches:
     only:

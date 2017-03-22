@@ -11,4 +11,4 @@ echo "call run_atchem.py"
 python $DIR/tools/run_atchem.py $1
 echo "cd"
 echo "make"
-make ALL -f $DIR/Makefile
+make

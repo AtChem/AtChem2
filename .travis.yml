@@ -16,4 +16,4 @@
     - ./tools/build.sh ./mcm_subset.fac
 
   script:
-    - ./tools/run.sh
+    - ./atchem

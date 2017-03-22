@@ -4,8 +4,7 @@
 set -e
 echo $1
 
-echo ./tools/run_atchem.py
-echo "call ./tools/run_atchem.py"
-python ./tools/run_atchem.py $1
+echo "call ./tools/setup_atchem.py"
+python ./tools/setup_atchem.py $1
 echo "make"
 make

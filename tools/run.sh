@@ -1,7 +1,7 @@
 #!/bin/sh
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR/..
+ls -al
+pwd
 echo "run"
 ./atchem
 echo "complete"

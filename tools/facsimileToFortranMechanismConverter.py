@@ -118,7 +118,7 @@ def convert(input_file):
                 # print 'products =', products
 
                 # Ignore empty reactantsList
-                if not reactantsList.isspace():
+                if not reactantsList == '':
                     # Compare each reactant against known species.
                     reactantNums = []
                     for x in reactants:
@@ -144,7 +144,7 @@ def convert(input_file):
                     for z in reactantNums:
                         reac_temp_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
 
-                if not productsList.isspace():
+                if not productsList == '':
                     # Compare each product against known species.
                     productNums = []
                     for x in products:

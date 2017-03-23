@@ -38,9 +38,13 @@ END SUBROUTINE outputPhotolysisRates
 
 !     ---------------------------------------------------------------
 SUBROUTINE getConcForSpecInt (y, yInt, specInt, specIntSize, neq)
-  DOUBLE PRECISION y(*), yInt(*)
-  INTEGER specIntSize, neq, i, j, specInt(*)
-
+  ! This subroutine outputs yInt, the concentration of each species of interest,
+  ! in the same order as the species are in specInt
+  DOUBLE PRECISION, INTENT(IN)  :: y(*)
+  DOUBLE PRECISION, INTENT(OUT) :: yInt(*)
+  INTEGER, INTENT(IN) :: specIntSize, neq, specInt(*)
+  INTEGER i, j
+  ! set yInt(j) to the
   DO i = 1, neq
      DO j = 1, specIntSize
         IF (specInt(j)==i) THEN
@@ -165,14 +169,14 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 END SUBROUTINE outputRates
 
 !     ----------------------------------------------------------------
-SUBROUTINE outputInterestingNames (names, namesSize)
+SUBROUTINE outputSpeciesOutputRequiredNames (names, namesSize)
   CHARACTER (LEN=10) names(*)
   INTEGER i, namesSize
   WRITE (50, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
   RETURN
-END SUBROUTINE outputInterestingNames
+END SUBROUTINE outputSpeciesOutputRequiredNames
 
-SUBROUTINE outputInteresting (t, yInt, yIntSize)
+SUBROUTINE outputSpeciesOutputRequired (t, yInt, yIntSize)
   DOUBLE PRECISION t, yInt(*)
   INTEGER yIntSize, i
   DO i = 1, yIntSize
@@ -182,4 +186,4 @@ SUBROUTINE outputInteresting (t, yInt, yIntSize)
   END DO
   WRITE (50, '(100 (1x, e15.5e3)) ') t, (yInt(i), i = 1, yIntSize)
   RETURN
-END SUBROUTINE outputInteresting
+END SUBROUTINE outputSpeciesOutputRequired

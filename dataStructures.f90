@@ -53,7 +53,7 @@ CONTAINS
     INTEGER :: n
     numberOfConstrainedSpecies = n
     ALLOCATE (constrainedSpecies(n), constrainedConcs(n))
-    WRITE(*,*) 'Setting size of constraint arrays, n = ', n
+    WRITE (*,*) 'Setting size of constraint arrays, n = ', n
   END SUBROUTINE setNumberOfConstrainedSpecies
 
   SUBROUTINE deallocateConstrainedSpecies ()

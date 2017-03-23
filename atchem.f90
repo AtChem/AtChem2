@@ -459,12 +459,12 @@ PROGRAM ATCHEM
      ! printing concentration of two first species - seems unnecessary at the moment
      ! WRITE (stderr, fmt) t, y (1), y (2)
 
-     ! OUTPUT RATES OF PRODIUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
+     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
      time = INT (t)
      elapsed = INT (t-modelStartTime)
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
         CALL outputRates (prodIntSpecies, t, productionRates, 1, np, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen, &
-             lossArrayLen , speciesName)
+             lossArrayLen, speciesName)
         CALL outputRates (reacIntSpecies, t, lossRates, 0, np, rateOfProdNS, prodLossArrayLen, rateOfProdNS, prodArrayLen, &
              lossArrayLen, speciesName)
      ENDIF
@@ -511,12 +511,12 @@ PROGRAM ATCHEM
      ! CALL system_clock(current, rate)
      ! currentSeconds =(current - runStart) / rate
      ! stepTime = currentSeconds - previousSeconds
-     ! WRITE (*,*) 'Current time = ', currentSeconds, '        step time = ', stepTime
+     ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
      ! previousSeconds = currentSeconds
 
      ! ERROR HANDLING
      IF (ier<0) THEN
-        fmt = "(///' SUNDIALS_ERROR: FCVODE returned ier = ', I5, /, '                 Linear Solver returned ier = ', I5) "
+        fmt = "(///' SUNDIALS_ERROR: FCVODE returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
         WRITE (stderr, fmt) ier, iout (15)
         ! free memory
         CALL fcvfree

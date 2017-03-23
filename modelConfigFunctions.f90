@@ -23,19 +23,19 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
   ! OUTPUT FOR CVODE MAIN SOLVER
-  WRITE (23,*) 't LNST LNFE LNETF LNGE'
+  WRITE (57,*) 't LNST LNFE LNETF LNGE'
 
   ! OUTPUT FOR SPARSE SOLVER
-  WRITE (21,*) 't NFELS NJTV NPE NPS'
-  WRITE (89,*) 'time speciesNumber speciesName reactionNumber rate'
-  WRITE (90,*) 'time speciesNumber speciesName reactionNumber rate'
+  WRITE (61,*) 't NFELS NJTV NPE NPS'
+  WRITE (60,*) 'time speciesNumber speciesName reactionNumber rate'
+  WRITE (56,*) 'time speciesNumber speciesName reactionNumber rate'
 
   ! OTHER OUPUT
-  ! write(85,*), 't temp m h2o'
-  WRITE (86,*) 't ', (TRIM (photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
-  WRITE (22,*) 't currentStepSize previousStepSize'
-  WRITE (49,*) 't secx cosx lat longt lha sinld cosld'
-  WRITE (95,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
+  ! WRITE (85,*), 't temp m h2o'
+  WRITE (58,*) 't ', (TRIM (photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
+  WRITE (62,*) 't currentStepSize previousStepSize'
+  WRITE (59,*) 't secx cosx lat longt lha sinld cosld'
+  WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
 
   RETURN
 END SUBROUTINE writeFileHeaders
@@ -96,14 +96,14 @@ SUBROUTINE setConcentrations (y, speciesName, concSpeciesName, concentration, co
            ! Set concentration in y()
            y(j) = concentration(i)
            match = 1
-           WRITE (99,*) 'match, m = k = ', m, ' concentration = ', concentration(i)
+           WRITE (54,*) 'match, m = k = ', m, ' concentration = ', concentration(i)
         ELSE
-           WRITE (99,*) 'no match, m', m, ' != k! = ', k, ' concentration = ', concentration(i)
+           WRITE (54,*) 'no match, m', m, ' != k! = ', k, ' concentration = ', concentration(i)
         ENDIF
      ENDDO
      IF (match==0) THEN
-        WRITE (94,*) "Error in setConcentrations"
-        WRITE (94,*) "Can't find species: ", k," in species list"
+        WRITE (51,*) "Error in setConcentrations"
+        WRITE (51,*) "Can't find species: ", k," in species list"
      END IF
   ENDDO
   RETURN

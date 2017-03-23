@@ -92,14 +92,14 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
   DOUBLE PRECISION :: coeff(size2)
 
   WRITE (*,*) 'Reading reactants (lhs) from mechanism.rec...'
-  OPEN (4, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
-  OPEN (14, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
+  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
+  OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
 
   ! read data for lhs of equations
   size1 = 0
-  READ (4,*)
+  READ (10,*)
   DO
-     READ (4,*) k, l
+     READ (10,*) k, l
 
      IF (k==0) EXIT
      size1 = size1+1
@@ -113,7 +113,7 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
   ! read data for rhs of equations
   size2 = 0
   DO
-     READ (14,*) k, l
+     READ (11,*) k, l
      IF (k==0) EXIT
      size2 = size2+1
      rhs(1, size2) = k
@@ -122,8 +122,8 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
 
   ENDDO
 
-  CLOSE (4, status='keep')
-  CLOSE (14, status='keep')
+  CLOSE (10, status='keep')
+  CLOSE (11, status='keep')
 
   WRITE (*,*) 'Finished reading lhs and rhs data.'
   RETURN

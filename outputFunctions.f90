@@ -4,7 +4,7 @@ SUBROUTINE outputEnvVar (t)
   INTEGER :: i
   DOUBLE PRECISION :: t
   IF (ro2<0) ro2 = 0.0
-  WRITE (95,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+  WRITE (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
   RETURN
 END SUBROUTINE outputEnvVar
@@ -15,9 +15,9 @@ SUBROUTINE outputjfy (fy, nsp, t)
   DOUBLE PRECISION :: fy(nsp, nsp), t
 
   DO i = 1, nsp
-     WRITE (93, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
+     WRITE (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
   ENDDO
-  WRITE (93,*) '---------------'
+  WRITE (55,*) '---------------'
 END SUBROUTINE outputjfy
 
 !     ---------------------------------------------------------------
@@ -26,7 +26,7 @@ SUBROUTINE outputPhotolysisRates (j, t)
   DOUBLE PRECISION :: j(*), t
   INTEGER :: i
 
-  WRITE (86, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+  WRITE (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
   RETURN
 END SUBROUTINE outputPhotolysisRates
 
@@ -135,7 +135,7 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 
            IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
-              WRITE (89,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
            ENDIF
         ENDDO
      ENDDO
@@ -150,7 +150,7 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 
            IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
-              WRITE (90,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+              WRITE (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
            ENDIF
         ENDDO
      ENDDO
@@ -162,7 +162,7 @@ END SUBROUTINE outputRates
 SUBROUTINE outputInterestingNames (names, namesSize)
   CHARACTER (LEN=10) names(*)
   INTEGER i, namesSize
-  WRITE (91, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
+  WRITE (50, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
   RETURN
 END SUBROUTINE outputInterestingNames
 
@@ -174,6 +174,6 @@ SUBROUTINE outputInteresting (t, yInt, yIntSize)
         yInt(i) = 0d0
      ENDIF
   END DO
-  WRITE (91, '(100 (1x, e15.5e3)) ') t, (yInt(i), i = 1, yIntSize)
+  WRITE (50, '(100 (1x, e15.5e3)) ') t, (yInt(i), i = 1, yIntSize)
   RETURN
 END SUBROUTINE outputInteresting

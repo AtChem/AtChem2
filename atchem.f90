@@ -4,6 +4,7 @@
 
 PROGRAM ATCHEM
 
+  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   USE species
   USE constraints
   USE interpolationMethod
@@ -108,31 +109,31 @@ PROGRAM ATCHEM
   previousSeconds = 0
 
   !   OPEN FILES FOR OUTPUT
-  OPEN (unit=91, file="modelOutput/concentration.output")
-  OPEN (unit=86, file="modelOutput/photolysisRates.output")
-  OPEN (unit=49, file="modelOutput/photoRateCalcParameters.output")
-  OPEN (unit=23, file="modelOutput/mainSolverParameters.output")
-  OPEN (unit=21, file="modelOutput/sparseSolverParameters.output")
-  OPEN (unit=22, file="modelOutput/stepSize.output")
-  OPEN (unit=99, file="modelOutput/initialConditionsSetting.output")
-  OPEN (unit=89, file="modelOutput/productionRates.output")
-  OPEN (unit=90, file="modelOutput/lossRates.output")
-  OPEN (unit=92, file="modelOutput/finalModelState.output")
-  OPEN (unit=93, file="modelOutput/jacobian.output")
-  OPEN (unit=94, file="modelOutput/errors.output")
-  OPEN (unit=95, file="modelOutput/envVar.output")
+  OPEN (unit=50, file="modelOutput/concentration.output")
+  OPEN (unit=51, file="modelOutput/errors.output")
+  OPEN (unit=52, file="modelOutput/envVar.output")
+  OPEN (unit=53, file="modelOutput/finalModelState.output")
+  OPEN (unit=54, file="modelOutput/initialConditionsSetting.output")
+  OPEN (unit=55, file="modelOutput/jacobian.output")
+  OPEN (unit=56, file="modelOutput/lossRates.output")
+  OPEN (unit=57, file="modelOutput/mainSolverParameters.output")
+  OPEN (unit=58, file="modelOutput/photolysisRates.output")
+  OPEN (unit=59, file="modelOutput/photoRateCalcParameters.output")
+  OPEN (unit=60, file="modelOutput/productionRates.output")
+  OPEN (unit=61, file="modelOutput/sparseSolverParameters.output")
+  OPEN (unit=62, file="modelOutput/stepSize.output")
   flush(6)
 
   !    OPEN FILES FOR INPUT
-  OPEN (5, file='modelConfiguration/mechanism.reac', status='old') ! input file
+  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file
 
   !   READ IN MECHANISM PARAMETERS
-  READ (5,*) np, numReactions
+  READ (10,*) np, numReactions
   WRITE (*,*)
   WRITE (*,*) 'Number of Species', np
   WRITE (*,*) 'Number of Reactions = ', numReactions
   WRITE (*,*)
-  CLOSE (5, status='keep')
+  CLOSE (10, status='keep')
 
   prodLossArrayLen = numReactions*2
 
@@ -330,7 +331,7 @@ PROGRAM ATCHEM
      ENDDO
   ENDIF
 
-  flush(6)
+  flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS
   !    ********************************************************************************************************
@@ -352,20 +353,20 @@ PROGRAM ATCHEM
   neq = neq - numberOfConstrainedSpecies
   WRITE (*,*) 'neq = ', neq, ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
-  flush(6)
+  flush(stderr)
   !    ********************************************************************************************************
   !    CONFIGURE SOLVER
   !    ********************************************************************************************************
 
-  WRITE (6,*) 'Dense example problem:'
-  WRITE (6,*) ' Robertson kinetics, neq = ', neq
+  WRITE (stderr,*) 'Dense example problem:'
+  WRITE (stderr,*) ' Robertson kinetics, neq = ', neq
 
   ipar(1) = neq
   ipar(2) = numReactions
 
   CALL fnvinits (1, neq, ier)
   IF (ier/=0) THEN
-     WRITE (6, 20) ier
+     WRITE (stderr, 20) ier
 20   FORMAT (///' SUNDIALS_ERROR: FNVINITS returned ier = ', I5)
      STOP
   ENDIF
@@ -374,7 +375,7 @@ PROGRAM ATCHEM
   CALL fcvmalloc (t0, z, meth, itmeth, itol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
   IF (ier/=0) THEN
-     WRITE (6, 30) ier
+     WRITE (stderr, 30) ier
 30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC returned ier = ', I5)
      STOP
   ENDIF
@@ -394,7 +395,7 @@ PROGRAM ATCHEM
      CALL fcvspgmr (1, 1, lookBack, deltaMain, ier)
      CALL fcvbpinit (neq, preconBandUpper, preconBandLower, ier)
      IF (ier/=0 ) THEN
-        WRITE (6,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
+        WRITE (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
         CALL fcvfree
         STOP
      END IF
@@ -402,8 +403,8 @@ PROGRAM ATCHEM
   ELSE IF (solverType==3) THEN
      ! make sure no Jacobian approximation is required
      IF (JVapprox==1) THEN
-        WRITE (6,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
-        WRITE (6,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
+        WRITE (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
+        WRITE (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
         STOP
      END IF
      CALL fcvdense (neq, ier)
@@ -413,7 +414,7 @@ PROGRAM ATCHEM
   ENDIF
   ! ERROR HANDLING
   IF (ier/=0) THEN
-     WRITE (6,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
+     WRITE (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
      CALL fcvfree
      STOP
   ENDIF
@@ -424,7 +425,7 @@ PROGRAM ATCHEM
   ENDIF
 
   IF (ier/=0) THEN
-     WRITE (6, 40) ier
+     WRITE (stderr, 40) ier
 40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE returned ier = ', I5)
      CALL fcvfree
      STOP
@@ -439,7 +440,7 @@ PROGRAM ATCHEM
 
   DO WHILE (jout<nout)
      ! GET CONCENTRATIONS FOR SOLVED SPECIES
-     WRITE (49,*) t, secx, cosx, lat, longt, lha, sinld, cosld
+     WRITE (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
      CALL fcvode (tout, t, z, itask, ier)
      IF (ier/=0) THEN
         WRITE (*,*) 'ier POST FCVODE = ', ier
@@ -456,7 +457,7 @@ PROGRAM ATCHEM
      ! OUTPUT ON SCREEN
      fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
      ! printing concentration of two first species - seems unnecessary at the moment
-     ! WRITE (6, fmt) T, Y (1), Y (2)
+     ! WRITE (stderr, fmt) t, y (1), y (2)
 
      ! OUTPUT RATES OF PRODIUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
      time = INT (t)
@@ -487,19 +488,19 @@ PROGRAM ATCHEM
         irfileLocationPrefix = './instantaneousRates/'
         irfileLocation = irfileLocationPrefix // ADJUSTL (strTime)
 
-        OPEN (27, file=irfileLocation)
+        OPEN (10, file=irfileLocation)
         DO i = 1, numReactions
-           WRITE (27,*) ir(i)
+           WRITE (10,*) ir(i)
         ENDDO
-        CLOSE (27, status='keep')
+        CLOSE (10, status='keep')
      ENDIF
 
      ! OUTPUT FOR CVODE MAIN SOLVER
-     WRITE (23,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
+     WRITE (57,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
      ! OUTPUT FOR SPARSE SOLVER
-     WRITE (21,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
+     WRITE (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
      ! OUTPUT STEP SIZE
-     WRITE (22,*) t, ' ', rout (3), ' ', rout (2)
+     WRITE (62,*) t, ' ', rout (3), ' ', rout (2)
 
      !OUTPUT ENVVAR VALUES
      CALL ro2sum (ro2, y)
@@ -507,16 +508,16 @@ PROGRAM ATCHEM
 
      ! CALCULATE AND OUTPUT RUNTIME
      ! not using timing at the moment
-     ! call system_clock(current, rate)
+     ! CALL system_clock(current, rate)
      ! currentSeconds =(current - runStart) / rate
      ! stepTime = currentSeconds - previousSeconds
-     ! write(*,*) 'Current time = ', currentSeconds, '        step time = ', stepTime
+     ! WRITE (*,*) 'Current time = ', currentSeconds, '        step time = ', stepTime
      ! previousSeconds = currentSeconds
 
      ! ERROR HANDLING
      IF (ier<0) THEN
         fmt = "(///' SUNDIALS_ERROR: FCVODE returned ier = ', I5, /, '                 Linear Solver returned ier = ', I5) "
-        WRITE (6, fmt) ier, iout (15)
+        WRITE (stderr, fmt) ier, iout (15)
         ! free memory
         CALL fcvfree
         STOP
@@ -533,14 +534,14 @@ PROGRAM ATCHEM
   CALL fcvdky (t, 1, z, ier)
   IF (ier/=0) THEN
      fmt = "(///' SUNDIALS_ERROR: FCVDKY returned ier = ', I4) "
-     WRITE (6, fmt) ier
+     WRITE (stderr, fmt) ier
      CALL fcvfree
      STOP
   ENDIF
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
   DO i = 1, np
-     WRITE (92,*) speciesName(i), y(i)
+     WRITE (53,*) speciesName(i), y(i)
   ENDDO
 
   !   printing of final statistics desactivated - nobody finds it useful
@@ -552,7 +553,7 @@ PROGRAM ATCHEM
        "' No. nonlinear convergence failures = ', I4/" // &
        "' No. error test failures = ', I4/) "
 
-  WRITE (6, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
+  WRITE (stderr, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
        iout (lnni), iout (lncf), iout (lnetf)
 
   CALL SYSTEM_CLOCK (runEnd, rate)
@@ -587,6 +588,20 @@ PROGRAM ATCHEM
   DEALLOCATE (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
   !   deallocate arrays from module photolysisRates
   DEALLOCATE (photoX, photoY, photoY2, photoNumberOfPoints)
+
+  CLOSE (50)
+  CLOSE (51)
+  CLOSE (52)
+  CLOSE (53)
+  CLOSE (54)
+  CLOSE (55)
+  CLOSE (56)
+  CLOSE (57)
+  CLOSE (58)
+  CLOSE (59)
+  CLOSE (60)
+  CLOSE (61)
+  CLOSE (62)
 
   STOP
 END PROGRAM ATCHEM

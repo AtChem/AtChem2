@@ -48,7 +48,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER np, numReactions, numSteps
+  INTEGER numSpec, numReactions, numSteps
   DOUBLE PRECISION tminus1, outputStepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
@@ -142,24 +142,24 @@ PROGRAM ATCHEM
   OPEN (unit=62, file=trim(output_dir) // "/stepSize.output")
   flush(6)
 
-  !    OPEN FILES FOR INPUT
+  !    READ IN MECHANISM PARAMETERS
   OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file
+  READ (10,*) numSpec, numReactions
+  CLOSE (10, status='keep')
 
-  !   READ IN MECHANISM PARAMETERS
-  READ (10,*) np, numReactions
   WRITE (*,*)
-  WRITE (*,*) 'Number of Species', np
+  WRITE (*,*) 'Number of Species', numSpec
   WRITE (*,*) 'Number of Reactions = ', numReactions
   WRITE (*,*)
-  CLOSE (10, status='keep')
 
   prodLossArrayLen = numReactions*2
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  ALLOCATE (y(np), speciesName(np), concSpeciesName(np*2), speciesNumber(np), z(np), concentration(np*2))
-  ALLOCATE (prodIntSpecies(np, prodLossArrayLen), returnArray(np), reacIntSpecies(np, prodLossArrayLen))
-  ALLOCATE (SORNumber(np), yInt(np), prodIntName(np), reacIntName(np), speciesOutputRequired(np))
-  ALLOCATE (fy(np, np))
+  ALLOCATE (y(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
+  ALLOCATE (speciesNumber(numSpec), z(numSpec), concentration(numSpec*2))
+  ALLOCATE (prodIntSpecies(numSpec, prodLossArrayLen), returnArray(numSpec), reacIntSpecies(numSpec, prodLossArrayLen))
+  ALLOCATE (SORNumber(numSpec), yInt(numSpec), prodIntName(numSpec), reacIntName(numSpec), speciesOutputRequired(numSpec))
+  ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   ALLOCATE (culmSpeciesProduced(numReactions), culmReactionNumber(numReactions), culmRates(numReactions))
   ALLOCATE (culmSpeciesLoss(numReactions), culmReactionNumberLoss(numReactions), culmRatesLoss(numReactions))
@@ -172,24 +172,24 @@ PROGRAM ATCHEM
 
   !   READ IN CHEMICAL REACTIONS
   CALL data (clhs, crhs, ccoeff, csize1, csize2)
-  neq = np
+  neq = numSpec
 
   WRITE (*,*) 'Size of lhs =', csize1, 'size of rhs2 = ', csize2, '.'
 
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
   WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (y, neq, speciesName, speciesNumber)
+  CALL readSpecies (y, numSpec, speciesName, speciesNumber)
   WRITE (*,*) 'Finished reading species names.'
   WRITE (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
-  CALL setNumberOfSpecies (neq)
+  CALL setNumberOfSpecies (numSpec)
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readConcentrations (concSpeciesName, concentration, concCounter, np)
-  CALL setConcentrations (y, speciesName, concSpeciesName, concentration, concCounter, neq)
+  CALL readConcentrations (concSpeciesName, concentration, concCounter, numSpec)
+  CALL setConcentrations (y, speciesName, concSpeciesName, concentration, concCounter, numSpec)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
@@ -211,7 +211,7 @@ PROGRAM ATCHEM
   !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
   CALL readProductsOfInterest (prodIntName, prodIntNameSize)
 
-  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, neq, returnArray, returnArraySize)
+  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, returnArraySize)
 
   rateOfProdNS = returnArraySize - 1
   ALLOCATE (prodArrayLen(rateOfProdNS))
@@ -220,13 +220,13 @@ PROGRAM ATCHEM
      prodIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
-  CALL findReactionsWithProductX (prodIntSpecies, crhs, csize2, rateOfProdNS, prodArrayLen, prodLossArrayLen, np)
+  CALL findReactionsWithProductX (prodIntSpecies, crhs, csize2, rateOfProdNS, prodArrayLen, prodLossArrayLen, numSpec)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
   !   CONFIGURE FOR OUTPUT OF LOSS RATES
   CALL readReactantsOfInterest (reacIntName, reacIntNameSize)
-  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, neq, returnArray, returnArraySize)
+  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, returnArraySize)
 
   rateOfLossNS = returnArraySize - 1
   WRITE (*,*) 'lossOfProdNS (number of species found):', rateOfLossNS
@@ -238,7 +238,7 @@ PROGRAM ATCHEM
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
-  CALL findReactionsWithReactant (reacIntSpecies, clhs, csize1, rateOfLossNS, lossArrayLen, prodLossArrayLen, np)
+  CALL findReactionsWithReactant (reacIntSpecies, clhs, csize1, rateOfLossNS, lossArrayLen, prodLossArrayLen, numSpec)
 
   DO i = 1, numReactions
      culmReactionNumberLoss(i) = reacIntSpecies(1, i)
@@ -332,10 +332,13 @@ PROGRAM ATCHEM
   CALL writeFileHeaders (photoRateNamesForHeader)
 
   !   CONCENTRATION OUTPUT
-  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize, np)
-  CALL matchNameToNumber (speciesName, speciesOutputRequired, speciesOutputRequiredSize, neq, SORNumber, SORNumberSize)
-  CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq)
-  CALL outputInterestingNames (speciesOutputRequired, speciesOutputRequiredSize)
+  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize, numSpec)
+  ! fill SORNumber with the numbers of the equations that each
+  CALL matchNameToNumber (speciesName, speciesOutputRequired, speciesOutputRequiredSize, &
+                          numSpec, SORNumber, SORNumberSize)
+  ! fill yInt with the concentrations of the species to be output
+  CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, numSpec)
+  CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
   SORNumberSize = SORNumberSize -1
 
   WRITE (*,*) 'Output required for concentration of', speciesOutputRequiredSize, 'species:'
@@ -358,17 +361,19 @@ PROGRAM ATCHEM
   CALL readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*)
 
-  CALL readSpeciesConstraints (speciesName, neq, y, t)
+  CALL readSpeciesConstraints (speciesName, numSpec, y, t)
 
   WRITE (*,*)
   !test
+  ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
   CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
-  CALL outputInteresting (t, yInt, SORNumberSize)
+  CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
 
-  CALL removeConstrainedSpeciesFromProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
+  ! This outputs z, which is y with all the constrained species removed.
+  CALL removeConstrainedSpeciesFromProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
-  neq = neq - numberOfConstrainedSpecies
+  neq = numSpec - numberOfConstrainedSpecies
   WRITE (*,*) 'neq = ', neq, ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
   flush(stderr)
@@ -481,21 +486,23 @@ PROGRAM ATCHEM
      time = INT (t)
      elapsed = INT (t-modelStartTime)
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
-        CALL outputRates (prodIntSpecies, t, productionRates, 1, np, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen, &
-             lossArrayLen, speciesName)
-        CALL outputRates (reacIntSpecies, t, lossRates, 0, np, rateOfProdNS, prodLossArrayLen, rateOfProdNS, prodArrayLen, &
-             lossArrayLen, speciesName)
+        CALL outputRates (prodIntSpecies, t, productionRates, 1, numSpec, &
+                          rateOfProdNS, prodLossArrayLen, rateOfLossNS, &
+                          prodArrayLen, lossArrayLen , speciesName)
+        CALL outputRates (reacIntSpecies, t, lossRates, 0, numSpec, &
+                          rateOfProdNS, prodLossArrayLen, rateOfProdNS, &
+                          prodArrayLen, lossArrayLen, speciesName)
      ENDIF
 
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
      WRITE (*,*) 'time = ', time
      IF (MOD (elapsed, jacobianOutputStepSize)==0) THEN
-        CALL jfy (np, numReactions, y, fy, t)
-        CALL outputjfy (fy, np, t)
+        CALL jfy (numSpec, numReactions, y, fy, t)
+        CALL outputjfy (fy, numSpec, t)
      ENDIF
 
      CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
-     CALL outputInteresting (t, yInt, SORNumberSize)
+     CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 
 
@@ -558,7 +565,7 @@ PROGRAM ATCHEM
   ENDIF
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
-  DO i = 1, np
+  DO i = 1, numSpec
      WRITE (53,*) speciesName(i), y(i)
   ENDDO
 

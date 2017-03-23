@@ -205,6 +205,8 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   c = 'abc'
 
   OPEN (10, file='modelConfiguration/concentrationOutput.config', status='old')
+  ! Loop over all lines of the file, and add each entry to r(i)
+  ! Then check we don't have more species of interest than total species
   READ (10,*) c
   DO WHILE (c/='end' .AND. i<=nsp )
      r(i) = c

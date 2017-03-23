@@ -74,7 +74,7 @@ for test in $1; do
   echo Comparing $TESTS_DIR/$test ...
   # This lists all words which will have their line skipped in the main output file. This is a space-delimited list.
   # TODO: extend to multi-word exclusions
-  skip_text="Runtime ratesOutputStepSize"
+  skip_text="Runtime"
   # Generate a table of line numbers to omit based on skip_text
   for item in $skip_text; do
     skip_line_number=$(find_string $item $TESTS_DIR/$test.out)
@@ -93,6 +93,7 @@ for test in $1; do
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
     this_file_failures=$(test_output_text $TESTS_DIR/$test.out $TESTS_DIR/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
     exitcode=$?
+    echo 'Checking' $TESTS_DIR/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
     if [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
@@ -105,9 +106,10 @@ $this_file_failures"
     old_skip_line_number=$skip_line_number
   done
 
-  # loop over all files in output directory, and numdiff these. If the numdiff gives differences,
+  # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/*.output; do
+    echo 'Checking' $filename
     this_file_failures=$(test_output_file $filename $filename.cmp)
     exitcode=$?
     if [ $exitcode -eq 0 ]; then
@@ -122,11 +124,12 @@ $this_file_failures"
     fi
   done
 
-  # loop over all files (that don't end in .cmp) in the instantaneousRates
+  # Loop over all files (that don't end in .cmp) in the instantaneousRates
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/instantaneousRates/* ; do
     if [ ${filename: -4} != ".cmp" ] ; then
+      echo 'Checking' $filename
       this_file_failures=$(test_output_file $filename $filename.cmp)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then

@@ -36,31 +36,34 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
   WRITE (62,*) 't currentStepSize previousStepSize'
   WRITE (59,*) 't secx cosx lat longt lha sinld cosld'
   WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
-
   RETURN
 END SUBROUTINE writeFileHeaders
 
 
-SUBROUTINE matchNameToNumber (speciesName, speciesList, listSize, neq, returnArray, returnArraySize)
-  CHARACTER (LEN=10) speciesList(*), speciesName(*), k, m
-  INTEGER i, j, match, matched_j, neq, returnArray(*), returnArraySize, listSize
-  returnArraySize = 1
+SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, listSize, &
+                              neq, returnArray, returnArraySize)
+  CHARACTER (LEN=10), INTENT(IN) :: masterSpeciesList(*)
+  CHARACTER (LEN=10), INTENT(INOUT) :: testSpeciesList(*)
+  INTEGER, INTENT(IN) :: listSize, neq
+  INTEGER, INTENT(OUT) :: returnArray(*), returnArraySize
+  INTEGER i, j
+  LOGICAL match
 
+  returnArraySize = 1
+  ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
+  ! returnArray with the number of that species within the masterSpeciesList
   DO i = 1, listSize
-     k = speciesList(i)
-     match = 0
+     match = .FALSE.
      DO j = 1, neq
-        m = speciesName(j)
-        IF (m==k) THEN
-           match = 1
-           matched_j = j
+        IF (masterSpeciesList(j)==testSpeciesList(i)) THEN
+           match = .TRUE.
            returnArray(returnArraySize) = j
            returnArraySize = returnArraySize + 1
         ENDIF
      ENDDO
      ! substitute empty strings for invalid species
-     IF (match==0) THEN
-        speciesList(i) = ''
+     IF (match.eqv..FALSE.) THEN
+        testSpeciesList(i) = ''
      ENDIF
   ENDDO
   RETURN

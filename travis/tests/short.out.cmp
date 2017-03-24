@@ -1,0 +1,128 @@
+ Output dir is travis/tests/short                                                              
+
+ Number of Species         104
+ Number of Reactions =          324
+
+ Reading reactants (lhs) from mechanism.rec...
+ Reading products (rhs) from mechanism.prod...
+ Finished reading lhs and rhs data.
+ Size of lhs =         510 size of rhs2 =          558 .
+
+ Reading species names from mechanism.species...
+ Finished reading species names.
+
+ Reading initial concentrations...
+           1  H2O2          5000.0000000000000     
+ ...
+           1  H2O2          5000.0000000000000     
+ Finished reading initial concentrations.
+
+ Looking for photolysis constants file...
+ Photolysis constants file not found, trying photolysis rates file...
+ Reading photolysis rates from file...
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000     
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000     
+ Finished reading photolysis rates.
+ Number of photolysis rates:          35
+
+ Reading JFacSpecies...
+ JFacSpecies = end                           
+ Finished reading JFacSpecies.
+
+ Reading products of interest...
+           1 OH        
+           2 HO2       
+ Finished reading products of interest.
+ rateOfProdNS (number of species found):           2
+
+ Reading reactants of interest...
+           1 OH        
+           2 HO2       
+ Finished reading reactants of interest.
+ lossOfProdNS (number of species found):           2
+
+ Reading solver parameters from file...
+ Finished reading solver parameters from file.
+ Reading model parameters from file...
+ Finished eading model parameters from file.
+
+ Solver parameters:
+ atol:    1.0000000000000000E-003 rtol:   1.0000000000000000E-004 JacVApprox:           0 deltaJv:   1.0000000000000000E-003
+ deltaMain:   1.0000000000000000E-004 lookBack:         100 max_step:   100.00000000000000      precondBandUpper:         750 preconBandLower         750
+ solverType:SPGMR + Banded Preconditioner           
+
+ Model parameters:
+ number of steps:            5 step size(seconds):   900.00000000000000     
+ species interpolation method: piecewise linear                        
+ conditions interpolation method: piecewise linear                        
+ dec interpolation method: piecewise linear                        
+ maximum number of data points in constraint file:       10000
+ maximum number of constrained species:          50
+ ratesOutputStepSize        3600 instantaneous rates output step size:         900 modelStartTime:   3600.0000000000000      jacobianOutputStepSize:      108000
+ latitude:   52.942999999999998      longitude:   0.0000000000000000      day/month/year:          19          11        2008
+
+ Reading environment variables...
+ Number of environment variables:           10
+ 1                             M                             2.60e+19                      
+ 2                             TEMP                          281.95e+00                    
+ 3                             PRESSURE                      NOTUSED                       
+ 4                             RH                            NOTUSED                       
+ 5                             H2O                           3.06e+17                      
+ 6                             DEC                           0.28782328e+00                
+ 7                             BOUNDARYLAYERHEIGHT           NOTUSED                       
+ 8                             DILUTE                        6.77E-6                       
+ 9                             JFAC                          NOTUSED                       
+ 10                            ROOFOPEN                      NOTUSED                       
+ Finished reading environment variables.
+
+ Checking for constrained environmental variables...
+ Finished checking for constrained environmental variables.
+
+ Reading concentration output from file...
+ Finished reading concentration output from file.
+ Output required for concentration of           2 species:
+           1 NO2       
+           2 HO2NO2    
+
+ Looking for photolysis constants file...
+ Photolysis constants file not found, trying photolysis rates file...
+ Reading photolysis rates from file...
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000     
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000     
+ Finished reading photolysis rates.
+ Number of photolysis rates:          35
+
+ Reading names of constrained photolysis rates from file...
+ Finished reading names of constrained photolysis rates.
+ Number of constrained photorates:           0
+
+ Counting the species to be constrained (in file constrainedSpecies.config)...
+ Finished counting the names of the species to be constrained.
+ Number of names for variable constrained species:           0
+ Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...
+ Finished counting the names of fixed-concentration species
+ Number names of fixed constrained species:           0
+ Reading in the names of variable constrained species...
+ Finished reading the names of variable constrained species
+ Number of constrained variable species:           0
+ maxNumberOfDataPoints:       10000
+ Allocating storage for variable constrained species...
+ Finished allocating storage for variable constrained species.
+ Reading concentration data for constrained species...
+ Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...
+ Finished reading in the names and concentration of fixed-concentration species.
+ Setting size of constraint arrays, n =            0
+ Finished reading constrained species.
+ Initialising concentrations of constrained species...
+ Finished initialising concentrations of constrained species.
+
+ neq =          104  numberOfConstrainedSpecies =            0
+ t0 =    3600.0000000000000     
+ setting maxsteps ier =            0
+ time =         4500
+ time =         5400
+ time =         6300
+ time =         7200
+ time =         8100
+ Runtime =            0
+ Deallocating memory.

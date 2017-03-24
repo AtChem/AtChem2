@@ -3,7 +3,7 @@
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
-.PHONY: all setup_var
+.PHONY: all setup_var test
 
 # gfortran flags
 F77      =  gfortran
@@ -22,7 +22,7 @@ setup_var:
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass apt-get install location for cvode
-CVODELIB=/usr/lib
+CVODELIB=/home/travis/build/AtChem/AtChem/cvode/lib
 else
 # if osx, then pass self-built cvode and homebrew gfortran
 CVODELIB=/Users/travis/build/AtChem/AtChem/cvode/lib
@@ -49,6 +49,13 @@ LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvod
 $(AOUT): $(SRCS) setup_var
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(CVODELIB) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
+
+TESTS := short full
+
+test:
+	@echo "Make: Running the following tests:" $(TESTS)
+	@rm -f travis/tests/results
+	@./travis/test_runner.sh "$(TESTS)"
 
 .f90.o:
 	$(F77) -c $(FFLAGS) $<

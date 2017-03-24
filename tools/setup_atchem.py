@@ -2,7 +2,7 @@ import os
 import sys
 import mech_converter as mc
 import shutil
-"""This script builds and runs the program atchem"""
+"""This script builds the program atchem"""
 
 
 def setup_files_for_atchem(in_file):

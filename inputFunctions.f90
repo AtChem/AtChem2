@@ -53,7 +53,8 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=30) :: str(*)
   LOGICAL :: file_exists
-  
+
+! Check whether file exists correctly in readPhotoloysisConstants,
   WRITE (*,*) 'Looking for photolysis constants file...'
   INQUIRE(FILE='modelConfiguration/photolysisConstants.config', EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN

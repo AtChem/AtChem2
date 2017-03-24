@@ -142,6 +142,8 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      pressure = envVarFixedValues(envVarNum)
+  ELSE
+    pressure = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   currentEnvVarValues(envVarNum) = pressure
@@ -159,6 +161,8 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      temp = envVarFixedValues(envVarNum)
+  ELSE
+     temp = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   currentEnvVarValues(envVarNum) = temp
@@ -176,6 +180,8 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      H2O = envVarFixedValues(envVarNum)
+  ELSE
+     H2O = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   envVarNumH2O = envVarNum
@@ -195,6 +201,8 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      m = envVarFixedValues(envVarNum)
+  ELSE
+     m = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   currentEnvVarValues(envVarNum) = m
@@ -238,7 +246,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      blh = envVarFixedValues(envVarNum)
      ! IF NOT USED
   ELSE
-
+     blh = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   currentEnvVarValues(envVarNum) = blh
@@ -260,7 +268,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      CALL convertRHtoConcH2O (H2o, temp, RH)
      ! IF NOT USED
   ELSE
-
+     RH = -1
   ENDIF
   ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
   currentEnvVarValues(envVarNum) = rh

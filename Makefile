@@ -1,10 +1,10 @@
+#!/bin/sh
 # Makefile for AtChem project
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
-.PHONY: all
+.PHONY: all setup_var
 
-CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
 # gfortran flags
 F77      =  gfortran
 FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic
@@ -17,6 +17,21 @@ LIBDIR   = /usr/lib/:$(CVODELIB)
 AOUT = atchem
 
 all: $(AOUT)
+
+setup_var:
+ifeq ($(TRAVIS),true)
+ifeq ($(TRAVIS_OS_NAME),linux)
+# if linux, pass apt-get install location for cvode
+CVODELIB=/usr/lib
+else
+# if osx, then pass self-built cvode and homebrew gfortran
+CVODELIB=/Users/travis/build/AtChem/AtChem/cvode/lib
+F77=/usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
+endif
+# else it's not on Travis, so pass local path to cvode.
+else
+CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
+endif
 
 LOCAL = makefile.$$(uname -n | perl -pe 's/\..+//')
 
@@ -31,7 +46,7 @@ SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 modelConfigFunctions.f9
 LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
-$(AOUT): $(SRCS)
+$(AOUT): $(SRCS) setup_var
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(CVODELIB) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 

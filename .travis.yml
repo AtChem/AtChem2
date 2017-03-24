@@ -5,13 +5,24 @@
 
   language: fortran
 
+  os:
+    - osx
+    - linux
+
   compiler:
     - gcc
 
+  addons:
+    apt:
+      packages:
+        - libsundials-serial-dev
+        - gfortran
+
   before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install libsundials-serial-dev
-    - sudo apt-get install -y gfortran
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update --quieter ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install gcc@4.8 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/install_cvode_osx.sh /Users/travis/build/AtChem/AtChem ; fi
+
   install:
     - ./tools/build.sh ./mcm_subset.fac
 

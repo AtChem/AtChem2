@@ -502,7 +502,7 @@ PROGRAM ATCHEM
      WRITE (22,*) t, ' ', rout (3), ' ', rout (2)
 
      !OUTPUT ENVVAR VALUES
-     CALL ro2sum (ro2, y)
+     CALL ro2Sum (ro2, y)
      CALL outputEnvVar (t)
 
      ! CALCULATE AND OUTPUT RUNTIME

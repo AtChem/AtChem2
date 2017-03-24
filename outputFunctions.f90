@@ -10,6 +10,13 @@ SUBROUTINE outputEnvVar (t)
 END SUBROUTINE outputEnvVar
 
 !--------------------------------------------------------------------
+SUBROUTINE ro2Sum (ro2, y)
+  DOUBLE PRECISION :: ro2
+  DOUBLE PRECISION, INTENT (in) :: y(*)
+  ro2 = 0.00e+00
+END SUBROUTINE ro2Sum
+
+!--------------------------------------------------------------------
 SUBROUTINE outputjfy (fy, nsp, t)
   INTEGER :: nsp, i, j
   DOUBLE PRECISION :: fy(nsp, nsp), t

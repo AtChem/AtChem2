@@ -20,17 +20,16 @@ ALL: $(AOUT)
 LOCAL = makefile.$$(uname -n | perl -pe 's/\..+//')
 
 makefile.local:
-	 touch $(LOCAL)
-	 ln $(LOCAL) makefile.local
+	touch $(LOCAL)
+	ln $(LOCAL) makefile.local
 
 include makefile.local
 
 SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 configFunctions.f90 utilityFunctions.f90 solverFunctions.f90 inputFunctions.f90 outputFunctions.f90 interpolationFunctions.f90 constraintFunctions.f90 instantaneousRatesFunctions.f90 facsimileFunctions.f90 conversionFunctions.f90
 
-OBJS = atchem.o mechanism-rates.o dataStructures.o configFunctions.o utilityFunctions.o solverFunctions.o inputFunctions.o outputFunctions.o interpolationFunctions.o constraintFunctions.o instantaneousRatesFunctions.o facsimileFunctions.o conversionFunctions.o
-
 LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
+# prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes))
 $(AOUT):
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(LIBDIR) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90

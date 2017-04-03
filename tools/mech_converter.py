@@ -514,7 +514,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
   RETURN
 END SUBROUTINE mechanism_rates
 
-INCLUDE 'modelConfiguration/extraOutputSubroutines.f90'
+INCLUDE 'utilityFunctions.f90'
 """)
     # print mechanism_rates_list
     with open(os.path.join(script_directory, '../mechanism-rates.f90'), 'w+') as mr2_file:

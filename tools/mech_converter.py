@@ -513,8 +513,6 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
   INCLUDE 'modelConfiguration/mechanism-rate-coefficients.f90'
   RETURN
 END SUBROUTINE mechanism_rates
-
-INCLUDE 'utilityFunctions.f90'
 """)
     # print mechanism_rates_list
     with open(os.path.join(script_directory, '../mechanism-rates.f90'), 'w+') as mr2_file:

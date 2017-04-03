@@ -41,7 +41,7 @@ makefile.local:
 
 include makefile.local
 
-SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 modelConfigFunctions.f90 zenith.f90  temperature.f90 solverFunctions.f90  inputFunctions.f90  outputFunctions.f90  interpolationFunctions.f90  constraintFunctions.f90  instantaneousRatesFunctions.f90  facsimileFunctions.f90  conversionFunctions.f90
+SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 configFunctions.f90 zenith.f90  temperature.f90 solverFunctions.f90  inputFunctions.f90  outputFunctions.f90  interpolationFunctions.f90  constraintFunctions.f90  instantaneousRatesFunctions.f90  facsimileFunctions.f90  conversionFunctions.f90
 
 LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
@@ -78,7 +78,7 @@ inputFunctions.o : inputFunctions.f90 dataStructures.o dataStructures.o dataStru
 instantaneousRatesFunctions.o : instantaneousRatesFunctions.f90
 interpolationFunctions.o : interpolationFunctions.f90 dataStructures.o dataStructures.o
 mechanism-rates.o : mechanism-rates.f90 modelConfiguration/mechanism-rate-coefficients.f90 dataStructures.o dataStructures.o dataStructures.o
-modelConfigFunctions.o : modelConfigFunctions.f90
+configFunctions.o : configFunctions.f90
 outputFunctions.o : outputFunctions.f90 dataStructures.o
 solverFunctions.o : solverFunctions.f90 dataStructures.o dataStructures.o dataStructures.o dataStructures.o dataStructures.o
 temperature.o : temperature.f90

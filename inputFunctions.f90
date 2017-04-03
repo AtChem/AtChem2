@@ -52,9 +52,11 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=30) :: str(*)
-
+  LOGICAL :: file_exists
+  
   WRITE (*,*) 'Looking for photolysis constants file...'
-  IF (ierr/=0) THEN
+  INQUIRE(FILE='modelConfiguration/photolysisConstants.config', EXIST=file_exists)
+  IF (file_exists.EQV..FALSE.) THEN
      useConstantValues = 0
      WRITE (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
      CALL readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)

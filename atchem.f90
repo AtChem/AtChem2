@@ -90,6 +90,8 @@ PROGRAM ATCHEM
   INTEGER :: irOutStepSize
   CHARACTER (LEN=30) :: strTime
 
+  INTEGER :: cmd_arg_count
+  CHARACTER (LEN=80) :: output_dir
   !    MISC
   CHARACTER (LEN=40) :: solverTypeName(3)
   CHARACTER (LEN=40) :: InterpolationMethodName(4)
@@ -108,20 +110,29 @@ PROGRAM ATCHEM
   CALL SYSTEM_CLOCK (runStart)
   previousSeconds = 0
 
+  ! Read in command line argument to direct output files to a given directory
+  cmd_arg_count = command_argument_count()
+  IF (cmd_arg_count>0) THEN
+     CALL get_command_argument(1, output_dir)
+  ELSE
+     output_dir = "modelOutput"
+  ENDIF
+
+  WRITE (*,*) 'Output dir is ', output_dir
   !   OPEN FILES FOR OUTPUT
-  OPEN (unit=50, file="modelOutput/concentration.output")
-  OPEN (unit=51, file="modelOutput/errors.output")
-  OPEN (unit=52, file="modelOutput/envVar.output")
-  OPEN (unit=53, file="modelOutput/finalModelState.output")
-  OPEN (unit=54, file="modelOutput/initialConditionsSetting.output")
-  OPEN (unit=55, file="modelOutput/jacobian.output")
-  OPEN (unit=56, file="modelOutput/lossRates.output")
-  OPEN (unit=57, file="modelOutput/mainSolverParameters.output")
-  OPEN (unit=58, file="modelOutput/photolysisRates.output")
-  OPEN (unit=59, file="modelOutput/photoRateCalcParameters.output")
-  OPEN (unit=60, file="modelOutput/productionRates.output")
-  OPEN (unit=61, file="modelOutput/sparseSolverParameters.output")
-  OPEN (unit=62, file="modelOutput/stepSize.output")
+  OPEN (unit=50, file=trim(output_dir) // "/concentration.output")
+  OPEN (unit=51, file=trim(output_dir) // "/errors.output")
+  OPEN (unit=52, file=trim(output_dir) // "/envVar.output")
+  OPEN (unit=53, file=trim(output_dir) // "/finalModelState.output")
+  OPEN (unit=54, file=trim(output_dir) // "/initialConditionsSetting.output")
+  OPEN (unit=55, file=trim(output_dir) // "/jacobian.output")
+  OPEN (unit=56, file=trim(output_dir) // "/lossRates.output")
+  OPEN (unit=57, file=trim(output_dir) // "/mainSolverParameters.output")
+  OPEN (unit=58, file=trim(output_dir) // "/photolysisRates.output")
+  OPEN (unit=59, file=trim(output_dir) // "/photoRateCalcParameters.output")
+  OPEN (unit=60, file=trim(output_dir) // "/productionRates.output")
+  OPEN (unit=61, file=trim(output_dir) // "/sparseSolverParameters.output")
+  OPEN (unit=62, file=trim(output_dir) // "/stepSize.output")
   flush(6)
 
   !    OPEN FILES FOR INPUT

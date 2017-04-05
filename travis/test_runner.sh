@@ -24,7 +24,7 @@ function test_output_text {
 
 function test_output_file {
   # numdiff with relative tolerance given by -r argument
-  numdiff -r 1.0e-5 $1 $2
+  numdiff -r 1.0e-10 $1 $2
 }
 
 function find_string {

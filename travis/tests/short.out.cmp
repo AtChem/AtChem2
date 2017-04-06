@@ -1,4 +1,5 @@
  Output dir is travis/tests/short                                                              
+ Instantaneous rates dir is travis/tests/short/instantaneousRates
 
  Number of Species         104
  Number of Reactions =          324

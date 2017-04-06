@@ -85,13 +85,14 @@ PROGRAM ATCHEM
   CHARACTER (LEN=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT
-  CHARACTER (LEN=21) :: irfileLocationPrefix
+  ! TODO: remove this intermediate var?
+  CHARACTER (LEN=80) :: irfileLocationPrefix
   CHARACTER (LEN=57) :: irfileLocation
   INTEGER :: irOutStepSize
   CHARACTER (LEN=30) :: strTime
 
   INTEGER :: cmd_arg_count
-  CHARACTER (LEN=80) :: output_dir
+  CHARACTER (LEN=80) :: output_dir, instantaneousRates_dir
   !    MISC
   CHARACTER (LEN=40) :: solverTypeName(3)
   CHARACTER (LEN=40) :: InterpolationMethodName(4)
@@ -114,11 +115,17 @@ PROGRAM ATCHEM
   cmd_arg_count = command_argument_count()
   IF (cmd_arg_count>0) THEN
      CALL get_command_argument(1, output_dir)
+     IF (cmd_arg_count>1) THEN
+        CALL get_command_argument(2, instantaneousRates_dir)
+     ELSE
+        instantaneousRates_dir = "instantaneousRates"
+     ENDIF
   ELSE
      output_dir = "modelOutput"
   ENDIF
 
   WRITE (*,*) 'Output dir is ', output_dir
+  WRITE (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
   !   OPEN FILES FOR OUTPUT
   OPEN (unit=50, file=trim(output_dir) // "/concentration.output")
   OPEN (unit=51, file=trim(output_dir) // "/errors.output")
@@ -496,8 +503,8 @@ PROGRAM ATCHEM
      IF (MOD (elapsed, irOutStepSize)==0) THEN
         WRITE (strTime,*) time
 
-        irfileLocationPrefix = './instantaneousRates/'
-        irfileLocation = irfileLocationPrefix // ADJUSTL (strTime)
+        irfileLocationPrefix = instantaneousRates_dir
+        irfileLocation = trim(irfileLocationPrefix) // '/' // ADJUSTL (strTime)
 
         OPEN (10, file=irfileLocation)
         DO i = 1, numReactions

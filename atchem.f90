@@ -86,8 +86,6 @@ PROGRAM ATCHEM
   CHARACTER (LEN=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT
-  ! TODO: remove this intermediate var?
-  CHARACTER (LEN=80) :: irfileLocationPrefix
   CHARACTER (LEN=57) :: irfileLocation
   INTEGER :: irOutStepSize
   CHARACTER (LEN=30) :: strTime
@@ -516,8 +514,7 @@ PROGRAM ATCHEM
      IF (MOD (elapsed, irOutStepSize)==0) THEN
         WRITE (strTime,*) time
 
-        irfileLocationPrefix = instantaneousRates_dir
-        irfileLocation = trim(irfileLocationPrefix) // '/' // ADJUSTL (strTime)
+        irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
 
         OPEN (10, file=irfileLocation)
         DO i = 1, numReactions

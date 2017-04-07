@@ -110,28 +110,35 @@ $this_file_failures"
   for filename in $TESTS_DIR/$test/*.output; do
     this_file_failures=$(test_output_file $filename $filename.cmp)
     exitcode=$?
-    if [ $exitcode -eq 1 ]; then
+    if [ $exitcode -eq 0 ]; then
+      continue
+    elif [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
 $this_file_failures"
-    elif [ $exitcode -eq -1 ]; then
+    else
       echo 'Numdiff gave an error. Aborting.'
       exit 1
     fi
   done
 
-  # loop over all files in instantaneousRates subdirectory, and numdiff these. If the numdiff gives differences,
+  # loop over all files (that don't end in .cmp) in the instantaneousRates
+  # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/instantaneousRates/*; do
-    this_file_failures=$(test_output_file $filename $filename.cmp)
-    exitcode=$?
-    if [ $exitcode -eq 1 ]; then
-      this_test_failures="$this_test_failures
+  for filename in $TESTS_DIR/$test/instantaneousRates/* ; do
+    if [ ${filename: -4} != ".cmp" ] ; then
+      this_file_failures=$(test_output_file $filename $filename.cmp)
+      exitcode=$?
+      if [ $exitcode -eq 0 ]; then
+        continue
+      elif [ $exitcode -eq 1 ]; then
+        this_test_failures="$this_test_failures
 
 $this_file_failures"
-    elif [ $exitcode -eq -1 ]; then
-      echo 'Numdiff gave an error. Aborting.'
-      exit 1
+      else
+        echo 'Numdiff gave an error. Aborting.'
+        exit 1
+      fi
     fi
   done
 

@@ -377,12 +377,10 @@ PROGRAM ATCHEM
   WRITE (*,*) 'neq = ', neq, ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
   flush(stderr)
+
   !    ********************************************************************************************************
   !    CONFIGURE SOLVER
   !    ********************************************************************************************************
-
-  WRITE (stderr,*) 'Dense example problem:'
-  WRITE (stderr,*) ' Robertson kinetics, neq = ', neq
 
   ipar(1) = neq
   ipar(2) = numReactions
@@ -578,7 +576,7 @@ PROGRAM ATCHEM
        "' No. nonlinear convergence failures = ', I4/" // &
        "' No. error test failures = ', I4/) "
 
-  WRITE (stderr, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
+  WRITE (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
        iout (lnni), iout (lncf), iout (lnetf)
 
   CALL SYSTEM_CLOCK (runEnd, rate)

@@ -1,5 +1,5 @@
  Output dir is travis/tests/short                                                              
- Instantaneous rates dir is travis/tests/short/instantaneousRates
+ Instantaneous rates dir is travis/tests/short/instantaneousRates                                           
 
  Number of Species         104
  Number of Reactions =          324
@@ -125,5 +125,14 @@
  time =         6300
  time =         7200
  time =         8100
+
+
+Final statistics:
+
+ No. steps =   46   No. f-s =   50   No. J-s =    0   No. LU-s =    4
+ No. nonlinear iterations =   46
+ No. nonlinear convergence failures =    0
+ No. error test failures =    0
+
  Runtime =            0
  Deallocating memory.

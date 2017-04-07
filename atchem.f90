@@ -17,6 +17,7 @@ PROGRAM ATCHEM
   USE envVars
   USE SZACalcVars
   USE date
+  USE directories, only: output_dir, instantaneousRates_dir, param_dir
 
   IMPLICIT NONE
 
@@ -92,7 +93,6 @@ PROGRAM ATCHEM
   CHARACTER (LEN=30) :: strTime
 
   INTEGER :: cmd_arg_count
-  CHARACTER (LEN=80) :: output_dir, instantaneousRates_dir
   !    MISC
   CHARACTER (LEN=40) :: solverTypeName(3)
   CHARACTER (LEN=40) :: InterpolationMethodName(4)
@@ -123,9 +123,15 @@ PROGRAM ATCHEM
   ELSE
      instantaneousRates_dir = "instantaneousRates"
   ENDIF
+  IF (cmd_arg_count>2) THEN
+     CALL get_command_argument(3, param_dir)
+  ELSE
+     param_dir = "modelConfiguration"
+  ENDIF
 
   WRITE (*,*) 'Output dir is ', output_dir
   WRITE (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
+  WRITE (*,*) 'Parameter dir is ', param_dir
   !   OPEN FILES FOR OUTPUT
   OPEN (unit=50, file=trim(output_dir) // "/concentration.output")
   OPEN (unit=51, file=trim(output_dir) // "/errors.output")
@@ -248,12 +254,12 @@ PROGRAM ATCHEM
 
   !    READ IN SOLVER PARAMETERS
   WRITE (*,*) 'Reading solver parameters from file...'
-  CALL getParametersFromFile ("modelConfiguration/solver.parameters", solverParameters)
+  CALL getParametersFromFile (trim(param_dir) // "/solver.parameters", solverParameters)
   WRITE (*,*) 'Finished reading solver parameters from file.'
 
   !   READ IN MODEL PARAMETERS
   WRITE (*,*) 'Reading model parameters from file...'
-  CALL getParametersFromFile ("modelConfiguration/model.parameters", modelParameters)
+  CALL getParametersFromFile (trim(param_dir) //  "/model.parameters", modelParameters)
   WRITE (*,*) 'Finished eading model parameters from file.'
   WRITE (*,*)
 

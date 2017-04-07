@@ -68,7 +68,7 @@ for test in $1; do
 
   # Run atchem with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates > $TESTS_DIR/$test.out
+  ./atchem $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration > $TESTS_DIR/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...

@@ -20,7 +20,7 @@ SUBROUTINE readJFacSpecies ()
   RETURN
 END SUBROUTINE readJFacSpecies
 
-SUBROUTINE readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
+SUBROUTINE readphotolysisRates (ck, cl, cmm, cnn, str, tf)
   USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
   USE directories, ONLY: param_dir
   IMPLICIT NONE
@@ -46,9 +46,9 @@ SUBROUTINE readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
   WRITE (*,*) 'Finished reading photolysis rates.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN
-END SUBROUTINE readPhotoloysisRates
+END SUBROUTINE readphotolysisRates
 
-SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
+SUBROUTINE readphotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
   USE directories, ONLY: param_dir
   IMPLICIT NONE
@@ -57,13 +57,13 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
   CHARACTER (LEN=30) :: str(*)
   LOGICAL :: file_exists
 
-! Check whether file exists correctly in readPhotoloysisConstants,
+! Check whether file exists correctly in readphotolysisConstants,
   WRITE (*,*) 'Looking for photolysis constants file...'
   INQUIRE(FILE=trim(param_dir) // '/photolysisConstants.config', EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
      useConstantValues = 0
      WRITE (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
-     CALL readPhotoloysisRates (ck, cl, cmm, cnn, str, tf)
+     CALL readphotolysisRates (ck, cl, cmm, cnn, str, tf)
      RETURN
   ENDIF
   useConstantValues = 1
@@ -85,7 +85,7 @@ SUBROUTINE readPhotoloysisConstants (ck, cl, cmm, cnn, str, tf)
   WRITE (*,*) 'Finished reading photolysis constants.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN
-END SUBROUTINE readPhotoloysisConstants
+END SUBROUTINE readphotolysisConstants
 
 
 SUBROUTINE getReactionListSizes (csize1, csize2)
@@ -144,7 +144,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   CHARACTER (LEN=57) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
-  CALL readPhotoloysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
+  CALL readphotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
   ! GET NAMES OF CONSTRAINED PHOTO RATES
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'

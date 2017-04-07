@@ -5,13 +5,13 @@
 
   language: fortran
 
-  cache:
-    directories:
-      - /usr/local/Cellar/isl@0.12
-      - /usr/local/Cellar/cloog
-      - /usr/local/Cellar/gcc@4.8
-      - /usr/local/Cellar/gettext
-      - /usr/local/Cellar/numdiff
+  #cache:
+  #  directories:
+  #    - /usr/local/Cellar/isl@0.12
+  #    - /usr/local/Cellar/cloog
+  #    - /usr/local/Cellar/gcc@4.8
+  #    - /usr/local/Cellar/gettext
+  #    - /usr/local/Cellar/numdiff
 
   os:
     - osx

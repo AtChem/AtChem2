@@ -1,6 +1,16 @@
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
+MODULE directories
+  IMPLICIT NONE
+
+  SAVE
+  CHARACTER (LEN=80) :: output_dir, instantaneousRates_dir, param_dir
+
+END MODULE directories
+!    ********************************************************************************************************
+!    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
+!    ********************************************************************************************************
 MODULE date
   IMPLICIT NONE
 

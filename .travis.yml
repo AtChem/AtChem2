@@ -5,6 +5,10 @@
 
   language: fortran
 
+  cache:
+    directories:
+      - /usr/local/Cellar
+
   os:
     - osx
     - linux

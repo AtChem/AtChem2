@@ -115,13 +115,13 @@ PROGRAM ATCHEM
   cmd_arg_count = command_argument_count()
   IF (cmd_arg_count>0) THEN
      CALL get_command_argument(1, output_dir)
-     IF (cmd_arg_count>1) THEN
-        CALL get_command_argument(2, instantaneousRates_dir)
-     ELSE
-        instantaneousRates_dir = "instantaneousRates"
-     ENDIF
   ELSE
      output_dir = "modelOutput"
+  ENDIF
+  IF (cmd_arg_count>1) THEN
+     CALL get_command_argument(2, instantaneousRates_dir)
+  ELSE
+     instantaneousRates_dir = "instantaneousRates"
   ENDIF
 
   WRITE (*,*) 'Output dir is ', output_dir

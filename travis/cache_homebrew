@@ -1,6 +1,5 @@
 #!/bin/sh
 
-cd travis
 if [ ! -f homebrew-cache.tar.gz ]; then
   sudo tar -czf travis/homebrew-cache.tar.gz -C /usr/local/Cellar isl@0.12 cloog gcc@4.8 gettext homebrew/science/numdiff
 fi

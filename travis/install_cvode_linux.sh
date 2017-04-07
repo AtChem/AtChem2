@@ -8,7 +8,6 @@ tar -zxf cvode-2.9.0.tar.gz
 cd cvode-2.9.0/
 mkdir build
 cd build
-make clean
 cmake -DCMAKE_INSTALL_PREFIX=/home/travis/build/AtChem/AtChem/cvode \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran \

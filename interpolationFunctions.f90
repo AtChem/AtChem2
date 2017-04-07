@@ -78,12 +78,18 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
 
   INTEGER n, maxPoints, ind
   DOUBLE PRECISION :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
-  ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function (with the xai�s in order), and given the array y2a(1:n), which is the output from spline above, and given a value of x, this routine returns a cubic-spline interpolated value y.
+  ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
+  ! (with the xai�s in order), and given the array y2a(1:n), which is the output
+  ! from spline above, and given a value of x, this routine returns a
+  ! cubic-spline interpolated value y.
   INTEGER k, khi, klo
   DOUBLE PRECISION :: a, b, h
 
   klo = 1 !We will find the right place in the table by means of bisection.
-  ! This is optimal if sequential calls to this routine are at random values of x. If sequential calls are in order, and closely spaced, one would do better to store previous values of klo and khi and test if they remain appropriate on the next call.
+  ! This is optimal if sequential calls to this routine are at random values of
+  ! x. If sequential calls are in order, and closely spaced, one would do better
+  ! to store previous values of klo and khi and test if they remain appropriate
+  ! on the next call.
   khi = n
   DO WHILE (khi-klo>1)
      k = (khi+klo)/2

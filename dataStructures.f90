@@ -233,7 +233,7 @@ MODULE chemicalConstraints
   SAVE
   DOUBLE PRECISION, ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
   DOUBLE PRECISION, ALLOCATABLE :: constrainedConcs(:)
-  INTEGER :: numberOfConstrainedSpecies, maxNumberOfChemDataPoints
+  INTEGER :: numberOfConstrainedSpecies
   CHARACTER(LEN=10), ALLOCATABLE :: constrainedName(:)
   INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
 

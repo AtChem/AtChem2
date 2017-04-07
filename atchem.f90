@@ -433,7 +433,9 @@ PROGRAM ATCHEM
      CALL fcvdense (neq, ier)
      ! UNEXPECTED SOLVER TYPE
   ELSE
-     WRITE (*,*) 'error with solverType input, error = ', solverType
+     WRITE (stderr,*) 'Error with solverType input, input = ', solverType
+     WRITE (stderr,*) 'Available options are 1, 2, 3.'
+     STOP
   ENDIF
   ! ERROR HANDLING
   IF (ier/=0) THEN

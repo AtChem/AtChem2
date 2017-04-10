@@ -9,7 +9,7 @@ SUBROUTINE calcJFac(jfac, t)
   INTEGER :: basePhotoRateNum, i
   INTEGER :: firstTime = 1
   IF (firstTime==1) THEN
-     WRITE (*,*) "basePhotoRate: ", jfacBase
+     WRITE (*,*) "basePhotoRate: ", jFacSpecies
      firstTime = 0
   ENDIF
 
@@ -17,14 +17,14 @@ SUBROUTINE calcJFac(jfac, t)
   basePhotoRateNum = 0
   DO i = 1, numConPhotoRates
 
-     IF ((TRIM (constrainedPhotoRates(i)))==(TRIM (jfacBase))) THEN
+     IF ((trim(constrainedPhotoRates(i)))==(trim(jFacSpecies))) THEN
         basePhotoRateNum = i
      ENDIF
 
   ENDDO
 
   IF (basePhotoRateNum==0) THEN
-     WRITE (*,*) 'Error! Missing constrained photo rate data for the JFAC species provided: ', TRIM (jfacBase)
+     WRITE (*,*) 'Error! Missing constrained photo rate data for the JFAC species provided: ', trim(jFacSpecies)
      STOP 2
   ENDIF
 
@@ -37,7 +37,7 @@ SUBROUTINE calcJFac(jfac, t)
   IF (JSpeciesAtT==0) THEN
      JFAC = 0
   ELSE
-     IF (useConstantValues==0) THEN
+     IF (usePhotolysisConstants.EQV..FALSE.) THEN
         JFAC = JspeciesAtT/(transmissionFactor(jfacSpeciesLine)* cl(jfacSpeciesLine)* &
              (COSX**(cmm(jfacSpeciesLine)))* EXP (-cnn(jfacSpeciesLine)*SECX))
      ELSE
@@ -362,7 +362,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum, envVarNames, numEnvVars)
 
   DO i = 1, numEnvVars
 
-     IF (name==TRIM (envVarNames(i))) THEN
+     IF (name==trim(envVarNames(i))) THEN
         envVarNum = i
      ENDIF
   ENDDO
@@ -381,13 +381,13 @@ SUBROUTINE test_jfac()
   !IF CALCULATED
   ! If JFAC is CALC and there's no JFAC species, the program should complain
   IF (envVarTypesNum(envVarNum)==1) THEN
-     IF ( ''==(TRIM (jfacBase)) .OR. TRIM (jfacBase)=='end' ) THEN
+     IF (''==trim(jFacSpecies)) THEN
         WRITE (*,*) 'Error! JFAC was set to CALC, but JFac species was not provided!'
         STOP 2
      ENDIF
      ! If jfacSpeciesLine = 0 (no line in photolysis rates matches the JFac species), program should complain
      IF (jfacSpeciesLine==0 ) THEN
-        WRITE (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', jfacBase
+        WRITE (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', jFacSpecies
      ENDIF
      !IF CONSTRAINED
   ELSE IF (envVarTypesNum(envVarNum)==2) THEN
@@ -396,9 +396,9 @@ SUBROUTINE test_jfac()
      !IF NOT USED
      ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
   ELSE
-     IF ( ''/=(TRIM (jfacBase)) .AND. TRIM (jfacBase)/='end' ) THEN
+     IF (''/=trim(jFacSpecies)) THEN
         WRITE (*,*) 'Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'
-        WRITE (*,*) 'JFac species: ', jfacBase
+        WRITE (*,*) 'JFac species: ', jFacSpecies
         STOP 2
      ENDIF
   ENDIF

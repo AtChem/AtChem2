@@ -215,10 +215,11 @@ MODULE photolysisRates
   INTEGER, PARAMETER :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
   INTEGER :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
   INTEGER :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
-  INTEGER :: useConstantValues, nrOfPhotoRates
+  INTEGER :: nrOfPhotoRates
+  LOGICAL :: usePhotolysisConstants
   DOUBLE PRECISION :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
   DOUBLE PRECISION :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
-  CHARACTER (LEN=30) :: photoRateNames(maxNrOfPhotoRates), constrainedPhotoRates(maxNrOfConPhotoRates), jfacBase
+  CHARACTER (LEN=30) :: photoRateNames(maxNrOfPhotoRates), constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
   DOUBLE PRECISION, ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
   INTEGER, ALLOCATABLE :: photoNumberOfPoints(:)
 

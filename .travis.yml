@@ -20,7 +20,7 @@
         - numdiff
 
   before_install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gcc@4.8 homebrew/science/numdiff ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew tap homebrew/science; HOMEBREW_NO_AUTO_UPDATE=1 brew install gcc@4.8 homebrew/science/numdiff ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/install_cvode_osx.sh /Users/travis/build/AtChem/AtChem ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./travis/install_cvode_linux.sh /home/travis/build/AtChem/AtChem ; fi
 

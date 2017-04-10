@@ -32,7 +32,7 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
 
   ! OTHER OUPUT
   ! WRITE (85,*), 't temp m h2o'
-  WRITE (58,*) 't ', (TRIM (photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
+  WRITE (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
   WRITE (62,*) 't currentStepSize previousStepSize'
   WRITE (59,*) 't secx cosx lat longt lha sinld cosld'
   WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
@@ -84,30 +84,40 @@ SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
 END SUBROUTINE matchOneNameToNumber
 
 
-SUBROUTINE setConcentrations (y, speciesName, concSpeciesName, concentration, concCounter, neq)
-  CHARACTER (LEN=10) concSpeciesName(*), speciesName(*), k, m
-  DOUBLE PRECISION concentration(*), y(*)
-  INTEGER concCounter, neq, i, j, match
+SUBROUTINE setConcentrations (outputConcentrations, refSpeciesNames, concSpeciesNames, inputConcentrations, concCounter, numSpecies)
+  ! For each input species in concSpeciesNames, and matching value in concentrations,
+  ! look through refSpeciesNames for the number of this species in that list,
+  ! then transer the value from concentrations to y. If no match is found,
+  ! output this to errors.output, but don't stop, just ignore the input value.
+  ! Ptrint outcome of each search into initialConditionsSetting.output.
+  CHARACTER (LEN=10), intent(in) :: concSpeciesNames(*), refSpeciesNames(*)
+  CHARACTER (LEN=10) :: k, m
+  DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
+  DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
+  INTEGER, intent(in) :: concCounter, numSpecies
+  INTEGER :: i, j
+  LOGICAL :: match
 
   DO i = 1, concCounter
-     k = concSpeciesName(i)
-     ! flag for matching of string names
-     match = 0
-     DO j = 1, neq
-        m = speciesName(j)
+     match = .FALSE.
+     k = concSpeciesNames(i)
+     DO j = 1, numSpecies
+        m = refSpeciesNames(j)
         IF (m==k) THEN
+           match = .TRUE.
            ! Set concentration in y()
-           y(j) = concentration(i)
-           match = 1
-           WRITE (54,*) 'match, m = k = ', m, ' concentration = ', concentration(i)
+           outputConcentrations(j) = inputConcentrations(i)
+           WRITE (54,*) 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
+           EXIT
         ELSE
-           WRITE (54,*) 'no match, m', m, ' != k! = ', k, ' concentration = ', concentration(i)
+           WRITE (54,*) 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)
         ENDIF
      ENDDO
-     IF (match==0) THEN
+     IF (match.eqv..FALSE.) THEN
+        ! If we reach this point, we've failed to find this species
         WRITE (51,*) "Error in setConcentrations"
         WRITE (51,*) "Can't find species: ", k," in species list"
-     END IF
+     ENDIF
   ENDDO
   RETURN
 END SUBROUTINE setConcentrations

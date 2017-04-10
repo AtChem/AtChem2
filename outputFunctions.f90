@@ -57,69 +57,60 @@ END SUBROUTINE getConcForSpecInt
 
 !     ---------------------------------------------------------------
 SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
+  ! Given a list speciesNames, and an integer reactionNumber, return reaction,
+  ! a string containing
   USE reactionStructure
   IMPLICIT NONE
   CHARACTER (LEN=10) :: reactants(10), products(10)
-  CHARACTER (LEN=10) :: speciesNames(*)
-  INTEGER :: reactionNumber, i, numReactants, numProducts
+  CHARACTER (LEN=10), intent(in) :: speciesNames(*)
+  INTEGER :: i, numReactants, numProducts
+  INTEGER, intent(in) :: reactionNumber
   CHARACTER (LEN=1000) :: str1
-  CHARACTER (LEN=1000) :: reaction, reactantStr, productStr
-  numReactants = 0
-  numProducts = 0
+  CHARACTER (LEN=1000) :: reactantStr, productStr
+  CHARACTER (LEN=1000), intent(out) :: reaction
 
-  ! LOOP OVER REACTANTS
+  ! Loop over reactants, and copy the reactant name for any reactant used in
+  ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
+  ! String these together with '+', and append a '='
+  numReactants = 0
   DO i = 1, csize1
      IF (clhs(1, i)==reactionNumber) THEN
-        numReactants = numReactants +1
+        numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
      ENDIF
   ENDDO
 
-  str1 = ' '
   reactantStr = ' '
   DO i = 1, numReactants
-     str1 = reactantStr
-
-     reactantStr = TRIM (str1) // TRIM (reactants(i))
-     reactantStr = ADJUSTL (reactantStr)
-     reactantStr = TRIM (reactantStr)
+     reactantStr = trim(adjustl(trim(reactantStr) // trim(reactants(i))))
      IF (i<numReactants) THEN
-        reactantStr = TRIM (reactantStr)// '+'
+        reactantStr = trim(reactantStr) // '+'
      ENDIF
-
   ENDDO
-  reactantStr = ADJUSTL (reactantStr)
-  reactantStr = TRIM (reactantStr)// '='
+  reactantStr = trim(reactantStr) // '='
 
 
-  !     LOOP OVER PRODUCTS
+  ! Loop over products, and copy the product name for any product created in
+  ! reaction reactionNumber. use numProducts as a counter of the number of products.
+  ! String these together with '+', and append this to reactantStr. Save the
+  ! result in reaction, which is returned
   numProducts = 0
   DO i = 1, csize2
      IF (crhs(1, i)==reactionNumber) THEN
-        numProducts = numProducts +1
+        numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))
      ENDIF
   ENDDO
 
-  str1 = ' '
   productStr = ' '
-
   DO i = 1, numProducts
-     str1 = productStr
-
-     productStr = TRIM (str1) // TRIM (products(i))
-     productStr = ADJUSTL (productStr)
-     productStr = TRIM (productStr)
+     productStr = trim(adjustl(trim(productStr) // trim(products(i))))
      IF (i<numProducts) THEN
-        productStr = TRIM (productStr)// '+'
+        productStr = trim(productStr) // '+'
      ENDIF
-
   ENDDO
 
-  productStr = ADJUSTL (productStr)
-
-
-  reaction = TRIM (reactantStr) // TRIM (productStr)
+  reaction = trim(reactantStr) // trim(productStr)
 
   RETURN
 END SUBROUTINE getReaction
@@ -145,7 +136,7 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 
            IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
-              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
            ENDIF
         ENDDO
      ENDDO
@@ -160,7 +151,7 @@ SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rate
 
            IF (r(i, j)/=0) THEN
               CALL getReaction (speciesNames, r(i, j), reaction)
-              WRITE (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', TRIM (reaction)
+              WRITE (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
            ENDIF
         ENDDO
      ENDDO

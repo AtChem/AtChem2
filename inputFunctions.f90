@@ -1,28 +1,52 @@
 SUBROUTINE readJFacSpecies ()
+  ! Read modelConfiguration/JFacSpecies.config, and store this in jFacSpecies.
+  ! Test this against known species, and if it is known then set jfacSpeciesLine
+  ! to that line number in photoRateNames
   USE photolysisRates
   USE directories, ONLY: param_dir
   IMPLICIT NONE
-  INTEGER :: i
+  INTEGER :: i, ierr
+  LOGICAL :: file_exists
 
   jfacSpeciesLine = 0
   WRITE (*,*) 'Reading JFacSpecies...'
-  OPEN (10, file=trim(param_dir) // '/JFacSpecies.config', status='old')
-  READ (10,*) jfacBase
-  CLOSE (10, status='keep')
-  WRITE (*,*) 'JFacSpecies = ', jfacBase
+  INQUIRE(file=trim(param_dir) // '/JFacSpecies.config', EXIST=file_exists)
+  IF (file_exists.EQV..FALSE.) THEN
+     WRITE (*,*) "No JFacSpecies.config file exists, so setting jFacSpecies to ''"
+     jFacSpecies = ''
+  ELSE
+     OPEN (10, file=trim(param_dir) // '/JFacSpecies.config', status='old', iostat=ierr)
+     READ (10, *, iostat=ierr) jFacSpecies
+     CLOSE (10, status='keep')
+     ! Catch the case where the file is empty
+     IF (ierr/=0) THEN
+        jFacSpecies = ''
+        RETURN
+     END IF
+  END IF
+  ! Convert 'end' to '' so we only need to test for that later.
+  IF ('end'==trim(jFacSpecies)) THEN
+     jFacSpecies = ''
+  END IF
+  WRITE (*,*) 'JFacSpecies = ', jFacSpecies
   WRITE (*,*) 'Finished reading JFacSpecies.'
   ! get line number for the JFac base species:
   DO i = 1, nrOfPhotoRates
-     IF ((TRIM (photoRateNames(i)))==(TRIM (jfacBase))) THEN
+     IF ((trim(photoRateNames(i)))==(trim(jFacSpecies))) THEN
         jfacSpeciesLine = i
      ENDIF
   ENDDO
   RETURN
 END SUBROUTINE readJFacSpecies
 
-SUBROUTINE readphotolysisRates (ck, cl, cmm, cnn, str, tf)
-  USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
+
+SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
+  ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
+  ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
+  ! modelConfiguration/photolysisRates.config.
+  USE photolysisRates, ONLY: maxNrOfPhotoRates, nrOfPhotoRates
   USE directories, ONLY: param_dir
+  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
@@ -34,6 +58,7 @@ SUBROUTINE readphotolysisRates (ck, cl, cmm, cnn, str, tf)
   DO i = 1, maxNrOfPhotoRates
      READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
      IF (ierr/=0) THEN
+       ! We've reached the end of file, so exit this loop
         EXIT
      ENDIF
   ENDDO
@@ -46,10 +71,14 @@ SUBROUTINE readphotolysisRates (ck, cl, cmm, cnn, str, tf)
   WRITE (*,*) 'Finished reading photolysis rates.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN
-END SUBROUTINE readphotolysisRates
+END SUBROUTINE readPhotolysisRates
 
-SUBROUTINE readphotolysisConstants (ck, cl, cmm, cnn, str, tf)
-  USE photolysisRates, ONLY: useConstantValues, maxNrOfPhotoRates, nrOfPhotoRates
+
+SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
+  ! If modelConfiguration/photolysisConstants.config exists, then read in
+  ! 3 values to fill ck, cl and str.
+  ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
+  USE photolysisRates, ONLY: usePhotolysisConstants, maxNrOfPhotoRates, nrOfPhotoRates
   USE directories, ONLY: param_dir
   IMPLICIT NONE
   INTEGER :: i, ck(*), ierr
@@ -57,16 +86,16 @@ SUBROUTINE readphotolysisConstants (ck, cl, cmm, cnn, str, tf)
   CHARACTER (LEN=30) :: str(*)
   LOGICAL :: file_exists
 
-! Check whether file exists correctly in readphotolysisConstants,
+! Check whether file exists correctly in readPhotolysisConstants,
   WRITE (*,*) 'Looking for photolysis constants file...'
-  INQUIRE(FILE=trim(param_dir) // '/photolysisConstants.config', EXIST=file_exists)
+  INQUIRE(file=trim(param_dir) // '/photolysisConstants.config', EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
-     useConstantValues = 0
+     usePhotolysisConstants = .FALSE.
      WRITE (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
-     CALL readphotolysisRates (ck, cl, cmm, cnn, str, tf)
+     CALL readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
      RETURN
   ENDIF
-  useConstantValues = 1
+  usePhotolysisConstants = .TRUE.
   WRITE (*,*) 'Reading photolysis constants from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisConstants.config', status='old', iostat=ierr)
   READ (10,*)
@@ -85,11 +114,15 @@ SUBROUTINE readphotolysisConstants (ck, cl, cmm, cnn, str, tf)
   WRITE (*,*) 'Finished reading photolysis constants.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN
-END SUBROUTINE readphotolysisConstants
+END SUBROUTINE readPhotolysisConstants
 
 
 SUBROUTINE getReactionListSizes (csize1, csize2)
-  INTEGER :: csize1, csize2, k, l
+  ! outputs csize1 and csize2, which hold the number of lines in
+  ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
+  ! last line
+  INTEGER, intent(out) :: csize1, csize2
+  INTEGER :: k, l
 
   OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
   csize1 = 0
@@ -113,6 +146,7 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   RETURN
 END SUBROUTINE getReactionListSizes
 
+
 SUBROUTINE getParametersFromFile (str, parameterArray)
   CHARACTER :: str*(*)
   DOUBLE PRECISION :: parameterArray(*)
@@ -131,6 +165,7 @@ SUBROUTINE getParametersFromFile (str, parameterArray)
   RETURN
 END SUBROUTINE getParametersFromFile
 
+
 SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
   USE photolysisRates
@@ -144,7 +179,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   CHARACTER (LEN=57) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
-  CALL readphotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
+  CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
   ! GET NAMES OF CONSTRAINED PHOTO RATES
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'
@@ -199,6 +234,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   RETURN
 END SUBROUTINE readPhotoRates
 
+
 SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   USE directories, ONLY: param_dir
 
@@ -235,14 +271,16 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   RETURN
 END SUBROUTINE readSpeciesOutputRequired
 
+
 SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
-  USE directories, ONLY: param_dir
+  DOUBLE PRECISION, intent(out) :: y(*)
+  INTEGER, intent(in) :: neq
+  INTEGER :: j
+  INTEGER, intent(out) :: speciesNumber(*)
+  CHARACTER (LEN=10), intent(out) :: speciesName(*)
 
-  DOUBLE PRECISION y(*)
-  INTEGER neq, speciesNumber(*), j
-  CHARACTER (LEN=10) speciesName(*)
-
-  ! READ IN INITIAL CONCENTRATIONS
+  ! Read in species number and name from mC/mechanism.species to speciesName
+  ! and speciesNumber. Also set each element of y to 0.
   OPEN (10, file='modelConfiguration/mechanism.species') ! input file
   DO j = 1, neq
      READ (10,*) speciesNumber(j), speciesName(j)
@@ -253,34 +291,37 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   RETURN
 END SUBROUTINE readSpecies
 
+
 SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
+  ! Reads in concentration per species from mC/initialConcentrations.config
+  ! Checks that there aren't more inputs that species
   USE directories, ONLY: param_dir
 
-  CHARACTER (LEN=10) concSpeciesName(*), k
-  DOUBLE PRECISION concentration(*), l
-  INTEGER i, concCounter, nsp
+  CHARACTER (LEN=10), intent(out) :: concSpeciesName(*)
+  CHARACTER (LEN=10) k
+  DOUBLE PRECISION, intent(out) :: concentration(*)
+  DOUBLE PRECISION l
+  INTEGER, intent(out) :: concCounter
+  INTEGER, intent(in) :: nsp
 
   WRITE (*,*) 'Reading initial concentrations...'
 
-  i = 1
+  concCounter = 0
   OPEN (10, file=trim(param_dir) // '/initialConcentrations.config', status='old') ! input file for lhs of equations
   DO
      READ (10,*) k, l
      IF (l==-1) EXIT
-     concentration(i) = l
-     concspeciesName(i) = k
-
-     i = i + 1
+     concCounter = concCounter + 1
+     concentration(concCounter) = l
+     concSpeciesName(concCounter) = k
   ENDDO
   CLOSE (10, status='keep')
 
-  WRITE (*,*) 1, ' ', concspeciesName(1), ' ', concentration(1)
+  WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
   WRITE (*,*) '...'
-  WRITE (*,*) i-1, ' ', concspeciesName(i-1), ' ', concentration(i-1)
+  WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
 
   WRITE (*,*) 'Finished reading initial concentrations.'
-
-  concCounter = i - 1
 
   IF (concCounter>nsp) THEN
      WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
@@ -291,24 +332,32 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   RETURN
 END SUBROUTINE readConcentrations
 
+
 SUBROUTINE readProductsOfInterest (r, i)
+  ! Read in contents of modelConfiguration/productionRatesOutput.config, which
+  ! contains a list of the species we want to have outputted to mC/productionRates.output
   USE directories, ONLY: param_dir
 
   CHARACTER (LEN=10) c, r(*)
-  INTEGER i
+  INTEGER i, ierr
+  LOGICAL :: file_exists
 
   WRITE (*,*) 'Reading products of interest...'
-
-  OPEN (10, file=trim(param_dir) // '/productionRatesOutput.config', status='old')
-  i = 0
-  c = 'abc'
-  READ (10,*) c
-  DO WHILE (c/='end')
-     i = i + 1
-     r(i) = c
-     READ (10,*) c
-  ENDDO
-  CLOSE (10, status='keep')
+  INQUIRE(file=trim(param_dir) // '/productionRatesOutput.config', EXIST=file_exists)
+  IF (file_exists.EQV..FALSE.) THEN
+     WRITE (*,*) 'No productionRatesOutput.config file exists, so prodIntName will be empty.'
+  ELSE
+     OPEN (10, file=trim(param_dir) // '/productionRatesOutput.config', status='old')
+     i = 0
+     c = 'abc'
+     READ (10, *, iostat=ierr) c
+     DO WHILE (ierr==0)
+        i = i + 1
+        r(i) = c
+        READ (10, *, iostat=ierr) c
+     ENDDO
+     CLOSE (10, status='keep')
+  END IF
   IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
@@ -322,23 +371,32 @@ SUBROUTINE readProductsOfInterest (r, i)
   RETURN
 END SUBROUTINE readProductsOfInterest
 
+
 SUBROUTINE readReactantsOfInterest (r, i)
+  ! Read in contents of modelConfiguration/lossRatesOutput.config, which
+  ! contains a list of the species we want to have outputted to mC/lossRates.output.
   USE directories, ONLY: param_dir
 
   CHARACTER (LEN=10) c, r(*)
-  INTEGER i
-  WRITE (*,*) 'Reading reactants of interest...'
+  INTEGER i, ierr
+  LOGICAL :: file_exists
 
-  i = 0
-  c = 'abc'
-  OPEN (10, file=trim(param_dir) // '/lossRatesOutput.config', status='old')
-  READ (10,*) c
-  DO WHILE (c/='end')
-     i = i + 1
-     r(i) = c
-     READ (10,*) c
-  ENDDO
-  CLOSE (10, status='keep')
+  WRITE (*,*) 'Reading reactants of interest...'
+  INQUIRE(file=trim(param_dir) // '/lossRatesOutput.config', EXIST=file_exists)
+  IF (file_exists.EQV..FALSE.) THEN
+     WRITE (*,*) 'No lossRatesOutput.config file exists, so reacIntName will be empty.'
+  ELSE
+     OPEN (10, file=trim(param_dir) // '/lossRatesOutput.config', status='old')
+     i = 0
+     c = 'abc'
+     READ (10, *, iostat=ierr) c
+     DO WHILE (ierr==0)
+        i = i + 1
+        r(i) = c
+        READ (10, *, iostat=ierr) c
+     ENDDO
+     CLOSE (10, status='keep')
+  END IF
   IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
@@ -350,8 +408,8 @@ SUBROUTINE readReactantsOfInterest (r, i)
   ENDIF
   WRITE (*,*) 'Finished reading reactants of interest.'
   RETURN
-
 END SUBROUTINE readReactantsOfInterest
+
 
 SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE species
@@ -449,7 +507,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
         IF (i==2) WRITE (*,*) '...'
      ENDIF
 
-     fileLocation = fileLocationPrefix // TRIM (constrainedName(i))
+     fileLocation = fileLocationPrefix // trim(constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints
@@ -533,6 +591,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   RETURN
 END SUBROUTINE readSpeciesConstraints
 
+
 SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   USE envVars
   USE directories, ONLY: param_dir
@@ -573,12 +632,12 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
      READ (10,*) dummy, envVarNames(i), envVarTypes(i)
      WRITE (*,*) dummy, envVarNames(i), envVarTypes(i)
 
-     IF (TRIM (envVarTypes(i))=='CALC') THEN
+     IF (trim(envVarTypes(i))=='CALC') THEN
         envVarTypesNum(i) = 1
-     ELSE IF (TRIM (envVarTypes(i))=='CONSTRAINED') THEN
+     ELSE IF (trim(envVarTypes(i))=='CONSTRAINED') THEN
         envVarTypesNum(i) = 2
         numConEnvVar = numConEnvVar + 1
-     ELSE IF (TRIM (envVarTypes(i))=='NOTUSED') THEN
+     ELSE IF (trim(envVarTypes(i))=='NOTUSED') THEN
         envVarTypesNum(i) = 4
         ! OTHERWISE ASSUME A FIXED VALUE
      ELSE
@@ -604,7 +663,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
 
         WRITE (*,*) 'Reading constraint data for', envVarNames(i)
 
-        fileLocation = fileLocationPrefix // TRIM (envVarNames(i))
+        fileLocation = fileLocationPrefix // trim(envVarNames(i))
 
         OPEN (11, file=fileLocation, status='old')
 

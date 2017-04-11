@@ -217,7 +217,7 @@ PROGRAM ATCHEM
 
   CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, returnArraySize)
 
-  rateOfProdNS = returnArraySize - 1
+  rateOfProdNS = returnArraySize
   ALLOCATE (prodArrayLen(rateOfProdNS))
 
   DO i = 1, rateOfProdNS
@@ -232,7 +232,7 @@ PROGRAM ATCHEM
   CALL readReactantsOfInterest (reacIntName, reacIntNameSize)
   CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, returnArraySize)
 
-  rateOfLossNS = returnArraySize - 1
+  rateOfLossNS = returnArraySize
   WRITE (*,*) 'lossOfProdNS (number of species found):', rateOfLossNS
   WRITE (*,*)
 
@@ -343,7 +343,7 @@ PROGRAM ATCHEM
   ! fill yInt with the concentrations of the species to be output
   CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, numSpec)
   CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
-  SORNumberSize = SORNumberSize -1
+  SORNumberSize = SORNumberSize
 
   WRITE (*,*) 'Output required for concentration of', speciesOutputRequiredSize, 'species:'
   IF (speciesOutputRequiredSize>2) THEN

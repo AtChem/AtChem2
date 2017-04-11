@@ -42,10 +42,10 @@ END SUBROUTINE writeFileHeaders
 
 SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, listSize, &
                               neq, returnArray, returnArraySize)
-  CHARACTER (LEN=10), INTENT(IN) :: masterSpeciesList(*)
-  CHARACTER (LEN=10), INTENT(INOUT) :: testSpeciesList(*)
-  INTEGER, INTENT(IN) :: listSize, neq
-  INTEGER, INTENT(OUT) :: returnArray(*), returnArraySize
+  CHARACTER (LEN=10), intent(IN) :: masterSpeciesList(*)
+  CHARACTER (LEN=10), intent(INOUT) :: testSpeciesList(*)
+  INTEGER, intent(IN) :: listSize, neq
+  INTEGER, intent(OUT) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
 

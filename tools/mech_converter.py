@@ -349,10 +349,10 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
   IMPLICIT NONE
 
   ! calculates rate constants from arrhenius information
-  DOUBLE PRECISION, INTENT (out) :: p(*)
-  DOUBLE PRECISION, INTENT (in) :: t
-  INTEGER, INTENT (in) :: mnsp
-  DOUBLE PRECISION, INTENT (in) :: y(mnsp)
+  DOUBLE PRECISION, intent (out) :: p(*)
+  DOUBLE PRECISION, intent (in) :: t
+  INTEGER, intent (in) :: mnsp
+  DOUBLE PRECISION, intent (in) :: y(mnsp)
   DOUBLE PRECISION :: temp, pressure, dummy
 """]
     mechanism_rates_list.append("""

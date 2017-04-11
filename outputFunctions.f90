@@ -1,6 +1,6 @@
 SUBROUTINE ro2Sum (ro2, y)
   DOUBLE PRECISION :: ro2
-  DOUBLE PRECISION, INTENT (in) :: y(*)
+  DOUBLE PRECISION, intent (in) :: y(*)
   ro2 = 0.00e+00
 END SUBROUTINE ro2Sum
 
@@ -40,9 +40,9 @@ END SUBROUTINE outputPhotolysisRates
 SUBROUTINE getConcForSpecInt (y, yInt, specInt, specIntSize, neq)
   ! This subroutine outputs yInt, the concentration of each species of interest,
   ! in the same order as the species are in specInt
-  DOUBLE PRECISION, INTENT(IN)  :: y(*)
-  DOUBLE PRECISION, INTENT(OUT) :: yInt(*)
-  INTEGER, INTENT(IN) :: specIntSize, neq, specInt(*)
+  DOUBLE PRECISION, intent(IN)  :: y(*)
+  DOUBLE PRECISION, intent(OUT) :: yInt(*)
+  INTEGER, intent(IN) :: specIntSize, neq, specInt(*)
   INTEGER i, j
   ! set yInt(j) to the
   DO i = 1, neq

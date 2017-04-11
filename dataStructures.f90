@@ -20,7 +20,7 @@ MODULE date
 
 END MODULE date
 !    ********************************************************************************************************
-!    ENVIRONMENTAL VARIABLES MODULE
+!    ENVIRONMENT VARIABLES MODULE
 !    ********************************************************************************************************
 MODULE envVars
   IMPLICIT NONE

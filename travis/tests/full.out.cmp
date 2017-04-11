@@ -28,7 +28,7 @@
  Number of photolysis rates:          35
 
  Reading JFacSpecies...
- JFacSpecies = 
+ JFacSpecies =
  Finished reading JFacSpecies.
 
  Reading products of interest...
@@ -41,7 +41,7 @@
            1 OH
            2 HO2
  Finished reading reactants of interest.
- lossOfProdNS (number of species found):           2
+ rateOfLossNS (number of species found):           2
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.

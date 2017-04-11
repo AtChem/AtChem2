@@ -233,7 +233,7 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, returnArraySize)
 
   rateOfLossNS = returnArraySize
-  WRITE (*,*) 'lossOfProdNS (number of species found):', rateOfLossNS
+  WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
 
   ALLOCATE (lossArrayLen(rateOfLossNS))
@@ -491,11 +491,11 @@ PROGRAM ATCHEM
      elapsed = INT (t-modelStartTime)
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
         CALL outputRates (prodIntSpecies, t, productionRates, 1, numSpec, &
-                          rateOfProdNS, prodLossArrayLen, rateOfLossNS, &
-                          prodArrayLen, lossArrayLen , speciesName)
+                          rateOfProdNS, prodLossArrayLen, &
+                          prodArrayLen, speciesName)
         CALL outputRates (reacIntSpecies, t, lossRates, 0, numSpec, &
-                          rateOfProdNS, prodLossArrayLen, rateOfProdNS, &
-                          prodArrayLen, lossArrayLen, speciesName)
+                          rateOfLossNS, prodLossArrayLen, &
+                          lossArrayLen, speciesName)
      ENDIF
 
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)

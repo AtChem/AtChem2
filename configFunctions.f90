@@ -49,7 +49,7 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, listSize, &
   INTEGER i, j
   LOGICAL match
 
-  returnArraySize = 1
+  returnArraySize = 0
   ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
   ! returnArray with the number of that species within the masterSpeciesList
   DO i = 1, listSize
@@ -57,8 +57,8 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, listSize, &
      DO j = 1, neq
         IF (masterSpeciesList(j)==testSpeciesList(i)) THEN
            match = .TRUE.
-           returnArray(returnArraySize) = j
            returnArraySize = returnArraySize + 1
+           returnArray(returnArraySize) = j
         ENDIF
      ENDDO
      ! substitute empty strings for invalid species

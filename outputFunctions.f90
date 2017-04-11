@@ -115,47 +115,33 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   RETURN
 END SUBROUTINE getReaction
 
-SUBROUTINE outputRates (r, t, p, flag, nsp, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen, &
-     lossArrayLen, speciesNames)
+SUBROUTINE outputRates (r, t, p, flag, nsp, numberOfSpecies, prodLossArrayLen, arrayLen, &
+     speciesNames)
 
   USE reactionStructure
-  INTEGER nsp, rateOfProdNS, prodLossArrayLen, rateOfLossNS, prodArrayLen(*), lossArrayLen(*)
-  INTEGER i, j, r(nsp, prodLossArrayLen), flag, x
+  INTEGER nsp, numberOfSpecies, prodLossArrayLen, arrayLen(*)
+  INTEGER i, j, r(nsp, prodLossArrayLen), flag
   DOUBLE PRECISION t, p(*)
   CHARACTER (LEN=10) speciesNames(*)
   CHARACTER (LEN=1000) :: reaction
 
+  DO i = 1, numberOfSpecies
+     DO j = 2, arrayLen(i)
+        IF (r(i, j)/=-1) THEN
 
-  ! Flag = 1 for production
-  IF (flag==1) THEN
-
-     DO i = 1, rateOfProdNS
-
-        x = 2+prodArrayLen(i)
-        DO j = 2, prodArrayLen(i)
-
-           IF (r(i, j)/=0) THEN
-              CALL getReaction (speciesNames, r(i, j), reaction)
-              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
-           ENDIF
-        ENDDO
-     ENDDO
-  ENDIF
-
-  ! Flag = 0 for loss
-  IF (flag==0) THEN
-
-     DO i = 1, rateOfLossNS
-
-        DO j = 2, lossArrayLen(i)
-
-           IF (r(i, j)/=0) THEN
-              CALL getReaction (speciesNames, r(i, j), reaction)
+           CALL getReaction (speciesNames, r(i, j), reaction)
+           ! Flag = 0 for reaction, 1 for loss
+           IF (flag==0) THEN
               WRITE (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
-           ENDIF
-        ENDDO
+           ELSE
+              IF (flag/=1) THEN
+                 STOP "Unexpected flag value to outputRates()"
+              END IF
+              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
+           END IF
+        ENDIF
      ENDDO
-  ENDIF
+  ENDDO
   RETURN
 END SUBROUTINE outputRates
 

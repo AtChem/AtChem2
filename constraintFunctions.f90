@@ -48,10 +48,10 @@ SUBROUTINE calcJFac(jfac, t)
   RETURN
 END SUBROUTINE calcJFac
 
-SUBROUTINE calcM (PRESSURE, TEMP, M)
+SUBROUTINE calcM (PRESS, TEMP, M)
   IMPLICIT NONE
-  DOUBLE PRECISION PRESSURE, TEMP, M
-  M = 9.6576d18*(PRESSURE/TEMP)
+  DOUBLE PRECISION PRESS, TEMP, M
+  M = 9.6576d18*(PRESS/TEMP)
 
   RETURN
 END SUBROUTINE calcM
@@ -131,7 +131,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET PRESSURE AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('PRESSURE', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('PRESS', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -192,7 +192,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   CALL getEnvVarNum ('M', envVarNum, envVarNames, numEnvVars)
   ! IF CALCULATED
   IF (envVarTypesNum(envVarNum)==1) THEN
-     CALL calcM (PRESSURE, TEMP, M)
+     CALL calcM (PRESS, TEMP, M)
      ! IF CONSTRAINED
   ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &

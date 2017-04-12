@@ -451,7 +451,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
                 # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
                 # Now, each string in the sublist will:
                 # - start with a digit
-                # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESSURE
+                # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESS
                 # - otherwise, be a species
                 RHSList_sub = re.sub('[()\-+*@/]', ' ', RHSList).split(' ')
                 # print RHSList_sub
@@ -460,7 +460,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
                     # Filter out spaces, numbers, and maths symbols
                     if (not re.match('[0-9]', x)) and (not x == ''):
                         # Filter out our 'reserved words'
-                        if not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESSURE', 'LOG10', 'T']):
+                        if not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T']):
                             # print x
                             if x in coeffSpeciesList:
                                 pass

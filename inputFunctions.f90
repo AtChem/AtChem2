@@ -213,7 +213,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   ALLOCATE (photoY2 (numConPhotoRates, maxNumberOfDataPoints))
   ALLOCATE (photoNumberOfPoints(numConPhotoRates))
 
-  fileLocationPrefix = './environmentalConstraints/'
+  fileLocationPrefix = './environmentConstraints/'
 
   ! READ IN PHOTOLYSIS DATA
   IF (numConPhotoRates>0) THEN
@@ -608,7 +608,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   OPEN (10, file=trim(param_dir) // '/environmentVariables.config', status='old') ! input file
   maxNumberOfDataPoints = 10000
 
-  ! FIND NUMBER OF ENVIRONMENTAL VARIABLES
+  ! FIND NUMBER OF ENVIRONMENT VARIABLES
   counter = 0
   DO
      counter = counter + 1
@@ -655,9 +655,9 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   ALLOCATE (envVarY2 (numEnvVars, maxNumberOfDataPoints))
   ALLOCATE (envVarNumberOfPoints(numEnvVars))
 
-  fileLocationPrefix = './environmentalConstraints/'
+  fileLocationPrefix = './environmentConstraints/'
   ! READ IN CONSTRAINT DATA FOR CONSTRAINED ENV VARIABLES
-  WRITE (*,*) 'Checking for constrained environmental variables...'
+  WRITE (*,*) 'Checking for constrained environment variables...'
   DO i = 1, numEnvVars
      IF (envVarTypes(i)=='CONSTRAINED') THEN
 
@@ -677,7 +677,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   ENDDO
   ! deallocate data
   DEALLOCATE (testArray)
-  WRITE (*,*) 'Finished checking for constrained environmental variables.'
+  WRITE (*,*) 'Finished checking for constrained environment variables.'
 
   RETURN
 END SUBROUTINE readEnvVar

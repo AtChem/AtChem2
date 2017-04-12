@@ -70,7 +70,7 @@
  Number of environment variables:           10
  1                             M                             2.60e+19                      
  2                             TEMP                          281.95e+00                    
- 3                             PRESSURE                      NOTUSED                       
+ 3                             PRESS                         NOTUSED                       
  4                             RH                            NOTUSED                       
  5                             H2O                           3.06e+17                      
  6                             DEC                           0.28782328e+00                
@@ -80,8 +80,8 @@
  10                            ROOFOPEN                      NOTUSED                       
  Finished reading environment variables.
 
- Checking for constrained environmental variables...
- Finished checking for constrained environmental variables.
+ Checking for constrained environment variables...
+ Finished checking for constrained environment variables.
 
  Reading concentration output from file...
  Finished reading concentration output from file.

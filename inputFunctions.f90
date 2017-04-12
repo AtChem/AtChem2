@@ -28,7 +28,7 @@ SUBROUTINE readJFacSpecies ()
   IF ('end'==trim(jFacSpecies)) THEN
      jFacSpecies = ''
   END IF
-  WRITE (*,*) 'JFacSpecies = ', jFacSpecies
+  WRITE (*,*) 'JFacSpecies = ', trim(jFacSpecies)
   WRITE (*,*) 'Finished reading JFacSpecies.'
   ! get line number for the JFac base species:
   DO i = 1, nrOfPhotoRates
@@ -65,9 +65,14 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   CLOSE (10, status='keep')
   nrOfPhotoRates = i-1
   i = 1
-  WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
-  i = nrOfPhotoRates
-  WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+  WRITE (*,*) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
+  IF (nrOfPhotoRates>2) THEN
+     WRITE (*,*) '...'
+  ENDIF
+  IF (nrOfPhotoRates>1) THEN
+     WRITE (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
+                 cnn(nrOfPhotoRates), str(nrOfPhotoRates), tf(nrOfPhotoRates)
+  ENDIF
   WRITE (*,*) 'Finished reading photolysis rates.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN

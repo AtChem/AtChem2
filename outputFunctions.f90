@@ -114,17 +114,21 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   RETURN
 END SUBROUTINE getReaction
 
-SUBROUTINE outputRates (r, t, p, flag, nsp, numberOfSpecies, prodLossArrayLen, arrayLen, &
+SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
      speciesNames)
 
   USE reactionStructure
-  INTEGER nsp, numberOfSpecies, prodLossArrayLen, arrayLen(*)
-  INTEGER i, j, r(nsp, prodLossArrayLen), flag
+  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
+  INTEGER numberOfSpecies, csize, arrayLen(*)
+  INTEGER i, j, r(numberOfSpecies, csize), flag
   DOUBLE PRECISION t, p(*)
   CHARACTER (LEN=10) speciesNames(*)
   CHARACTER (LEN=1000) :: reaction
 
   DO i = 1, numberOfSpecies
+     IF (arrayLen(i)>csize) THEN
+        WRITE (stderr,*) "arrayLen(i)>csize in outputRates, which is illegal. i =", i
+     ENDIF
      DO j = 2, arrayLen(i)
         IF (r(i, j)/=-1) THEN
 

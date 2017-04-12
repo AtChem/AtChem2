@@ -62,7 +62,8 @@ PROGRAM ATCHEM
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), reacIntSpecies(:,:)
   INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: yInt(:)
-  CHARACTER (LEN=10), ALLOCATABLE :: prodIntName(:), reacIntName(:), speciesOutputRequired(:)
+  CHARACTER (LEN=10), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
+  CHARACTER (LEN=10), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:), speciesOutputRequired(:)
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
@@ -161,8 +162,9 @@ PROGRAM ATCHEM
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (y(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
   ALLOCATE (speciesNumber(numSpec), z(numSpec), concentration(numSpec*2))
-  ALLOCATE (prodIntSpecies(numSpec, prodLossArrayLen), returnArray(numSpec), reacIntSpecies(numSpec, prodLossArrayLen))
-  ALLOCATE (SORNumber(numSpec), yInt(numSpec), prodIntName(numSpec), reacIntName(numSpec), speciesOutputRequired(numSpec))
+  ALLOCATE (returnArray(numSpec))
+  ALLOCATE (SORNumber(numSpec), yInt(numSpec))
+  ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), speciesOutputRequired(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   ALLOCATE (culmSpeciesProduced(numReactions), culmReactionNumber(numReactions), culmRates(numReactions))
@@ -175,7 +177,7 @@ PROGRAM ATCHEM
   ALLOCATE (clhs(3, csize1), crhs(2, csize2), ccoeff(csize2))
 
   !   READ IN CHEMICAL REACTIONS
-  CALL data (clhs, crhs, ccoeff, csize1, csize2)
+  CALL readReactions (clhs, crhs, ccoeff, csize1, csize2)
   neq = numSpec
 
   WRITE (*,*) 'Size of lhs =', csize1, 'size of rhs2 = ', csize2, '.'
@@ -213,34 +215,47 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
-  CALL readProductsOfInterest (prodIntName, prodIntNameSize)
-
+  CALL readProductsOfInterest (tempForProdIntName, prodIntNameSize)
+  ALLOCATE (prodIntName(prodIntNameSize))
+  DO i = 1, prodIntNameSize
+     prodIntName(i) = tempForProdIntName(i)
+  ENDDO
+  ! This takes in speciesName as masterSpeciesList, and checks whether each member of
+  ! prodIntName is in masterSpeciesList.
+  ! When it finds a match, it adds the number of the line in masterSpeciesList to
+  ! returnArray in the next available space.
+  ! rateOfProdNS contains the size of returnArray, which is the
+  ! number of times a match was made (this should equal prodIntNameSize?)
   CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, rateOfProdNS)
-
+  ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
-
+  ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
   DO i = 1, rateOfProdNS
      prodIntSpecies(i, 1) = returnArray(i)
   ENDDO
-
-  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2, csize2, rateOfProdNS, prodArrayLen, prodLossArrayLen, numSpec)
+  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2, csize2, rateOfProdNS, prodArrayLen, numSpec)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
   !   CONFIGURE FOR OUTPUT OF LOSS RATES
-  CALL readReactantsOfInterest (reacIntName, reacIntNameSize)
+  CALL readReactantsOfInterest (tempForReacIntName, reacIntNameSize)
+  ALLOCATE (reacIntName(reacIntNameSize))
+  DO i = 1, reacIntNameSize
+     reacIntName(i) = tempForReacIntName(i)
+  ENDDO
+
   CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, rateOfLossNS)
 
-  WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
-  WRITE (*,*)
-
+  ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
-
+  ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
   DO i = 1, rateOfLossNS
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
+  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, numSpec)
+  WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
+  WRITE (*,*)
 
-  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, prodLossArrayLen, numSpec)
 
   DO i = 1, numReactions
      culmReactionNumberLoss(i) = reacIntSpecies(1, i)
@@ -464,6 +479,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   DO WHILE (jout<nout)
+
      ! GET CONCENTRATIONS FOR SOLVED SPECIES
      WRITE (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
      CALL fcvode (tout, t, z, itask, ier)
@@ -471,6 +487,7 @@ PROGRAM ATCHEM
         WRITE (*,*) 'ier POST FCVODE = ', ier
      ENDIF
      flush(6)
+
      ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
      DO i = 1, numberOfConstrainedSpecies
         CALL getConstrainedConc (i, d)
@@ -486,13 +503,14 @@ PROGRAM ATCHEM
 
      ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
      time = INT (t)
+
      elapsed = INT (t-modelStartTime)
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
-        CALL outputRates (prodIntSpecies, t, productionRates, 1, numSpec, &
-                          rateOfProdNS, prodLossArrayLen, &
+        CALL outputRates (prodIntSpecies, t, productionRates, 1, &
+                          rateOfProdNS, csize2, &
                           prodArrayLen, speciesName)
-        CALL outputRates (reacIntSpecies, t, lossRates, 0, numSpec, &
-                          rateOfLossNS, prodLossArrayLen, &
+        CALL outputRates (reacIntSpecies, t, lossRates, 0, &
+                          rateOfLossNS, csize1, &
                           lossArrayLen, speciesName)
      ENDIF
 
@@ -506,7 +524,6 @@ PROGRAM ATCHEM
      CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
      CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
-
 
      !OUTPUT INSTANTANEOUS RATES
      IF (MOD (elapsed, irOutStepSize)==0) THEN

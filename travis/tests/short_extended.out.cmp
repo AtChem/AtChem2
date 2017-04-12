@@ -2,7 +2,7 @@
  Instantaneous rates dir is travis/tests/short_extended/instantaneousRates                                  
  Parameter dir is travis/tests/short_extended/modelConfiguration                                  
 
- Number of Species          104
+ Number of Species =          104
  Number of Reactions =          324
 
  Reading reactants (lhs) from mechanism.rec...

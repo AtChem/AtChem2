@@ -2,7 +2,7 @@
  Instantaneous rates dir is travis/tests/short/instantaneousRates
  Parameter dir is travis/tests/short/modelConfiguration
 
- Number of Species         104
+ Number of Species =          104
  Number of Reactions =          324
 
  Reading reactants (lhs) from mechanism.rec...
@@ -28,7 +28,7 @@
  Number of photolysis rates:          35
 
  Reading JFacSpecies...
- JFacSpecies = 
+ JFacSpecies =
  Finished reading JFacSpecies.
 
  Reading products of interest...

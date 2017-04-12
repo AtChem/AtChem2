@@ -2,7 +2,7 @@
  Instantaneous rates dir is travis/tests/full/instantaneousRates
  Parameter dir is travis/tests/full/modelConfiguration
 
- Number of Species        5832
+ Number of Species =         5832
  Number of Reactions =        17224
 
  Reading reactants (lhs) from mechanism.rec...
@@ -135,5 +135,5 @@ Final statistics:
  No. nonlinear convergence failures =    0
  No. error test failures =    0
 
- Runtime =           13
+ Runtime =           12
  Deallocating memory.

@@ -192,7 +192,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   CALL getEnvVarNum ('M', envVarNum, envVarNames, numEnvVars)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
-     CALL calcM (PRESS, TEMP, M)
+     CALL calcM (pressure, TEMP, M)
      ! IF CONSTRAINED
   ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &

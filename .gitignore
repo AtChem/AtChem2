@@ -3,3 +3,5 @@
 *.mod
 atchem
 mechanism-rates.f90
+mechanism-rate-coefficients.f90
+makefile.*

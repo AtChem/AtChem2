@@ -336,11 +336,14 @@ END SUBROUTINE readConcentrations
 SUBROUTINE readProductsOfInterest (r, i)
   ! Read in contents of modelConfiguration/productionRatesOutput.config, which
   ! contains a list of the species we want to have outputted to mC/productionRates.output
+  ! Output the contents in r, with i as the length of r.
   USE directories, ONLY: param_dir
 
-  CHARACTER (LEN=10) c, r(*)
-  INTEGER i, ierr
-  LOGICAL :: file_exists
+  CHARACTER (LEN=10) c
+  CHARACTER (LEN=10), intent(out) :: r(*)
+  INTEGER ierr
+  INTEGER, intent(out) :: i
+  LOGICAL file_exists
 
   WRITE (*,*) 'Reading products of interest...'
   INQUIRE(file=trim(param_dir) // '/productionRatesOutput.config', EXIST=file_exists)
@@ -375,11 +378,14 @@ END SUBROUTINE readProductsOfInterest
 SUBROUTINE readReactantsOfInterest (r, i)
   ! Read in contents of modelConfiguration/lossRatesOutput.config, which
   ! contains a list of the species we want to have outputted to mC/lossRates.output.
+  ! Output the contents in r, with i as the length of r.
   USE directories, ONLY: param_dir
 
-  CHARACTER (LEN=10) c, r(*)
-  INTEGER i, ierr
-  LOGICAL :: file_exists
+  CHARACTER (LEN=10) c
+  CHARACTER (LEN=10), intent(out) :: r(*)
+  INTEGER ierr
+  INTEGER, intent(out) :: i
+  LOGICAL file_exists
 
   WRITE (*,*) 'Reading reactants of interest...'
   INQUIRE(file=trim(param_dir) // '/lossRatesOutput.config', EXIST=file_exists)

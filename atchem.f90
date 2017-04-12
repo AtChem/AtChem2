@@ -152,7 +152,7 @@ PROGRAM ATCHEM
   CLOSE (10, status='keep')
 
   WRITE (*,*)
-  WRITE (*,*) 'Number of Species', numSpec
+  WRITE (*,*) 'Number of Species = ', numSpec
   WRITE (*,*) 'Number of Reactions = ', numReactions
   WRITE (*,*)
 

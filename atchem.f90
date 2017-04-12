@@ -60,7 +60,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), reacIntSpecies(:,:)
-  INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, returnArraySize, reacIntNameSize
+  INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: yInt(:)
   CHARACTER (LEN=10), ALLOCATABLE :: prodIntName(:), reacIntName(:), speciesOutputRequired(:)
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
@@ -215,9 +215,8 @@ PROGRAM ATCHEM
   !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
   CALL readProductsOfInterest (prodIntName, prodIntNameSize)
 
-  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, returnArraySize)
+  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, rateOfProdNS)
 
-  rateOfProdNS = returnArraySize
   ALLOCATE (prodArrayLen(rateOfProdNS))
 
   DO i = 1, rateOfProdNS
@@ -230,9 +229,8 @@ PROGRAM ATCHEM
 
   !   CONFIGURE FOR OUTPUT OF LOSS RATES
   CALL readReactantsOfInterest (reacIntName, reacIntNameSize)
-  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, returnArraySize)
+  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, rateOfLossNS)
 
-  rateOfLossNS = returnArraySize
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
 

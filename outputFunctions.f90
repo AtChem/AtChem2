@@ -65,7 +65,6 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   CHARACTER (LEN=10), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
   INTEGER, intent(in) :: reactionNumber
-  CHARACTER (LEN=1000) :: str1
   CHARACTER (LEN=1000) :: reactantStr, productStr
   CHARACTER (LEN=1000), intent(out) :: reaction
 

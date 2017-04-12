@@ -86,14 +86,15 @@ END SUBROUTINE FCVFUN
 !     ----------------------------------------------------------------
 !-----------------------------------------------------------------
 !     routine for reading in the reaction
-SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
-  INTEGER :: k, l, size1, size2
-  INTEGER :: lhs(3, size1), rhs(2, size2)
-  DOUBLE PRECISION :: coeff(size2)
+SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
+  ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
+  INTEGER :: k, l
+  INTEGER, intent(inout) :: size1, size2
+  INTEGER, intent(out) :: lhs(3, size1), rhs(2, size2)
+  DOUBLE PRECISION, intent(out) :: coeff(size2)
 
   WRITE (*,*) 'Reading reactants (lhs) from mechanism.rec...'
   OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
-  OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
 
   ! read data for lhs of equations
   size1 = 0
@@ -110,6 +111,7 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
   ENDDO
 
   WRITE (*,*) 'Reading products (rhs) from mechanism.prod...'
+  OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
   ! read data for rhs of equations
   size2 = 0
   DO
@@ -127,7 +129,7 @@ SUBROUTINE DATA (lhs, rhs, coeff, size1, size2)
 
   WRITE (*,*) 'Finished reading lhs and rhs data.'
   RETURN
-END SUBROUTINE DATA
+END SUBROUTINE readReactions
 
 
 SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
@@ -195,13 +197,13 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   ! csize1 is the number of entries
   ! clhs(1,) = reaction number
   ! clhs(2,) = species number
-  ! clhs(3,) = stochiometric coefficient
+  ! clhs(3,) = stoichiometric coefficient
 
   ! for the products array
   ! csize2 is the number of entries
   ! crhs(1,) = reaction number
   ! crhs(2,) = species number
-  ! ccoeff() = stochiometric coefficient (double precision)
+  ! ccoeff() = stoichiometric coefficient (double precision)
 
   ! y = concentration array - dimension ny
   ! fy = jacobian array - dimension ny x ny

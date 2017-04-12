@@ -40,21 +40,21 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
 END SUBROUTINE writeFileHeaders
 
 
-SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, listSize, &
-                              neq, returnArray, returnArraySize)
+SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, testSpeciesListSize, &
+                              masterSpeciesListSize, returnArray, returnArraySize)
   CHARACTER (LEN=10), intent(IN) :: masterSpeciesList(*)
   CHARACTER (LEN=10), intent(INOUT) :: testSpeciesList(*)
-  INTEGER, intent(IN) :: listSize, neq
+  INTEGER, intent(IN) :: testSpeciesListSize, masterSpeciesListSize
   INTEGER, intent(OUT) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
 
-  returnArraySize = 0
+  returnArraySize = 0 
   ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
   ! returnArray with the number of that species within the masterSpeciesList
-  DO i = 1, listSize
+  DO i = 1, testSpeciesListSize
      match = .FALSE.
-     DO j = 1, neq
+     DO j = 1, masterSpeciesListSize
         IF (masterSpeciesList(j)==testSpeciesList(i)) THEN
            match = .TRUE.
            returnArraySize = returnArraySize + 1

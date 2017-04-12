@@ -223,7 +223,7 @@ PROGRAM ATCHEM
      prodIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
-  CALL findReactionsWithProductX (prodIntSpecies, crhs, csize2, rateOfProdNS, prodArrayLen, prodLossArrayLen, numSpec)
+  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2, csize2, rateOfProdNS, prodArrayLen, prodLossArrayLen, numSpec)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
@@ -240,7 +240,7 @@ PROGRAM ATCHEM
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
 
-  CALL findReactionsWithReactant (reacIntSpecies, clhs, csize1, rateOfLossNS, lossArrayLen, prodLossArrayLen, numSpec)
+  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, prodLossArrayLen, numSpec)
 
   DO i = 1, numReactions
      culmReactionNumberLoss(i) = reacIntSpecies(1, i)

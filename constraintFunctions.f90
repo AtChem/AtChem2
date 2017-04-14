@@ -49,10 +49,11 @@ SUBROUTINE calcJFac(jfac, t)
 END SUBROUTINE calcJFac
 
 SUBROUTINE calcM (pressure, TEMP, M)
+  ! calculate the number density of air (molecule cm-3)
+  ! pressure in mbar, temperature in K
   IMPLICIT NONE
   DOUBLE PRECISION pressure, TEMP, M
-  M = 9.6576d18*(pressure/TEMP)
-
+  M = 7.242972d16*(100*pressure/TEMP)
   RETURN
 END SUBROUTINE calcM
 

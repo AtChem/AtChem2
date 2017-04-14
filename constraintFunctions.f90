@@ -234,7 +234,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET BOUNDARY LAYER HEIGHT AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('BOUNDARYLAYERHEIGHT', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('BLHEIGHT', envVarNum, envVarNames, numEnvVars)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED

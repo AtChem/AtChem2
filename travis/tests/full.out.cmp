@@ -72,7 +72,7 @@
  4                             RH                            NOTUSED                       
  5                             H2O                           3.06e+17                      
  6                             DEC                           0.28782328e+00                
- 7                             BOUNDARYLAYERHEIGHT           NOTUSED                       
+ 7                             BLHEIGHT           NOTUSED                       
  8                             DILUTE                        6.77E-6                       
  9                             JFAC                          NOTUSED                       
  10                            ROOFOPEN                      NOTUSED                       

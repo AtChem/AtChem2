@@ -55,7 +55,7 @@ TESTS := short short_extended full
 test:
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/test_runner.sh "$(TESTS)"
+	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB)"
 
 .f90.o:
 	$(F77) -c $(FFLAGS) $<

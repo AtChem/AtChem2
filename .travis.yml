@@ -9,6 +9,9 @@
     - osx
     - linux
 
+  env:
+    - DYLD_LIBRARY_PATH=/Users/travis/build/AtChem/AtChem/cvode/lib
+
   compiler:
     - gcc
 

@@ -43,11 +43,11 @@ include makefile.local
 
 SRCS = dataStructures.f90 atchem.f90 mechanism-rates.f90 configFunctions.f90 solverFunctions.f90 inputFunctions.f90 outputFunctions.f90 interpolationFunctions.f90 constraintFunctions.f90 instantaneousRatesFunctions.f90 facsimileFunctions.f90 conversionFunctions.f90 utilityFunctions.f90
 
-LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(CVODELIB) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
+LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(LIBDIR) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
-	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) -L$(CVODELIB) $(LDFLAGS)
+	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
 TESTS := short short_extended full

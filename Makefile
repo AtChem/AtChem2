@@ -50,7 +50,7 @@ $(AOUT): $(SRCS)
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
-TESTS := short short_extended full
+TESTS := short single_reac_of_interest short_extended full
 
 test:
 	@echo "Make: Running the following tests:" $(TESTS)

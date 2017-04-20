@@ -152,18 +152,19 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
 END SUBROUTINE getReactionListSizes
 
 
-SUBROUTINE getParametersFromFile (str, parameterArray)
-  CHARACTER :: str*(*)
-  DOUBLE PRECISION :: parameterArray(*)
-  INTEGER :: i
+SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
+  ! Read in parameters from file at input_file, and save the contents of each
+  ! line to an element of the array
+  CHARACTER, intent(in) :: input_file*(*)
+  DOUBLE PRECISION, intent(out) :: parameterArray(*)
+  INTEGER, intent(out) :: numValidEntries
 
-  ! READ IN SOLVER PARAMETERS
-  OPEN (10, file=str, status='old') ! input file
-  i = 1
-  READ (10,*) parameterArray(i)
-  DO WHILE (parameterArray(i)/=-9999)
-     i = i + 1
-     READ (10,*) parameterArray(i)
+  OPEN (10, file=input_file, status='old') ! input file
+  numValidEntries = 0
+  READ (10,*) parameterArray(1)
+  DO WHILE (parameterArray(numValidEntries+1)/=-9999)
+     numValidEntries = numValidEntries + 1
+     READ (10,*) parameterArray(numValidEntries+1)
   END DO
   CLOSE (10, status='keep')
 

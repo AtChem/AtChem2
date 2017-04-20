@@ -5,31 +5,31 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
   DOUBLE PRECISION :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
   DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: indexBefore, indexAfter, intMethod, ind, facintfound, i
+  INTEGER :: indexBefore, indexAfter, interpMethod, ind, facintfound, i
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
   IF (constraintType==1) THEN
-     CALL getSpeciesIntMethod (intMethod)
+     CALL getSpeciesInterpMethod (interpMethod)
   ELSE IF (constraintType==2) THEN
-     CALL getConditionIntMethod (intMethod)
+     CALL getConditionInterpMethod (interpMethod)
   ELSE IF (constraintType==3) THEN
-     CALL getDecIntMethod (intMethod)
+     CALL getDecInterpMethod (interpMethod)
   ELSE
      WRITE (*,*) 'Error in setting constraintType, error = ', constraintType
   ENDIF
 
   ! CUBIC SPLINE INTERPOLATION
-  IF (intMethod==1) THEN
+  IF (interpMethod==1) THEN
      CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
      IF (concAtT<=0) THEN
         concAtT = 0
      ENDIF
      ! CUBIC SPLINE INTERPOLATION (LN)
-  ELSE IF (intMethod==2) THEN
+  ELSE IF (interpMethod==2) THEN
      CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
      concAtT = EXP (concAtT)
      ! PIECEWISE CONSTANT INTERPOLATION
-  ELSE IF (intMethod==3) THEN
+  ELSE IF (interpMethod==3) THEN
      facintfound = 0
      DO i = 1, dataNumberOfPoints
         IF ((t>=X (ind, i)).AND.(t<X (ind, i+1))) THEN
@@ -43,7 +43,7 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
         concAtT = y(ind, dataNumberOfPoints)
      ENDIF
      ! PIECEWISE LINEAR INTERPOLATION
-  ELSE IF (intMethod==4) THEN
+  ELSE IF (interpMethod==4) THEN
      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
      linintsuc = 0
      DO i = 1, dataNumberOfPoints
@@ -68,7 +68,7 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
         concAtT = m*t + c
      ENDIF
   ELSE
-     WRITE (*,*) 'Interpolation method not set, error = ', intMethod
+     WRITE (*,*) 'Interpolation method not set, error = ', interpMethod
   ENDIF
 
   RETURN
@@ -148,28 +148,28 @@ SUBROUTINE getConstrainedQuantAtT (t, x, y, y2, dataNumberOfPoints, concAtT, con
   DOUBLE PRECISION :: t, x(*), y(*), y2 (*), concAtT
   INTEGER dataNumberOfPoints, linintsuc, constraintType
   DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: indexBefore, indexAfter, intMethod, facintfound, i
+  INTEGER :: indexBefore, indexAfter, interpMethod, facintfound, i
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
   IF (constraintType==1) THEN
-     CALL getSpeciesIntMethod (intMethod)
+     CALL getSpeciesInterpMethod (interpMethod)
   ELSE IF (constraintType==2) THEN
-     CALL getConditionIntMethod (intMethod)
+     CALL getConditionInterpMethod (interpMethod)
   ELSE IF (constraintType==3) THEN
-     CALL getDecIntMethod (intMethod)
+     CALL getDecInterpMethod (interpMethod)
   ELSE
      WRITE (*,*) 'Error in setting constraintType, error = ', constraintType
   ENDIF
 
   ! CUBIC SPLINE INTERPOLATION
-  IF (intMethod==1) THEN
+  IF (interpMethod==1) THEN
      CALL splint (x, y, y2, dataNumberOfPoints, t, concAtT)
      ! CUBIC SPLINE INTERPOLATION (LN)
-  ELSE IF (intMethod==2) THEN
+  ELSE IF (interpMethod==2) THEN
      CALL splint (x, y, y2, dataNumberOfPoints, t, concAtT)
      concAtT = EXP (concAtT)
      ! PIECEWISE CONSTANT INTERPOLATION
-  ELSE IF (intMethod==3) THEN
+  ELSE IF (interpMethod==3) THEN
      facintfound = 0
      DO i = 1, dataNumberOfPoints
         IF ((t>=x(i)).AND.(t<x(i+1))) THEN
@@ -183,7 +183,7 @@ SUBROUTINE getConstrainedQuantAtT (t, x, y, y2, dataNumberOfPoints, concAtT, con
         concAtT = y(dataNumberOfPoints)
      ENDIF
      ! PIECEWISE LINEAR INTERPOLATION
-  ELSE IF (intMethod==4) THEN
+  ELSE IF (interpMethod==4) THEN
      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
      linintsuc = 0
      DO i = 1, dataNumberOfPoints
@@ -208,7 +208,7 @@ SUBROUTINE getConstrainedQuantAtT (t, x, y, y2, dataNumberOfPoints, concAtT, con
         concAtT = m*t + c
      ENDIF
   ELSE
-     WRITE (*,*) 'Interpolation method not set, error = ', intMethod
+     WRITE (*,*) 'Interpolation method not set, error = ', interpMethod
   ENDIF
 
   RETURN

@@ -43,7 +43,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, max_step
   INTEGER :: JvApprox, lookBack
-  INTEGER :: SpeciesIntMethod, conditionsIntMethod, decIntMethod
+  INTEGER :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
   DOUBLE PRECISION :: d
 
@@ -300,12 +300,12 @@ PROGRAM ATCHEM
   !   SET MODEL PARAMETERS
   nout = modelParameters(1)
   tout = modelParameters(2)
-  SpeciesIntMethod = modelParameters(3)
-  CALL setSpeciesIntMethod (SpeciesIntMethod)
-  conditionsIntMethod = modelParameters(4)
-  CALL setConditionIntMethod (conditionsIntMethod)
-  decIntMethod = modelParameters(5)
-  CALL setDecIntMethod (decIntMethod)
+  speciesInterpMethod = modelParameters(3)
+  CALL setSpeciesInterpMethod (speciesInterpMethod)
+  conditionsInterpMethod = modelParameters(4)
+  CALL setConditionInterpMethod (conditionsInterpMethod)
+  decInterpMethod = modelParameters(5)
+  CALL setDecInterpMethod (decInterpMethod)
   maxNumberOfDataPoints = modelParameters(6)
   numberOfConstrainedSpecies = modelParameters(7)
   ratesOutputStepSize = modelParameters(8)
@@ -320,9 +320,9 @@ PROGRAM ATCHEM
 
   WRITE (*,*) 'Model parameters:'
   WRITE (*,*) 'number of steps: ', nout, 'step size(seconds):', tout
-  WRITE (*,*) 'species interpolation method: ', InterpolationMethodName(SpeciesIntMethod)
-  WRITE (*,*) 'conditions interpolation method: ', InterpolationMethodName(conditionsIntMethod)
-  WRITE (*,*) 'dec interpolation method: ', InterpolationMethodName(decIntMethod)
+  WRITE (*,*) 'species interpolation method: ', InterpolationMethodName(speciesInterpMethod)
+  WRITE (*,*) 'conditions interpolation method: ', InterpolationMethodName(conditionsInterpMethod)
+  WRITE (*,*) 'dec interpolation method: ', InterpolationMethodName(decInterpMethod)
   WRITE (*,*) 'maximum number of data points in constraint file:', maxNumberOfDataPoints
   WRITE (*,*) 'maximum number of constrained species:', numberOfConstrainedSpecies
   WRITE (*,*) 'ratesOutputStepSize', ratesOutputStepSize, &

@@ -148,47 +148,47 @@ END MODULE species
 MODULE interpolationMethod
   IMPLICIT NONE
   SAVE
-  INTEGER :: speciesIntMethod, conditionsIntMethod, decIntMethod
+  INTEGER :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   DOUBLE PRECISION, ALLOCATABLE :: testArray(:)
 
   PUBLIC :: testArray
 
-  PRIVATE :: speciesIntMethod, conditionsIntMethod, decIntMethod
-  PUBLIC :: getSpeciesIntMethod, setSpeciesIntMethod
-  PUBLIC :: getConditionIntMethod, setConditionIntMethod
-  PUBLIC :: getDecIntMethod, setDecIntMethod
+  PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  PUBLIC :: getSpeciesInterpMethod, setSpeciesInterpMethod
+  PUBLIC :: getConditionInterpMethod, setConditionInterpMethod
+  PUBLIC :: getDecInterpMethod, setDecInterpMethod
 
 CONTAINS
 
-  SUBROUTINE getSpeciesIntMethod (n)
+  SUBROUTINE getSpeciesInterpMethod (n)
     INTEGER :: n
-    n = speciesIntMethod
-  END SUBROUTINE getSpeciesIntMethod
+    n = speciesinterpMethod
+  END SUBROUTINE getSpeciesinterpMethod
 
-  SUBROUTINE setSpeciesIntMethod (n)
+  SUBROUTINE setSpeciesinterpMethod (n)
     INTEGER :: n
-    speciesIntMethod = n
-  END SUBROUTINE setSpeciesIntMethod
+    speciesinterpMethod = n
+  END SUBROUTINE setSpeciesinterpMethod
 
-  SUBROUTINE getConditionIntMethod (n)
+  SUBROUTINE getConditioninterpMethod (n)
     INTEGER :: n
-    n = conditionsIntMethod
-  END SUBROUTINE getConditionIntMethod
+    n = conditionsinterpMethod
+  END SUBROUTINE getConditioninterpMethod
 
-  SUBROUTINE setConditionIntMethod (n)
+  SUBROUTINE setConditioninterpMethod (n)
     INTEGER :: n
-    conditionsIntMethod = n
-  END SUBROUTINE setConditionIntMethod
+    conditionsinterpMethod = n
+  END SUBROUTINE setConditioninterpMethod
 
-  SUBROUTINE getDecIntMethod (n)
+  SUBROUTINE getDecinterpMethod (n)
     INTEGER :: n
-    n = decIntMethod
-  END SUBROUTINE getDecIntMethod
+    n = decinterpMethod
+  END SUBROUTINE getDecinterpMethod
 
-  SUBROUTINE setDecIntMethod (n)
+  SUBROUTINE setDecinterpMethod (n)
     INTEGER :: n
-    decIntMethod = n
-  END SUBROUTINE setDecIntMethod
+    decinterpMethod = n
+  END SUBROUTINE setDecinterpMethod
 
 END MODULE interpolationMethod
 

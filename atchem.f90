@@ -67,12 +67,6 @@ PROGRAM ATCHEM
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
-  !    DECLARATIONS FOR CULUMATIVE RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: culmSpeciesProduced(:), culmReactionNumber(:)
-  DOUBLE PRECISION, ALLOCATABLE :: culmRates(:)
-  INTEGER, ALLOCATABLE :: culmSpeciesLoss(:), culmReactionNumberLoss(:)
-  DOUBLE PRECISION, ALLOCATABLE :: culmRatesLoss(:)
-
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   DOUBLE PRECISION, ALLOCATABLE :: z(:)
   DOUBLE PRECISION tempForSolverParameters(100), tempForModelParameters(100)
@@ -169,8 +163,6 @@ PROGRAM ATCHEM
   ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), speciesOutputRequired(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
-  ALLOCATE (culmSpeciesProduced(numReactions), culmReactionNumber(numReactions), culmRates(numReactions))
-  ALLOCATE (culmSpeciesLoss(numReactions), culmReactionNumberLoss(numReactions), culmRatesLoss(numReactions))
   ALLOCATE (lossRates(numReactions), productionRates(numReactions), ir(numReactions))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
@@ -251,12 +243,6 @@ PROGRAM ATCHEM
   CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, numSpec)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
-
-
-  DO i = 1, numReactions
-     culmReactionNumberLoss(i) = reacIntSpecies(1, i)
-     culmRates(i) = 0
-  ENDDO
 
 
   !    READ IN SOLVER PARAMETERS
@@ -639,9 +625,7 @@ PROGRAM ATCHEM
   DEALLOCATE (y, speciesName, concSpeciesName, speciesNumber, z, concentration)
   DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
   DEALLOCATE (SORNumber, yInt, prodIntName, reacIntName, speciesOutputRequired)
-  DEALLOCATE (fy)
-  DEALLOCATE (culmSpeciesProduced, culmReactionNumber, culmRates, ir)
-  DEALLOCATE (culmSpeciesLoss, culmReactionNumberLoss, culmRatesLoss)
+  DEALLOCATE (fy, ir)
   DEALLOCATE (lossRates, productionRates)
   DEALLOCATE (clhs, crhs, ccoeff)
   DEALLOCATE (prodArrayLen)

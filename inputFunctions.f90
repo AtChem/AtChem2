@@ -323,10 +323,17 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ENDDO
   CLOSE (10, status='keep')
 
-  WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
-  WRITE (*,*) '...'
-  WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
-
+  IF (concCounter>0) THEN
+     WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
+  ENDIF
+  IF (concCounter>3) THEN
+     WRITE (*,*) '...'
+  ELSE IF (concCounter==3) THEN
+     WRITE (*,*) 2, ' ', concSpeciesName(2), ' ', concentration(2)
+  ENDIF
+  IF (concCounter>1) THEN
+     WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
+  ENDIF
   WRITE (*,*) 'Finished reading initial concentrations.'
 
   IF (concCounter>nsp) THEN
@@ -370,8 +377,10 @@ SUBROUTINE readProductsOfInterest (r, i)
   IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
-  IF (i>2) THEN
+  IF (i>3) THEN
      WRITE (*,*) '...'
+  ELSE IF (i==3) THEN
+     WRITE (*,*) 2, r(2)
   ENDIF
   IF (i>1) THEN
      WRITE (*,*) i, r(i)
@@ -412,8 +421,10 @@ SUBROUTINE readReactantsOfInterest (r, i)
   IF (i>0) THEN
      WRITE (*,*) 1, r(1)
   ENDIF
-  IF (i>2) THEN
+  IF (i>3) THEN
      WRITE (*,*) '...'
+  ELSE IF (i==3) THEN
+     WRITE (*,*) 2, r(2)
   ENDIF
   IF (i>1) THEN
      WRITE (*,*) i, r(i)
@@ -642,7 +653,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   numConEnvVar = 0
   DO i = 1, numEnvVars
      READ (10,*) dummy, envVarNames(i), envVarTypes(i)
-     WRITE (*,*) dummy, envVarNames(i), envVarTypes(i)
+     WRITE (*,'(A, A4, A12, A30)') ' ', dummy, envVarNames(i), adjustr(envVarTypes(i))
 
      IF (trim(envVarTypes(i))=='CALC') THEN
         envVarTypesNum(i) = 1

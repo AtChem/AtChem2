@@ -290,11 +290,23 @@ PROGRAM ATCHEM
   preconBandUpper = solverParameters(9)
   preconBandLower = solverParameters(10)
 
+  ! float format
+100 FORMAT (A17, E11.3)
+  ! integer format
+200 FORMAT (A17, I11)
   WRITE (*,*) 'Solver parameters:'
-  WRITE (*,*) 'atol: ', atol, 'rtol:', rtol, 'JacVApprox:', JvApprox, 'deltaJv:', deltaJv
-  WRITE (*,*) 'deltaMain:', deltaMain, 'lookBack:', lookBack, 'max_step:', max_step, &
-       'precondBandUpper:', preconBandUpper, 'preconBandLower', preconBandLower
-  WRITE (*,*) 'solverType:', solverTypeName(solverType)
+  WRITE (*,*) '------------------'
+  WRITE (*,100) 'atol: ', atol
+  WRITE (*,100) 'rtol: ', rtol
+  WRITE (*,200) 'JacVApprox: ', JvApprox
+  WRITE (*,100) 'deltaJv: ', deltaJv
+  WRITE (*,100) 'deltaMain: ', deltaMain
+  WRITE (*,200) 'lookBack: ', lookBack
+  WRITE (*,100) 'max_step: ', max_step
+  WRITE (*,200) 'preconBandUpper: ', preconBandUpper
+  WRITE (*,200) 'preconBandLower: ', preconBandLower
+  WRITE (*,'(A17, A29)') 'solverType: ', adjustl(solverTypeName(solverType))
+  WRITE (*,*) '------------------'
   WRITE (*,*)
 
   !   SET MODEL PARAMETERS
@@ -318,18 +330,29 @@ PROGRAM ATCHEM
   year = modelParameters(15)
   irOutStepSize = modelParameters(16)
 
+  ! float format
+300 FORMAT (A52, E11.3)
+  ! integer format
+400 FORMAT (A52, I11)
+  ! string format
+500 FORMAT (A52, A17)
   WRITE (*,*) 'Model parameters:'
-  WRITE (*,*) 'number of steps: ', nout, 'step size(seconds):', tout
-  WRITE (*,*) 'species interpolation method: ', interpolationMethodName(speciesInterpMethod)
-  WRITE (*,*) 'conditions interpolation method: ', interpolationMethodName(conditionsInterpMethod)
-  WRITE (*,*) 'dec interpolation method: ', interpolationMethodName(decInterpMethod)
-  WRITE (*,*) 'maximum number of data points in constraint file:', maxNumberOfDataPoints
-  WRITE (*,*) 'maximum number of constrained species:', numberOfConstrainedSpecies
-  WRITE (*,*) 'ratesOutputStepSize', ratesOutputStepSize, &
-       'instantaneous rates output step size:', irOutStepSize, &
-       'modelStartTime:', modelStartTime, 'jacobianOutputStepSize:', jacobianOutputStepSize
-  WRITE (*,*) 'latitude:', latitude, 'longitude:', longitude, &
-       'day/month/year:', day, month, year
+  WRITE (*,*) '-----------------'
+  WRITE (*,400) 'number of steps: ', nout
+  WRITE (*,300) 'step size (seconds): ', tout
+  WRITE (*,500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpMethod))
+  WRITE (*,500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpMethod))
+  WRITE (*,500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpMethod))
+  WRITE (*,400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
+  WRITE (*,400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
+  WRITE (*,400) 'ratesOutputStepSize: ', ratesOutputStepSize
+  WRITE (*,400) 'instantaneous rates output step size: ', irOutStepSize
+  WRITE (*,300) 'modelStartTime: ', modelStartTime
+  WRITE (*,400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
+  WRITE (*,300) 'latitude: ', latitude
+  WRITE (*,300) 'longitude: ', longitude
+  WRITE (*,'(A52, I3, A, I2, A, I4)') 'day/month/year: ', day, '/', month, '/', year
+  WRITE (*,*) '-----------------'
   WRITE (*,*)
 
   CALL calcDateParameters ()
@@ -395,7 +418,8 @@ PROGRAM ATCHEM
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
-  WRITE (*,*) 'neq = ', neq, ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
+  WRITE (*,'(A30, I6)') 'neq = ', neq
+  WRITE (*,'(A30, I6)') 'numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
   flush(stderr)
 
@@ -413,7 +437,7 @@ PROGRAM ATCHEM
      STOP
   ENDIF
 
-  WRITE (*,*) 't0 = ', t0
+  WRITE (*,'(A30, E15.3)') 't0 = ', t0
   CALL fcvmalloc (t0, z, meth, itmeth, itol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
   IF (ier/=0) THEN

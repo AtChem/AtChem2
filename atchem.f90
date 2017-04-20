@@ -96,14 +96,14 @@ PROGRAM ATCHEM
   INTEGER :: cmd_arg_count
   !    MISC
   CHARACTER (LEN=40) :: solverTypeName(3)
-  CHARACTER (LEN=40) :: InterpolationMethodName(4)
+  CHARACTER (LEN=40) :: interpolationMethodName(4)
   solverTypeName(1) = 'SPGMR'
   solverTypeName(2) = 'SPGMR + Banded Preconditioner'
   solverTypeName(3) = 'Dense'
-  InterpolationMethodName(1) = 'cubic spline'
-  InterpolationMethodName(2) = 'cubic spline ln'
-  InterpolationMethodName(3) = 'piecewise constant'
-  InterpolationMethodName(4) = 'piecewise linear'
+  interpolationMethodName(1) = 'cubic spline'
+  interpolationMethodName(2) = 'cubic spline ln'
+  interpolationMethodName(3) = 'piecewise constant'
+  interpolationMethodName(4) = 'piecewise linear'
 
   !    ********************************************************************************************************
   !    MODEL SETUP AND CONFIGURATION
@@ -320,9 +320,9 @@ PROGRAM ATCHEM
 
   WRITE (*,*) 'Model parameters:'
   WRITE (*,*) 'number of steps: ', nout, 'step size(seconds):', tout
-  WRITE (*,*) 'species interpolation method: ', InterpolationMethodName(speciesInterpMethod)
-  WRITE (*,*) 'conditions interpolation method: ', InterpolationMethodName(conditionsInterpMethod)
-  WRITE (*,*) 'dec interpolation method: ', InterpolationMethodName(decInterpMethod)
+  WRITE (*,*) 'species interpolation method: ', interpolationMethodName(speciesInterpMethod)
+  WRITE (*,*) 'conditions interpolation method: ', interpolationMethodName(conditionsInterpMethod)
+  WRITE (*,*) 'dec interpolation method: ', interpolationMethodName(decInterpMethod)
   WRITE (*,*) 'maximum number of data points in constraint file:', maxNumberOfDataPoints
   WRITE (*,*) 'maximum number of constrained species:', numberOfConstrainedSpecies
   WRITE (*,*) 'ratesOutputStepSize', ratesOutputStepSize, &

@@ -75,7 +75,9 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   DOUBLE PRECISION, ALLOCATABLE :: z(:)
-  DOUBLE PRECISION solverParameters(100), modelParameters(100)
+  DOUBLE PRECISION tempForSolverParameters(100), tempForModelParameters(100)
+  DOUBLE PRECISION, ALLOCATABLE :: solverParameters(:), modelParameters(:)
+  INTEGER modelParameterSize, solverParameterSize
 
   DOUBLE PRECISION :: modelStartTime
 
@@ -259,13 +261,21 @@ PROGRAM ATCHEM
 
   !    READ IN SOLVER PARAMETERS
   WRITE (*,*) 'Reading solver parameters from file...'
-  CALL getParametersFromFile (trim(param_dir) // "/solver.parameters", solverParameters)
+  CALL getParametersFromFile (trim(param_dir) // "/solver.parameters", tempForSolverParameters, solverParameterSize)
   WRITE (*,*) 'Finished reading solver parameters from file.'
+  ALLOCATE (solverParameters(solverParameterSize))
+  DO i = 1, solverParameterSize
+     solverParameters(i) = tempForSolverParameters(i)
+  ENDDO
 
   !   READ IN MODEL PARAMETERS
   WRITE (*,*) 'Reading model parameters from file...'
-  CALL getParametersFromFile (trim(param_dir) //  "/model.parameters", modelParameters)
-  WRITE (*,*) 'Finished eading model parameters from file.'
+  CALL getParametersFromFile (trim(param_dir) //  "/model.parameters", tempForModelParameters, modelParameterSize)
+  WRITE (*,*) 'Finished reading model parameters from file.'
+  ALLOCATE (modelParameters(modelParameterSize))
+  DO i = 1, modelParameterSize
+     modelParameters(i) = tempForModelParameters(i)
+  ENDDO
   WRITE (*,*)
 
   !   SET SOLVER PARAMETERS

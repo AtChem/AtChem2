@@ -155,7 +155,7 @@ MODULE interpolationMethod
 
   PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   PUBLIC :: getSpeciesInterpMethod, setSpeciesInterpMethod
-  PUBLIC :: getConditionInterpMethod, setConditionInterpMethod
+  PUBLIC :: getConditionsInterpMethod, setConditionsInterpMethod
   PUBLIC :: getDecInterpMethod, setDecInterpMethod
 
 CONTAINS
@@ -170,15 +170,15 @@ CONTAINS
     speciesInterpMethod = n
   END SUBROUTINE setSpeciesInterpMethod
 
-  SUBROUTINE getConditionInterpMethod (n)
+  SUBROUTINE getConditionsInterpMethod (n)
     INTEGER :: n
     n = conditionsInterpMethod
-  END SUBROUTINE getConditionInterpMethod
+  END SUBROUTINE getConditionsInterpMethod
 
-  SUBROUTINE setConditionInterpMethod (n)
+  SUBROUTINE setConditionsInterpMethod (n)
     INTEGER :: n
     conditionsInterpMethod = n
-  END SUBROUTINE setConditionInterpMethod
+  END SUBROUTINE setConditionsInterpMethod
 
   SUBROUTINE getDecInterpMethod (n)
     INTEGER :: n

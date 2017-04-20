@@ -303,7 +303,7 @@ PROGRAM ATCHEM
   speciesInterpMethod = modelParameters(3)
   CALL setSpeciesInterpMethod (speciesInterpMethod)
   conditionsInterpMethod = modelParameters(4)
-  CALL setConditionInterpMethod (conditionsInterpMethod)
+  CALL setConditionsInterpMethod (conditionsInterpMethod)
   decInterpMethod = modelParameters(5)
   CALL setDecInterpMethod (decInterpMethod)
   maxNumberOfDataPoints = modelParameters(6)

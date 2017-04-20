@@ -11,7 +11,7 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   IF (constraintType==1) THEN
      CALL getSpeciesInterpMethod (interpMethod)
   ELSE IF (constraintType==2) THEN
-     CALL getConditionInterpMethod (interpMethod)
+     CALL getConditionsInterpMethod (interpMethod)
   ELSE IF (constraintType==3) THEN
      CALL getDecInterpMethod (interpMethod)
   ELSE
@@ -154,7 +154,7 @@ SUBROUTINE getConstrainedQuantAtT (t, x, y, y2, dataNumberOfPoints, concAtT, con
   IF (constraintType==1) THEN
      CALL getSpeciesInterpMethod (interpMethod)
   ELSE IF (constraintType==2) THEN
-     CALL getConditionInterpMethod (interpMethod)
+     CALL getConditionsInterpMethod (interpMethod)
   ELSE IF (constraintType==3) THEN
      CALL getDecInterpMethod (interpMethod)
   ELSE

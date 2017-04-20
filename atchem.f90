@@ -220,12 +220,7 @@ PROGRAM ATCHEM
   DO i = 1, prodIntNameSize
      prodIntName(i) = tempForProdIntName(i)
   ENDDO
-  ! This takes in speciesName as masterSpeciesList, and checks whether each member of
-  ! prodIntName is in masterSpeciesList.
-  ! When it finds a match, it adds the number of the line in masterSpeciesList to
-  ! returnArray in the next available space.
-  ! rateOfProdNS contains the size of returnArray, which is the
-  ! number of times a match was made (this should equal prodIntNameSize?)
+
   CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
@@ -245,7 +240,6 @@ PROGRAM ATCHEM
   ENDDO
 
   CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, rateOfLossNS)
-
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))

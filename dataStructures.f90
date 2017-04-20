@@ -162,33 +162,33 @@ CONTAINS
 
   SUBROUTINE getSpeciesInterpMethod (n)
     INTEGER :: n
-    n = speciesinterpMethod
-  END SUBROUTINE getSpeciesinterpMethod
+    n = speciesInterpMethod
+  END SUBROUTINE getSpeciesInterpMethod
 
-  SUBROUTINE setSpeciesinterpMethod (n)
+  SUBROUTINE setSpeciesInterpMethod (n)
     INTEGER :: n
-    speciesinterpMethod = n
-  END SUBROUTINE setSpeciesinterpMethod
+    speciesInterpMethod = n
+  END SUBROUTINE setSpeciesInterpMethod
 
-  SUBROUTINE getConditioninterpMethod (n)
+  SUBROUTINE getConditionInterpMethod (n)
     INTEGER :: n
-    n = conditionsinterpMethod
-  END SUBROUTINE getConditioninterpMethod
+    n = conditionsInterpMethod
+  END SUBROUTINE getConditionInterpMethod
 
-  SUBROUTINE setConditioninterpMethod (n)
+  SUBROUTINE setConditionInterpMethod (n)
     INTEGER :: n
-    conditionsinterpMethod = n
-  END SUBROUTINE setConditioninterpMethod
+    conditionsInterpMethod = n
+  END SUBROUTINE setConditionInterpMethod
 
-  SUBROUTINE getDecinterpMethod (n)
+  SUBROUTINE getDecInterpMethod (n)
     INTEGER :: n
-    n = decinterpMethod
-  END SUBROUTINE getDecinterpMethod
+    n = decInterpMethod
+  END SUBROUTINE getDecInterpMethod
 
-  SUBROUTINE setDecinterpMethod (n)
+  SUBROUTINE setDecInterpMethod (n)
     INTEGER :: n
-    decinterpMethod = n
-  END SUBROUTINE setDecinterpMethod
+    decInterpMethod = n
+  END SUBROUTINE setDecInterpMethod
 
 END MODULE interpolationMethod
 

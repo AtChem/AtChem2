@@ -180,14 +180,14 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
   USE photolysisRates
   USE directories, ONLY : param_dir
-  USE storage, ONLY : maxPhotoRateNameLength
+  USE storage, ONLY : maxPhotoRateNameLength, maxFilepathLength
   IMPLICIT NONE
 
   INTEGER :: counter, i, k
   INTEGER :: maxNumberOfDataPoints
   CHARACTER (LEN=maxPhotoRateNameLength) :: string
-  CHARACTER (LEN=27) :: fileLocationPrefix
-  CHARACTER (LEN=57) :: fileLocation
+  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER (LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
   CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
@@ -455,15 +455,15 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE constraints
   USE chemicalConstraints
   USE directories, ONLY : param_dir
-  USE storage, ONLY : maxSpecLength
+  USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
   INTEGER :: i, j, k, dataNumberOfPoints, neq, id
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-  CHARACTER (LEN=13) :: string
+  CHARACTER (LEN=maxSpecLength) :: string
   CHARACTER (LEN=maxSpecLength) :: speciesName(*), name
-  CHARACTER (LEN=21) :: fileLocationPrefix
-  CHARACTER (LEN=57) :: fileLocation
+  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER (LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
   DOUBLE PRECISION :: y (*)
 
@@ -633,14 +633,14 @@ END SUBROUTINE readSpeciesConstraints
 
 SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   USE envVars
-  USE directories, ONLY: param_dir
-
+  USE directories, ONLY : param_dir
+  USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
 
   INTEGER :: i, counter, numConEnvVar, k, maxNumberOfDataPoints
   CHARACTER (LEN=10) dummy
-  CHARACTER (LEN=27) :: fileLocationPrefix
-  CHARACTER (LEN=57) :: fileLocation
+  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER (LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
   DOUBLE PRECISION, ALLOCATABLE :: testArray(:)
 
   WRITE (*,*) 'Reading environment variables...'

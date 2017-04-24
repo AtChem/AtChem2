@@ -4,16 +4,19 @@ MODULE storage
   INTEGER, PARAMETER :: maxPhotoRateNameLength=6
   INTEGER, PARAMETER :: maxEnvVarNameLength=9
   INTEGER, PARAMETER :: maxEnvVarLength=15
+  INTEGER, PARAMETER :: maxFilepathLength=100
+  INTEGER, PARAMETER :: maxReactionStringLength=1000
 END MODULE
 
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
 MODULE directories
+  USE storage, ONLY : maxFilepathLength
   IMPLICIT NONE
 
   SAVE
-  CHARACTER (LEN=80) :: output_dir, instantaneousRates_dir, param_dir
+  CHARACTER (LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir
 
 END MODULE directories
 !    ********************************************************************************************************

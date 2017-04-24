@@ -17,9 +17,11 @@ END SUBROUTINE outputEnvVar
 
 !--------------------------------------------------------------------
 SUBROUTINE outputjfy (fy, nsp, t)
-  INTEGER :: nsp, i, j
-  DOUBLE PRECISION :: fy(nsp, nsp), t
+  INTEGER, intent(in) :: nsp
+  INTEGER i, j
+  DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
 
+  ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
   DO i = 1, nsp
      WRITE (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
   ENDDO

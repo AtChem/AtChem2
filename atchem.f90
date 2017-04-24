@@ -29,7 +29,7 @@ PROGRAM ATCHEM
   INTEGER ier, i
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
-  INTEGER meth, itmeth, itol, itask, jout, nout
+  INTEGER meth, itmeth, iatol, itask, jout, nout
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
   INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
   INTEGER :: neq
@@ -41,7 +41,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION, ALLOCATABLE :: y(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
-  DOUBLE PRECISION :: deltaJv, deltaMain, max_step
+  DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
   INTEGER :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
@@ -265,14 +265,33 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   SET SOLVER PARAMETERS
+  ! Used in FCVMALLOC: ATOL is the absolute tolerance (scalar or array).
   atol = solverParameters(1)
+  ! Used in FCVMALLOC: RTOL is the relative tolerance (scalar).
   rtol = solverParameters(2)
+  ! TODO: convert this to boolean?
+  ! If JvApprox==1 and solverType={1,2}, call fcvspilssetjac() below, with non-zero flag.
+  ! This means FCVJTIMES() in solverFunctions.f90 should be used to approximate the Jacobian.
   JvApprox = solverParameters(3)
+  ! This is never used, but is referenced in a comment in FCVJTIMES.
+  ! TODO: delete?
   deltaJv = solverParameters(4)
+  ! From CVODE docs: DELT is the linear convergence tolerance factor of the SPGMR. Used in FCVSPGMR.
   deltaMain = solverParameters(5)
+  ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR.
+  ! TODO: Rename to MAXL?
   lookBack = solverParameters(6)
-  max_step = solverParameters(7)
+  ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN.
+  maxStep = solverParameters(7)
+  ! USed to choose which solver to use:
+  ! 1: SPGMR
+  ! 2: SPGMR + Banded preconditioner
+  ! 3: Dense solver
+  ! otherwise: error
   solverType = solverParameters(8)
+  ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower) are the upper
+  ! and lower half- bandwidths of the band matrix that is retained as an
+  ! approximation of the Jacobian.
   preconBandUpper = solverParameters(9)
   preconBandLower = solverParameters(10)
 
@@ -288,7 +307,7 @@ PROGRAM ATCHEM
   WRITE (*,100) 'deltaJv: ', deltaJv
   WRITE (*,100) 'deltaMain: ', deltaMain
   WRITE (*,200) 'lookBack: ', lookBack
-  WRITE (*,100) 'max_step: ', max_step
+  WRITE (*,100) 'maxStep: ', maxStep
   WRITE (*,200) 'preconBandUpper: ', preconBandUpper
   WRITE (*,200) 'preconBandLower: ', preconBandLower
   WRITE (*,'(A17, A29)') 'solverType: ', adjustl(solverTypeName(solverType))
@@ -346,13 +365,25 @@ PROGRAM ATCHEM
 
   !   HARD CODED SOLVER PARAMETERS
   t0 = modelStartTime
+  outputStepSize = tout
   tout = tout + t0
-  outputStepSize = tout - t0
   t = t0
+  ! Parameters for fcvmalloc. (Comments from cvode guide)
+  ! meth specifies the basic integration: 1 for Adams (nonstiff) or 2 for BDF stiff)
   meth = 2
+  ! itmeth specifies the nonlinear iteration method: 1 for functional iteration or 2 for Newton iteration.
   itmeth = 2
-  itol = 1
+  ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar or 2 for array.
+  ! If IATOL= 3, the arguments RTOL and ATOL are ignored and the user is
+  ! expected to subsequently call FCVEWTSET and provide the function FCVEWT.
+  iatol = 1
+
+  ! Parameter for FCVODE. Comment from cvode guide: ITASK is a task indicator and should be
+  ! set to 1 for normal mode (overshoot TOUT and interpolate),
+  ! or to 2 for one-step mode (return after each internal step taken)
   itask = 1
+
+  ! jout counts the number of iterative steps. Set to zero. Calculation will terminate when jout>=nout.
   jout = 0
 
   !   READ IN ENVIRONMENT VARIABLES (FIXED, CONSTRAINED, CALC OR NOTUSED, SEE ENVVAR.CONFIG)
@@ -425,7 +456,7 @@ PROGRAM ATCHEM
   ENDIF
 
   WRITE (*,'(A30, E15.3)') 't0 = ', t0
-  CALL fcvmalloc (t0, z, meth, itmeth, itol, rtol, atol, &
+  CALL fcvmalloc (t0, z, meth, itmeth, iatol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
   IF (ier/=0) THEN
      WRITE (stderr, 30) ier
@@ -437,7 +468,7 @@ PROGRAM ATCHEM
   CALL fcvsetiin ('MAX_NSTEPS', numsteps, ier)
   WRITE (*,*) 'setting maxsteps ier = ', ier
 
-  CALL fcvsetrin ('MAX_STEP', max_step, ier)
+  CALL fcvsetrin ('MAX_STEP', maxStep, ier)
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER
@@ -474,7 +505,9 @@ PROGRAM ATCHEM
      STOP
   ENDIF
 
-  !    USE JACOBIAN APPROXIMATION IF REQUIRED
+  ! Use Jacobian approximation if required. Calling fcvspilssetjac with non-zero flag
+  ! specifies that spgmr, spbcg, or sptfqmr should use the supplied FCVJTIMES (in solverfunctions.f90).
+  ! In our case, solverType={1,2} calls SPGMR above, while solverType=3 errors out if JvApprox=1
   IF (JVapprox==1) THEN
      CALL fcvspilssetjac (1, ier)
   ENDIF

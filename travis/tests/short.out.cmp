@@ -1,6 +1,6 @@
- Output dir is travis/tests/short                                                              
- Instantaneous rates dir is travis/tests/short/instantaneousRates                                           
- Parameter dir is travis/tests/short/modelConfiguration                                           
+ Output dir is travis/tests/short
+ Instantaneous rates dir is travis/tests/short/instantaneousRates
+ Parameter dir is travis/tests/short/modelConfiguration
 
  Number of Species =          104
  Number of Reactions =          324
@@ -14,31 +14,31 @@
  Finished reading species names.
 
  Reading initial concentrations...
-           1  H2O2          5000.0000000000000     
+           1  H2O2          5000.0000000000000
  Finished reading initial concentrations.
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000     
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000     
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000
  Finished reading photolysis rates.
  Number of photolysis rates:          35
 
  Reading JFacSpecies...
- JFacSpecies = 
+ JFacSpecies =
  Finished reading JFacSpecies.
 
  Reading products of interest...
-           1 OH        
-           2 HO2       
+           1 OH
+           2 HO2
  Finished reading products of interest.
  rateOfProdNS (number of species found):           2
 
  Reading reactants of interest...
-           1 OH        
-           2 HO2       
+           1 OH
+           2 HO2
  Finished reading reactants of interest.
  rateOfLossNS (number of species found):           2
 
@@ -55,7 +55,7 @@
         deltaJv:   0.100E-02
       deltaMain:   0.100E-03
        lookBack:         100
-       max_step:   0.100E+03
+        maxStep:   0.100E+03
 preconBandUpper:         750
 preconBandLower:         750
      solverType: SPGMR + Banded Preconditioner
@@ -65,9 +65,9 @@ preconBandLower:         750
  -----------------
                                    number of steps:           5
                                step size (seconds):   0.900E+03
-                      species interpolation method: piecewise linear 
-                   conditions interpolation method: piecewise linear 
-                          dec interpolation method: piecewise linear 
+                      species interpolation method: piecewise linear
+                   conditions interpolation method: piecewise linear
+                          dec interpolation method: piecewise linear
   maximum number of data points in constraint file:       10000
              maximum number of constrained species:          50
                                ratesOutputStepSize:        3600
@@ -99,15 +99,15 @@ preconBandLower:         750
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of           2 species:
-           1 NO2       
-           2 HO2NO2    
+           1 NO2
+           2 HO2NO2
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000     
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000     
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000
  Finished reading photolysis rates.
  Number of photolysis rates:          35
 

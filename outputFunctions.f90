@@ -183,6 +183,7 @@ SUBROUTINE outputInstantaneousRates (time, numReac)
   ENDDO
   CLOSE (10, status='keep')
 
+
   RETURN
 END SUBROUTINE outputInstantaneousRates
 

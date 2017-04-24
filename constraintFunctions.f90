@@ -357,8 +357,11 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
 END SUBROUTINE getEnvVarsAtT
 
 SUBROUTINE getEnvVarNum(name, envVarNum, envVarNames, numEnvVars)
+  USE storage, ONLY : maxEnvVarNameLength
+  IMPLICIT NONE
+
   CHARACTER name*(*)
-  CHARACTER (LEN=30) envVarNames(*)
+  CHARACTER (LEN=maxEnvVarNameLength) envVarNames(*)
   INTEGER :: envVarNum, i, numEnvVars
 
   DO i = 1, numEnvVars

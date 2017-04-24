@@ -638,7 +638,7 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
   IMPLICIT NONE
 
   INTEGER :: i, counter, numConEnvVar, k, maxNumberOfDataPoints
-  CHARACTER (LEN=30) dummy
+  CHARACTER (LEN=10) dummy
   CHARACTER (LEN=27) :: fileLocationPrefix
   CHARACTER (LEN=57) :: fileLocation
   DOUBLE PRECISION, ALLOCATABLE :: testArray(:)

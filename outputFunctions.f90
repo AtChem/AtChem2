@@ -6,9 +6,11 @@ END SUBROUTINE ro2Sum
 
 SUBROUTINE outputEnvVar (t)
   USE envVars
+  IMPLICIT NONE
 
   INTEGER :: i
-  DOUBLE PRECISION :: t
+  DOUBLE PRECISION, intent(in) :: t
+
   IF (ro2<0) ro2 = 0.0
   WRITE (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
@@ -17,6 +19,7 @@ END SUBROUTINE outputEnvVar
 
 !--------------------------------------------------------------------
 SUBROUTINE outputjfy (fy, nsp, t)
+  IMPLICIT NONE
   INTEGER, intent(in) :: nsp
   INTEGER i, j
   DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
@@ -31,7 +34,8 @@ END SUBROUTINE outputjfy
 !     ---------------------------------------------------------------
 SUBROUTINE outputPhotolysisRates (j, t)
   USE photolysisRates, ONLY: nrOfPhotoRates, ck
-  DOUBLE PRECISION :: j(*), t
+
+  DOUBLE PRECISION, intent(in) :: j(*), t
   INTEGER :: i
 
   WRITE (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
@@ -62,9 +66,11 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   ! Given a list speciesNames, and an integer reactionNumber, return reaction,
   ! a string containing
   USE reactionStructure
+  USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
-  CHARACTER (LEN=10) :: reactants(10), products(10)
-  CHARACTER (LEN=10), intent(in) :: speciesNames(*)
+
+  CHARACTER (LEN=maxSpecLength) :: reactants(10), products(10)
+  CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
   INTEGER, intent(in) :: reactionNumber
   CHARACTER (LEN=1000) :: reactantStr, productStr
@@ -120,11 +126,15 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
      speciesNames)
 
   USE reactionStructure
+  USE storage, ONLY : maxSpecLength
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
-  INTEGER numberOfSpecies, csize, arrayLen(*)
-  INTEGER i, j, r(numberOfSpecies, csize), flag
-  DOUBLE PRECISION t, p(*)
-  CHARACTER (LEN=10) speciesNames(*)
+  IMPLICIT NONE
+
+  INTEGER, intent(in) :: numberOfSpecies, csize, arrayLen(*)
+  INTEGER, intent(in) :: r(numberOfSpecies, csize), flag
+  INTEGER i, j
+  DOUBLE PRECISION, intent(in) :: t, p(*)
+  CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   CHARACTER (LEN=1000) :: reaction
 
   DO i = 1, numberOfSpecies
@@ -156,6 +166,7 @@ SUBROUTINE outputInstantaneousRates (time, numReac)
   USE directories, ONLY : instantaneousRates_dir
   USE productionAndLossRates, ONLY : ir
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
+  IMPLICIT NONE
 
   INTEGER, intent(in) :: time, numReac
   INTEGER i
@@ -177,20 +188,30 @@ END SUBROUTINE outputInstantaneousRates
 
 !     ----------------------------------------------------------------
 SUBROUTINE outputSpeciesOutputRequiredNames (names, namesSize)
-  CHARACTER (LEN=10) names(*)
+  USE storage, only: maxSpecLength
+  IMPLICIT NONE
+
+  CHARACTER (LEN=maxSpecLength) names(*)
   INTEGER i, namesSize
   WRITE (50, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
   RETURN
 END SUBROUTINE outputSpeciesOutputRequiredNames
 
-SUBROUTINE outputSpeciesOutputRequired (t, yInt, yIntSize)
-  DOUBLE PRECISION t, yInt(*)
-  INTEGER yIntSize, i
-  DO i = 1, yIntSize
-     IF (yInt(i)<0) THEN
-        yInt(i) = 0d0
+SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
+  ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
+  ! If any concentration is negative, then set it to zero before printing.
+  IMPLICIT NONE
+
+  DOUBLE PRECISION, intent(in) :: t
+  DOUBLE PRECISION, intent(inout) :: arrayOfConcs(*)
+  INTEGER, intent(in) :: arrayOfConcsSize
+  INTEGER i
+
+  DO i = 1, arrayOfConcsSize
+     IF (arrayOfConcs(i)<0) THEN
+        arrayOfConcs(i) = 0d0
      ENDIF
   END DO
-  WRITE (50, '(100 (1x, e15.5e3)) ') t, (yInt(i), i = 1, yIntSize)
+  WRITE (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
   RETURN
 END SUBROUTINE outputSpeciesOutputRequired

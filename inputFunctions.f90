@@ -44,13 +44,15 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
   ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
   ! modelConfiguration/photolysisRates.config.
-  USE photolysisRates, ONLY: maxNrOfPhotoRates, nrOfPhotoRates
-  USE directories, ONLY: param_dir
+  USE photolysisRates, ONLY : maxNrOfPhotoRates, nrOfPhotoRates
+  USE directories, ONLY : param_dir
+  USE storage, ONLY : maxPhotoRateNameLength
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
+
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER (LEN=30) :: str(*)
+  CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
 
   WRITE (*,*) 'Reading photolysis rates from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
@@ -85,10 +87,12 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
   USE photolysisRates, ONLY: usePhotolysisConstants, maxNrOfPhotoRates, nrOfPhotoRates
   USE directories, ONLY: param_dir
+  USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
+
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER (LEN=30) :: str(*)
+  CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
 
 ! Check whether file exists correctly in readPhotolysisConstants,
@@ -175,12 +179,13 @@ END SUBROUTINE getParametersFromFile
 SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
   USE photolysisRates
-  USE directories, ONLY: param_dir
+  USE directories, ONLY : param_dir
+  USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
   INTEGER :: counter, i, k
   INTEGER :: maxNumberOfDataPoints
-  CHARACTER (LEN=30) :: string
+  CHARACTER (LEN=maxPhotoRateNameLength) :: string
   CHARACTER (LEN=27) :: fileLocationPrefix
   CHARACTER (LEN=57) :: fileLocation
 
@@ -243,8 +248,10 @@ END SUBROUTINE readPhotoRates
 
 SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   USE directories, ONLY: param_dir
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
 
-  CHARACTER (LEN=10) c, r(*)
+  CHARACTER (LEN=maxSpecLength) c, r(*)
   INTEGER i, nsp
 
   WRITE (*,*) 'Reading concentration output from file...'
@@ -279,11 +286,14 @@ END SUBROUTINE readSpeciesOutputRequired
 
 
 SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
+
   DOUBLE PRECISION, intent(out) :: y(*)
   INTEGER, intent(in) :: neq
   INTEGER :: j
   INTEGER, intent(out) :: speciesNumber(*)
-  CHARACTER (LEN=10), intent(out) :: speciesName(*)
+  CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
 
   ! Read in species number and name from mC/mechanism.species to speciesName
   ! and speciesNumber. Also set each element of y to 0.
@@ -302,9 +312,11 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
   USE directories, ONLY: param_dir
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
 
-  CHARACTER (LEN=10), intent(out) :: concSpeciesName(*)
-  CHARACTER (LEN=10) k
+  CHARACTER (LEN=maxSpecLength), intent(out) :: concSpeciesName(*)
+  CHARACTER (LEN=maxSpecLength) k
   DOUBLE PRECISION, intent(out) :: concentration(*)
   DOUBLE PRECISION l
   INTEGER, intent(out) :: concCounter
@@ -351,9 +363,11 @@ SUBROUTINE readProductsOfInterest (r, i)
   ! contains a list of the species we want to have outputted to mC/productionRates.output
   ! Output the contents in r, with i as the length of r.
   USE directories, ONLY: param_dir
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
 
-  CHARACTER (LEN=10) c
-  CHARACTER (LEN=10), intent(out) :: r(*)
+  CHARACTER (LEN=maxSpecLength) c
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
   INTEGER ierr
   INTEGER, intent(out) :: i
   LOGICAL file_exists
@@ -395,9 +409,11 @@ SUBROUTINE readReactantsOfInterest (r, i)
   ! contains a list of the species we want to have outputted to mC/lossRates.output.
   ! Output the contents in r, with i as the length of r.
   USE directories, ONLY: param_dir
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
 
-  CHARACTER (LEN=10) c
-  CHARACTER (LEN=10), intent(out) :: r(*)
+  CHARACTER (LEN=maxSpecLength) c
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
   INTEGER ierr
   INTEGER, intent(out) :: i
   LOGICAL file_exists
@@ -438,14 +454,14 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE species
   USE constraints
   USE chemicalConstraints
-  USE directories, ONLY: param_dir
-
+  USE directories, ONLY : param_dir
+  USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   INTEGER :: i, j, k, dataNumberOfPoints, neq, id
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER (LEN=13) :: string
-  CHARACTER (LEN=10) :: speciesName(*), name
+  CHARACTER (LEN=maxSpecLength) :: speciesName(*), name
   CHARACTER (LEN=21) :: fileLocationPrefix
   CHARACTER (LEN=57) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value

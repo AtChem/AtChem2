@@ -1,3 +1,9 @@
+MODULE storage
+  IMPLICIT NONE
+  INTEGER, PARAMETER :: maxSpecLength=10
+  INTEGER, PARAMETER :: maxPhotoRateNameLength=6
+END MODULE
+
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
@@ -99,10 +105,12 @@ CONTAINS
 END MODULE constraints
 
 MODULE species
+  USE storage, ONLY : maxSpecLength
+
   IMPLICIT NONE
   SAVE
   INTEGER :: neq
-  CHARACTER (LEN=10), ALLOCATABLE :: speciesList(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
 
   INTEGER :: i
 
@@ -127,14 +135,14 @@ CONTAINS
   END SUBROUTINE deallocateSpeciesList
 
   SUBROUTINE getSpeciesList (sl)
-    CHARACTER (LEN=10) :: sl(*)
+    CHARACTER (LEN=maxSpecLength) :: sl(*)
     DO i = 1, neq
        sl(i) = speciesList(i)
     ENDDO
   END SUBROUTINE getSpeciesList
 
   SUBROUTINE setSpeciesList (sl)
-    CHARACTER (LEN=10) :: sl(*)
+    CHARACTER (LEN=maxSpecLength) :: sl(*)
     DO i = 1, neq
        speciesList(i) = sl(i)
     ENDDO
@@ -209,6 +217,7 @@ END MODULE reactionStructure
 !    PHOTOLYSIS RATES METHOD MODULE
 !    ********************************************************************************************************
 MODULE photolysisRates
+  USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
   SAVE
@@ -219,7 +228,8 @@ MODULE photolysisRates
   LOGICAL :: usePhotolysisConstants
   DOUBLE PRECISION :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
   DOUBLE PRECISION :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
-  CHARACTER (LEN=30) :: photoRateNames(maxNrOfPhotoRates), constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
+  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
+  CHARACTER (LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
   DOUBLE PRECISION, ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
   INTEGER, ALLOCATABLE :: photoNumberOfPoints(:)
 
@@ -229,13 +239,14 @@ END MODULE photolysisRates
 !    CHEMICAL CONSTRAINTS MODULE
 !    ********************************************************************************************************
 MODULE chemicalConstraints
+  USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   SAVE
   DOUBLE PRECISION, ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
   DOUBLE PRECISION, ALLOCATABLE :: constrainedConcs(:)
   INTEGER :: numberOfConstrainedSpecies
-  CHARACTER(LEN=10), ALLOCATABLE :: constrainedName(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: constrainedName(:)
   INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
 
 END MODULE chemicalConstraints

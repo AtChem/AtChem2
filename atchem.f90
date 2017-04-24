@@ -17,8 +17,8 @@ PROGRAM ATCHEM
   USE envVars
   USE SZACalcVars
   USE date
-  USE directories, only: output_dir, instantaneousRates_dir, param_dir
-
+  USE directories, ONLY : output_dir, instantaneousRates_dir, param_dir
+  USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -55,15 +55,15 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR SPECIES PARAMETERS
   INTEGER concCounter
   DOUBLE PRECISION, ALLOCATABLE :: concentration(:)
-  CHARACTER (LEN=10), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), reacIntSpecies(:,:)
   INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: yInt(:)
-  CHARACTER (LEN=10), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
-  CHARACTER (LEN=10), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:), speciesOutputRequired(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:), speciesOutputRequired(:)
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
@@ -79,7 +79,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION, ALLOCATABLE :: fy(:,:)
   INTEGER :: jacobianOutputStepSize
 
-  CHARACTER (LEN=30) :: photoRateNamesForHeader(200)
+  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
   CHARACTER (LEN=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT

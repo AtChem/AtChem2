@@ -150,6 +150,31 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   RETURN
 END SUBROUTINE outputRates
 
+SUBROUTINE outputInstantaneousRates (time, numReac)
+
+  USE reactionStructure
+  USE directories, ONLY : instantaneousRates_dir
+  USE productionAndLossRates, ONLY : ir
+  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
+
+  INTEGER, intent(in) :: time, numReac
+  INTEGER i
+  CHARACTER (LEN=57) :: irfileLocation
+  CHARACTER (LEN=30) :: strTime
+
+  WRITE (strTime,*) time
+
+  irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
+
+  OPEN (10, file=irfileLocation)
+  DO i = 1, numReac
+     WRITE (10,*) ir(i)
+  ENDDO
+  CLOSE (10, status='keep')
+
+  RETURN
+END SUBROUTINE outputInstantaneousRates
+
 !     ----------------------------------------------------------------
 SUBROUTINE outputSpeciesOutputRequiredNames (names, namesSize)
   CHARACTER (LEN=10) names(*)

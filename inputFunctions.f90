@@ -631,70 +631,74 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 END SUBROUTINE readSpeciesConstraints
 
 
-SUBROUTINE readEnvVar (maxNumberOfDataPoints)
+SUBROUTINE readEnvVar ()
+  ! This function reads in data from environmentVariables.config, and sets
+  ! envVarTypesNum for each one. In the case of a constrained variable, this
+  ! also reads in the constraint data from environmentConstraints directory, the
+  ! file named after the environmental variable.
   USE envVars
   USE directories, ONLY : param_dir
+  USE constraints, ONLY : maxNumberOfDataPoints
   USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, counter, numConEnvVar, k, maxNumberOfDataPoints
+  INTEGER :: i, counter, k, ierr
   CHARACTER (LEN=10) dummy
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
-  DOUBLE PRECISION, ALLOCATABLE :: testArray(:)
 
   WRITE (*,*) 'Reading environment variables...'
   OPEN (10, file=trim(param_dir) // '/environmentVariables.config', status='old') ! input file
 
-  ! FIND NUMBER OF ENVIRONMENT VARIABLES
+  ! Count number of environment variables by reading in lines from file
   counter = 0
-  DO
+  READ (10, *, iostat=ierr) dummy
+  DO WHILE (ierr==0)
      counter = counter + 1
-     READ (10,*) dummy
-     IF (dummy=='end') EXIT
+     READ (10, *, iostat=ierr) dummy
   ENDDO
 
-  numEnvVars = counter -1
+  numEnvVars = counter
 
-  !ALLOCATE STORAGE FOR CURRENT VALUES OF ENV VARS USED FOR OUTPUT
+  ! Allocate storage for current values of env vars used for output
   ALLOCATE (currentEnvVarValues(numEnvVars))
 
   WRITE (*,*) 'Number of environment variables: ', numEnvVars
-  ALLOCATE (testArray(3))
   ALLOCATE (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars))
   ALLOCATE (envVarFixedValues(numEnvVars))
   REWIND (10)
-  ! READ IN ENV VARIABLES
-  numConEnvVar = 0
+  ! Read in environment variables - if
   DO i = 1, numEnvVars
      READ (10,*) dummy, envVarNames(i), envVarTypes(i)
      WRITE (*,'(A, A4, A12, A30)') ' ', dummy, envVarNames(i), adjustr(envVarTypes(i))
 
-     IF (trim(envVarTypes(i))=='CALC') THEN
+     SELECT CASE (trim(envVarTypes(i)))
+     CASE ('CALC')
         envVarTypesNum(i) = 1
-     ELSE IF (trim(envVarTypes(i))=='CONSTRAINED') THEN
+     CASE ('CONSTRAINED')
         envVarTypesNum(i) = 2
-        numConEnvVar = numConEnvVar + 1
-     ELSE IF (trim(envVarTypes(i))=='NOTUSED') THEN
+     CASE ('NOTUSED')
         envVarTypesNum(i) = 4
-        ! OTHERWISE ASSUME A FIXED VALUE
-     ELSE
+     CASE default
         envVarTypesNum(i) = 3
+        ! Copy 3rd column value to envVarFixedValues(i)
         READ (envVarTypes(i),*) envVarFixedValues(i)
-     ENDIF
+     END SELECT
   ENDDO
   CLOSE (10, status='keep')
 
   WRITE (*,*) 'Finished reading environment variables.'
   WRITE (*,*)
 
+  ! Allocate variables for next section
   ALLOCATE (envVarX (numEnvVars, maxNumberOfDataPoints))
   ALLOCATE (envVarY (numEnvVars, maxNumberOfDataPoints))
   ALLOCATE (envVarY2 (numEnvVars, maxNumberOfDataPoints))
   ALLOCATE (envVarNumberOfPoints(numEnvVars))
 
+  ! TODO: convert this to a command line input argument
   fileLocationPrefix = './environmentConstraints/'
-  ! READ IN CONSTRAINT DATA FOR CONSTRAINED ENV VARIABLES
+  ! If environment variable is constrained, read in constraint data
   WRITE (*,*) 'Checking for constrained environment variables...'
   DO i = 1, numEnvVars
      IF (envVarTypes(i)=='CONSTRAINED') THEN
@@ -713,8 +717,6 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
         WRITE (*,*) 'Finished reading constraint data.'
      ENDIF
   ENDDO
-  ! deallocate data
-  DEALLOCATE (testArray)
   WRITE (*,*) 'Finished checking for constrained environment variables.'
 
   RETURN

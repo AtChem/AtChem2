@@ -2,6 +2,8 @@ MODULE storage
   IMPLICIT NONE
   INTEGER, PARAMETER :: maxSpecLength=10
   INTEGER, PARAMETER :: maxPhotoRateNameLength=6
+  INTEGER, PARAMETER :: maxEnvVarNameLength=9
+  INTEGER, PARAMETER :: maxEnvVarLength=15
 END MODULE
 
 !    ********************************************************************************************************
@@ -29,10 +31,12 @@ END MODULE date
 !    ENVIRONMENT VARIABLES MODULE
 !    ********************************************************************************************************
 MODULE envVars
+  USE storage, ONLY : maxEnvVarNameLength, maxEnvVarLength
   IMPLICIT NONE
 
   SAVE
-  CHARACTER (LEN=30), ALLOCATABLE :: envVarNames(:), envVarTypes(:)
+  CHARACTER (LEN=maxEnvVarNameLength), ALLOCATABLE :: envVarNames(:)
+  CHARACTER (LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
   INTEGER, ALLOCATABLE :: envVarTypesNum(:)
   DOUBLE PRECISION, ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
   INTEGER :: numEnvVars, tempNum

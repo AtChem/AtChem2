@@ -163,12 +163,7 @@ END MODULE species
 MODULE interpolationMethod
   IMPLICIT NONE
   SAVE
-  INTEGER :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
-  DOUBLE PRECISION, ALLOCATABLE :: testArray(:)
-
-  PUBLIC :: testArray
-
-  PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  INTEGER, PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   PUBLIC :: getSpeciesInterpMethod, setSpeciesInterpMethod
   PUBLIC :: getConditionsInterpMethod, setConditionsInterpMethod
   PUBLIC :: getDecInterpMethod, setDecInterpMethod

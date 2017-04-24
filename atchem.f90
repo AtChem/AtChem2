@@ -404,8 +404,8 @@ PROGRAM ATCHEM
   ! currentNumTimestep counts the number of iterative steps. Set to zero. Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
   currentNumTimestep = 0
 
-  !   READ IN ENVIRONMENT VARIABLES (FIXED, CONSTRAINED, CALC OR NOTUSED, SEE ENVVAR.CONFIG)
-  CALL readEnvVar (maxNumberOfDataPoints)
+  ! Read in environment variables (FIXED, CONSTRAINED, CALC or NOTUSED, see environmentVariables.config)
+  CALL readEnvVar ()
   WRITE (*,*)
 
   !   WRITE FILE OUTPUT HEADERS AND OUTPUT AT t=0

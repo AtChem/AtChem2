@@ -337,15 +337,22 @@ PROGRAM ATCHEM
   CALL setDecInterpMethod (decInterpolationMethod)
   ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
+  ! Member variable of chemicalConstraints.
   numberOfConstrainedSpecies = modelParameters(7)
+  ! Frequency at which outputRates is called below.
   ratesOutputStepSize = modelParameters(8)
+  ! Start time of model. Used to set t0, and to calculate the elapsed time.
   modelStartTime = modelParameters(9)
+  ! Frequency at which outputjfy is called below.
   jacobianOutputStepSize = modelParameters(10)
+  ! Member variables of module SZACalcVars
   latitude = modelParameters(11)
   longitude = modelParameters(12)
+  ! Member variables of module date
   day = modelParameters(13)
   month = modelParameters(14)
   year = modelParameters(15)
+  ! Frequency at which to output instantaneous rates
   irOutStepSize = modelParameters(16)
 
   ! float format

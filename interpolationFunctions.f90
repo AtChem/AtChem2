@@ -1,5 +1,6 @@
 SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec)
 
+  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   USE interpolationMethod
   USE chemicalConstraints
   INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
@@ -68,7 +69,8 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
         concAtT = m*t + c
      ENDIF
   ELSE
-     WRITE (*,*) 'Interpolation method not set, error = ', interpMethod
+     WRITE (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
+     STOP
   ENDIF
 
   RETURN

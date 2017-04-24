@@ -83,9 +83,7 @@ PROGRAM ATCHEM
   CHARACTER (LEN=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT
-  CHARACTER (LEN=57) :: irfileLocation
   INTEGER :: irOutStepSize
-  CHARACTER (LEN=30) :: strTime
 
   INTEGER :: cmd_arg_count
   !    MISC
@@ -595,15 +593,7 @@ PROGRAM ATCHEM
 
      !OUTPUT INSTANTANEOUS RATES
      IF (MOD (elapsed, irOutStepSize)==0) THEN
-        WRITE (strTime,*) time
-
-        irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
-
-        OPEN (10, file=irfileLocation)
-        DO i = 1, numReactions
-           WRITE (10,*) ir(i)
-        ENDDO
-        CLOSE (10, status='keep')
+        CALL outputInstantaneousRates(time, numReactions)
      ENDIF
 
      ! OUTPUT FOR CVODE MAIN SOLVER

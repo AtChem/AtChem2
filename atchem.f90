@@ -87,8 +87,8 @@ PROGRAM ATCHEM
 
   INTEGER :: cmd_arg_count
   !    MISC
-  CHARACTER (LEN=40) :: solverTypeName(3)
-  CHARACTER (LEN=40) :: interpolationMethodName(4)
+  CHARACTER (LEN=30) :: solverTypeName(3)
+  CHARACTER (LEN=20) :: interpolationMethodName(4)
   solverTypeName(1) = 'SPGMR'
   solverTypeName(2) = 'SPGMR + Banded Preconditioner'
   solverTypeName(3) = 'Dense'

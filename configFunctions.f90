@@ -18,8 +18,9 @@ END SUBROUTINE calcDateParameters
 
 SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
   USE envVars
-  USE photolysisRates, ONLY: nrOfPhotoRates, ck
-  CHARACTER (LEN=30) :: photoRateNamesForHeader(*)
+  USE photolysisRates, ONLY : nrOfPhotoRates, ck
+  USE storage, ONLY : maxPhotoRateNameLength
+  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
   INTEGER :: i
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
@@ -43,14 +44,15 @@ END SUBROUTINE writeFileHeaders
 
 SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, testSpeciesListSize, &
                               masterSpeciesListSize, returnArray, returnArraySize)
+  USE storage, ONLY : maxSpecLength
   ! This takes in masterSpeciesList, and checks whether each member of
   ! testspeciesList is in masterSpeciesList.
   ! When it finds a match, it adds the number of the line in masterSpeciesList to
   ! returnArray in the next available space.
   ! returnArraySize contains the size of returnArray, which is the
   ! number of times a match was made
-  CHARACTER (LEN=10), intent(in) :: masterSpeciesList(*)
-  CHARACTER (LEN=10), intent(inout) :: testSpeciesList(*)
+  CHARACTER (LEN=maxSpecLength), intent(in) :: masterSpeciesList(*)
+  CHARACTER (LEN=maxSpecLength), intent(inout) :: testSpeciesList(*)
   INTEGER, intent(in) :: testSpeciesListSize, masterSpeciesListSize
   INTEGER, intent(out) :: returnArray(*), returnArraySize
   INTEGER i, j
@@ -77,7 +79,10 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, testSpeciesLis
 END SUBROUTINE matchNameToNumber
 
 SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
-  CHARACTER (LEN=10) oneSpecies, speciesName(*), m
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
+
+  CHARACTER (LEN=maxSpecLength) oneSpecies, speciesName(*), m
   INTEGER j, neq, id
 
   id = 0
@@ -97,8 +102,11 @@ SUBROUTINE setConcentrations (outputConcentrations, refSpeciesNames, concSpecies
   ! then transer the value from concentrations to y. If no match is found,
   ! output this to errors.output, but don't stop, just ignore the input value.
   ! Ptrint outcome of each search into initialConditionsSetting.output.
-  CHARACTER (LEN=10), intent(in) :: concSpeciesNames(*), refSpeciesNames(*)
-  CHARACTER (LEN=10) :: k, m
+  USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
+
+  CHARACTER (LEN=maxSpecLength), intent(in) :: concSpeciesNames(*), refSpeciesNames(*)
+  CHARACTER (LEN=maxSpecLength) :: k, m
   DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
   INTEGER, intent(in) :: concCounter, numSpecies

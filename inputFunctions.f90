@@ -629,7 +629,6 @@ SUBROUTINE readEnvVar (maxNumberOfDataPoints)
 
   WRITE (*,*) 'Reading environment variables...'
   OPEN (10, file=trim(param_dir) // '/environmentVariables.config', status='old') ! input file
-  maxNumberOfDataPoints = 10000
 
   ! FIND NUMBER OF ENVIRONMENT VARIABLES
   counter = 0

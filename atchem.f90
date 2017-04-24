@@ -29,7 +29,7 @@ PROGRAM ATCHEM
   INTEGER ier, i
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
-  INTEGER meth, itmeth, iatol, itask, jout, nout
+  INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
   INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
   INTEGER :: neq
@@ -43,14 +43,14 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
-  INTEGER :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  INTEGER :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
   DOUBLE PRECISION :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds
   INTEGER numSpec, numReactions, numSteps
-  DOUBLE PRECISION tminus1, outputStepSize
+  DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   INTEGER concCounter
@@ -315,14 +315,27 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   SET MODEL PARAMETERS
-  nout = modelParameters(1)
-  tout = modelParameters(2)
-  speciesInterpMethod = modelParameters(3)
-  CALL setSpeciesInterpMethod (speciesInterpMethod)
-  conditionsInterpMethod = modelParameters(4)
-  CALL setConditionsInterpMethod (conditionsInterpMethod)
-  decInterpMethod = modelParameters(5)
-  CALL setDecInterpMethod (decInterpMethod)
+  ! maxNumTimesteps sets the maximum number of timesteps to calculate.
+  ! Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
+  maxNumTimesteps = modelParameters(1)
+  ! Size of timestep: tout is incremented by this amount on each iteration of the main while loop.
+  timestepSize = modelParameters(2)
+  ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
+  ! the private member of MODULE interpolationMethod.
+  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT and getConstrainedQuantAtT2D.
+  ! Values:
+  ! 1: Cubic spline interpolation
+  ! 2: Cubic spline interpolation (log) TODO: this just outputs the exponential of the value. Is this right?
+  ! 3: Piecewise constant
+  ! 4: Piecewise linear
+  ! otherwise: error
+  speciesInterpolationMethod = modelParameters(3)
+  CALL setSpeciesInterpMethod (speciesInterpolationMethod)
+  conditionsInterpolationMethod = modelParameters(4)
+  CALL setConditionsInterpMethod (conditionsInterpolationMethod)
+  decInterpolationMethod = modelParameters(5)
+  CALL setDecInterpMethod (decInterpolationMethod)
+  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
   numberOfConstrainedSpecies = modelParameters(7)
   ratesOutputStepSize = modelParameters(8)
@@ -343,11 +356,11 @@ PROGRAM ATCHEM
 500 FORMAT (A52, A17)
   WRITE (*,*) 'Model parameters:'
   WRITE (*,*) '-----------------'
-  WRITE (*,400) 'number of steps: ', nout
-  WRITE (*,300) 'step size (seconds): ', tout
-  WRITE (*,500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpMethod))
-  WRITE (*,500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpMethod))
-  WRITE (*,500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpMethod))
+  WRITE (*,400) 'number of steps: ', maxNumTimesteps
+  WRITE (*,300) 'step size (seconds): ', timestepSize
+  WRITE (*,500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpolationMethod))
+  WRITE (*,500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpolationMethod))
+  WRITE (*,500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpolationMethod))
   WRITE (*,400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
   WRITE (*,400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
   WRITE (*,400) 'ratesOutputStepSize: ', ratesOutputStepSize
@@ -365,7 +378,7 @@ PROGRAM ATCHEM
 
   !   HARD CODED SOLVER PARAMETERS
   t0 = modelStartTime
-  outputStepSize = tout
+  tout = timestepSize
   tout = tout + t0
   t = t0
   ! Parameters for fcvmalloc. (Comments from cvode guide)
@@ -383,8 +396,8 @@ PROGRAM ATCHEM
   ! or to 2 for one-step mode (return after each internal step taken)
   itask = 1
 
-  ! jout counts the number of iterative steps. Set to zero. Calculation will terminate when jout>=nout.
-  jout = 0
+  ! currentNumTimestep counts the number of iterative steps. Set to zero. Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
+  currentNumTimestep = 0
 
   !   READ IN ENVIRONMENT VARIABLES (FIXED, CONSTRAINED, CALC OR NOTUSED, SEE ENVVAR.CONFIG)
   CALL readEnvVar (maxNumberOfDataPoints)
@@ -526,7 +539,7 @@ PROGRAM ATCHEM
   !    RUN MODEL
   !    ********************************************************************************************************
 
-  DO WHILE (jout<nout)
+  DO WHILE (currentNumTimestep<maxNumTimesteps)
 
      ! GET CONCENTRATIONS FOR SOLVED SPECIES
      WRITE (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
@@ -616,8 +629,8 @@ PROGRAM ATCHEM
 
      IF (ier==0) THEN
         tminus1 = t
-        tout = tout + outputStepSize
-        jout = jout + 1
+        tout = tout + timestepSize
+        currentNumTimestep = currentNumTimestep + 1
      ENDIF
 
   ENDDO

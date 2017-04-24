@@ -66,15 +66,15 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   ! Given a list speciesNames, and an integer reactionNumber, return reaction,
   ! a string containing
   USE reactionStructure
-  USE storage, ONLY : maxSpecLength
+  USE storage, ONLY : maxSpecLength, maxReactionStringLength
   IMPLICIT NONE
 
   CHARACTER (LEN=maxSpecLength) :: reactants(10), products(10)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
   INTEGER, intent(in) :: reactionNumber
-  CHARACTER (LEN=1000) :: reactantStr, productStr
-  CHARACTER (LEN=1000), intent(out) :: reaction
+  CHARACTER (LEN=maxReactionStringLength) :: reactantStr, productStr
+  CHARACTER (LEN=maxReactionStringLength), intent(out) :: reaction
 
   ! Loop over reactants, and copy the reactant name for any reactant used in
   ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
@@ -126,7 +126,7 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
      speciesNames)
 
   USE reactionStructure
-  USE storage, ONLY : maxSpecLength
+  USE storage, ONLY : maxSpecLength, maxReactionStringLength
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
@@ -135,7 +135,7 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   INTEGER i, j
   DOUBLE PRECISION, intent(in) :: t, p(*)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
-  CHARACTER (LEN=1000) :: reaction
+  CHARACTER (LEN=maxReactionStringLength) :: reaction
 
   DO i = 1, numberOfSpecies
      IF (arrayLen(i)>csize) THEN
@@ -161,16 +161,16 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
 END SUBROUTINE outputRates
 
 SUBROUTINE outputInstantaneousRates (time, numReac)
-
   USE reactionStructure
   USE directories, ONLY : instantaneousRates_dir
   USE productionAndLossRates, ONLY : ir
+  USE storage, ONLY : maxFilepathLength
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
   INTEGER, intent(in) :: time, numReac
   INTEGER i
-  CHARACTER (LEN=57) :: irfileLocation
+  CHARACTER (LEN=maxFilepathLength+30) :: irfileLocation
   CHARACTER (LEN=30) :: strTime
 
   WRITE (strTime,*) time

@@ -409,9 +409,6 @@ PROGRAM ATCHEM
   CALL readEnvVar ()
   WRITE (*,*)
 
-  !   WRITE FILE OUTPUT HEADERS AND OUTPUT AT t=0
-  CALL writeFileHeaders (photoRateNamesForHeader)
-
   ! fill tempSpeciesOutputRequired with the names of species to output to concentration.output
   CALL readSpeciesOutputRequired (tempSpeciesOutputRequired, speciesOutputRequiredSize, numSpec)
   ! Allocate speciesOutputRequired and fill from temporary array
@@ -430,8 +427,9 @@ PROGRAM ATCHEM
   ENDDO
   ! fill yInt with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, numSpec, yInt)
-  CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
-  SORNumberSize = SORNumberSize
+
+  !   Write file output headers
+  CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
 
   flush(stderr)
   !    ********************************************************************************************************

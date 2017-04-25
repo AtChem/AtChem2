@@ -16,12 +16,14 @@ SUBROUTINE calcDateParameters ()
   RETURN
 END SUBROUTINE calcDateParameters
 
-SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
+SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutReqNamesSize)
   USE envVars
   USE photolysisRates, ONLY : nrOfPhotoRates, ck
-  USE storage, ONLY : maxPhotoRateNameLength
+  USE storage, ONLY : maxPhotoRateNameLength, maxSpecLength
   CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
-  INTEGER :: i
+  CHARACTER (LEN=maxSpecLength) :: specOutReqNames(*)
+  INTEGER, intent(in) :: specOutReqNamesSize
+  INTEGER i
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
   ! OUTPUT FOR CVODE MAIN SOLVER
@@ -33,7 +35,7 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
   WRITE (61,*) 't NFELS NJTV NPE NPS'
 
   ! OTHER OUPUT
-  ! 50 is current handled by outputSpeciesOutputRequiredNames(). TODO: Move that here (requires moving this to later in main fn)
+  WRITE (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, specOutReqNamesSize)
   ! 51, 53, 54, 55 don't need a header.
   WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
   WRITE (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)

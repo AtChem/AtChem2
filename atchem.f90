@@ -38,7 +38,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION :: rpar (1)
   DATA lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
        lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
-  DOUBLE PRECISION, ALLOCATABLE :: y(:)
+  DOUBLE PRECISION, ALLOCATABLE :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
@@ -54,7 +54,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   INTEGER concCounter
-  DOUBLE PRECISION, ALLOCATABLE :: concentration(:)
+  DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
@@ -155,8 +155,8 @@ PROGRAM ATCHEM
   prodLossArrayLen = numReactions*2
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  ALLOCATE (y(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
-  ALLOCATE (speciesNumber(numSpec), z(numSpec), concentration(numSpec*2))
+  ALLOCATE (speciesConcs(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
+  ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
   ALLOCATE (tempSORNumber(numSpec), yInt(numSpec))
   ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), tempSpeciesOutputRequired(numSpec))
@@ -178,7 +178,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
   WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (y, numSpec, speciesName, speciesNumber)
+  CALL readSpecies (speciesConcs, numSpec, speciesName, speciesNumber)
   WRITE (*,*) 'Finished reading species names.'
   WRITE (*,*)
 
@@ -187,8 +187,8 @@ PROGRAM ATCHEM
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readConcentrations (concSpeciesName, concentration, concCounter, numSpec)
-  CALL setConcentrations (y, speciesName, concSpeciesName, concentration, concCounter, numSpec)
+  CALL readConcentrations (concSpeciesName, initialConcentrations, concCounter, numSpec)
+  CALL setConcentrations (speciesConcs, speciesName, concSpeciesName, initialConcentrations, concCounter, numSpec)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
@@ -429,7 +429,7 @@ PROGRAM ATCHEM
      SORNumber(i) = tempSORNumber(i)
   ENDDO
   ! fill yInt with the concentrations of the species to be output
-  CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, numSpec)
+  CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, numSpec)
   CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
   SORNumberSize = SORNumberSize
 
@@ -442,16 +442,16 @@ PROGRAM ATCHEM
   CALL readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*)
 
-  CALL readSpeciesConstraints (speciesName, numSpec, y, t)
+  CALL readSpeciesConstraints (speciesName, numSpec, speciesConcs, t)
 
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
+  CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
   CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
-  CALL removeConstrainedSpeciesFromProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
+  CALL removeConstrainedSpeciesFromProbSpec (speciesConcs, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
@@ -561,7 +561,7 @@ PROGRAM ATCHEM
         constrainedConcs(i) = d
      ENDDO
 
-     CALL addConstrainedSpeciesToProbSpec (z, y, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
+     CALL addConstrainedSpeciesToProbSpec (z, speciesConcs, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
 
      ! OUTPUT ON SCREEN
      fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
@@ -584,11 +584,11 @@ PROGRAM ATCHEM
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
      WRITE (*,*) 'time = ', time
      IF (MOD (elapsed, jacobianOutputStepSize)==0) THEN
-        CALL jfy (numSpec, numReactions, y, fy, t)
+        CALL jfy (numSpec, numReactions, speciesConcs, fy, t)
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
+     CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
      CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 
@@ -605,7 +605,7 @@ PROGRAM ATCHEM
      WRITE (62,*) t, ' ', rout (3), ' ', rout (2)
 
      !OUTPUT ENVVAR VALUES
-     CALL ro2sum (ro2, y)
+     CALL ro2sum (ro2, speciesConcs)
      CALL outputEnvVar (t)
 
      ! CALCULATE AND OUTPUT RUNTIME
@@ -643,7 +643,7 @@ PROGRAM ATCHEM
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
   DO i = 1, numSpec
-     WRITE (53,*) speciesName(i), y(i)
+     WRITE (53,*) speciesName(i), speciesConcs(i)
   ENDDO
 
   !   printing of final statistics desactivated - nobody finds it useful
@@ -667,7 +667,7 @@ PROGRAM ATCHEM
   !   deallocate CVODE internal data
 
   CALL fcvfree
-  DEALLOCATE (y, speciesName, concSpeciesName, speciesNumber, z, concentration)
+  DEALLOCATE (speciesConcs, speciesName, concSpeciesName, speciesNumber, z, initialConcentrations)
   DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
   DEALLOCATE (SORNumber, yInt, prodIntName, reacIntName, speciesOutputRequired)
   DEALLOCATE (fy, ir)

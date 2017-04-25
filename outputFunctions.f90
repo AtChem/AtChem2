@@ -43,18 +43,19 @@ SUBROUTINE outputPhotolysisRates (j, t)
 END SUBROUTINE outputPhotolysisRates
 
 !     ---------------------------------------------------------------
-SUBROUTINE getConcForSpecInt (y, neq, specInt, specIntSize, yInt)
-  ! This subroutine outputs yInt, the concentration of each species of interest,
+SUBROUTINE getConcForSpecInt (masterConcList, masterConcListSize, speciesOfInterest, speciesOfInterestSize, interestSpeciesConcList)
+  ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
   ! in the same order as the species are in specInt
-  DOUBLE PRECISION, intent(in)  :: y(*)
-  DOUBLE PRECISION, intent(out) :: yInt(*)
-  INTEGER, intent(in) :: specIntSize, neq, specInt(*)
+  DOUBLE PRECISION, intent(in)  :: masterConcList(*)
+  DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(*)
+  INTEGER, intent(in) :: speciesOfInterestSize, masterConcListSize, speciesOfInterest(*)
   INTEGER i, j
-  ! set yInt(j) to the
-  DO i = 1, neq
-     DO j = 1, specIntSize
-        IF (specInt(j)==i) THEN
-           yInt(j) = y(i)
+  ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
+  ! using the elements of specInt as a key
+  DO i = 1, masterConcListSize
+     DO j = 1, speciesOfInterestSize
+        IF (speciesOfInterest(j)==i) THEN
+           interestSpeciesConcList(j) = masterConcList(i)
         ENDIF
      ENDDO
   ENDDO

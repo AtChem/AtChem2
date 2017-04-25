@@ -448,7 +448,7 @@ PROGRAM ATCHEM
   CALL readPhotoRates ()
   WRITE (*,*)
 
-  CALL readSpeciesConstraints (speciesName, numSpec, speciesConcs, t)
+  CALL readSpeciesConstraints (numSpec, speciesConcs, t)
 
   WRITE (*,*)
   !test

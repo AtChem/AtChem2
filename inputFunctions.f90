@@ -532,8 +532,6 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
      ENDDO
   ENDIF
 
-  fileLocationPrefix = trim(spec_constraints_dir) // "/"
-
   ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
   WRITE (*,*) 'Reading concentration data for constrained species...'
   ALLOCATE (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
@@ -544,7 +542,7 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
         IF (i==2) WRITE (*,*) '...'
      ENDIF
 
-     fileLocation = trim(fileLocationPrefix) // trim(constrainedName(i))
+     fileLocation = './speciesConstraints/' // trim(constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints

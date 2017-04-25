@@ -214,7 +214,7 @@ PROGRAM ATCHEM
      prodIntName(i) = tempForProdIntName(i)
   ENDDO
 
-  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, numSpec, returnArray, rateOfProdNS)
+  CALL matchNameToNumber (speciesName, numSpec, prodIntName, prodIntNameSize, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
   ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
@@ -232,7 +232,7 @@ PROGRAM ATCHEM
      reacIntName(i) = tempForReacIntName(i)
   ENDDO
 
-  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, numSpec, returnArray, rateOfLossNS)
+  CALL matchNameToNumber (speciesName, numSpec, reacIntName, reacIntNameSize, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
@@ -420,8 +420,9 @@ PROGRAM ATCHEM
      speciesOutputRequired(i) = tempSpeciesOutputRequired(i)
   ENDDO
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
-  CALL matchNameToNumber (speciesName, speciesOutputRequired, speciesOutputRequiredSize, &
-                          numSpec, tempSORNumber, SORNumberSize)
+  CALL matchNameToNumber (speciesName, numSpec, &
+                          speciesOutputRequired, speciesOutputRequiredSize, &
+                          tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
   ALLOCATE (SORNumber(SORNumberSize))
   DO i = 1, SORNumberSize

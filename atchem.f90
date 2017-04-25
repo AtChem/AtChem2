@@ -61,7 +61,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
   INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
-  DOUBLE PRECISION, ALLOCATABLE :: yInt(:)
+  DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:), tempSpeciesOutputRequired(:)
@@ -158,7 +158,7 @@ PROGRAM ATCHEM
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
-  ALLOCATE (tempSORNumber(numSpec), yInt(numSpec))
+  ALLOCATE (tempSORNumber(numSpec), concsOfSpeciesOfInterest(numSpec))
   ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), tempSpeciesOutputRequired(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
@@ -425,8 +425,8 @@ PROGRAM ATCHEM
   DO i = 1, SORNumberSize
      SORNumber(i) = tempSORNumber(i)
   ENDDO
-  ! fill yInt with the concentrations of the species to be output
-  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, numSpec, yInt)
+  ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
+  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, numSpec, concsOfSpeciesOfInterest)
 
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
@@ -445,8 +445,8 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, yInt)
-  CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
+  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, concsOfSpeciesOfInterest)
+  CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
   CALL removeConstrainedSpeciesFromProbSpec (speciesConcs, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
@@ -586,8 +586,8 @@ PROGRAM ATCHEM
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, yInt)
-     CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
+     CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, concsOfSpeciesOfInterest)
+     CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 
      !OUTPUT INSTANTANEOUS RATES
@@ -667,7 +667,7 @@ PROGRAM ATCHEM
   CALL fcvfree
   DEALLOCATE (speciesConcs, speciesName, concSpeciesName, speciesNumber, z, initialConcentrations)
   DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
-  DEALLOCATE (SORNumber, yInt, prodIntName, reacIntName, speciesOutputRequired)
+  DEALLOCATE (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   DEALLOCATE (fy, ir)
   DEALLOCATE (lossRates, productionRates)
   DEALLOCATE (clhs, crhs, ccoeff)

@@ -247,31 +247,31 @@ END SUBROUTINE readPhotoRates
 
 
 SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
-  USE directories, ONLY: param_dir
+  USE directories, ONLY : param_dir
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) c, r(*)
-  INTEGER i, nsp
+  CHARACTER (LEN=maxSpecLength) c
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
+  INTEGER i, j, ierr
+  INTEGER, intent(in) :: nsp
 
   WRITE (*,*) 'Reading concentration output from file...'
 
-  i = 1
-  c = 'abc'
+  i = 0
 
   OPEN (10, file=trim(param_dir) // '/concentrationOutput.config', status='old')
   ! Loop over all lines of the file, and add each entry to r(i)
   ! Then check we don't have more species of interest than total species
-  READ (10,*) c
-  DO WHILE (c/='end' .AND. i<=nsp )
-     r(i) = c
+  READ (10,*, iostat=ierr) c
+  DO WHILE (ierr==0)
      i = i + 1
-     READ (10,*) c
+     r(i) = c
+     READ (10,*, iostat=ierr) c
   ENDDO
   CLOSE (10, status='keep')
 
   WRITE (*,*) 'Finished reading concentration output from file.'
-  i = i - 1
 
   ! ERROR HANDLING
   IF (i>nsp) THEN
@@ -279,6 +279,17 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
      WRITE (51,*) "(number of species output is required for) = ", i
      WRITE (51,*) "(number of species) = ", nsp
      STOP 2
+  ENDIF
+
+  WRITE (*,*) 'Output required for concentration of', i, 'species:'
+  IF (i>2) THEN
+     WRITE (*,*) 1, r(1)
+     WRITE (*,*) '...'
+     WRITE (*,*) i, r(i)
+  ELSE
+     DO j = 1, i
+        WRITE (*,*) j, r(j)
+     ENDDO
   ENDIF
 
   RETURN
@@ -321,6 +332,7 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   DOUBLE PRECISION l
   INTEGER, intent(out) :: concCounter
   INTEGER, intent(in) :: nsp
+  INTEGER i
 
   WRITE (*,*) 'Reading initial concentrations...'
 
@@ -335,16 +347,14 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ENDDO
   CLOSE (10, status='keep')
 
-  IF (concCounter>0) THEN
+  IF (concCounter>2) THEN
      WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
-  ENDIF
-  IF (concCounter>3) THEN
      WRITE (*,*) '...'
-  ELSE IF (concCounter==3) THEN
-     WRITE (*,*) 2, ' ', concSpeciesName(2), ' ', concentration(2)
-  ENDIF
-  IF (concCounter>1) THEN
      WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
+  ELSE
+     DO i = 1, concCounter
+        WRITE (*,*) i, ' ', concSpeciesName(i), ' ', concentration(i)
+     ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading initial concentrations.'
 
@@ -368,7 +378,7 @@ SUBROUTINE readProductsOfInterest (r, i)
 
   CHARACTER (LEN=maxSpecLength) c
   CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
-  INTEGER ierr
+  INTEGER ierr, j
   INTEGER, intent(out) :: i
   LOGICAL file_exists
 
@@ -379,7 +389,6 @@ SUBROUTINE readProductsOfInterest (r, i)
   ELSE
      OPEN (10, file=trim(param_dir) // '/productionRatesOutput.config', status='old')
      i = 0
-     c = 'abc'
      READ (10, *, iostat=ierr) c
      DO WHILE (ierr==0)
         i = i + 1
@@ -388,16 +397,14 @@ SUBROUTINE readProductsOfInterest (r, i)
      ENDDO
      CLOSE (10, status='keep')
   END IF
-  IF (i>0) THEN
-     WRITE (*,*) 1, r(1)
-  ENDIF
-  IF (i>3) THEN
+  IF (i>2) THEN
+     WRITE (*,*) 1, ' ', r(1)
      WRITE (*,*) '...'
-  ELSE IF (i==3) THEN
-     WRITE (*,*) 2, r(2)
-  ENDIF
-  IF (i>1) THEN
-     WRITE (*,*) i, r(i)
+     WRITE (*,*) i, ' ', r(i)
+  ELSE
+     DO j = 1, i
+        WRITE (*,*) j, ' ', r(j)
+     ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading products of interest.'
   RETURN
@@ -414,7 +421,7 @@ SUBROUTINE readReactantsOfInterest (r, i)
 
   CHARACTER (LEN=maxSpecLength) c
   CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
-  INTEGER ierr
+  INTEGER ierr, j
   INTEGER, intent(out) :: i
   LOGICAL file_exists
 
@@ -425,7 +432,6 @@ SUBROUTINE readReactantsOfInterest (r, i)
   ELSE
      OPEN (10, file=trim(param_dir) // '/lossRatesOutput.config', status='old')
      i = 0
-     c = 'abc'
      READ (10, *, iostat=ierr) c
      DO WHILE (ierr==0)
         i = i + 1
@@ -434,16 +440,14 @@ SUBROUTINE readReactantsOfInterest (r, i)
      ENDDO
      CLOSE (10, status='keep')
   END IF
-  IF (i>0) THEN
-     WRITE (*,*) 1, r(1)
-  ENDIF
-  IF (i>3) THEN
+  IF (i>2) THEN
+     WRITE (*,*) 1, ' ', r(1)
      WRITE (*,*) '...'
-  ELSE IF (i==3) THEN
-     WRITE (*,*) 2, r(2)
-  ENDIF
-  IF (i>1) THEN
-     WRITE (*,*) i, r(i)
+     WRITE (*,*) i, ' ', r(i)
+  ELSE
+     DO j = 1, i
+        WRITE (*,*) j, ' ', r(j)
+     ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading reactants of interest.'
   RETURN

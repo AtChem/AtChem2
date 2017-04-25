@@ -217,7 +217,7 @@ SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
 END SUBROUTINE getParametersFromFile
 
 
-SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
+SUBROUTINE readPhotoRates ()
 
   USE photolysisRates
   USE directories, ONLY : param_dir, env_constraints_dir

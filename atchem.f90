@@ -445,7 +445,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   WRITE (*,*)
-  CALL readPhotoRates (maxNumberOfDataPoints)
+  CALL readPhotoRates ()
   WRITE (*,*)
 
   CALL readSpeciesConstraints (speciesName, numSpec, speciesConcs, t)

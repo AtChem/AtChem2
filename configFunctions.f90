@@ -43,8 +43,9 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
 END SUBROUTINE writeFileHeaders
 
 
-SUBROUTINE matchNameToNumber (masterSpeciesList, testSpeciesList, testSpeciesListSize, &
-                              masterSpeciesListSize, returnArray, returnArraySize)
+SUBROUTINE matchNameToNumber (masterSpeciesList, masterSpeciesListSize, &
+                              testSpeciesList, testSpeciesListSize, &
+                              returnArray, returnArraySize)
   USE storage, ONLY : maxSpecLength
   ! This takes in masterSpeciesList, and checks whether each member of
   ! testspeciesList is in masterSpeciesList.

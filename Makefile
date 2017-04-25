@@ -83,7 +83,7 @@ facsimileFunctions.o : facsimileFunctions.f90
 inputFunctions.o : inputFunctions.f90 dataStructures.o
 instantaneousRatesFunctions.o : instantaneousRatesFunctions.f90
 interpolationFunctions.o : interpolationFunctions.f90 dataStructures.o
-mechanism-rates.o : mechanism-rates.f90 modelConfiguration/mechanism-rate-coefficients.f90 dataStructures.o
+mechanism-rates.o : mechanism-rates.f90 dataStructures.o
 configFunctions.o : configFunctions.f90
 outputFunctions.o : outputFunctions.f90 dataStructures.o
 solverFunctions.o : solverFunctions.f90 dataStructures.o

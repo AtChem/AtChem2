@@ -187,17 +187,6 @@ SUBROUTINE outputInstantaneousRates (time, numReac)
   RETURN
 END SUBROUTINE outputInstantaneousRates
 
-!     ----------------------------------------------------------------
-SUBROUTINE outputSpeciesOutputRequiredNames (names, namesSize)
-  USE storage, only: maxSpecLength
-  IMPLICIT NONE
-
-  CHARACTER (LEN=maxSpecLength) names(*)
-  INTEGER i, namesSize
-  WRITE (50, '(100 (1x, a)) ') 't         ', (names(i), i = 1, namesSize)
-  RETURN
-END SUBROUTINE outputSpeciesOutputRequiredNames
-
 SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
   ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
   ! If any concentration is negative, then set it to zero before printing.

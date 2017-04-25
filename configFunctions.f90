@@ -28,16 +28,17 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader)
   WRITE (57,*) 't LNST LNFE LNETF LNGE'
 
   ! OUTPUT FOR SPARSE SOLVER
-  WRITE (61,*) 't NFELS NJTV NPE NPS'
-  WRITE (60,*) 'time speciesNumber speciesName reactionNumber rate'
   WRITE (56,*) 'time speciesNumber speciesName reactionNumber rate'
+  WRITE (60,*) 'time speciesNumber speciesName reactionNumber rate'
+  WRITE (61,*) 't NFELS NJTV NPE NPS'
 
   ! OTHER OUPUT
-  ! WRITE (85,*), 't temp m h2o'
-  WRITE (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
-  WRITE (62,*) 't currentStepSize previousStepSize'
-  WRITE (59,*) 't secx cosx lat longt lha sinld cosld'
+  ! 50 is current handled by outputSpeciesOutputRequiredNames(). TODO: Move that here (requires moving this to later in main fn)
+  ! 51, 53, 54, 55 don't need a header.
   WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
+  WRITE (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
+  WRITE (59,*) 't secx cosx lat longt lha sinld cosld'
+  WRITE (62,*) 't currentStepSize previousStepSize'
   RETURN
 END SUBROUTINE writeFileHeaders
 

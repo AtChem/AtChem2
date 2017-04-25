@@ -59,11 +59,12 @@ PROGRAM ATCHEM
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), reacIntSpecies(:,:)
+  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
   INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: yInt(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:), speciesOutputRequired(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:), tempSpeciesOutputRequired(:)
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
@@ -157,8 +158,8 @@ PROGRAM ATCHEM
   ALLOCATE (y(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
   ALLOCATE (speciesNumber(numSpec), z(numSpec), concentration(numSpec*2))
   ALLOCATE (returnArray(numSpec))
-  ALLOCATE (SORNumber(numSpec), yInt(numSpec))
-  ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), speciesOutputRequired(numSpec))
+  ALLOCATE (tempSORNumber(numSpec), yInt(numSpec))
+  ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), tempSpeciesOutputRequired(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   ALLOCATE (lossRates(numReactions), productionRates(numReactions), ir(numReactions))
@@ -411,26 +412,25 @@ PROGRAM ATCHEM
   !   WRITE FILE OUTPUT HEADERS AND OUTPUT AT t=0
   CALL writeFileHeaders (photoRateNamesForHeader)
 
-  !   CONCENTRATION OUTPUT
-  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize, numSpec)
-  ! fill SORNumber with the numbers of the equations that each
+  ! fill tempSpeciesOutputRequired with the names of species to output to concentration.output
+  CALL readSpeciesOutputRequired (tempSpeciesOutputRequired, speciesOutputRequiredSize, numSpec)
+  ! Allocate speciesOutputRequired and fill from temporary array
+  ALLOCATE (speciesOutputRequired(speciesOutputRequiredSize))
+  DO i = 1, speciesOutputRequiredSize
+     speciesOutputRequired(i) = tempSpeciesOutputRequired(i)
+  ENDDO
+  ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
   CALL matchNameToNumber (speciesName, speciesOutputRequired, speciesOutputRequiredSize, &
-                          numSpec, SORNumber, SORNumberSize)
+                          numSpec, tempSORNumber, SORNumberSize)
+  ! Allocate SORNumber and fill from temporary array
+  ALLOCATE (SORNumber(SORNumberSize))
+  DO i = 1, SORNumberSize
+     SORNumber(i) = tempSORNumber(i)
+  ENDDO
   ! fill yInt with the concentrations of the species to be output
   CALL getConcForSpecInt (y, yInt, SORNumber, SORNumberSize, numSpec)
   CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
   SORNumberSize = SORNumberSize
-
-  WRITE (*,*) 'Output required for concentration of', speciesOutputRequiredSize, 'species:'
-  IF (speciesOutputRequiredSize>2) THEN
-     WRITE (*,*) 1, speciesOutputRequired(1)
-     WRITE (*,*) '...'
-     WRITE (*,*) speciesOutputRequiredSize, speciesOutputRequired(speciesOutputRequiredSize)
-  ELSE
-     DO i = 1, speciesOutputRequiredSize
-        WRITE (*,*) i, speciesOutputRequired(i)
-     ENDDO
-  ENDIF
 
   flush(stderr)
   !    ********************************************************************************************************

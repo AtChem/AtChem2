@@ -429,7 +429,7 @@ PROGRAM ATCHEM
      SORNumber(i) = tempSORNumber(i)
   ENDDO
   ! fill yInt with the concentrations of the species to be output
-  CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, numSpec)
+  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, numSpec, yInt)
   CALL outputSpeciesOutputRequiredNames (speciesOutputRequired, speciesOutputRequiredSize)
   SORNumberSize = SORNumberSize
 
@@ -447,7 +447,7 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
+  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, yInt)
   CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
@@ -588,7 +588,7 @@ PROGRAM ATCHEM
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     CALL getConcForSpecInt (speciesConcs, yInt, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies)
+     CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, yInt)
      CALL outputSpeciesOutputRequired (t, yInt, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 

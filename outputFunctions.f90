@@ -43,7 +43,7 @@ SUBROUTINE outputPhotolysisRates (j, t)
 END SUBROUTINE outputPhotolysisRates
 
 !     ---------------------------------------------------------------
-SUBROUTINE getConcForSpecInt (y, specInt, specIntSize, neq, yInt)
+SUBROUTINE getConcForSpecInt (y, neq, specInt, specIntSize, yInt)
   ! This subroutine outputs yInt, the concentration of each species of interest,
   ! in the same order as the species are in specInt
   DOUBLE PRECISION, intent(in)  :: y(*)

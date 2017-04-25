@@ -426,7 +426,7 @@ PROGRAM ATCHEM
      SORNumber(i) = tempSORNumber(i)
   ENDDO
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
-  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, numSpec, concsOfSpeciesOfInterest)
+  CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
 
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
@@ -445,7 +445,7 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, concsOfSpeciesOfInterest)
+  CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
   CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
@@ -586,7 +586,7 @@ PROGRAM ATCHEM
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     CALL getConcForSpecInt (speciesConcs, SORNumber, SORNumberSize, neq+numberOfConstrainedSpecies, concsOfSpeciesOfInterest)
+     CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
      CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 

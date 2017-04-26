@@ -360,7 +360,6 @@ END SUBROUTINE getEnvVarsAtT
 
 SUBROUTINE getEnvVarNum(name, envVarNum)
   ! Set envVarNum to the index of name within enVarNames
-  USE storage, ONLY : maxEnvVarNameLength
   USE envVars, ONLY : envVarNames, numEnvVars
   IMPLICIT NONE
 

@@ -12,7 +12,7 @@ SUBROUTINE calcDateParameters ()
   ! This day refers to the following fraction through the year
   dayAsFractionOfYear = dayOfYear / 365
   ! Set number of seconds per year
-  secYear = 3.6525d+02*2.40d+01*3.60d+03
+  secondsInYear = 3.6525d+02*2.40d+01*3.60d+03
   RETURN
 END SUBROUTINE calcDateParameters
 

@@ -379,7 +379,7 @@ PROGRAM ATCHEM
   WRITE (*,*) '-----------------'
   WRITE (*,*)
 
-  ! Set the members totalDays, fractionYear, secYear of MODULE date to their value based on day, month, year
+  ! Set the members dayOfYear, fractionYear, secYear of MODULE date to their value based on day, month, year
   CALL calcDateParameters ()
 
   !   HARD CODED SOLVER PARAMETERS

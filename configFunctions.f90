@@ -4,13 +4,13 @@ SUBROUTINE calcDateParameters ()
 
   monthList = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
   ! calculate which day of the year day/month refers to
-  totalDays = 0
+  dayOfYear = 0
   DO i = 1, month-1
-     totalDays = totalDays + monthList(i)
+     dayOfYear = dayOfYear + monthList(i)
   ENDDO
-  totalDays = totalDays + day -1
+  dayOfYear = dayOfYear + day -1
   ! This day refers to the following fraction through the year
-  fractionYear = totalDays / 365
+  fractionYear = dayOfYear / 365
   ! Set number of seconds per year
   secYear = 3.6525d+02*2.40d+01*3.60d+03
   RETURN

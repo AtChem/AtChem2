@@ -188,7 +188,7 @@ PROGRAM ATCHEM
 
   !   SET INITIAL SPECIES CONCENTRATIONS
   CALL readInitialConcentrations (concSpeciesName, initialConcentrations, concCounter, numSpec)
-  CALL setConcentrations (speciesConcs, speciesName, concSpeciesName, initialConcentrations, concCounter, numSpec)
+  CALL setConcentrations (speciesName, numSpec, concSpeciesName, initialConcentrations, concCounter, speciesConcs)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION

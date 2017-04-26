@@ -321,7 +321,7 @@ PROGRAM ATCHEM
   timestepSize = modelParameters(2)
   ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
   ! the private member of MODULE interpolationMethod.
-  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT and getConstrainedQuantAtT2D.
+  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT2D.
   ! Values:
   ! 1: Cubic spline interpolation
   ! 2: Cubic spline interpolation (log) TODO: this just outputs the exponential of the value. Is this right?

@@ -1,3 +1,4 @@
+! TODO: this is unused?
 SUBROUTINE temperature (temp, h2o, ttime)
   ! SUBROUTINE TO CALCULATE DIURNAL VARIATIONS IN TEMPERATURE
   DOUBLE PRECISION temp, ttime, rh, h2o, sin

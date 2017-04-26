@@ -100,12 +100,12 @@ SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
 END SUBROUTINE matchOneNameToNumber
 
 
-SUBROUTINE setConcentrations (outputConcentrations, refSpeciesNames, concSpeciesNames, inputConcentrations, concCounter, numSpecies)
-  ! For each input species in concSpeciesNames, and matching value in concentrations,
-  ! look through refSpeciesNames for the number of this species in that list,
-  ! then transer the value from concentrations to y. If no match is found,
+SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inputConcentrations, concCounter, outputConcentrations)
+  ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size conCounter),
+  ! look through refSpeciesNames (size numSpecies) for the number of this species in that list,
+  ! then transer the value from inputConcentrations to outputConcentrations. If no match is found,
   ! output this to errors.output, but don't stop, just ignore the input value.
-  ! Ptrint outcome of each search into initialConditionsSetting.output.
+  ! Print outcome of each search into initialConditionsSetting.output.
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
@@ -124,7 +124,7 @@ SUBROUTINE setConcentrations (outputConcentrations, refSpeciesNames, concSpecies
         m = refSpeciesNames(j)
         IF (m==k) THEN
            match = .TRUE.
-           ! Set concentration in y()
+           ! Set concentration in outputConcentrations
            outputConcentrations(j) = inputConcentrations(i)
            WRITE (54,*) 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
            EXIT

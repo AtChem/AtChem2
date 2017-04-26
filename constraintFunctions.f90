@@ -58,14 +58,15 @@ SUBROUTINE calcM (pressure, TEMP, M)
 END SUBROUTINE calcM
 
 SUBROUTINE calcDec(dec, t)
-  USE date
+  USE date, ONLY : secYear, dayAsFractionOfYear
   IMPLICIT NONE
-  DOUBLE PRECISION dec, t, PI
+  DOUBLE PRECISION dec, t, pi, daysInYear, maxDecInRad, currentFYear
 
-  PI = 4.0*ATAN (1.0)
-  currentFYear = fractionYear + (t / secYear)
-  DEC = -4.1420D-01*COS (2.00D+00*PI*currentFYear)
-
+  daysInYear = 365.24
+  pi = 4.0*ATAN (1.0)
+  maxDecInRad = 23.44*pi/180.0
+  currentFYear = dayAsFractionOfYear + (t / secYear)
+  dec=ASIN(SIN(-maxDecInRad)*COS((2.0*pi)*(currentFYear+(10.0/daysInYear))+2.0*0.0167*SIN(2*pi*(currentFYear-(2.0/daysInYear)))))
   RETURN
 END SUBROUTINE calcDec
 

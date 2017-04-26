@@ -1,6 +1,6 @@
 SUBROUTINE calcDateParameters ()
   USE date
-  INTEGER :: i
+  INTEGER :: i, monthList(12)
 
   monthList = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
   ! calculate which day of the year day/month refers to
@@ -10,7 +10,7 @@ SUBROUTINE calcDateParameters ()
   ENDDO
   dayOfYear = dayOfYear + day -1
   ! This day refers to the following fraction through the year
-  fractionYear = dayOfYear / 365
+  dayAsFractionOfYear = dayOfYear / 365
   ! Set number of seconds per year
   secYear = 3.6525d+02*2.40d+01*3.60d+03
   RETURN

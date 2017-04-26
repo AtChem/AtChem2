@@ -27,7 +27,7 @@ MODULE date
 
   SAVE
   INTEGER :: day, month, year, dayOfYear
-  DOUBLE PRECISION :: dayAsFractionOfYear, secYear
+  DOUBLE PRECISION :: dayAsFractionOfYear, secondsInYear
 
 END MODULE date
 !    ********************************************************************************************************

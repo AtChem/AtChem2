@@ -83,54 +83,6 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   RETURN
 END SUBROUTINE FCVFUN
 
-!     ----------------------------------------------------------------
-!-----------------------------------------------------------------
-!     routine for reading in the reaction
-SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
-  ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER :: k, l
-  INTEGER, intent(inout) :: size1, size2
-  INTEGER, intent(out) :: lhs(3, size1), rhs(2, size2)
-  DOUBLE PRECISION, intent(out) :: coeff(size2)
-
-  WRITE (*,*) 'Reading reactants (lhs) from mechanism.rec...'
-  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
-
-  ! read data for lhs of equations
-  size1 = 0
-  READ (10,*)
-  DO
-     READ (10,*) k, l
-
-     IF (k==0) EXIT
-     size1 = size1+1
-     lhs(1, size1) = k
-     lhs(2, size1) = l
-     lhs(3, size1) = 1
-
-  ENDDO
-
-  WRITE (*,*) 'Reading products (rhs) from mechanism.prod...'
-  OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
-  ! read data for rhs of equations
-  size2 = 0
-  DO
-     READ (11,*) k, l
-     IF (k==0) EXIT
-     size2 = size2+1
-     rhs(1, size2) = k
-     rhs(2, size2) = l
-     coeff(size2) = 1
-
-  ENDDO
-
-  CLOSE (10, status='keep')
-  CLOSE (11, status='keep')
-
-  WRITE (*,*) 'Finished reading lhs and rhs data.'
-  RETURN
-END SUBROUTINE readReactions
-
 
 SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   ! calculate rhs of rate eqn dy()

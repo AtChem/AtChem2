@@ -319,7 +319,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 END SUBROUTINE readSpecies
 
 
-SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
+SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
   USE directories, ONLY: param_dir
@@ -365,7 +365,7 @@ SUBROUTINE readConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ENDIF
 
   RETURN
-END SUBROUTINE readConcentrations
+END SUBROUTINE readInitialConcentrations
 
 
 SUBROUTINE readProductsOfInterest (r, i)

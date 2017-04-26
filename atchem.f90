@@ -187,7 +187,7 @@ PROGRAM ATCHEM
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readConcentrations (concSpeciesName, initialConcentrations, concCounter, numSpec)
+  CALL readInitialConcentrations (concSpeciesName, initialConcentrations, concCounter, numSpec)
   CALL setConcentrations (speciesConcs, speciesName, concSpeciesName, initialConcentrations, concCounter, numSpec)
   WRITE (*,*)
 

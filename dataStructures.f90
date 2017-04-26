@@ -26,7 +26,7 @@ MODULE date
   IMPLICIT NONE
 
   SAVE
-  INTEGER :: day, month, year, monthList(12), totalDays
+  INTEGER :: day, month, year, monthList(12), dayOfYear
   DOUBLE PRECISION :: fractionYear, secYear, currentFYear
 
 END MODULE date

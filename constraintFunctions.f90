@@ -134,7 +134,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET PRESSURE AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('PRESS', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('PRESS', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -153,7 +153,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET TEMP AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('TEMP', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('TEMP', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -172,7 +172,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET H2O AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('H2O', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('H2O', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -192,7 +192,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET M AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('M', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('M', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcM (pressure, TEMP, M)
@@ -212,7 +212,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET DEC AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('DEC', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('DEC', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcDec (dec, t)
@@ -236,7 +236,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET BOUNDARY LAYER HEIGHT AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('BLHEIGHT', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('BLHEIGHT', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -256,7 +256,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   ! ********************************************************************************************************************
   ! GET RELATIVE HUMIDITY AT T
   ! ********************************************************************************************************************
-  CALL getEnvVarNum ('RH', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('RH', envVarNames, numEnvVars, envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      ! IF CONSTRAINED
@@ -280,7 +280,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !*******************************************************************************************************
   !GET DILUTE AT T
   !***********************************************************************************************************
-  CALL getEnvVarNum ('DILUTE', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('DILUTE', envVarNames, numEnvVars, envVarNum)
   !IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      !IF CONSTRAINED
@@ -309,7 +309,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !**************************************************************************************************
   !GET JFAC AT T
   !*************************************************************************************************
-  CALL getEnvVarNum ('JFAC', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('JFAC', envVarNames, numEnvVars, envVarNum)
   !IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      CALL calcJFac (jfac, t)
@@ -334,7 +334,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   !**************************************************************************************************
   !GET ROOFOPEN AT T
   !************************************************************************************************************
-  CALL getEnvVarNum ('ROOFOPEN', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('ROOFOPEN', envVarNames, numEnvVars, envVarNum)
   !IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
      WRITE (*,*) "No calculation available for ROOFOPEN Variable"
@@ -358,7 +358,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   RETURN
 END SUBROUTINE getEnvVarsAtT
 
-SUBROUTINE getEnvVarNum(name, envVarNum, envVarNames, numEnvVars)
+SUBROUTINE getEnvVarNum(name, envVarNames, numEnvVars, envVarNum)
   ! Set envVarNum to the index of name within enVarNames
   USE storage, ONLY : maxEnvVarNameLength
   IMPLICIT NONE
@@ -385,7 +385,7 @@ SUBROUTINE test_jfac()
   INTEGER :: envVarNum
   ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
   envVarNum = 0
-  CALL getEnvVarNum ('JFAC', envVarNum, envVarNames, numEnvVars)
+  CALL getEnvVarNum ('JFAC', envVarNames, numEnvVars, envVarNum)
   !IF CALC
   ! If JFAC is CALC and there's no JFAC species, the program should complain
   IF (envVarTypesNum(envVarNum)==1) THEN

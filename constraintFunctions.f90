@@ -359,15 +359,17 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
 END SUBROUTINE getEnvVarsAtT
 
 SUBROUTINE getEnvVarNum(name, envVarNum, envVarNames, numEnvVars)
+  ! Set envVarNum to the index of name within enVarNames
   USE storage, ONLY : maxEnvVarNameLength
   IMPLICIT NONE
 
-  CHARACTER name*(*)
-  CHARACTER (LEN=maxEnvVarNameLength) envVarNames(*)
-  INTEGER :: envVarNum, i, numEnvVars
+  CHARACTER, intent(in) :: name*(*)
+  CHARACTER (LEN=maxEnvVarNameLength), intent(in) :: envVarNames(*)
+  INTEGER, intent(out) :: envVarNum
+  INTEGER, intent(in) :: numEnvVars
+  INTEGER i
 
   DO i = 1, numEnvVars
-
      IF (name==trim(envVarNames(i))) THEN
         envVarNum = i
      ENDIF

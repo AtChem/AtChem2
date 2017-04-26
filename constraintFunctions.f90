@@ -58,6 +58,7 @@ SUBROUTINE calcM (pressure, TEMP, M)
 END SUBROUTINE calcM
 
 SUBROUTINE calcDec(dec, t)
+  ! calculate the declination of the Sun as seen from Earth.
   USE date, ONLY : secondsInYear, dayAsFractionOfYear
   IMPLICIT NONE
   DOUBLE PRECISION dec, t, pi, daysInYear, maxDecInRad, currentFYear

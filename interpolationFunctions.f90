@@ -113,33 +113,3 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
   y = a*ya(ind, klo)+b*ya(ind, khi)+((a**3-a)*y2a(ind, klo)+(b**3-b)*y2a(ind, khi))*(h**2)/6.
   RETURN
 END SUBROUTINE splint2D
-
-SUBROUTINE splint (xa, ya, y2a, n, x, y)
-  INTEGER n
-  DOUBLE PRECISION :: x, y, xa(*), y2a(*), ya(*)
-  ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function (with the xai�s in order), and given the array y2a(1:n), which is the output from spline above, and given a value of x, this routine returns a cubic-spline interpolated value y.
-  INTEGER k, khi, klo
-  DOUBLE PRECISION :: a, b, h
-
-  klo = 1 !We will find the right place in the table by means of bisection.
-  ! This is optimal if sequential calls to this routine are at random values of x. If sequential calls are in order, and closely spaced, one would do better to store previous values of klo and khi and test if they remain appropriate on the next call.
-  khi = n
-  DO WHILE (khi-klo>1)
-     k = (khi+klo)/2
-     IF (xa(k)>x) THEN
-        khi = k
-     ELSE
-        klo = k
-     ENDIF
-  ENDDO !klo and khi now bracket the input value of x.
-  h = xa(khi)-xa(klo)
-
-  IF (h==0.) THEN
-     PRINT *, 'bad xa input in splint! The xa''s must be distinct.'
-     STOP
-  END IF
-  a = (xa(khi)-x)/h !Cubic spline polynomial is now evaluated.
-  b = (x-xa(klo))/h
-  y = a*ya(klo)+b*ya(khi)+((a**3-a)*y2a(klo)+(b**3-b)*y2a(khi))*(h**2)/6.
-  RETURN
-END SUBROUTINE splint

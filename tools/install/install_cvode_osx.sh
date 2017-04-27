@@ -1,8 +1,12 @@
 #!/bin/sh
 
-# This file downloads and installs CVODE 2.9.0 into the directory given by input
-# argument $1. This is dependent on the exisence of a gcc installation.
+# This script downloads and installs CVODE 2.9.0 into the directory given by input
+# argument $1. This is dependent on the existence of a gcc installation.
+#
+# This is the macOSX version.
+#
 # Edit FORT_COMP to point to an existing gfortran or ifort executable.
+#
 # Example usage:
 #   ./install_cvode_linux.sh /path/to/install/directory
 FORT_COMP=/usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8

@@ -17,7 +17,7 @@ PROGRAM ATCHEM
   USE envVars
   USE SZACalcVars
   USE date
-  USE directories, ONLY : output_dir, instantaneousRates_dir, param_dir
+  USE directories, ONLY : output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   IMPLICIT NONE
 
@@ -121,6 +121,16 @@ PROGRAM ATCHEM
      CALL get_command_argument(3, param_dir)
   ELSE
      param_dir = "modelConfiguration"
+  ENDIF
+  IF (cmd_arg_count>3) THEN
+     CALL get_command_argument(4, spec_constraints_dir)
+  ELSE
+     spec_constraints_dir = "speciesConstraints"
+  ENDIF
+  IF (cmd_arg_count>4) THEN
+     CALL get_command_argument(5, env_constraints_dir)
+  ELSE
+     env_constraints_dir = "environmentConstraints"
   ENDIF
 
   WRITE (*,*) 'Output dir is ', output_dir

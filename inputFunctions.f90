@@ -104,7 +104,6 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
   ! Ignore first line
   READ (10,*)
-
   DO i = 1, maxNrOfPhotoRates
      READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
      IF (ierr/=0) THEN
@@ -155,6 +154,8 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
      RETURN
   ENDIF
   usePhotolysisConstants = .TRUE.
+
+  nrOfPhotoRates = 0
   WRITE (*,*) 'Reading photolysis constants from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisConstants.config', status='old', iostat=ierr)
   READ (10,*)
@@ -163,9 +164,9 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
      IF (ierr/=0) THEN
         EXIT
      ENDIF
+     nrOfPhotoRates = i
   ENDDO
   CLOSE (10, status='keep')
-  nrOfPhotoRates = i-1
   IF (nrOfPhotoRates>3) THEN
      WRITE (*,*) ck(1), cl(1), str(1)
      WRITE (*,*) '...'
@@ -247,23 +248,30 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   ! GET NAMES OF PHOTO RATES
   CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
+
+  numConPhotoRates = 0
   ! GET NAMES OF CONSTRAINED PHOTO RATES
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'
-
   OPEN (10, file=trim(param_dir) // '/constrainedPhotoRates.config', status='old') ! input file
-  DO i = 1, maxNrOfPhotoRates
+  DO i = 1, maxNrOfConPhotoRates
      READ (10,*, iostat=ierr) constrainedPhotoRates(i)
      IF (ierr/=0) THEN
-        EXIT
-     ENDIF
+       EXIT
+    ENDIF
+    numConPhotoRates = i
   ENDDO
   CLOSE (10, status='keep')
-  numConPhotoRates = i-1
+  IF (numConPhotoRates>3) THEN
+     WRITE (*,*) constrainedPhotoRates(1)
+     WRITE (*,*) '...'
+     WRITE (*,*) constrainedPhotoRates(numConPhotoRates)
+  ELSE
+     DO i = 1, numConPhotoRates
+        WRITE (*,*) constrainedPhotoRates(i)
+     ENDDO
+  ENDIF
   WRITE (*,*) 'Finished reading names of constrained photolysis rates.'
   WRITE (*,*) 'Number of constrained photorates:', numConPhotoRates
-  IF (numConPhotoRates>0) WRITE (*,*) 1, constrainedPhotoRates(1)
-  IF (numConPhotoRates>2) WRITE (*,*) '...'
-  IF (numConPhotoRates>1) WRITE (*,*) numConPhotoRates, constrainedPhotoRates(numConPhotoRates)
 
   ! GET NUMBERS OF CONSTRAINED PHOTO RATES
   DO i = 1, numConPhotoRates

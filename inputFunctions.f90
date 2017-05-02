@@ -104,14 +104,8 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
   ! Ignore first line
   READ (10,*)
-  READ (10,*, iostat=ierr) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
 
-  ! DO WHILE (ierr==0)
-  !    i = i + 1
-  !    READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
-  ! ENDDO
-  !CLOSE (10, status='keep')
-  DO i = 2, maxNrOfPhotoRates
+  DO i = 1, maxNrOfPhotoRates
      READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
      IF (ierr/=0) THEN
        ! We've reached the end of file, so exit this loop
@@ -146,8 +140,7 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, ierr
-  INTEGER, dimension(:), intent(out) :: ck(*)
+  INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
@@ -252,7 +245,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   CHARACTER (LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
-  CALL readPhotolysisConstants (ck(:), cl, cmm, cnn, photoRateNames, transmissionFactor)
+  CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
   ! GET NAMES OF CONSTRAINED PHOTO RATES
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'

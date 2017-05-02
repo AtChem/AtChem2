@@ -110,11 +110,9 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   !    i = i + 1
   !    READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
   ! ENDDO
-  CLOSE (10, status='keep')
-  DO i = 1, maxNrOfPhotoRates
-    write (*,*) ierr, nrOfPhotoRates
+  !CLOSE (10, status='keep')
+  DO i = 2, maxNrOfPhotoRates
      READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
-     WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i), ierr
      IF (ierr/=0) THEN
        ! We've reached the end of file, so exit this loop
         EXIT
@@ -124,15 +122,13 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   CLOSE (10, status='keep')
 
   IF (nrOfPhotoRates>3) THEN
-     WRITE (*,*) ck(1), cl(1), cmm(1), &
-                 cnn(1), str(1), tf(1)
+     WRITE (*,*) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
      WRITE (*,*) '...'
      WRITE (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
                  cnn(nrOfPhotoRates), str(nrOfPhotoRates), tf(nrOfPhotoRates)
   ELSE
      DO i = 1, nrOfPhotoRates
-        WRITE (*,*) ck(i), cl(i), cmm(i), &
-                    cnn(i), str(i), tf(i)
+        WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
      ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading photolysis rates.'

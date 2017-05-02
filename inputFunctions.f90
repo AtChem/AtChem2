@@ -112,7 +112,6 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   ENDDO
   CLOSE (10, status='keep')
   nrOfPhotoRates = i-1
-  i = 1
   WRITE (*,*) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
   IF (nrOfPhotoRates>2) THEN
      WRITE (*,*) '...'
@@ -229,7 +228,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   USE storage, ONLY : maxPhotoRateNameLength, maxFilepathLength
   IMPLICIT NONE
 
-  INTEGER :: counter, i, k
+  INTEGER :: i, k, ierr
   INTEGER :: maxNumberOfDataPoints
   CHARACTER (LEN=maxPhotoRateNameLength) :: string
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
@@ -242,14 +241,14 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'
 
   OPEN (10, file=trim(param_dir) // '/constrainedPhotoRates.config', status='old') ! input file
-  counter = 0
-  DO
-     counter = counter + 1
-     READ (10,*) constrainedPhotoRates(counter)
-     IF (constrainedPhotoRates(counter)=='end') EXIT
+  DO i = 1, maxNrOfPhotoRates
+     READ (10,*, iostat=ierr) constrainedPhotoRates(i)
+     IF (ierr/=0) THEN
+        EXIT
+     ENDIF
   ENDDO
   CLOSE (10, status='keep')
-  numConPhotoRates = counter -1
+  numConPhotoRates = i-1
   WRITE (*,*) 'Finished reading names of constrained photolysis rates.'
   WRITE (*,*) 'Number of constrained photorates:', numConPhotoRates
   IF (numConPhotoRates>0) WRITE (*,*) 1, constrainedPhotoRates(1)
@@ -505,12 +504,12 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE constraints
   USE chemicalConstraints
   USE directories, ONLY : param_dir, spec_constraints_dir
+  USE photolysisRates, ONLY : maxNrOfPhotoRates
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
-  INTEGER :: i, j, k, dataNumberOfPoints, neq, id
+  INTEGER :: i, j, k, dataNumberOfPoints, neq, id, ierr
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-  CHARACTER (LEN=maxSpecLength) :: string
   CHARACTER (LEN=maxSpecLength) :: speciesName(*), name
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxSpecLength) :: fileLocation
@@ -519,16 +518,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
   ! READ IN SPECIES TO BE CONSTRAINED
   WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
-  OPEN (10, file=trim(param_dir) // '/constrainedSpecies.config', status='old') ! input file
-
-  i = 0
-  READ (10,*) string
-  DO WHILE (string/='end')
-     i = i + 1
-     READ (10,*) string
-  END DO
-  CLOSE (10, status='keep')
-  countOfVarConSpecNames = i
+  CALL count_lines_in_file(trim(param_dir) // '/constrainedSpecies.config', countOfVarConSpecNames)
 
   WRITE (*,*) 'Finished counting the names of the species to be constrained.'
   WRITE (*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
@@ -536,16 +526,9 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   ! read in numberOfFixedConstrainedSpecies
 
   WRITE (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
-  OPEN (11, file=trim(param_dir) // '/constrainedFixedSpecies.config', status='old') ! input file
-  i = 0
-  READ (11,*) string
-  DO WHILE (string/='end')
-     i = i + 1
-     READ (11,*) string
-  END DO
-  CLOSE (11, status='keep')
+  CALL count_lines_in_file(trim(param_dir) // '/constrainedFixedSpecies.config', countOfFixConSpecNames)
   WRITE (*,*) 'Finished counting the names of fixed-concentration species'
-  countOfFixConSpecNames = i
+
   WRITE (*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
 
   countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
@@ -555,19 +538,22 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
   WRITE (*,*) 'Reading in the names of variable constrained species...'
   OPEN (12, file=trim(param_dir) // '/constrainedSpecies.config', status='old') ! input file
-  i = 0
-  READ (12,*) name
-  DO WHILE (name/='end')
+  j = 0
+  DO i = 1, maxNrOfPhotoRates
+     READ (12,*, iostat=ierr) name
+     IF (ierr/=0) THEN
+        EXIT
+     ENDIF
      CALL matchOneNameToNumber (speciesName, name, neq, id)
      IF (id/=0) THEN
-        i = i + 1
-        constrainedName(i) = name
-        constrainedSpecies(i) = id
+        j = j + 1
+        constrainedName(j) = name
+        constrainedSpecies(j) = id
      ENDIF
      READ (12,*) name
   END DO
   CLOSE (12, status='keep')
-  numberOfVariableConstrainedSpecies = i
+  numberOfVariableConstrainedSpecies = j
   WRITE (*,*) 'Finished reading the names of variable constrained species'
   WRITE (*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
 
@@ -692,21 +678,15 @@ SUBROUTINE readEnvVar ()
   USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, counter, k, ierr
+  INTEGER :: i, counter, k
   CHARACTER (LEN=10) dummy
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
 
   WRITE (*,*) 'Reading environment variables...'
-  OPEN (10, file=trim(param_dir) // '/environmentVariables.config', status='old') ! input file
 
   ! Count number of environment variables by reading in lines from file
-  counter = 0
-  READ (10, *, iostat=ierr) dummy
-  DO WHILE (ierr==0)
-     counter = counter + 1
-     READ (10, *, iostat=ierr) dummy
-  ENDDO
+  CALL count_lines_in_file( trim(param_dir) // '/environmentVariables.config', counter )
 
   numEnvVars = counter
 
@@ -716,7 +696,8 @@ SUBROUTINE readEnvVar ()
   WRITE (*,*) 'Number of environment variables: ', numEnvVars
   ALLOCATE (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars))
   ALLOCATE (envVarFixedValues(numEnvVars))
-  REWIND (10)
+
+  OPEN (10, file=trim(param_dir) // '/environmentVariables.config', status='old') ! input file
   ! Read in environment variables - if
   DO i = 1, numEnvVars
      READ (10,*) dummy, envVarNames(i), envVarTypes(i)
@@ -771,3 +752,21 @@ SUBROUTINE readEnvVar ()
 
   RETURN
 END SUBROUTINE readEnvVar
+
+
+SUBROUTINE count_lines_in_file (filename, counter)
+  CHARACTER (*), intent(in) :: filename
+  INTEGER, intent(out) :: counter
+  CHARACTER (LEN=10) dummy
+  INTEGER :: ierr
+
+  OPEN (11, file=filename, status='old')
+  counter = 0
+  ierr = 0
+  DO WHILE (ierr==0)
+     counter = counter + 1
+     READ (11, *, iostat=ierr) dummy
+  ENDDO
+  CLOSE (11, status='keep')
+  counter = counter - 1
+END SUBROUTINE count_lines_in_file

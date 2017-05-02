@@ -1,4 +1,4 @@
-SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
+  SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
   INTEGER :: k, l
   INTEGER, intent(inout) :: size1, size2
@@ -102,23 +102,38 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
 
   WRITE (*,*) 'Reading photolysis rates from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
+  ! Ignore first line
   READ (10,*)
+  READ (10,*, iostat=ierr) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
+
+  ! DO WHILE (ierr==0)
+  !    i = i + 1
+  !    READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+  ! ENDDO
+  CLOSE (10, status='keep')
   DO i = 1, maxNrOfPhotoRates
+    write (*,*) ierr, nrOfPhotoRates
      READ (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+     WRITE (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i), ierr
      IF (ierr/=0) THEN
        ! We've reached the end of file, so exit this loop
         EXIT
      ENDIF
+     nrOfPhotoRates = i
   ENDDO
   CLOSE (10, status='keep')
-  nrOfPhotoRates = i-1
-  WRITE (*,*) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
-  IF (nrOfPhotoRates>2) THEN
+
+  IF (nrOfPhotoRates>3) THEN
+     WRITE (*,*) ck(1), cl(1), cmm(1), &
+                 cnn(1), str(1), tf(1)
      WRITE (*,*) '...'
-  ENDIF
-  IF (nrOfPhotoRates>1) THEN
      WRITE (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
                  cnn(nrOfPhotoRates), str(nrOfPhotoRates), tf(nrOfPhotoRates)
+  ELSE
+     DO i = 1, nrOfPhotoRates
+        WRITE (*,*) ck(i), cl(i), cmm(i), &
+                    cnn(i), str(i), tf(i)
+     ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading photolysis rates.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
@@ -135,7 +150,8 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, ck(*), ierr
+  INTEGER :: i, ierr
+  INTEGER, dimension(:), intent(out) :: ck(*)
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
@@ -161,10 +177,15 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   ENDDO
   CLOSE (10, status='keep')
   nrOfPhotoRates = i-1
-  i = 1
-  WRITE (*,*) ck(i), cl(i), str(i)
-  i = nrOfPhotoRates
-  WRITE (*,*) ck(i), cl(i), str(i)
+  IF (nrOfPhotoRates>3) THEN
+     WRITE (*,*) ck(1), cl(1), str(1)
+     WRITE (*,*) '...'
+     WRITE (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), str(nrOfPhotoRates)
+  ELSE
+     DO i = 1, nrOfPhotoRates
+        WRITE (*,*) ck(i), cl(i), str(i)
+     ENDDO
+  ENDIF
   WRITE (*,*) 'Finished reading photolysis constants.'
   WRITE (*,*) 'Number of photolysis rates:', nrOfPhotoRates
   RETURN
@@ -235,7 +256,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   CHARACTER (LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
-  CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
+  CALL readPhotolysisConstants (ck(:), cl, cmm, cnn, photoRateNames, transmissionFactor)
   WRITE (*,*)
   ! GET NAMES OF CONSTRAINED PHOTO RATES
   WRITE (*,*) 'Reading names of constrained photolysis rates from file...'
@@ -327,7 +348,7 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   ENDIF
 
   WRITE (*,*) 'Output required for concentration of', i, 'species:'
-  IF (i>2) THEN
+  IF (i>3) THEN
      WRITE (*,*) 1, r(1)
      WRITE (*,*) '...'
      WRITE (*,*) i, r(i)
@@ -392,7 +413,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
   ENDDO
   CLOSE (10, status='keep')
 
-  IF (concCounter>2) THEN
+  IF (concCounter>3) THEN
      WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
      WRITE (*,*) '...'
      WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
@@ -442,7 +463,7 @@ SUBROUTINE readProductsOfInterest (r, i)
      ENDDO
      CLOSE (10, status='keep')
   END IF
-  IF (i>2) THEN
+  IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)
      WRITE (*,*) '...'
      WRITE (*,*) i, ' ', r(i)
@@ -485,7 +506,7 @@ SUBROUTINE readReactantsOfInterest (r, i)
      ENDDO
      CLOSE (10, status='keep')
   END IF
-  IF (i>2) THEN
+  IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)
      WRITE (*,*) '...'
      WRITE (*,*) i, ' ', r(i)

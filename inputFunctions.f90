@@ -270,7 +270,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   ALLOCATE (photoY2 (numConPhotoRates, maxNumberOfDataPoints))
   ALLOCATE (photoNumberOfPoints(numConPhotoRates))
 
-  fileLocationPrefix = trim(env_constraints_dir // '/')
+  fileLocationPrefix = trim(env_constraints_dir) // "/"
 
   ! READ IN PHOTOLYSIS DATA
   IF (numConPhotoRates>0) THEN
@@ -584,7 +584,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   IF (numberOfVariableConstrainedSpecies>1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
        constrainedName(numberOfVariableConstrainedSpecies)
 
-  fileLocationPrefix = trim(spec_constraints_dir // '/')
+  fileLocationPrefix = trim(spec_constraints_dir) // "/"
 
   ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
   WRITE (*,*) 'Reading concentration data for constrained species...'
@@ -747,7 +747,7 @@ SUBROUTINE readEnvVar ()
   ALLOCATE (envVarNumberOfPoints(numEnvVars))
 
   ! TODO: convert this to a command line input argument
-  fileLocationPrefix = trim(env_constraints_dir // '/')
+  fileLocationPrefix = trim(env_constraints_dir) // "/"
   ! If environment variable is constrained, read in constraint data
   WRITE (*,*) 'Checking for constrained environment variables...'
   DO i = 1, numEnvVars

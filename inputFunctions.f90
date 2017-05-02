@@ -584,11 +584,15 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   ALLOCATE (dataY2 (numberOfVariableConstrainedSpecies, maxNumberOfDataPoints))
   WRITE (*,*) 'Finished allocating storage for variable constrained species.'
 
-
-  IF (numberOfVariableConstrainedSpecies>0) WRITE (*,*) 1, constrainedName(1)
-  IF (numberOfVariableConstrainedSpecies>2) WRITE (*,*) '...'
-  IF (numberOfVariableConstrainedSpecies>1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
-       constrainedName(numberOfVariableConstrainedSpecies)
+  IF (numberOfVariableConstrainedSpecies>3) THEN
+     WRITE (*,*) 1, constrainedName(1)
+     WRITE (*,*) '...'
+     WRITE (*,*) numberOfVariableConstrainedSpecies, constrainedName(numberOfVariableConstrainedSpecies)
+  ELSE
+     DO i = 1, numberOfVariableConstrainedSpecies
+        WRITE (*,*) i, constrainedName(i)
+     ENDDO
+  ENDIF
 
   fileLocationPrefix = trim(spec_constraints_dir) // "/"
 
@@ -640,14 +644,17 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   numberOfFixedConstrainedSpecies = j
   WRITE (51,*) 'Number of fixed constrained species:', numberOfFixedConstrainedSpecies
 
-  IF (numberOfFixedConstrainedSpecies>0) THEN
+  IF (numberOfFixedConstrainedSpecies>3) THEN
      WRITE (*,*) 1, constrainedName(1+numberOfVariableConstrainedSpecies), dataFixedY (1)
-  ENDIF
-  IF (numberOfFixedConstrainedSpecies>2) WRITE (*,*) '...'
-  IF (numberOfFixedConstrainedSpecies>1) THEN
+     WRITE (*,*) '...'
      WRITE (*,*) numberOfFixedConstrainedSpecies, &
-          constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
-          dataFixedY (numberOfFixedConstrainedSpecies)
+                 constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
+                 dataFixedY (numberOfFixedConstrainedSpecies)
+  ELSE
+     DO i = 1, numberOfFixedConstrainedSpecies
+        WRITE (*,*) i, constrainedName(numberOfFixedConstrainedSpecies+numberOfVariableConstrainedSpecies), &
+                    dataFixedY (numberOfFixedConstrainedSpecies)
+     ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 

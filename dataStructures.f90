@@ -16,7 +16,7 @@ MODULE directories
   IMPLICIT NONE
 
   SAVE
-  CHARACTER (LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir
+  CHARACTER (LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
 
 END MODULE directories
 !    ********************************************************************************************************

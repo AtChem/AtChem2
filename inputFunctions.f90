@@ -225,7 +225,7 @@ END SUBROUTINE getParametersFromFile
 SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
   USE photolysisRates
-  USE directories, ONLY : param_dir
+  USE directories, ONLY : param_dir, env_constraints_dir
   USE storage, ONLY : maxPhotoRateNameLength, maxFilepathLength
   IMPLICIT NONE
 
@@ -270,7 +270,7 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
   ALLOCATE (photoY2 (numConPhotoRates, maxNumberOfDataPoints))
   ALLOCATE (photoNumberOfPoints(numConPhotoRates))
 
-  fileLocationPrefix = './environmentConstraints/'
+  fileLocationPrefix = trim(env_constraints_dir)
 
   ! READ IN PHOTOLYSIS DATA
   IF (numConPhotoRates>0) THEN
@@ -504,7 +504,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE species
   USE constraints
   USE chemicalConstraints
-  USE directories, ONLY : param_dir
+  USE directories, ONLY : param_dir, spec_constraints_dir
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
@@ -584,7 +584,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   IF (numberOfVariableConstrainedSpecies>1) WRITE (*,*) numberOfVariableConstrainedSpecies, &
        constrainedName(numberOfVariableConstrainedSpecies)
 
-  fileLocationPrefix = './speciesConstraints/'
+  fileLocationPrefix = trim(spec_constraints_dir)
 
   ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
   WRITE (*,*) 'Reading concentration data for constrained species...'
@@ -687,7 +687,7 @@ SUBROUTINE readEnvVar ()
   ! also reads in the constraint data from environmentConstraints directory, the
   ! file named after the environmental variable.
   USE envVars
-  USE directories, ONLY : param_dir
+  USE directories, ONLY : param_dir, env_constraints_dir
   USE constraints, ONLY : maxNumberOfDataPoints
   USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
@@ -747,7 +747,7 @@ SUBROUTINE readEnvVar ()
   ALLOCATE (envVarNumberOfPoints(numEnvVars))
 
   ! TODO: convert this to a command line input argument
-  fileLocationPrefix = './environmentConstraints/'
+  fileLocationPrefix = trim(env_constraints_dir)
   ! If environment variable is constrained, read in constraint data
   WRITE (*,*) 'Checking for constrained environment variables...'
   DO i = 1, numEnvVars

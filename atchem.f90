@@ -19,6 +19,8 @@ PROGRAM ATCHEM
   USE date
   USE directories, ONLY : output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
+  USE inputFunctions_mod
+  USE configFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -224,7 +226,7 @@ PROGRAM ATCHEM
      prodIntName(i) = tempForProdIntName(i)
   ENDDO
 
-  CALL matchNameToNumber (speciesName, numSpec, prodIntName, prodIntNameSize, returnArray, rateOfProdNS)
+  CALL matchNameToNumber (speciesName, prodIntName, prodIntNameSize, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
   ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
@@ -242,7 +244,7 @@ PROGRAM ATCHEM
      reacIntName(i) = tempForReacIntName(i)
   ENDDO
 
-  CALL matchNameToNumber (speciesName, numSpec, reacIntName, reacIntNameSize, returnArray, rateOfLossNS)
+  CALL matchNameToNumber (speciesName, reacIntName, reacIntNameSize, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
@@ -427,7 +429,7 @@ PROGRAM ATCHEM
      speciesOutputRequired(i) = tempSpeciesOutputRequired(i)
   ENDDO
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
-  CALL matchNameToNumber (speciesName, numSpec, &
+  CALL matchNameToNumber (speciesName, &
                           speciesOutputRequired, speciesOutputRequiredSize, &
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array

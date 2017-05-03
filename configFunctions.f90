@@ -1,4 +1,6 @@
-SUBROUTINE calcDateParameters ()
+MODULE configFunctions_mod
+CONTAINS
+  SUBROUTINE calcDateParameters ()
   USE date
   INTEGER :: i, monthList(12)
 
@@ -45,7 +47,7 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutRe
 END SUBROUTINE writeFileHeaders
 
 
-SUBROUTINE matchNameToNumber (masterSpeciesList, masterSpeciesListSize, &
+SUBROUTINE matchNameToNumber (masterSpeciesList, &
                               testSpeciesList, testSpeciesListSize, &
                               returnArray, returnArraySize)
   USE storage, ONLY : maxSpecLength
@@ -55,9 +57,9 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, masterSpeciesListSize, &
   ! returnArray in the next available space.
   ! returnArraySize contains the size of returnArray, which is the
   ! number of times a match was made
-  CHARACTER (LEN=maxSpecLength), intent(in) :: masterSpeciesList(*)
+  CHARACTER (LEN=maxSpecLength), dimension(:), contiguous, intent(in) :: masterSpeciesList
   CHARACTER (LEN=maxSpecLength), intent(inout) :: testSpeciesList(*)
-  INTEGER, intent(in) :: testSpeciesListSize, masterSpeciesListSize
+  INTEGER, intent(in) :: testSpeciesListSize
   INTEGER, intent(out) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
@@ -67,7 +69,7 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, masterSpeciesListSize, &
   ! returnArray with the number of the species from testSpeciesList within the masterSpeciesList
   DO i = 1, testSpeciesListSize
      match = .FALSE.
-     DO j = 1, masterSpeciesListSize
+     DO j = 1, size(masterSpeciesList)
         IF (masterSpeciesList(j)==testSpeciesList(i)) THEN
            match = .TRUE.
            returnArraySize = returnArraySize + 1
@@ -140,3 +142,4 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inp
   ENDDO
   RETURN
 END SUBROUTINE setConcentrations
+END MODULE configFunctions_mod

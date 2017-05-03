@@ -1,4 +1,6 @@
-  SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
+MODULE inputFunctions_mod
+CONTAINS
+SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
   INTEGER :: k, l
   INTEGER, intent(inout) :: size1, size2
@@ -527,11 +529,12 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE directories, ONLY : param_dir, spec_constraints_dir
   USE photolysisRates, ONLY : maxNrOfPhotoRates
   USE storage, ONLY : maxSpecLength, maxFilepathLength
+  USE configFunctions_mod, ONLY : matchOneNameToNumber
   IMPLICIT NONE
 
   INTEGER :: i, j, k, dataNumberOfPoints, neq, id, ierr
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-  CHARACTER (LEN=maxSpecLength) :: speciesName(*), name
+  CHARACTER (LEN=maxSpecLength) :: speciesName(:), name
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
@@ -565,7 +568,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
      IF (ierr/=0) THEN
         EXIT
      ENDIF
-     CALL matchOneNameToNumber (speciesName, name, neq, id)
+     CALL matchOneNameToNumber (speciesName, name, id)
      IF (id/=0) THEN
         j = j + 1
         constrainedName(j) = name
@@ -632,7 +635,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   j = 0
   DO i = 1, countOfFixConSpecNames
      READ (14,*) name, value
-     CALL matchOneNameToNumber (speciesName, name, neq, id)
+     CALL matchOneNameToNumber (speciesName, name, id)
      IF (id/=0) THEN
         j = j+1
         constrainedName(j+numberOfVariableConstrainedSpecies) = name
@@ -797,3 +800,4 @@ SUBROUTINE count_lines_in_file (filename, counter)
   CLOSE (11, status='keep')
   counter = counter - 1
 END SUBROUTINE count_lines_in_file
+END MODULE inputFunctions_mod

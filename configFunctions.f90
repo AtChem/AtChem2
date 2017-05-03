@@ -48,7 +48,7 @@ END SUBROUTINE writeFileHeaders
 
 
 SUBROUTINE matchNameToNumber (masterSpeciesList, &
-                              testSpeciesList, testSpeciesListSize, &
+                              testSpeciesList, &
                               returnArray, returnArraySize)
   USE storage, ONLY : maxSpecLength
   ! This takes in masterSpeciesList, and checks whether each member of
@@ -57,9 +57,8 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   ! returnArray in the next available space.
   ! returnArraySize contains the size of returnArray, which is the
   ! number of times a match was made
-  CHARACTER (LEN=maxSpecLength), dimension(:), contiguous, intent(in) :: masterSpeciesList
-  CHARACTER (LEN=maxSpecLength), intent(inout) :: testSpeciesList(*)
-  INTEGER, intent(in) :: testSpeciesListSize
+  CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
+  CHARACTER (LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
   INTEGER, intent(out) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
@@ -67,7 +66,7 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   returnArraySize = 0
   ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
   ! returnArray with the number of the species from testSpeciesList within the masterSpeciesList
-  DO i = 1, testSpeciesListSize
+  DO i = 1, size(testSpeciesList)
      match = .FALSE.
      DO j = 1, size(masterSpeciesList)
         IF (masterSpeciesList(j)==testSpeciesList(i)) THEN

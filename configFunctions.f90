@@ -83,15 +83,17 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   RETURN
 END SUBROUTINE matchNameToNumber
 
-SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, neq, id)
+SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, id)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) oneSpecies, speciesName(*), m
-  INTEGER j, neq, id
+  CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: speciesName(:)
+  CHARACTER (LEN=maxSpecLength), intent(in) :: oneSpecies
+  CHARACTER (LEN=maxSpecLength) :: m
+  INTEGER j, id
 
   id = 0
-  DO j = 1, neq
+  DO j = 1, size(speciesName)
      m = speciesName(j)
      IF (m==oneSpecies) THEN
         id = j

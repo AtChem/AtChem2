@@ -298,29 +298,12 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) c
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
-  INTEGER i, j, ierr
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
+  INTEGER i, j
   INTEGER, intent(in) :: nsp
 
   WRITE (*,*) 'Reading concentration output from file...'
-
-  i = 0
-
-  OPEN (10, file=trim(param_dir) // '/concentrationOutput.config', status='old')
-  ! Loop over all lines of the file, and add each entry to r(i)
-  ! Then check we don't have more species of interest than total species
-  READ (10,*, iostat=ierr) c
-  DO WHILE (ierr==0)
-     IF (ierr/=0) THEN
-        EXIT
-     ENDIF
-     i = i + 1
-     r(i) = c
-     READ (10,*, iostat=ierr) c
-  ENDDO
-  CLOSE (10, status='keep')
-
+  CALL read_in_single_column_string_file( trim(param_dir) // '/concentrationOutput.config', r, i)
   WRITE (*,*) 'Finished reading concentration output from file.'
 
   ! ERROR HANDLING
@@ -426,26 +409,17 @@ SUBROUTINE readProductsOfInterest (r, i)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) c
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
-  INTEGER ierr, j
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
+  INTEGER :: j
   INTEGER, intent(out) :: i
-  LOGICAL file_exists
+  LOGICAL :: file_exists
 
   WRITE (*,*) 'Reading products of interest...'
   INQUIRE(file=trim(param_dir) // '/productionRatesOutput.config', EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
      WRITE (*,*) 'No productionRatesOutput.config file exists, so prodIntName will be empty.'
   ELSE
-     OPEN (10, file=trim(param_dir) // '/productionRatesOutput.config', status='old')
-     i = 0
-     READ (10, *, iostat=ierr) c
-     DO WHILE (ierr==0)
-        i = i + 1
-        r(i) = c
-        READ (10, *, iostat=ierr) c
-     ENDDO
-     CLOSE (10, status='keep')
+     CALL read_in_single_column_string_file( trim(param_dir) // '/productionRatesOutput.config', r, i)
   END IF
   IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)
@@ -469,26 +443,17 @@ SUBROUTINE readReactantsOfInterest (r, i)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) c
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(*)
-  INTEGER ierr, j
+  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
+  INTEGER :: j
   INTEGER, intent(out) :: i
-  LOGICAL file_exists
+  LOGICAL :: file_exists
 
   WRITE (*,*) 'Reading reactants of interest...'
   INQUIRE(file=trim(param_dir) // '/lossRatesOutput.config', EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
      WRITE (*,*) 'No lossRatesOutput.config file exists, so reacIntName will be empty.'
   ELSE
-     OPEN (10, file=trim(param_dir) // '/lossRatesOutput.config', status='old')
-     i = 0
-     READ (10, *, iostat=ierr) c
-     DO WHILE (ierr==0)
-        i = i + 1
-        r(i) = c
-        READ (10, *, iostat=ierr) c
-     ENDDO
-     CLOSE (10, status='keep')
+     CALL read_in_single_column_string_file( trim(param_dir) // '/lossRatesOutput.config', r, i)
   END IF
   IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)
@@ -793,4 +758,25 @@ SUBROUTINE count_lines_in_file (filename, counter, skip_first_line_in)
   ! Handle the case where skip_first_line==.TRUE. and there was no contents: return 0.
   IF (counter==-1) counter=0
 END SUBROUTINE count_lines_in_file
+
+SUBROUTINE read_in_single_column_string_file (filename, output_vector, i)
+  USE storage, ONLY : maxSpecLength
+
+  CHARACTER (LEN=*), INTENT(IN) :: filename
+  CHARACTER (LEN=*), INTENT(OUT) :: output_vector(:)
+  CHARACTER (LEN=maxSpecLength) :: c
+  INTEGER, INTENT(OUT) :: i
+  INTEGER :: ierr
+  OPEN (10, file=filename, status='old')
+  ! Loop over all lines of the file, and add each entry to r(i)
+  ! Then check we don't have more species of interest than total species
+  i = 0
+  READ (10,*, iostat=ierr) c
+  DO WHILE (ierr==0)
+     i = i + 1
+     output_vector(i) = c
+     READ (10,*, iostat=ierr) c
+  ENDDO
+  CLOSE (10, status='keep')
+END SUBROUTINE read_in_single_column_string_file
 END MODULE inputFunctions_mod

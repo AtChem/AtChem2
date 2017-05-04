@@ -182,7 +182,7 @@ PROGRAM ATCHEM
   ALLOCATE (clhs(3, csize1), crhs(2, csize2), ccoeff(csize2))
 
   !   READ IN CHEMICAL REACTIONS
-  CALL readReactions (clhs, crhs, ccoeff, csize1, csize2)
+  CALL readReactions (clhs, crhs, ccoeff)
   neq = numSpec
 
   WRITE (*,*) 'Size of lhs =', csize1, 'size of rhs2 = ', csize2, '.'

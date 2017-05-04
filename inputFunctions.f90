@@ -1,12 +1,19 @@
 MODULE inputFunctions_mod
 CONTAINS
-SUBROUTINE readReactions (lhs, rhs, coeff, size1, size2)
+SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER :: k, l
-  INTEGER, intent(inout) :: size1, size2
-  INTEGER, intent(out) :: lhs(3, size1), rhs(2, size2)
-  DOUBLE PRECISION, intent(out) :: coeff(size2)
-
+  INTEGER :: k, l, size1, size2
+  INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
+  DOUBLE PRECISION, intent(out) :: coeff(:)
+  IF (size( lhs, 1 )/=3) THEN
+    STOP "size( lhs, 1 )/=3 in readReactions()."
+  END IF
+  IF (size( rhs, 1 )/=2) THEN
+    STOP "size( rhs, 1 )/=2 in readReactions()."
+  END IF
+  IF (size(coeff)/=size(rhs, 2)) THEN
+    STOP "size(coeff)/=size(rhs, 2) in readReactions()."
+  END IF
   WRITE (*,*) 'Reading reactants (lhs) from mechanism.rec...'
   OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
 

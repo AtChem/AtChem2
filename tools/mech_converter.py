@@ -170,9 +170,6 @@ def convert(input_file):
                     for z in productNums:
                         prod_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
 
-        # Mark end of file with zeros
-        reac_temp_file.write('0\t0\t0\t0 \n')
-        prod_file.write('0\t0\t0\t0')
         # Output number of species and number of reactions
         reac_temp_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
 

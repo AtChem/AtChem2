@@ -2,7 +2,7 @@ MODULE inputFunctions_mod
 CONTAINS
 SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER :: k, l, count
+  INTEGER :: k, l, count, ierr
   INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
   DOUBLE PRECISION, intent(out) :: coeff(:)
   IF (size( lhs, 1 )/=3) THEN
@@ -19,14 +19,14 @@ SUBROUTINE readReactions (lhs, rhs, coeff)
   OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
   ! read data for lhs of equations
   count = 0
-  READ (10,*)
-  DO
-     READ (10,*) k, l
-     IF (k==0) EXIT
+  READ (10,*, iostat=ierr)
+  READ (10,*, iostat=ierr) k, l
+  DO WHILE (ierr==0)
      count = count+1
      lhs(1, count) = k
      lhs(2, count) = l
      lhs(3, count) = 1
+     READ (10,*, iostat=ierr) k, l
   ENDDO
   CLOSE (10, status='keep')
 
@@ -34,13 +34,14 @@ SUBROUTINE readReactions (lhs, rhs, coeff)
   OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
   ! read data for rhs of equations
   count = 0
-  DO
-     READ (11,*) k, l
-     IF (k==0) EXIT
+  ierr = 0
+  READ (11,*, iostat=ierr) k, l
+  DO WHILE (ierr==0)
      count = count+1
      rhs(1, count) = k
      rhs(2, count) = l
      coeff(count) = 1
+     READ (11,*, iostat=ierr) k, l
   ENDDO
   CLOSE (11, status='keep')
 
@@ -192,26 +193,9 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
   ! last line
   INTEGER, intent(out) :: csize1, csize2
-  INTEGER :: k, l
 
-  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
-  csize1 = 0
-  READ (10,*)
-  DO
-     READ (10,*) k, l
-     IF (k==0) EXIT
-     csize1 = csize1+1
-  ENDDO
-  CLOSE (10, status='keep')
-
-  OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
-  csize2 = 0
-  DO
-     READ (11,*) k, l
-     IF (k==0) EXIT
-     csize2 = csize2+1
-  ENDDO
-  CLOSE (11, status='keep')
+  CALL count_lines_in_file('modelConfiguration/mechanism.reac', csize1, skip_first_line_in=.TRUE.)
+  CALL count_lines_in_file('modelConfiguration/mechanism.prod', csize2, skip_first_line_in=.FALSE.)
 
   RETURN
 END SUBROUTINE getReactionListSizes

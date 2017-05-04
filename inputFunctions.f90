@@ -328,12 +328,12 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   ! Then check we don't have more species of interest than total species
   READ (10,*, iostat=ierr) c
   DO WHILE (ierr==0)
-     READ (10,*, iostat=ierr) c
      IF (ierr/=0) THEN
         EXIT
      ENDIF
      i = i + 1
      r(i) = c
+     READ (10,*, iostat=ierr) c
   ENDDO
   CLOSE (10, status='keep')
 

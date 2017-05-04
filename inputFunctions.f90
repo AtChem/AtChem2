@@ -550,7 +550,6 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
         constrainedName(j) = name
         constrainedSpecies(j) = id
      ENDIF
-     READ (12,*) name
   END DO
   CLOSE (12, status='keep')
   numberOfVariableConstrainedSpecies = j
@@ -582,7 +581,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
         IF (i==2) WRITE (*,*) '...'
      ENDIF
 
-     fileLocation = fileLocationPrefix // trim(constrainedName(i))
+     fileLocation = trim(fileLocationPrefix) // trim(constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints
@@ -736,7 +735,7 @@ SUBROUTINE readEnvVar ()
 
         WRITE (*,*) 'Reading constraint data for', envVarNames(i)
 
-        fileLocation = fileLocationPrefix // trim(envVarNames(i))
+        fileLocation = trim(fileLocationPrefix) // trim(envVarNames(i))
 
         OPEN (11, file=fileLocation, status='old')
 

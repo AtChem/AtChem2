@@ -8,4 +8,4 @@ echo "call ./tools/setup_atchem.py"
 python ./tools/setup_atchem.py $1
 echo ''
 echo "make" $1
-make
+make --always-make

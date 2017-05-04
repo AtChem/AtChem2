@@ -1,6 +1,6 @@
- Output dir is travis/tests/single_reac_of_interest
- Instantaneous rates dir is travis/tests/single_reac_of_interest/instantaneousRates
- Parameter dir is travis/tests/single_reac_of_interest/modelConfiguration
+ Output dir is travis/tests/single_reac_of_interest                                                                
+ Instantaneous rates dir is travis/tests/single_reac_of_interest/instantaneousRates                                             
+ Parameter dir is travis/tests/single_reac_of_interest/modelConfiguration                                             
 
  Number of Species =          104
  Number of Reactions =          324
@@ -14,30 +14,30 @@
  Finished reading species names.
 
  Reading initial concentrations...
-           1  H2O2          5000.0000000000000
+           1  H2O2          5000.0000000000000     
  Finished reading initial concentrations.
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
  Finished reading photolysis rates.
  Number of photolysis rates:          35
 
  Reading JFacSpecies...
  No JFacSpecies.config file exists, so setting jFacSpecies to ''
- JFacSpecies =
+ JFacSpecies = 
  Finished reading JFacSpecies.
 
  Reading products of interest...
-           1 MEK
+           1  MEK       
  Finished reading products of interest.
  rateOfProdNS (number of species found):           1
 
  Reading reactants of interest...
-           1 HOCH2CO3H
+           1  HOCH2CO3H 
  Finished reading reactants of interest.
  rateOfLossNS (number of species found):           1
 
@@ -64,9 +64,9 @@ preconBandLower:         750
  -----------------
                                    number of steps:           3
                                step size (seconds):   0.100E+04
-                      species interpolation method: piecewise linear
-                   conditions interpolation method: piecewise linear
-                          dec interpolation method: piecewise linear
+                      species interpolation method: piecewise linear 
+                   conditions interpolation method: piecewise linear 
+                          dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:       10000
              maximum number of constrained species:          50
                                ratesOutputStepSize:        3000
@@ -80,16 +80,16 @@ preconBandLower:         750
 
  Reading environment variables...
  Number of environment variables:           10
- 1   M                                 2.60e+19
- 2   TEMP                            281.95e+00
- 3   PRESS                              NOTUSED
- 4   RH                                 NOTUSED
- 5   H2O                               3.06e+17
- 6   DEC                         0.28782328e+00
- 7   BLHEIGHT                           NOTUSED
- 8   DILUTE                             6.77E-6
- 9   JFAC                               NOTUSED
- 10  ROOFOPEN                           NOTUSED
+ 1      M                              2.60e+19
+ 2      TEMP                         281.95e+00
+ 3      PRESS                           NOTUSED
+ 4      RH                              NOTUSED
+ 5      H2O                            3.06e+17
+ 6      DEC                      0.28782328e+00
+ 7      BLHEIGHT                        NOTUSED
+ 8      DILUTE                          6.77E-6
+ 9      JFAC                            NOTUSED
+ 10     ROOFOPEN                        NOTUSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -98,16 +98,16 @@ preconBandLower:         750
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of           4 species:
-           1 NO2
+           1 NO2       
  ...
            4 HOCO3C4OOH
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1                               1.0000000000000000
+           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61                              1.0000000000000000
+          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
  Finished reading photolysis rates.
  Number of photolysis rates:          35
 

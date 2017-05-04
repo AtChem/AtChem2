@@ -382,18 +382,18 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
   DOUBLE PRECISION l
   INTEGER, intent(out) :: concCounter
   INTEGER, intent(in) :: nsp
-  INTEGER i
+  INTEGER :: i, ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
 
-  concCounter = 0
   OPEN (10, file=trim(param_dir) // '/initialConcentrations.config', status='old') ! input file for lhs of equations
-  DO
-     READ (10,*) k, l
-     IF (l==-1) EXIT
+  concCounter = 0
+  READ (10,*, iostat=ierr) k, l
+  DO WHILE (ierr==0)
      concCounter = concCounter + 1
      concentration(concCounter) = l
      concSpeciesName(concCounter) = k
+     READ (10,*, iostat=ierr) k, l
   ENDDO
   CLOSE (10, status='keep')
 

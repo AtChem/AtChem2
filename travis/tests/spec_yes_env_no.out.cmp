@@ -15,7 +15,7 @@
 
  Reading initial concentrations...
            1  CH4           47500000000000.000     
- ...
+           2  NO2           264000000000.00000     
            3  O3            1320000000000.0000     
  Finished reading initial concentrations.
 
@@ -102,7 +102,7 @@ preconBandLower:         750
  Finished reading concentration output from file.
  Output required for concentration of           3 species:
            1 CH4       
- ...
+           2 NO2       
            3 O3        
 
  Looking for photolysis constants file...

@@ -2,7 +2,7 @@ MODULE inputFunctions_mod
 CONTAINS
 SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER :: k, l, size1, size2
+  INTEGER :: k, l, count
   INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
   DOUBLE PRECISION, intent(out) :: coeff(:)
   IF (size( lhs, 1 )/=3) THEN
@@ -14,38 +14,34 @@ SUBROUTINE readReactions (lhs, rhs, coeff)
   IF (size(coeff)/=size(rhs, 2)) THEN
     STOP "size(coeff)/=size(rhs, 2) in readReactions()."
   END IF
-  WRITE (*,*) 'Reading reactants (lhs) from mechanism.rec...'
-  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
 
+  WRITE (*,*) 'Reading reactants (lhs) from mechanism.reac...'
+  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
   ! read data for lhs of equations
-  size1 = 0
+  count = 0
   READ (10,*)
   DO
      READ (10,*) k, l
-
      IF (k==0) EXIT
-     size1 = size1+1
-     lhs(1, size1) = k
-     lhs(2, size1) = l
-     lhs(3, size1) = 1
-
+     count = count+1
+     lhs(1, count) = k
+     lhs(2, count) = l
+     lhs(3, count) = 1
   ENDDO
+  CLOSE (10, status='keep')
 
   WRITE (*,*) 'Reading products (rhs) from mechanism.prod...'
   OPEN (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
   ! read data for rhs of equations
-  size2 = 0
+  count = 0
   DO
      READ (11,*) k, l
      IF (k==0) EXIT
-     size2 = size2+1
-     rhs(1, size2) = k
-     rhs(2, size2) = l
-     coeff(size2) = 1
-
+     count = count+1
+     rhs(1, count) = k
+     rhs(2, count) = l
+     coeff(count) = 1
   ENDDO
-
-  CLOSE (10, status='keep')
   CLOSE (11, status='keep')
 
   WRITE (*,*) 'Finished reading lhs and rhs data.'

@@ -1,2 +1,11 @@
+# Ignore output files from test runs
+
 *.output
 *.out
+*/instantaneousRates/*
+
+# Except configurationa and reference files
+
+!*.cmp
+!*.config
+!*.parameters

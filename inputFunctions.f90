@@ -515,7 +515,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
      IF (ierr/=0) THEN
         EXIT
      ENDIF
-     CALL matchOneNameToNumber (speciesName, name, id)
+     id = matchOneNameToNumber (speciesName, name)
      IF (id/=0) THEN
         j = j + 1
         constrainedName(j) = name
@@ -582,7 +582,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   j = 0
   DO i = 1, countOfFixConSpecNames
      READ (14,*) name, value
-     CALL matchOneNameToNumber (speciesName, name, id)
+     id = matchOneNameToNumber (speciesName, name)
      IF (id/=0) THEN
         j = j+1
         constrainedName(j+numberOfVariableConstrainedSpecies) = name

@@ -83,24 +83,22 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   RETURN
 END SUBROUTINE matchNameToNumber
 
-SUBROUTINE matchOneNameToNumber (speciesName, oneSpecies, id)
-  USE storage, ONLY : maxSpecLength
+PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
+  ! Search masterList for target, and return the index id. If not found, return 0.
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: speciesName(:)
-  CHARACTER (LEN=maxSpecLength), intent(in) :: oneSpecies
-  CHARACTER (LEN=maxSpecLength) :: m
+  CHARACTER (LEN=*), contiguous, intent(in) :: masterList(:)
+  CHARACTER (LEN=*), intent(in) :: target
   INTEGER j, id
 
   id = 0
-  DO j = 1, size(speciesName)
-     m = speciesName(j)
-     IF (m==oneSpecies) THEN
+  DO j = 1, size(masterList)
+     IF (masterList(j)==target) THEN
         id = j
         RETURN
      ENDIF
   ENDDO
-END SUBROUTINE matchOneNameToNumber
+END FUNCTION matchOneNameToNumber
 
 
 SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inputConcentrations, concCounter, outputConcentrations)

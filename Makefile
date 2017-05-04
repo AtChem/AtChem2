@@ -37,7 +37,7 @@ LOCAL = makefile.$$(uname -n | perl -pe 's/\..+//')
 
 makefile.local:
 	touch $(LOCAL)
-	ln $(LOCAL) makefile.local
+	ln -f $(LOCAL) makefile.local
 
 include makefile.local
 
@@ -53,6 +53,8 @@ $(AOUT): $(SRCS)
 TESTS := short single_reac_of_interest short_extended full
 
 test:
+	@echo "Make: performing 'make clean'."
+	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
 	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB)"
@@ -68,6 +70,7 @@ clean:
 	rm -f $(AOUT)
 	rm -f fort.*
 	rm -f *.mod
+	rm -f travis/tests/*.out travis/tests/*.output travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 
 webapp:
 	bash ./make_webapp.sh

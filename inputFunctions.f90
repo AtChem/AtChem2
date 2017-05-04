@@ -787,20 +787,31 @@ SUBROUTINE readEnvVar ()
 END SUBROUTINE readEnvVar
 
 
-SUBROUTINE count_lines_in_file (filename, counter)
+SUBROUTINE count_lines_in_file (filename, counter, skip_first_line_in)
   CHARACTER (*), intent(in) :: filename
   INTEGER, intent(out) :: counter
+  LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
+  LOGICAL :: skip_first_line
   CHARACTER (LEN=10) dummy
   INTEGER :: ierr
-
-  OPEN (11, file=filename, status='old')
+  ! Set default to not skip first line
+  IF (.NOT. present(skip_first_line_in)) THEN
+    skip_first_line = .FALSE.
+  ELSE
+    skip_first_line = skip_first_line_in
+  ENDIF
   counter = 0
   ierr = 0
+  OPEN (11, file=filename, status='old')
+  IF (skip_first_line) READ (11, *, iostat=ierr) dummy
   DO WHILE (ierr==0)
      counter = counter + 1
      READ (11, *, iostat=ierr) dummy
   ENDDO
   CLOSE (11, status='keep')
+  ! Remove 1 from counter, as the last wasn't used
   counter = counter - 1
+  ! Handle the case where skip_first_line==.TRUE. and there was no contents: return 0.
+  IF (counter==-1) counter=0
 END SUBROUTINE count_lines_in_file
 END MODULE inputFunctions_mod

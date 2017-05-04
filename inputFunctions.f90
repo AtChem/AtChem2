@@ -73,12 +73,7 @@ SUBROUTINE readJFacSpecies ()
      ! Catch the case where the file is empty
      IF (ierr/=0) THEN
         jFacSpecies = ''
-        RETURN
      END IF
-  END IF
-  ! Convert 'end' to '' so we only need to test for that later.
-  IF ('end'==trim(jFacSpecies)) THEN
-     jFacSpecies = ''
   END IF
   WRITE (*,*) 'JFacSpecies = ', trim(jFacSpecies)
   WRITE (*,*) 'Finished reading JFacSpecies.'

@@ -167,10 +167,10 @@ done
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "Tests FAILED"
   echo "$fail_counter/$test_counter tests FAILED"
-  echo "The diff is as follows:"
-  cat $RESULTS_FILE
+  echo "The diff is in $RESULTS_FILE"
   exit 1
 else
   echo "Tests PASSED"
+  echo "$test_counter/$test_counter tests PASSED"
   exit 0
 fi ;

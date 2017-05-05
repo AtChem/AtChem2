@@ -189,8 +189,8 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   ! last line
   INTEGER, intent(out) :: csize1, csize2
 
-  CALL count_lines_in_file('modelConfiguration/mechanism.reac', csize1, skip_first_line_in=.TRUE.)
-  CALL count_lines_in_file('modelConfiguration/mechanism.prod', csize2, skip_first_line_in=.FALSE.)
+  csize1 = count_lines_in_file( 'modelConfiguration/mechanism.reac',  skip_first_line_in=.TRUE. )
+  csize2 = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.FALSE. )
 
   RETURN
 END SUBROUTINE getReactionListSizes
@@ -489,7 +489,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
 
   ! READ IN SPECIES TO BE CONSTRAINED
   WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
-  CALL count_lines_in_file(trim(param_dir) // '/constrainedSpecies.config', countOfVarConSpecNames)
+  countOfVarConSpecNames = count_lines_in_file( trim(param_dir) // '/constrainedSpecies.config' )
 
   WRITE (*,*) 'Finished counting the names of the species to be constrained.'
   WRITE (*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
@@ -497,7 +497,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   ! read in numberOfFixedConstrainedSpecies
 
   WRITE (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
-  CALL count_lines_in_file(trim(param_dir) // '/constrainedFixedSpecies.config', countOfFixConSpecNames)
+  countOfFixConSpecNames = count_lines_in_file( trim(param_dir) // '/constrainedFixedSpecies.config' )
   WRITE (*,*) 'Finished counting the names of fixed-concentration species'
 
   WRITE (*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
@@ -663,7 +663,7 @@ SUBROUTINE readEnvVar ()
   WRITE (*,*) 'Reading environment variables...'
 
   ! Count number of environment variables by reading in lines from file
-  CALL count_lines_in_file( trim(param_dir) // '/environmentVariables.config', counter )
+  counter = count_lines_in_file( trim(param_dir) // '/environmentVariables.config' )
 
   numEnvVars = counter
 
@@ -731,9 +731,9 @@ SUBROUTINE readEnvVar ()
 END SUBROUTINE readEnvVar
 
 
-SUBROUTINE count_lines_in_file (filename, counter, skip_first_line_in)
+FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
   CHARACTER (*), intent(in) :: filename
-  INTEGER, intent(out) :: counter
+  INTEGER :: counter
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER (LEN=10) dummy
@@ -757,7 +757,7 @@ SUBROUTINE count_lines_in_file (filename, counter, skip_first_line_in)
   counter = counter - 1
   ! Handle the case where skip_first_line==.TRUE. and there was no contents: return 0.
   IF (counter==-1) counter=0
-END SUBROUTINE count_lines_in_file
+END FUNCTION count_lines_in_file
 
 SUBROUTINE read_in_single_column_string_file (filename, output_vector, i)
   USE storage, ONLY : maxSpecLength

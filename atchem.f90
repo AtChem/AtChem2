@@ -32,7 +32,7 @@ PROGRAM ATCHEM
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
+  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
   INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
   INTEGER :: neq
   DOUBLE PRECISION rtol, t, t0, tout

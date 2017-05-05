@@ -1,3 +1,5 @@
+MODULE interpolationFunctions_mod
+CONTAINS
 SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec)
 
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
@@ -113,3 +115,4 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
   y = a*ya(ind, klo)+b*ya(ind, khi)+((a**3-a)*y2a(ind, klo)+(b**3-b)*y2a(ind, khi))*(h**2)/6.
   RETURN
 END SUBROUTINE splint2D
+END MODULE interpolationFunctions_mod

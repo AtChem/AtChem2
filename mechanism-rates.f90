@@ -4,7 +4,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    USE zenithData1
    USE constraints
    USE envVars, ONLY : ro2
-
+   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
    IMPLICIT NONE
 
    ! calculates rate constants from arrhenius information

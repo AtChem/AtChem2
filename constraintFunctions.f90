@@ -3,6 +3,7 @@ SUBROUTINE calcJFac(jfac, t)
   USE zenithData1
   USE photolysisRates
   USE constraints
+  USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
 
   IMPLICIT NONE
   DOUBLE PRECISION :: jfac, JSpeciesAtT, t
@@ -126,7 +127,9 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   USE envVars
   USE constraints
   USE zenithData1
+  USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
+
   DOUBLE PRECISION :: t, envVarAtT, theta
   DOUBLE PRECISION :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
   INTEGER :: envVarNum, envVarNumH2O

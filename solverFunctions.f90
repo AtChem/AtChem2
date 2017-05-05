@@ -42,6 +42,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   USE constraints
   USE reactionStructure
   USE chemicalConstraints
+  USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
 
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE

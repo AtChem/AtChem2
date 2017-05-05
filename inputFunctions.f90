@@ -447,6 +447,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE photolysisRates, ONLY : maxNrOfPhotoRates
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   USE configFunctions_mod, ONLY : matchOneNameToNumber
+  USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
   INTEGER :: i, j, k, dataNumberOfPoints, neq, id, ierr

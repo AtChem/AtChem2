@@ -21,6 +21,7 @@ PROGRAM ATCHEM
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   USE inputFunctions_mod
   USE configFunctions_mod
+  USE instantaneousRatesFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************

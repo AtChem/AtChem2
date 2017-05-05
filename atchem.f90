@@ -220,7 +220,9 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
-  CALL readProductsOfInterest (tempForProdIntName, prodIntNameSize)
+  WRITE (*,*) 'Reading products of interest...'
+  CALL readProductsOReactantsOfInterest( '/productionRatesOutput.config', tempForProdIntName, prodIntNameSize )
+  WRITE (*,*) 'Finished reading products of interest.'
   ALLOCATE (prodIntName(prodIntNameSize))
   DO i = 1, prodIntNameSize
      prodIntName(i) = tempForProdIntName(i)
@@ -238,7 +240,9 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   CONFIGURE FOR OUTPUT OF LOSS RATES
-  CALL readReactantsOfInterest (tempForReacIntName, reacIntNameSize)
+  WRITE (*,*) 'Reading reactants of interest...'
+  CALL readProductsOReactantsOfInterest( '/lossRatesOutput.config', tempForReacIntName, reacIntNameSize )
+  WRITE (*,*) 'Finished reading reactants of interest.'
   ALLOCATE (reacIntName(reacIntNameSize))
   DO i = 1, reacIntNameSize
      reacIntName(i) = tempForReacIntName(i)

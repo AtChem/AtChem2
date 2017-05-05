@@ -401,7 +401,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
 END SUBROUTINE readInitialConcentrations
 
 
-SUBROUTINE readProductsOfInterest (r, i)
+SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
   ! Read in contents of modelConfiguration/productionRatesOutput.config, which
   ! contains a list of the species we want to have outputted to mC/productionRates.output
   ! Output the contents in r, with i as the length of r.
@@ -409,17 +409,17 @@ SUBROUTINE readProductsOfInterest (r, i)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
+  CHARACTER (LEN=*), intent(in) :: filename
   CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
-  INTEGER :: j
   INTEGER, intent(out) :: i
+  INTEGER :: j
   LOGICAL :: file_exists
 
-  WRITE (*,*) 'Reading products of interest...'
-  INQUIRE(file=trim(param_dir) // '/productionRatesOutput.config', EXIST=file_exists)
+  INQUIRE(file=trim(param_dir) // filename, EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
-     WRITE (*,*) 'No productionRatesOutput.config file exists, so prodIntName will be empty.'
+     WRITE (*,*) 'No ' // trim(filename) // ' file exists.'
   ELSE
-     CALL read_in_single_column_string_file( trim(param_dir) // '/productionRatesOutput.config', r, i)
+     CALL read_in_single_column_string_file( trim(param_dir) // filename, r, i)
   END IF
   IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)
@@ -430,43 +430,8 @@ SUBROUTINE readProductsOfInterest (r, i)
         WRITE (*,*) j, ' ', r(j)
      ENDDO
   ENDIF
-  WRITE (*,*) 'Finished reading products of interest.'
   RETURN
-END SUBROUTINE readProductsOfInterest
-
-
-SUBROUTINE readReactantsOfInterest (r, i)
-  ! Read in contents of modelConfiguration/lossRatesOutput.config, which
-  ! contains a list of the species we want to have outputted to mC/lossRates.output.
-  ! Output the contents in r, with i as the length of r.
-  USE directories, ONLY: param_dir
-  USE storage, ONLY : maxSpecLength
-  IMPLICIT NONE
-
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
-  INTEGER :: j
-  INTEGER, intent(out) :: i
-  LOGICAL :: file_exists
-
-  WRITE (*,*) 'Reading reactants of interest...'
-  INQUIRE(file=trim(param_dir) // '/lossRatesOutput.config', EXIST=file_exists)
-  IF (file_exists.EQV..FALSE.) THEN
-     WRITE (*,*) 'No lossRatesOutput.config file exists, so reacIntName will be empty.'
-  ELSE
-     CALL read_in_single_column_string_file( trim(param_dir) // '/lossRatesOutput.config', r, i)
-  END IF
-  IF (i>3) THEN
-     WRITE (*,*) 1, ' ', r(1)
-     WRITE (*,*) '...'
-     WRITE (*,*) i, ' ', r(i)
-  ELSE
-     DO j = 1, i
-        WRITE (*,*) j, ' ', r(j)
-     ENDDO
-  ENDIF
-  WRITE (*,*) 'Finished reading reactants of interest.'
-  RETURN
-END SUBROUTINE readReactantsOfInterest
+END SUBROUTINE readProductsOReactantsOfInterest
 
 
 SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)

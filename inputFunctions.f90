@@ -1,9 +1,10 @@
 MODULE inputFunctions_mod
+  USE types_mod
 CONTAINS
 SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
   INTEGER :: k, l, count, ierr
-  INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
+  INTEGER(kind=DI), intent(out) :: lhs(:, :), rhs(:, :)
   DOUBLE PRECISION, intent(out) :: coeff(:)
   IF (size( lhs, 1 )/=3) THEN
     STOP "size( lhs, 1 )/=3 in readReactions()."
@@ -97,7 +98,8 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER :: i, ck(*), ierr
+  INTEGER :: i, ierr
+  INTEGER(kind=DI) ck(*)
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
 
@@ -140,7 +142,8 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, ck(*), ierr
+  INTEGER :: i, ierr
+  INTEGER(kind=DI) :: ck(*)
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
@@ -187,7 +190,7 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   ! outputs csize1 and csize2, which hold the number of lines in
   ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
   ! last line
-  INTEGER, intent(out) :: csize1, csize2
+  INTEGER(kind=DI), intent(out) :: csize1, csize2
 
   csize1 = count_lines_in_file( 'modelConfiguration/mechanism.reac',  skip_first_line_in=.TRUE. )
   csize2 = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.FALSE. )
@@ -217,14 +220,13 @@ END SUBROUTINE getParametersFromFile
 
 
 SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
-
   USE photolysisRates
   USE directories, ONLY : param_dir, env_constraints_dir
   USE storage, ONLY : maxPhotoRateNameLength, maxFilepathLength
   IMPLICIT NONE
 
   INTEGER :: i, k, ierr
-  INTEGER :: maxNumberOfDataPoints
+  INTEGER(kind=DI) :: maxNumberOfDataPoints
   CHARACTER (LEN=maxPhotoRateNameLength) :: string
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
@@ -299,9 +301,10 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   IMPLICIT NONE
 
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=DI), intent(in) :: nsp
   CHARACTER (LEN=maxFilepathLength) :: filename
-  INTEGER :: i, j, length
+  INTEGER(kind=DI) :: i
+  INTEGER :: j, length
 
   filename = trim(param_dir) // '/concentrationOutput.config'
   WRITE (*,*) 'Reading concentration output from file...'
@@ -338,7 +341,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   IMPLICIT NONE
 
   DOUBLE PRECISION, intent(out) :: y(*)
-  INTEGER, intent(in) :: neq
+  INTEGER(kind=DI), intent(in) :: neq
   INTEGER :: j
   INTEGER, intent(out) :: speciesNumber(*)
   CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
@@ -367,8 +370,8 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
   CHARACTER (LEN=maxSpecLength) k
   DOUBLE PRECISION, intent(out) :: concentration(*)
   DOUBLE PRECISION l
-  INTEGER, intent(out) :: concCounter
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=DI), intent(out) :: concCounter
+  INTEGER(kind=DI), intent(in) :: nsp
   INTEGER :: i, ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
@@ -414,7 +417,7 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
 
   CHARACTER (LEN=*), intent(in) :: filename
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  INTEGER, intent(out) :: i
+  INTEGER(kind=DI), intent(out) :: i
   INTEGER :: j, length
   LOGICAL :: file_exists
 
@@ -449,8 +452,8 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE configFunctions_mod, ONLY : matchOneNameToNumber
   IMPLICIT NONE
 
-  INTEGER :: i, j, k, dataNumberOfPoints, neq, id, ierr
-  INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
+  INTEGER(kind=SI) :: j, k, dataNumberOfPoints, id, ierr
+  INTEGER(kind=DI) :: i, neq, countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER (LEN=maxSpecLength) :: speciesName(:), name
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER (LEN=maxFilepathLength+maxSpecLength) :: fileLocation
@@ -702,12 +705,14 @@ END SUBROUTINE readEnvVar
 
 
 FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
+  IMPLICIT NONE
+
   CHARACTER (*), intent(in) :: filename
-  INTEGER :: counter
+  INTEGER(kind=DI) :: counter
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER (LEN=10) dummy
-  INTEGER :: ierr
+  INTEGER(kind=SI) :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN
     skip_first_line = .FALSE.
@@ -731,14 +736,15 @@ END FUNCTION count_lines_in_file
 
 SUBROUTINE read_in_single_column_string_file (filename, output_vector, i, skip_first_line_in)
   USE storage, ONLY : maxSpecLength
+  IMPLICIT NONE
 
   CHARACTER (LEN=*), INTENT(IN) :: filename
   CHARACTER (LEN=*), INTENT(OUT) :: output_vector(:)
-  INTEGER, INTENT(OUT) :: i
+  INTEGER(kind=DI), INTENT(OUT) :: i
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER (LEN=maxSpecLength) :: c
-  INTEGER :: ierr
+  INTEGER(kind=SI) :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN
     skip_first_line = .FALSE.

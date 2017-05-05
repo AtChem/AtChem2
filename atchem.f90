@@ -28,7 +28,8 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  INTEGER ier, i
+  INTEGER ier
+  INTEGER(kind=DI) :: i
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
@@ -45,28 +46,32 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
-  INTEGER :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
+  INTEGER(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
   DOUBLE PRECISION :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER numSpec, numReactions, numSteps
+  INTEGER(kind=DI) :: numSpec
+  INTEGER numReactions, numSteps
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  INTEGER concCounter
+  INTEGER(kind=DI) :: concCounter
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
-  INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
+  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), SORNumber(:), reacIntSpecies(:,:)
+  INTEGER(kind=DI), ALLOCATABLE :: tempSORNumber(:), returnArray(:)
+  INTEGER(kind=DI) :: speciesOutputRequiredSize
+  INTEGER(kind=DI) :: SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
-  INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
+  INTEGER prodLossArrayLen, ratesOutputStepSize, time, elapsed
+  INTEGER(kind=DI) :: rateOfProdNS, rateOfLossNS
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS

@@ -1,4 +1,6 @@
-SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS, arrayLen, numSpecies)
+MODULE instantaneousRatesFunctions_mod
+CONTAINS
+  SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS, arrayLen, numSpecies)
   ! For each interesting species,
   INTEGER rCounter, i, j
   INTEGER, intent(in) :: chssize1, csize, rateOfNS, numSpecies, chs(chssize1, csize)
@@ -30,3 +32,4 @@ SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS
 
   RETURN
 END SUBROUTINE findReactionsWithProductOrReactant
+END MODULE instantaneousRatesFunctions_mod

@@ -1,11 +1,12 @@
-!     ---------------------------------------------------------------
+MODULE solverFunctions_mod
+  USE types_mod
+CONTAINS!     ---------------------------------------------------------------
 SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
 
   USE species
 
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) ipar (*), ier, neq, i
-  INTEGER(kind=DI) :: j, np
+  INTEGER(kind=SI) :: ier
+  INTEGER(kind=DI) :: ipar(*), neq, i, j, np
   DOUBLE PRECISION t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
   DOUBLE PRECISION, ALLOCATABLE :: yPlusV (:), yPlusVi(:)
   CALL getNumberOfSpecies (np)
@@ -43,12 +44,13 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   USE constraints
   USE reactionStructure
   USE chemicalConstraints
+  USE constraintFunctions_mod
 
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE
   !
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) ipar(*), ier, nConSpec, np, numReactions
+  INTEGER(kind=SI) :: ier
+  INTEGER(KIND=DI) ipar(*), nConSpec, np, numReactions
   DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
   INTEGER(kind=DI) :: i
@@ -91,10 +93,9 @@ SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   USE productionAndLossRates
 
   IMPLICIT NONE
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) :: i
-  INTEGER (KIND=LongInt_Kind) :: nsp ! number of species involved
-  INTEGER (KIND=LongInt_Kind) :: nr ! number of reactions
+  INTEGER(KIND=DI) :: i
+  INTEGER(KIND=DI) :: nsp ! number of species involved
+  INTEGER(KIND=DI) :: nr ! number of reactions
   INTEGER(kind=DI) :: size1, size2 !number of entries in each equation array
   INTEGER(kind=DI) :: lhs(3, size1), rhs(2, size2)
   DOUBLE PRECISION :: coeff(*) ! coeff term of rhs
@@ -168,7 +169,8 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   USE reactionStructure ! access is, crhs, nclhs, csize2
   IMPLICIT NONE
 
-  INTEGER ny, nr
+  INTEGER(kind=DI) :: ny
+  INTEGER :: nr
   DOUBLE PRECISION p(nr), fy(ny,*), y(*), r(nr), t
   INTEGER j, is
 
@@ -202,3 +204,4 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   RETURN
 END SUBROUTINE jfy
+END MODULE solverFunctions_mod

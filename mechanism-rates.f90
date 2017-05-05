@@ -1,8 +1,10 @@
 
 SUBROUTINE mechanism_rates (p, t, y, mnsp)
-  USE photolysisRates
+   USE outputFunctions_mod
+   USE photolysisRates
    USE zenithData1
    USE constraints
+   USE constraintFunctions_mod
    USE envVars, ONLY : ro2
 
    IMPLICIT NONE

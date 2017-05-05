@@ -23,6 +23,8 @@ PROGRAM ATCHEM
   USE configFunctions_mod
   USE instRates_mod
   USE outputFunctions_mod
+  USE constraintFunctions_mod
+  USE solverFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -36,7 +38,7 @@ PROGRAM ATCHEM
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
-  INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
+  INTEGER(KIND=DI) :: iout (21), ipar (10)
   INTEGER(kind=DI) :: neq
   DOUBLE PRECISION rtol, t, t0, tout
   DOUBLE PRECISION atol, rout (6)
@@ -453,7 +455,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
   !    CONSTRAINTS
   !    ********************************************************************************************************
-
+write (*,*) 'numspec3', numSpec
   WRITE (*,*)
   CALL readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*)
@@ -463,11 +465,15 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
+  write (*,*) 'get conc'
   CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+  write (*,*) 'got conc'
   CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
+  write (*,*) 'output SOR'
 
   ! This outputs z, which is y with all the constrained species removed.
   CALL removeConstrainedSpeciesFromProbSpec (speciesConcs, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
+  write (*,*) 'removed'
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies

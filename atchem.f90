@@ -64,9 +64,8 @@ PROGRAM ATCHEM
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
   INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), tempForProdIntName(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: reacIntName(:), tempForReacIntName(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:), tempSpeciesOutputRequired(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
   INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
@@ -171,7 +170,6 @@ PROGRAM ATCHEM
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
   ALLOCATE (tempSORNumber(numSpec), concsOfSpeciesOfInterest(numSpec))
-  ALLOCATE (tempForProdIntName(numSpec), tempForReacIntName(numSpec), tempSpeciesOutputRequired(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   ALLOCATE (lossRates(numReactions), productionRates(numReactions), ir(numReactions))
@@ -221,13 +219,8 @@ PROGRAM ATCHEM
 
   !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
   WRITE (*,*) 'Reading products of interest...'
-  CALL readProductsOReactantsOfInterest( '/productionRatesOutput.config', tempForProdIntName, prodIntNameSize )
+  CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   WRITE (*,*) 'Finished reading products of interest.'
-  ALLOCATE (prodIntName(prodIntNameSize))
-  DO i = 1, prodIntNameSize
-     prodIntName(i) = tempForProdIntName(i)
-  ENDDO
-
   CALL matchNameToNumber (speciesName, prodIntName, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
@@ -241,12 +234,8 @@ PROGRAM ATCHEM
 
   !   CONFIGURE FOR OUTPUT OF LOSS RATES
   WRITE (*,*) 'Reading reactants of interest...'
-  CALL readProductsOReactantsOfInterest( '/lossRatesOutput.config', tempForReacIntName, reacIntNameSize )
+  CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   WRITE (*,*) 'Finished reading reactants of interest.'
-  ALLOCATE (reacIntName(reacIntNameSize))
-  DO i = 1, reacIntNameSize
-     reacIntName(i) = tempForReacIntName(i)
-  ENDDO
 
   CALL matchNameToNumber (speciesName, reacIntName, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
@@ -425,13 +414,9 @@ PROGRAM ATCHEM
   CALL readEnvVar ()
   WRITE (*,*)
 
-  ! fill tempSpeciesOutputRequired with the names of species to output to concentration.output
-  CALL readSpeciesOutputRequired (tempSpeciesOutputRequired, speciesOutputRequiredSize, numSpec)
-  ! Allocate speciesOutputRequired and fill from temporary array
-  ALLOCATE (speciesOutputRequired(speciesOutputRequiredSize))
-  DO i = 1, speciesOutputRequiredSize
-     speciesOutputRequired(i) = tempSpeciesOutputRequired(i)
-  ENDDO
+  ! fill speciesOutputRequired with the names of species to output to concentration.output
+  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize, numSpec)
+
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
   CALL matchNameToNumber (speciesName, speciesOutputRequired, &
                           tempSORNumber, SORNumberSize)

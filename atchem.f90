@@ -21,6 +21,9 @@ PROGRAM ATCHEM
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   USE inputFunctions_mod
   USE configFunctions_mod
+  USE instRates_mod
+  USE outputFunctions_mod
+  USE constraintFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -28,13 +31,14 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  INTEGER ier, i
+  INTEGER ier
+  INTEGER(kind=DI) :: i
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
-  INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
-  INTEGER :: neq
+  INTEGER(KIND=DI) :: iout (21), ipar (10)
+  INTEGER(kind=DI) :: neq
   DOUBLE PRECISION rtol, t, t0, tout
   DOUBLE PRECISION atol, rout (6)
   DOUBLE PRECISION :: rpar (1)
@@ -45,28 +49,32 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
-  INTEGER :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
+  INTEGER(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
   DOUBLE PRECISION :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER numSpec, numReactions, numSteps
+  INTEGER(kind=DI) :: numSpec
+  INTEGER numReactions, numSteps
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  INTEGER concCounter
+  INTEGER(kind=DI) :: concCounter
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
-  INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
+  INTEGER(kind=DI), ALLOCATABLE :: prodIntSpecies(:,:), SORNumber(:), reacIntSpecies(:,:)
+  INTEGER(kind=DI), ALLOCATABLE :: tempSORNumber(:), returnArray(:)
+  INTEGER(kind=DI) :: speciesOutputRequiredSize
+  INTEGER(kind=DI) :: SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
-  INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
+  INTEGER prodLossArrayLen, ratesOutputStepSize, time, elapsed
+  INTEGER(kind=DI) :: rateOfProdNS, rateOfLossNS
   INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
@@ -422,12 +430,13 @@ PROGRAM ATCHEM
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
   ALLOCATE (SORNumber(SORNumberSize))
+
   DO i = 1, SORNumberSize
      SORNumber(i) = tempSORNumber(i)
   ENDDO
+
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
-
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
 
@@ -435,7 +444,6 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
   !    CONSTRAINTS
   !    ********************************************************************************************************
-
   WRITE (*,*)
   CALL readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*)
@@ -475,6 +483,7 @@ PROGRAM ATCHEM
   WRITE (*,'(A30, E15.3)') 't0 = ', t0
   CALL fcvmalloc (t0, z, meth, itmeth, iatol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
+  write (*,*) 'malloced'
   IF (ier/=0) THEN
      WRITE (stderr, 30) ier
 30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC returned ier = ', I5)

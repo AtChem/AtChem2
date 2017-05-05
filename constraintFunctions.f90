@@ -1,12 +1,17 @@
-SUBROUTINE calcJFac(jfac, t)
+MODULE constraintFunctions_mod
+  USE types_mod
+CONTAINS
+  SUBROUTINE calcJFac(jfac, t)
 
   USE zenithData1
   USE photolysisRates
   USE constraints
+  USE interpolationFunctions_mod
 
   IMPLICIT NONE
   DOUBLE PRECISION :: jfac, JSpeciesAtT, t
-  INTEGER :: basePhotoRateNum, i
+  INTEGER(kind=DI) :: basePhotoRateNum
+  INTEGER :: i
   INTEGER :: firstTime = 1
   IF (firstTime==1) THEN
      WRITE (*,*) "basePhotoRate: ", jFacSpecies
@@ -73,8 +78,8 @@ END SUBROUTINE calcDec
 
 SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
   DOUBLE PRECISION z(*), x(*), constrainedConcs(*)
-  INTEGER numberOfConstrainedSpecies, constrainedSpecies(*), zCounter, speciesConstrained, i, neq, j
-
+  INTEGER zCounter, speciesConstrained, i, j
+  INTEGER(kind=DI) :: numberOfConstrainedSpecies, constrainedSpecies(*), neq
   zCounter = 1
   DO i = 1, numberOfConstrainedSpecies + neq
      speciesConstrained = 0
@@ -98,11 +103,13 @@ END SUBROUTINE addConstrainedSpeciesToProbSpec
 !     ---------------------------------------------------------------
 SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
   DOUBLE PRECISION z(*), y(*)
-  INTEGER numberOfConstrainedSpecies, constrainedSpecies(*), zCounter, speciesConstrained, i, k, neq
+  INTEGER zCounter, speciesConstrained, i, k
+  INTEGER(kind=DI) :: numberOfConstrainedSpecies, constrainedSpecies(*), neq
 
   zCounter = 1
   ! loop through y()
   DO i = 1, neq
+    write (*,*) neq, i
      speciesConstrained = 0
      ! loop through constrained species
      DO k = 1, numberOfConstrainedSpecies
@@ -126,10 +133,12 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   USE envVars
   USE constraints
   USE zenithData1
+  USE interpolationFunctions_mod
   IMPLICIT NONE
   DOUBLE PRECISION :: t, envVarAtT, theta
   DOUBLE PRECISION :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
-  INTEGER :: envVarNum, envVarNumH2O
+  INTEGER(kind=DI) :: envVarNum
+  INTEGER :: envVarNumH2O
 
   ! ********************************************************************************************************************
   ! GET PRESSURE AT T
@@ -364,7 +373,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum)
   IMPLICIT NONE
 
   CHARACTER, intent(in) :: name*(*)
-  INTEGER, intent(out) :: envVarNum
+  INTEGER(kind=DI), intent(out) :: envVarNum
   INTEGER i
 
   DO i = 1, numEnvVars
@@ -380,7 +389,7 @@ SUBROUTINE test_jfac()
   USE photolysisRates
   USE envVars
   IMPLICIT NONE
-  INTEGER :: envVarNum
+  INTEGER(kind=DI) :: envVarNum
   ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
   envVarNum = 0
   CALL getEnvVarNum ('JFAC', envVarNum)
@@ -409,3 +418,4 @@ SUBROUTINE test_jfac()
      ENDIF
   ENDIF
 END SUBROUTINE test_jfac
+END MODULE constraintFunctions_mod

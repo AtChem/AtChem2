@@ -1,4 +1,5 @@
 MODULE configFunctions_mod
+  USE types_mod
 CONTAINS
   SUBROUTINE calcDateParameters ()
   USE date
@@ -19,12 +20,14 @@ CONTAINS
 END SUBROUTINE calcDateParameters
 
 SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutReqNamesSize)
+  USE types_mod
   USE envVars
   USE photolysisRates, ONLY : nrOfPhotoRates, ck
   USE storage, ONLY : maxPhotoRateNameLength, maxSpecLength
+  IMPLICIT NONE
   CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
   CHARACTER (LEN=maxSpecLength) :: specOutReqNames(*)
-  INTEGER, intent(in) :: specOutReqNamesSize
+  INTEGER(kind=DI), intent(in) :: specOutReqNamesSize
   INTEGER i
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
@@ -59,8 +62,8 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   ! number of times a match was made
   CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
   CHARACTER (LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
-  INTEGER, intent(out) :: returnArray(*), returnArraySize
-  INTEGER i, j
+  INTEGER(kind=DI), intent(out) :: returnArray(*), returnArraySize
+  INTEGER(kind=DI) :: i, j
   LOGICAL match
 
   returnArraySize = 0
@@ -114,7 +117,7 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inp
   CHARACTER (LEN=maxSpecLength) :: k, m
   DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
-  INTEGER, intent(in) :: concCounter, numSpecies
+  INTEGER(kind=DI), intent(in) :: concCounter, numSpecies
   INTEGER :: i, j
   LOGICAL :: match
 

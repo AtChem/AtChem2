@@ -1,8 +1,11 @@
 
 SUBROUTINE mechanism_rates (p, t, y, mnsp)
-  USE photolysisRates
+   USE outputFunctions_mod
+   USE photolysisRates
    USE zenithData1
    USE constraints
+   USE constraintFunctions_mod
+   USE interpolationFunctions_mod
    USE envVars, ONLY : ro2
 
    IMPLICIT NONE
@@ -14,7 +17,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    DOUBLE PRECISION, intent (in) :: y(mnsp)
    DOUBLE PRECISION :: temp, pressure, dummy
 
-   INTEGER :: i
+   INTEGER(kind=DI) :: i
    DOUBLE PRECISION :: photoRateAtT
 
    INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'

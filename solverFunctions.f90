@@ -1,11 +1,10 @@
-!     ---------------------------------------------------------------
+!---------------------------------------------------------------
 SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
 
   USE species
 
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) ipar (*), ier, neq, i
-  INTEGER j, np
+  INTEGER(kind=SI) :: ier
+  INTEGER(kind=DI) :: ipar(*), neq, i, j, np
   DOUBLE PRECISION t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
   DOUBLE PRECISION, ALLOCATABLE :: yPlusV (:), yPlusVi(:)
   CALL getNumberOfSpecies (np)
@@ -38,19 +37,22 @@ END SUBROUTINE FCVJTIMES
 
 !     ---------------------------------------------------------------
 SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
+  USE types_mod
   USE species
   USE constraints
   USE reactionStructure
   USE chemicalConstraints
+  USE constraintFunctions_mod
+  USE interpolationFunctions_mod
 
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE
   !
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) ipar(*), ier, nConSpec, np, numReactions
+  INTEGER(kind=SI) :: ier
+  INTEGER(KIND=DI) ipar(*), nConSpec, np, numReactions
   DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
-  INTEGER i
+  INTEGER(kind=DI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
   numReactions = ipar(2)
@@ -86,15 +88,15 @@ END SUBROUTINE FCVFUN
 
 SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   ! calculate rhs of rate eqn dy()
+  USE types_mod
   USE productionAndLossRates
 
   IMPLICIT NONE
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) :: i
-  INTEGER (KIND=LongInt_Kind) :: nsp ! number of species involved
-  INTEGER (KIND=LongInt_Kind) :: nr ! number of reactions
-  INTEGER :: size1, size2 !number of entries in each equation array
-  INTEGER :: lhs(3, size1), rhs(2, size2)
+  INTEGER(KIND=DI) :: i
+  INTEGER(KIND=DI) :: nsp ! number of species involved
+  INTEGER(KIND=DI) :: nr ! number of reactions
+  INTEGER(kind=DI) :: size1, size2 !number of entries in each equation array
+  INTEGER(kind=DI) :: lhs(3, size1), rhs(2, size2)
   DOUBLE PRECISION :: coeff(*) ! coeff term of rhs
   DOUBLE PRECISION :: y(*) ! concentration array
   DOUBLE PRECISION :: p(nr) ! array to hold rates
@@ -166,7 +168,8 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   USE reactionStructure ! access is, crhs, nclhs, csize2
   IMPLICIT NONE
 
-  INTEGER ny, nr
+  INTEGER(kind=DI) :: ny
+  INTEGER :: nr
   DOUBLE PRECISION p(nr), fy(ny,*), y(*), r(nr), t
   INTEGER j, is
 

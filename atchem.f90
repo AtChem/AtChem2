@@ -24,7 +24,6 @@ PROGRAM ATCHEM
   USE instRates_mod
   USE outputFunctions_mod
   USE constraintFunctions_mod
-  USE solverFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************

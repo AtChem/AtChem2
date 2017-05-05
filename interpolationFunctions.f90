@@ -1,12 +1,17 @@
+MODULE interpolationFunctions_mod
+  USE types_mod
+CONTAINS
 SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec)
 
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   USE interpolationMethod
   USE chemicalConstraints
-  INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
+  INTEGER(kind=DI) :: dataNumberOfPoints, maxPoints, nConSpec
+  INTEGER :: linintsuc, constraintType
   DOUBLE PRECISION :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
   DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: indexBefore, indexAfter, ind, facintfound, i
+  INTEGER :: indexBefore, indexAfter, facintfound, i
+  INTEGER(kind=DI) :: ind
   INTEGER(kind=SI) :: interpMethod
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
@@ -79,7 +84,7 @@ END SUBROUTINE getConstrainedQuantAtT2D
 
 SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
 
-  INTEGER n, maxPoints, ind
+  INTEGER(kind=DI) :: n, ind, maxPoints
   DOUBLE PRECISION :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
   ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
   ! (with the xai�s in order), and given the array y2a(1:n), which is the output
@@ -114,3 +119,4 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
   y = a*ya(ind, klo)+b*ya(ind, khi)+((a**3-a)*y2a(ind, klo)+(b**3-b)*y2a(ind, khi))*(h**2)/6.
   RETURN
 END SUBROUTINE splint2D
+END MODULE interpolationFunctions_mod

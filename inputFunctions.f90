@@ -450,6 +450,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE photolysisRates, ONLY : maxNrOfPhotoRates
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   USE configFunctions_mod, ONLY : matchOneNameToNumber
+  USE interpolationFunctions_mod
   IMPLICIT NONE
 
   INTEGER(kind=SI) :: j, k, dataNumberOfPoints, id, ierr

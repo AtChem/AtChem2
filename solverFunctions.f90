@@ -1,6 +1,4 @@
-MODULE solverFunctions_mod
-  USE types_mod
-CONTAINS!     ---------------------------------------------------------------
+!---------------------------------------------------------------
 SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
 
   USE species
@@ -45,6 +43,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   USE reactionStructure
   USE chemicalConstraints
   USE constraintFunctions_mod
+  USE interpolationFunctions_mod
 
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE
@@ -204,4 +203,3 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   RETURN
 END SUBROUTINE jfy
-END MODULE solverFunctions_mod

@@ -61,7 +61,7 @@ MODULE envVars
   CHARACTER (LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
   INTEGER(kind=SI), ALLOCATABLE :: envVarTypesNum(:)
   DOUBLE PRECISION, ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
-  INTEGER(kind=SI) :: numEnvVars
+  INTEGER(kind=DI) :: numEnvVars
 
 
   DOUBLE PRECISION, ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)

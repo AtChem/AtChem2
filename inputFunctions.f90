@@ -295,15 +295,19 @@ END SUBROUTINE readPhotoRates
 
 SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   USE directories, ONLY : param_dir
-  USE storage, ONLY : maxSpecLength
+  USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
-  INTEGER i, j
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   INTEGER, intent(in) :: nsp
+  CHARACTER (LEN=maxFilepathLength) :: filename
+  INTEGER :: i, j, length
 
+  filename = trim(param_dir) // '/concentrationOutput.config'
   WRITE (*,*) 'Reading concentration output from file...'
-  CALL read_in_single_column_string_file( trim(param_dir) // '/concentrationOutput.config', r, i)
+  length = count_lines_in_file( trim(filename) )
+  ALLOCATE (r(length))
+  CALL read_in_single_column_string_file( trim(filename), r, i )
   WRITE (*,*) 'Finished reading concentration output from file.'
 
   ! ERROR HANDLING
@@ -405,21 +409,22 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
   ! Read in contents of modelConfiguration/productionRatesOutput.config, which
   ! contains a list of the species we want to have outputted to mC/productionRates.output
   ! Output the contents in r, with i as the length of r.
-  USE directories, ONLY: param_dir
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   CHARACTER (LEN=*), intent(in) :: filename
-  CHARACTER (LEN=maxSpecLength), intent(out) :: r(:)
+  CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   INTEGER, intent(out) :: i
-  INTEGER :: j
+  INTEGER :: j, length
   LOGICAL :: file_exists
 
-  INQUIRE(file=trim(param_dir) // filename, EXIST=file_exists)
+  INQUIRE(file=trim(filename), EXIST=file_exists)
   IF (file_exists.EQV..FALSE.) THEN
-     WRITE (*,*) 'No ' // trim(filename) // ' file exists.'
+     WRITE (*,*) 'No ' // filename // ' file exists.'
   ELSE
-     CALL read_in_single_column_string_file( trim(param_dir) // filename, r, i)
+     length = count_lines_in_file ( trim(filename), .FALSE.)
+     ALLOCATE (r(length))
+     CALL read_in_single_column_string_file( trim(filename), r, i, .FALSE.)
   END IF
   IF (i>3) THEN
      WRITE (*,*) 1, ' ', r(1)

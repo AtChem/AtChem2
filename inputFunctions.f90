@@ -724,15 +724,25 @@ FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
   IF (counter==-1) counter=0
 END FUNCTION count_lines_in_file
 
-SUBROUTINE read_in_single_column_string_file (filename, output_vector, i)
+SUBROUTINE read_in_single_column_string_file (filename, output_vector, i, skip_first_line_in)
   USE storage, ONLY : maxSpecLength
 
   CHARACTER (LEN=*), INTENT(IN) :: filename
   CHARACTER (LEN=*), INTENT(OUT) :: output_vector(:)
-  CHARACTER (LEN=maxSpecLength) :: c
   INTEGER, INTENT(OUT) :: i
+  LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
+  LOGICAL :: skip_first_line
+  CHARACTER (LEN=maxSpecLength) :: c
   INTEGER :: ierr
+  ! Set default to not skip first line
+  IF (.NOT. present(skip_first_line_in)) THEN
+    skip_first_line = .FALSE.
+  ELSE
+    skip_first_line = skip_first_line_in
+  ENDIF
   OPEN (10, file=filename, status='old')
+  ! Skip first line if necessary.
+  IF (skip_first_line) READ (11, *, iostat=ierr) c
   ! Loop over all lines of the file, and add each entry to r(i)
   ! Then check we don't have more species of interest than total species
   i = 0

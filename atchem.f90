@@ -21,6 +21,8 @@ PROGRAM ATCHEM
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   USE inputFunctions_mod
   USE configFunctions_mod
+  USE instRates_mod
+  USE outputFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -35,7 +37,7 @@ PROGRAM ATCHEM
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (11)
   INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
-  INTEGER :: neq
+  INTEGER(kind=DI) :: neq
   DOUBLE PRECISION rtol, t, t0, tout
   DOUBLE PRECISION atol, rout (6)
   DOUBLE PRECISION :: rpar (1)
@@ -63,7 +65,7 @@ PROGRAM ATCHEM
   INTEGER, ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), SORNumber(:), reacIntSpecies(:,:)
+  INTEGER(kind=DI), ALLOCATABLE :: prodIntSpecies(:,:), SORNumber(:), reacIntSpecies(:,:)
   INTEGER(kind=DI), ALLOCATABLE :: tempSORNumber(:), returnArray(:)
   INTEGER(kind=DI) :: speciesOutputRequiredSize
   INTEGER(kind=DI) :: SORNumberSize, prodIntNameSize, reacIntNameSize
@@ -244,11 +246,16 @@ PROGRAM ATCHEM
 
   CALL matchNameToNumber (speciesName, reacIntName, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
+  write (*,*) rateOfLossNS, csize1, size(returnArray)
+  write (*,*) 'allocate1'
   ALLOCATE (lossArrayLen(rateOfLossNS))
+  write (*,*) 'allocate2'
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
+  write (*,*) 'loop'
   DO i = 1, rateOfLossNS
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
+  write (*,*) 'find'
   CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, numSpec)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
@@ -426,15 +433,21 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesName, speciesOutputRequired, &
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
+  write(*,*) 'allocate'
   ALLOCATE (SORNumber(SORNumberSize))
+  write(*,*) 'allocated'
+
   DO i = 1, SORNumberSize
      SORNumber(i) = tempSORNumber(i)
   ENDDO
+  write(*,*) 'done'
+
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
-
+  write (*,*) 'got conc for spec int'
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
+  write (*,*) 'wrote headers'
 
   flush(stderr)
   !    ********************************************************************************************************

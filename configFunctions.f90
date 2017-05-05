@@ -63,9 +63,9 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
   CHARACTER (LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
   INTEGER(kind=DI), intent(out) :: returnArray(*), returnArraySize
-  INTEGER i, j
+  INTEGER(kind=DI) :: i, j
   LOGICAL match
-
+  write(*,*) 'match'
   returnArraySize = 0
   ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
   ! returnArray with the number of the species from testSpeciesList within the masterSpeciesList
@@ -83,6 +83,7 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
         testSpeciesList(i) = ''
      ENDIF
   ENDDO
+  write (*,*) 'end match'
   RETURN
 END SUBROUTINE matchNameToNumber
 

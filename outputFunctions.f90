@@ -1,3 +1,6 @@
+MODULE outputFunctions_mod
+  USE types_mod
+CONTAINS
 SUBROUTINE ro2Sum (ro2, y)
   DOUBLE PRECISION :: ro2
   DOUBLE PRECISION, intent (in) :: y(*)
@@ -20,7 +23,7 @@ END SUBROUTINE outputEnvVar
 !--------------------------------------------------------------------
 SUBROUTINE outputjfy (fy, nsp, t)
   IMPLICIT NONE
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=DI), intent(in) :: nsp
   INTEGER i, j
   DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
 
@@ -48,7 +51,7 @@ SUBROUTINE getConcForSpecInt (masterConcList, masterConcListSize, speciesOfInter
   ! in the same order as the species are in specInt
   DOUBLE PRECISION, intent(in)  :: masterConcList(*)
   DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(*)
-  INTEGER, intent(in) :: speciesOfInterestSize, masterConcListSize, speciesOfInterest(*)
+  INTEGER(kind=DI), intent(in) :: speciesOfInterestSize, masterConcListSize, speciesOfInterest(*)
   INTEGER i, j
   ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
   ! using the elements of specInt as a key
@@ -73,7 +76,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   CHARACTER (LEN=maxSpecLength) :: reactants(10), products(10)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
-  INTEGER, intent(in) :: reactionNumber
+  INTEGER(kind=DI), intent(in) :: reactionNumber
   CHARACTER (LEN=maxReactionStringLength) :: reactantStr, productStr
   CHARACTER (LEN=maxReactionStringLength), intent(out) :: reaction
 
@@ -131,8 +134,10 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER, intent(in) :: numberOfSpecies, csize, arrayLen(*)
-  INTEGER, intent(in) :: r(numberOfSpecies, csize), flag
+  INTEGER(kind=DI), intent(in) :: numberOfSpecies, csize
+  INTEGER, intent(in) :: arrayLen(*)
+  INTEGER(kind=DI), intent(in) :: r(numberOfSpecies, csize)
+  INTEGER, intent(in) :: flag
   INTEGER i, j
   DOUBLE PRECISION, intent(in) :: t, p(*)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
@@ -195,7 +200,7 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
 
   DOUBLE PRECISION, intent(in) :: t
   DOUBLE PRECISION, intent(inout) :: arrayOfConcs(*)
-  INTEGER, intent(in) :: arrayOfConcsSize
+  INTEGER(kind=DI), intent(in) :: arrayOfConcsSize
   INTEGER i
 
   DO i = 1, arrayOfConcsSize
@@ -206,3 +211,4 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
   WRITE (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
   RETURN
 END SUBROUTINE outputSpeciesOutputRequired
+END MODULE outputFunctions_mod

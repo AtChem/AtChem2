@@ -19,7 +19,6 @@ SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS
   IF (size( chs, 2 )/=csize) THEN
     STOP "size( rhs, 1 )/=2 in readReactions()."
   END IF
-  write (*,*) 'r has second size', size( r , 2 )
   ! initialise counter for r array
   rCounter = 2
   ! loop over interesting species (i.e. over 1st index of r)

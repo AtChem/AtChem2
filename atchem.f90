@@ -247,16 +247,11 @@ PROGRAM ATCHEM
 
   CALL matchNameToNumber (speciesName, reacIntName, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
-  write (*,*) rateOfLossNS, csize1, size(returnArray)
-  write (*,*) 'allocate1'
   ALLOCATE (lossArrayLen(rateOfLossNS))
-  write (*,*) 'allocate2'
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
-  write (*,*) 'loop'
   DO i = 1, rateOfLossNS
      reacIntSpecies(i, 1) = returnArray(i)
   ENDDO
-  write (*,*) 'find'
   CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen, numSpec)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
@@ -434,27 +429,21 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesName, speciesOutputRequired, &
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
-  write(*,*) 'allocate'
   ALLOCATE (SORNumber(SORNumberSize))
-  write(*,*) 'allocated'
 
   DO i = 1, SORNumberSize
      SORNumber(i) = tempSORNumber(i)
   ENDDO
-  write(*,*) 'done'
 
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
-  write (*,*) 'got conc for spec int'
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
-  write (*,*) 'wrote headers'
 
   flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS
   !    ********************************************************************************************************
-write (*,*) 'numspec3', numSpec
   WRITE (*,*)
   CALL readPhotoRates (maxNumberOfDataPoints)
   WRITE (*,*)
@@ -464,15 +453,11 @@ write (*,*) 'numspec3', numSpec
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  write (*,*) 'get conc'
   CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
-  write (*,*) 'got conc'
   CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
-  write (*,*) 'output SOR'
 
   ! This outputs z, which is y with all the constrained species removed.
   CALL removeConstrainedSpeciesFromProbSpec (speciesConcs, z, numberOfConstrainedSpecies, constrainedSpecies, numSpec)
-  write (*,*) 'removed'
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
@@ -498,6 +483,7 @@ write (*,*) 'numspec3', numSpec
   WRITE (*,'(A30, E15.3)') 't0 = ', t0
   CALL fcvmalloc (t0, z, meth, itmeth, iatol, rtol, atol, &
        iout, rout, ipar, rpar, ier)
+  write (*,*) 'malloced'
   IF (ier/=0) THEN
      WRITE (stderr, 30) ier
 30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC returned ier = ', I5)

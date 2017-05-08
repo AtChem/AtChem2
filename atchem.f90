@@ -39,7 +39,7 @@ PROGRAM ATCHEM
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER(kind=NPI) :: iout (21), ipar (10)
-  INTEGER(kind=NPI) :: neq, neqPlusNumberOfConstrainedSpecies
+  INTEGER(kind=NPI) :: neq
   DOUBLE PRECISION rtol, t, t0, tout
   DOUBLE PRECISION atol, rout (6)
   DOUBLE PRECISION :: rpar (1)

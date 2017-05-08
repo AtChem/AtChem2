@@ -206,7 +206,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   CALL getEnvVarNum ('M', envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
-     CALL calcM (M, pressure, temp)
+     M = calcM(pressure, temp)
      ! IF CONSTRAINED
   ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
@@ -275,11 +275,11 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      RH = envVarAtT
-     CALL convertRHtoH2O (H2o, RH, temp)
+     H2o =  convertRHtoH2O(RH, temp, pressure)
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      RH = envVarFixedValues(envVarNum)
-     CALL convertRHtoH2O (H2o, RH, temp)
+     H2o =  convertRHtoH2O(RH, temp, pressure)
      ! IF NOTUSED
   ELSE
      RH = -1

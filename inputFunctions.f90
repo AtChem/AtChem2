@@ -359,7 +359,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 END SUBROUTINE readSpecies
 
 
-SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounter, nsp)
+SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concentrationValidSize, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
   USE types_mod
@@ -371,37 +371,38 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
   CHARACTER (LEN=maxSpecLength) k
   DOUBLE PRECISION, intent(out) :: concentration(*)
   DOUBLE PRECISION l
-  INTEGER, intent(out) :: concCounter
+  INTEGER(kind=NPI), intent(out) :: concentrationValidSize
   INTEGER(kind=NPI), intent(in) :: nsp
-  INTEGER :: i, ierr
+  INTEGER(kind=NPI) :: i
+  INTEGER :: ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
 
   OPEN (10, file=trim(param_dir) // '/initialConcentrations.config', status='old') ! input file for lhs of equations
-  concCounter = 0
+  concentrationValidSize = 0
   READ (10,*, iostat=ierr) k, l
   DO WHILE (ierr==0)
-     concCounter = concCounter + 1
-     concentration(concCounter) = l
-     concSpeciesName(concCounter) = k
+     concentrationValidSize = concentrationValidSize + 1
+     concentration(concentrationValidSize) = l
+     concSpeciesName(concentrationValidSize) = k
      READ (10,*, iostat=ierr) k, l
   ENDDO
   CLOSE (10, status='keep')
 
-  IF (concCounter>3) THEN
+  IF (concentrationValidSize>3) THEN
      WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
      WRITE (*,*) '...'
-     WRITE (*,*) concCounter, ' ', concSpeciesName(concCounter), ' ', concentration(concCounter)
+     WRITE (*,*) concentrationValidSize, ' ', concSpeciesName(concentrationValidSize), ' ', concentration(concentrationValidSize)
   ELSE
-     DO i = 1, concCounter
+     DO i = 1, concentrationValidSize
         WRITE (*,*) i, ' ', concSpeciesName(i), ' ', concentration(i)
      ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading initial concentrations.'
 
-  IF (concCounter>nsp) THEN
+  IF (concentrationValidSize>nsp) THEN
      WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
-     WRITE (51,*) "(number of species initial concentrations are set for) = ", concCounter
+     WRITE (51,*) "(number of species initial concentrations are set for) = ", concentrationValidSize
      WRITE (51,*) "(number of species) = ", nsp
   ENDIF
 

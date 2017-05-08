@@ -62,7 +62,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
@@ -70,8 +70,8 @@ PROGRAM ATCHEM
   INTEGER(kind=NPI), ALLOCATABLE :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
   INTEGER(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
   INTEGER(kind=NPI) :: rateOfProdNS, rateOfLossNS
   INTEGER :: ratesOutputStepSize, time, elapsed
 
@@ -87,16 +87,16 @@ PROGRAM ATCHEM
   DOUBLE PRECISION, ALLOCATABLE :: fy(:,:)
   INTEGER :: jacobianOutputStepSize
 
-  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
-  CHARACTER (LEN=400) :: fmt
+  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
+  CHARACTER(LEN=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT
   INTEGER :: irOutStepSize
 
   INTEGER(kind=QI) :: cmd_arg_count
   !    MISC
-  CHARACTER (LEN=30) :: solverTypeName(3)
-  CHARACTER (LEN=20) :: interpolationMethodName(4)
+  CHARACTER(LEN=30) :: solverTypeName(3)
+  CHARACTER(LEN=20) :: interpolationMethodName(4)
   solverTypeName(1) = 'SPGMR'
   solverTypeName(2) = 'SPGMR + Banded Preconditioner'
   solverTypeName(3) = 'Dense'

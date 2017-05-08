@@ -3,12 +3,14 @@ CONTAINS
 SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec)
 
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
+  USE types_mod
   USE interpolationMethod
   USE chemicalConstraints
   INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
   DOUBLE PRECISION :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
   DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: indexBefore, indexAfter, interpMethod, ind, facintfound, i
+  INTEGER :: indexBefore, indexAfter, interpMethod, facintfound, i
+  INTEGER(kind=NPI) :: ind
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
   IF (constraintType==1) THEN
@@ -79,8 +81,11 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
 END SUBROUTINE getConstrainedQuantAtT2D
 
 SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
+  USE types_mod
+  IMPLICIT NONE
 
-  INTEGER n, maxPoints, ind
+  INTEGER n, maxPoints
+  INTEGER(kind=NPI) :: ind
   DOUBLE PRECISION :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
   ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
   ! (with the xai�s in order), and given the array y2a(1:n), which is the output

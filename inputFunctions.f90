@@ -340,7 +340,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 
   DOUBLE PRECISION, intent(out) :: y(*)
   INTEGER(kind=NPI), intent(in) :: neq
-  INTEGER :: j
+  INTEGER(kind=NPI) :: j
   INTEGER, intent(out) :: speciesNumber(*)
   CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
 
@@ -452,8 +452,8 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
-  INTEGER :: i, j, k, dataNumberOfPoints, id, ierr
-  INTEGER(kind=NPI) :: neq
+  INTEGER :: j, k, dataNumberOfPoints, id, ierr
+  INTEGER(kind=NPI) :: neq, i
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER (LEN=maxSpecLength) :: speciesName(:), name
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix

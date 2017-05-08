@@ -51,7 +51,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   INTEGER (KIND=NPI) ipar(*), ier, nConSpec, np, numReactions
   DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
-  INTEGER i
+  INTEGER(kind=NPI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
   numReactions = ipar(2)
@@ -169,10 +169,10 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   USE reactionStructure ! access is, crhs, nclhs, csize2
   IMPLICIT NONE
 
-  INTEGER nr
-  INTEGER(kind=NPI) :: ny
-  DOUBLE PRECISION p(nr), fy(ny,*), y(*), r(nr), t
-  INTEGER j, is
+  INTEGER :: nr
+  INTEGER(kind=NPI) :: ny, j
+  DOUBLE PRECISION :: p(nr), fy(ny,*), y(*), r(nr), t
+  INTEGER :: is
 
   ! set jacobian matrix to zero
   fy(1:ny, 1:ny) = 0.0

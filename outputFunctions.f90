@@ -24,7 +24,7 @@ END SUBROUTINE outputEnvVar
 SUBROUTINE outputjfy (fy, nsp, t)
   IMPLICIT NONE
   INTEGER(kind=NPI), intent(in) :: nsp
-  INTEGER i, j
+  INTEGER(kind=NPI) :: i, j
   DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
 
   ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
@@ -53,7 +53,8 @@ SUBROUTINE getConcForSpecInt (masterConcList, masterConcListSize, speciesOfInter
   DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(*)
   INTEGER, intent(in) :: speciesOfInterestSize, speciesOfInterest(*)
   INTEGER(kind=NPI), intent(in) :: masterConcListSize
-  INTEGER i, j
+  INTEGER(kind=NPI) :: i
+  INTEGER :: j
   ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
   ! using the elements of specInt as a key
   DO i = 1, masterConcListSize

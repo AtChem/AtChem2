@@ -63,7 +63,7 @@ PROGRAM ATCHEM
   INTEGER concCounter
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
-  INTEGER, ALLOCATABLE :: speciesNumber(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)

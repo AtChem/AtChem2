@@ -341,7 +341,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   DOUBLE PRECISION, intent(out) :: y(*)
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
-  INTEGER, intent(out) :: speciesNumber(*)
+  INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
   CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
 
   ! Read in species number and name from mC/mechanism.species to speciesName

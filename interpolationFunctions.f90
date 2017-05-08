@@ -9,7 +9,8 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
   DOUBLE PRECISION :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
   DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: indexBefore, indexAfter, interpMethod, facintfound, i
+  INTEGER :: indexBefore, indexAfter, facintfound, i
+  INTEGER(kind=SI) :: interpMethod
   INTEGER(kind=NPI) :: ind
 
   ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE

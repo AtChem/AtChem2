@@ -49,7 +49,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
-  INTEGER :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
+  INTEGER(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
   DOUBLE PRECISION :: d
 

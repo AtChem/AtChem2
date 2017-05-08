@@ -76,12 +76,12 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   USE storage, ONLY : maxSpecLength, maxReactionStringLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength) :: reactants(10), products(10)
-  CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
+  CHARACTER(LEN=maxSpecLength) :: reactants(10), products(10)
+  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
   INTEGER(kind=NPI), intent(in) :: reactionNumber
-  CHARACTER (LEN=maxReactionStringLength) :: reactantStr, productStr
-  CHARACTER (LEN=maxReactionStringLength), intent(out) :: reaction
+  CHARACTER(LEN=maxReactionStringLength) :: reactantStr, productStr
+  CHARACTER(LEN=maxReactionStringLength), intent(out) :: reaction
 
   ! Loop over reactants, and copy the reactant name for any reactant used in
   ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
@@ -141,8 +141,8 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   INTEGER(kind=NPI), intent(in) :: numberOfSpecies, r(numberOfSpecies, csize), arrayLen(*)
   INTEGER(kind=NPI) :: i, j
   DOUBLE PRECISION, intent(in) :: t, p(*)
-  CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
-  CHARACTER (LEN=maxReactionStringLength) :: reaction
+  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
+  CHARACTER(LEN=maxReactionStringLength) :: reaction
 
   DO i = 1, numberOfSpecies
      IF (arrayLen(i)>csize) THEN
@@ -178,8 +178,8 @@ SUBROUTINE outputInstantaneousRates (time, numReac)
   INTEGER(kind=QI), intent(in) :: time
   INTEGER(kind=NPI), intent(in) :: numReac
   INTEGER(kind=NPI) :: i
-  CHARACTER (LEN=maxFilepathLength+30) :: irfileLocation
-  CHARACTER (LEN=30) :: strTime
+  CHARACTER(LEN=maxFilepathLength+30) :: irfileLocation
+  CHARACTER(LEN=30) :: strTime
 
   WRITE (strTime,*) time
 

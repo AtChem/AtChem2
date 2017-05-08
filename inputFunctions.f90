@@ -100,7 +100,7 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
 
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
 
   WRITE (*,*) 'Reading photolysis rates from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
@@ -143,7 +143,7 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
 
   INTEGER :: i, ck(*), ierr
   DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER (LEN=maxPhotoRateNameLength) :: str(*)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
 
 ! Check whether file exists correctly in readPhotolysisConstants,
@@ -226,9 +226,9 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 
   INTEGER :: i, k, ierr
   INTEGER :: maxNumberOfDataPoints
-  CHARACTER (LEN=maxPhotoRateNameLength) :: string
-  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
-  CHARACTER (LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
+  CHARACTER(LEN=maxPhotoRateNameLength) :: string
+  CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER(LEN=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
 
   ! GET NAMES OF PHOTO RATES
   CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
@@ -300,8 +300,8 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  CHARACTER (LEN=maxFilepathLength) :: filename
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
+  CHARACTER(LEN=maxFilepathLength) :: filename
   INTEGER(kind=NPI) :: j, nsp
   INTEGER :: length
   INTEGER(kind=NPI), intent(out) :: i
@@ -345,7 +345,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
   INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
-  CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
+  CHARACTER(LEN=maxSpecLength), intent(out) :: speciesName(*)
 
   ! Read in species number and name from mC/mechanism.species to speciesName
   ! and speciesNumber. Also set each element of y to 0.
@@ -424,8 +424,8 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=*), intent(in) :: filename
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
+  CHARACTER(LEN=*), intent(in) :: filename
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   INTEGER(kind=NPI), intent(out) :: i
   INTEGER(kind=NPI) :: j
   INTEGER :: length
@@ -466,9 +466,9 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   INTEGER :: j, k, dataNumberOfPoints, id, ierr
   INTEGER(kind=NPI) :: neq, i
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-  CHARACTER (LEN=maxSpecLength) :: speciesName(:), name
-  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
-  CHARACTER (LEN=maxFilepathLength+maxSpecLength) :: fileLocation
+  CHARACTER(LEN=maxSpecLength) :: speciesName(:), name
+  CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
   DOUBLE PRECISION :: y (*)
 
@@ -641,9 +641,9 @@ SUBROUTINE readEnvVar ()
   IMPLICIT NONE
 
   INTEGER :: i, counter, k
-  CHARACTER (LEN=10) dummy
-  CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix
-  CHARACTER (LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
+  CHARACTER(LEN=10) dummy
+  CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
+  CHARACTER(LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
 
   WRITE (*,*) 'Reading environment variables...'
 
@@ -721,7 +721,7 @@ FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
   INTEGER :: counter
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
-  CHARACTER (LEN=10) dummy
+  CHARACTER(LEN=10) dummy
   INTEGER :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN
@@ -747,12 +747,12 @@ END FUNCTION count_lines_in_file
 SUBROUTINE read_in_single_column_string_file (filename, output_vector, i, skip_first_line_in)
   USE storage, ONLY : maxSpecLength
 
-  CHARACTER (LEN=*), INTENT(IN) :: filename
-  CHARACTER (LEN=*), INTENT(OUT) :: output_vector(:)
+  CHARACTER(LEN=*), INTENT(IN) :: filename
+  CHARACTER(LEN=*), INTENT(OUT) :: output_vector(:)
   INTEGER(kind=NPI), INTENT(OUT) :: i
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
-  CHARACTER (LEN=maxSpecLength) :: c
+  CHARACTER(LEN=maxSpecLength) :: c
   INTEGER :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN

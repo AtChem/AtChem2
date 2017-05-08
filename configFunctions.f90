@@ -23,8 +23,8 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutRe
   USE envVars
   USE photolysisRates, ONLY : nrOfPhotoRates, ck
   USE storage, ONLY : maxPhotoRateNameLength, maxSpecLength
-  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
-  CHARACTER (LEN=maxSpecLength) :: specOutReqNames(*)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
+  CHARACTER(LEN=maxSpecLength) :: specOutReqNames(*)
   INTEGER(kind=NPI), intent(in) :: specOutReqNamesSize
   INTEGER(kind=NPI) :: i
 
@@ -58,8 +58,8 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   ! returnArray in the next available space.
   ! returnArraySize contains the size of returnArray, which is the
   ! number of times a match was made
-  CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
-  CHARACTER (LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
+  CHARACTER(LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
+  CHARACTER(LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
   INTEGER(kind=NPI), intent(out) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
@@ -88,8 +88,8 @@ PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
   ! Search masterList for target, and return the index id. If not found, return 0.
   IMPLICIT NONE
 
-  CHARACTER (LEN=*), contiguous, intent(in) :: masterList(:)
-  CHARACTER (LEN=*), intent(in) :: target
+  CHARACTER(LEN=*), contiguous, intent(in) :: masterList(:)
+  CHARACTER(LEN=*), intent(in) :: target
   INTEGER :: j, id
 
   id = 0
@@ -112,8 +112,8 @@ SUBROUTINE setConcentrations (refSpeciesNames, concSpeciesNames, &
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
-  CHARACTER (LEN=maxSpecLength) :: k, m
+  CHARACTER(LEN=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
+  CHARACTER(LEN=maxSpecLength) :: k, m
   DOUBLE PRECISION, intent(in) :: inputConcentrations(:)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(:)
   INTEGER(kind=NPI) :: j, i

@@ -33,7 +33,7 @@ MODULE directories
   IMPLICIT NONE
 
   SAVE
-  CHARACTER (LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
+  CHARACTER(LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
 
 END MODULE directories
 !    ********************************************************************************************************
@@ -55,8 +55,8 @@ MODULE envVars
   IMPLICIT NONE
 
   SAVE
-  CHARACTER (LEN=maxEnvVarNameLength), ALLOCATABLE :: envVarNames(:)
-  CHARACTER (LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
+  CHARACTER(LEN=maxEnvVarNameLength), ALLOCATABLE :: envVarNames(:)
+  CHARACTER(LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
   INTEGER, ALLOCATABLE :: envVarTypesNum(:)
   DOUBLE PRECISION, ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
   INTEGER :: numEnvVars, tempNum
@@ -137,7 +137,7 @@ MODULE species
   IMPLICIT NONE
   SAVE
   INTEGER(kind=NPI) :: neq
-  CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
 
   INTEGER(kind=NPI) :: i
 
@@ -162,14 +162,14 @@ CONTAINS
   END SUBROUTINE deallocateSpeciesList
 
   SUBROUTINE getSpeciesList (sl)
-    CHARACTER (LEN=maxSpecLength) :: sl(*)
+    CHARACTER(LEN=maxSpecLength) :: sl(*)
     DO i = 1, neq
        sl(i) = speciesList(i)
     ENDDO
   END SUBROUTINE getSpeciesList
 
   SUBROUTINE setSpeciesList (sl)
-    CHARACTER (LEN=maxSpecLength) :: sl(*)
+    CHARACTER(LEN=maxSpecLength) :: sl(*)
     DO i = 1, neq
        speciesList(i) = sl(i)
     ENDDO
@@ -251,8 +251,8 @@ MODULE photolysisRates
   LOGICAL :: usePhotolysisConstants
   DOUBLE PRECISION :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
   DOUBLE PRECISION :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
-  CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
-  CHARACTER (LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
+  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
   DOUBLE PRECISION, ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
   INTEGER, ALLOCATABLE :: photoNumberOfPoints(:)
 

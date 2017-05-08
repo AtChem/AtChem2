@@ -3,10 +3,12 @@ CONTAINS
   SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS, arrayLen)
   USE types_mod
   ! For each interesting species,
-  INTEGER rCounter, i, j
-  INTEGER, intent(in) :: chssize1, csize, rateOfNS, chs(chssize1, csize)
-  INTEGER, intent(out) :: arrayLen(*)
-  INTEGER, intent(inout) :: r(rateOfNS, *)
+  INTEGER(kind=NPI) :: rCounter, i
+  INTEGER :: j
+  INTEGER, intent(in) :: chssize1, csize, chs(chssize1, csize)
+  INTEGER(kind=NPI), intent(in) :: rateOfNS
+  INTEGER(kind=NPI), intent(out) :: arrayLen(*)
+  INTEGER(kind=NPI), intent(inout) :: r(rateOfNS, *)
 
   ! chssize1 will be 3 for reactants, 2 for products. Reactants have an extra column
   ! due to subroutine readReactions() placing 1 in this column. This is the

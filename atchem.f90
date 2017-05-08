@@ -32,7 +32,8 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  INTEGER ier, i
+  INTEGER(kind=QI) :: ier
+  INTEGER :: i
   INTEGER(kind=NPI) :: species_counter
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
@@ -66,13 +67,14 @@ PROGRAM ATCHEM
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER, ALLOCATABLE :: prodIntSpecies(:,:), returnArray(:), SORNumber(:), tempSORNumber(:), reacIntSpecies(:,:)
-  INTEGER speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
+  INTEGER(kind=NPI), ALLOCATABLE :: returnArray(:), tempSORNumber(:), SORNumber(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
+  INTEGER(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
-  INTEGER rateOfProdNS, prodLossArrayLen, rateOfLossNS, ratesOutputStepSize, time, elapsed
-  INTEGER, ALLOCATABLE :: prodArrayLen(:), lossArrayLen(:)
+  INTEGER(kind=NPI) :: rateOfProdNS, prodLossArrayLen, rateOfLossNS
+  INTEGER :: ratesOutputStepSize, time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   DOUBLE PRECISION, ALLOCATABLE :: z(:)
@@ -230,8 +232,8 @@ PROGRAM ATCHEM
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
   ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
-  DO i = 1, rateOfProdNS
-     prodIntSpecies(i, 1) = returnArray(i)
+  DO species_counter = 1, rateOfProdNS
+     prodIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
   CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2, csize2, rateOfProdNS, prodArrayLen)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
@@ -246,8 +248,8 @@ PROGRAM ATCHEM
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
-  DO i = 1, rateOfLossNS
-     reacIntSpecies(i, 1) = returnArray(i)
+  DO species_counter = 1, rateOfLossNS
+     reacIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
   CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3, csize1, rateOfLossNS, lossArrayLen)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
@@ -427,8 +429,8 @@ PROGRAM ATCHEM
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
   ALLOCATE (SORNumber(SORNumberSize))
-  DO i = 1, SORNumberSize
-     SORNumber(i) = tempSORNumber(i)
+  DO species_counter = 1, SORNumberSize
+     SORNumber(species_counter) = tempSORNumber(species_counter)
   ENDDO
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)

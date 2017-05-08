@@ -51,10 +51,8 @@ SUBROUTINE getConcForSpecInt (masterConcList, masterConcListSize, speciesOfInter
   ! in the same order as the species are in specInt
   DOUBLE PRECISION, intent(in)  :: masterConcList(*)
   DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(*)
-  INTEGER, intent(in) :: speciesOfInterestSize, speciesOfInterest(*)
-  INTEGER(kind=NPI), intent(in) :: masterConcListSize
-  INTEGER(kind=NPI) :: i
-  INTEGER :: j
+  INTEGER(kind=NPI), intent(in) :: masterConcListSize, speciesOfInterestSize, speciesOfInterest(*)
+  INTEGER(kind=NPI) :: i, j
   ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
   ! using the elements of specInt as a key
   DO i = 1, masterConcListSize
@@ -78,7 +76,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   CHARACTER (LEN=maxSpecLength) :: reactants(10), products(10)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   INTEGER :: i, numReactants, numProducts
-  INTEGER, intent(in) :: reactionNumber
+  INTEGER(kind=NPI), intent(in) :: reactionNumber
   CHARACTER (LEN=maxReactionStringLength) :: reactantStr, productStr
   CHARACTER (LEN=maxReactionStringLength), intent(out) :: reaction
 
@@ -136,9 +134,9 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER, intent(in) :: numberOfSpecies, csize, arrayLen(*)
-  INTEGER, intent(in) :: r(numberOfSpecies, csize), flag
-  INTEGER i, j
+  INTEGER, intent(in) :: csize, flag
+  INTEGER(kind=NPI), intent(in) :: numberOfSpecies, r(numberOfSpecies, csize), arrayLen(*)
+  INTEGER(kind=NPI) :: i, j
   DOUBLE PRECISION, intent(in) :: t, p(*)
   CHARACTER (LEN=maxSpecLength), intent(in) :: speciesNames(*)
   CHARACTER (LEN=maxReactionStringLength) :: reaction
@@ -200,8 +198,8 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
 
   DOUBLE PRECISION, intent(in) :: t
   DOUBLE PRECISION, intent(inout) :: arrayOfConcs(*)
-  INTEGER, intent(in) :: arrayOfConcsSize
-  INTEGER i
+  INTEGER(kind=NPI), intent(in) :: arrayOfConcsSize
+  INTEGER(kind=NPI) :: i
 
   DO i = 1, arrayOfConcsSize
      IF (arrayOfConcs(i)<0) THEN

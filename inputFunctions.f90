@@ -302,7 +302,9 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   INTEGER(kind=NPI), intent(in) :: nsp
   CHARACTER (LEN=maxFilepathLength) :: filename
-  INTEGER :: i, j, length
+  INTEGER(kind=NPI) :: j
+  INTEGER :: length
+  INTEGER(kind=NPI), intent(out) :: i
 
   filename = trim(param_dir) // '/concentrationOutput.config'
   WRITE (*,*) 'Reading concentration output from file...'
@@ -416,8 +418,9 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
 
   CHARACTER (LEN=*), intent(in) :: filename
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  INTEGER, intent(out) :: i
-  INTEGER :: j, length
+  INTEGER(kind=NPI), intent(out) :: i
+  INTEGER(kind=NPI) :: j
+  INTEGER :: length
   LOGICAL :: file_exists
 
   INQUIRE(file=trim(filename), EXIST=file_exists)
@@ -738,7 +741,7 @@ SUBROUTINE read_in_single_column_string_file (filename, output_vector, i, skip_f
 
   CHARACTER (LEN=*), INTENT(IN) :: filename
   CHARACTER (LEN=*), INTENT(OUT) :: output_vector(:)
-  INTEGER, INTENT(OUT) :: i
+  INTEGER(kind=NPI), INTENT(OUT) :: i
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER (LEN=maxSpecLength) :: c

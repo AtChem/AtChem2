@@ -55,7 +55,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
-  INTEGER runStart, runEnd, runTime, rate, previousSeconds
+  INTEGER(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
   INTEGER numReactions, numSteps
   INTEGER(kind=NPI) :: numSpec
   DOUBLE PRECISION tminus1, timestepSize

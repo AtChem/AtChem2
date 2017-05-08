@@ -1,6 +1,9 @@
+MODULE mechanismRates_mod
 
+CONTAINS
 SUBROUTINE mechanism_rates (p, t, y, mnsp)
-  USE photolysisRates
+   USE types_mod
+   USE photolysisRates
    USE zenithData1
    USE constraints
    USE envVars, ONLY : ro2
@@ -12,7 +15,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    ! calculates rate constants from arrhenius information
    DOUBLE PRECISION, intent (out) :: p(*)
    DOUBLE PRECISION, intent (in) :: t
-   INTEGER, intent (in) :: mnsp
+   INTEGER(kind=NPI), intent (in) :: mnsp
    DOUBLE PRECISION, intent (in) :: y(mnsp)
    DOUBLE PRECISION :: temp, pressure, dummy
 
@@ -54,3 +57,4 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    INCLUDE 'modelConfiguration/mechanism-rate-coefficients.f90'
    RETURN
 END SUBROUTINE mechanism_rates
+END MODULE mechanismRates_mod

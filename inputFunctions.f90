@@ -359,7 +359,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 END SUBROUTINE readSpecies
 
 
-SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concentrationValidSize, nsp)
+SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
   USE types_mod
@@ -369,42 +369,41 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concentrat
 
   CHARACTER (LEN=maxSpecLength), intent(out) :: concSpeciesName(*)
   CHARACTER (LEN=maxSpecLength) k
-  DOUBLE PRECISION, intent(out) :: concentration(*)
+  DOUBLE PRECISION, ALLOCATABLE, intent(out) :: concentration(:)
   DOUBLE PRECISION l
-  INTEGER(kind=NPI), intent(out) :: concentrationValidSize
   INTEGER(kind=NPI), intent(in) :: nsp
-  INTEGER(kind=NPI) :: i
+  INTEGER(kind=NPI) :: numLines, i
   INTEGER :: ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
-
+  numLines = count_lines_in_file(trim(param_dir) // '/initialConcentrations.config', .FALSE.)
+  IF (numLines>nsp) THEN
+     WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
+     WRITE (51,*) "(number of species initial concentrations are set for) = ", numLines
+     WRITE (51,*) "(number of species) = ", nsp
+  ENDIF
+  ALLOCATE (concentration(numLines))
   OPEN (10, file=trim(param_dir) // '/initialConcentrations.config', status='old') ! input file for lhs of equations
-  concentrationValidSize = 0
+  i = 0
   READ (10,*, iostat=ierr) k, l
   DO WHILE (ierr==0)
-     concentrationValidSize = concentrationValidSize + 1
-     concentration(concentrationValidSize) = l
-     concSpeciesName(concentrationValidSize) = k
+     i = i + 1
+     concentration(i) = l
+     concSpeciesName(i) = k
      READ (10,*, iostat=ierr) k, l
   ENDDO
   CLOSE (10, status='keep')
 
-  IF (concentrationValidSize>3) THEN
+  IF (numLines>3) THEN
      WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
      WRITE (*,*) '...'
-     WRITE (*,*) concentrationValidSize, ' ', concSpeciesName(concentrationValidSize), ' ', concentration(concentrationValidSize)
+     WRITE (*,*) numLines, ' ', concSpeciesName(numLines), ' ', concentration(numLines)
   ELSE
-     DO i = 1, concentrationValidSize
+     DO i = 1, numLines
         WRITE (*,*) i, ' ', concSpeciesName(i), ' ', concentration(i)
      ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading initial concentrations.'
-
-  IF (concentrationValidSize>nsp) THEN
-     WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
-     WRITE (51,*) "(number of species initial concentrations are set for) = ", concentrationValidSize
-     WRITE (51,*) "(number of species) = ", nsp
-  ENDIF
 
   RETURN
 END SUBROUTINE readInitialConcentrations

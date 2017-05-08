@@ -61,7 +61,6 @@ PROGRAM ATCHEM
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  INTEGER(kind=NPI) :: concCounter
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
@@ -204,8 +203,8 @@ PROGRAM ATCHEM
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readInitialConcentrations (concSpeciesName, initialConcentrations, concCounter, numSpec)
-  CALL setConcentrations (speciesName, numSpec, concSpeciesName, initialConcentrations, concCounter, speciesConcs)
+  CALL readInitialConcentrations (concSpeciesName, initialConcentrations, numSpec)
+  CALL setConcentrations (speciesName, numSpec, concSpeciesName, initialConcentrations, speciesConcs)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION

@@ -87,8 +87,9 @@ END SUBROUTINE FCVFUN
 
 SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   ! calculate rhs of rate eqn dy()
-  USE productionAndLossRates
   USE types_mod
+  USE productionAndLossRates
+  USE mechanismRates_mod
 
   IMPLICIT NONE
   INTEGER (KIND=NPI) :: i
@@ -163,11 +164,13 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   ! t = current time (s)
   ! p = reaction rates - dimension nr
   ! r = working array - dimension nr
-
+  USE types_mod
+  USE mechanismRates_mod
   USE reactionStructure ! access is, crhs, nclhs, csize2
   IMPLICIT NONE
 
-  INTEGER ny, nr
+  INTEGER nr
+  INTEGER(kind=NPI) :: ny
   DOUBLE PRECISION p(nr), fy(ny,*), y(*), r(nr), t
   INTEGER j, is
 

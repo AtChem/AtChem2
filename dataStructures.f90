@@ -8,6 +8,7 @@ module types_mod
    integer, parameter :: DI = INT16
    integer, parameter :: QI = INT32
    integer, parameter :: LONG = INT64
+   integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
    real, parameter :: SP = selected_real_kind( p = 6, r = 37 )
    real, parameter :: DP = selected_real_kind( p = 15, r = 307 )
    real, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
@@ -69,9 +70,11 @@ END MODULE envVars
 
 !    ********************************************************************************************************
 MODULE constraints
+  USE types_mod
   IMPLICIT NONE
   SAVE
-  INTEGER :: numberOfConstrainedSpecies, maxNumberOfDataPoints
+  INTEGER(kind=NPI) :: numberOfConstrainedSpecies
+  INTEGER :: maxNumberOfDataPoints
   INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   INTEGER, ALLOCATABLE :: constrainedSpecies(:)
   REAL (8), ALLOCATABLE :: constrainedConcs(:)
@@ -84,12 +87,12 @@ CONTAINS
   ! METHODS FOR numberOfConstrainedSpecies
 
   SUBROUTINE getNumberOfConstrainedSpecies (n)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     n = numberOfConstrainedSpecies
   END SUBROUTINE getNumberOfConstrainedSpecies
 
   SUBROUTINE setNumberOfConstrainedSpecies (n)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     numberOfConstrainedSpecies = n
     ALLOCATE (constrainedSpecies(n), constrainedConcs(n))
     WRITE (*,*) 'Setting size of constraint arrays, n = ', n
@@ -128,14 +131,15 @@ CONTAINS
 END MODULE constraints
 
 MODULE species
+  USE types_mod
   USE storage, ONLY : maxSpecLength
 
   IMPLICIT NONE
   SAVE
-  INTEGER :: neq
+  INTEGER(kind=NPI) :: neq
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
 
-  INTEGER :: i
+  INTEGER(kind=NPI) :: i
 
   PRIVATE :: neq, speciesList, i
   PUBLIC :: getNumberOfSpecies, setNumberOfSpecies, deallocateSpeciesList
@@ -143,12 +147,12 @@ MODULE species
 CONTAINS
 
   SUBROUTINE getNumberOfSpecies (n)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     n = neq
   END SUBROUTINE getNumberOfSpecies
 
   SUBROUTINE setNumberOfSpecies (n)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     neq = n
     ALLOCATE (speciesList(n))
   END SUBROUTINE setNumberOfSpecies
@@ -257,13 +261,14 @@ END MODULE photolysisRates
 !    CHEMICAL CONSTRAINTS MODULE
 !    ********************************************************************************************************
 MODULE chemicalConstraints
+  USE types_mod
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   SAVE
   DOUBLE PRECISION, ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
   DOUBLE PRECISION, ALLOCATABLE :: constrainedConcs(:)
-  INTEGER :: numberOfConstrainedSpecies
+  INTEGER(kind=NPI) :: numberOfConstrainedSpecies
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: constrainedName(:)
   INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
 

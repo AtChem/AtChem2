@@ -1,4 +1,5 @@
 MODULE inputFunctions_mod
+  USE types_mod
 CONTAINS
 SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
@@ -299,7 +300,7 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   IMPLICIT NONE
 
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=NPI), intent(in) :: nsp
   CHARACTER (LEN=maxFilepathLength) :: filename
   INTEGER :: i, j, length
 
@@ -338,7 +339,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   IMPLICIT NONE
 
   DOUBLE PRECISION, intent(out) :: y(*)
-  INTEGER, intent(in) :: neq
+  INTEGER(kind=NPI), intent(in) :: neq
   INTEGER :: j
   INTEGER, intent(out) :: speciesNumber(*)
   CHARACTER (LEN=maxSpecLength), intent(out) :: speciesName(*)
@@ -359,6 +360,7 @@ END SUBROUTINE readSpecies
 SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounter, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
+  USE types_mod
   USE directories, ONLY: param_dir
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
@@ -368,7 +370,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, concCounte
   DOUBLE PRECISION, intent(out) :: concentration(*)
   DOUBLE PRECISION l
   INTEGER, intent(out) :: concCounter
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=NPI), intent(in) :: nsp
   INTEGER :: i, ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
@@ -450,7 +452,8 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
-  INTEGER :: i, j, k, dataNumberOfPoints, neq, id, ierr
+  INTEGER :: i, j, k, dataNumberOfPoints, id, ierr
+  INTEGER(kind=NPI) :: neq
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER (LEN=maxSpecLength) :: speciesName(:), name
   CHARACTER (LEN=maxFilepathLength) :: fileLocationPrefix

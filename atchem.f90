@@ -5,6 +5,7 @@
 PROGRAM ATCHEM
 
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
+  USE types_mod
   USE species
   USE constraints
   USE interpolationMethod
@@ -23,6 +24,7 @@ PROGRAM ATCHEM
   USE configFunctions_mod
   USE instantaneousRatesFunctions_mod
   USE outputFunctions_mod
+  USE constraintFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************
@@ -34,9 +36,8 @@ PROGRAM ATCHEM
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
-  INTEGER, PARAMETER :: LongInt_Kind = SELECTED_INT_KIND (10)
-  INTEGER (KIND=LongInt_Kind) :: iout (21), ipar (10)
-  INTEGER :: neq
+  INTEGER(kind=NPI) :: iout (21), ipar (10)
+  INTEGER(kind=NPI) :: neq, neqPlusNumberOfConstrainedSpecies
   DOUBLE PRECISION rtol, t, t0, tout
   DOUBLE PRECISION atol, rout (6)
   DOUBLE PRECISION :: rpar (1)
@@ -53,7 +54,8 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER numSpec, numReactions, numSteps
+  INTEGER numReactions, numSteps
+  INTEGER(kind=NPI) :: numSpec
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
@@ -447,7 +449,8 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+  neqPlusNumberOfConstrainedSpecies = neq+numberOfConstrainedSpecies
+  CALL getConcForSpecInt (speciesConcs, neqPlusNumberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
   CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
@@ -588,7 +591,8 @@ PROGRAM ATCHEM
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     CALL getConcForSpecInt (speciesConcs, neq+numberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+     neqPlusNumberOfConstrainedSpecies = neq+numberOfConstrainedSpecies
+     CALL getConcForSpecInt (speciesConcs, neqPlusNumberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
      CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 

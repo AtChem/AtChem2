@@ -1,9 +1,11 @@
 MODULE instantaneousRatesFunctions_mod
 CONTAINS
   SUBROUTINE findReactionsWithProductOrReactant (r, chs, chssize1, csize, rateOfNS, arrayLen, numSpecies)
+  USE types_mod
   ! For each interesting species,
   INTEGER rCounter, i, j
-  INTEGER, intent(in) :: chssize1, csize, rateOfNS, numSpecies, chs(chssize1, csize)
+  INTEGER, intent(in) :: chssize1, csize, rateOfNS, chs(chssize1, csize)
+  INTEGER(kind=NPI), intent(in) :: numSpecies
   INTEGER, intent(out) :: arrayLen(*)
   INTEGER, intent(inout) :: r(rateOfNS, *)
 

@@ -61,7 +61,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  INTEGER concCounter
+  INTEGER(kind=NPI) :: concCounter
   DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)

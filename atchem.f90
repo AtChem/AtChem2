@@ -175,7 +175,7 @@ PROGRAM ATCHEM
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
-  ALLOCATE (tempSORNumber(numSpec), concsOfSpeciesOfInterest(numSpec))
+  ALLOCATE (tempSORNumber(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   ALLOCATE (lossRates(numReactions), productionRates(numReactions), ir(numReactions))
@@ -427,12 +427,12 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesName, speciesOutputRequired, &
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
-  ALLOCATE (SORNumber(SORNumberSize))
+  ALLOCATE (SORNumber(SORNumberSize), concsOfSpeciesOfInterest(SORNumberSize))
   DO species_counter = 1, SORNumberSize
      SORNumber(species_counter) = tempSORNumber(species_counter)
   ENDDO
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
-  CALL getConcForSpecInt (speciesConcs, numSpec, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+  CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
 
   !   Write file output headers
   CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
@@ -451,8 +451,7 @@ PROGRAM ATCHEM
   WRITE (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  neqPlusNumberOfConstrainedSpecies = neq+numberOfConstrainedSpecies
-  CALL getConcForSpecInt (speciesConcs, neqPlusNumberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+  CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
   CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
 
   ! This outputs z, which is y with all the constrained species removed.
@@ -593,8 +592,7 @@ PROGRAM ATCHEM
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
-     neqPlusNumberOfConstrainedSpecies = neq+numberOfConstrainedSpecies
-     CALL getConcForSpecInt (speciesConcs, neqPlusNumberOfConstrainedSpecies, SORNumber, SORNumberSize, concsOfSpeciesOfInterest)
+     CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
      CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
      CALL outputPhotolysisRates (j, t)
 

@@ -1,4 +1,6 @@
-SUBROUTINE ro2Sum (ro2, y)
+MODULE outputFunctions_mod
+CONTAINS
+  SUBROUTINE ro2Sum (ro2, y)
   DOUBLE PRECISION :: ro2
   DOUBLE PRECISION, intent (in) :: y(*)
   ro2 = 0.00e+00
@@ -206,3 +208,4 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
   WRITE (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
   RETURN
 END SUBROUTINE outputSpeciesOutputRequired
+END MODULE outputFunctions_mod

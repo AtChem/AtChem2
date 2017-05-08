@@ -10,7 +10,8 @@ CONTAINS
 
   IMPLICIT NONE
   DOUBLE PRECISION :: jfac, JSpeciesAtT, t
-  INTEGER :: basePhotoRateNum, i
+  INTEGER(kind=NPI) :: basePhotoRateNum
+  INTEGER :: i
   INTEGER :: firstTime = 1
   IF (firstTime==1) THEN
      WRITE (*,*) "basePhotoRate: ", jFacSpecies
@@ -139,7 +140,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
 
   DOUBLE PRECISION :: t, envVarAtT, theta
   DOUBLE PRECISION :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
-  INTEGER :: envVarNum, envVarNumH2O
+  INTEGER(kind=NPI) :: envVarNum, envVarNumH2O
 
   ! ********************************************************************************************************************
   ! GET PRESSURE AT T
@@ -374,7 +375,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum)
   IMPLICIT NONE
 
   CHARACTER, intent(in) :: name*(*)
-  INTEGER, intent(out) :: envVarNum
+  INTEGER(kind=NPI), intent(out) :: envVarNum
   INTEGER i
 
   DO i = 1, numEnvVars
@@ -390,7 +391,7 @@ SUBROUTINE test_jfac()
   USE photolysisRates
   USE envVars
   IMPLICIT NONE
-  INTEGER :: envVarNum
+  INTEGER(kind=NPI) :: envVarNum
   ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
   envVarNum = 0
   CALL getEnvVarNum ('JFAC', envVarNum)

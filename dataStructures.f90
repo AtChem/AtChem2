@@ -76,7 +76,7 @@ MODULE constraints
   INTEGER(kind=NPI) :: numberOfConstrainedSpecies
   INTEGER :: maxNumberOfDataPoints
   INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
-  INTEGER, ALLOCATABLE :: constrainedSpecies(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: constrainedSpecies(:)
   REAL (8), ALLOCATABLE :: constrainedConcs(:)
 
   PRIVATE :: numberOfConstrainedSpecies, constrainedSpecies, constrainedConcs
@@ -105,13 +105,13 @@ CONTAINS
   ! METHODS FOR constrainedConcs
 
   SUBROUTINE getConstrainedConc (n, r)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     REAL (8) :: r
     r = constrainedConcs(n)
   END SUBROUTINE getConstrainedConc
 
   SUBROUTINE setConstrainedConc (n, r)
-    INTEGER :: n
+    INTEGER(kind=NPI) :: n
     REAL (8) :: r
     constrainedConcs(n) = r
   END SUBROUTINE setConstrainedConc
@@ -119,12 +119,12 @@ CONTAINS
   ! METHODS FOR constrainedSpecies
 
   SUBROUTINE getConstrainedSpecies (n, j)
-    INTEGER :: n, j
+    INTEGER(kind=NPI) :: n, j
     j = constrainedSpecies(n)
   END SUBROUTINE getConstrainedSpecies
 
   SUBROUTINE setConstrainedSpecies (n, j)
-    INTEGER :: n, j
+    INTEGER(kind=NPI) :: n, j
     constrainedSpecies(n) = j
   END SUBROUTINE setConstrainedSpecies
 

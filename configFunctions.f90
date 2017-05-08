@@ -116,8 +116,8 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inp
   DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
   INTEGER, intent(in) :: concCounter
-  INTEGER(kind=NPI) :: numSpecies
-  INTEGER :: i, j
+  INTEGER(kind=NPI) :: numSpecies, j
+  INTEGER :: i
   LOGICAL :: match
 
   DO i = 1, concCounter

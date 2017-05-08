@@ -20,7 +20,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    DOUBLE PRECISION, intent (in) :: y(mnsp)
    DOUBLE PRECISION :: temp, pressure, dummy
 
-   INTEGER :: i
+   INTEGER(kind=NPI) :: i
    DOUBLE PRECISION :: photoRateAtT
 
    INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'

@@ -33,6 +33,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
   INTEGER ier, i
+  INTEGER(kind=NPI) :: species_counter
   INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
   INTEGER nfels, njtv, npe, nps
   INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
@@ -559,9 +560,9 @@ PROGRAM ATCHEM
      flush(6)
 
      ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-     DO i = 1, numberOfConstrainedSpecies
-        CALL getConstrainedConc (i, d)
-        constrainedConcs(i) = d
+     DO species_counter = 1, numberOfConstrainedSpecies
+        CALL getConstrainedConc (species_counter, d)
+        constrainedConcs(species_counter) = d
      ENDDO
 
      CALL addConstrainedSpeciesToProbSpec (z, speciesConcs, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
@@ -646,8 +647,8 @@ PROGRAM ATCHEM
   ENDIF
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
-  DO i = 1, numSpec
-     WRITE (53,*) speciesName(i), speciesConcs(i)
+  DO species_counter = 1, numSpec
+     WRITE (53,*) speciesName(species_counter), speciesConcs(species_counter)
   ENDDO
 
   !   printing of final statistics desactivated - nobody finds it useful

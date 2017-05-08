@@ -1,4 +1,5 @@
 MODULE outputFunctions_mod
+  USE types_mod
 CONTAINS
   SUBROUTINE ro2Sum (ro2, y)
   DOUBLE PRECISION :: ro2
@@ -22,7 +23,7 @@ END SUBROUTINE outputEnvVar
 !--------------------------------------------------------------------
 SUBROUTINE outputjfy (fy, nsp, t)
   IMPLICIT NONE
-  INTEGER, intent(in) :: nsp
+  INTEGER(kind=NPI), intent(in) :: nsp
   INTEGER i, j
   DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
 
@@ -50,7 +51,8 @@ SUBROUTINE getConcForSpecInt (masterConcList, masterConcListSize, speciesOfInter
   ! in the same order as the species are in specInt
   DOUBLE PRECISION, intent(in)  :: masterConcList(*)
   DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(*)
-  INTEGER, intent(in) :: speciesOfInterestSize, masterConcListSize, speciesOfInterest(*)
+  INTEGER, intent(in) :: speciesOfInterestSize, speciesOfInterest(*)
+  INTEGER(kind=NPI), intent(in) :: masterConcListSize
   INTEGER i, j
   ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
   ! using the elements of specInt as a key

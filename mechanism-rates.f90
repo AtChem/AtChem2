@@ -6,6 +6,7 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    USE envVars, ONLY : ro2
    USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
    USE outputFunctions_mod, ONLY : ro2sum
+   USE constraintFunctions_mod, ONLY : getEnvVarsAtT
    IMPLICIT NONE
 
    ! calculates rate constants from arrhenius information

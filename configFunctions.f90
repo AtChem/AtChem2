@@ -1,4 +1,5 @@
 MODULE configFunctions_mod
+  USE types_mod
 CONTAINS
   SUBROUTINE calcDateParameters ()
   USE date
@@ -114,7 +115,8 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, inp
   CHARACTER (LEN=maxSpecLength) :: k, m
   DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
-  INTEGER, intent(in) :: concCounter, numSpecies
+  INTEGER, intent(in) :: concCounter
+  INTEGER(kind=NPI) :: numSpecies
   INTEGER :: i, j
   LOGICAL :: match
 

@@ -1,4 +1,7 @@
-SUBROUTINE calcJFac(jfac, t)
+MODULE constraintFunctions_mod
+  USE types_mod
+CONTAINS
+  SUBROUTINE calcJFac(jfac, t)
 
   USE zenithData1
   USE photolysisRates
@@ -74,7 +77,8 @@ END SUBROUTINE calcDec
 
 SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
   DOUBLE PRECISION z(*), x(*), constrainedConcs(*)
-  INTEGER numberOfConstrainedSpecies, constrainedSpecies(*), zCounter, speciesConstrained, i, neq, j
+  INTEGER constrainedSpecies(*), zCounter
+  INTEGER (kind=NPI) :: neq, numberOfConstrainedSpecies, i, j, speciesConstrained
 
   zCounter = 1
   DO i = 1, numberOfConstrainedSpecies + neq
@@ -99,7 +103,8 @@ END SUBROUTINE addConstrainedSpeciesToProbSpec
 !     ---------------------------------------------------------------
 SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
   DOUBLE PRECISION z(*), y(*)
-  INTEGER numberOfConstrainedSpecies, constrainedSpecies(*), zCounter, speciesConstrained, i, k, neq
+  INTEGER constrainedSpecies(*), zCounter, speciesConstrained
+  INTEGER (kind=NPI) neq, numberOfConstrainedSpecies, i, k
 
   zCounter = 1
   ! loop through y()
@@ -412,3 +417,4 @@ SUBROUTINE test_jfac()
      ENDIF
   ENDIF
 END SUBROUTINE test_jfac
+END MODULE constraintFunctions_mod

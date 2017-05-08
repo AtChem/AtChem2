@@ -1,3 +1,19 @@
+module types_mod
+   use, intrinsic :: iso_fortran_env
+   implicit none
+
+   public ::  SI, DI, QI, SP, DP, QP
+
+   integer, parameter :: SI = INT8
+   integer, parameter :: DI = INT16
+   integer, parameter :: QI = INT32
+   integer, parameter :: LONG = INT64
+   real, parameter :: SP = selected_real_kind( p = 6, r = 37 )
+   real, parameter :: DP = selected_real_kind( p = 15, r = 307 )
+   real, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
+contains
+end module types_mod
+
 MODULE storage
   IMPLICIT NONE
   INTEGER, PARAMETER :: maxSpecLength=10

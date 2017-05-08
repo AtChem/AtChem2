@@ -79,7 +79,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION, ALLOCATABLE :: z(:)
   DOUBLE PRECISION, ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
   DOUBLE PRECISION, ALLOCATABLE :: solverParameters(:), modelParameters(:)
-  INTEGER modelParameterSize, solverParameterSize
+  INTEGER(kind=DI) :: modelParameterSize, solverParameterSize
 
   DOUBLE PRECISION :: modelStartTime
 

@@ -72,7 +72,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
-  INTEGER(kind=NPI) :: rateOfProdNS, prodLossArrayLen, rateOfLossNS
+  INTEGER(kind=NPI) :: rateOfProdNS, rateOfLossNS
   INTEGER :: ratesOutputStepSize, time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
@@ -168,8 +168,6 @@ PROGRAM ATCHEM
   WRITE (*,*) 'Number of Species = ', numSpec
   WRITE (*,*) 'Number of Reactions = ', numReactions
   WRITE (*,*)
-
-  prodLossArrayLen = numReactions*2
 
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))

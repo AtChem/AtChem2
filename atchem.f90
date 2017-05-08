@@ -203,7 +203,7 @@ PROGRAM ATCHEM
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readInitialConcentrations (concSpeciesName, initialConcentrations, numSpec)
+  CALL readInitialConcentrations (concSpeciesName, initialConcentrations)
   CALL setConcentrations (speciesName, concSpeciesName, initialConcentrations, speciesConcs)
   WRITE (*,*)
 
@@ -424,7 +424,7 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   ! fill speciesOutputRequired with the names of species to output to concentration.output
-  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize, numSpec)
+  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize)
 
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
   CALL matchNameToNumber (speciesName, speciesOutputRequired, &

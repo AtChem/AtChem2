@@ -93,7 +93,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR IR OUTPUT
   INTEGER :: irOutStepSize
 
-  INTEGER :: cmd_arg_count
+  INTEGER(kind=QI) :: cmd_arg_count
   !    MISC
   CHARACTER (LEN=30) :: solverTypeName(3)
   CHARACTER (LEN=20) :: interpolationMethodName(4)

@@ -133,6 +133,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   USE constraints
   USE zenithData1
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
+  USE conversionFunctions_mod
   IMPLICIT NONE
 
   DOUBLE PRECISION :: t, envVarAtT, theta

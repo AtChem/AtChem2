@@ -1,4 +1,6 @@
-! TODO: this is unused?
+MODULE utilityFunctions_mod
+CONTAINS
+  ! TODO: this is unused?
 SUBROUTINE temperature (temp, h2o, ttime)
   ! SUBROUTINE TO CALCULATE DIURNAL VARIATIONS IN TEMPERATURE
   DOUBLE PRECISION temp, ttime, rh, h2o, sin
@@ -52,3 +54,4 @@ SUBROUTINE ramp (arg1, rampValue)
   rampValue = (arg1 + arg2) / 2
   RETURN
 END SUBROUTINE ramp
+END MODULE utilityFunctions_mod

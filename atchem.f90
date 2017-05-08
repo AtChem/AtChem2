@@ -77,7 +77,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   DOUBLE PRECISION, ALLOCATABLE :: z(:)
-  DOUBLE PRECISION tempForSolverParameters(100), tempForModelParameters(100)
+  DOUBLE PRECISION, ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
   DOUBLE PRECISION, ALLOCATABLE :: solverParameters(:), modelParameters(:)
   INTEGER modelParameterSize, solverParameterSize
 
@@ -256,6 +256,7 @@ PROGRAM ATCHEM
 
 
   !    READ IN SOLVER PARAMETERS
+  ALLOCATE(tempForSolverParameters(100))
   WRITE (*,*) 'Reading solver parameters from file...'
   CALL getParametersFromFile (trim(param_dir) // "/solver.parameters", tempForSolverParameters, solverParameterSize)
   WRITE (*,*) 'Finished reading solver parameters from file.'
@@ -263,8 +264,9 @@ PROGRAM ATCHEM
   DO i = 1, solverParameterSize
      solverParameters(i) = tempForSolverParameters(i)
   ENDDO
-
+  DEALLOCATE(tempForSolverParameters)
   !   READ IN MODEL PARAMETERS
+  ALLOCATE(tempForModelParameters(100))
   WRITE (*,*) 'Reading model parameters from file...'
   CALL getParametersFromFile (trim(param_dir) //  "/model.parameters", tempForModelParameters, modelParameterSize)
   WRITE (*,*) 'Finished reading model parameters from file.'
@@ -272,6 +274,7 @@ PROGRAM ATCHEM
   DO i = 1, modelParameterSize
      modelParameters(i) = tempForModelParameters(i)
   ENDDO
+  DEALLOCATE(tempForModelParameters)
   WRITE (*,*)
 
   !   SET SOLVER PARAMETERS
@@ -431,6 +434,7 @@ PROGRAM ATCHEM
   DO species_counter = 1, SORNumberSize
      SORNumber(species_counter) = tempSORNumber(species_counter)
   ENDDO
+  DEALLOCATE(tempSORNumber)
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
 

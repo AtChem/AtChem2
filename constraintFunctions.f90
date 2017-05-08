@@ -52,7 +52,7 @@ CONTAINS
   RETURN
 END SUBROUTINE calcJFac
 
-SUBROUTINE calcM (M, pressure, temp)
+FUNCTION calcM (1pressure, temp) result ( M )
   ! calculate the number density of air (molecule cm-3)
   ! pressure in mbar, temperature in K
   IMPLICIT NONE
@@ -60,7 +60,7 @@ SUBROUTINE calcM (M, pressure, temp)
 
   M = (6.02214129d+23/8.3144621)*(1.0d+2*pressure/temp)
   RETURN
-END SUBROUTINE calcM
+END FUNCTION calcM
 
 SUBROUTINE calcDec(dec, t)
   ! calculate the declination of the Sun as seen from Earth.

@@ -172,8 +172,9 @@ SUBROUTINE outputInstantaneousRates (time, numReac)
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER, intent(in) :: time, numReac
-  INTEGER i
+  INTEGER(kind=QI), intent(in) :: time
+  INTEGER(kind=NPI), intent(in) :: numReac
+  INTEGER(kind=NPI) :: i
   CHARACTER (LEN=maxFilepathLength+30) :: irfileLocation
   CHARACTER (LEN=30) :: strTime
 

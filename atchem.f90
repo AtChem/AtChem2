@@ -56,8 +56,8 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER numReactions, numSteps
-  INTEGER(kind=NPI) :: numSpec
+  INTEGER :: numSteps
+  INTEGER(kind=NPI) :: numSpec, numReactions
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS

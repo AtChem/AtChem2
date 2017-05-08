@@ -52,12 +52,13 @@ CONTAINS
   RETURN
 END SUBROUTINE calcJFac
 
-SUBROUTINE calcM (pressure, TEMP, M)
+SUBROUTINE calcM (M, pressure, temp)
   ! calculate the number density of air (molecule cm-3)
   ! pressure in mbar, temperature in K
   IMPLICIT NONE
   real(kind=DP) ::pressure, TEMP, M
-  M = 7.242972d16*(100*pressure/TEMP)
+
+  M = (6.02214129e+23/8.3144621)*(100*pressure/temp)
   RETURN
 END SUBROUTINE calcM
 

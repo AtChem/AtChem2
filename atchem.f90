@@ -172,7 +172,7 @@ PROGRAM ATCHEM
   prodLossArrayLen = numReactions*2
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  ALLOCATE (speciesConcs(numSpec), speciesName(numSpec), concSpeciesName(numSpec*2))
+  ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
   ALLOCATE (tempSORNumber(numSpec), concsOfSpeciesOfInterest(numSpec))
@@ -204,7 +204,7 @@ PROGRAM ATCHEM
 
   !   SET INITIAL SPECIES CONCENTRATIONS
   CALL readInitialConcentrations (concSpeciesName, initialConcentrations, numSpec)
-  CALL setConcentrations (speciesName, numSpec, concSpeciesName, initialConcentrations, speciesConcs)
+  CALL setConcentrations (speciesName, concSpeciesName, initialConcentrations, speciesConcs)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION

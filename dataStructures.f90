@@ -181,9 +181,10 @@ END MODULE species
 !    INTERPOLATION METHOD MODULE
 !    ********************************************************************************************************
 MODULE interpolationMethod
+  USE types_mod
   IMPLICIT NONE
   SAVE
-  INTEGER, PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  INTEGER(kind=SI), PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   PUBLIC :: getSpeciesInterpMethod, setSpeciesInterpMethod
   PUBLIC :: getConditionsInterpMethod, setConditionsInterpMethod
   PUBLIC :: getDecInterpMethod, setDecInterpMethod
@@ -191,32 +192,32 @@ MODULE interpolationMethod
 CONTAINS
 
   SUBROUTINE getSpeciesInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     n = speciesInterpMethod
   END SUBROUTINE getSpeciesInterpMethod
 
   SUBROUTINE setSpeciesInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     speciesInterpMethod = n
   END SUBROUTINE setSpeciesInterpMethod
 
   SUBROUTINE getConditionsInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     n = conditionsInterpMethod
   END SUBROUTINE getConditionsInterpMethod
 
   SUBROUTINE setConditionsInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     conditionsInterpMethod = n
   END SUBROUTINE setConditionsInterpMethod
 
   SUBROUTINE getDecInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     n = decInterpMethod
   END SUBROUTINE getDecInterpMethod
 
   SUBROUTINE setDecInterpMethod (n)
-    INTEGER :: n
+    INTEGER(kind=SI) :: n
     decInterpMethod = n
   END SUBROUTINE setDecInterpMethod
 

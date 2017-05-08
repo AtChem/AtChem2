@@ -146,10 +146,10 @@ MODULE species
 
 CONTAINS
 
-  SUBROUTINE getNumberOfSpecies (n)
+  FUNCTION getNumberOfSpecies( ) result (n)
     INTEGER(kind=NPI) :: n
     n = neq
-  END SUBROUTINE getNumberOfSpecies
+  END FUNCTION getNumberOfSpecies
 
   SUBROUTINE setNumberOfSpecies (n)
     INTEGER(kind=NPI) :: n

@@ -7,7 +7,7 @@ SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
   INTEGER j
   DOUBLE PRECISION t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
   DOUBLE PRECISION, ALLOCATABLE :: yPlusV (:), yPlusVi(:)
-  CALL getNumberOfSpecies (np)
+  np = getNumberOfSpecies ()
   ALLOCATE (yPlusV (np), yPlusVi(np))
 
   neq = ipar(1)

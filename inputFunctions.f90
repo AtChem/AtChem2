@@ -294,15 +294,15 @@ SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
 END SUBROUTINE readPhotoRates
 
 
-SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
+SUBROUTINE readSpeciesOutputRequired (r, i)
+  USE species, ONLY : getNumberOfSpecies
   USE directories, ONLY : param_dir
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
   CHARACTER (LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
-  INTEGER(kind=NPI), intent(in) :: nsp
   CHARACTER (LEN=maxFilepathLength) :: filename
-  INTEGER(kind=NPI) :: j
+  INTEGER(kind=NPI) :: j, nsp
   INTEGER :: length
   INTEGER(kind=NPI), intent(out) :: i
 
@@ -314,6 +314,7 @@ SUBROUTINE readSpeciesOutputRequired (r, i, nsp)
   WRITE (*,*) 'Finished reading concentration output from file.'
 
   ! ERROR HANDLING
+  nsp = getNumberOfSpecies()
   IF (i>nsp) THEN
      WRITE (51,*) 'Error: Number of (number of species output is required for) > (number of species) '
      WRITE (51,*) "(number of species output is required for) = ", i
@@ -359,13 +360,13 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 END SUBROUTINE readSpecies
 
 
-SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration, nsp)
+SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species.
   ! concSpeciesNames is filled with all species names of initial concentrations,
   ! concentration is filled with corresponding concentration VALUES
-  ! nsp is used to sanity-check that we haven't got too many initial species.
   USE types_mod
+  USE species, ONLY : getNumberOfSpecies
   USE directories, ONLY: param_dir
   USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
@@ -375,14 +376,14 @@ SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration, nsp)
   CHARACTER(LEN=maxFilepathLength) :: file
   DOUBLE PRECISION, ALLOCATABLE, intent(out) :: concentration(:)
   DOUBLE PRECISION :: l
-  INTEGER(kind=NPI), intent(in) :: nsp
-  INTEGER(kind=NPI) :: numLines, i
+  INTEGER(kind=NPI) :: numLines, i, nsp
   INTEGER :: ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
   file = trim(param_dir) // '/initialConcentrations.config'
   ! Count lines in file, allocate appropriately
   numLines = count_lines_in_file(trim(file), .FALSE.)
+  nsp = getNumberOfSpecies()
   IF (numLines>nsp) THEN
      WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
      WRITE (51,*) "(number of species initial concentrations are set for) = ", numLines

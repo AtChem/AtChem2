@@ -202,7 +202,7 @@ SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
   ! line to an element of the array
   CHARACTER, intent(in) :: input_file*(*)
   DOUBLE PRECISION, intent(out) :: parameterArray(*)
-  INTEGER, intent(out) :: numValidEntries
+  INTEGER(kind=DI), intent(out) :: numValidEntries
 
   OPEN (10, file=input_file, status='old') ! input file
   numValidEntries = 0

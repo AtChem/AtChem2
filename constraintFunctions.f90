@@ -52,7 +52,7 @@ CONTAINS
   RETURN
 END SUBROUTINE calcJFac
 
-FUNCTION calcM (1pressure, temp) result ( M )
+FUNCTION calcM (pressure, temp) result ( M )
   ! calculate the number density of air (molecule cm-3)
   ! pressure in mbar, temperature in K
   IMPLICIT NONE

@@ -22,6 +22,7 @@ PROGRAM ATCHEM
   USE inputFunctions_mod
   USE configFunctions_mod
   USE instantaneousRatesFunctions_mod
+  USE outputFunctions_mod
   IMPLICIT NONE
 
   !    ********************************************************************************************************

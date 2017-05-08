@@ -25,8 +25,8 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutRe
   USE storage, ONLY : maxPhotoRateNameLength, maxSpecLength
   CHARACTER (LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
   CHARACTER (LEN=maxSpecLength) :: specOutReqNames(*)
-  INTEGER, intent(in) :: specOutReqNamesSize
-  INTEGER i
+  INTEGER(kind=NPI), intent(in) :: specOutReqNamesSize
+  INTEGER(kind=NPI) :: i
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
   ! OUTPUT FOR CVODE MAIN SOLVER
@@ -60,7 +60,7 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   ! number of times a match was made
   CHARACTER (LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
   CHARACTER (LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
-  INTEGER, intent(out) :: returnArray(*), returnArraySize
+  INTEGER(kind=NPI), intent(out) :: returnArray(*), returnArraySize
   INTEGER i, j
   LOGICAL match
 
@@ -90,7 +90,7 @@ PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
 
   CHARACTER (LEN=*), contiguous, intent(in) :: masterList(:)
   CHARACTER (LEN=*), intent(in) :: target
-  INTEGER j, id
+  INTEGER :: j, id
 
   id = 0
   DO j = 1, size(masterList)

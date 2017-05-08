@@ -48,13 +48,13 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE
   !
-  INTEGER (KIND=NPI) ipar(*), ier, nConSpec, np, numReactions
+  INTEGER (KIND=NPI) ipar(*), ier, nConSpec, np, numReac
   DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
   DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
   INTEGER(kind=NPI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
-  numReactions = ipar(2)
+  numReac = ipar(2)
   dummy = rpar(1)
 
   nConSpec = numberOfConstrainedSpecies
@@ -74,7 +74,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
 
   CALL addConstrainedSpeciesToProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
 
-  CALL resid (np, numReactions, t, z, dy, clhs, crhs, ccoeff, csize1, csize2)
+  CALL resid (np, numReac, t, z, dy, clhs, crhs, ccoeff, csize1, csize2)
 
   CALL removeConstrainedSpeciesFromProbSpec (dy, ydot, numberOfConstrainedSpecies, constrainedSpecies, np)
 
@@ -169,9 +169,10 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   USE reactionStructure ! access is, crhs, nclhs, csize2
   IMPLICIT NONE
 
-  INTEGER :: nr
-  INTEGER(kind=NPI) :: ny, j
-  DOUBLE PRECISION :: p(nr), fy(ny,*), y(*), r(nr), t
+  INTEGER(kind=NPI), intent(in) :: ny, nr
+  INTEGER(kind=NPI) :: j
+  DOUBLE PRECISION :: p(nr), y(*), r(nr), t
+  DOUBLE PRECISION, intent(out) :: fy(ny,*)
   INTEGER :: is
 
   ! set jacobian matrix to zero

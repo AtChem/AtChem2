@@ -58,7 +58,7 @@ SUBROUTINE calcM (M, pressure, temp)
   IMPLICIT NONE
   real(kind=DP) ::pressure, TEMP, M
 
-  M = (6.02214129e+23/8.3144621)*(100*pressure/temp)
+  M = (6.02214129d+23/8.3144621)*(1.0d+2*pressure/temp)
   RETURN
 END SUBROUTINE calcM
 
@@ -206,7 +206,7 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   CALL getEnvVarNum ('M', envVarNum)
   ! IF CALC
   IF (envVarTypesNum(envVarNum)==1) THEN
-     CALL calcM (pressure, TEMP, M)
+     CALL calcM (M, pressure, temp)
      ! IF CONSTRAINED
   ELSE IF (envVarTypesNum(envVarNum)==2) THEN
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
@@ -275,11 +275,11 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
      CALL getConstrainedQuantAtT2D (t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
           envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars)
      RH = envVarAtT
-     CALL convertRHtoConcH2O (H2o, temp, RH)
+     CALL convertRHtoH2O (H2o, RH, temp)
      ! IF FIXED
   ELSE IF (envVarTypesNum(envVarNum)==3) THEN
      RH = envVarFixedValues(envVarNum)
-     CALL convertRHtoConcH2O (H2o, temp, RH)
+     CALL convertRHtoH2O (H2o, RH, temp)
      ! IF NOTUSED
   ELSE
      RH = -1

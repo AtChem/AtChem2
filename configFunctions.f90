@@ -103,7 +103,7 @@ END FUNCTION matchOneNameToNumber
 
 
 SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, &
-                              inputConcentrations, inputConcentrationsSize, outputConcentrations)
+                              inputConcentrations, outputConcentrations)
   ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),
   ! look through refSpeciesNames (size numSpecies) for the number of this species in that list,
   ! then transer the value from inputConcentrations to outputConcentrations. If no match is found,
@@ -114,13 +114,12 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, &
 
   CHARACTER (LEN=maxSpecLength), intent(in) :: concSpeciesNames(*), refSpeciesNames(*)
   CHARACTER (LEN=maxSpecLength) :: k, m
-  DOUBLE PRECISION, intent(in) :: inputConcentrations(*)
+  DOUBLE PRECISION, intent(in) :: inputConcentrations(:)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
-  INTEGER(kind=NPI), intent(in) :: inputConcentrationsSize
   INTEGER(kind=NPI) :: numSpecies, j, i
   LOGICAL :: match
 
-  DO i = 1, inputConcentrationsSize
+  DO i = 1, size(inputConcentrations)
      match = .FALSE.
      k = concSpeciesNames(i)
      DO j = 1, numSpecies

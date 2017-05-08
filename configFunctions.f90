@@ -102,7 +102,7 @@ PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
 END FUNCTION matchOneNameToNumber
 
 
-SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, &
+SUBROUTINE setConcentrations (refSpeciesNames, concSpeciesNames, &
                               inputConcentrations, outputConcentrations)
   ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),
   ! look through refSpeciesNames (size numSpecies) for the number of this species in that list,
@@ -112,17 +112,23 @@ SUBROUTINE setConcentrations (refSpeciesNames, numSpecies, concSpeciesNames, &
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), intent(in) :: concSpeciesNames(*), refSpeciesNames(*)
+  CHARACTER (LEN=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
   CHARACTER (LEN=maxSpecLength) :: k, m
   DOUBLE PRECISION, intent(in) :: inputConcentrations(:)
-  DOUBLE PRECISION, intent(out) :: outputConcentrations(*)
-  INTEGER(kind=NPI) :: numSpecies, j, i
+  DOUBLE PRECISION, intent(out) :: outputConcentrations(:)
+  INTEGER(kind=NPI) :: j, i
   LOGICAL :: match
 
-  DO i = 1, size(inputConcentrations)
+  IF (size(concSpeciesNames)/=size(inputConcentrations)) THEN
+    STOP "size(concSpeciesNames)/=size(inputConcentrations in setConcentrations()."
+  END IF
+  IF (size(refSpeciesNames)/=size(outputConcentrations)) THEN
+    STOP "size(refSpeciesNames)/=size(outputConcentrations in setConcentrations()."
+  END IF
+  DO i = 1, size(concSpeciesNames)
      match = .FALSE.
      k = concSpeciesNames(i)
-     DO j = 1, numSpecies
+     DO j = 1, size(refSpeciesNames)
         m = refSpeciesNames(j)
         IF (m==k) THEN
            match = .TRUE.

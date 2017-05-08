@@ -359,48 +359,52 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
 END SUBROUTINE readSpecies
 
 
-SUBROUTINE readInitialConcentrations (concSpeciesName, concentration, nsp)
+SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration, nsp)
   ! Reads in concentration per species from mC/initialConcentrations.config
   ! Checks that there aren't more inputs that species
   USE types_mod
   USE directories, ONLY: param_dir
-  USE storage, ONLY : maxSpecLength
+  USE storage, ONLY : maxSpecLength, maxFilepathLength
   IMPLICIT NONE
 
-  CHARACTER (LEN=maxSpecLength), intent(out) :: concSpeciesName(*)
-  CHARACTER (LEN=maxSpecLength) k
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: concSpeciesNames(:)
+  CHARACTER(LEN=maxSpecLength) :: k
+  CHARACTER(LEN=maxFilepathLength) :: file
   DOUBLE PRECISION, ALLOCATABLE, intent(out) :: concentration(:)
-  DOUBLE PRECISION l
+  DOUBLE PRECISION :: l
   INTEGER(kind=NPI), intent(in) :: nsp
   INTEGER(kind=NPI) :: numLines, i
   INTEGER :: ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
-  numLines = count_lines_in_file(trim(param_dir) // '/initialConcentrations.config', .FALSE.)
+  file = trim(param_dir) // '/initialConcentrations.config'
+  ! Count lines in file, allocate appropriately
+  numLines = count_lines_in_file(trim(file), .FALSE.)
   IF (numLines>nsp) THEN
      WRITE (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
      WRITE (51,*) "(number of species initial concentrations are set for) = ", numLines
      WRITE (51,*) "(number of species) = ", nsp
   ENDIF
-  ALLOCATE (concentration(numLines))
-  OPEN (10, file=trim(param_dir) // '/initialConcentrations.config', status='old') ! input file for lhs of equations
+  ALLOCATE (concSpeciesNames(numLines), concentration(numLines))
+
+  OPEN (10, file=trim(file), status='old') ! input file for lhs of equations
   i = 0
   READ (10,*, iostat=ierr) k, l
   DO WHILE (ierr==0)
      i = i + 1
      concentration(i) = l
-     concSpeciesName(i) = k
+     concSpeciesNames(i) = k
      READ (10,*, iostat=ierr) k, l
   ENDDO
   CLOSE (10, status='keep')
 
   IF (numLines>3) THEN
-     WRITE (*,*) 1, ' ', concSpeciesName(1), ' ', concentration(1)
+     WRITE (*,*) 1, ' ', concSpeciesNames(1), ' ', concentration(1)
      WRITE (*,*) '...'
-     WRITE (*,*) numLines, ' ', concSpeciesName(numLines), ' ', concentration(numLines)
+     WRITE (*,*) numLines, ' ', concSpeciesNames(numLines), ' ', concentration(numLines)
   ELSE
      DO i = 1, numLines
-        WRITE (*,*) i, ' ', concSpeciesName(i), ' ', concentration(i)
+        WRITE (*,*) i, ' ', concSpeciesNames(i), ' ', concentration(i)
      ENDDO
   ENDIF
   WRITE (*,*) 'Finished reading initial concentrations.'

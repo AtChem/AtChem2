@@ -4,7 +4,7 @@ CONTAINS
 SUBROUTINE temperature (temp, h2o, ttime)
   USE types_mod
   ! SUBROUTINE TO CALCULATE DIURNAL VARIATIONS IN TEMPERATURE
-  real(kind=DP) temp, ttime, rh, h2o, sin
+  real(kind=DP) :: temp, ttime, rh, h2o, sin
 
   temp = 289.86 + 8.3*SIN ((7.2722D-5*ttime)-1.9635)
   temp = 298.00
@@ -24,8 +24,8 @@ END SUBROUTINE atmosphere
 SUBROUTINE zenith (theta, secx, cosx, ttime, dec)
   USE zenithData
   USE SZACalcVars
-  real(kind=DP) pi, radian, dec, ttime, theta, cosx, secx
-  real(kind=DP) rampValue
+  real(kind=DP) :: pi, radian, dec, ttime, theta, cosx, secx
+  real(kind=DP) :: rampValue
   ! real(kind=DP) :: , sinld, cosld, lat, lha, longt
   ! SOLAR decLINATION ANGLE FROM JULY 1ST - HARWELL TRAJ MODEL
 
@@ -51,7 +51,7 @@ END SUBROUTINE zenith
 
 SUBROUTINE ramp (arg1, rampValue)
   USE types_mod
-  real(kind=DP) arg1, arg2, rampValue
+  real(kind=DP) :: arg1, arg2, rampValue
 
   arg2 = ABS (arg1)
   rampValue = (arg1 + arg2) / 2

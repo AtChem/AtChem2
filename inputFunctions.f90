@@ -5,10 +5,11 @@ SUBROUTINE readReactions (lhs, rhs, coeff)
   IMPLICIT NONE
 
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER(kind=NPI) :: k, l, count
-  INTEGER(kind=IntErr) :: ierr
   INTEGER(kind=NPI), intent(out) :: lhs(:, :), rhs(:, :)
   real(kind=DP), intent(out) :: coeff(:)
+  INTEGER(kind=NPI) :: k, l, count
+  INTEGER(kind=IntErr) :: ierr
+
   IF (size( lhs, 1 )/=3) THEN
     STOP "size( lhs, 1 )/=3 in readReactions()."
   END IF
@@ -650,7 +651,7 @@ SUBROUTINE readEnvVar ()
   IMPLICIT NONE
 
   INTEGER(kind=NPI) :: i, counter, k
-  CHARACTER(LEN=10) dummy
+  CHARACTER(LEN=10) :: dummy
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
 
@@ -727,11 +728,11 @@ END SUBROUTINE readEnvVar
 
 FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
   CHARACTER (*), intent(in) :: filename
+  LOGICAL, intent(in), OPTIONAL :: skip_first_line_in
   INTEGER(kind=NPI) :: counter
-  LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
-  CHARACTER(LEN=10) dummy
-  INTEGER :: ierr
+  CHARACTER(LEN=10) :: dummy
+  INTEGER(kind=IntErr) :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN
     skip_first_line = .FALSE.
@@ -762,7 +763,7 @@ SUBROUTINE read_in_single_column_string_file (filename, output_vector, i, skip_f
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER(LEN=maxSpecLength) :: c
-  INTEGER :: ierr
+  INTEGER(kind=IntErr) :: ierr
   ! Set default to not skip first line
   IF (.NOT. present(skip_first_line_in)) THEN
     skip_first_line = .FALSE.

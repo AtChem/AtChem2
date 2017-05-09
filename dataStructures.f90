@@ -77,7 +77,7 @@ MODULE constraints
   INTEGER :: maxNumberOfDataPoints
   INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   INTEGER(kind=NPI), ALLOCATABLE :: constrainedSpecies(:)
-  REAL (8), ALLOCATABLE :: constrainedConcs(:)
+  real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
 
   PRIVATE :: numberOfConstrainedSpecies, constrainedSpecies, constrainedConcs
   PUBLIC :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies

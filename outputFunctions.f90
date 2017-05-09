@@ -3,7 +3,7 @@ MODULE outputFunctions_mod
 CONTAINS
   SUBROUTINE ro2Sum (ro2, y)
   DOUBLE PRECISION :: ro2
-  DOUBLE PRECISION, intent (in) :: y(*)
+  real(kind=DP), intent (in) :: y(*)
   ro2 = 0.00e+00
 END SUBROUTINE ro2Sum
 
@@ -49,9 +49,9 @@ END SUBROUTINE outputPhotolysisRates
 SUBROUTINE getConcForSpecInt (masterConcList, speciesOfInterest, interestSpeciesConcList)
   ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
   ! in the same order as the species are in specInt
-  DOUBLE PRECISION, intent(in)  :: masterConcList(:)
+  real(kind=DP), intent(in)  :: masterConcList(:)
   INTEGER(kind=NPI), intent(in) :: speciesOfInterest(:)
-  DOUBLE PRECISION, intent(out) :: interestSpeciesConcList(:)
+  real(kind=DP), intent(out) :: interestSpeciesConcList(:)
   INTEGER(kind=NPI) :: i, j
   ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
   ! using the elements of specInt as a key
@@ -201,7 +201,7 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
   IMPLICIT NONE
 
   DOUBLE PRECISION, intent(in) :: t
-  DOUBLE PRECISION, intent(inout) :: arrayOfConcs(*)
+  real(kind=DP), intent(inout) :: arrayOfConcs(*)
   INTEGER(kind=NPI), intent(in) :: arrayOfConcsSize
   INTEGER(kind=NPI) :: i
 

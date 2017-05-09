@@ -9,6 +9,7 @@ module types_mod
    integer, parameter :: QI = INT32
    integer, parameter :: LONG = INT64
    integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
+   integer, parameter :: IntErr = INT32
    integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
    integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
    integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
@@ -61,7 +62,8 @@ MODULE envVars
   CHARACTER(LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
   INTEGER, ALLOCATABLE :: envVarTypesNum(:)
   real(kind=DP), ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
-  INTEGER :: numEnvVars, tempNum
+  INTEGER(kind=NPI) :: numEnvVars
+  INTEGER :: tempNum
 
 
   real(kind=DP), ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
@@ -77,7 +79,7 @@ MODULE constraints
   SAVE
   INTEGER(kind=NPI) :: numberOfConstrainedSpecies
   INTEGER :: maxNumberOfDataPoints
-  INTEGER :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
+  INTEGER(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   INTEGER(kind=NPI), ALLOCATABLE :: constrainedSpecies(:)
   real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
 
@@ -234,8 +236,8 @@ MODULE reactionStructure
   IMPLICIT NONE
 
   SAVE
-  INTEGER, ALLOCATABLE :: clhs(:,:), crhs(:,:)
-  INTEGER :: csize1, csize2
+  INTEGER(kind=NPI), ALLOCATABLE :: clhs(:,:), crhs(:,:)
+  INTEGER(kind=NPI) :: csize1, csize2
   real(kind=DP), ALLOCATABLE :: ccoeff(:)
 
 END MODULE reactionStructure
@@ -250,9 +252,9 @@ MODULE photolysisRates
 
   SAVE
   INTEGER, PARAMETER :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
-  INTEGER :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
-  INTEGER :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
-  INTEGER :: nrOfPhotoRates
+  INTEGER(kind=NPI) :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
+  INTEGER(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
+  INTEGER(kind=NPI) :: nrOfPhotoRates
   LOGICAL :: usePhotolysisConstants
   real(kind=DP) :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
   real(kind=DP) :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)

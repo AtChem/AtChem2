@@ -92,11 +92,11 @@ SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   USE mechanismRates_mod
 
   IMPLICIT NONE
-  INTEGER (KIND=NPI) :: i
-  INTEGER (KIND=NPI) :: nsp ! number of species involved
-  INTEGER (KIND=NPI) :: nr ! number of reactions
-  INTEGER :: size1, size2 !number of entries in each equation array
-  INTEGER :: lhs(3, size1), rhs(2, size2)
+  INTEGER(kind=NPI) :: i
+  INTEGER(kind=NPI) :: nsp ! number of species involved
+  INTEGER(kind=NPI) :: nr ! number of reactions
+  INTEGER(kind=NPI) :: size1, size2 !number of entries in each equation array
+  INTEGER(kind=NPI) :: lhs(3, size1), rhs(2, size2)
   real(kind=DP) :: coeff(*) ! coeff term of rhs
   real(kind=DP) :: y(*) ! concentration array
   real(kind=DP) :: p(nr) ! array to hold rates

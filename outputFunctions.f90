@@ -1,7 +1,7 @@
 MODULE outputFunctions_mod
   USE types_mod
 CONTAINS
-  SUBROUTINE ro2Sum (ro2, y)
+SUBROUTINE ro2Sum (ro2, y)
   real(kind=DP) :: ro2
   real(kind=DP), intent (in) :: y(*)
   ro2 = 0.00e+00
@@ -11,7 +11,7 @@ SUBROUTINE outputEnvVar (t)
   USE envVars
   IMPLICIT NONE
 
-  INTEGER :: i
+  INTEGER(kind=NPI) :: i
   real(kind=DP), intent(in) :: t
 
   IF (ro2<0) ro2 = 0.0
@@ -39,7 +39,7 @@ SUBROUTINE outputPhotolysisRates (j, t)
   USE photolysisRates, ONLY: nrOfPhotoRates, ck
 
   real(kind=DP), intent(in) :: j(*), t
-  INTEGER :: i
+  INTEGER(kind=NPI) :: i
 
   WRITE (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
   RETURN
@@ -78,7 +78,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
 
   CHARACTER(LEN=maxSpecLength) :: reactants(10), products(10)
   CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
-  INTEGER :: i, numReactants, numProducts
+  INTEGER(kind=NPI) :: i, numReactants, numProducts
   INTEGER(kind=NPI), intent(in) :: reactionNumber
   CHARACTER(LEN=maxReactionStringLength) :: reactantStr, productStr
   CHARACTER(LEN=maxReactionStringLength), intent(out) :: reaction
@@ -137,7 +137,8 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER, intent(in) :: csize, flag
+  INTEGER(kind=NPI), intent(in) :: csize
+  INTEGER, intent(in) :: flag
   INTEGER(kind=NPI), intent(in) :: numberOfSpecies, r(numberOfSpecies, csize), arrayLen(*)
   INTEGER(kind=NPI) :: i, j
   real(kind=DP), intent(in) :: t, p(*)

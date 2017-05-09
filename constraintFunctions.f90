@@ -10,8 +10,7 @@ CONTAINS
 
   IMPLICIT NONE
   real(kind=DP) :: jfac, JSpeciesAtT, t
-  INTEGER(kind=NPI) :: basePhotoRateNum
-  INTEGER :: i
+  INTEGER(kind=NPI) :: basePhotoRateNum, i
   INTEGER :: firstTime = 1
   IF (firstTime==1) THEN
      WRITE (*,*) "basePhotoRate: ", jFacSpecies
@@ -376,7 +375,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum)
 
   CHARACTER, intent(in) :: name*(*)
   INTEGER(kind=NPI), intent(out) :: envVarNum
-  INTEGER :: i
+  INTEGER(kind=NPI) :: i
 
   DO i = 1, numEnvVars
      IF (name==trim(envVarNames(i))) THEN

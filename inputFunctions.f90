@@ -389,7 +389,7 @@ END SUBROUTINE readSpecies
 
 SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   ! Reads in concentration per species from mC/initialConcentrations.config
-  ! Checks that there aren't more inputs that species.
+  ! Checks that there aren't more inputs than species.
   ! concSpeciesNames is filled with all species names of initial concentrations,
   ! concentration is filled with corresponding concentration VALUES
   USE species, ONLY : getNumberOfSpecies

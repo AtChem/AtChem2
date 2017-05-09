@@ -40,17 +40,19 @@ END MODULE directories
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
 MODULE date
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
   INTEGER :: day, month, year, dayOfYear
-  DOUBLE PRECISION :: dayAsFractionOfYear, secondsInYear
+  real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 
 END MODULE date
 !    ********************************************************************************************************
 !    ENVIRONMENT VARIABLES MODULE
 !    ********************************************************************************************************
 MODULE envVars
+  USE types_mod
   USE storage, ONLY : maxEnvVarNameLength, maxEnvVarLength
   IMPLICIT NONE
 
@@ -58,13 +60,13 @@ MODULE envVars
   CHARACTER(LEN=maxEnvVarNameLength), ALLOCATABLE :: envVarNames(:)
   CHARACTER(LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
   INTEGER, ALLOCATABLE :: envVarTypesNum(:)
-  DOUBLE PRECISION, ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
+  real(kind=DP), ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
   INTEGER :: numEnvVars, tempNum
 
 
-  DOUBLE PRECISION, ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
+  real(kind=DP), ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
   INTEGER, ALLOCATABLE :: envVarNumberOfPoints(:)
-  DOUBLE PRECISION :: ro2
+  real(kind=DP) :: ro2
 
 END MODULE envVars
 
@@ -227,12 +229,13 @@ END MODULE interpolationMethod
 !    INTERPOLATION METHOD MODULE
 !    ********************************************************************************************************
 MODULE reactionStructure
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
   INTEGER, ALLOCATABLE :: clhs(:,:), crhs(:,:)
   INTEGER :: csize1, csize2
-  DOUBLE PRECISION, ALLOCATABLE :: ccoeff(:)
+  real(kind=DP), ALLOCATABLE :: ccoeff(:)
 
 END MODULE reactionStructure
 
@@ -240,6 +243,7 @@ END MODULE reactionStructure
 !    PHOTOLYSIS RATES METHOD MODULE
 !    ********************************************************************************************************
 MODULE photolysisRates
+  USE types_mod
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
@@ -249,11 +253,11 @@ MODULE photolysisRates
   INTEGER :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
   INTEGER :: nrOfPhotoRates
   LOGICAL :: usePhotolysisConstants
-  DOUBLE PRECISION :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
-  DOUBLE PRECISION :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
+  real(kind=DP) :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
+  real(kind=DP) :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
   CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
   CHARACTER(LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
-  DOUBLE PRECISION, ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
+  real(kind=DP), ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
   INTEGER, ALLOCATABLE :: photoNumberOfPoints(:)
 
 END MODULE photolysisRates
@@ -267,8 +271,8 @@ MODULE chemicalConstraints
   IMPLICIT NONE
 
   SAVE
-  DOUBLE PRECISION, ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
-  DOUBLE PRECISION, ALLOCATABLE :: constrainedConcs(:)
+  real(kind=DP), ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
+  real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
   INTEGER(kind=NPI) :: numberOfConstrainedSpecies
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: constrainedName(:)
   INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
@@ -279,18 +283,20 @@ END MODULE chemicalConstraints
 !    PHOTOLYSIS RATES PARAMETERS MODULE
 !    ********************************************************************************************************
 MODULE zenithData
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
-  DOUBLE PRECISION :: lat, longt, lha, sinld, cosld
+  real(kind=DP) :: lat, longt, lha, sinld, cosld
 
 END MODULE zenithData
 
 MODULE zenithData1
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
-  DOUBLE PRECISION :: cosX, secX
+  real(kind=DP) :: cosX, secX
 
 END MODULE zenithData1
 
@@ -298,10 +304,11 @@ END MODULE zenithData1
 !    RATES OF PRODUCTION AND LOSS MODULE
 !    ********************************************************************************************************
 MODULE productionAndLossRates
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
-  DOUBLE PRECISION, ALLOCATABLE :: lossRates(:), productionRates(:), ir(:)
+  real(kind=DP), ALLOCATABLE :: lossRates(:), productionRates(:), ir(:)
 
 END MODULE productionAndLossRates
 
@@ -311,9 +318,10 @@ END MODULE productionAndLossRates
 !    SOLAR ZENITH ANGLE CALCULATION VARIABLES MODULE
 !    ********************************************************************************************************
 MODULE SZACalcVars
+  USE types_mod
   IMPLICIT NONE
 
   SAVE
-  DOUBLE PRECISION :: latitude, longitude
+  real(kind=DP) :: latitude, longitude
 
 END MODULE SZACalcVars

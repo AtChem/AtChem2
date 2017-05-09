@@ -542,7 +542,7 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
         IF (i==2) WRITE (*,*) '...'
      ENDIF
 
-     fileLocation = './speciesConstraints/' // trim(constrainedName(i))
+     fileLocation = trim(spec_constraints_dir) // '/' // trim(constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints

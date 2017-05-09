@@ -428,7 +428,7 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   INTEGER(kind=NPI), intent(out) :: i
   INTEGER(kind=NPI) :: j
-  INTEGER :: length
+  INTEGER(kind=NPI) :: length
   LOGICAL :: file_exists
 
   INQUIRE(file=trim(filename), EXIST=file_exists)

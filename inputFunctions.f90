@@ -746,7 +746,7 @@ END SUBROUTINE readEnvVar
 
 
 FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
-  CHARACTER (*), intent(in) :: filename
+  CHARACTER(LEN=*), intent(in) :: filename
   LOGICAL, intent(in), OPTIONAL :: skip_first_line_in
   INTEGER(kind=NPI) :: counter
   LOGICAL :: skip_first_line

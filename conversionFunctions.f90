@@ -2,7 +2,7 @@ MODULE conversionFunctions_mod
 CONTAINS
 SUBROUTINE convertRHtoConcH2O (h2o, temp, rh)
   USE types_mod
-  real(kind=DP) ::h2o, temp, rh, exponent, e1
+  real(kind=DP) :: h2o, temp, rh, exponent, e1
 
   exponent = EXP (-1.00d00*(597.30d00-0.57d00*(temp - 273.16d00))* &
        18.00d00/1.986d00*(1.00d00/temp - 1.00d00/273.16d00))

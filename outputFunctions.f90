@@ -129,25 +129,27 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   RETURN
 END SUBROUTINE getReaction
 
-SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
-     speciesNames)
+SUBROUTINE outputRates (r, arrayLen, t, p, flag, speciesNames)
 
   USE reactionStructure
   USE storage, ONLY : maxSpecLength, maxReactionStringLength
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER(kind=NPI), intent(in) :: csize
+  INTEGER(kind=NPI), intent(in) :: r(:, :), arrayLen(:)
+  real(kind=DP), intent(in) :: t, p(:)
   INTEGER, intent(in) :: flag
-  INTEGER(kind=NPI), intent(in) :: numberOfSpecies, r(numberOfSpecies, csize), arrayLen(*)
+  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(:)
   INTEGER(kind=NPI) :: i, j
-  real(kind=DP), intent(in) :: t, p(*)
-  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
   CHARACTER(LEN=maxReactionStringLength) :: reaction
 
-  DO i = 1, numberOfSpecies
-     IF (arrayLen(i)>csize) THEN
-        WRITE (stderr,*) "arrayLen(i)>csize in outputRates, which is illegal. i =", i
+  IF (size( r, 1 ) /= size( arrayLen )) THEN
+    STOP "size( r, 1 ) /= size( arrayLen ) in outputRates()."
+  ENDIF
+  DO i = 1, size( arrayLen )
+     IF (arrayLen(i) > size( r, 2 )) THEN
+       WRITE (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i
+       STOP
      ENDIF
      DO j = 2, arrayLen(i)
         IF (r(i, j)/=-1) THEN

@@ -215,7 +215,7 @@ PROGRAM ATCHEM
   CALL readJFacSpecies ()
   WRITE (*,*)
 
-  !   CONFIGURE FOR OUTPUT OF PRODUCTION RATES
+  ! Read in product species of interest, and set up variables to hold these
   WRITE (*,*) 'Reading products of interest...'
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   WRITE (*,*) 'Finished reading products of interest.'
@@ -234,7 +234,7 @@ PROGRAM ATCHEM
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
-  !   CONFIGURE FOR OUTPUT OF LOSS RATES
+  ! Read in reactant species of interest, and set up variables to hold these
   WRITE (*,*) 'Reading reactants of interest...'
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   WRITE (*,*) 'Finished reading reactants of interest.'

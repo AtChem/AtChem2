@@ -166,7 +166,7 @@ PROGRAM ATCHEM
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
   speciesConcs(:) = 0
-  ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
+  ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec))
   ALLOCATE (returnArray(numSpec))
   ALLOCATE (tempSORNumber(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
@@ -197,6 +197,7 @@ PROGRAM ATCHEM
   !   SET INITIAL SPECIES CONCENTRATIONS
   CALL readInitialConcentrations (concSpeciesName, initialConcentrations)
   CALL setConcentrations (speciesName, concSpeciesName, initialConcentrations, speciesConcs)
+  DEALLOCATE (concSpeciesName, initialConcentrations)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
@@ -667,7 +668,7 @@ PROGRAM ATCHEM
   !   deallocate CVODE internal data
 
   CALL fcvfree
-  DEALLOCATE (speciesConcs, speciesName, concSpeciesName, speciesNumber, z, initialConcentrations)
+  DEALLOCATE (speciesConcs, speciesName, speciesNumber, z)
   DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
   DEALLOCATE (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   DEALLOCATE (fy, ir)

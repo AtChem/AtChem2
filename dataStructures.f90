@@ -106,13 +106,13 @@ CONTAINS
 
   SUBROUTINE getConstrainedConc (n, r)
     INTEGER(kind=NPI) :: n
-    REAL (8) :: r
+    real(kind=DP) :: r
     r = constrainedConcs(n)
   END SUBROUTINE getConstrainedConc
 
   SUBROUTINE setConstrainedConc (n, r)
     INTEGER(kind=NPI) :: n
-    REAL (8) :: r
+    real(kind=DP) :: r
     constrainedConcs(n) = r
   END SUBROUTINE setConstrainedConc
 

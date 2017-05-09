@@ -2,9 +2,12 @@ MODULE inputFunctions_mod
   USE types_mod
 CONTAINS
 SUBROUTINE readReactions (lhs, rhs, coeff)
+  IMPLICIT NONE
+
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-  INTEGER :: k, l, count, ierr
-  INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
+  INTEGER(kind=NPI) :: k, l, count
+  INTEGER(kind=IntErr) :: ierr
+  INTEGER(kind=NPI), intent(out) :: lhs(:, :), rhs(:, :)
   real(kind=DP), intent(out) :: coeff(:)
   IF (size( lhs, 1 )/=3) THEN
     STOP "size( lhs, 1 )/=3 in readReactions()."
@@ -58,7 +61,9 @@ SUBROUTINE readJFacSpecies ()
   USE photolysisRates
   USE directories, ONLY: param_dir
   IMPLICIT NONE
-  INTEGER :: i, ierr
+
+  INTEGER(kind=NPI) :: i
+  INTEGER(kind=IntErr) :: ierr
   LOGICAL :: file_exists
 
   jfacSpeciesLine = 0
@@ -98,7 +103,8 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER :: i, ck(*), ierr
+  INTEGER(kind=NPI) :: i, ck(*)
+  INTEGER(kind=IntErr) :: ierr
   real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
 
@@ -141,7 +147,8 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, ck(*), ierr
+  INTEGER(kind=NPI) :: i, ck(*)
+  INTEGER(kind=IntErr) :: ierr
   real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
@@ -188,7 +195,7 @@ SUBROUTINE getReactionListSizes (csize1, csize2)
   ! outputs csize1 and csize2, which hold the number of lines in
   ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
   ! last line
-  INTEGER, intent(out) :: csize1, csize2
+  INTEGER(kind=NPI), intent(out) :: csize1, csize2
 
   csize1 = count_lines_in_file( 'modelConfiguration/mechanism.reac',  skip_first_line_in=.TRUE. )
   csize2 = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.FALSE. )
@@ -224,7 +231,8 @@ SUBROUTINE readPhotoRates ()
   USE storage, ONLY : maxPhotoRateNameLength, maxFilepathLength
   IMPLICIT NONE
 
-  INTEGER :: i, k, ierr
+  INTEGER(kind=NPI) :: i, k
+  INTEGER(kind=IntErr) :: ierr
   INTEGER :: maxNumberOfDataPoints
   CHARACTER(LEN=maxPhotoRateNameLength) :: string
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
@@ -302,8 +310,7 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
 
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
   CHARACTER(LEN=maxFilepathLength) :: filename
-  INTEGER(kind=NPI) :: j, nsp
-  INTEGER :: length
+  INTEGER(kind=NPI) :: j, nsp, length
   INTEGER(kind=NPI), intent(out) :: i
 
   filename = trim(param_dir) // '/concentrationOutput.config'
@@ -465,10 +472,9 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
 
   INTEGER :: j, k, dataNumberOfPoints, id, ierr
   INTEGER(kind=NPI) :: neq, i
-  INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
+  INTEGER(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:)
   CHARACTER(LEN=maxSpecLength) :: name
-  CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   real(kind=DP) :: concAtT, t, value
   real(kind=DP) :: y (*)
@@ -641,7 +647,8 @@ SUBROUTINE readEnvVar ()
   USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
 
-  INTEGER :: i, counter, k
+  INTEGER :: k
+  INTEGER(kind=NPI) :: i, counter
   CHARACTER(LEN=10) dummy
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
@@ -719,7 +726,7 @@ END SUBROUTINE readEnvVar
 
 FUNCTION count_lines_in_file (filename, skip_first_line_in) result ( counter )
   CHARACTER (*), intent(in) :: filename
-  INTEGER :: counter
+  INTEGER(kind=NPI) :: counter
   LOGICAL, INTENT(IN), OPTIONAL :: skip_first_line_in
   LOGICAL :: skip_first_line
   CHARACTER(LEN=10) dummy

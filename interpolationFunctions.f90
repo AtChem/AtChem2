@@ -6,7 +6,8 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   USE types_mod
   USE interpolationMethod
   USE chemicalConstraints
-  INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
+  INTEGER :: dataNumberOfPoints, linintsuc, constraintType, maxPoints
+  INTEGER(kind=NPI) :: nConSpec
   real(kind=DP) :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
   real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
   INTEGER :: indexBefore, indexAfter, facintfound, i

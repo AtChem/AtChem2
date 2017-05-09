@@ -424,7 +424,7 @@ def convert(input_file):
 
     # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
     # Begin wthe first line as necessary
-    newline = '  DOUBLE PRECISION ::'
+    newline = '  real(kind=DP) ::'
     mechanism_rates_decl = []
     # Loop over all species
     for i, item in zip(range(1, len(coeffSpeciesList) + 1), coeffSpeciesList):
@@ -437,7 +437,7 @@ def convert(input_file):
         # Otherwise, every tenth species gets rounded off with a newline and a prefix to the next line
         if i % 10 == 0:
             mechanism_rates_decl.append(newline + '\n')
-            newline = '  DOUBLE PRECISION ::'
+            newline = '  real(kind=DP) ::'
         else:
             # If not, add a spacer
             newline += ','

@@ -192,7 +192,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
   WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (speciesConcs, numSpec, speciesName, speciesNumber)
+  CALL readSpecies (numSpec, speciesName, speciesConcs, speciesNumber)
   WRITE (*,*) 'Finished reading species names.'
   WRITE (*,*)
 

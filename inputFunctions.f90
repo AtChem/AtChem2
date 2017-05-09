@@ -310,9 +310,9 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
   IMPLICIT NONE
 
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: r(:)
+  INTEGER(kind=NPI), intent(out) :: i
   CHARACTER(LEN=maxFilepathLength) :: filename
   INTEGER(kind=NPI) :: j, nsp, length
-  INTEGER(kind=NPI), intent(out) :: i
 
   filename = trim(param_dir) // '/concentrationOutput.config'
   WRITE (*,*) 'Reading concentration output from file...'
@@ -345,15 +345,15 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
 END SUBROUTINE readSpeciesOutputRequired
 
 
-SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
+SUBROUTINE readSpecies (neq, speciesName, y, speciesNumber)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  real(kind=DP), intent(out) :: y(*)
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
-  INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
   CHARACTER(LEN=maxSpecLength), intent(out) :: speciesName(*)
+  real(kind=DP), intent(out) :: y(*)
+  INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
 
   ! Read in species number and name from mC/mechanism.species to speciesName
   ! and speciesNumber. Also set each element of y to 0.

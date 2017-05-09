@@ -5,7 +5,7 @@ SUBROUTINE readReactions (lhs, rhs, coeff)
   ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
   INTEGER :: k, l, count, ierr
   INTEGER, intent(out) :: lhs(:, :), rhs(:, :)
-  DOUBLE PRECISION, intent(out) :: coeff(:)
+  real(kind=DP), intent(out) :: coeff(:)
   IF (size( lhs, 1 )/=3) THEN
     STOP "size( lhs, 1 )/=3 in readReactions()."
   END IF
@@ -99,7 +99,7 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   IMPLICIT NONE
 
   INTEGER :: i, ck(*), ierr
-  DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
+  real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
 
   WRITE (*,*) 'Reading photolysis rates from file...'
@@ -142,7 +142,7 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   IMPLICIT NONE
 
   INTEGER :: i, ck(*), ierr
-  DOUBLE PRECISION :: cl(*), cmm(*), cnn(*), tf(*)
+  real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
   CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
   LOGICAL :: file_exists
 
@@ -201,7 +201,7 @@ SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
   ! Read in parameters from file at input_file, and save the contents of each
   ! line to an element of the array
   CHARACTER, intent(in) :: input_file*(*)
-  DOUBLE PRECISION, intent(out) :: parameterArray(*)
+  real(kind=DP), intent(out) :: parameterArray(*)
   INTEGER(kind=DI), intent(out) :: numValidEntries
 
   OPEN (10, file=input_file, status='old') ! input file
@@ -375,7 +375,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   CHARACTER(LEN=maxSpecLength) :: k
   CHARACTER(LEN=maxFilepathLength) :: file
   real(kind=DP), ALLOCATABLE, intent(out) :: concentration(:)
-  DOUBLE PRECISION :: l
+  real(kind=DP) :: l
   INTEGER(kind=NPI) :: numLines, i, nsp
   INTEGER :: ierr
 
@@ -469,7 +469,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   CHARACTER(LEN=maxSpecLength) :: speciesName(:), name
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
-  DOUBLE PRECISION :: concAtT, t, value
+  real(kind=DP) :: concAtT, t, value
   real(kind=DP) :: y (*)
 
   ! READ IN SPECIES TO BE CONSTRAINED

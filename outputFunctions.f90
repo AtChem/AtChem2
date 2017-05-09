@@ -2,7 +2,7 @@ MODULE outputFunctions_mod
   USE types_mod
 CONTAINS
   SUBROUTINE ro2Sum (ro2, y)
-  DOUBLE PRECISION :: ro2
+  real(kind=DP) :: ro2
   real(kind=DP), intent (in) :: y(*)
   ro2 = 0.00e+00
 END SUBROUTINE ro2Sum
@@ -12,7 +12,7 @@ SUBROUTINE outputEnvVar (t)
   IMPLICIT NONE
 
   INTEGER :: i
-  DOUBLE PRECISION, intent(in) :: t
+  real(kind=DP), intent(in) :: t
 
   IF (ro2<0) ro2 = 0.0
   WRITE (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
@@ -25,7 +25,7 @@ SUBROUTINE outputjfy (fy, nsp, t)
   IMPLICIT NONE
   INTEGER(kind=NPI), intent(in) :: nsp
   INTEGER(kind=NPI) :: i, j
-  DOUBLE PRECISION, intent(in) :: fy(nsp, nsp), t
+  real(kind=DP), intent(in) :: fy(nsp, nsp), t
 
   ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
   DO i = 1, nsp
@@ -38,7 +38,7 @@ END SUBROUTINE outputjfy
 SUBROUTINE outputPhotolysisRates (j, t)
   USE photolysisRates, ONLY: nrOfPhotoRates, ck
 
-  DOUBLE PRECISION, intent(in) :: j(*), t
+  real(kind=DP), intent(in) :: j(*), t
   INTEGER :: i
 
   WRITE (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
@@ -140,7 +140,7 @@ SUBROUTINE outputRates (r, t, p, flag, numberOfSpecies, csize, arrayLen, &
   INTEGER, intent(in) :: csize, flag
   INTEGER(kind=NPI), intent(in) :: numberOfSpecies, r(numberOfSpecies, csize), arrayLen(*)
   INTEGER(kind=NPI) :: i, j
-  DOUBLE PRECISION, intent(in) :: t, p(*)
+  real(kind=DP), intent(in) :: t, p(*)
   CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
   CHARACTER(LEN=maxReactionStringLength) :: reaction
 
@@ -200,7 +200,7 @@ SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
   ! If any concentration is negative, then set it to zero before printing.
   IMPLICIT NONE
 
-  DOUBLE PRECISION, intent(in) :: t
+  real(kind=DP), intent(in) :: t
   real(kind=DP), intent(inout) :: arrayOfConcs(*)
   INTEGER(kind=NPI), intent(in) :: arrayOfConcsSize
   INTEGER(kind=NPI) :: i

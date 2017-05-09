@@ -171,6 +171,7 @@ PROGRAM ATCHEM
 
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
+  speciesConcs(:) = 0
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec*2))
   ALLOCATE (returnArray(numSpec))
   ALLOCATE (tempSORNumber(numSpec))
@@ -192,7 +193,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
   WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (numSpec, speciesName, speciesConcs, speciesNumber)
+  CALL readSpecies (numSpec, speciesName, speciesNumber)
   WRITE (*,*) 'Finished reading species names.'
   WRITE (*,*)
 

@@ -14,14 +14,14 @@ SUBROUTINE mechanism_rates (p, t, y, mnsp)
    IMPLICIT NONE
 
    ! calculates rate constants from arrhenius information
-   DOUBLE PRECISION, intent (out) :: p(*)
-   DOUBLE PRECISION, intent (in) :: t
+   real(kind=DP), intent (out) :: p(*)
+   real(kind=DP), intent (in) :: t
    INTEGER(kind=NPI), intent (in) :: mnsp
-   DOUBLE PRECISION, intent (in) :: y(mnsp)
-   DOUBLE PRECISION :: temp, pressure, dummy
+   real(kind=DP), intent (in) :: y(mnsp)
+   real(kind=DP) :: temp, pressure, dummy
 
    INTEGER(kind=NPI) :: i
-   DOUBLE PRECISION :: photoRateAtT
+   real(kind=DP) :: photoRateAtT
 
    INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'
 

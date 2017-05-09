@@ -35,30 +35,30 @@ PROGRAM ATCHEM
   INTEGER(kind=QI) :: ier
   INTEGER :: i
   INTEGER(kind=NPI) :: species_counter
-  INTEGER lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
-  INTEGER nfels, njtv, npe, nps
-  INTEGER meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
+  INTEGER :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
+  INTEGER :: nfels, njtv, npe, nps
+  INTEGER :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   INTEGER(kind=NPI) :: iout (21), ipar (10)
   INTEGER(kind=NPI) :: neq
-  DOUBLE PRECISION rtol, t, t0, tout
-  DOUBLE PRECISION atol, rout (6)
-  DOUBLE PRECISION :: rpar (1)
+  real(kind=DP) :: rtol, t, t0, tout
+  real(kind=DP) :: atol, rout (6)
+  real(kind=DP) :: rpar (1)
   DATA lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
        lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
   real(kind=DP), ALLOCATABLE :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
-  DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
+  real(kind=DP) :: deltaJv, deltaMain, maxStep
   INTEGER :: JvApprox, lookBack
   INTEGER(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   INTEGER :: preconBandUpper, preconBandLower, solverType
-  DOUBLE PRECISION :: d
+  real(kind=DP) :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
   INTEGER :: numSteps
   INTEGER(kind=NPI) :: numSpec, numReactions
-  DOUBLE PRECISION tminus1, timestepSize
+  real(kind=DP) :: tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   REAL(kind=DP), ALLOCATABLE :: initialConcentrations(:)
@@ -77,14 +77,14 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   real(kind=DP), ALLOCATABLE :: z(:)
-  DOUBLE PRECISION, ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
-  DOUBLE PRECISION, ALLOCATABLE :: solverParameters(:), modelParameters(:)
+  real(kind=DP), ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
+  real(kind=DP), ALLOCATABLE :: solverParameters(:), modelParameters(:)
   INTEGER(kind=DI) :: modelParameterSize, solverParameterSize
 
-  DOUBLE PRECISION :: modelStartTime
+  real(kind=DP) :: modelStartTime
 
   !   DECLARATIONS FOR JACOBIAN PRODUCTION
-  DOUBLE PRECISION, ALLOCATABLE :: fy(:,:)
+  real(kind=DP), ALLOCATABLE :: fy(:,:)
   INTEGER :: jacobianOutputStepSize
 
   CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)

@@ -3,10 +3,10 @@ SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
   USE types_mod
   USE species
 
-  INTEGER (KIND=NPI) ipar (*), ier, neq, i, np
-  INTEGER j
-  DOUBLE PRECISION t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
-  DOUBLE PRECISION, ALLOCATABLE :: yPlusV (:), yPlusVi(:)
+  INTEGER (KIND=NPI) :: ipar (*), ier, neq, i, np
+  INTEGER :: j
+  real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
+  real(kind=DP), ALLOCATABLE :: yPlusV (:), yPlusVi(:)
   np = getNumberOfSpecies ()
   ALLOCATE (yPlusV (np), yPlusVi(np))
 
@@ -48,9 +48,9 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
   ! Fortran routine for right-hand side function.
   IMPLICIT NONE
   !
-  INTEGER (KIND=NPI) ipar(*), ier, nConSpec, np, numReac
-  DOUBLE PRECISION t, y(*), ydot(*), rpar (*), concAtT, dummy
-  DOUBLE PRECISION, ALLOCATABLE :: dy(:), z(:)
+  INTEGER (KIND=NPI) :: ipar(*), ier, nConSpec, np, numReac
+  real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
+  real(kind=DP), ALLOCATABLE :: dy(:), z(:)
   INTEGER(kind=NPI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
@@ -97,12 +97,12 @@ SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   INTEGER (KIND=NPI) :: nr ! number of reactions
   INTEGER :: size1, size2 !number of entries in each equation array
   INTEGER :: lhs(3, size1), rhs(2, size2)
-  DOUBLE PRECISION :: coeff(*) ! coeff term of rhs
-  DOUBLE PRECISION :: y(*) ! concentration array
-  DOUBLE PRECISION :: p(nr) ! array to hold rates
-  DOUBLE PRECISION :: r(nr) ! working array
-  DOUBLE PRECISION :: dy(*) ! array to hold value of rate equations
-  DOUBLE PRECISION :: clocktime
+  real(kind=DP) :: coeff(*) ! coeff term of rhs
+  real(kind=DP) :: y(*) ! concentration array
+  real(kind=DP) :: p(nr) ! array to hold rates
+  real(kind=DP) :: r(nr) ! working array
+  real(kind=DP) :: dy(*) ! array to hold value of rate equations
+  real(kind=DP) :: clocktime
 
   ! set rate eqn to zero
   DO i = 1, nsp
@@ -171,9 +171,9 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   INTEGER(kind=NPI), intent(in) :: ny, nr
   INTEGER(kind=NPI) :: j
-  DOUBLE PRECISION :: p(nr), r(nr), t
+  real(kind=DP) :: p(nr), r(nr), t
   real(kind=DP) :: y(*)
-  DOUBLE PRECISION, intent(out) :: fy(ny,*)
+  real(kind=DP), intent(out) :: fy(ny,*)
   INTEGER :: is
 
   ! set jacobian matrix to zero

@@ -1,90 +1,5 @@
-!     ---------------------------------------------------------------
-SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
-  USE types_mod
-  USE species
-
-  INTEGER (KIND=NPI) :: ipar (*), ier, neq, i, np
-  INTEGER :: j
-  real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
-  real(kind=DP), ALLOCATABLE :: yPlusV (:), yPlusVi(:)
-  np = getNumberOfSpecies ()
-  ALLOCATE (yPlusV (np), yPlusVi(np))
-
-  neq = ipar(1)
-  delta = 1.00d-03
-  ! fake using variables h and work, to avoid a warning (they are required by CVODE code)
-  h = h
-  dummy = work(1)
-
-  ! calculate y + delta v
-  j = 0
-  DO i = 1, neq
-     deltaV = delta * v(i)
-     yPlusV (i) = y(i) + deltaV
-  ENDDO
-
-  ! get f(y + delta v)
-  CALL FCVFUN (t, yPlusV, yPlusVi, ipar, rpar, ier)
-
-  ! JVminus1 + deltaJV
-  DO i = 1, neq
-     fjv(i) = (yPlusVi(i) - fy(i)) / delta
-  ENDDO
-  DEALLOCATE (yPlusV, yPlusVi)
-
-  RETURN
-END SUBROUTINE FCVJTIMES
-
-!     ---------------------------------------------------------------
-SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
-  USE types_mod
-  USE species
-  USE constraints
-  USE reactionStructure
-  USE chemicalConstraints
-  USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
-  USE constraintFunctions_mod
-
-  ! Fortran routine for right-hand side function.
-  IMPLICIT NONE
-  !
-  INTEGER (KIND=NPI) :: ipar(*), ier, nConSpec, np, numReac
-  real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
-  real(kind=DP), ALLOCATABLE :: dy(:), z(:)
-  INTEGER(kind=NPI) :: i
-
-  np = ipar(1) + numberOfConstrainedSpecies
-  numReac = ipar(2)
-  dummy = rpar(1)
-
-  nConSpec = numberOfConstrainedSpecies
-  ALLOCATE (dy(np), z(np))
-
-  DO i = 1, numberOfConstrainedSpecies
-     IF (i<=numberOfVariableConstrainedSpecies) THEN
-        CALL getConstrainedQuantAtT2D (t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, &
-             1, i, maxNumberOfDataPoints, numberOfVariableConstrainedSpecies)
-     ELSE
-        concAtT = dataFixedY (i-numberOfVariableConstrainedSpecies)
-     ENDIF
-     constrainedConcs(i) = concAtT
-     CALL setConstrainedConc (i, concAtT)
-
-  ENDDO
-
-  CALL addConstrainedSpeciesToProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
-
-  CALL resid (np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size)
-
-  CALL removeConstrainedSpeciesFromProbSpec (dy, ydot, numberOfConstrainedSpecies, constrainedSpecies, np)
-
-  DEALLOCATE (dy, z)
-  ier = 0
-
-  RETURN
-END SUBROUTINE FCVFUN
-
-
+MODULE solverFunctions_mod
+CONTAINS!     ---------------------------------------------------------------
 SUBROUTINE resid (nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2)
   ! calculate rhs of rate eqn dy()
   USE types_mod
@@ -206,3 +121,4 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   RETURN
 END SUBROUTINE jfy
+END MODULE solverFunctions_mod

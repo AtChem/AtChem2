@@ -90,7 +90,7 @@ PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
 
   CHARACTER(LEN=*), contiguous, intent(in) :: masterList(:)
   CHARACTER(LEN=*), intent(in) :: target
-  INTEGER :: j, id
+  INTEGER(kind=NPI) :: j, id
 
   id = 0
   DO j = 1, size(masterList)

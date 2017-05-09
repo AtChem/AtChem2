@@ -67,7 +67,7 @@ MODULE envVars
 
 
   real(kind=DP), ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
-  INTEGER, ALLOCATABLE :: envVarNumberOfPoints(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
 
 END MODULE envVars
@@ -261,7 +261,7 @@ MODULE photolysisRates
   CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
   CHARACTER(LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
   real(kind=DP), ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
-  INTEGER, ALLOCATABLE :: photoNumberOfPoints(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: photoNumberOfPoints(:)
 
 END MODULE photolysisRates
 
@@ -278,7 +278,7 @@ MODULE chemicalConstraints
   real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
   INTEGER(kind=NPI) :: numberOfConstrainedSpecies
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: constrainedName(:)
-  INTEGER, ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
+  INTEGER(kind=NPI), ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
 
 END MODULE chemicalConstraints
 

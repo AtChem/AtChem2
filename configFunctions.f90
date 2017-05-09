@@ -114,7 +114,7 @@ SUBROUTINE setConcentrations (refSpeciesNames, concSpeciesNames, &
 
   CHARACTER(LEN=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
   CHARACTER(LEN=maxSpecLength) :: k, m
-  DOUBLE PRECISION, intent(in) :: inputConcentrations(:)
+  real(kind=DP), intent(in) :: inputConcentrations(:)
   DOUBLE PRECISION, intent(out) :: outputConcentrations(:)
   INTEGER(kind=NPI) :: j, i
   LOGICAL :: match

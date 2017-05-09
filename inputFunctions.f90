@@ -374,7 +374,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE, intent(out) :: concSpeciesNames(:)
   CHARACTER(LEN=maxSpecLength) :: k
   CHARACTER(LEN=maxFilepathLength) :: file
-  DOUBLE PRECISION, ALLOCATABLE, intent(out) :: concentration(:)
+  real(kind=DP), ALLOCATABLE, intent(out) :: concentration(:)
   DOUBLE PRECISION :: l
   INTEGER(kind=NPI) :: numLines, i, nsp
   INTEGER :: ierr

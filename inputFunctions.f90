@@ -341,7 +341,7 @@ SUBROUTINE readSpecies (y, neq, speciesName, speciesNumber)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
-  DOUBLE PRECISION, intent(out) :: y(*)
+  real(kind=DP), intent(out) :: y(*)
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
   INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
@@ -470,7 +470,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   DOUBLE PRECISION :: concAtT, t, value
-  DOUBLE PRECISION :: y (*)
+  real(kind=DP) :: y (*)
 
   ! READ IN SPECIES TO BE CONSTRAINED
   WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'

@@ -171,7 +171,8 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   INTEGER(kind=NPI), intent(in) :: ny, nr
   INTEGER(kind=NPI) :: j
-  DOUBLE PRECISION :: p(nr), y(*), r(nr), t
+  DOUBLE PRECISION :: p(nr), r(nr), t
+  real(kind=DP) :: y(*)
   DOUBLE PRECISION, intent(out) :: fy(ny,*)
   INTEGER :: is
 

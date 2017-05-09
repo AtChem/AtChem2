@@ -45,7 +45,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION :: rpar (1)
   DATA lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
        lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
-  DOUBLE PRECISION, ALLOCATABLE :: speciesConcs(:)
+  real(kind=DP), ALLOCATABLE :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   DOUBLE PRECISION :: deltaJv, deltaMain, maxStep
@@ -69,14 +69,14 @@ PROGRAM ATCHEM
   INTEGER(kind=NPI), ALLOCATABLE :: returnArray(:), tempSORNumber(:), SORNumber(:)
   INTEGER(kind=NPI), ALLOCATABLE :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
   INTEGER(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
-  DOUBLE PRECISION, ALLOCATABLE :: concsOfSpeciesOfInterest(:)
+  real(kind=DP), ALLOCATABLE :: concsOfSpeciesOfInterest(:)
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
   INTEGER(kind=NPI) :: rateOfProdNS, rateOfLossNS
   INTEGER :: ratesOutputStepSize, time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
-  DOUBLE PRECISION, ALLOCATABLE :: z(:)
+  real(kind=DP), ALLOCATABLE :: z(:)
   DOUBLE PRECISION, ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
   DOUBLE PRECISION, ALLOCATABLE :: solverParameters(:), modelParameters(:)
   INTEGER(kind=DI) :: modelParameterSize, solverParameterSize

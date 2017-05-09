@@ -164,7 +164,8 @@ CONTAINS
   END SUBROUTINE deallocateSpeciesList
 
   SUBROUTINE getSpeciesList (sl)
-    CHARACTER(LEN=maxSpecLength) :: sl(*)
+    CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: sl(:)
+    ALLOCATE( sl(neq) )
     DO i = 1, neq
        sl(i) = speciesList(i)
     ENDDO

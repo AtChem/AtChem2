@@ -217,7 +217,7 @@ SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
 END SUBROUTINE getParametersFromFile
 
 
-SUBROUTINE readPhotoRates (maxNumberOfDataPoints)
+SUBROUTINE readPhotoRates ()
 
   USE photolysisRates
   USE directories, ONLY : param_dir, env_constraints_dir
@@ -452,7 +452,7 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
 END SUBROUTINE readProductsOReactantsOfInterest
 
 
-SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
+SUBROUTINE readSpeciesConstraints (neq, y, t)
   USE species
   USE constraints
   USE chemicalConstraints
@@ -466,11 +466,14 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
   INTEGER :: j, k, dataNumberOfPoints, id, ierr
   INTEGER(kind=NPI) :: neq, i
   INTEGER :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-  CHARACTER(LEN=maxSpecLength) :: speciesName(:), name
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:)
+  CHARACTER(LEN=maxSpecLength) :: name
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
   real(kind=DP) :: concAtT, t, value
   real(kind=DP) :: y (*)
+
+  CALL getSpeciesList(speciesName)
 
   ! READ IN SPECIES TO BE CONSTRAINED
   WRITE (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
@@ -529,8 +532,6 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
      ENDDO
   ENDIF
 
-  fileLocationPrefix = trim(spec_constraints_dir) // "/"
-
   ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
   WRITE (*,*) 'Reading concentration data for constrained species...'
   ALLOCATE (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
@@ -541,7 +542,7 @@ SUBROUTINE readSpeciesConstraints (speciesName, neq, y, t)
         IF (i==2) WRITE (*,*) '...'
      ENDIF
 
-     fileLocation = trim(fileLocationPrefix) // trim(constrainedName(i))
+     fileLocation = trim(spec_constraints_dir) // '/' // trim(constrainedName(i))
      OPEN (13, file=fileLocation, status='old')
 
      READ (13,*) dataNumberOfPoints

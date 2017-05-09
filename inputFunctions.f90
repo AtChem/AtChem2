@@ -372,7 +372,6 @@ SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   ! Checks that there aren't more inputs that species.
   ! concSpeciesNames is filled with all species names of initial concentrations,
   ! concentration is filled with corresponding concentration VALUES
-  USE types_mod
   USE species, ONLY : getNumberOfSpecies
   USE directories, ONLY: param_dir
   USE storage, ONLY : maxSpecLength, maxFilepathLength
@@ -384,7 +383,7 @@ SUBROUTINE readInitialConcentrations (concSpeciesNames, concentration)
   real(kind=DP), ALLOCATABLE, intent(out) :: concentration(:)
   real(kind=DP) :: l
   INTEGER(kind=NPI) :: numLines, i, nsp
-  INTEGER :: ierr
+  INTEGER(kind=IntErr) :: ierr
 
   WRITE (*,*) 'Reading initial concentrations...'
   file = trim(param_dir) // '/initialConcentrations.config'
@@ -470,8 +469,9 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
-  INTEGER :: j, k, dataNumberOfPoints, id, ierr
-  INTEGER(kind=NPI) :: neq, i
+  INTEGER :: j, k, dataNumberOfPoints
+  INTEGER(kind=IntErr) :: ierr
+  INTEGER(kind=NPI) :: neq, i, id
   INTEGER(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:)
   CHARACTER(LEN=maxSpecLength) :: name
@@ -647,8 +647,7 @@ SUBROUTINE readEnvVar ()
   USE storage, ONLY : maxFilepathLength, maxEnvVarNameLength
   IMPLICIT NONE
 
-  INTEGER :: k
-  INTEGER(kind=NPI) :: i, counter
+  INTEGER(kind=NPI) :: i, counter, k
   CHARACTER(LEN=10) dummy
   CHARACTER(LEN=maxFilepathLength) :: fileLocationPrefix
   CHARACTER(LEN=maxFilepathLength+maxEnvVarNameLength) :: fileLocation

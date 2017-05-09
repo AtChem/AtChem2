@@ -77,8 +77,7 @@ END SUBROUTINE calcDec
 
 SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
   real(kind=DP) :: z(*), x(*), constrainedConcs(*)
-  INTEGER :: constrainedSpecies(*), zCounter
-  INTEGER (kind=NPI) :: neq, numberOfConstrainedSpecies, i, j, speciesConstrained
+  INTEGER (kind=NPI) :: constrainedSpecies(*), zCounter, neq, numberOfConstrainedSpecies, i, j, speciesConstrained
 
   zCounter = 1
   DO i = 1, numberOfConstrainedSpecies + neq
@@ -103,8 +102,7 @@ END SUBROUTINE addConstrainedSpeciesToProbSpec
 !     ---------------------------------------------------------------
 SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
   real(kind=DP) :: z(*), y(*)
-  INTEGER :: constrainedSpecies(*), zCounter, speciesConstrained
-  INTEGER (kind=NPI) :: neq, numberOfConstrainedSpecies, i, k
+  INTEGER (kind=NPI) :: constrainedSpecies(*), zCounter, speciesConstrained, neq, numberOfConstrainedSpecies, i, k
 
   zCounter = 1
   ! loop through y()

@@ -345,14 +345,13 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
 END SUBROUTINE readSpeciesOutputRequired
 
 
-SUBROUTINE readSpecies (neq, speciesName, y, speciesNumber)
+SUBROUTINE readSpecies (neq, speciesName, speciesNumber)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
   CHARACTER(LEN=maxSpecLength), intent(out) :: speciesName(*)
-  real(kind=DP), intent(out) :: y(*)
   INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
 
   ! Read in species number and name from mC/mechanism.species to speciesName
@@ -360,7 +359,6 @@ SUBROUTINE readSpecies (neq, speciesName, y, speciesNumber)
   OPEN (10, file='modelConfiguration/mechanism.species') ! input file
   DO j = 1, neq
      READ (10,*) speciesNumber(j), speciesName(j)
-     y(j) = 0
   ENDDO
   CLOSE (10, status='keep')
 

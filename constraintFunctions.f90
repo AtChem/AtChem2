@@ -100,16 +100,17 @@ SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, con
 END SUBROUTINE addConstrainedSpeciesToProbSpec
 
 !     ---------------------------------------------------------------
-SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
-  real(kind=DP) :: z(*), y(*)
-  INTEGER (kind=NPI) :: constrainedSpecies(*), zCounter, speciesConstrained, neq, numberOfConstrainedSpecies, i, k
+SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, constrainedSpecies)
+  IMPLICIT NONE
+  real(kind=DP) :: z(*), y(:)
+  INTEGER (kind=NPI) :: constrainedSpecies(:), zCounter, speciesConstrained, i, k
 
   zCounter = 1
   ! loop through y()
-  DO i = 1, neq
+  DO i = 1, size(y)
      speciesConstrained = 0
      ! loop through constrained species
-     DO k = 1, numberOfConstrainedSpecies
+     DO k = 1, size(constrainedSpecies)
         IF (i==constrainedSpecies(k)) THEN
            speciesConstrained = 1
         ENDIF

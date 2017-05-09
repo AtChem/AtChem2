@@ -9,7 +9,7 @@ CONTAINS
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
 
   IMPLICIT NONE
-  DOUBLE PRECISION :: jfac, JSpeciesAtT, t
+  real(kind=DP) :: jfac, JSpeciesAtT, t
   INTEGER(kind=NPI) :: basePhotoRateNum
   INTEGER :: i
   INTEGER :: firstTime = 1
@@ -57,7 +57,7 @@ SUBROUTINE calcM (pressure, TEMP, M)
   ! calculate the number density of air (molecule cm-3)
   ! pressure in mbar, temperature in K
   IMPLICIT NONE
-  DOUBLE PRECISION pressure, TEMP, M
+  real(kind=DP) ::pressure, TEMP, M
   M = 7.242972d16*(100*pressure/TEMP)
   RETURN
 END SUBROUTINE calcM
@@ -66,7 +66,7 @@ SUBROUTINE calcDec(dec, t)
   ! calculate the declination of the Sun as seen from Earth.
   USE date, ONLY : secondsInYear, dayAsFractionOfYear
   IMPLICIT NONE
-  DOUBLE PRECISION dec, t, pi, daysInYear, maxDecInRad, currentFYear
+  real(kind=DP) :: dec, t, pi, daysInYear, maxDecInRad, currentFYear
 
   daysInYear = 365.24
   pi = 4.0*ATAN (1.0)
@@ -78,7 +78,7 @@ END SUBROUTINE calcDec
 
 SUBROUTINE addConstrainedSpeciesToProbSpec(z, x, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
   real(kind=DP) :: z(*), x(*), constrainedConcs(*)
-  INTEGER constrainedSpecies(*), zCounter
+  INTEGER :: constrainedSpecies(*), zCounter
   INTEGER (kind=NPI) :: neq, numberOfConstrainedSpecies, i, j, speciesConstrained
 
   zCounter = 1
@@ -104,8 +104,8 @@ END SUBROUTINE addConstrainedSpeciesToProbSpec
 !     ---------------------------------------------------------------
 SUBROUTINE removeConstrainedSpeciesFromProbSpec(y, z, numberOfConstrainedSpecies, constrainedSpecies, neq)
   real(kind=DP) :: z(*), y(*)
-  INTEGER constrainedSpecies(*), zCounter, speciesConstrained
-  INTEGER (kind=NPI) neq, numberOfConstrainedSpecies, i, k
+  INTEGER :: constrainedSpecies(*), zCounter, speciesConstrained
+  INTEGER (kind=NPI) :: neq, numberOfConstrainedSpecies, i, k
 
   zCounter = 1
   ! loop through y()
@@ -138,8 +138,8 @@ SUBROUTINE getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac,
   USE utilityFunctions_mod, ONLY : zenith
   IMPLICIT NONE
 
-  DOUBLE PRECISION :: t, envVarAtT, theta
-  DOUBLE PRECISION :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
+  real(kind=DP) :: t, envVarAtT, theta
+  real(kind=DP) :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
   INTEGER(kind=NPI) :: envVarNum, envVarNumH2O
 
   ! ********************************************************************************************************************
@@ -376,7 +376,7 @@ SUBROUTINE getEnvVarNum(name, envVarNum)
 
   CHARACTER, intent(in) :: name*(*)
   INTEGER(kind=NPI), intent(out) :: envVarNum
-  INTEGER i
+  INTEGER :: i
 
   DO i = 1, numEnvVars
      IF (name==trim(envVarNames(i))) THEN

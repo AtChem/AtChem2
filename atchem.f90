@@ -160,9 +160,9 @@ PROGRAM ATCHEM
   flush(6)
 
   CALL readNumberOfSpeciesAndReactions()
-
   numSpec = getNumberOfSpecies()
   numReac = getNumberOfReactions()
+
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (speciesConcs(numSpec), speciesNames(numSpec))
   speciesConcs(:) = 0

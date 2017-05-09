@@ -57,7 +57,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR TIME PARAMETERS
   INTEGER(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
   INTEGER :: numSteps
-  INTEGER(kind=NPI) :: numSpec, numReactions
+  INTEGER(kind=NPI) :: numSpec, numReac
   real(kind=DP) :: tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
@@ -159,16 +159,10 @@ PROGRAM ATCHEM
   OPEN (unit=62, file=trim(output_dir) // "/stepSize.output")
   flush(6)
 
-  !    READ IN MECHANISM PARAMETERS
-  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file
-  READ (10,*) numSpec, numReactions
-  CLOSE (10, status='keep')
+  CALL readNumberOfSpeciesAndReactions()
 
-  WRITE (*,*)
-  WRITE (*,*) 'Number of Species = ', numSpec
-  WRITE (*,*) 'Number of Reactions = ', numReactions
-  WRITE (*,*)
-
+  numSpec = getNumberOfSpecies()
+  numReac = getNumberOfReactions()
   !    SET ARRAY SIZES = NO. OF SPECIES
   ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
   speciesConcs(:) = 0
@@ -177,7 +171,7 @@ PROGRAM ATCHEM
   ALLOCATE (tempSORNumber(numSpec))
   ALLOCATE (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
-  ALLOCATE (lossRates(numReactions), productionRates(numReactions), ir(numReactions))
+  ALLOCATE (lossRates(numReac), productionRates(numReac), ir(numReac))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
   CALL getReactionListSizes (csize1, csize2)
@@ -198,7 +192,6 @@ PROGRAM ATCHEM
   WRITE (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
-  CALL setNumberOfSpecies (numSpec)
   CALL setSpeciesList (speciesName)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
@@ -472,7 +465,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   ipar(1) = neq
-  ipar(2) = numReactions
+  ipar(2) = numReac
 
   CALL fnvinits (1, neq, ier)
   IF (ier/=0) THEN
@@ -591,7 +584,7 @@ PROGRAM ATCHEM
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
      WRITE (*,*) 'time = ', time
      IF (MOD (elapsed, jacobianOutputStepSize)==0) THEN
-        CALL jfy (numSpec, numReactions, speciesConcs, fy, t)
+        CALL jfy (numSpec, numReac, speciesConcs, fy, t)
         CALL outputjfy (fy, numSpec, t)
      ENDIF
 
@@ -601,7 +594,7 @@ PROGRAM ATCHEM
 
      !OUTPUT INSTANTANEOUS RATES
      IF (MOD (elapsed, irOutStepSize)==0) THEN
-        CALL outputInstantaneousRates(time, numReactions)
+        CALL outputInstantaneousRates(time, numReac)
      ENDIF
 
      ! OUTPUT FOR CVODE MAIN SOLVER

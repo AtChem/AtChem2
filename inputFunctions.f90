@@ -104,10 +104,10 @@ SUBROUTINE readPhotolysisRates (ck, cl, cmm, cnn, str, tf)
   USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
   IMPLICIT NONE
 
-  INTEGER(kind=NPI) :: i, ck(*)
+  INTEGER(kind=NPI) :: i, ck(:)
   INTEGER(kind=IntErr) :: ierr
-  real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
+  real(kind=DP) :: cl(:), cmm(:), cnn(:), tf(:)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: str(:)
 
   WRITE (*,*) 'Reading photolysis rates from file...'
   OPEN (10, file=trim(param_dir) // '/photolysisRates.config', status='old')
@@ -148,10 +148,10 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
   USE storage, ONLY : maxPhotoRateNameLength
   IMPLICIT NONE
 
-  INTEGER(kind=NPI) :: i, ck(*)
+  INTEGER(kind=NPI) :: i, ck(:)
   INTEGER(kind=IntErr) :: ierr
-  real(kind=DP) :: cl(*), cmm(*), cnn(*), tf(*)
-  CHARACTER(LEN=maxPhotoRateNameLength) :: str(*)
+  real(kind=DP) :: cl(:), cmm(:), cnn(:), tf(:)
+  CHARACTER(LEN=maxPhotoRateNameLength) :: str(:)
   LOGICAL :: file_exists
 
 ! Check whether file exists correctly in readPhotolysisConstants,
@@ -208,8 +208,8 @@ END SUBROUTINE getReactantAndProductListSizes
 SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)
   ! Read in parameters from file at input_file, and save the contents of each
   ! line to an element of the array
-  CHARACTER, intent(in) :: input_file*(*)
-  real(kind=DP), intent(out) :: parameterArray(*)
+  CHARACTER(LEN=*), intent(in) :: input_file
+  real(kind=DP), intent(out) :: parameterArray(:)
   INTEGER(kind=DI), intent(out) :: numValidEntries
 
   OPEN (10, file=input_file, status='old') ! input file
@@ -478,7 +478,7 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
 END SUBROUTINE readProductsOReactantsOfInterest
 
 
-SUBROUTINE readSpeciesConstraints (numSpecies, t, y)
+SUBROUTINE readSpeciesConstraints (t, y)
   USE species
   USE constraints
   USE chemicalConstraints
@@ -489,11 +489,10 @@ SUBROUTINE readSpeciesConstraints (numSpecies, t, y)
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
-  INTEGER(kind=NPI), intent(in) :: numSpecies
   real(kind=DP), intent(in) :: t
-  real(kind=DP), intent(inout) ::y (*)
+  real(kind=DP), intent(inout) :: y(:)
   real(kind=DP) :: concAtT, value
-  INTEGER(kind=NPI) :: i, j, id
+  INTEGER(kind=NPI) :: i, j, id, numberOfSpecies
   INTEGER :: k, dataNumberOfPoints
   INTEGER(kind=IntErr) :: ierr
   INTEGER(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
@@ -626,10 +625,11 @@ SUBROUTINE readSpeciesConstraints (numSpecies, t, y)
   WRITE (51,*) "Number of constrained species:", numberOfConstrainedSpecies
 
   ! ERROR HANDLING
-  IF (numberOfConstrainedSpecies>=numSpecies) THEN
+  numberOfSpecies = getNumberOfSpecies()
+  IF (numberOfConstrainedSpecies>=numberOfSpecies) THEN
      WRITE (51,*) "Error: Number of (number of constrained species) >= (number of species) "
      WRITE (51,*) "(number of constrained species) = ", numberOfConstrainedSpecies
-     WRITE (51,*) "(number of species) = ", numSpecies
+     WRITE (51,*) "(number of species) = ", numberOfSpecies
      STOP 2
   ENDIF
 

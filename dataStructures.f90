@@ -248,7 +248,7 @@ MODULE reactionStructure
 
   SAVE
   INTEGER(kind=NPI), ALLOCATABLE :: clhs(:,:), crhs(:,:)
-  INTEGER(kind=NPI) :: csize1, csize2
+  INTEGER(kind=NPI) :: lhs_size, rhs_size
   real(kind=DP), ALLOCATABLE :: ccoeff(:)
 
 END MODULE reactionStructure

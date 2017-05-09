@@ -174,15 +174,15 @@ PROGRAM ATCHEM
   ALLOCATE (lossRates(numReac), productionRates(numReac), ir(numReac))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
-  CALL getReactionListSizes (csize1, csize2)
+  CALL getReactantAndProductListSizes ()
 
-  ALLOCATE (clhs(3, csize1), crhs(2, csize2), ccoeff(csize2))
+  ALLOCATE (clhs(3, lhs_size), crhs(2, rhs_size), ccoeff(rhs_size))
 
   !   READ IN CHEMICAL REACTIONS
   CALL readReactions (clhs, crhs, ccoeff)
   neq = numSpec
 
-  WRITE (*,*) 'Size of lhs =', csize1, 'size of rhs2 = ', csize2, '.'
+  WRITE (*,*) 'Size of lhs =', lhs_size, 'size of rhs2 = ', rhs_size, '.'
 
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
@@ -223,11 +223,11 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesNames, prodIntName, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
-  ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
+  ALLOCATE (prodIntSpecies(rateOfProdNS, rhs_size))
   DO species_counter = 1, rateOfProdNS
      prodIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
-  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2_NPI, csize2, rateOfProdNS, prodArrayLen)
+  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2_NPI, rhs_size, rateOfProdNS, prodArrayLen)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
@@ -239,11 +239,11 @@ PROGRAM ATCHEM
   CALL matchNameToNumber (speciesNames, reacIntName, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
-  ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
+  ALLOCATE (reacIntSpecies(rateOfLossNS, lhs_size))
   DO species_counter = 1, rateOfLossNS
      reacIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
-  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3_NPI, csize1, rateOfLossNS, lossArrayLen)
+  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3_NPI, lhs_size, rateOfLossNS, lossArrayLen)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
 
@@ -575,10 +575,10 @@ PROGRAM ATCHEM
      elapsed = INT (t-modelStartTime)
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
         CALL outputRates (prodIntSpecies, t, productionRates, 1, &
-                          rateOfProdNS, csize2, &
+                          rateOfProdNS, rhs_size, &
                           prodArrayLen, speciesNames)
         CALL outputRates (reacIntSpecies, t, lossRates, 0, &
-                          rateOfLossNS, csize1, &
+                          rateOfLossNS, lhs_size, &
                           lossArrayLen, speciesNames)
      ENDIF
 

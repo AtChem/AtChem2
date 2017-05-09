@@ -74,7 +74,7 @@ SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
 
   CALL addConstrainedSpeciesToProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
 
-  CALL resid (np, numReac, t, z, dy, clhs, crhs, ccoeff, csize1, csize2)
+  CALL resid (np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size)
 
   CALL removeConstrainedSpeciesFromProbSpec (dy, ydot, numberOfConstrainedSpecies, constrainedSpecies, np)
 
@@ -148,13 +148,13 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   ! nr = number of reactions
   ! for each species calculate the rhs of the rate equation
   ! for the reactants array
-  ! csize1 is the number of entries
+  ! lhs_size is the number of entries
   ! clhs(1,) = reaction number
   ! clhs(2,) = species number
   ! clhs(3,) = stoichiometric coefficient
 
   ! for the products array
-  ! csize2 is the number of entries
+  ! rhs_size is the number of entries
   ! crhs(1,) = reaction number
   ! crhs(2,) = species number
   ! ccoeff() = stoichiometric coefficient (double precision)
@@ -166,7 +166,7 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
   ! r = working array - dimension nr
   USE types_mod
   USE mechanismRates_mod
-  USE reactionStructure ! access is, crhs, nclhs, csize2
+  USE reactionStructure ! access is, crhs, nclhs, rhs_size
   IMPLICIT NONE
 
   INTEGER(kind=NPI), intent(in) :: ny, nr
@@ -184,22 +184,22 @@ SUBROUTINE jfy (ny, nr, y, fy, t)
 
   DO j = 1, ny
      r(1:nr) = 0.0
-     DO is = 1, csize1
+     DO is = 1, lhs_size
         IF (clhs(2, is)==j) THEN
            r(clhs(1, is)) = p(clhs(1, is))
         ENDIF
      ENDDO
-     DO is = 1, csize1
+     DO is = 1, lhs_size
         IF (clhs(2, is)==j) THEN
            r(clhs(1, is)) = r(clhs(1, is))*clhs(3, is)*y(clhs(2, is))**(clhs(3, is)-1)
         ELSE
            r(clhs(1, is)) = r(clhs(1, is))*y(clhs(2, is))**clhs(3, is)
         ENDIF
      ENDDO
-     DO is = 1, csize1
+     DO is = 1, lhs_size
         fy(clhs(2, is), j)=fy(clhs(2, is), j)-clhs(3, is)*r(clhs(1, is))
      ENDDO
-     DO is = 1, csize2
+     DO is = 1, rhs_size
         fy(crhs(2, is), j)=fy(crhs(2, is), j) + ccoeff(is) * r(crhs(1, is))
      ENDDO
   ENDDO

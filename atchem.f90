@@ -62,7 +62,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   REAL(kind=DP), ALLOCATABLE :: initialConcentrations(:)
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
+  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesNames(:), concSpeciesNames(:)
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
@@ -164,7 +164,7 @@ PROGRAM ATCHEM
   numSpec = getNumberOfSpecies()
   numReac = getNumberOfReactions()
   !    SET ARRAY SIZES = NO. OF SPECIES
-  ALLOCATE (speciesConcs(numSpec), speciesName(numSpec))
+  ALLOCATE (speciesConcs(numSpec), speciesNames(numSpec))
   speciesConcs(:) = 0
   ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec))
   ALLOCATE (returnArray(numSpec))
@@ -187,17 +187,17 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   WRITE (*,*)
   WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (numSpec, speciesName, speciesNumber)
+  CALL readSpecies (numSpec, speciesNames, speciesNumber)
   WRITE (*,*) 'Finished reading species names.'
   WRITE (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
-  CALL setSpeciesList (speciesName)
+  CALL setSpeciesList (speciesNames)
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readInitialConcentrations (concSpeciesName, initialConcentrations)
-  CALL setConcentrations (speciesName, concSpeciesName, initialConcentrations, speciesConcs)
-  DEALLOCATE (concSpeciesName, initialConcentrations)
+  CALL readInitialConcentrations (concSpeciesNames, initialConcentrations)
+  CALL setConcentrations (speciesNames, concSpeciesNames, initialConcentrations, speciesConcs)
+  DEALLOCATE (concSpeciesNames, initialConcentrations)
   WRITE (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
@@ -220,7 +220,7 @@ PROGRAM ATCHEM
   WRITE (*,*) 'Reading products of interest...'
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   WRITE (*,*) 'Finished reading products of interest.'
-  CALL matchNameToNumber (speciesName, prodIntName, returnArray, rateOfProdNS)
+  CALL matchNameToNumber (speciesNames, prodIntName, returnArray, rateOfProdNS)
   ! prodArrayLen will hold the length of each line of prodIntSpecies
   ALLOCATE (prodArrayLen(rateOfProdNS))
   ALLOCATE (prodIntSpecies(rateOfProdNS, csize2))
@@ -236,7 +236,7 @@ PROGRAM ATCHEM
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   WRITE (*,*) 'Finished reading reactants of interest.'
 
-  CALL matchNameToNumber (speciesName, reacIntName, returnArray, rateOfLossNS)
+  CALL matchNameToNumber (speciesNames, reacIntName, returnArray, rateOfLossNS)
   ! lossArrayLen will hold the length of each line of reacIntSpecies
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, csize1))
@@ -420,7 +420,7 @@ PROGRAM ATCHEM
   CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize)
 
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
-  CALL matchNameToNumber (speciesName, speciesOutputRequired, &
+  CALL matchNameToNumber (speciesNames, speciesOutputRequired, &
                           tempSORNumber, SORNumberSize)
   ! Allocate SORNumber and fill from temporary array
   ALLOCATE (SORNumber(SORNumberSize), concsOfSpeciesOfInterest(SORNumberSize))
@@ -576,10 +576,10 @@ PROGRAM ATCHEM
      IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
         CALL outputRates (prodIntSpecies, t, productionRates, 1, &
                           rateOfProdNS, csize2, &
-                          prodArrayLen, speciesName)
+                          prodArrayLen, speciesNames)
         CALL outputRates (reacIntSpecies, t, lossRates, 0, &
                           rateOfLossNS, csize1, &
-                          lossArrayLen, speciesName)
+                          lossArrayLen, speciesNames)
      ENDIF
 
      ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
@@ -644,7 +644,7 @@ PROGRAM ATCHEM
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
   DO species_counter = 1, numSpec
-     WRITE (53,*) speciesName(species_counter), speciesConcs(species_counter)
+     WRITE (53,*) speciesNames(species_counter), speciesConcs(species_counter)
   ENDDO
 
   !   printing of final statistics desactivated - nobody finds it useful
@@ -668,7 +668,7 @@ PROGRAM ATCHEM
   !   deallocate CVODE internal data
 
   CALL fcvfree
-  DEALLOCATE (speciesConcs, speciesName, speciesNumber, z)
+  DEALLOCATE (speciesConcs, speciesNames, speciesNumber, z)
   DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
   DEALLOCATE (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   DEALLOCATE (fy, ir)

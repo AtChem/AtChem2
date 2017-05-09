@@ -432,7 +432,7 @@ PROGRAM ATCHEM
   CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
 
   !   Write file output headers
-  CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired, speciesOutputRequiredSize)
+  CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired)
 
   flush(stderr)
   !    ********************************************************************************************************

@@ -345,14 +345,35 @@ SUBROUTINE readSpeciesOutputRequired (r, i)
 END SUBROUTINE readSpeciesOutputRequired
 
 
+SUBROUTINE readNumberOfSpeciesAndReactions ()
+  USE types_mod
+  USE species, ONLY : setNumberOfSpecies, setNumberOfReactions
+  IMPLICIT NONE
+
+  INTEGER(kind=NPI) :: numSpec, numReac
+  !    READ IN MECHANISM PARAMETERS
+  OPEN (10, file='modelConfiguration/mechanism.reac', status='old') ! input file
+  READ (10,*) numSpec, numReac
+  CLOSE (10, status='keep')
+
+  CALL setNumberOfSpecies(numSpec)
+  CALL setNumberOfReactions(numReac)
+
+  WRITE (*,*)
+  WRITE (*,*) 'Number of Species = ', numSpec
+  WRITE (*,*) 'Number of Reactions = ', numReac
+  WRITE (*,*)
+END SUBROUTINE readNumberOfSpeciesAndReactions
+
+
 SUBROUTINE readSpecies (neq, speciesName, speciesNumber)
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE
 
   INTEGER(kind=NPI), intent(in) :: neq
   INTEGER(kind=NPI) :: j
-  CHARACTER(LEN=maxSpecLength), intent(out) :: speciesName(*)
-  INTEGER(kind=NPI), intent(out) :: speciesNumber(*)
+  CHARACTER(LEN=maxSpecLength), intent(out) :: speciesName(:)
+  INTEGER(kind=NPI), intent(out) :: speciesNumber(:)
 
   ! Read in species number and name from mC/mechanism.species to speciesName
   ! and speciesNumber. Also set each element of y to 0.

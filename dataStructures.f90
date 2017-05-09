@@ -140,26 +140,37 @@ MODULE species
 
   IMPLICIT NONE
   SAVE
-  INTEGER(kind=NPI) :: neq
+  INTEGER(kind=NPI) :: numSpecies, numReactions
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
 
   INTEGER(kind=NPI) :: i
 
-  PRIVATE :: neq, speciesList, i
-  PUBLIC :: getNumberOfSpecies, setNumberOfSpecies, deallocateSpeciesList
+  PRIVATE :: numSpecies, speciesList, i
+  PUBLIC :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
+  PUBLIC :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
 CONTAINS
 
   FUNCTION getNumberOfSpecies( ) result (n)
     INTEGER(kind=NPI) :: n
-    n = neq
+    n = numSpecies
   END FUNCTION getNumberOfSpecies
 
   SUBROUTINE setNumberOfSpecies (n)
     INTEGER(kind=NPI) :: n
-    neq = n
+    numSpecies = n
     ALLOCATE (speciesList(n))
   END SUBROUTINE setNumberOfSpecies
+
+  FUNCTION getNumberOfReactions( ) result (n)
+    INTEGER(kind=NPI) :: n
+    n = numReactions
+  END FUNCTION getNumberOfReactions
+
+  SUBROUTINE setNumberOfReactions (n)
+    INTEGER(kind=NPI) :: n
+    numReactions = n
+  END SUBROUTINE setNumberOfReactions
 
   SUBROUTINE deallocateSpeciesList
     DEALLOCATE (speciesList)
@@ -167,15 +178,15 @@ CONTAINS
 
   SUBROUTINE getSpeciesList (sl)
     CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: sl(:)
-    ALLOCATE( sl(neq) )
-    DO i = 1, neq
+    ALLOCATE( sl(numSpecies) )
+    DO i = 1, numSpecies
        sl(i) = speciesList(i)
     ENDDO
   END SUBROUTINE getSpeciesList
 
   SUBROUTINE setSpeciesList (sl)
-    CHARACTER(LEN=maxSpecLength) :: sl(*)
-    DO i = 1, neq
+    CHARACTER(LEN=maxSpecLength) :: sl(:)
+    DO i = 1, numSpecies
        speciesList(i) = sl(i)
     ENDDO
   END SUBROUTINE setSpeciesList

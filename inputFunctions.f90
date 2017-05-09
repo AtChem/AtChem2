@@ -444,8 +444,8 @@ END SUBROUTINE readInitialConcentrations
 
 
 SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
-  ! Read in contents of modelConfiguration/productionRatesOutput.config, which
-  ! contains a list of the species we want to have outputted to mC/productionRates.output
+  ! Read in contents of modelConfiguration/production/lossRatesOutput.config, which
+  ! contains a list of the species we want to have outputted to mC/production/lossRates.output
   ! Output the contents in r, with i as the length of r.
   USE storage, ONLY : maxSpecLength
   IMPLICIT NONE

@@ -103,6 +103,44 @@ PURE FUNCTION matchOneNameToNumber (masterList, target) result ( id )
 END FUNCTION matchOneNameToNumber
 
 
+SUBROUTINE findReactionsWithProductOrReactant (r, chs, arrayLen)
+USE types_mod
+! For each interesting species, held in the first element of each row of r,
+! find all reactions in chs which match (i.e. second column of chs matches first element
+! of given row from r), and append the number of that reaction (first column of chs)
+! to this row of r.
+! arrayLen keeps track of how long each row in r is.
+INTEGER(kind=NPI), intent(in) :: chs(:, :)
+INTEGER(kind=NPI), intent(out) :: arrayLen(:)
+INTEGER(kind=NPI), intent(inout) :: r(:, :)
+INTEGER(kind=NPI) :: rCounter, i, j
+
+IF (size(arrayLen)/=size(r, 1)) THEN
+  STOP "size(arrayLen)/=size(r, 1) in findReactionsWithProductOrReactant()."
+END IF
+! initialise counter for r array
+rCounter = 2
+! loop over interesting species (i.e. over 1st index of r)
+DO i = 1, size(arrayLen)
+  ! loop over elements of 2nd index of chs
+   DO j = 1, size(chs, 2)
+      ! Is the second element of this row in chs (a species number) equal to the first element of this column in r (the interesting species number)?
+      ! If so, then append the first element of this row in chs (the equation number) to this row in r,
+      ! and update the length counter arrayLen for this row.
+      IF (chs(2, j)==r(i, 1)) THEN
+         ! Match found
+         r(i, rCounter) = chs(1, j)
+         rCounter = rCounter + 1
+      ENDIF
+   ENDDO
+   arrayLen(i) = rCounter -1
+   rCounter = 2
+ENDDO
+
+RETURN
+END SUBROUTINE findReactionsWithProductOrReactant
+
+
 SUBROUTINE setConcentrations (refSpeciesNames, concSpeciesNames, &
                               inputConcentrations, outputConcentrations)
   ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),
@@ -121,10 +159,10 @@ SUBROUTINE setConcentrations (refSpeciesNames, concSpeciesNames, &
   LOGICAL :: match
 
   IF (size(concSpeciesNames)/=size(inputConcentrations)) THEN
-    STOP "size(concSpeciesNames)/=size(inputConcentrations in setConcentrations()."
+    STOP "size(concSpeciesNames)/=size(inputConcentrations) in setConcentrations()."
   END IF
   IF (size(refSpeciesNames)/=size(outputConcentrations)) THEN
-    STOP "size(refSpeciesNames)/=size(outputConcentrations in setConcentrations()."
+    STOP "size(refSpeciesNames)/=size(outputConcentrations) in setConcentrations()."
   END IF
   DO i = 1, size(concSpeciesNames)
      match = .FALSE.

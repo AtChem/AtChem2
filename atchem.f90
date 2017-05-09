@@ -22,7 +22,6 @@ PROGRAM ATCHEM
   USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
   USE inputFunctions_mod
   USE configFunctions_mod
-  USE instantaneousRatesFunctions_mod
   USE outputFunctions_mod
   USE constraintFunctions_mod
   IMPLICIT NONE
@@ -220,14 +219,18 @@ PROGRAM ATCHEM
   WRITE (*,*) 'Reading products of interest...'
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   WRITE (*,*) 'Finished reading products of interest.'
+  ! Fill returnArray with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
   CALL matchNameToNumber (speciesNames, prodIntName, returnArray, rateOfProdNS)
-  ! prodArrayLen will hold the length of each line of prodIntSpecies
+  ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
+  ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
   ALLOCATE (prodArrayLen(rateOfProdNS))
   ALLOCATE (prodIntSpecies(rateOfProdNS, rhs_size))
+  ! Write product species number to first element of each row of prodIntSpecies
   DO species_counter = 1, rateOfProdNS
      prodIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
-  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, 2_NPI, rhs_size, rateOfProdNS, prodArrayLen)
+  ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
+  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, prodArrayLen)
   WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
   WRITE (*,*)
 
@@ -235,15 +238,18 @@ PROGRAM ATCHEM
   WRITE (*,*) 'Reading reactants of interest...'
   CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   WRITE (*,*) 'Finished reading reactants of interest.'
-
+  ! Fill returnArray with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
   CALL matchNameToNumber (speciesNames, reacIntName, returnArray, rateOfLossNS)
-  ! lossArrayLen will hold the length of each line of reacIntSpecies
+  ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
+  ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
   ALLOCATE (lossArrayLen(rateOfLossNS))
   ALLOCATE (reacIntSpecies(rateOfLossNS, lhs_size))
+  ! Write reactant species number to first element of each row of reacIntSpecies
   DO species_counter = 1, rateOfLossNS
      reacIntSpecies(species_counter, 1) = returnArray(species_counter)
   ENDDO
-  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, 3_NPI, lhs_size, rateOfLossNS, lossArrayLen)
+  ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
+  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, lossArrayLen)
   WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
   WRITE (*,*)
 

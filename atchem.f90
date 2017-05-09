@@ -61,7 +61,7 @@ PROGRAM ATCHEM
   DOUBLE PRECISION tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  DOUBLE PRECISION, ALLOCATABLE :: initialConcentrations(:)
+  REAL(kind=DP), ALLOCATABLE :: initialConcentrations(:)
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:), concSpeciesName(:)
   INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
 

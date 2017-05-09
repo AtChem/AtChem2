@@ -9,9 +9,9 @@ module types_mod
    integer, parameter :: QI = INT32
    integer, parameter :: LONG = INT64
    integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
-   real, parameter :: SP = selected_real_kind( p = 6, r = 37 )
-   real, parameter :: DP = selected_real_kind( p = 15, r = 307 )
-   real, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
+   integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
+   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
+   integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
 contains
 end module types_mod
 

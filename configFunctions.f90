@@ -19,13 +19,14 @@ CONTAINS
   RETURN
 END SUBROUTINE calcDateParameters
 
-SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutReqNamesSize)
+SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames)
   USE envVars
   USE photolysisRates, ONLY : nrOfPhotoRates, ck
   USE storage, ONLY : maxPhotoRateNameLength, maxSpecLength
-  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(*)
-  CHARACTER(LEN=maxSpecLength) :: specOutReqNames(*)
-  INTEGER(kind=NPI), intent(in) :: specOutReqNamesSize
+  IMPLICIT NONE
+
+  CHARACTER(LEN=maxPhotoRateNameLength), intent(in) :: photoRateNamesForHeader(:)
+  CHARACTER(LEN=maxSpecLength), intent(in) :: specOutReqNames(:)
   INTEGER(kind=NPI) :: i
 
   ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
@@ -38,7 +39,7 @@ SUBROUTINE writeFileHeaders (photoRateNamesForHeader, specOutReqNames, specOutRe
   WRITE (61,*) 't NFELS NJTV NPE NPS'
 
   ! OTHER OUPUT
-  WRITE (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, specOutReqNamesSize)
+  WRITE (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, size(specOutReqNames))
   ! 51, 53, 54, 55 don't need a header.
   WRITE (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
   WRITE (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
@@ -60,8 +61,8 @@ SUBROUTINE matchNameToNumber (masterSpeciesList, &
   ! number of times a match was made
   CHARACTER(LEN=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
   CHARACTER(LEN=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
-  INTEGER(kind=NPI), intent(out) :: returnArray(*), returnArraySize
-  INTEGER i, j
+  INTEGER(kind=NPI), intent(out) :: returnArray(:), returnArraySize
+  INTEGER :: i, j
   LOGICAL match
 
   returnArraySize = 0

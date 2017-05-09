@@ -7,8 +7,8 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
   USE interpolationMethod
   USE chemicalConstraints
   INTEGER dataNumberOfPoints, linintsuc, constraintType, maxPoints, nConSpec
-  DOUBLE PRECISION :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
-  DOUBLE PRECISION :: xBefore, xAfter, yBefore, yAfter, m, c
+  real(kind=DP) :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
+  real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
   INTEGER :: indexBefore, indexAfter, facintfound, i
   INTEGER(kind=SI) :: interpMethod
   INTEGER(kind=NPI) :: ind
@@ -87,13 +87,13 @@ SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
 
   INTEGER n, maxPoints
   INTEGER(kind=NPI) :: ind
-  DOUBLE PRECISION :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
+  real(kind=DP) :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
   ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
   ! (with the xai�s in order), and given the array y2a(1:n), which is the output
   ! from spline above, and given a value of x, this routine returns a
   ! cubic-spline interpolated value y.
   INTEGER k, khi, klo
-  DOUBLE PRECISION :: a, b, h
+  real(kind=DP) :: a, b, h
 
   klo = 1 !We will find the right place in the table by means of bisection.
   ! This is optimal if sequential calls to this routine are at random values of

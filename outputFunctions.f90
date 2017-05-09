@@ -87,7 +87,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
   ! String these together with '+', and append a '='
   numReactants = 0
-  DO i = 1, csize1
+  DO i = 1, lhs_size
      IF (clhs(1, i)==reactionNumber) THEN
         numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
@@ -109,7 +109,7 @@ SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
   ! String these together with '+', and append this to reactantStr. Save the
   ! result in reaction, which is returned
   numProducts = 0
-  DO i = 1, csize2
+  DO i = 1, rhs_size
      IF (crhs(1, i)==reactionNumber) THEN
         numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))

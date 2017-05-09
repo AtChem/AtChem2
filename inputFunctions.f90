@@ -192,17 +192,17 @@ SUBROUTINE readPhotolysisConstants (ck, cl, cmm, cnn, str, tf)
 END SUBROUTINE readPhotolysisConstants
 
 
-SUBROUTINE getReactionListSizes (csize1, csize2)
-  ! outputs csize1 and csize2, which hold the number of lines in
+SUBROUTINE getReactantAndProductListSizes ()
+  USE reactionStructure, ONLY : lhs_size, rhs_size
+  IMPLICIT NONE
+  ! outputs lhs_size and rhs_size, which hold the number of lines in
   ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
   ! last line
-  INTEGER(kind=NPI), intent(out) :: csize1, csize2
-
-  csize1 = count_lines_in_file( 'modelConfiguration/mechanism.reac',  skip_first_line_in=.TRUE. )
-  csize2 = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.FALSE. )
+  lhs_size = count_lines_in_file( 'modelConfiguration/mechanism.reac', skip_first_line_in=.TRUE. )
+  rhs_size = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.FALSE. )
 
   RETURN
-END SUBROUTINE getReactionListSizes
+END SUBROUTINE getReactantAndProductListSizes
 
 
 SUBROUTINE getParametersFromFile (input_file, parameterArray, numValidEntries)

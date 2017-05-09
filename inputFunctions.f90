@@ -458,7 +458,7 @@ SUBROUTINE readProductsOReactantsOfInterest (filename, r, i)
 END SUBROUTINE readProductsOReactantsOfInterest
 
 
-SUBROUTINE readSpeciesConstraints (neq, y, t)
+SUBROUTINE readSpeciesConstraints (numSpecies, t, y)
   USE species
   USE constraints
   USE chemicalConstraints
@@ -469,15 +469,17 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
   IMPLICIT NONE
 
-  INTEGER :: j, k, dataNumberOfPoints
+  INTEGER(kind=NPI), intent(in) :: numSpecies
+  real(kind=DP), intent(in) :: t
+  real(kind=DP), intent(inout) ::y (*)
+  real(kind=DP) :: concAtT, value
+  INTEGER(kind=NPI) :: i, j, id
+  INTEGER :: k, dataNumberOfPoints
   INTEGER(kind=IntErr) :: ierr
-  INTEGER(kind=NPI) :: neq, i, id
   INTEGER(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
   CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesName(:)
   CHARACTER(LEN=maxSpecLength) :: name
   CHARACTER(LEN=maxFilepathLength+maxSpecLength) :: fileLocation
-  real(kind=DP) :: concAtT, t, value
-  real(kind=DP) :: y (*)
 
   CALL getSpeciesList(speciesName)
 
@@ -604,10 +606,10 @@ SUBROUTINE readSpeciesConstraints (neq, y, t)
   WRITE (51,*) "Number of constrained species:", numberOfConstrainedSpecies
 
   ! ERROR HANDLING
-  IF (numberOfConstrainedSpecies>=neq) THEN
+  IF (numberOfConstrainedSpecies>=numSpecies) THEN
      WRITE (51,*) "Error: Number of (number of constrained species) >= (number of species) "
      WRITE (51,*) "(number of constrained species) = ", numberOfConstrainedSpecies
-     WRITE (51,*) "(number of species) = ", neq
+     WRITE (51,*) "(number of species) = ", numSpecies
      STOP 2
   ENDIF
 

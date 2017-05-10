@@ -65,13 +65,14 @@ SUBROUTINE calcDec(dec, t)
   ! calculate the declination of the Sun as seen from Earth.
   USE date, ONLY : secondsInYear, dayAsFractionOfYear
   IMPLICIT NONE
-  real(kind=DP) :: dec, t, pi, daysInYear, maxDecInRad, currentFYear
+  real(kind=DP) :: dec, t, pi, daysInYear, maxDecInRad, currentFYear, temporary
 
   daysInYear = 365.24
   pi = 4.0*ATAN (1.0)
   maxDecInRad = 23.44*pi/180.0
   currentFYear = dayAsFractionOfYear + (t / secondsInYear)
-  dec=ASIN(SIN(-maxDecInRad)*COS((2.0*pi)*(currentFYear+(10.0/daysInYear))+2.0*0.0167*SIN(2*pi*(currentFYear-(2.0/daysInYear)))))
+  temporary = 2.0 * 0.0167 * SIN(2 * pi * (currentFYear - (2.0 / daysInYear)))
+  dec = ASIN(SIN(-maxDecInRad)*COS((2.0*pi)*(currentFYear + (10.0 / daysInYear)) + temporary))
   RETURN
 END SUBROUTINE calcDec
 

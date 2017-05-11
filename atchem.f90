@@ -119,10 +119,8 @@ PROGRAM ATCHEM
       use chemicalConstraints
       use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
       use constraintFunctions_mod
-
-      ! Fortran routine for right-hand side function.
       implicit none
-      !
+
       integer (kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
       real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
       real(kind=DP), allocatable :: dy(:), z(:)
@@ -745,7 +743,7 @@ END PROGRAM ATCHEM
   SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
     USE types_mod
     USE species
-    IMPLICIT NONE
+    implicit none
 
     INTEGER (KIND=NPI) :: ipar (*), ier, neq, i, np
     INTEGER :: j

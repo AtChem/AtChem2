@@ -32,7 +32,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  integer(kind=IntErr) :: ier
+  integer(kind=QI) :: ier
   integer :: i
   integer(kind=NPI) :: species_counter
   integer :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
@@ -341,9 +341,9 @@ PROGRAM ATCHEM
   preconBandLower = solverParameters(10)
 
   ! float format
-  100 format (A17, E11.3)
+  100 FORMAT (A17, E11.3)
   ! integer format
-  200 format (A17, I11)
+  200 FORMAT (A17, I11)
   write (*,*) 'Solver parameters:'
   write (*,*) '------------------'
   write (*, 100) 'atol: ', atol
@@ -366,7 +366,7 @@ PROGRAM ATCHEM
   ! Size of timestep: tout is incremented by this amount on each iteration of the main while loop.
   timestepSize = modelParameters(2)
   ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
-  ! the private member of module interpolationMethod.
+  ! the private member of MODULE interpolationMethod.
   ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT2D.
   ! Values:
   ! 1: Cubic spline interpolation
@@ -380,7 +380,7 @@ PROGRAM ATCHEM
   call setConditionsInterpMethod( conditionsInterpolationMethod )
   decInterpolationMethod = modelParameters(5)
   call setDecInterpMethod( decInterpolationMethod )
-  ! Member variable of module constraints. Used in getConstrainedQuantAtT2D and readEnvVar
+  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
   ! Member variable of chemicalConstraints.
   numberOfConstrainedSpecies = modelParameters(7)
@@ -401,11 +401,11 @@ PROGRAM ATCHEM
   irOutStepSize = modelParameters(16)
 
   ! float format
-  300 format (A52, E11.3)
+  300 FORMAT (A52, E11.3)
   ! integer format
-  400 format (A52, I11)
+  400 FORMAT (A52, I11)
   ! string format
-  500 format (A52, A17)
+  500 FORMAT (A52, A17)
   write (*,*) 'Model parameters:'
   write (*,*) '-----------------'
   write (*, 400) 'number of steps: ', maxNumTimesteps
@@ -438,13 +438,13 @@ PROGRAM ATCHEM
   meth = 2
   ! itmeth specifies the nonlinear iteration method: 1 for functional iteration or 2 for Newton iteration.
   itmeth = 2
-  ! iatol specifies the type for absolute tolerance atol: 1 for scalar or 2 for array.
-  ! If iatol= 3, the arguments rtol and atol are ignored and the user is
+  ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar or 2 for array.
+  ! If IATOL= 3, the arguments RTOL and ATOL are ignored and the user is
   ! expected to subsequently call FCVEWTSET() and provide the function FCVEWT().
   iatol = 1
 
-  ! Parameter for FCVODE(). Comment from cvode guide: itask is a task indicator and should be
-  ! set to 1 for normal mode (overshoot tout and interpolate),
+  ! Parameter for FCVODE(). Comment from cvode guide: ITASK is a task indicator and should be
+  ! set to 1 for normal mode (overshoot TOUT and interpolate),
   ! or to 2 for one-step mode (return after each internal step taken)
   itask = 1
 
@@ -510,7 +510,7 @@ PROGRAM ATCHEM
   call FNVINITS( 1, neq, ier )
   if (ier/=0) then
     write (stderr, 20) ier
-    20   format (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
+    20   FORMAT (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
     stop
   end if
 
@@ -519,7 +519,7 @@ PROGRAM ATCHEM
                   iout, rout, ipar, rpar, ier )
   if (ier/=0) then
     write (stderr, 30) ier
-    30   format (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
+    30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
     stop
   end if
 
@@ -573,7 +573,7 @@ PROGRAM ATCHEM
 
   if (ier/=0) then
     write (stderr, 40) ier
-    40   format (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
+    40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
     call FCVFREE()
     stop
   end if
@@ -609,17 +609,17 @@ PROGRAM ATCHEM
     ! write (stderr, fmt) t, y (1), y (2)
 
     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-    time = int( t )
+    time = INT( t )
 
-    elapsed = int( t-modelStartTime )
-    if (mod( elapsed, ratesOutputStepSize )==0) then
+    elapsed = INT( t-modelStartTime )
+    if (MOD( elapsed, ratesOutputStepSize )==0) then
       call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames )
       call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0, speciesNames )
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
     write (*,*) 'time = ', time
-    if (mod( elapsed, jacobianOutputStepSize )==0) then
+    if (MOD( elapsed, jacobianOutputStepSize )==0) then
       call jfy( numSpec, numReac, speciesConcs, fy, t )
       call outputjfy( fy, numSpec, t )
     end if
@@ -629,7 +629,7 @@ PROGRAM ATCHEM
     call outputPhotolysisRates( j, t )
 
     !OUTPUT INSTANTANEOUS RATES
-    if (mod (elapsed, irOutStepSize)==0) then
+    if (MOD (elapsed, irOutStepSize)==0) then
       call outputInstantaneousRates( time, numReac )
     end if
 
@@ -646,10 +646,10 @@ PROGRAM ATCHEM
 
     ! CALCULATE AND OUTPUT RUNTIME
     ! not using timing at the moment
-    ! call system_clock(current, rate)
+    ! CALL system_clock(current, rate)
     ! currentSeconds =(current - runStart) / rate
     ! stepTime = currentSeconds - previousSeconds
-    ! write (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
+    ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
     ! previousSeconds = currentSeconds
 
     ! ERROR HANDLING
@@ -691,7 +691,7 @@ PROGRAM ATCHEM
         "' No. nonlinear convergence failures = ', I4/" // &
         "' No. error test failures = ', I4/) "
 
-  write (*, fmt) iout (lnst), iout (lnfe), iout (lnje), iout (lnsetup), &
+  write (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
                  iout (lnni), iout (lncf), iout (lnetf )
 
   call SYSTEM_CLOCK( runEnd, rate )

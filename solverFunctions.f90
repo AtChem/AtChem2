@@ -46,7 +46,7 @@ contains!     ---------------------------------------------------------------
 
     do i = 1, size1
       dy(lhs(2, i)) = dy(lhs(2, i))-lhs(3, i)*r(lhs(1, i))
-      lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
+      lossRates(lhs(1, i)) = ABS (dy(lhs(2, i)))
     end do
 
     do i = 1, size2

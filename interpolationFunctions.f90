@@ -34,7 +34,7 @@ contains
       ! CUBIC SPLINE INTERPOLATION (LN)
     else if (interpMethod==2) then
       call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
-      concAtT = exp (concAtT)
+      concAtT = EXP (concAtT)
       ! PIECEWISE CONSTANT INTERPOLATION
     else if (interpMethod==3) then
       facintfound = 0

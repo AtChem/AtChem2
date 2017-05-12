@@ -10,8 +10,8 @@
 
 def replace_any_case_with_lower_first(string, to_output):
     # Replaces the first word(s) with its lowercase if it matches string
-    if re.match('^\s*'+string+'\s*', to_output, flags=re.IGNORECASE):
-        to_output = re.sub(string+'\s*', string.lower()+' ', to_output, 1, flags=re.IGNORECASE)
+    if re.match('^\s*'+string, to_output, flags=re.IGNORECASE):
+        to_output = re.sub(string, string.lower(), to_output, 1, flags=re.IGNORECASE)
     return to_output
 
 def replace_any_case_with_lower(string, to_output):
@@ -125,8 +125,6 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('FILE\s*=',   'file=',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('EXIST\s*=',  'exist=',  to_output, flags=re.IGNORECASE)
 
-        # Place all :: with exactly one space either side.
-        to_output = re.sub('\s*::\s*', ' :: ', to_output)
         # Any ending bracket followed by a double-quote, should have a single space.
         to_output = re.sub('\)(?=")', ') ', to_output)
         # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, or single-quote
@@ -148,12 +146,15 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub(",(?=[a-zA-Z0-9('-])", ', ', to_output)
 
         # These are modifiers so should be lowercase
-        to_output = re.sub(',\s*ONLY\s*:\s*',      ', only : ',      to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*OPTIONAL\s*',      ', optional',     to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*CONTIGUOUS\s*',    ', contiguous',   to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*PARAMETER\s*:\s*', ', parameter : ', to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*PRIVATE\s*:\s*',   ', private : ',   to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*PUBLIC\s*:\s*',    ', public : ',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*ONLY\s*:\s*',   ', only : ',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*OPTIONAL\s*',   ', optional',   to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*CONTIGUOUS\s*', ', contiguous', to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PARAMETER\s*',  ', parameter',  to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PRIVATE\s*',    ', private',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PUBLIC\s*',     ', public',     to_output, flags=re.IGNORECASE)
+
+        # Place all :: with exactly one space either side.
+        to_output = re.sub('\s*::\s*', ' :: ', to_output)
 
         # If it's a CALL etc line, then make the first opening bracket be preceded by no whitespace,
         # last bracket to be preceded by one space (while handling the case where this is split over multiple lines)

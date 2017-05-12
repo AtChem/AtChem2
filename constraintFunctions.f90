@@ -38,11 +38,11 @@ contains
                                    basePhotoRateNum, maxNumberOfDataPoints, numConPhotoRates )
 
     if (JSpeciesAtT==0) then
-      jfac = 0
+      JFAC = 0
     else
       if (usePhotolysisConstants.eqv..false.) then
-        jfac = JspeciesAtT/(transmissionFactor(jfacSpeciesLine)* cl(jfacSpeciesLine)* &
-               (cosx**(cmm(jfacSpeciesLine)))* exp (-cnn(jfacSpeciesLine)*secx) )
+        JFAC = JspeciesAtT/(transmissionFactor(jfacSpeciesLine)* cl(jfacSpeciesLine)* &
+               (COSX**(cmm(jfacSpeciesLine)))* EXP (-cnn(jfacSpeciesLine)*SECX) )
       else
         write (*,*) 'Error! JFAC should not be used, as constant photolysis rates have been provided.'!
         stop 2
@@ -253,19 +253,19 @@ contains
     else if (envVarTypesNum(envVarNum)==2) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
                                      envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
-      rh = envVarAtT
-      h2o =  convertRHtoH2O(rh, temp, pressure)
+      RH = envVarAtT
+      H2o =  convertRHtoH2O(RH, temp, pressure)
       ! IF FIXED
     else if (envVarTypesNum(envVarNum)==3) then
-      rh = envVarFixedValues(envVarNum)
-      h2o =  convertRHtoH2O(rh, temp, pressure)
+      RH = envVarFixedValues(envVarNum)
+      H2o =  convertRHtoH2O(RH, temp, pressure)
       ! IF NOTUSED
     else
-      rh = -1
+      RH = -1
     end if
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
     currentEnvVarValues(envVarNum) = rh
-    currentEnvVarValues(envVarNumH2O) = h2o
+    currentEnvVarValues(envVarNumH2O) = H2O
 
     !*********************************************
     !GET DILUTE AT T
@@ -327,7 +327,7 @@ contains
     call getEnvVarNum( 'ROOFOPEN', envVarNum )
     !IF CALC
     if (envVarTypesNum(envVarNum)==1) then
-      write (*,*) "No calculation available for ROOFOPEN variable"
+      write (*,*) "No calculation available for ROOFOPEN Variable"
       !IF CONSTRAINED
     else if (envVarTypesNum(envVarNum)==2) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &

@@ -6,10 +6,10 @@ contains
     ! SUBROUTINE TO CALCULATE DIURNAL VARIATIONS IN TEMPERATURE
     real(kind=DP) :: temp, ttime, rh, h2o, sin
 
-    temp = 289.86 + 8.3*sin( (7.2722D-5*ttime)-1.9635 )
+    temp = 289.86 + 8.3*SIN ((7.2722D-5*ttime)-1.9635)
     temp = 298.00
-    rh = 23.0*sin ((7.2722D-5*ttime)+1.1781)+66.5
-    h2o = 6.1078*exp(-1.0D+0*(597.3-0.57*(temp-273.16))*18.0/1.986*(1.0/temp-1.0/273.16))*10./(1.38D-16*temp)*rh
+    rh = 23.0*SIN ((7.2722D-5*ttime)+1.1781)+66.5
+    h2o = 6.1078*Dexp(-1.0D+0*(597.3-0.57*(temp-273.16))*18.0/1.986*(1.0/temp-1.0/273.16))*10./(1.38D-16*temp)*rh
 
     return
   end subroutine temperature
@@ -31,13 +31,13 @@ contains
 
     lat = latitude
     longt = longitude
-    pi = 4.0*atan (1.0)
+    pi = 4.0*ATAN (1.0)
     ! LOCAL HOUR ANGLE - REPRESENTING TIME OF DAY
     lha = (1 + ((ttime) / 4.32D+04)) * pi
     radian = 180.0/pi
     lat = lat/radian
     ! dec = dec/RADIAN
-    theta = acos( cos( lha ) * cos( dec ) * cos( lat ) + sin( dec ) * sin( lat ) + 1.0D-30 )
+    theta = ACOS (COS (LHA)*COS (dec)*COS (lat)+SIN (dec)*SIN (lat)+1.0D-30)
     sinld = SIN (lat)*SIN (dec)
     cosld = COS (lat)*COS (dec)
 

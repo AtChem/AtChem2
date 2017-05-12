@@ -1,6 +1,6 @@
 module mechanismRates_mod
 
-contains
+contains 
   subroutine mechanism_rates( p, t, y, mnsp )
     use types_mod
     use photolysisRates
@@ -11,7 +11,7 @@ contains
     use outputFunctions_mod, only : ro2sum
     use constraintFunctions_mod, only : getEnvVarsAtT
     use utilityFunctions_mod, only : atmosphere
-    implicit none
+    implicit none 
 
     ! calculates rate constants from arrhenius information
     real(kind=DP), intent (out) :: p(*)
@@ -41,21 +41,21 @@ contains
       if (usePhotolysisConstants.eqv..false.) then
         if (cosx<1.00d-10) then
           j(ck(i)) = 1.0d-30
-        else
+        else 
           j(ck(i)) = cl(i)*cosx**(cmm(i))*exp(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
-        end if
-      else
+        end if 
+      else 
         j(ck(i)) = cl(i)
-      end if
-    end do
+      end if 
+    end do 
 
     do i = 1, numConPhotoRates
       call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
                                      maxNumberOfDataPoints, numConPhotoRates )
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
-    end do
+    end do 
 
     include 'modelConfiguration/mechanism-rate-coefficients.f90'
-    return
+    return 
   end subroutine mechanism_rates
 end module mechanismRates_mod

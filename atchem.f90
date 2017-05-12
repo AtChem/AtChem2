@@ -4,114 +4,114 @@
 
 PROGRAM ATCHEM
 
-  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
-  USE types_mod
-  USE species
-  USE constraints
-  USE interpolationMethod
-  USE reactionStructure
-  USE photolysisRates
-  USE chemicalConstraints
-  USE zenithData
-  USE zenithData1
-  USE productionAndLossRates
-  USE envVars
-  USE SZACalcVars
-  USE date
-  USE directories, ONLY : output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
-  USE storage, ONLY : maxSpecLength, maxPhotoRateNameLength
-  USE inputFunctions_mod
-  USE configFunctions_mod
-  USE outputFunctions_mod
-  USE constraintFunctions_mod
-  USE solverFunctions_mod
-  IMPLICIT NONE
+  use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+  use types_mod
+  use species
+  use constraints
+  use interpolationMethod
+  use reactionStructure
+  use photolysisRates
+  use chemicalConstraints
+  use zenithData
+  use zenithData1
+  use productionAndLossRates
+  use envVars
+  use SZACalcVars
+  use date
+  use directories, only : output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
+  use storage, only : maxSpecLength, maxPhotoRateNameLength
+  use inputFunctions_mod
+  use configFunctions_mod
+  use outputFunctions_mod
+  use constraintFunctions_mod
+  use solverFunctions_mod
+  implicit none
 
   !    ********************************************************************************************************
   !    DECLARATIONS
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  INTEGER(kind=QI) :: ier
-  INTEGER :: i
-  INTEGER(kind=NPI) :: species_counter
-  INTEGER :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
-  INTEGER :: nfels, njtv, npe, nps
-  INTEGER :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
-  INTEGER(kind=NPI) :: iout (21), ipar (10)
-  INTEGER(kind=NPI) :: neq
+  integer(kind=QI) :: ier
+  integer :: i
+  integer(kind=NPI) :: species_counter
+  integer :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
+  integer :: nfels, njtv, npe, nps
+  integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
+  integer(kind=NPI) :: iout(21), ipar(10)
+  integer(kind=NPI) :: neq
   real(kind=DP) :: rtol, t, t0, tout
-  real(kind=DP) :: atol, rout (6)
-  real(kind=DP) :: rpar (1)
+  real(kind=DP) :: atol, rout(6)
+  real(kind=DP) :: rpar(1)
   DATA lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
        lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
-  real(kind=DP), ALLOCATABLE :: speciesConcs(:)
+  real(kind=DP), allocatable :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
   real(kind=DP) :: deltaJv, deltaMain, maxStep
-  INTEGER :: JvApprox, lookBack
-  INTEGER(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
-  INTEGER :: preconBandUpper, preconBandLower, solverType
+  integer :: JvApprox, lookBack
+  integer(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
+  integer :: preconBandUpper, preconBandLower, solverType
   real(kind=DP) :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
-  INTEGER(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
-  INTEGER :: numSteps
-  INTEGER(kind=NPI) :: numSpec, numReac
+  integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
+  integer :: numSteps
+  integer(kind=NPI) :: numSpec, numReac
   real(kind=DP) :: tminus1, timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  REAL(kind=DP), ALLOCATABLE :: initialConcentrations(:)
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesNames(:), concSpeciesNames(:)
-  INTEGER(kind=NPI), ALLOCATABLE :: speciesNumber(:)
+  real(kind=DP), allocatable :: initialConcentrations(:)
+  character(len=maxSpecLength), allocatable :: speciesNames(:), concSpeciesNames(:)
+  integer(kind=NPI), allocatable :: speciesNumber(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  INTEGER(kind=NPI), ALLOCATABLE :: returnArray(:), tempSORNumber(:), SORNumber(:)
-  INTEGER(kind=NPI), ALLOCATABLE :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
-  INTEGER(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
-  real(kind=DP), ALLOCATABLE :: concsOfSpeciesOfInterest(:)
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: prodIntName(:), reacIntName(:)
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesOutputRequired(:)
-  INTEGER(kind=NPI) :: rateOfProdNS, rateOfLossNS
-  INTEGER :: ratesOutputStepSize, time, elapsed
+  integer(kind=NPI), allocatable :: returnArray(:), tempSORNumber(:), SORNumber(:)
+  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
+  integer(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
+  real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
+  character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
+  character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
+  integer(kind=NPI) :: rateOfProdNS, rateOfLossNS
+  integer :: ratesOutputStepSize, time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
-  real(kind=DP), ALLOCATABLE :: z(:)
-  real(kind=DP), ALLOCATABLE :: tempForSolverParameters(:), tempForModelParameters(:)
-  real(kind=DP), ALLOCATABLE :: solverParameters(:), modelParameters(:)
-  INTEGER(kind=DI) :: modelParameterSize, solverParameterSize
+  real(kind=DP), allocatable :: z(:)
+  real(kind=DP), allocatable :: tempForSolverParameters(:), tempForModelParameters(:)
+  real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)
+  integer(kind=DI) :: modelParameterSize, solverParameterSize
 
   real(kind=DP) :: modelStartTime
 
   !   DECLARATIONS FOR JACOBIAN PRODUCTION
-  real(kind=DP), ALLOCATABLE :: fy(:,:)
-  INTEGER :: jacobianOutputStepSize
+  real(kind=DP), allocatable :: fy(:,:)
+  integer :: jacobianOutputStepSize
 
-  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
-  CHARACTER(LEN=400) :: fmt
+  character(len=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
+  character(len=400) :: fmt
 
   !   DECLARATIONS FOR IR OUTPUT
-  INTEGER :: irOutStepSize
+  integer :: irOutStepSize
 
-  INTEGER(kind=QI) :: cmd_arg_count
+  integer(kind=QI) :: cmd_arg_count
   !    MISC
-  CHARACTER(LEN=30) :: solverTypeName(3)
-  CHARACTER(LEN=20) :: interpolationMethodName(4)
+  character(len=30) :: solverTypeName(3)
+  character(len=20) :: interpolationMethodName(4)
 
 
   interface
-    subroutine fcvjtimes (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
+    subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
       use types_mod
       use species
       implicit none
 
-      integer (kind=NPI) :: ipar (*), ier, neq, i, np
+      integer(kind=NPI) :: ipar (*), ier, neq, i, np
       integer :: j
       real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
       real(kind=DP), allocatable :: yPlusV (:), yPlusVi(:)
-    end subroutine fcvjtimes
+    end subroutine FCVJTIMES
 
-    subroutine fcvfun (t, y, ydot, ipar, rpar, ier)
+    subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species
       use constraints
@@ -123,11 +123,11 @@ PROGRAM ATCHEM
       ! Fortran routine for right-hand side function.
       implicit none
       !
-      integer (kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
+      integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
       real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
       real(kind=DP), allocatable :: dy(:), z(:)
       integer(kind=NPI) :: i
-    end subroutine fcvfun
+    end subroutine FCVFUN
   end interface
 
   solverTypeName(1) = 'SPGMR'
@@ -141,192 +141,192 @@ PROGRAM ATCHEM
   !    MODEL SETUP AND CONFIGURATION
   !    ********************************************************************************************************
 
-  CALL SYSTEM_CLOCK (runStart)
+  call SYSTEM_CLOCK( runStart )
   previousSeconds = 0
 
   ! Read in command line argument to direct output files to a given directory
   cmd_arg_count = command_argument_count()
-  IF (cmd_arg_count>0) THEN
-     CALL get_command_argument(1, output_dir)
-  ELSE
-     output_dir = "modelOutput"
-  ENDIF
-  IF (cmd_arg_count>1) THEN
-     CALL get_command_argument(2, instantaneousRates_dir)
-  ELSE
-     instantaneousRates_dir = "instantaneousRates"
-  ENDIF
-  IF (cmd_arg_count>2) THEN
-     CALL get_command_argument(3, param_dir)
-  ELSE
-     param_dir = "modelConfiguration"
-  ENDIF
-  IF (cmd_arg_count>3) THEN
-     CALL get_command_argument(4, spec_constraints_dir)
-  ELSE
-     spec_constraints_dir = "speciesConstraints"
-  ENDIF
-  IF (cmd_arg_count>4) THEN
-     CALL get_command_argument(5, env_constraints_dir)
-  ELSE
-     env_constraints_dir = "environmentConstraints"
-  ENDIF
+  if (cmd_arg_count>0) then
+    call get_command_argument( 1, output_dir )
+  else
+    output_dir = "modelOutput"
+  end if
+  if (cmd_arg_count>1) then
+    call get_command_argument( 2, instantaneousRates_dir )
+  else
+    instantaneousRates_dir = "instantaneousRates"
+  end if
+  if (cmd_arg_count>2) then
+    call get_command_argument( 3, param_dir )
+  else
+    param_dir = "modelConfiguration"
+  end if
+  if (cmd_arg_count>3) then
+    call get_command_argument( 4, spec_constraints_dir )
+  else
+    spec_constraints_dir = "speciesConstraints"
+  end if
+  if (cmd_arg_count>4) then
+    call get_command_argument( 5, env_constraints_dir )
+  else
+    env_constraints_dir = "environmentConstraints"
+  end if
 
-  WRITE (*,*) 'Output dir is ', output_dir
-  WRITE (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
-  WRITE (*,*) 'Parameter dir is ', param_dir
+  write (*,*) 'Output dir is ', output_dir
+  write (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
+  write (*,*) 'Parameter dir is ', param_dir
   !   OPEN FILES FOR OUTPUT
-  OPEN (unit=50, file=trim(output_dir) // "/concentration.output")
-  OPEN (unit=51, file=trim(output_dir) // "/errors.output")
-  OPEN (unit=52, file=trim(output_dir) // "/envVar.output")
-  OPEN (unit=53, file=trim(output_dir) // "/finalModelState.output")
-  OPEN (unit=54, file=trim(output_dir) // "/initialConditionsSetting.output")
-  OPEN (unit=55, file=trim(output_dir) // "/jacobian.output")
-  OPEN (unit=56, file=trim(output_dir) // "/lossRates.output")
-  OPEN (unit=57, file=trim(output_dir) // "/mainSolverParameters.output")
-  OPEN (unit=58, file=trim(output_dir) // "/photolysisRates.output")
-  OPEN (unit=59, file=trim(output_dir) // "/photoRateCalcParameters.output")
-  OPEN (unit=60, file=trim(output_dir) // "/productionRates.output")
-  OPEN (unit=61, file=trim(output_dir) // "/sparseSolverParameters.output")
-  OPEN (unit=62, file=trim(output_dir) // "/stepSize.output")
+  open (unit=50, file=trim(output_dir) // "/concentration.output")
+  open (unit=51, file=trim(output_dir) // "/errors.output")
+  open (unit=52, file=trim(output_dir) // "/envVar.output")
+  open (unit=53, file=trim(output_dir) // "/finalModelState.output")
+  open (unit=54, file=trim(output_dir) // "/initialConditionsSetting.output")
+  open (unit=55, file=trim(output_dir) // "/jacobian.output")
+  open (unit=56, file=trim(output_dir) // "/lossRates.output")
+  open (unit=57, file=trim(output_dir) // "/mainSolverParameters.output")
+  open (unit=58, file=trim(output_dir) // "/photolysisRates.output")
+  open (unit=59, file=trim(output_dir) // "/photoRateCalcParameters.output")
+  open (unit=60, file=trim(output_dir) // "/productionRates.output")
+  open (unit=61, file=trim(output_dir) // "/sparseSolverParameters.output")
+  open (unit=62, file=trim(output_dir) // "/stepSize.output")
   flush(6)
 
-  CALL readNumberOfSpeciesAndReactions()
+  call readNumberOfSpeciesAndReactions()
   numSpec = getNumberOfSpecies()
   numReac = getNumberOfReactions()
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  ALLOCATE (speciesConcs(numSpec), speciesNames(numSpec))
+  allocate (speciesConcs(numSpec), speciesNames(numSpec))
   speciesConcs(:) = 0
-  ALLOCATE (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec))
-  ALLOCATE (returnArray(numSpec))
-  ALLOCATE (tempSORNumber(numSpec))
-  ALLOCATE (fy(numSpec, numSpec))
+  allocate (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec))
+  allocate (returnArray(numSpec))
+  allocate (tempSORNumber(numSpec))
+  allocate (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
-  ALLOCATE (lossRates(numReac), productionRates(numReac), ir(numReac))
+  allocate (lossRates(numReac), productionRates(numReac), ir(numReac))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
-  CALL getReactantAndProductListSizes ()
+  call getReactantAndProductListSizes()
 
-  ALLOCATE (clhs(3, lhs_size), crhs(2, rhs_size), ccoeff(rhs_size))
+  allocate (clhs(3, lhs_size), crhs(2, rhs_size), ccoeff(rhs_size))
 
   !   READ IN CHEMICAL REACTIONS
-  CALL readReactions (clhs, crhs, ccoeff)
+  call readReactions( clhs, crhs, ccoeff )
   neq = numSpec
 
-  WRITE (*,*) 'Size of lhs =', lhs_size, 'size of rhs2 = ', rhs_size, '.'
+  write (*,*) 'Size of lhs =', lhs_size, 'size of rhs2 = ', rhs_size, '.'
 
   !   READ SPECIES NAMES AND NUMBERS
-  WRITE (*,*)
-  WRITE (*,*) 'Reading species names from mechanism.species...'
-  CALL readSpecies (numSpec, speciesNames, speciesNumber)
-  WRITE (*,*) 'Finished reading species names.'
-  WRITE (*,*)
+  write (*,*)
+  write (*,*) 'Reading species names from mechanism.species...'
+  call readSpecies( numSpec, speciesNames, speciesNumber )
+  write (*,*) 'Finished reading species names.'
+  write (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
-  CALL setSpeciesList (speciesNames)
+  call setSpeciesList( speciesNames )
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  CALL readInitialConcentrations (concSpeciesNames, initialConcentrations)
-  CALL setConcentrations (speciesNames, concSpeciesNames, initialConcentrations, speciesConcs)
-  DEALLOCATE (concSpeciesNames, initialConcentrations)
-  WRITE (*,*)
+  call readInitialConcentrations( concSpeciesNames, initialConcentrations )
+  call setConcentrations( speciesNames, concSpeciesNames, initialConcentrations, speciesConcs )
+  deallocate (concSpeciesNames, initialConcentrations)
+  write (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
-  CALL readPhotolysisConstants (ck, cl, cmm, cnn, photoRateNames, transmissionFactor)
-  WRITE (*,*)
+  call readPhotolysisConstants( ck, cl, cmm, cnn, photoRateNames, transmissionFactor )
+  write (*,*)
   !   Set default value for photonames array
-  DO i = 1, 200
-     photoRateNamesForHeader(i) = 'na'
-  ENDDO
+  do i = 1, 200
+    photoRateNamesForHeader(i) = 'na'
+  end do
 
-  DO i = 1, nrOfPhotoRates
-     photoRateNamesForHeader(ck(i)) = photoRateNames(i)
-  ENDDO
+  do i = 1, nrOfPhotoRates
+    photoRateNamesForHeader(ck(i)) = photoRateNames(i)
+  end do
 
   !   READ IN JFAC SPECIES
-  CALL readJFacSpecies ()
-  WRITE (*,*)
+  call readJFacSpecies()
+  write (*,*)
 
   ! Read in product species of interest, and set up variables to hold these
-  WRITE (*,*) 'Reading products of interest...'
-  CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
-  WRITE (*,*) 'Finished reading products of interest.'
+  write (*,*) 'Reading products of interest...'
+  call readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
+  write (*,*) 'Finished reading products of interest.'
   ! Fill returnArray with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
-  CALL matchNameToNumber (speciesNames, prodIntName, returnArray, rateOfProdNS)
+  call matchNameToNumber( speciesNames, prodIntName, returnArray, rateOfProdNS )
   ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
-  ALLOCATE (prodArrayLen(rateOfProdNS))
-  ALLOCATE (prodIntSpecies(rateOfProdNS, rhs_size))
+  allocate (prodArrayLen(rateOfProdNS))
+  allocate (prodIntSpecies(rateOfProdNS, rhs_size))
   ! Write product species number to first element of each row of prodIntSpecies
-  DO species_counter = 1, rateOfProdNS
-     prodIntSpecies(species_counter, 1) = returnArray(species_counter)
-  ENDDO
+  do species_counter = 1, rateOfProdNS
+    prodIntSpecies(species_counter, 1) = returnArray(species_counter)
+  end do
   ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
-  CALL findReactionsWithProductOrReactant (prodIntSpecies, crhs, prodArrayLen)
-  WRITE (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
-  WRITE (*,*)
+  call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodArrayLen )
+  write (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
+  write (*,*)
 
   ! Read in reactant species of interest, and set up variables to hold these
-  WRITE (*,*) 'Reading reactants of interest...'
-  CALL readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
-  WRITE (*,*) 'Finished reading reactants of interest.'
+  write (*,*) 'Reading reactants of interest...'
+  call readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
+  write (*,*) 'Finished reading reactants of interest.'
   ! Fill returnArray with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
-  CALL matchNameToNumber (speciesNames, reacIntName, returnArray, rateOfLossNS)
+  call matchNameToNumber( speciesNames, reacIntName, returnArray, rateOfLossNS )
   ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
-  ALLOCATE (lossArrayLen(rateOfLossNS))
-  ALLOCATE (reacIntSpecies(rateOfLossNS, lhs_size))
+  allocate (lossArrayLen(rateOfLossNS))
+  allocate (reacIntSpecies(rateOfLossNS, lhs_size))
   ! Write reactant species number to first element of each row of reacIntSpecies
-  DO species_counter = 1, rateOfLossNS
-     reacIntSpecies(species_counter, 1) = returnArray(species_counter)
-  ENDDO
+  do species_counter = 1, rateOfLossNS
+    reacIntSpecies(species_counter, 1) = returnArray(species_counter)
+  end do
   ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
-  CALL findReactionsWithProductOrReactant (reacIntSpecies, clhs, lossArrayLen)
-  WRITE (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
-  WRITE (*,*)
+  call findReactionsWithProductOrReactant( reacIntSpecies, clhs, lossArrayLen )
+  write (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
+  write (*,*)
 
 
   !    READ IN SOLVER PARAMETERS
-  ALLOCATE(tempForSolverParameters(100))
-  WRITE (*,*) 'Reading solver parameters from file...'
-  CALL getParametersFromFile (trim(param_dir) // "/solver.parameters", tempForSolverParameters, solverParameterSize)
-  WRITE (*,*) 'Finished reading solver parameters from file.'
-  ALLOCATE (solverParameters(solverParameterSize))
-  DO i = 1, solverParameterSize
-     solverParameters(i) = tempForSolverParameters(i)
-  ENDDO
-  DEALLOCATE(tempForSolverParameters)
+  allocate(tempForSolverParameters(100))
+  write (*,*) 'Reading solver parameters from file...'
+  call getParametersFromFile( trim(param_dir) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
+  write (*,*) 'Finished reading solver parameters from file.'
+  allocate (solverParameters(solverParameterSize))
+  do i = 1, solverParameterSize
+    solverParameters(i) = tempForSolverParameters(i)
+  end do
+  deallocate(tempForSolverParameters)
   !   READ IN MODEL PARAMETERS
-  ALLOCATE(tempForModelParameters(100))
-  WRITE (*,*) 'Reading model parameters from file...'
-  CALL getParametersFromFile (trim(param_dir) //  "/model.parameters", tempForModelParameters, modelParameterSize)
-  WRITE (*,*) 'Finished reading model parameters from file.'
-  ALLOCATE (modelParameters(modelParameterSize))
-  DO i = 1, modelParameterSize
-     modelParameters(i) = tempForModelParameters(i)
-  ENDDO
-  DEALLOCATE(tempForModelParameters)
-  WRITE (*,*)
+  allocate(tempForModelParameters(100))
+  write (*,*) 'Reading model parameters from file...'
+  call getParametersFromFile( trim(param_dir) //  "/model.parameters", tempForModelParameters, modelParameterSize )
+  write (*,*) 'Finished reading model parameters from file.'
+  allocate (modelParameters(modelParameterSize))
+  do i = 1, modelParameterSize
+    modelParameters(i) = tempForModelParameters(i)
+  end do
+  deallocate(tempForModelParameters)
+  write (*,*)
 
   !   SET SOLVER PARAMETERS
-  ! Used in FCVMALLOC: ATOL is the absolute tolerance (scalar or array).
+  ! Used in FCVMALLOC(): ATOL is the absolute tolerance (scalar or array).
   atol = solverParameters(1)
-  ! Used in FCVMALLOC: RTOL is the relative tolerance (scalar).
+  ! Used in FCVMALLOC(): RTOL is the relative tolerance (scalar).
   rtol = solverParameters(2)
   ! TODO: convert this to boolean?
-  ! If JvApprox==1 and solverType={1,2}, call fcvspilssetjac() below, with non-zero flag.
+  ! If JvApprox==1 and solverType={1,2}, call FCVSPILSSETJAC() below, with non-zero flag.
   ! This means FCVJTIMES() in solverFunctions.f90 should be used to approximate the Jacobian.
   JvApprox = solverParameters(3)
-  ! This is never used, but is referenced in a comment in FCVJTIMES.
+  ! This is never used, but is referenced in a comment in FCVJTIMES().
   ! TODO: delete?
   deltaJv = solverParameters(4)
-  ! From CVODE docs: DELT is the linear convergence tolerance factor of the SPGMR. Used in FCVSPGMR.
+  ! From CVODE docs: DELT is the linear convergence tolerance factor of the SPGMR. Used in FCVSPGMR().
   deltaMain = solverParameters(5)
-  ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR.
+  ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR().
   ! TODO: Rename to MAXL?
   lookBack = solverParameters(6)
-  ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN.
+  ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
   maxStep = solverParameters(7)
   ! USed to choose which solver to use:
   ! 1: SPGMR
@@ -341,23 +341,23 @@ PROGRAM ATCHEM
   preconBandLower = solverParameters(10)
 
   ! float format
-100 FORMAT (A17, E11.3)
+  100 FORMAT (A17, E11.3)
   ! integer format
-200 FORMAT (A17, I11)
-  WRITE (*,*) 'Solver parameters:'
-  WRITE (*,*) '------------------'
-  WRITE (*,100) 'atol: ', atol
-  WRITE (*,100) 'rtol: ', rtol
-  WRITE (*,200) 'JacVApprox: ', JvApprox
-  WRITE (*,100) 'deltaJv: ', deltaJv
-  WRITE (*,100) 'deltaMain: ', deltaMain
-  WRITE (*,200) 'lookBack: ', lookBack
-  WRITE (*,100) 'maxStep: ', maxStep
-  WRITE (*,200) 'preconBandUpper: ', preconBandUpper
-  WRITE (*,200) 'preconBandLower: ', preconBandLower
-  WRITE (*,'(A17, A29)') 'solverType: ', adjustl(solverTypeName(solverType))
-  WRITE (*,*) '------------------'
-  WRITE (*,*)
+  200 FORMAT (A17, I11)
+  write (*,*) 'Solver parameters:'
+  write (*,*) '------------------'
+  write (*, 100) 'atol: ', atol
+  write (*, 100) 'rtol: ', rtol
+  write (*, 200) 'JacVApprox: ', JvApprox
+  write (*, 100) 'deltaJv: ', deltaJv
+  write (*, 100) 'deltaMain: ', deltaMain
+  write (*, 200) 'lookBack: ', lookBack
+  write (*, 100) 'maxStep: ', maxStep
+  write (*, 200) 'preconBandUpper: ', preconBandUpper
+  write (*, 200) 'preconBandLower: ', preconBandLower
+  write (*, '(A17, A29) ') 'solverType: ', adjustl(solverTypeName(solverType))
+  write (*,*) '------------------'
+  write (*,*)
 
   !   SET MODEL PARAMETERS
   ! maxNumTimesteps sets the maximum number of timesteps to calculate.
@@ -375,11 +375,11 @@ PROGRAM ATCHEM
   ! 4: Piecewise linear
   ! otherwise: error
   speciesInterpolationMethod = modelParameters(3)
-  CALL setSpeciesInterpMethod (speciesInterpolationMethod)
+  call setSpeciesInterpMethod( speciesInterpolationMethod )
   conditionsInterpolationMethod = modelParameters(4)
-  CALL setConditionsInterpMethod (conditionsInterpolationMethod)
+  call setConditionsInterpMethod( conditionsInterpolationMethod )
   decInterpolationMethod = modelParameters(5)
-  CALL setDecInterpMethod (decInterpolationMethod)
+  call setDecInterpMethod( decInterpolationMethod )
   ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
   ! Member variable of chemicalConstraints.
@@ -401,49 +401,49 @@ PROGRAM ATCHEM
   irOutStepSize = modelParameters(16)
 
   ! float format
-300 FORMAT (A52, E11.3)
+  300 FORMAT (A52, E11.3)
   ! integer format
-400 FORMAT (A52, I11)
+  400 FORMAT (A52, I11)
   ! string format
-500 FORMAT (A52, A17)
-  WRITE (*,*) 'Model parameters:'
-  WRITE (*,*) '-----------------'
-  WRITE (*,400) 'number of steps: ', maxNumTimesteps
-  WRITE (*,300) 'step size (seconds): ', timestepSize
-  WRITE (*,500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpolationMethod))
-  WRITE (*,500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpolationMethod))
-  WRITE (*,500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpolationMethod))
-  WRITE (*,400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
-  WRITE (*,400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
-  WRITE (*,400) 'ratesOutputStepSize: ', ratesOutputStepSize
-  WRITE (*,400) 'instantaneous rates output step size: ', irOutStepSize
-  WRITE (*,300) 'modelStartTime: ', modelStartTime
-  WRITE (*,400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
-  WRITE (*,300) 'latitude: ', latitude
-  WRITE (*,300) 'longitude: ', longitude
-  WRITE (*,'(A52, I3, A, I2, A, I4)') 'day/month/year: ', day, '/', month, '/', year
-  WRITE (*,*) '-----------------'
-  WRITE (*,*)
+  500 FORMAT (A52, A17)
+  write (*,*) 'Model parameters:'
+  write (*,*) '-----------------'
+  write (*, 400) 'number of steps: ', maxNumTimesteps
+  write (*, 300) 'step size (seconds): ', timestepSize
+  write (*, 500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpolationMethod))
+  write (*, 500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpolationMethod))
+  write (*, 500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpolationMethod))
+  write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
+  write (*, 400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
+  write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
+  write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
+  write (*, 300) 'modelStartTime: ', modelStartTime
+  write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
+  write (*, 300) 'latitude: ', latitude
+  write (*, 300) 'longitude: ', longitude
+  write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', day, '/', month, '/', year
+  write (*,*) '-----------------'
+  write (*,*)
 
   ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year
-  CALL calcDateParameters ()
+  call calcDateParameters()
 
   !   HARD CODED SOLVER PARAMETERS
   t0 = modelStartTime
   tout = timestepSize
   tout = tout + t0
   t = t0
-  ! Parameters for fcvmalloc. (Comments from cvode guide)
+  ! Parameters for FCVMALLOC(). (Comments from cvode guide)
   ! meth specifies the basic integration: 1 for Adams (nonstiff) or 2 for BDF stiff)
   meth = 2
   ! itmeth specifies the nonlinear iteration method: 1 for functional iteration or 2 for Newton iteration.
   itmeth = 2
   ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar or 2 for array.
   ! If IATOL= 3, the arguments RTOL and ATOL are ignored and the user is
-  ! expected to subsequently call FCVEWTSET and provide the function FCVEWT.
+  ! expected to subsequently call FCVEWTSET() and provide the function FCVEWT().
   iatol = 1
 
-  ! Parameter for FCVODE. Comment from cvode guide: ITASK is a task indicator and should be
+  ! Parameter for FCVODE(). Comment from cvode guide: ITASK is a task indicator and should be
   ! set to 1 for normal mode (overshoot TOUT and interpolate),
   ! or to 2 for one-step mode (return after each internal step taken)
   itask = 1
@@ -452,51 +452,51 @@ PROGRAM ATCHEM
   currentNumTimestep = 0
 
   ! Read in environment variables (FIXED, CONSTRAINED, CALC or NOTUSED, see environmentVariables.config)
-  CALL readEnvVar ()
-  WRITE (*,*)
+  call readEnvVar()
+  write (*,*)
 
   ! fill speciesOutputRequired with the names of species to output to concentration.output
-  CALL readSpeciesOutputRequired (speciesOutputRequired, speciesOutputRequiredSize)
+  call readSpeciesOutputRequired( speciesOutputRequired, speciesOutputRequiredSize )
 
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
-  CALL matchNameToNumber (speciesNames, speciesOutputRequired, &
-                          tempSORNumber, SORNumberSize)
+  call matchNameToNumber( speciesNames, speciesOutputRequired, &
+                          tempSORNumber, SORNumberSize )
   ! Allocate SORNumber and fill from temporary array
-  ALLOCATE (SORNumber(SORNumberSize), concsOfSpeciesOfInterest(SORNumberSize))
-  DO species_counter = 1, SORNumberSize
-     SORNumber(species_counter) = tempSORNumber(species_counter)
-  ENDDO
-  DEALLOCATE(tempSORNumber)
+  allocate (SORNumber(SORNumberSize), concsOfSpeciesOfInterest(SORNumberSize))
+  do species_counter = 1, SORNumberSize
+    SORNumber(species_counter) = tempSORNumber(species_counter)
+  end do
+  deallocate(tempSORNumber)
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
-  CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
+  call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
   !   Write file output headers
-  CALL writeFileHeaders (photoRateNamesForHeader, speciesOutputRequired)
+  call writeFileHeaders( photoRateNamesForHeader, speciesOutputRequired )
 
   flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS
   !    ********************************************************************************************************
 
-  WRITE (*,*)
-  CALL readPhotoRates ()
-  WRITE (*,*)
+  write (*,*)
+  call readPhotoRates()
+  write (*,*)
 
-  CALL readSpeciesConstraints (t, speciesConcs)
+  call readSpeciesConstraints( t, speciesConcs )
 
-  WRITE (*,*)
+  write (*,*)
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
-  CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
-  CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
+  call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
+  call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest, SORNumberSize )
 
   ! This outputs z, which is y with all the constrained species removed.
-  CALL removeConstrainedSpeciesFromProbSpec (speciesConcs, z, constrainedSpecies)
+  call removeConstrainedSpeciesFromProbSpec( speciesConcs, z, constrainedSpecies )
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
-  WRITE (*,'(A30, I6)') 'neq = ', neq
-  WRITE (*,'(A30, I6)') 'numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
+  write (*, '(A30, I6) ') 'neq = ', neq
+  write (*, '(A30, I6) ') 'numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
   flush(stderr)
 
@@ -507,324 +507,324 @@ PROGRAM ATCHEM
   ipar(1) = neq
   ipar(2) = numReac
 
-  CALL fnvinits (1, neq, ier)
-  IF (ier/=0) THEN
-     WRITE (stderr, 20) ier
-20   FORMAT (///' SUNDIALS_ERROR: FNVINITS returned ier = ', I5)
-     STOP
-  ENDIF
+  call FNVINITS( 1, neq, ier )
+  if (ier/=0) then
+    write (stderr, 20) ier
+    20   FORMAT (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
+    stop
+  end if
 
-  WRITE (*,'(A30, E15.3)') 't0 = ', t0
-  CALL fcvmalloc (t0, z, meth, itmeth, iatol, rtol, atol, &
-       iout, rout, ipar, rpar, ier)
-  IF (ier/=0) THEN
-     WRITE (stderr, 30) ier
-30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC returned ier = ', I5)
-     STOP
-  ENDIF
+  write (*, '(A30, E15.3) ') 't0 = ', t0
+  call FCVMALLOC( t0, z, meth, itmeth, iatol, rtol, atol, &
+                  iout, rout, ipar, rpar, ier )
+  if (ier/=0) then
+    write (stderr, 30) ier
+    30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
+    stop
+  end if
 
   numsteps = 100000
-  CALL fcvsetiin ('MAX_NSTEPS', numsteps, ier)
-  WRITE (*,*) 'setting maxsteps ier = ', ier
+  call FCVSETIIN( 'MAX_NSTEPS', numsteps, ier )
+  write (*,*) 'setting maxsteps ier = ', ier
 
-  CALL fcvsetrin ('MAX_STEP', maxStep, ier)
+  call FCVSETRIN( 'MAX_STEP', maxStep, ier )
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER
-  IF (solverType==1) THEN
-     CALL fcvspgmr (0, 1, lookBack, deltaMain, ier)
-     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
-  ELSE IF (solverType==2) THEN
-     CALL fcvspgmr (1, 1, lookBack, deltaMain, ier)
-     CALL fcvbpinit (neq, preconBandUpper, preconBandLower, ier)
-     IF (ier/=0 ) THEN
-        WRITE (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
-        CALL fcvfree
-        STOP
-     END IF
-     ! DENSE SOLVER
-  ELSE IF (solverType==3) THEN
-     ! make sure no Jacobian approximation is required
-     IF (JVapprox==1) THEN
-        WRITE (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
-        WRITE (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
-        STOP
-     END IF
-     CALL fcvdense (neq, ier)
-     ! UNEXPECTED SOLVER TYPE
-  ELSE
-     WRITE (stderr,*) 'Error with solverType input, input = ', solverType
-     WRITE (stderr,*) 'Available options are 1, 2, 3.'
-     STOP
-  ENDIF
+  if (solverType==1) then
+    call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
+    ! SPGMR SOLVER WITH BANDED PRECONDITIONER
+  else if (solverType==2) then
+    call FCVSPGMR( 1, 1, lookBack, deltaMain, ier )
+    call FCVBPINIT( neq, preconBandUpper, preconBandLower, ier )
+    if (ier/=0 ) then
+      write (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
+      call FCVFREE()
+      stop
+    end if
+    ! DENSE SOLVER
+  else if (solverType==3) then
+    ! make sure no Jacobian approximation is required
+    if (JVapprox==1) then
+      write (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'!
+      write (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
+      stop
+    end if
+    call FCVDENSE( neq, ier )
+    ! UNEXPECTED SOLVER TYPE
+  else
+    write (stderr,*) 'Error with solverType input, input = ', solverType
+    write (stderr,*) 'Available options are 1, 2, 3.'
+    stop
+  end if
   ! ERROR HANDLING
-  IF (ier/=0) THEN
-     WRITE (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
-     CALL fcvfree
-     STOP
-  ENDIF
+  if (ier/=0) then
+    write (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
+    call FCVFREE()
+    stop
+  end if
 
-  ! Use Jacobian approximation if required. Calling fcvspilssetjac with non-zero flag
-  ! specifies that spgmr, spbcg, or sptfqmr should use the supplied FCVJTIMES (in solverfunctions.f90).
+  ! Use Jacobian approximation if required. Calling FCVSPILSSETJAC() with non-zero flag
+  ! specifies that spgmr, spbcg, or sptfqmr should use the supplied FCVJTIMES() (in solverfunctions.f90).
   ! In our case, solverType={1,2} calls SPGMR above, while solverType=3 errors out if JvApprox=1
-  IF (JVapprox==1) THEN
-     CALL fcvspilssetjac (1, ier)
-  ENDIF
+  if (JVapprox==1) then
+    call FCVSPILSSETJAC( 1, ier )
+  end if
 
-  IF (ier/=0) THEN
-     WRITE (stderr, 40) ier
-40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE returned ier = ', I5)
-     CALL fcvfree
-     STOP
-  ENDIF
+  if (ier/=0) then
+    write (stderr, 40) ier
+    40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
+    call FCVFREE()
+    stop
+  end if
 
   ! check JFac data consistency:
-  CALL test_jfac ()
+  call test_jfac()
 
   !    ********************************************************************************************************
   !    RUN MODEL
   !    ********************************************************************************************************
 
-  DO WHILE (currentNumTimestep<maxNumTimesteps)
+  do while (currentNumTimestep<maxNumTimesteps)
 
-     ! GET CONCENTRATIONS FOR SOLVED SPECIES
-     WRITE (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
-     CALL fcvode (tout, t, z, itask, ier)
-     IF (ier/=0) THEN
-        WRITE (*,*) 'ier POST FCVODE = ', ier
-     ENDIF
-     flush(6)
+    ! GET CONCENTRATIONS FOR SOLVED SPECIES
+    write (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
+    call FCVODE( tout, t, z, itask, ier )
+    if (ier/=0) then
+      write (*,*) 'ier POST FCVODE()= ', ier
+    end if
+    flush(6)
 
-     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-     DO species_counter = 1, numberOfConstrainedSpecies
-        CALL getConstrainedConc (species_counter, d)
-        constrainedConcs(species_counter) = d
-     ENDDO
+    ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
+    do species_counter = 1, numberOfConstrainedSpecies
+      call getConstrainedConc( species_counter, d )
+      constrainedConcs(species_counter) = d
+    end do
 
-     CALL addConstrainedSpeciesToProbSpec (z, speciesConcs, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs)
+    call addConstrainedSpeciesToProbSpec( z, speciesConcs, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs )
 
-     ! OUTPUT ON SCREEN
-     fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
-     ! printing concentration of two first species - seems unnecessary at the moment
-     ! WRITE (stderr, fmt) t, y (1), y (2)
+    ! OUTPUT ON SCREEN
+    fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
+    ! printing concentration of two first species - seems unnecessary at the moment
+    ! write (stderr, fmt) t, y (1), y (2)
 
-     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-     time = INT (t)
+    ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
+    time = INT( t )
 
-     elapsed = INT (t-modelStartTime)
-     IF (MOD (elapsed, ratesOutputStepSize)==0) THEN
-        CALL outputRates (prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames)
-        CALL outputRates (reacIntSpecies, lossArrayLen, t, lossRates,       0, speciesNames)
-     ENDIF
+    elapsed = INT( t-modelStartTime )
+    if (MOD( elapsed, ratesOutputStepSize )==0) then
+      call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames )
+      call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0, speciesNames )
+    end if
 
-     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
-     WRITE (*,*) 'time = ', time
-     IF (MOD (elapsed, jacobianOutputStepSize)==0) THEN
-        CALL jfy (numSpec, numReac, speciesConcs, fy, t)
-        CALL outputjfy (fy, numSpec, t)
-     ENDIF
+    ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
+    write (*,*) 'time = ', time
+    if (MOD( elapsed, jacobianOutputStepSize )==0) then
+      call jfy( numSpec, numReac, speciesConcs, fy, t )
+      call outputjfy( fy, numSpec, t )
+    end if
 
-     CALL getConcForSpecInt (speciesConcs, SORNumber, concsOfSpeciesOfInterest)
-     CALL outputSpeciesOutputRequired (t, concsOfSpeciesOfInterest, SORNumberSize)
-     CALL outputPhotolysisRates (j, t)
+    call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
+    call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest, SORNumberSize )
+    call outputPhotolysisRates( j, t )
 
-     !OUTPUT INSTANTANEOUS RATES
-     IF (MOD (elapsed, irOutStepSize)==0) THEN
-        CALL outputInstantaneousRates(time, numReac)
-     ENDIF
+    !OUTPUT INSTANTANEOUS RATES
+    if (MOD (elapsed, irOutStepSize)==0) then
+      call outputInstantaneousRates( time, numReac )
+    end if
 
-     ! OUTPUT FOR CVODE MAIN SOLVER
-     WRITE (57,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
-     ! OUTPUT FOR SPARSE SOLVER
-     WRITE (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
-     ! OUTPUT STEP SIZE
-     WRITE (62,*) t, ' ', rout (3), ' ', rout (2)
+    ! OUTPUT FOR CVODE MAIN SOLVER
+    write (57,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
+    ! OUTPUT FOR SPARSE SOLVER
+    write (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
+    ! OUTPUT STEP SIZE
+    write (62,*) t, ' ', rout (3), ' ', rout (2)
 
-     !OUTPUT ENVVAR VALUES
-     CALL ro2sum (ro2, speciesConcs)
-     CALL outputEnvVar (t)
+    !OUTPUT ENVVAR VALUES
+    call ro2sum( ro2, speciesConcs )
+    call outputEnvVar( t )
 
-     ! CALCULATE AND OUTPUT RUNTIME
-     ! not using timing at the moment
-     ! CALL system_clock(current, rate)
-     ! currentSeconds =(current - runStart) / rate
-     ! stepTime = currentSeconds - previousSeconds
-     ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
-     ! previousSeconds = currentSeconds
+    ! CALCULATE AND OUTPUT RUNTIME
+    ! not using timing at the moment
+    ! CALL system_clock(current, rate)
+    ! currentSeconds =(current - runStart) / rate
+    ! stepTime = currentSeconds - previousSeconds
+    ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
+    ! previousSeconds = currentSeconds
 
-     ! ERROR HANDLING
-     IF (ier<0) THEN
-        fmt = "(///' SUNDIALS_ERROR: FCVODE returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
-        WRITE (stderr, fmt) ier, iout (15)
-        ! free memory
-        CALL fcvfree
-        STOP
-     ENDIF
+    ! ERROR HANDLING
+    if (ier<0) then
+      fmt = "(///' SUNDIALS_ERROR: FCVODE()returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
+      write (stderr, fmt) ier, iout (15)
+      ! free memory
+      call FCVFREE()
+      stop
+    end if
 
-     IF (ier==0) THEN
-        tminus1 = t
-        tout = tout + timestepSize
-        currentNumTimestep = currentNumTimestep + 1
-     ENDIF
+    if (ier==0) then
+      tminus1 = t
+      tout = tout + timestepSize
+      currentNumTimestep = currentNumTimestep + 1
+    end if
 
-  ENDDO
+  end do
 
-  CALL fcvdky (t, 1, z, ier)
-  IF (ier/=0) THEN
-     fmt = "(///' SUNDIALS_ERROR: FCVDKY returned ier = ', I4) "
-     WRITE (stderr, fmt) ier
-     CALL fcvfree
-     STOP
-  ENDIF
+  call FCVDKY( t, 1, z, ier )
+  if (ier/=0) then
+    fmt = "(///' SUNDIALS_ERROR: FCVDKY()returned ier = ', I4) "
+    write (stderr, fmt) ier
+    call FCVFREE()
+    stop
+  end if
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
-  DO species_counter = 1, numSpec
-     WRITE (53,*) speciesNames(species_counter), speciesConcs(species_counter)
-  ENDDO
+  do species_counter = 1, numSpec
+    write (53,*) speciesNames(species_counter), speciesConcs(species_counter)
+  end do
 
   !   printing of final statistics desactivated - nobody finds it useful
   !   FINAL ON SCREEN OUTPUT
   fmt = "(//'Final statistics:'//" // &
-       "' No. steps = ', I4, '   No. f-s = ', I4," // &
-       "'   No. J-s = ', I4, '   No. LU-s = ', I4/" // &
-       "' No. nonlinear iterations = ', I4/" // &
-       "' No. nonlinear convergence failures = ', I4/" // &
-       "' No. error test failures = ', I4/) "
+        "' No. steps = ', I4, '   No. f-s = ', I4, " // &
+        "'   No. J-s = ', I4, '   No. LU-s = ', I4/" // &
+        "' No. nonlinear iterations = ', I4/" // &
+        "' No. nonlinear convergence failures = ', I4/" // &
+        "' No. error test failures = ', I4/) "
 
-  WRITE (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
-       iout (lnni), iout (lncf), iout (lnetf)
+  write (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
+                 iout (lnni), iout (lncf), iout (lnetf )
 
-  CALL SYSTEM_CLOCK (runEnd, rate)
+  call SYSTEM_CLOCK( runEnd, rate )
   runTime =(runEnd - runStart) / rate
-  WRITE (*,*) 'Runtime = ', runTime
+  write (*,*) 'Runtime = ', runTime
 
   !   deallocate all
-  WRITE (*,*) 'Deallocating memory.'
+  write (*,*) 'Deallocating memory.'
   !   deallocate CVODE internal data
 
-  CALL fcvfree
-  DEALLOCATE (speciesConcs, speciesNames, speciesNumber, z)
-  DEALLOCATE (prodIntSpecies, returnArray, reacIntSpecies)
-  DEALLOCATE (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
-  DEALLOCATE (fy, ir)
-  DEALLOCATE (lossRates, productionRates)
-  DEALLOCATE (clhs, crhs, ccoeff)
-  DEALLOCATE (prodArrayLen)
-  DEALLOCATE (lossArrayLen)
+  call FCVFREE()
+  deallocate (speciesConcs, speciesNames, speciesNumber, z)
+  deallocate (prodIntSpecies, returnArray, reacIntSpecies)
+  deallocate (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
+  deallocate (fy, ir)
+  deallocate (lossRates, productionRates)
+  deallocate (clhs, crhs, ccoeff)
+  deallocate (prodArrayLen)
+  deallocate (lossArrayLen)
   !   deallocate data allocated before in input functions(inputFunctions.f)
   !   deallocate arrays from module constraints
-  CALL deallocateConstrainedSpecies ()
+  call deallocateConstrainedSpecies()
   !   deallocate arrays from module species
-  CALL deallocateSpeciesList
+  call deallocateSpeciesList
   !   deallocate arrays from module chemicalConstraints
-  DEALLOCATE (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedName)
-  DEALLOCATE (speciesNumberOfPoints, constrainedSpecies)
+  deallocate (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedName)
+  deallocate (speciesNumberOfPoints, constrainedSpecies)
   !   deallocate arrays from module envVars
-  DEALLOCATE (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
-  DEALLOCATE (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
+  deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
+  deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
   !   deallocate arrays from module photolysisRates
-  DEALLOCATE (photoX, photoY, photoY2, photoNumberOfPoints)
+  deallocate (photoX, photoY, photoY2, photoNumberOfPoints)
 
-  CLOSE (50)
-  CLOSE (51)
-  CLOSE (52)
-  CLOSE (53)
-  CLOSE (54)
-  CLOSE (55)
-  CLOSE (56)
-  CLOSE (57)
-  CLOSE (58)
-  CLOSE (59)
-  CLOSE (60)
-  CLOSE (61)
-  CLOSE (62)
+  close (50)
+  close (51)
+  close (52)
+  close (53)
+  close (54)
+  close (55)
+  close (56)
+  close (57)
+  close (58)
+  close (59)
+  close (60)
+  close (61)
+  close (62)
 
-  STOP
+  stop
 END PROGRAM ATCHEM
 
-  SUBROUTINE FCVJTIMES (v, fjv, t, y, fy, h, ipar, rpar, work, ier)
-    USE types_mod
-    USE species
-    IMPLICIT NONE
+subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
+  use types_mod
+  use species
+  implicit none
 
-    INTEGER (KIND=NPI) :: ipar (*), ier, neq, i, np
-    INTEGER :: j
-    real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
-    real(kind=DP), ALLOCATABLE :: yPlusV (:), yPlusVi(:)
-    np = getNumberOfSpecies ()
-    ALLOCATE (yPlusV (np), yPlusVi(np))
+  integer(kind=NPI) :: ipar (*), ier, neq, i, np
+  integer :: j
+  real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
+  real(kind=DP), allocatable :: yPlusV (:), yPlusVi(:)
+  np = getNumberOfSpecies()
+  allocate (yPlusV (np), yPlusVi(np))
 
-    neq = ipar(1)
-    delta = 1.00d-03
-    ! fake using variables h and work, to avoid a warning (they are required by CVODE code)
-    h = h
-    dummy = work(1)
+  neq = ipar(1)
+  delta = 1.00d-03
+  ! fake using variables h and work, to avoid a warning (they are required by CVODE code)
+  h = h
+  dummy = work(1)
 
-    ! calculate y + delta v
-    j = 0
-    DO i = 1, neq
-       deltaV = delta * v(i)
-       yPlusV (i) = y(i) + deltaV
-    ENDDO
+  ! calculate y + delta v
+  j = 0
+  do i = 1, neq
+    deltaV = delta * v(i)
+    yPlusV (i) = y(i) + deltaV
+  end do
 
-    ! get f(y + delta v)
-    CALL FCVFUN (t, yPlusV, yPlusVi, ipar, rpar, ier)
+  ! get f(y + delta v)
+  call FCVFUN( t, yPlusV, yPlusVi, ipar, rpar, ier )
 
-    ! JVminus1 + deltaJV
-    DO i = 1, neq
-       fjv(i) = (yPlusVi(i) - fy(i)) / delta
-    ENDDO
-    DEALLOCATE (yPlusV, yPlusVi)
+  ! JVminus1 + deltaJV
+  do i = 1, neq
+    fjv(i) = (yPlusVi(i) - fy(i)) / delta
+  end do
+  deallocate (yPlusV, yPlusVi)
 
-    RETURN
-  END SUBROUTINE FCVJTIMES
+  return
+end subroutine FCVJTIMES
 
-  !     ---------------------------------------------------------------
-  SUBROUTINE FCVFUN (t, y, ydot, ipar, rpar, ier)
-    USE types_mod
-    USE species
-    USE constraints
-    USE reactionStructure
-    USE chemicalConstraints
-    USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
-    USE constraintFunctions_mod
-    USE solverFunctions_mod, ONLY : resid
+!     ---------------------------------------------------------------
+subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
+  use types_mod
+  use species
+  use constraints
+  use reactionStructure
+  use chemicalConstraints
+  use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+  use constraintFunctions_mod
+  use solverFunctions_mod, only : resid
 
-    ! Fortran routine for right-hand side function.
-    IMPLICIT NONE
-    !
-    INTEGER (KIND=NPI) :: ipar(*), ier, nConSpec, np, numReac
-    real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
-    real(kind=DP), ALLOCATABLE :: dy(:), z(:)
-    INTEGER(kind=NPI) :: i
+  ! Fortran routine for right-hand side function.
+  implicit none
+  !
+  integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
+  real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
+  real(kind=DP), allocatable :: dy(:), z(:)
+  integer(kind=NPI) :: i
 
-    np = ipar(1) + numberOfConstrainedSpecies
-    numReac = ipar(2)
-    dummy = rpar(1)
+  np = ipar(1) + numberOfConstrainedSpecies
+  numReac = ipar(2)
+  dummy = rpar(1)
 
-    nConSpec = numberOfConstrainedSpecies
-    ALLOCATE (dy(np), z(np))
+  nConSpec = numberOfConstrainedSpecies
+  allocate (dy(np), z(np))
 
-    DO i = 1, numberOfConstrainedSpecies
-       IF (i<=numberOfVariableConstrainedSpecies) THEN
-          CALL getConstrainedQuantAtT2D (t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, &
-               1, i, maxNumberOfDataPoints, numberOfVariableConstrainedSpecies)
-       ELSE
-          concAtT = dataFixedY (i-numberOfVariableConstrainedSpecies)
-       ENDIF
-       constrainedConcs(i) = concAtT
-       CALL setConstrainedConc (i, concAtT)
+  do i = 1, numberOfConstrainedSpecies
+    if (i<=numberOfVariableConstrainedSpecies) then
+      call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, &
+                                     1, i, maxNumberOfDataPoints, numberOfVariableConstrainedSpecies )
+    else
+      concAtT = dataFixedY (i-numberOfVariableConstrainedSpecies)
+    end if
+    constrainedConcs(i) = concAtT
+    call setConstrainedConc( i, concAtT )
 
-    ENDDO
+  end do
 
-    CALL addConstrainedSpeciesToProbSpec (y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs)
+  call addConstrainedSpeciesToProbSpec( y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs )
 
-    CALL resid (np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size)
+  call resid( np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size )
 
-    CALL removeConstrainedSpeciesFromProbSpec (dy, ydot, constrainedSpecies)
+  call removeConstrainedSpeciesFromProbSpec( dy, ydot, constrainedSpecies )
 
-    DEALLOCATE (dy, z)
-    ier = 0
+  deallocate (dy, z)
+  ier = 0
 
-    RETURN
-  END SUBROUTINE FCVFUN
+  return
+end subroutine FCVFUN

@@ -1,61 +1,61 @@
-MODULE mechanismRates_mod
+module mechanismRates_mod
 
-CONTAINS
-SUBROUTINE mechanism_rates (p, t, y, mnsp)
-   USE types_mod
-   USE photolysisRates
-   USE zenithData1
-   USE constraints
-   USE envVars, ONLY : ro2
-   USE interpolationFunctions_mod, ONLY : getConstrainedQuantAtT2D
-   USE outputFunctions_mod, ONLY : ro2sum
-   USE constraintFunctions_mod, ONLY : getEnvVarsAtT
-   USE utilityFunctions_mod, ONLY : atmosphere
-   IMPLICIT NONE
+contains
+  subroutine mechanism_rates( p, t, y, mnsp )
+    use types_mod
+    use photolysisRates
+    use zenithData1
+    use constraints
+    use envVars, only : ro2
+    use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+    use outputFunctions_mod, only : ro2sum
+    use constraintFunctions_mod, only : getEnvVarsAtT
+    use utilityFunctions_mod, only : atmosphere
+    implicit none
 
-   ! calculates rate constants from arrhenius information
-   real(kind=DP), intent (out) :: p(*)
-   real(kind=DP), intent (in) :: t
-   INTEGER(kind=NPI), intent (in) :: mnsp
-   real(kind=DP), intent (in) :: y(mnsp)
-   real(kind=DP) :: temp, pressure, dummy
+    ! calculates rate constants from arrhenius information
+    real(kind=DP), intent (out) :: p(*)
+    real(kind=DP), intent (in) :: t
+    integer(kind=NPI), intent (in) :: mnsp
+    real(kind=DP), intent (in) :: y(mnsp)
+    real(kind=DP) :: temp, pressure, dummy
 
-   INTEGER(kind=NPI) :: i
-   real(kind=DP) :: photoRateAtT
+    integer(kind=NPI) :: i
+    real(kind=DP) :: photoRateAtT
 
-   INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'
+    INCLUDE 'modelConfiguration/mechanism-rate-declarations.f90'
 
-   CALL ro2sum (ro2, y)
-   dummy = y(1)
+    call ro2sum( ro2, y )
+    dummy = y(1)
 
-   dec = -1e16
+    dec = -1e16
 
-   CALL getEnvVarsAtT (t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen)
+    call getEnvVarsAtT( t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen )
 
-   CALL atmosphere (o2, n2, m)
+    call atmosphere( o2, n2, m )
 
-   !O2 = 0.2095*m
-   !N2 = 0.7809*m
+    !O2 = 0.2095*m
+    !N2 = 0.7809*m
 
-   DO i = 1, nrOfPhotoRates
-      IF (usePhotolysisConstants.EQV..FALSE.) THEN
-         IF (cosx<1.00d-10) THEN
-            j(ck(i)) = 1.0d-30
-         ELSE
-            j(ck(i)) = cl(i)*cosx**(cmm(i))*EXP(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
-         ENDIF
-      ELSE
-         j(ck(i)) = cl(i)
-      ENDIF
-   ENDDO
+    do i = 1, nrOfPhotoRates
+      if (usePhotolysisConstants.eqv..false.) then
+        if (cosx<1.00d-10) then
+          j(ck(i)) = 1.0d-30
+        else
+          j(ck(i)) = cl(i)*cosx**(cmm(i))*exp(-cnn(i)*secx)*transmissionFactor(i)*roofOpen*jfac
+        end if
+      else
+        j(ck(i)) = cl(i)
+      end if
+    end do
 
-   DO i = 1, numConPhotoRates
-      CALL getConstrainedQuantAtT2D (t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
-                                     maxNumberOfDataPoints, numConPhotoRates)
+    do i = 1, numConPhotoRates
+      call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
+                                     maxNumberOfDataPoints, numConPhotoRates )
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
-   ENDDO
+    end do
 
-   INCLUDE 'modelConfiguration/mechanism-rate-coefficients.f90'
-   RETURN
-END SUBROUTINE mechanism_rates
-END MODULE mechanismRates_mod
+    INCLUDE 'modelConfiguration/mechanism-rate-coefficients.f90'
+    return
+  end subroutine mechanism_rates
+end module mechanismRates_mod

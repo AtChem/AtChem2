@@ -34,12 +34,12 @@ contains
       ! CUBIC SPLINE INTERPOLATION (LN)
     else if (interpMethod==2) then
       call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
-      concAtT = EXP (concAtT)
+      concAtT = exp (concAtT)
       ! PIECEWISE CONSTANT INTERPOLATION
     else if (interpMethod==3) then
       facintfound = 0
       do i = 1, dataNumberOfPoints
-        if ((t>=X (ind, i)).AND.(t<X (ind, i+1))) then
+        if ((t>=X (ind, i)).and.(t<X (ind, i+1))) then
           concAtT = Y (ind, i)
           facintfound = 1
         end if
@@ -54,7 +54,7 @@ contains
       ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
       linintsuc = 0
       do i = 1, dataNumberOfPoints
-        if ((t>=x(ind, i)).AND.(t<x(ind, i+1))) then
+        if ((t>=x(ind, i)).and.(t<x(ind, i+1))) then
           indexBefore = i
           indexAfter = i + 1
           linintsuc = 1
@@ -113,7 +113,7 @@ contains
     h = xa(ind, khi)-xa(ind, klo)
 
     if (h==0.) then
-      PRINT *, 'Bad input in splint2D! The xa''s must be distinct'!
+      print *, 'Bad input in splint2D! The xa''s must be distinct'!
       stop
     end if
 

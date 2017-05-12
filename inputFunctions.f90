@@ -69,7 +69,7 @@ contains
 
     jfacSpeciesLine = 0
     write (*,*) 'Reading JFacSpecies...'
-    INQUIRE(file=trim(param_dir) // '/JFacSpecies.config', exist=file_exists)
+    inquire(file=trim(param_dir) // '/JFacSpecies.config', exist=file_exists)
     if (file_exists.eqv..false.) then
       write (*,*) "No JFacSpecies.config file exists, so setting jFacSpecies to ''"
       jFacSpecies = ''
@@ -156,7 +156,7 @@ contains
 
     ! Check whether file exists correctly in readPhotolysisConstants,
     write (*,*) 'Looking for photolysis constants file...'
-    INQUIRE(file=trim(param_dir) // '/photolysisConstants.config', exist=file_exists)
+    inquire(file=trim(param_dir) // '/photolysisConstants.config', exist=file_exists)
     if (file_exists.eqv..false.) then
       usePhotolysisConstants = .false.
       write (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
@@ -391,7 +391,7 @@ contains
     ! Reads in concentration per species from mC/initialConcentrations.config
     ! Checks that there aren't more inputs than species.
     ! concSpeciesNames is filled with all species names of initial concentrations,
-    ! concentration is filled with corresponding concentration VALUES
+    ! concentration is filled with corresponding concentration values
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
@@ -457,7 +457,7 @@ contains
     integer(kind=NPI) :: length
     logical :: file_exists
 
-    INQUIRE(file=trim(filename), exist=file_exists)
+    inquire(file=trim(filename), exist=file_exists)
     if (file_exists.eqv..false.) then
       write (*,*) 'No ' // filename // ' file exists.'
     else
@@ -563,10 +563,10 @@ contains
     write (*,*) 'Reading concentration data for constrained species...'
     allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames))
     do i = 1, numberOfVariableConstrainedSpecies
-      if (i<3 .OR. i==numberOfVariableConstrainedSpecies) then
+      if (i<3 .or. i==numberOfVariableConstrainedSpecies) then
         write (*,*) constrainedName(i), '...'
       else
-        if (i==2) WRITE (*,*) '...'
+        if (i==2) write (*,*) '...'
       end if
 
       fileLocation = trim(spec_constraints_dir) // '/' // trim(constrainedName(i))
@@ -762,7 +762,7 @@ function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
   counter = 0
   ierr = 0
   open (11, file=filename, status='old')
-  if (skip_first_line) READ (11,*, iostat=ierr) dummy
+  if (skip_first_line) read (11,*, iostat=ierr) dummy
   do while (ierr==0)
     counter = counter + 1
     read (11,*, iostat=ierr) dummy
@@ -792,7 +792,7 @@ subroutine read_in_single_column_string_file( filename, output_vector, i, skip_f
   end if
   open (10, file=filename, status='old')
   ! Skip first line if necessary.
-  if (skip_first_line) READ (11,*, iostat=ierr) c
+  if (skip_first_line) read (11,*, iostat=ierr) c
   ! Loop over all lines of the file, and add each entry to r(i)
   ! Then check we don't have more species of interest than total species
   i = 0

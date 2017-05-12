@@ -11,10 +11,10 @@ contains
     real(kind=DP) :: dec, t, pi, daysInYear, maxDecInRad, currentFYear
 
     daysInYear = 365.24
-    pi = 4.0*ATAN (1.0)
+    pi = 4.0*atan(1.0)
     maxDecInRad = 23.44*pi/180.0
     currentFYear = dayAsFractionOfYear + (t / secondsInYear)
-    dec=ASIN(SIN(-maxDecInRad)*COS((2.0*pi)*(currentFYear+(10.0/daysInYear))+2.0*0.0167*SIN(2*pi*(currentFYear-(2.0/daysInYear)))))
+    dec=asin(sin(-maxDecInRad)*cos((2.0*pi)*(currentFYear+(10.0/daysInYear))+2.0*0.0167*sin(2*pi*(currentFYear-(2.0/daysInYear)))))
     return
   end subroutine calcDec
 

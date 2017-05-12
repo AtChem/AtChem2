@@ -178,7 +178,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
     implicit none
 
-    integer(kind=QI), intent(in) :: time
+    integer(kind=DP), intent(in) :: time
     integer(kind=NPI), intent(in) :: numReac
     integer(kind=NPI) :: i
     character(len=maxFilepathLength+30) :: irfileLocation
@@ -186,7 +186,7 @@ contains
 
     write (strTime,*) time
 
-    irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
+    irfileLocation = trim(instantaneousRates_dir) // '/' // adjustl (strTime)
 
     open (10, file=irfileLocation)
     do i = 1, numReac

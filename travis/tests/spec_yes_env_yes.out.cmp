@@ -70,7 +70,7 @@
   maximum number of data points in constraint file:       50000
                                ratesOutputStepSize:        3600
               instantaneous rates output step size:        3600
-                                    modelStartTime:   0.120E+04
+                                    modelStartTime:        1200
                             jacobianOutputStepSize:      108000
                                           latitude:   0.530E+02
                                          longitude:  -0.100E+01

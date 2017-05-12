@@ -1,13 +1,16 @@
 ! ******************************************************************** !
-! ATCHEM -- MODULE parameterModules
+! ATCHEM -- FILE parameterModules
 !
-! ??? Text describing the content of the module ???
+! This file contains solver_params_mod and model_params_mod, two
+! modules that handle the setting and storing of solver and model
+! parameters from file.
 ! ******************************************************************** !
 
 
 ! ******************************************************************** !
 ! MODULE solver_params
-! ???
+! This module contains all the variables holding solver options, and
+! the function to set these.
 ! ******************************************************************** !
 module solver_params_mod
   use types_mod
@@ -26,7 +29,8 @@ module solver_params_mod
 contains
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! This sets all the solver parameters as read in from the
+  ! solver.parameters file
   subroutine set_solver_parameters( input_parameters )
     use types_mod
     implicit none
@@ -93,7 +97,8 @@ end module solver_params_mod
 
 ! ******************************************************************** !
 ! MODULE model_params
-! ???
+! This module contains all the variables holding model options, and
+! the function to set these.
 ! ******************************************************************** !
 module model_params_mod
   use types_mod
@@ -103,16 +108,15 @@ module model_params_mod
   integer(kind=NPI) :: maxNumTimesteps
   real(kind=DP) :: timestepSize
   integer(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
-  integer(kind=QI) :: ratesOutputStepSize
-  real(kind=DP) :: modelStartTime
-  integer(kind=QI) :: jacobianOutputStepSize
-  integer(kind=QI) :: irOutStepSize
+  integer(kind=QI) :: ratesOutputStepSize, modelStartTime, jacobianOutputStepSize, irOutStepSize
   character(len=20) :: interpolationMethodName(2)
+  logical :: outputJacobian
 
 contains
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! This sets all the model parameters as read in from the
+  ! model.parameters file
   subroutine set_model_parameters( input_parameters )
     use types_mod
     use constraints_mod, only : maxNumberOfDataPoints
@@ -150,13 +154,18 @@ contains
     ! Member variable of MODULE constraints. Used in
     ! getConstrainedQuantAtT and readEnvVar
     maxNumberOfDataPoints = nint( input_parameters(6), NPI )
-    ! Frequency at which outputRates is called below.
+    ! Frequency at which outputRates is called.
     ratesOutputStepSize = nint( input_parameters(7), QI )
     ! Start time of model. Used to set t initially, and to calculate
     ! the elapsed time.
-    modelStartTime = input_parameters(8)
-    ! Frequency at which output_jfy is called below.
+    modelStartTime = nint( input_parameters(8) )
+    ! Frequency at which jfy() is called below.
     jacobianOutputStepSize = nint( input_parameters(9), QI )
+    if (jacobianOutputStepSize==0) then
+      outputJacobian = .false.
+    else
+      outputJacobian = .true.
+    end if
     ! Member variables of module zenith_data_mod
     latitude = input_parameters(10)
     longitude = input_parameters(11)
@@ -184,7 +193,7 @@ contains
     write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
     write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
     write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
-    write (*, 300) 'modelStartTime: ', modelStartTime
+    write (*, 400) 'modelStartTime: ', modelStartTime
     write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
     write (*, 300) 'latitude: ', latitude
     write (*, 300) 'longitude: ', longitude

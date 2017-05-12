@@ -373,9 +373,20 @@ PROGRAM ATCHEM
   write (*, '(A)') '-----------'
   write (*, '(A)') ' Model run'
   write (*, '(A)') '-----------'
+
+  elapsed = int( t - modelStartTime )
+
   do while ( currentNumTimestep < maxNumTimesteps )
 
     call outputPhotoRateCalcParameters( t )
+
+    ! Output Jacobian matrix (output frequency set in
+    ! model.parameters)
+    if ( outputJacobian .eqv. .true. ) then
+      if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
+        call jfy( numReac, speciesConcs, t )
+      end if
+    end if
 
     ! Get concentrations for unconstrained species
     call FCVODE( tout, t, z, itask, ier )
@@ -384,7 +395,9 @@ PROGRAM ATCHEM
     end if
     flush(6)
 
-    time = int( t )
+    time = nint( t )
+    elapsed = time - modelStartTime
+
     write (*, '(A, I0)') ' time = ', time
 
     ! Get concentrations for constrained species and add to array for
@@ -393,16 +406,9 @@ PROGRAM ATCHEM
 
     ! Output rates of production and loss (output frequency set in
     ! model.parameters)
-    elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1_SI )
       call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0_SI )
-    end if
-
-    ! Output Jacobian matrix (output frequency set in
-    ! model.parameters)
-    if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
-      call jfy( numReac, speciesConcs, t )
     end if
 
     concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )

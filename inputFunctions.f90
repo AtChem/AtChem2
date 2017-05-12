@@ -443,7 +443,7 @@ contains
   end subroutine readInitialConcentrations
 
 
-  subroutine readProductsOReactantsOfInterest( filename, r, i )
+  subroutine readProductsOrReactantsOfInterest( filename, r, i )
     ! Read in contents of modelConfiguration/production/lossRatesOutput.config, which
     ! contains a list of the species we want to have outputted to mC/production/lossRates.output
     ! Output the contents in r, with i as the length of r.
@@ -475,7 +475,7 @@ contains
       end do
     end if
     return
-  end subroutine readProductsOReactantsOfInterest
+  end subroutine readProductsOrReactantsOfInterest
 
 
   subroutine readSpeciesConstraints( t, y )

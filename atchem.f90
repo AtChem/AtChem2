@@ -32,7 +32,7 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
-  integer(kind=QI) :: ier
+  integer(kind=IntErr) :: ier
   integer :: i
   integer(kind=NPI) :: species_counter
   integer :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
@@ -43,7 +43,7 @@ PROGRAM ATCHEM
   real(kind=DP) :: rtol, t, t0, tout
   real(kind=DP) :: atol, rout(6)
   real(kind=DP) :: rpar(1)
-  DATA lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
+  data lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
        lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
   real(kind=DP), allocatable :: speciesConcs(:)
 
@@ -250,7 +250,7 @@ PROGRAM ATCHEM
 
   ! Read in product species of interest, and set up variables to hold these
   write (*,*) 'Reading products of interest...'
-  call readProductsOReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   write (*,*) 'Finished reading products of interest.'
   ! Fill returnArray with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, prodIntName, returnArray, rateOfProdNS )
@@ -269,7 +269,7 @@ PROGRAM ATCHEM
 
   ! Read in reactant species of interest, and set up variables to hold these
   write (*,*) 'Reading reactants of interest...'
-  call readProductsOReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   write (*,*) 'Finished reading reactants of interest.'
   ! Fill returnArray with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, reacIntName, returnArray, rateOfLossNS )
@@ -366,7 +366,7 @@ PROGRAM ATCHEM
   ! Size of timestep: tout is incremented by this amount on each iteration of the main while loop.
   timestepSize = modelParameters(2)
   ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
-  ! the private member of MODULE interpolationMethod.
+  ! the private member of module interpolationMethod.
   ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT2D.
   ! Values:
   ! 1: Cubic spline interpolation
@@ -380,7 +380,7 @@ PROGRAM ATCHEM
   call setConditionsInterpMethod( conditionsInterpolationMethod )
   decInterpolationMethod = modelParameters(5)
   call setDecInterpMethod( decInterpolationMethod )
-  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
+  ! Member variable of module constraints. Used in getConstrainedQuantAtT2D and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
   ! Member variable of chemicalConstraints.
   numberOfConstrainedSpecies = modelParameters(7)
@@ -438,13 +438,13 @@ PROGRAM ATCHEM
   meth = 2
   ! itmeth specifies the nonlinear iteration method: 1 for functional iteration or 2 for Newton iteration.
   itmeth = 2
-  ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar or 2 for array.
-  ! If IATOL= 3, the arguments RTOL and ATOL are ignored and the user is
+  ! iatol specifies the type for absolute tolerance atol: 1 for scalar or 2 for array.
+  ! If iatol= 3, the arguments rtol and atol are ignored and the user is
   ! expected to subsequently call FCVEWTSET() and provide the function FCVEWT().
   iatol = 1
 
-  ! Parameter for FCVODE(). Comment from cvode guide: ITASK is a task indicator and should be
-  ! set to 1 for normal mode (overshoot TOUT and interpolate),
+  ! Parameter for FCVODE(). Comment from cvode guide: itask is a task indicator and should be
+  ! set to 1 for normal mode (overshoot tout and interpolate),
   ! or to 2 for one-step mode (return after each internal step taken)
   itask = 1
 
@@ -609,17 +609,17 @@ PROGRAM ATCHEM
     ! write (stderr, fmt) t, y (1), y (2)
 
     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-    time = INT( t )
+    time = int( t )
 
-    elapsed = INT( t-modelStartTime )
-    if (MOD( elapsed, ratesOutputStepSize )==0) then
+    elapsed = int( t-modelStartTime )
+    if (mod( elapsed, ratesOutputStepSize )==0) then
       call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames )
       call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0, speciesNames )
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
     write (*,*) 'time = ', time
-    if (MOD( elapsed, jacobianOutputStepSize )==0) then
+    if (mod( elapsed, jacobianOutputStepSize )==0) then
       call jfy( numSpec, numReac, speciesConcs, fy, t )
       call outputjfy( fy, numSpec, t )
     end if
@@ -629,7 +629,7 @@ PROGRAM ATCHEM
     call outputPhotolysisRates( j, t )
 
     !OUTPUT INSTANTANEOUS RATES
-    if (MOD (elapsed, irOutStepSize)==0) then
+    if (mod (elapsed, irOutStepSize)==0) then
       call outputInstantaneousRates( time, numReac )
     end if
 
@@ -646,10 +646,10 @@ PROGRAM ATCHEM
 
     ! CALCULATE AND OUTPUT RUNTIME
     ! not using timing at the moment
-    ! CALL system_clock(current, rate)
+    ! call system_clock(current, rate)
     ! currentSeconds =(current - runStart) / rate
     ! stepTime = currentSeconds - previousSeconds
-    ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
+    ! write (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
     ! previousSeconds = currentSeconds
 
     ! ERROR HANDLING
@@ -691,7 +691,7 @@ PROGRAM ATCHEM
         "' No. nonlinear convergence failures = ', I4/" // &
         "' No. error test failures = ', I4/) "
 
-  write (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
+  write (*, fmt) iout (lnst), iout (lnfe), iout (lnje), iout (lnsetup), &
                  iout (lnni), iout (lncf), iout (lnetf )
 
   call SYSTEM_CLOCK( runEnd, rate )

@@ -205,7 +205,7 @@ def convert(input_file):
                 string = string.replace('<', '(')
                 string = string.replace('>', ')')
                 mech_rates_temp_file.write(
-                    '  p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
+                    'p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
                 i += 1
 
     # Write RO2 data to file
@@ -272,13 +272,13 @@ def convert(input_file):
                                       ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
 
         # loop over RO2 and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the RO2
-        mech_rates_file.write('  ro2 = 0.00e+00\n')
+        mech_rates_file.write('ro2 = 0.00e+00\n')
         print 'adding RO2 to mechanism-rate-coefficients.f90'
         for ro2List_i in ro2List:
             # print 'ro2List_i: ' + ro2List_i
             for speciesNumber, y in zip(range(1, len(speciesList) + 1), speciesList):
                 if ro2List_i.strip() == y.strip():
-                    mech_rates_file.write('  ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2List_i.strip() + '\n')
+                    mech_rates_file.write('ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2List_i.strip() + '\n')
                     # Exit loop early if species found
                     break
             # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the RO2 being
@@ -334,10 +334,10 @@ def convert(input_file):
     for line in generic_rate_coefficients + complex_reactions:
         # Check for comments (beginning with a !), or blank lines
         if (re.match('!', line) is not None) | (line.isspace()):
-            mechanism_rates_coeff_list.append('  ' + line)
+            mechanism_rates_coeff_list.append(line)
         # Check for lines starting with either ; or *, and write these as comments
         elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
-            mechanism_rates_coeff_list.append('  !' + line)
+            mechanism_rates_coeff_list.append('!' + line)
         # Otherwise assume all remaining lines are in the correct format, and so process them
         else:
             # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
@@ -345,10 +345,11 @@ def convert(input_file):
             # bracketed version.
             # It also then converts all @ to ** etc.
             # Save the resulting string to mechanism_rates_coeff_list
-            mechanism_rates_coeff_list.append('  ' +
-                                        re.sub('(?<=@)-[0-9.]*', '(\g<0>)', line.replace(';', '').strip()).replace('@',
-                                                                                                                   '**') +
-                                        '\n')
+            mechanism_rates_coeff_list.append(re.sub('(?<=@)-[0-9.]*',
+                                                     '(\g<0>)',
+                                                     line.replace(';', '').strip()
+                                                     ).replace('@', '**')
+                                              + '\n')
 
             # Now we need to find the list of all species that are used in these equations, so we can declare them
             # at the top of the Fortran source file.
@@ -424,7 +425,7 @@ def convert(input_file):
 
     # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
     # Begin wthe first line as necessary
-    newline = '  real(kind=DP) ::'
+    newline = 'real(kind=DP) ::'
     mechanism_rates_decl = []
     # Loop over all species
     for i, item in zip(range(1, len(coeffSpeciesList) + 1), coeffSpeciesList):
@@ -437,7 +438,7 @@ def convert(input_file):
         # Otherwise, every tenth species gets rounded off with a newline and a prefix to the next line
         if i % 10 == 0:
             mechanism_rates_decl.append(newline + '\n')
-            newline = '  real(kind=DP) ::'
+            newline = 'real(kind=DP) ::'
         else:
             # If not, add a spacer
             newline += ','

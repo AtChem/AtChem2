@@ -1,69 +1,69 @@
-MODULE interpolationFunctions_mod
-CONTAINS
-SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec)
+module interpolationFunctions_mod
+contains
+  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec )
 
-  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
-  USE types_mod
-  USE interpolationMethod
-  USE chemicalConstraints
-  INTEGER :: linintsuc, constraintType, maxPoints
-  INTEGER(kind=NPI) :: nConSpec, dataNumberOfPoints
-  real(kind=DP) :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
-  real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
-  INTEGER :: facintfound
-  INTEGER(kind=SI) :: interpMethod
-  INTEGER(kind=NPI) :: ind, i, indexBefore, indexAfter
+    use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+    use types_mod
+    use interpolationMethod
+    use chemicalConstraints
+    integer :: linintsuc, constraintType, maxPoints
+    integer(kind=NPI) :: nConSpec, dataNumberOfPoints
+    real(kind=DP) :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2 (nConSpec, maxPoints), concAtT
+    real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
+    integer :: facintfound
+    integer(kind=SI) :: interpMethod
+    integer(kind=NPI) :: ind, i, indexBefore, indexAfter
 
-  ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
-  IF (constraintType==1) THEN
-     CALL getSpeciesInterpMethod (interpMethod)
-  ELSE IF (constraintType==2) THEN
-     CALL getConditionsInterpMethod (interpMethod)
-  ELSE IF (constraintType==3) THEN
-     CALL getDecInterpMethod (interpMethod)
-  ELSE
-     WRITE (*,*) 'Error in setting constraintType, error = ', constraintType
-  ENDIF
+    ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
+    if (constraintType==1) then
+      call getSpeciesInterpMethod( interpMethod )
+    else if (constraintType==2) then
+      call getConditionsInterpMethod( interpMethod )
+    else if (constraintType==3) then
+      call getDecInterpMethod( interpMethod )
+    else
+      write (*,*) 'Error in setting constraintType, error = ', constraintType
+    end if
 
-  ! CUBIC SPLINE INTERPOLATION
-  IF (interpMethod==1) THEN
-     CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
-     IF (concAtT<=0) THEN
+    ! CUBIC SPLINE INTERPOLATION
+    if (interpMethod==1) then
+      call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
+      if (concAtT<=0) then
         concAtT = 0
-     ENDIF
-     ! CUBIC SPLINE INTERPOLATION (LN)
-  ELSE IF (interpMethod==2) THEN
-     CALL splint2D (x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints)
-     concAtT = EXP (concAtT)
-     ! PIECEWISE CONSTANT INTERPOLATION
-  ELSE IF (interpMethod==3) THEN
-     facintfound = 0
-     DO i = 1, dataNumberOfPoints
-        IF ((t>=X (ind, i)).AND.(t<X (ind, i+1))) THEN
-           concAtT = Y (ind, i)
-           facintfound = 1
-        ENDIF
-     ENDDO
-     IF (facintfound==0) THEN
-        WRITE (*,*) 'error in peicewise constant interpolation'
-        WRITE (*,*) t, dataNumberOfPoints, concAtT
+      end if
+      ! CUBIC SPLINE INTERPOLATION (LN)
+    else if (interpMethod==2) then
+      call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
+      concAtT = EXP (concAtT)
+      ! PIECEWISE CONSTANT INTERPOLATION
+    else if (interpMethod==3) then
+      facintfound = 0
+      do i = 1, dataNumberOfPoints
+        if ((t>=X (ind, i)).AND.(t<X (ind, i+1))) then
+          concAtT = Y (ind, i)
+          facintfound = 1
+        end if
+      end do
+      if (facintfound==0) then
+        write (*,*) 'error in peicewise constant interpolation'
+        write (*,*) t, dataNumberOfPoints, concAtT
         concAtT = y(ind, dataNumberOfPoints)
-     ENDIF
-     ! PIECEWISE LINEAR INTERPOLATION
-  ELSE IF (interpMethod==4) THEN
-     ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
-     linintsuc = 0
-     DO i = 1, dataNumberOfPoints
-        IF ((t>=x(ind, i)).AND.(t<x(ind, i+1))) THEN
-           indexBefore = i
-           indexAfter = i + 1
-           linintsuc = 1
-        ENDIF
-     ENDDO
-     IF (linintsuc==0) THEN
+      end if
+      ! PIECEWISE LINEAR INTERPOLATION
+    else if (interpMethod==4) then
+      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
+      linintsuc = 0
+      do i = 1, dataNumberOfPoints
+        if ((t>=x(ind, i)).AND.(t<x(ind, i+1))) then
+          indexBefore = i
+          indexAfter = i + 1
+          linintsuc = 1
+        end if
+      end do
+      if (linintsuc==0) then
         concAtT = y(ind, dataNumberOfPoints)
-        WRITE (*,*) 'Failed to lin int'
-     ELSE IF (linintsuc==1) THEN
+        write (*,*) 'Failed to lin int'
+      else if (linintsuc==1) then
         ! INDENTIFY COORIDANTES OF ENCLOSING DATA POINTS
         xBefore = x(ind, indexBefore)
         yBefore = y(ind, indexBefore)
@@ -73,53 +73,53 @@ SUBROUTINE getConstrainedQuantAtT2D (t, x, y, y2, dataNumberOfPoints, concAtT, c
         m = (yAfter - yBefore)/(xAfter - xBefore)
         c = yAfter - (m*xAfter)
         concAtT = m*t + c
-     ENDIF
-  ELSE
-     WRITE (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
-     STOP
-  ENDIF
+      end if
+    else
+      write (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
+      stop
+    end if
 
-  RETURN
-END SUBROUTINE getConstrainedQuantAtT2D
+    return
+  end subroutine getConstrainedQuantAtT2D
 
-SUBROUTINE splint2D (xa, ya, y2a, n, x, y, ind, maxPoints)
-  USE types_mod
-  IMPLICIT NONE
+  subroutine splint2D( xa, ya, y2a, n, x, y, ind, maxPoints )
+    use types_mod
+    implicit none
 
-  INTEGER maxPoints
-  INTEGER(kind=NPI) :: ind, n
-  real(kind=DP) :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
-  ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
-  ! (with the xai�s in order), and given the array y2a(1:n), which is the output
-  ! from spline above, and given a value of x, this routine returns a
-  ! cubic-spline interpolated value y.
-  INTEGER(kind=NPI) :: k, khi, klo
-  real(kind=DP) :: a, b, h
+    integer maxPoints
+    integer(kind=NPI) :: ind, n
+    real(kind=DP) :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
+    ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
+    ! (with the xai�s in order), and given the array y2a(1:n), which is the output
+    ! from spline above, and given a value of x, this routine returns a
+    ! cubic-spline interpolated value y.
+    integer(kind=NPI) :: k, khi, klo
+    real(kind=DP) :: a, b, h
 
-  klo = 1 !We will find the right place in the table by means of bisection.
-  ! This is optimal if sequential calls to this routine are at random values of
-  ! x. If sequential calls are in order, and closely spaced, one would do better
-  ! to store previous values of klo and khi and test if they remain appropriate
-  ! on the next call.
-  khi = n
-  DO WHILE (khi-klo>1)
-     k = (khi+klo)/2
-     IF (xa(ind, k)>x) THEN
+    klo = 1 !We will find the right place in the table by means of bisection.
+    ! This is optimal if sequential calls to this routine are at random values of
+    ! x. If sequential calls are in order, and closely spaced, one would do better
+    ! to store previous values of klo and khi and test if they remain appropriate
+    ! on the next call.
+    khi = n
+    do while (khi-klo>1)
+      k = (khi+klo)/2
+      if (xa(ind, k)>x) then
         khi = k
-     ELSE
+      else
         klo = k
-     ENDIF
-  ENDDO !klo and khi now bracket the input value of x.
-  h = xa(ind, khi)-xa(ind, klo)
+      end if
+    end do !klo and khi now bracket the input value of x.
+    h = xa(ind, khi)-xa(ind, klo)
 
-  IF (h==0.) THEN
-     PRINT *, 'Bad input in splint2D! The xa''s must be distinct'
-     STOP
-  END IF
+    if (h==0.) then
+      PRINT *, 'Bad input in splint2D! The xa''s must be distinct'!
+      stop
+    end if
 
-  a = (xa(ind, khi)-x)/h !Cubic spline polynomial is now evaluated.
-  b = (x-xa(ind, klo))/h
-  y = a*ya(ind, klo)+b*ya(ind, khi)+((a**3-a)*y2a(ind, klo)+(b**3-b)*y2a(ind, khi))*(h**2)/6.
-  RETURN
-END SUBROUTINE splint2D
-END MODULE interpolationFunctions_mod
+    a = (xa(ind, khi)-x)/h !Cubic spline polynomial is now evaluated.
+    b = (x-xa(ind, klo))/h
+    y = a*ya(ind, klo)+b*ya(ind, khi)+((a**3-a)*y2a(ind, klo)+(b**3-b)*y2a(ind, khi))*(h**2)/6.
+    return
+  end subroutine splint2D
+end module interpolationFunctions_mod

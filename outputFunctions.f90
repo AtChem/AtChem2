@@ -1,219 +1,219 @@
-MODULE outputFunctions_mod
-  USE types_mod
-CONTAINS
-SUBROUTINE ro2Sum (ro2, y)
-  real(kind=DP) :: ro2
-  real(kind=DP), intent (in) :: y(*)
-  ro2 = 0.00e+00
-END SUBROUTINE ro2Sum
+module outputFunctions_mod
+  use types_mod
+contains
+  subroutine ro2Sum( ro2, y )
+    real(kind=DP) :: ro2
+    real(kind=DP), intent (in) :: y(*)
+    ro2 = 0.00e+00
+  end subroutine ro2Sum
 
-SUBROUTINE outputEnvVar (t)
-  USE envVars
-  IMPLICIT NONE
+  subroutine outputEnvVar( t )
+    use envVars
+    implicit none
 
-  INTEGER(kind=NPI) :: i
-  real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: i
+    real(kind=DP), intent(in) :: t
 
-  IF (ro2<0) ro2 = 0.0
-  WRITE (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+    if (ro2<0) ro2 = 0.0
+    write (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
-  RETURN
-END SUBROUTINE outputEnvVar
+    return
+  end subroutine outputEnvVar
 
-!--------------------------------------------------------------------
-SUBROUTINE outputjfy (fy, nsp, t)
-  IMPLICIT NONE
-  INTEGER(kind=NPI), intent(in) :: nsp
-  INTEGER(kind=NPI) :: i, j
-  real(kind=DP), intent(in) :: fy(nsp, nsp), t
+  !--------------------------------------------------------------------
+  subroutine outputjfy( fy, nsp, t )
+    implicit none
+    integer(kind=NPI), intent(in) :: nsp
+    integer(kind=NPI) :: i, j
+    real(kind=DP), intent(in) :: fy(nsp, nsp), t
 
-  ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
-  DO i = 1, nsp
-     WRITE (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
-  ENDDO
-  WRITE (55,*) '---------------'
-END SUBROUTINE outputjfy
+    ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
+    do i = 1, nsp
+      write (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
+    end do
+    write (55,*) '---------------'
+  end subroutine outputjfy
 
-!     ---------------------------------------------------------------
-SUBROUTINE outputPhotolysisRates (j, t)
-  USE photolysisRates, ONLY: nrOfPhotoRates, ck
+  !     ---------------------------------------------------------------
+  subroutine outputPhotolysisRates( j, t )
+    use photolysisRates, only : nrOfPhotoRates, ck
 
-  real(kind=DP), intent(in) :: j(*), t
-  INTEGER(kind=NPI) :: i
+    real(kind=DP), intent(in) :: j(*), t
+    integer(kind=NPI) :: i
 
-  WRITE (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
-  RETURN
-END SUBROUTINE outputPhotolysisRates
+    write (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    return
+  end subroutine outputPhotolysisRates
 
-!     ---------------------------------------------------------------
-SUBROUTINE getConcForSpecInt (masterConcList, speciesOfInterest, interestSpeciesConcList)
-  ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
-  ! in the same order as the species are in specInt
-  real(kind=DP), intent(in)  :: masterConcList(:)
-  INTEGER(kind=NPI), intent(in) :: speciesOfInterest(:)
-  real(kind=DP), intent(out) :: interestSpeciesConcList(:)
-  INTEGER(kind=NPI) :: i, j
-  ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
-  ! using the elements of specInt as a key
-  IF (size(interestSpeciesConcList)/=size(speciesOfInterest)) THEN
-    STOP 'size(interestSpeciesConcList)/=size(speciesOfInterest) in getConcForSpecInt'
-  END IF
-  DO i = 1, size(masterConcList)
-     DO j = 1, size(speciesOfInterest)
-        IF (speciesOfInterest(j)==i) THEN
-           interestSpeciesConcList(j) = masterConcList(i)
-        ENDIF
-     ENDDO
-  ENDDO
-  RETURN
-END SUBROUTINE getConcForSpecInt
+  !     ---------------------------------------------------------------
+  subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
+    ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
+    ! in the same order as the species are in specInt
+    real(kind=DP), intent(in) :: masterConcList(:)
+    integer(kind=NPI), intent(in) :: speciesOfInterest(:)
+    real(kind=DP), intent(out) :: interestSpeciesConcList(:)
+    integer(kind=NPI) :: i, j
+    ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
+    ! using the elements of specInt as a key
+    if (size(interestSpeciesConcList)/=size(speciesOfInterest)) then
+      stop 'size(interestSpeciesConcList)/=size(speciesOfInterest) in getConcForSpecInt'
+    end if
+    do i = 1, size(masterConcList)
+      do j = 1, size(speciesOfInterest)
+        if (speciesOfInterest(j)==i) then
+          interestSpeciesConcList(j) = masterConcList(i)
+        end if
+      end do
+    end do
+    return
+  end subroutine getConcForSpecInt
 
-!     ---------------------------------------------------------------
-SUBROUTINE getReaction (speciesNames, reactionNumber, reaction)
-  ! Given a list speciesNames, and an integer reactionNumber, return reaction,
-  ! a string containing
-  USE reactionStructure
-  USE storage, ONLY : maxSpecLength, maxReactionStringLength
-  IMPLICIT NONE
+  !     ---------------------------------------------------------------
+  subroutine getReaction( speciesNames, reactionNumber, reaction )
+    ! Given a list speciesNames, and an integer reactionNumber, return reaction,
+    ! a string containing
+    use reactionStructure
+    use storage, only : maxSpecLength, maxReactionStringLength
+    implicit none
 
-  CHARACTER(LEN=maxSpecLength) :: reactants(10), products(10)
-  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(*)
-  INTEGER(kind=NPI) :: i, numReactants, numProducts
-  INTEGER(kind=NPI), intent(in) :: reactionNumber
-  CHARACTER(LEN=maxReactionStringLength) :: reactantStr, productStr
-  CHARACTER(LEN=maxReactionStringLength), intent(out) :: reaction
+    character(len=maxSpecLength) :: reactants(10), products(10)
+    character(len=maxSpecLength), intent(in) :: speciesNames(*)
+    integer(kind=NPI) :: i, numReactants, numProducts
+    integer(kind=NPI), intent(in) :: reactionNumber
+    character(len=maxReactionStringLength) :: reactantStr, productStr
+    character(len=maxReactionStringLength), intent(out) :: reaction
 
-  ! Loop over reactants, and copy the reactant name for any reactant used in
-  ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
-  ! String these together with '+', and append a '='
-  numReactants = 0
-  DO i = 1, lhs_size
-     IF (clhs(1, i)==reactionNumber) THEN
+    ! Loop over reactants, and copy the reactant name for any reactant used in
+    ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
+    ! String these together with '+', and append a '='
+    numReactants = 0
+    do i = 1, lhs_size
+      if (clhs(1, i)==reactionNumber) then
         numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
-     ENDIF
-  ENDDO
+      end if
+    end do
 
-  reactantStr = ' '
-  DO i = 1, numReactants
-     reactantStr = trim(adjustl(trim(reactantStr) // trim(reactants(i))))
-     IF (i<numReactants) THEN
+    reactantStr = ' '
+    do i = 1, numReactants
+      reactantStr = trim(adjustl(trim(reactantStr) // trim(reactants(i))))
+      if (i<numReactants) then
         reactantStr = trim(reactantStr) // '+'
-     ENDIF
-  ENDDO
-  reactantStr = trim(reactantStr) // '='
+      end if
+    end do
+    reactantStr = trim(reactantStr) // '='
 
 
-  ! Loop over products, and copy the product name for any product created in
-  ! reaction reactionNumber. use numProducts as a counter of the number of products.
-  ! String these together with '+', and append this to reactantStr. Save the
-  ! result in reaction, which is returned
-  numProducts = 0
-  DO i = 1, rhs_size
-     IF (crhs(1, i)==reactionNumber) THEN
+    ! Loop over products, and copy the product name for any product created in
+    ! reaction reactionNumber. use numProducts as a counter of the number of products.
+    ! String these together with '+', and append this to reactantStr. Save the
+    ! result in reaction, which is returned
+    numProducts = 0
+    do i = 1, rhs_size
+      if (crhs(1, i)==reactionNumber) then
         numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))
-     ENDIF
-  ENDDO
+      end if
+    end do
 
-  productStr = ' '
-  DO i = 1, numProducts
-     productStr = trim(adjustl(trim(productStr) // trim(products(i))))
-     IF (i<numProducts) THEN
+    productStr = ' '
+    do i = 1, numProducts
+      productStr = trim(adjustl(trim(productStr) // trim(products(i))))
+      if (i<numProducts) then
         productStr = trim(productStr) // '+'
-     ENDIF
-  ENDDO
+      end if
+    end do
 
-  reaction = trim(reactantStr) // trim(productStr)
+    reaction = trim(reactantStr) // trim(productStr)
 
-  RETURN
-END SUBROUTINE getReaction
+    return
+  end subroutine getReaction
 
-SUBROUTINE outputRates (r, arrayLen, t, p, flag, speciesNames)
+  subroutine outputRates( r, arrayLen, t, p, flag, speciesNames )
 
-  USE reactionStructure
-  USE storage, ONLY : maxSpecLength, maxReactionStringLength
-  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
-  IMPLICIT NONE
+    use reactionStructure
+    use storage, only : maxSpecLength, maxReactionStringLength
+    use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+    implicit none
 
-  INTEGER(kind=NPI), intent(in) :: r(:, :), arrayLen(:)
-  real(kind=DP), intent(in) :: t, p(:)
-  INTEGER, intent(in) :: flag
-  CHARACTER(LEN=maxSpecLength), intent(in) :: speciesNames(:)
-  INTEGER(kind=NPI) :: i, j
-  CHARACTER(LEN=maxReactionStringLength) :: reaction
+    integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
+    real(kind=DP), intent(in) :: t, p(:)
+    integer, intent(in) :: flag
+    character(len=maxSpecLength), intent(in) :: speciesNames(:)
+    integer(kind=NPI) :: i, j
+    character(len=maxReactionStringLength) :: reaction
 
-  IF (size( r, 1 ) /= size( arrayLen )) THEN
-    STOP "size( r, 1 ) /= size( arrayLen ) in outputRates()."
-  ENDIF
-  DO i = 1, size( arrayLen )
-     IF (arrayLen(i) > size( r, 2 )) THEN
-       WRITE (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i
-       STOP
-     ENDIF
-     DO j = 2, arrayLen(i)
-        IF (r(i, j)/=-1) THEN
+    if (size( r, 1 ) /= size( arrayLen )) then
+      stop "size( r, 1 ) /= size( arrayLen ) in outputRates()."
+    end if
+    do i = 1, size( arrayLen )
+      if (arrayLen(i) > size( r, 2 )) then
+        write (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i
+        stop
+      end if
+      do j = 2, arrayLen(i)
+        if (r(i, j)/=-1) then
 
-           CALL getReaction (speciesNames, r(i, j), reaction)
-           ! Flag = 0 for reaction, 1 for loss
-           IF (flag==0) THEN
-              WRITE (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
-           ELSE
-              IF (flag/=1) THEN
-                 STOP "Unexpected flag value to outputRates()"
-              END IF
-              WRITE (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
-           END IF
-        ENDIF
-     ENDDO
-  ENDDO
-  RETURN
-END SUBROUTINE outputRates
+          call getReaction( speciesNames, r(i, j), reaction )
+          ! Flag = 0 for reaction, 1 for loss
+          if (flag==0) then
+            write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
+          else
+            if (flag/=1) then
+              stop "Unexpected flag value to outputRates()"
+            end if
+            write (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
+          end if
+        end if
+      end do
+    end do
+    return
+  end subroutine outputRates
 
-SUBROUTINE outputInstantaneousRates (time, numReac)
-  USE reactionStructure
-  USE directories, ONLY : instantaneousRates_dir
-  USE productionAndLossRates, ONLY : ir
-  USE storage, ONLY : maxFilepathLength
-  USE, INTRINSIC :: iso_fortran_env, ONLY : stderr=>error_unit
-  IMPLICIT NONE
+  subroutine outputInstantaneousRates( time, numReac )
+    use reactionStructure
+    use directories, only : instantaneousRates_dir
+    use productionAndLossRates, only : ir
+    use storage, only : maxFilepathLength
+    use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+    implicit none
 
-  INTEGER(kind=QI), intent(in) :: time
-  INTEGER(kind=NPI), intent(in) :: numReac
-  INTEGER(kind=NPI) :: i
-  CHARACTER(LEN=maxFilepathLength+30) :: irfileLocation
-  CHARACTER(LEN=30) :: strTime
+    integer(kind=QI), intent(in) :: time
+    integer(kind=NPI), intent(in) :: numReac
+    integer(kind=NPI) :: i
+    character(len=maxFilepathLength+30) :: irfileLocation
+    character(len=30) :: strTime
 
-  WRITE (strTime,*) time
+    write (strTime,*) time
 
-  irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
+    irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
 
-  OPEN (10, file=irfileLocation)
-  DO i = 1, numReac
-     WRITE (10,*) ir(i)
-  ENDDO
-  CLOSE (10, status='keep')
+    open (10, file=irfileLocation)
+    do i = 1, numReac
+      write (10,*) ir(i)
+    end do
+    close (10, status='keep')
 
 
-  RETURN
-END SUBROUTINE outputInstantaneousRates
+    return
+  end subroutine outputInstantaneousRates
 
-SUBROUTINE outputSpeciesOutputRequired (t, arrayOfConcs, arrayOfConcsSize)
-  ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
-  ! If any concentration is negative, then set it to zero before printing.
-  IMPLICIT NONE
+  subroutine outputSpeciesOutputRequired( t, arrayOfConcs, arrayOfConcsSize )
+    ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
+    ! If any concentration is negative, then set it to zero before printing.
+    implicit none
 
-  real(kind=DP), intent(in) :: t
-  real(kind=DP), intent(inout) :: arrayOfConcs(*)
-  INTEGER(kind=NPI), intent(in) :: arrayOfConcsSize
-  INTEGER(kind=NPI) :: i
+    real(kind=DP), intent(in) :: t
+    real(kind=DP), intent(inout) :: arrayOfConcs(*)
+    integer(kind=NPI), intent(in) :: arrayOfConcsSize
+    integer(kind=NPI) :: i
 
-  DO i = 1, arrayOfConcsSize
-     IF (arrayOfConcs(i)<0) THEN
+    do i = 1, arrayOfConcsSize
+      if (arrayOfConcs(i)<0) then
         arrayOfConcs(i) = 0d0
-     ENDIF
-  END DO
-  WRITE (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
-  RETURN
-END SUBROUTINE outputSpeciesOutputRequired
-END MODULE outputFunctions_mod
+      end if
+    end do
+    write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
+    return
+  end subroutine outputSpeciesOutputRequired
+end module outputFunctions_mod

@@ -1,341 +1,341 @@
 module types_mod
-   use, intrinsic :: iso_fortran_env
-   implicit none
+  use, intrinsic :: iso_fortran_env
+  implicit none
 
-   public ::  SI, DI, QI, SP, DP, QP
+  public :: SI, DI, QI, SP, DP, QP
 
-   integer, parameter :: SI = INT8
-   integer, parameter :: DI = INT16
-   integer, parameter :: QI = INT32
-   integer, parameter :: LONG = INT64
-   integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
-   integer, parameter :: IntErr = INT32
-   integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
-   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
-   integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
+  integer, parameter :: SI = INT8
+  integer, parameter :: DI = INT16
+  integer, parameter :: QI = INT32
+  integer, parameter :: LONG = INT64
+  integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
+  integer, parameter :: IntErr = INT32
+  integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
+  integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
+  integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
 contains
 end module types_mod
 
-MODULE storage
-  IMPLICIT NONE
-  INTEGER, PARAMETER :: maxSpecLength=10
-  INTEGER, PARAMETER :: maxPhotoRateNameLength=6
-  INTEGER, PARAMETER :: maxEnvVarNameLength=9
-  INTEGER, PARAMETER :: maxEnvVarLength=15
-  INTEGER, PARAMETER :: maxFilepathLength=100
-  INTEGER, PARAMETER :: maxReactionStringLength=1000
-END MODULE
+module storage
+  implicit none
+  integer, PARAMETER :: maxSpecLength=10
+  integer, PARAMETER :: maxPhotoRateNameLength=6
+  integer, PARAMETER :: maxEnvVarNameLength=9
+  integer, PARAMETER :: maxEnvVarLength=15
+  integer, PARAMETER :: maxFilepathLength=100
+  integer, PARAMETER :: maxReactionStringLength=1000
+end module
 
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
-MODULE directories
-  USE storage, ONLY : maxFilepathLength
-  IMPLICIT NONE
+module directories
+  use storage, only : maxFilepathLength
+  implicit none
 
   SAVE
-  CHARACTER(LEN=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
+  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
 
-END MODULE directories
+end module directories
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************
-MODULE date
-  USE types_mod
-  IMPLICIT NONE
+module date
+  use types_mod
+  implicit none
 
   SAVE
-  INTEGER :: day, month, year, dayOfYear
+  integer :: day, month, year, dayOfYear
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 
-END MODULE date
+end module date
 !    ********************************************************************************************************
 !    ENVIRONMENT VARIABLES MODULE
 !    ********************************************************************************************************
-MODULE envVars
-  USE types_mod
-  USE storage, ONLY : maxEnvVarNameLength, maxEnvVarLength
-  IMPLICIT NONE
+module envVars
+  use types_mod
+  use storage, only : maxEnvVarNameLength, maxEnvVarLength
+  implicit none
 
   SAVE
-  CHARACTER(LEN=maxEnvVarNameLength), ALLOCATABLE :: envVarNames(:)
-  CHARACTER(LEN=maxEnvVarLength), ALLOCATABLE :: envVarTypes(:)
-  INTEGER, ALLOCATABLE :: envVarTypesNum(:)
-  real(kind=DP), ALLOCATABLE :: envVarFixedValues(:), currentEnvVarValues(:)
-  INTEGER(kind=NPI) :: numEnvVars
-  INTEGER :: tempNum
+  character(len=maxEnvVarNameLength), allocatable :: envVarNames(:)
+  character(len=maxEnvVarLength), allocatable :: envVarTypes(:)
+  integer, allocatable :: envVarTypesNum(:)
+  real(kind=DP), allocatable :: envVarFixedValues(:), currentEnvVarValues(:)
+  integer(kind=NPI) :: numEnvVars
+  integer :: tempNum
 
 
-  real(kind=DP), ALLOCATABLE :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
-  INTEGER(kind=NPI), ALLOCATABLE :: envVarNumberOfPoints(:)
+  real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
+  integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
 
-END MODULE envVars
+end module envVars
 
 !    ********************************************************************************************************
-MODULE constraints
-  USE types_mod
-  IMPLICIT NONE
+module constraints
+  use types_mod
+  implicit none
   SAVE
-  INTEGER(kind=NPI) :: numberOfConstrainedSpecies
-  INTEGER :: maxNumberOfDataPoints
-  INTEGER(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
-  INTEGER(kind=NPI), ALLOCATABLE :: constrainedSpecies(:)
-  real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
+  integer(kind=NPI) :: numberOfConstrainedSpecies
+  integer :: maxNumberOfDataPoints
+  integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
+  integer(kind=NPI), allocatable :: constrainedSpecies(:)
+  real(kind=DP), allocatable :: constrainedConcs(:)
 
   PRIVATE :: numberOfConstrainedSpecies, constrainedSpecies, constrainedConcs
   PUBLIC :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies
 
-CONTAINS
+contains
 
   ! METHODS FOR numberOfConstrainedSpecies
 
-  SUBROUTINE getNumberOfConstrainedSpecies (n)
-    INTEGER(kind=NPI) :: n
+  subroutine getNumberOfConstrainedSpecies( n )
+    integer(kind=NPI) :: n
     n = numberOfConstrainedSpecies
-  END SUBROUTINE getNumberOfConstrainedSpecies
+  end subroutine getNumberOfConstrainedSpecies
 
-  SUBROUTINE setNumberOfConstrainedSpecies (n)
-    INTEGER(kind=NPI) :: n
+  subroutine setNumberOfConstrainedSpecies( n )
+    integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
-    ALLOCATE (constrainedSpecies(n), constrainedConcs(n))
-    WRITE (*,*) 'Setting size of constraint arrays, n = ', n
-  END SUBROUTINE setNumberOfConstrainedSpecies
+    allocate (constrainedSpecies(n), constrainedConcs(n))
+    write (*,*) 'Setting size of constraint arrays, n = ', n
+  end subroutine setNumberOfConstrainedSpecies
 
-  SUBROUTINE deallocateConstrainedSpecies ()
-    DEALLOCATE (constrainedSpecies, constrainedConcs)
-  END SUBROUTINE deallocateConstrainedSpecies
+  subroutine deallocateConstrainedSpecies()
+    deallocate (constrainedSpecies, constrainedConcs)
+  end subroutine deallocateConstrainedSpecies
 
   ! METHODS FOR constrainedConcs
 
-  SUBROUTINE getConstrainedConc (n, r)
-    INTEGER(kind=NPI) :: n
+  subroutine getConstrainedConc( n, r )
+    integer(kind=NPI) :: n
     real(kind=DP) :: r
     r = constrainedConcs(n)
-  END SUBROUTINE getConstrainedConc
+  end subroutine getConstrainedConc
 
-  SUBROUTINE setConstrainedConc (n, r)
-    INTEGER(kind=NPI) :: n
+  subroutine setConstrainedConc( n, r )
+    integer(kind=NPI) :: n
     real(kind=DP) :: r
     constrainedConcs(n) = r
-  END SUBROUTINE setConstrainedConc
+  end subroutine setConstrainedConc
 
   ! METHODS FOR constrainedSpecies
 
-  SUBROUTINE getConstrainedSpecies (n, j)
-    INTEGER(kind=NPI) :: n, j
+  subroutine getConstrainedSpecies( n, j )
+    integer(kind=NPI) :: n, j
     j = constrainedSpecies(n)
-  END SUBROUTINE getConstrainedSpecies
+  end subroutine getConstrainedSpecies
 
-  SUBROUTINE setConstrainedSpecies (n, j)
-    INTEGER(kind=NPI) :: n, j
+  subroutine setConstrainedSpecies( n, j )
+    integer(kind=NPI) :: n, j
     constrainedSpecies(n) = j
-  END SUBROUTINE setConstrainedSpecies
+  end subroutine setConstrainedSpecies
 
-END MODULE constraints
+end module constraints
 
-MODULE species
-  USE types_mod
-  USE storage, ONLY : maxSpecLength
+module species
+  use types_mod
+  use storage, only : maxSpecLength
 
-  IMPLICIT NONE
+  implicit none
   SAVE
-  INTEGER(kind=NPI) :: numSpecies, numReactions
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: speciesList(:)
+  integer(kind=NPI) :: numSpecies, numReactions
+  character(len=maxSpecLength), allocatable :: speciesList(:)
 
-  INTEGER(kind=NPI) :: i
+  integer(kind=NPI) :: i
 
   PRIVATE :: numSpecies, speciesList, i
   PUBLIC :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
   PUBLIC :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
-CONTAINS
+contains
 
-  FUNCTION getNumberOfSpecies( ) result (n)
-    INTEGER(kind=NPI) :: n
+  function getNumberOfSpecies() result ( n )
+    integer(kind=NPI) :: n
     n = numSpecies
-  END FUNCTION getNumberOfSpecies
+  end function getNumberOfSpecies
 
-  SUBROUTINE setNumberOfSpecies (n)
-    INTEGER(kind=NPI) :: n
+  subroutine setNumberOfSpecies( n )
+    integer(kind=NPI) :: n
     numSpecies = n
-    ALLOCATE (speciesList(n))
-  END SUBROUTINE setNumberOfSpecies
+    allocate (speciesList(n))
+  end subroutine setNumberOfSpecies
 
-  FUNCTION getNumberOfReactions( ) result (n)
-    INTEGER(kind=NPI) :: n
+  function getNumberOfReactions() result ( n )
+    integer(kind=NPI) :: n
     n = numReactions
-  END FUNCTION getNumberOfReactions
+  end function getNumberOfReactions
 
-  SUBROUTINE setNumberOfReactions (n)
-    INTEGER(kind=NPI) :: n
+  subroutine setNumberOfReactions( n )
+    integer(kind=NPI) :: n
     numReactions = n
-  END SUBROUTINE setNumberOfReactions
+  end subroutine setNumberOfReactions
 
-  SUBROUTINE deallocateSpeciesList
-    DEALLOCATE (speciesList)
-  END SUBROUTINE deallocateSpeciesList
+  subroutine deallocateSpeciesList
+    deallocate (speciesList)
+  end subroutine deallocateSpeciesList
 
-  SUBROUTINE getSpeciesList (sl)
-    CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: sl(:)
-    ALLOCATE( sl(numSpecies) )
-    DO i = 1, numSpecies
-       sl(i) = speciesList(i)
-    ENDDO
-  END SUBROUTINE getSpeciesList
+  subroutine getSpeciesList( sl )
+    character(len=maxSpecLength), allocatable :: sl(:)
+    allocate( sl(numSpecies) )
+    do i = 1, numSpecies
+      sl(i) = speciesList(i)
+    end do
+  end subroutine getSpeciesList
 
-  SUBROUTINE setSpeciesList (sl)
-    CHARACTER(LEN=maxSpecLength) :: sl(:)
-    DO i = 1, numSpecies
-       speciesList(i) = sl(i)
-    ENDDO
-  END SUBROUTINE setSpeciesList
+  subroutine setSpeciesList( sl )
+    character(len=maxSpecLength) :: sl(:)
+    do i = 1, numSpecies
+      speciesList(i) = sl(i)
+    end do
+  end subroutine setSpeciesList
 
-END MODULE species
+end module species
 
 !    ********************************************************************************************************
 !    INTERPOLATION METHOD MODULE
 !    ********************************************************************************************************
-MODULE interpolationMethod
-  USE types_mod
-  IMPLICIT NONE
+module interpolationMethod
+  use types_mod
+  implicit none
   SAVE
-  INTEGER(kind=SI), PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  integer(kind=SI), PRIVATE :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   PUBLIC :: getSpeciesInterpMethod, setSpeciesInterpMethod
   PUBLIC :: getConditionsInterpMethod, setConditionsInterpMethod
   PUBLIC :: getDecInterpMethod, setDecInterpMethod
 
-CONTAINS
+contains
 
-  SUBROUTINE getSpeciesInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine getSpeciesInterpMethod( n )
+    integer(kind=SI) :: n
     n = speciesInterpMethod
-  END SUBROUTINE getSpeciesInterpMethod
+  end subroutine getSpeciesInterpMethod
 
-  SUBROUTINE setSpeciesInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine setSpeciesInterpMethod( n )
+    integer(kind=SI) :: n
     speciesInterpMethod = n
-  END SUBROUTINE setSpeciesInterpMethod
+  end subroutine setSpeciesInterpMethod
 
-  SUBROUTINE getConditionsInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine getConditionsInterpMethod( n )
+    integer(kind=SI) :: n
     n = conditionsInterpMethod
-  END SUBROUTINE getConditionsInterpMethod
+  end subroutine getConditionsInterpMethod
 
-  SUBROUTINE setConditionsInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine setConditionsInterpMethod( n )
+    integer(kind=SI) :: n
     conditionsInterpMethod = n
-  END SUBROUTINE setConditionsInterpMethod
+  end subroutine setConditionsInterpMethod
 
-  SUBROUTINE getDecInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine getDecInterpMethod( n )
+    integer(kind=SI) :: n
     n = decInterpMethod
-  END SUBROUTINE getDecInterpMethod
+  end subroutine getDecInterpMethod
 
-  SUBROUTINE setDecInterpMethod (n)
-    INTEGER(kind=SI) :: n
+  subroutine setDecInterpMethod( n )
+    integer(kind=SI) :: n
     decInterpMethod = n
-  END SUBROUTINE setDecInterpMethod
+  end subroutine setDecInterpMethod
 
-END MODULE interpolationMethod
+end module interpolationMethod
 
 !    ********************************************************************************************************
 !    INTERPOLATION METHOD MODULE
 !    ********************************************************************************************************
-MODULE reactionStructure
-  USE types_mod
-  IMPLICIT NONE
+module reactionStructure
+  use types_mod
+  implicit none
 
   SAVE
-  INTEGER(kind=NPI), ALLOCATABLE :: clhs(:,:), crhs(:,:)
-  INTEGER(kind=NPI) :: lhs_size, rhs_size
-  real(kind=DP), ALLOCATABLE :: ccoeff(:)
+  integer(kind=NPI), allocatable :: clhs(:,:), crhs(:,:)
+  integer(kind=NPI) :: lhs_size, rhs_size
+  real(kind=DP), allocatable :: ccoeff(:)
 
-END MODULE reactionStructure
+end module reactionStructure
 
 !    ********************************************************************************************************
 !    PHOTOLYSIS RATES METHOD MODULE
 !    ********************************************************************************************************
-MODULE photolysisRates
-  USE types_mod
-  USE storage, ONLY : maxPhotoRateNameLength
-  IMPLICIT NONE
+module photolysisRates
+  use types_mod
+  use storage, only : maxPhotoRateNameLength
+  implicit none
 
   SAVE
-  INTEGER, PARAMETER :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
-  INTEGER(kind=NPI) :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
-  INTEGER(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
-  INTEGER(kind=NPI) :: nrOfPhotoRates
-  LOGICAL :: usePhotolysisConstants
+  integer, PARAMETER :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
+  integer(kind=NPI) :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
+  integer(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
+  integer(kind=NPI) :: nrOfPhotoRates
+  logical :: usePhotolysisConstants
   real(kind=DP) :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
   real(kind=DP) :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
-  CHARACTER(LEN=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
-  CHARACTER(LEN=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
-  real(kind=DP), ALLOCATABLE :: photoX (:,:), photoY (:,:), photoY2 (:,:)
-  INTEGER(kind=NPI), ALLOCATABLE :: photoNumberOfPoints(:)
+  character(len=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
+  character(len=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
+  real(kind=DP), allocatable :: photoX (:,:), photoY (:,:), photoY2 (:,:)
+  integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
 
-END MODULE photolysisRates
+end module photolysisRates
 
 !    ********************************************************************************************************
 !    CHEMICAL CONSTRAINTS MODULE
 !    ********************************************************************************************************
-MODULE chemicalConstraints
-  USE types_mod
-  USE storage, ONLY : maxSpecLength
-  IMPLICIT NONE
+module chemicalConstraints
+  use types_mod
+  use storage, only : maxSpecLength
+  implicit none
 
   SAVE
-  real(kind=DP), ALLOCATABLE :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
-  real(kind=DP), ALLOCATABLE :: constrainedConcs(:)
-  INTEGER(kind=NPI) :: numberOfConstrainedSpecies
-  CHARACTER(LEN=maxSpecLength), ALLOCATABLE :: constrainedName(:)
-  INTEGER(kind=NPI), ALLOCATABLE :: speciesNumberOfPoints(:), constrainedSpecies(:)
+  real(kind=DP), allocatable :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
+  real(kind=DP), allocatable :: constrainedConcs(:)
+  integer(kind=NPI) :: numberOfConstrainedSpecies
+  character(len=maxSpecLength), allocatable :: constrainedName(:)
+  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)
 
-END MODULE chemicalConstraints
+end module chemicalConstraints
 
 !    ********************************************************************************************************
 !    PHOTOLYSIS RATES PARAMETERS MODULE
 !    ********************************************************************************************************
-MODULE zenithData
-  USE types_mod
-  IMPLICIT NONE
+module zenithData
+  use types_mod
+  implicit none
 
   SAVE
   real(kind=DP) :: lat, longt, lha, sinld, cosld
 
-END MODULE zenithData
+end module zenithData
 
-MODULE zenithData1
-  USE types_mod
-  IMPLICIT NONE
+module zenithData1
+  use types_mod
+  implicit none
 
   SAVE
   real(kind=DP) :: cosX, secX
 
-END MODULE zenithData1
+end module zenithData1
 
 !    ********************************************************************************************************
 !    RATES OF PRODUCTION AND LOSS MODULE
 !    ********************************************************************************************************
-MODULE productionAndLossRates
-  USE types_mod
-  IMPLICIT NONE
+module productionAndLossRates
+  use types_mod
+  implicit none
 
   SAVE
-  real(kind=DP), ALLOCATABLE :: lossRates(:), productionRates(:), ir(:)
+  real(kind=DP), allocatable :: lossRates(:), productionRates(:), ir(:)
 
-END MODULE productionAndLossRates
+end module productionAndLossRates
 
 !    ----------------------------------------------------------------
 !     *******************************************************************************************************
 !    ********************************************************************************************************
 !    SOLAR ZENITH ANGLE CALCULATION VARIABLES MODULE
 !    ********************************************************************************************************
-MODULE SZACalcVars
-  USE types_mod
-  IMPLICIT NONE
+module SZACalcVars
+  use types_mod
+  implicit none
 
   SAVE
   real(kind=DP) :: latitude, longitude
 
-END MODULE SZACalcVars
+end module SZACalcVars

@@ -341,9 +341,9 @@ PROGRAM ATCHEM
   preconBandLower = solverParameters(10)
 
   ! float format
-  100 FORMAT (A17, E11.3)
+  100 format (A17, E11.3)
   ! integer format
-  200 FORMAT (A17, I11)
+  200 format (A17, I11)
   write (*,*) 'Solver parameters:'
   write (*,*) '------------------'
   write (*, 100) 'atol: ', atol
@@ -401,11 +401,11 @@ PROGRAM ATCHEM
   irOutStepSize = modelParameters(16)
 
   ! float format
-  300 FORMAT (A52, E11.3)
+  300 format (A52, E11.3)
   ! integer format
-  400 FORMAT (A52, I11)
+  400 format (A52, I11)
   ! string format
-  500 FORMAT (A52, A17)
+  500 format (A52, A17)
   write (*,*) 'Model parameters:'
   write (*,*) '-----------------'
   write (*, 400) 'number of steps: ', maxNumTimesteps
@@ -510,7 +510,7 @@ PROGRAM ATCHEM
   call FNVINITS( 1, neq, ier )
   if (ier/=0) then
     write (stderr, 20) ier
-    20   FORMAT (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
+    20   format (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
     stop
   end if
 
@@ -519,7 +519,7 @@ PROGRAM ATCHEM
                   iout, rout, ipar, rpar, ier )
   if (ier/=0) then
     write (stderr, 30) ier
-    30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
+    30   format (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
     stop
   end if
 
@@ -573,7 +573,7 @@ PROGRAM ATCHEM
 
   if (ier/=0) then
     write (stderr, 40) ier
-    40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
+    40   format (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
     call FCVFREE()
     stop
   end if

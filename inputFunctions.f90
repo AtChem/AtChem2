@@ -708,101 +708,101 @@ contains
           ! Copy 3rd column value to envVarFixedValues(i)
           read (envVarTypes(i),*) envVarFixedValues(i)
       end select
-  end do
-  close (10, status='keep')
+    end do
+    close (10, status='keep')
 
-  write (*,*) 'Finished reading environment variables.'
-  write (*,*)
+    write (*,*) 'Finished reading environment variables.'
+    write (*,*)
 
-  ! Allocate variables for next section
-  allocate (envVarX (numEnvVars, maxNumberOfDataPoints))
-  allocate (envVarY (numEnvVars, maxNumberOfDataPoints))
-  allocate (envVarY2 (numEnvVars, maxNumberOfDataPoints))
-  allocate (envVarNumberOfPoints(numEnvVars))
+    ! Allocate variables for next section
+    allocate (envVarX (numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarY (numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarY2 (numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarNumberOfPoints(numEnvVars))
 
-  ! TODO: convert this to a command line input argument
-  fileLocationPrefix = trim(env_constraints_dir) // "/"
-  ! If environment variable is constrained, read in constraint data
-  write (*,*) 'Checking for constrained environment variables...'
-  do i = 1, numEnvVars
-    if (envVarTypes(i)=='CONSTRAINED') then
+    ! TODO: convert this to a command line input argument
+    fileLocationPrefix = trim(env_constraints_dir) // "/"
+    ! If environment variable is constrained, read in constraint data
+    write (*,*) 'Checking for constrained environment variables...'
+    do i = 1, numEnvVars
+      if (envVarTypes(i)=='CONSTRAINED') then
 
-      write (*,*) 'Reading constraint data for', envVarNames(i)
+        write (*,*) 'Reading constraint data for', envVarNames(i)
 
-      fileLocation = trim(fileLocationPrefix) // trim(envVarNames(i))
+        fileLocation = trim(fileLocationPrefix) // trim(envVarNames(i))
 
-      open (11, file=fileLocation, status='old')
+        open (11, file=fileLocation, status='old')
 
-      read (11,*) envVarNumberOfPoints(i)
-      do k = 1, envVarNumberOfPoints(i)
-        read (11,*) envVarX (i, k), envVarY (i, k) ! envVarY2 (i, k)
-      end do
-      close (11, status='keep')
-      write (*,*) 'Finished reading constraint data.'
+        read (11,*) envVarNumberOfPoints(i)
+        do k = 1, envVarNumberOfPoints(i)
+          read (11,*) envVarX (i, k), envVarY (i, k) ! envVarY2 (i, k)
+        end do
+        close (11, status='keep')
+        write (*,*) 'Finished reading constraint data.'
+      end if
+    end do
+    write (*,*) 'Finished checking for constrained environment variables.'
+
+    return
+  end subroutine readEnvVar
+
+
+  function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
+    character(len=*), intent(in) :: filename
+    logical, intent(in), optional :: skip_first_line_in
+    integer(kind=NPI) :: counter
+    logical :: skip_first_line
+    character(len=10) :: dummy
+    integer(kind=IntErr) :: ierr
+    ! Set default to not skip first line
+    if (.not. present(skip_first_line_in)) then
+      skip_first_line = .false.
+    else
+      skip_first_line = skip_first_line_in
     end if
-  end do
-  write (*,*) 'Finished checking for constrained environment variables.'
+    counter = 0
+    ierr = 0
+    open (11, file=filename, status='old')
+    if (skip_first_line) READ (11,*, iostat=ierr) dummy
+    do while (ierr==0)
+      counter = counter + 1
+      read (11,*, iostat=ierr) dummy
+    end do
+    close (11, status='keep')
+    ! Remove 1 from counter, as the last wasn't used
+    counter = counter - 1
+    ! Handle the case where skip_first_line==.true. and there was no contents: return 0.
+    if (counter==-1) counter=0
+  end function count_lines_in_file
 
-  return
-end subroutine readEnvVar
+  subroutine read_in_single_column_string_file( filename, output_vector, i, skip_first_line_in )
+    use storage, only : maxSpecLength
 
-
-function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
-  character(len=*), intent(in) :: filename
-  logical, intent(in), optional :: skip_first_line_in
-  integer(kind=NPI) :: counter
-  logical :: skip_first_line
-  character(len=10) :: dummy
-  integer(kind=IntErr) :: ierr
-  ! Set default to not skip first line
-  if (.not. present(skip_first_line_in)) then
-    skip_first_line = .false.
-  else
-    skip_first_line = skip_first_line_in
-  end if
-  counter = 0
-  ierr = 0
-  open (11, file=filename, status='old')
-  if (skip_first_line) READ (11,*, iostat=ierr) dummy
-  do while (ierr==0)
-    counter = counter + 1
-    read (11,*, iostat=ierr) dummy
-  end do
-  close (11, status='keep')
-  ! Remove 1 from counter, as the last wasn't used
-  counter = counter - 1
-  ! Handle the case where skip_first_line==.true. and there was no contents: return 0.
-  if (counter==-1) counter=0
-end function count_lines_in_file
-
-subroutine read_in_single_column_string_file( filename, output_vector, i, skip_first_line_in )
-  use storage, only : maxSpecLength
-
-  character(len=*), intent(in) :: filename
-  character(len=*), intent(out) :: output_vector(:)
-  integer(kind=NPI), intent(out) :: i
-  logical, intent(in), optional :: skip_first_line_in
-  logical :: skip_first_line
-  character(len=maxSpecLength) :: c
-  integer(kind=IntErr) :: ierr
-  ! Set default to not skip first line
-  if (.not. present(skip_first_line_in)) then
-    skip_first_line = .false.
-  else
-    skip_first_line = skip_first_line_in
-  end if
-  open (10, file=filename, status='old')
-  ! Skip first line if necessary.
-  if (skip_first_line) READ (11,*, iostat=ierr) c
-  ! Loop over all lines of the file, and add each entry to r(i)
-  ! Then check we don't have more species of interest than total species
-  i = 0
-  read (10,*, iostat=ierr) c
-  do while (ierr==0)
-    i = i + 1
-    output_vector(i) = c
+    character(len=*), intent(in) :: filename
+    character(len=*), intent(out) :: output_vector(:)
+    integer(kind=NPI), intent(out) :: i
+    logical, intent(in), optional :: skip_first_line_in
+    logical :: skip_first_line
+    character(len=maxSpecLength) :: c
+    integer(kind=IntErr) :: ierr
+    ! Set default to not skip first line
+    if (.not. present(skip_first_line_in)) then
+      skip_first_line = .false.
+    else
+      skip_first_line = skip_first_line_in
+    end if
+    open (10, file=filename, status='old')
+    ! Skip first line if necessary.
+    if (skip_first_line) READ (11,*, iostat=ierr) c
+    ! Loop over all lines of the file, and add each entry to r(i)
+    ! Then check we don't have more species of interest than total species
+    i = 0
     read (10,*, iostat=ierr) c
-  end do
-  close (10, status='keep')
-end subroutine read_in_single_column_string_file
+    do while (ierr==0)
+      i = i + 1
+      output_vector(i) = c
+      read (10,*, iostat=ierr) c
+    end do
+    close (10, status='keep')
+  end subroutine read_in_single_column_string_file
 end module inputFunctions_mod

@@ -299,14 +299,13 @@ contains
   end subroutine readPhotoRates
 
 
-  subroutine readSpeciesOutputRequired( r, i )
+  subroutine readSpeciesOutputRequired( r )
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
     implicit none
 
     character(len=maxSpecLength), allocatable, intent(out) :: r(:)
-    integer(kind=NPI), intent(out) :: i
     character(len=maxFilepathLength) :: filename
     integer(kind=NPI) :: j, nsp, length
 
@@ -314,25 +313,25 @@ contains
     write (*,*) 'Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
     allocate (r(length) )
-    call read_in_single_column_string_file( trim( filename ), r, i )
+    call read_in_single_column_string_file( trim( filename ), r )
     write (*,*) 'Finished reading concentration output from file.'
 
     ! ERROR HANDLING
     nsp = getNumberOfSpecies()
-    if ( i > nsp ) then
+    if ( length > nsp ) then
       write (51,*) 'Error: Number of (number of species output is required for) > (number of species) '
-      write (51,*) "(number of species output is required for) = ", i
+      write (51,*) "(number of species output is required for) = ", length
       write (51,*) "(number of species) = ", nsp
       stop 2
     end if
 
-    write (*,*) 'Output required for concentration of', i, 'species:'
-    if ( i > 3 ) then
+    write (*,*) 'Output required for concentration of', length, 'species:'
+    if ( length > 3 ) then
       write (*,*) 1, r(1)
       write (*,*) '...'
-      write (*,*) i, r(i)
+      write (*,*) length, r(length)
     else
-      do j = 1, i
+      do j = 1, length
         write (*,*) j, r(j)
       end do
     end if
@@ -437,7 +436,7 @@ contains
   end subroutine readInitialConcentrations
 
 
-  subroutine readProductsOrReactantsOfInterest( filename, r, i )
+  subroutine readProductsOrReactantsOfInterest( filename, r, length )
     ! Read in contents of modelConfiguration/production/lossRatesOutput.config, which
     ! contains a list of the species we want to have outputted to mC/production/lossRates.output
     ! Output the contents in r, with i as the length of r.
@@ -446,9 +445,8 @@ contains
 
     character(len=*), intent(in) :: filename
     character(len=maxSpecLength), allocatable, intent(out) :: r(:)
-    integer(kind=NPI), intent(out) :: i
+    integer(kind=NPI), intent(out) :: length
     integer(kind=NPI) :: j
-    integer(kind=NPI) :: length
     logical :: file_exists
 
     inquire(file=trim( filename ), exist=file_exists)
@@ -457,14 +455,14 @@ contains
     else
       length = count_lines_in_file ( trim( filename ), .false. )
       allocate (r(length) )
-      call read_in_single_column_string_file( trim( filename ), r, i, .false. )
+      call read_in_single_column_string_file( trim( filename ), r, .false. )
     end if
-    if ( i > 3 ) then
+    if ( length > 3 ) then
       write (*,*) 1, ' ', r(1)
       write (*,*) '...'
-      write (*,*) i, ' ', r(i)
+      write (*,*) length, ' ', r(length)
     else
-      do j = 1, i
+      do j = 1, length
         write (*,*) j, ' ', r(j)
       end do
     end if
@@ -768,15 +766,15 @@ contains
     if ( counter == -1 ) counter = 0
   end function count_lines_in_file
 
-  subroutine read_in_single_column_string_file( filename, output_vector, i, skip_first_line_in )
+  subroutine read_in_single_column_string_file( filename, output_vector, skip_first_line_in )
     use storage, only : maxSpecLength
 
     character(len=*), intent(in) :: filename
     character(len=*), intent(out) :: output_vector(:)
-    integer(kind=NPI), intent(out) :: i
     logical, intent(in), optional :: skip_first_line_in
     logical :: skip_first_line
     character(len=maxSpecLength) :: c
+    integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
     ! Set default to not skip first line
     if ( .not. present(skip_first_line_in)) then

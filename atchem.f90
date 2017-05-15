@@ -67,7 +67,7 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: returnArray(:), tempSORNumber(:), SORNumber(:)
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
-  integer(kind=NPI) :: speciesOutputRequiredSize, SORNumberSize, prodIntNameSize, reacIntNameSize
+  integer(kind=NPI) :: SORNumberSize, prodIntNameSize, reacIntNameSize
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
@@ -455,7 +455,7 @@ PROGRAM ATCHEM
   write (*,*)
 
   ! fill speciesOutputRequired with the names of species to output to concentration.output
-  call readSpeciesOutputRequired( speciesOutputRequired, speciesOutputRequiredSize )
+  call readSpeciesOutputRequired( speciesOutputRequired )
 
   ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
   call matchNameToNumber( speciesNames, speciesOutputRequired, &

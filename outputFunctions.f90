@@ -118,8 +118,9 @@ contains
   end function getReaction
 
 
-  subroutine outputRates( r, arrayLen, t, p, flag, speciesNames )
+  subroutine outputRates( r, arrayLen, t, p, flag )
     use reactionStructure
+    use species, only : getSpeciesList
     use storage, only : maxSpecLength, maxReactionStringLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
@@ -127,13 +128,16 @@ contains
     integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
     real(kind=DP), intent(in) :: t, p(:)
     integer, intent(in) :: flag
-    character(len=maxSpecLength), intent(in) :: speciesNames(:)
+    character(len=maxSpecLength), allocatable :: speciesNames(:)
     integer(kind=NPI) :: i, j
     character(len=maxReactionStringLength) :: reaction
 
     if ( size( r, 1 ) /= size( arrayLen ) ) then
       stop "size( r, 1 ) /= size( arrayLen ) in outputRates()."
     end if
+
+    speciesNames = getSpeciesList()
+
     do i = 1, size( arrayLen )
       if ( arrayLen(i) > size( r, 2 ) ) then
         write (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i

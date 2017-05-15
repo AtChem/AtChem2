@@ -613,8 +613,8 @@ PROGRAM ATCHEM
 
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames )
-      call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0, speciesNames )
+      call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1 )
+      call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0 )
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)

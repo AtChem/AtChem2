@@ -277,10 +277,10 @@ contains
       end do
     end do
     ! ALLOCATE ARRAY SIZE FOR STOREAGE OF PHOTOLYSIS CONSTRAINT DATA
-    allocate( photoX (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate( photoY (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate( photoY2 (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate( photoNumberOfPoints(numConPhotoRates) )
+    allocate (photoX (numConPhotoRates, maxNumberOfDataPoints) )
+    allocate (photoY (numConPhotoRates, maxNumberOfDataPoints) )
+    allocate (photoY2 (numConPhotoRates, maxNumberOfDataPoints) )
+    allocate (photoNumberOfPoints(numConPhotoRates) )
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
 
@@ -318,7 +318,7 @@ contains
     filename = trim( param_dir ) // '/concentrationOutput.config'
     write (*,*) 'Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
-    allocate( r(length) )
+    allocate (r(length) )
     call read_in_single_column_string_file( trim( filename ), r, i )
     write (*,*) 'Finished reading concentration output from file.'
 
@@ -416,7 +416,7 @@ contains
       write (51,*) "(number of species initial concentrations are set for) = ", numLines
       write (51,*) "(number of species) = ", nsp
     end if
-    allocate( concSpeciesNames(numLines), concentration(numLines) )
+    allocate (concSpeciesNames(numLines), concentration(numLines) )
 
     open (10, file=trim( file ), status='old') ! input file for lhs of equations
     i = 0
@@ -463,7 +463,7 @@ contains
       write (*,*) 'No ' // filename // ' file exists.'
     else
       length = count_lines_in_file ( trim( filename ), .false. )
-      allocate( r(length) )
+      allocate (r(length) )
       call read_in_single_column_string_file( trim( filename ), r, i, .false. )
     end if
     if ( i > 3 ) then
@@ -519,7 +519,7 @@ contains
     write (*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
 
     countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
-    allocate( constrainedSpecies(countOfConNames), constrainedName(countOfConNames) )
+    allocate (constrainedSpecies(countOfConNames), constrainedName(countOfConNames) )
 
 
 
@@ -545,9 +545,9 @@ contains
 
     write (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
     write (*,*) 'Allocating storage for variable constrained species...'
-    allocate( dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
-    allocate( dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
-    allocate( dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
+    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
+    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
+    allocate (dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     write (*,*) 'Finished allocating storage for variable constrained species.'
 
     if ( numberOfVariableConstrainedSpecies > 3 ) then
@@ -562,7 +562,7 @@ contains
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
     write (*,*) 'Reading concentration data for constrained species...'
-    allocate( speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
+    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
     do i = 1, numberOfVariableConstrainedSpecies
       if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
         write (*,*) constrainedName(i), '...'
@@ -589,7 +589,7 @@ contains
 
 
     ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
-    allocate( dataFixedY(countOfFixConSpecNames) )
+    allocate (dataFixedY(countOfFixConSpecNames) )
     write (*,*) 'Reading in the names and concentration of the fixed constrained species ' // &
                 '(in file constrainedFixedSpecies.config)...'
     open (14, file=trim( param_dir ) // '/constrainedFixedSpecies.config', status='old') ! input file
@@ -635,7 +635,7 @@ contains
       stop 2
     end if
 
-    allocate( constrainedConcs(numberOfConstrainedSpecies) )
+    allocate (constrainedConcs(numberOfConstrainedSpecies) )
 
     call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
@@ -684,11 +684,11 @@ contains
     numEnvVars = counter
 
     ! Allocate storage for current values of env vars used for output
-    allocate( currentEnvVarValues(numEnvVars) )
+    allocate (currentEnvVarValues(numEnvVars) )
 
     write (*,*) 'Number of environment variables: ', numEnvVars
-    allocate( envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
-    allocate( envVarFixedValues(numEnvVars) )
+    allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
+    allocate (envVarFixedValues(numEnvVars) )
 
     open (10, file=trim( param_dir ) // '/environmentVariables.config', status='old') ! input file
     ! Read in environment variables - if
@@ -715,27 +715,27 @@ contains
     write (*,*)
 
     ! Allocate variables for next section
-    allocate (envVarX (numEnvVars, maxNumberOfDataPoints))
-    allocate (envVarY (numEnvVars, maxNumberOfDataPoints))
-    allocate (envVarY2 (numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarX(numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarY(numEnvVars, maxNumberOfDataPoints))
+    allocate (envVarY2(numEnvVars, maxNumberOfDataPoints))
     allocate (envVarNumberOfPoints(numEnvVars))
 
     ! TODO: convert this to a command line input argument
-    fileLocationPrefix = trim(env_constraints_dir) // "/"
+    fileLocationPrefix = trim( env_constraints_dir ) // "/"
     ! If environment variable is constrained, read in constraint data
     write (*,*) 'Checking for constrained environment variables...'
     do i = 1, numEnvVars
-      if (envVarTypes(i)=='CONSTRAINED') then
+      if ( envVarTypes(i) == 'CONSTRAINED' ) then
 
         write (*,*) 'Reading constraint data for', envVarNames(i)
 
-        fileLocation = trim(fileLocationPrefix) // trim(envVarNames(i))
+        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
 
         open (11, file=fileLocation, status='old')
 
         read (11,*) envVarNumberOfPoints(i)
         do k = 1, envVarNumberOfPoints(i)
-          read (11,*) envVarX (i, k), envVarY (i, k) ! envVarY2 (i, k)
+          read (11,*) envVarX(i, k), envVarY(i, k) ! envVarY2 (i, k)
         end do
         close (11, status='keep')
         write (*,*) 'Finished reading constraint data.'
@@ -755,7 +755,7 @@ contains
     character(len=10) :: dummy
     integer(kind=IntErr) :: ierr
     ! Set default to not skip first line
-    if (.not. present(skip_first_line_in)) then
+    if (.not. present( skip_first_line_in ) ) then
       skip_first_line = .false.
     else
       skip_first_line = skip_first_line_in
@@ -763,7 +763,7 @@ contains
     counter = 0
     ierr = 0
     open (11, file=filename, status='old')
-    if (skip_first_line) READ (11,*, iostat=ierr) dummy
+    if ( skip_first_line ) read (11,*, iostat=ierr) dummy
     do while (ierr==0)
       counter = counter + 1
       read (11,*, iostat=ierr) dummy
@@ -772,7 +772,7 @@ contains
     ! Remove 1 from counter, as the last wasn't used
     counter = counter - 1
     ! Handle the case where skip_first_line==.true. and there was no contents: return 0.
-    if (counter==-1) counter=0
+    if ( counter == -1 ) counter = 0
   end function count_lines_in_file
 
   subroutine read_in_single_column_string_file( filename, output_vector, i, skip_first_line_in )
@@ -786,19 +786,19 @@ contains
     character(len=maxSpecLength) :: c
     integer(kind=IntErr) :: ierr
     ! Set default to not skip first line
-    if (.not. present(skip_first_line_in)) then
+    if ( .not. present(skip_first_line_in)) then
       skip_first_line = .false.
     else
       skip_first_line = skip_first_line_in
     end if
     open (10, file=filename, status='old')
     ! Skip first line if necessary.
-    if (skip_first_line) READ (11,*, iostat=ierr) c
+    if ( skip_first_line ) read (11,*, iostat=ierr) c
     ! Loop over all lines of the file, and add each entry to r(i)
     ! Then check we don't have more species of interest than total species
     i = 0
     read (10,*, iostat=ierr) c
-    do while (ierr==0)
+    do while ( ierr == 0 )
       i = i + 1
       output_vector(i) = c
       read (10,*, iostat=ierr) c

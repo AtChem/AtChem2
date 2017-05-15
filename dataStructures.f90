@@ -178,7 +178,7 @@ contains
 
   subroutine getSpeciesList( sl )
     character(len=maxSpecLength), allocatable :: sl(:)
-    allocate( sl(numSpecies) )
+    allocate (sl(numSpecies) )
     do i = 1, numSpecies
       sl(i) = speciesList(i)
     end do

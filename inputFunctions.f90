@@ -501,7 +501,7 @@ contains
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
 
-    call getSpeciesList( speciesName )
+    speciesName =  getSpeciesList()
 
     ! READ IN SPECIES TO BE CONSTRAINED
     write (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'

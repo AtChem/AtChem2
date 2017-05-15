@@ -176,13 +176,13 @@ contains
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
-  subroutine getSpeciesList( sl )
+  function getSpeciesList() result ( sl )
     character(len=maxSpecLength), allocatable :: sl(:)
     allocate (sl(numSpecies) )
     do i = 1, numSpecies
       sl(i) = speciesList(i)
     end do
-  end subroutine getSpeciesList
+  end function getSpeciesList
 
   subroutine setSpeciesList( sl )
     character(len=maxSpecLength) :: sl(:)

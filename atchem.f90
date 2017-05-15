@@ -490,7 +490,7 @@ PROGRAM ATCHEM
   call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is y with all the constrained species removed.
-  call removeConstrainedSpeciesFromProbSpec( speciesConcs, z, constrainedSpecies )
+  call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
@@ -820,7 +820,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   call resid( np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size )
 
-  call removeConstrainedSpeciesFromProbSpec( dy, ydot, constrainedSpecies )
+  call removeConstrainedSpeciesFromProbSpec( dy, constrainedSpecies, ydot )
 
   deallocate (dy, z)
   ier = 0

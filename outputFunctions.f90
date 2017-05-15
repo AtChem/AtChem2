@@ -39,11 +39,11 @@ contains
   end subroutine outputjfy
 
   !     ---------------------------------------------------------------
-  subroutine outputPhotolysisRates( j, t )
-    use photolysisRates, only : nrOfPhotoRates, ck
+  subroutine outputPhotolysisRates( t )
+    use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
 
-    real(kind=DP), intent(in) :: j(*), t
+    real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: i
 
     write (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)

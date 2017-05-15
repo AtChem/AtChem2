@@ -1,6 +1,7 @@
 module types_mod
   use, intrinsic :: iso_fortran_env
   implicit none
+  save
 
   public :: SI, DI, QI, SP, DP, QP
 
@@ -13,17 +14,19 @@ module types_mod
   integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
   integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
-contains
 end module types_mod
 
 module storage
   implicit none
+  save
+
   integer, parameter :: maxSpecLength=10
   integer, parameter :: maxPhotoRateNameLength=6
   integer, parameter :: maxEnvVarNameLength=9
   integer, parameter :: maxEnvVarLength=15
   integer, parameter :: maxFilepathLength=100
   integer, parameter :: maxReactionStringLength=1000
+
 end module
 
 !    ********************************************************************************************************
@@ -32,8 +35,8 @@ end module
 module directories
   use storage, only : maxFilepathLength
   implicit none
+  save
 
-  SAVE
   character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
 
 end module directories
@@ -43,8 +46,8 @@ end module directories
 module date
   use types_mod
   implicit none
+  save
 
-  SAVE
   integer :: day, month, year, dayOfYear
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 
@@ -56,16 +59,14 @@ module envVars
   use types_mod
   use storage, only : maxEnvVarNameLength, maxEnvVarLength
   implicit none
+  save
 
-  SAVE
   character(len=maxEnvVarNameLength), allocatable :: envVarNames(:)
   character(len=maxEnvVarLength), allocatable :: envVarTypes(:)
   integer, allocatable :: envVarTypesNum(:)
   real(kind=DP), allocatable :: envVarFixedValues(:), currentEnvVarValues(:)
   integer(kind=NPI) :: numEnvVars
   integer :: tempNum
-
-
   real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
@@ -76,7 +77,8 @@ end module envVars
 module constraints
   use types_mod
   implicit none
-  SAVE
+  save
+
   integer(kind=NPI) :: numberOfConstrainedSpecies
   integer :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
@@ -137,15 +139,13 @@ end module constraints
 module species
   use types_mod
   use storage, only : maxSpecLength
-
   implicit none
-  SAVE
-  integer(kind=NPI) :: numSpecies, numReactions
+  save
+
+  integer(kind=NPI) :: numSpecies, numReactions, i
   character(len=maxSpecLength), allocatable :: speciesList(:)
 
-  integer(kind=NPI) :: i
-
-  private :: numSpecies, speciesList, i
+  private :: numSpecies, numReactions, speciesList, i
   public :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
   public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
@@ -199,11 +199,11 @@ end module species
 module interpolationMethod
   use types_mod
   implicit none
-  SAVE
+  save
+
   integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
-  public :: getSpeciesInterpMethod, setSpeciesInterpMethod
-  public :: getConditionsInterpMethod, setConditionsInterpMethod
-  public :: getDecInterpMethod, setDecInterpMethod
+  public :: getSpeciesInterpMethod, getConditionsInterpMethod, getDecInterpMethod
+  public :: setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
 
 contains
 
@@ -245,8 +245,8 @@ end module interpolationMethod
 module reactionStructure
   use types_mod
   implicit none
+  save
 
-  SAVE
   integer(kind=NPI), allocatable :: clhs(:,:), crhs(:,:)
   integer(kind=NPI) :: lhs_size, rhs_size
   real(kind=DP), allocatable :: ccoeff(:)
@@ -260,8 +260,8 @@ module photolysisRates
   use types_mod
   use storage, only : maxPhotoRateNameLength
   implicit none
+  save
 
-  SAVE
   integer, parameter :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
   integer(kind=NPI) :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
   integer(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
@@ -271,7 +271,7 @@ module photolysisRates
   real(kind=DP) :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
   character(len=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
   character(len=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
-  real(kind=DP), allocatable :: photoX (:,:), photoY (:,:), photoY2 (:,:)
+  real(kind=DP), allocatable :: photoX(:,:), photoY(:,:), photoY2(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
 
 end module photolysisRates
@@ -283,9 +283,9 @@ module chemicalConstraints
   use types_mod
   use storage, only : maxSpecLength
   implicit none
+  save
 
-  SAVE
-  real(kind=DP), allocatable :: dataX (:,:), dataY (:,:), dataY2 (:,:), dataFixedY (:)
+  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
   real(kind=DP), allocatable :: constrainedConcs(:)
   integer(kind=NPI) :: numberOfConstrainedSpecies
   character(len=maxSpecLength), allocatable :: constrainedName(:)
@@ -299,8 +299,8 @@ end module chemicalConstraints
 module zenithData
   use types_mod
   implicit none
+  save
 
-  SAVE
   real(kind=DP) :: lat, longt, lha, sinld, cosld
 
 end module zenithData
@@ -308,8 +308,8 @@ end module zenithData
 module zenithData1
   use types_mod
   implicit none
+  save
 
-  SAVE
   real(kind=DP) :: cosX, secX
 
 end module zenithData1
@@ -320,8 +320,8 @@ end module zenithData1
 module productionAndLossRates
   use types_mod
   implicit none
+  save
 
-  SAVE
   real(kind=DP), allocatable :: lossRates(:), productionRates(:), ir(:)
 
 end module productionAndLossRates
@@ -334,8 +334,8 @@ end module productionAndLossRates
 module SZACalcVars
   use types_mod
   implicit none
+  save
 
-  SAVE
   real(kind=DP) :: latitude, longitude
 
 end module SZACalcVars

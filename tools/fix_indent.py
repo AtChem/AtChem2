@@ -77,7 +77,10 @@ with open(out_filename, 'w') as output_file:
             for i in range(len(split_line)):
                 to_output = '!'.join(split_line[0:i+1])
                 if even_quotes(to_output):
-                    comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    if len(split_line)>=i+2 and not split_line[i+1].isspace():
+                        comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    else:
+                        comment = ''
                     break
         else:
             comment = ''

@@ -151,7 +151,7 @@ module species
 
 contains
 
-  function getNumberOfSpecies() result ( n )
+  pure function getNumberOfSpecies() result ( n )
     integer(kind=NPI) :: n
     n = numSpecies
   end function getNumberOfSpecies
@@ -162,7 +162,7 @@ contains
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
-  function getNumberOfReactions() result ( n )
+  pure function getNumberOfReactions() result ( n )
     integer(kind=NPI) :: n
     n = numReactions
   end function getNumberOfReactions

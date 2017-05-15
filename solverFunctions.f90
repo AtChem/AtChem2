@@ -5,8 +5,8 @@ contains!     ---------------------------------------------------------------
     use types_mod
     use productionAndLossRates
     use mechanismRates_mod
-
     implicit none
+
     integer(kind=NPI) :: i
     integer(kind=NPI) :: nsp ! number of species involved
     integer(kind=NPI) :: nr ! number of reactions
@@ -22,7 +22,6 @@ contains!     ---------------------------------------------------------------
     ! set rate eqn to zero
     do i = 1, nsp
       dy(i) = 0
-
     end do
 
     do i = 1, nr
@@ -38,20 +37,19 @@ contains!     ---------------------------------------------------------------
       r(i) = p(i)
     end do
 
-
     do i = 1, size1
-      r(lhs(1, i)) = r(lhs(1, i))*y(lhs(2, i))**lhs(3, i)
+      r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lhs(3, i)
       ir(lhs(1, i)) = r(lhs(1, i))
     end do
 
     do i = 1, size1
-      dy(lhs(2, i)) = dy(lhs(2, i))-lhs(3, i)*r(lhs(1, i))
-      lossRates(lhs(1, i)) = ABS (dy(lhs(2, i)))
+      dy(lhs(2, i)) = dy(lhs(2, i)) - lhs(3, i) * r(lhs(1, i))
+      lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
     end do
 
     do i = 1, size2
-      dy(rhs(2, i))=dy(rhs(2, i))+coeff(i)*r(rhs(1, i))
-      productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + coeff(i)*r(rhs(1, i))
+      dy(rhs(2, i)) = dy(rhs(2, i)) + coeff(i) * r(rhs(1, i))
+      productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + coeff(i) * r(rhs(1, i))
     end do
 
     return
@@ -89,7 +87,7 @@ contains!     ---------------------------------------------------------------
     real(kind=DP) :: p(nr), r(nr), t
     real(kind=DP) :: y(*)
     real(kind=DP), intent(out) :: fy(ny,*)
-    integer :: is
+    integer(kind=NPI) :: is
 
     ! set jacobian matrix to zero
     fy(1:ny, 1:ny) = 0.0
@@ -100,22 +98,22 @@ contains!     ---------------------------------------------------------------
     do j = 1, ny
       r(1:nr) = 0.0
       do is = 1, lhs_size
-        if (clhs(2, is)==j) then
+        if ( clhs(2, is) == j ) then
           r(clhs(1, is)) = p(clhs(1, is))
         end if
       end do
       do is = 1, lhs_size
-        if (clhs(2, is)==j) then
-          r(clhs(1, is)) = r(clhs(1, is))*clhs(3, is)*y(clhs(2, is))**(clhs(3, is)-1)
+        if ( clhs(2, is) == j ) then
+          r(clhs(1, is)) = r(clhs(1, is)) * clhs(3, is) * y(clhs(2, is)) ** ( clhs(3, is) - 1 )
         else
-          r(clhs(1, is)) = r(clhs(1, is))*y(clhs(2, is))**clhs(3, is)
+          r(clhs(1, is)) = r(clhs(1, is)) * y(clhs(2, is)) ** clhs(3, is)
         end if
       end do
       do is = 1, lhs_size
-        fy(clhs(2, is), j)=fy(clhs(2, is), j)-clhs(3, is)*r(clhs(1, is))
+        fy(clhs(2, is), j) = fy(clhs(2, is), j) - clhs(3, is) * r(clhs(1, is))
       end do
       do is = 1, rhs_size
-        fy(crhs(2, is), j)=fy(crhs(2, is), j) + ccoeff(is) * r(crhs(1, is))
+        fy(crhs(2, is), j) = fy(crhs(2, is), j) + ccoeff(is) * r(crhs(1, is))
       end do
     end do
 

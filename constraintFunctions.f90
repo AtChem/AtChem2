@@ -81,7 +81,7 @@ contains
 
   subroutine removeConstrainedSpeciesFromProbSpec( y, z, constrainedSpecies )
     implicit none
-    real(kind=DP) :: z(*), y(:)
+    real(kind=DP) :: y(:), z(:)
     integer(kind=NPI) :: constrainedSpecies(:), zCounter, speciesConstrained, i, k
 
     zCounter = 1

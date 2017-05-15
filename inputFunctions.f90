@@ -558,7 +558,7 @@ contains
       if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
         write (*,*) constrainedName(i), '...'
       else
-        if ( i == 2 ) WRITE (*,*) '...'
+        if ( i == 2 ) write (*,*) '...'
       end if
 
       fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedName(i) )
@@ -580,7 +580,7 @@ contains
 
 
     ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
-    allocate (dataFixedY(countOfFixConSpecNames) )
+    allocate (dataFixedY(countOfFixConSpecNames))
     write (*,*) 'Reading in the names and concentration of the fixed constrained species ' // &
                 '(in file constrainedFixedSpecies.config)...'
     open (14, file=trim( param_dir ) // '/constrainedFixedSpecies.config', status='old') ! input file

@@ -8,6 +8,8 @@ contains
     real(kind=DP), intent(in) :: y(*)
 
     ro2 = 0.00e+00
+
+    return
   end subroutine ro2Sum
 
 
@@ -39,6 +41,8 @@ contains
       write (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
     end do
     write (55,*) '---------------'
+
+    return
   end subroutine output_jfy
 
 
@@ -50,6 +54,7 @@ contains
     integer(kind=NPI) :: i
 
     write (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+
     return
   end subroutine outputPhotolysisRates
 
@@ -150,6 +155,7 @@ contains
         end if
       end do
     end do
+
     return
   end subroutine outputRates
 
@@ -177,7 +183,6 @@ contains
       write (10,*) ir(i)
     end do
     close (10, status='keep')
-
 
     return
   end subroutine outputInstantaneousRates

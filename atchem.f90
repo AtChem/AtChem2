@@ -219,7 +219,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
   write (*,*) 'Reading species names from mechanism.species...'
-  call readSpecies( numSpec, speciesNames, speciesNumber )
+  call readSpecies( speciesNames, speciesNumber )
   write (*,*) 'Finished reading species names.'
   write (*,*)
 

@@ -134,7 +134,6 @@ contains
   end subroutine getReaction
 
   subroutine outputRates( r, arrayLen, t, p, flag, speciesNames )
-
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit

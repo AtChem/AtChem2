@@ -62,8 +62,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   real(kind=DP), allocatable :: initialConcentrations(:)
-  character(len=maxSpecLength), allocatable :: speciesNames(:), concSpeciesNames(:)
-  integer(kind=NPI), allocatable :: speciesNumber(:)
+  character(len=maxSpecLength), allocatable :: speciesNames(:), initConcSpeciesNames(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: returnArray(:), tempSORNumber(:), SORNumber(:)
@@ -198,7 +197,7 @@ PROGRAM ATCHEM
   !    SET ARRAY SIZES = NO. OF SPECIES
   allocate (speciesConcs(numSpec), speciesNames(numSpec))
   speciesConcs(:) = 0
-  allocate (speciesNumber(numSpec), z(numSpec), initialConcentrations(numSpec))
+  allocate (z(numSpec), initialConcentrations(numSpec))
   allocate (returnArray(numSpec))
   allocate (tempSORNumber(numSpec))
   allocate (fy(numSpec, numSpec))
@@ -219,7 +218,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
   write (*,*) 'Reading species names from mechanism.species...'
-  call readSpecies( speciesNames, speciesNumber )
+  call readSpecies( speciesNames )
   write (*,*) 'Finished reading species names.'
   write (*,*)
 
@@ -227,9 +226,9 @@ PROGRAM ATCHEM
   call setSpeciesList( speciesNames )
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  call readInitialConcentrations( concSpeciesNames, initialConcentrations )
-  call setConcentrations( speciesNames, concSpeciesNames, initialConcentrations, speciesConcs )
-  deallocate (concSpeciesNames, initialConcentrations)
+  call readInitialConcentrations( initConcSpeciesNames, initialConcentrations )
+  call setConcentrations( speciesNames, initConcSpeciesNames, initialConcentrations, speciesConcs )
+  deallocate (initConcSpeciesNames, initialConcentrations)
   write (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
@@ -703,7 +702,7 @@ PROGRAM ATCHEM
   !   deallocate CVODE internal data
 
   call FCVFREE()
-  deallocate (speciesConcs, speciesNames, speciesNumber, z)
+  deallocate (speciesConcs, speciesNames, z)
   deallocate (prodIntSpecies, returnArray, reacIntSpecies)
   deallocate (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   deallocate (fy, ir)

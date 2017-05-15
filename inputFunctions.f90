@@ -362,22 +362,18 @@ contains
   end subroutine readNumberOfSpeciesAndReactions
 
 
-  subroutine readSpecies( speciesName, speciesNumber )
+  subroutine readSpecies( speciesName )
     use storage, only : maxSpecLength
     implicit none
 
-    integer(kind=NPI) :: j
     character(len=maxSpecLength), intent(out) :: speciesName(:)
-    integer(kind=NPI), intent(out) :: speciesNumber(:)
+    integer(kind=NPI) :: j, dummy
 
     ! Read in species number and name from mC/mechanism.species to speciesName
-    ! and speciesNumber. Also set each element of y to 0.
-    if ( size( speciesName ) /= size( speciesNumber ) ) then
-      stop "size( speciesName ) /= size( speciesNumber ) in readSpecies()."
-    end if
+    ! and sdummy (to be thrown).
     open (10, file='modelConfiguration/mechanism.species') ! input file
     do j = 1, size ( speciesName )
-      read (10,*) speciesNumber(j), speciesName(j)
+      read (10,*) dummy, speciesName(j)
     end do
     close (10, status='keep')
 
@@ -396,9 +392,9 @@ contains
     implicit none
 
     character(len=maxSpecLength), allocatable, intent(out) :: concSpeciesNames(:)
+    real(kind=DP), allocatable, intent(out) :: concentration(:)
     character(len=maxSpecLength) :: k
     character(len=maxFilepathLength) :: file
-    real(kind=DP), allocatable, intent(out) :: concentration(:)
     real(kind=DP) :: l
     integer(kind=NPI) :: numLines, i, nsp
     integer(kind=IntErr) :: ierr

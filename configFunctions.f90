@@ -143,6 +143,29 @@ contains
   end subroutine findReactionsWithProductOrReactant
 
 
+  subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
+    ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
+    ! in the same order as the species are in specInt
+    real(kind=DP), intent(in) :: masterConcList(:)
+    integer(kind=NPI), intent(in) :: speciesOfInterest(:)
+    real(kind=DP), intent(out) :: interestSpeciesConcList(:)
+    integer(kind=NPI) :: i, j
+    ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
+    ! using the elements of specInt as a key
+    if ( size( interestSpeciesConcList ) /= size( speciesOfInterest ) ) then
+      stop 'size(interestSpeciesConcList) /= size(speciesOfInterest) in getConcForSpecInt'
+    end if
+    do i = 1, size( masterConcList )
+      do j = 1, size( speciesOfInterest )
+        if ( speciesOfInterest(j) == i ) then
+          interestSpeciesConcList(j) = masterConcList(i)
+        end if
+      end do
+    end do
+    return
+  end subroutine getConcForSpecInt
+
+
   subroutine setConcentrations( refSpeciesNames, concSpeciesNames, &
                                 inputConcentrations, outputConcentrations )
     ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),

@@ -2,45 +2,45 @@
  Instantaneous rates dir is travis/tests/short/instantaneousRates                                                               
  Parameter dir is travis/tests/short/modelConfiguration                                                               
 
- Number of Species =          104
- Number of Reactions =          324
+ Number of Species =                   104
+ Number of Reactions =                   324
 
  Reading reactants (lhs) from mechanism.reac...
  Reading products (rhs) from mechanism.prod...
  Finished reading lhs and rhs data.
- Size of lhs =         510 size of rhs2 =          558 .
+ Size of lhs =                  510 size of rhs2 =                   558 .
 
  Reading species names from mechanism.species...
  Finished reading species names.
 
  Reading initial concentrations...
-           1  H2O2          5000.0000000000000     
+                    1  H2O2          5000.0000000000000     
  Finished reading initial concentrations.
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
+                    1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
+                   61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
  Finished reading photolysis rates.
- Number of photolysis rates:          35
+ Number of photolysis rates:                   35
 
  Reading JFacSpecies...
  JFacSpecies = 
  Finished reading JFacSpecies.
 
  Reading products of interest...
-           1  OH        
-           2  HO2       
+                    1  OH        
+                    2  HO2       
  Finished reading products of interest.
- rateOfProdNS (number of species found):           2
+ rateOfProdNS (number of species found):                    2
 
  Reading reactants of interest...
-           1  OH        
-           2  HO2       
+                    1  OH        
+                    2  HO2       
  Finished reading reactants of interest.
- rateOfLossNS (number of species found):           2
+ rateOfLossNS (number of species found):                    2
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.
@@ -80,7 +80,7 @@ preconBandLower:         750
  -----------------
 
  Reading environment variables...
- Number of environment variables:           10
+ Number of environment variables:                    10
  1      M                              2.60e+19
  2      TEMP                         281.95e+00
  3      PRESS                           NOTUSED
@@ -98,39 +98,39 @@ preconBandLower:         750
 
  Reading concentration output from file...
  Finished reading concentration output from file.
- Output required for concentration of           2 species:
-           1 NO2       
-           2 HO2NO2    
+ Output required for concentration of                    2 species:
+                    1 NO2       
+                    2 HO2NO2    
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-           1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
+                    1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
  ...
-          61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
+                   61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
  Finished reading photolysis rates.
- Number of photolysis rates:          35
+ Number of photolysis rates:                   35
 
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
- Number of constrained photorates:           0
+ Number of constrained photorates:                    0
 
- Counting the species to be constrained (in file constrainedSpecies.config)...
- Finished counting the names of the species to be constrained.
- Number of names for variable constrained species:           0
+ Counting the species to be variably constrained (in file constrainedSpecies.config)...
+ Finished counting the names of the species to be variably constrained.
+ Number of names for variable constrained species:                    0
  Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...
  Finished counting the names of fixed-concentration species
- Number names of fixed constrained species:           0
+ Number names of fixed constrained species:                    0
  Reading in the names of variable constrained species...
  Finished reading the names of variable constrained species
- Number of constrained variable species:           0
+ Number of variable constrained species:                    0
  maxNumberOfDataPoints:       10000
  Allocating storage for variable constrained species...
  Finished allocating storage for variable constrained species.
- Reading concentration data for constrained species...
+ Reading concentration data for variable constrained species...
  Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...
  Finished reading in the names and concentration of fixed-concentration species.
- Setting size of constraint arrays, n =            0
+ Setting size of constraint arrays, n =                     0
  Finished reading constrained species.
  Initialising concentrations of constrained species...
  Finished initialising concentrations of constrained species.

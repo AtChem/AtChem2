@@ -495,10 +495,10 @@ contains
     speciesName =  getSpeciesList()
 
     ! READ IN SPECIES TO BE CONSTRAINED
-    write (*,*) 'Counting the species to be constrained (in file constrainedSpecies.config)...'
+    write (*,*) 'Counting the species to be variably constrained (in file constrainedSpecies.config)...'
     countOfVarConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
 
-    write (*,*) 'Finished counting the names of the species to be constrained.'
+    write (*,*) 'Finished counting the names of the species to be variably constrained.'
     write (*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
 
     ! read in numberOfFixedConstrainedSpecies
@@ -532,7 +532,7 @@ contains
     close (12, status='keep')
     numberOfVariableConstrainedSpecies = j
     write (*,*) 'Finished reading the names of variable constrained species'
-    write (*,*) 'Number of constrained variable species:', numberOfVariableConstrainedSpecies
+    write (*,*) 'Number of variable constrained species:', numberOfVariableConstrainedSpecies
 
     write (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
     write (*,*) 'Allocating storage for variable constrained species...'
@@ -552,7 +552,7 @@ contains
     end if
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
-    write (*,*) 'Reading concentration data for constrained species...'
+    write (*,*) 'Reading concentration data for variable constrained species...'
     allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
     do i = 1, numberOfVariableConstrainedSpecies
       if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
@@ -615,14 +615,14 @@ contains
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    write (51,*) "Number of constrained species:", numberOfConstrainedSpecies
+    write (51,*) "Total number of constrained species:", numberOfConstrainedSpecies
 
     ! ERROR HANDLING
     numberOfSpecies = getNumberOfSpecies()
     if ( numberOfConstrainedSpecies >= numberOfSpecies ) then
-      write (51,*) "Error: Number of (number of constrained species) >= (number of species) "
-      write (51,*) "(number of constrained species) = ", numberOfConstrainedSpecies
-      write (51,*) "(number of species) = ", numberOfSpecies
+      write (51,*) "Error: number of constrained species >= number of species "
+      write (51,*) "number of constrained species = ", numberOfConstrainedSpecies
+      write (51,*) "number of species = ", numberOfSpecies
       stop 2
     end if
 

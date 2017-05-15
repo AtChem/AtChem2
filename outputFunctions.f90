@@ -24,19 +24,21 @@ contains
   end subroutine outputEnvVar
 
   !--------------------------------------------------------------------
-  subroutine outputjfy( fy, nsp, t )
+  subroutine output_jfy( fy, t )
     implicit none
 
-    integer(kind=NPI), intent(in) :: nsp
+    real(kind=DP), intent(in) :: fy(:,:), t
     integer(kind=NPI) :: i, j
-    real(kind=DP), intent(in) :: fy(nsp, nsp), t
 
+    if ( size( fy, 1 ) /= size( fy, 2 ) ) then
+      stop "size( fy, 1 ) /= size( fy, 2 ) in output_jfy()."
+    end if
     ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
-    do i = 1, nsp
-      write (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, nsp)
+    do i = 1, size( fy, 1)
+      write (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
     end do
     write (55,*) '---------------'
-  end subroutine outputjfy
+  end subroutine output_jfy
 
   !     ---------------------------------------------------------------
   subroutine outputPhotolysisRates( t )

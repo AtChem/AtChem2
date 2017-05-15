@@ -388,7 +388,7 @@ PROGRAM ATCHEM
   ratesOutputStepSize = modelParameters(8)
   ! Start time of model. Used to set t0, and to calculate the elapsed time.
   modelStartTime = modelParameters(9)
-  ! Frequency at which outputjfy is called below.
+  ! Frequency at which output_jfy is called below.
   jacobianOutputStepSize = modelParameters(10)
   ! Member variables of module SZACalcVars
   latitude = modelParameters(11)
@@ -621,7 +621,7 @@ PROGRAM ATCHEM
     write (*,*) 'time = ', time
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numSpec, numReac, speciesConcs, fy, t )
-      call outputjfy( fy, numSpec, t )
+      call output_jfy( fy, t )
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )

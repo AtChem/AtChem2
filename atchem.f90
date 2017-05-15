@@ -626,7 +626,7 @@ PROGRAM ATCHEM
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
     call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
-    call outputPhotolysisRates( j, t )
+    call outputPhotolysisRates( t )
 
     !OUTPUT INSTANTANEOUS RATES
     if ( mod( elapsed, irOutStepSize ) == 0 ) then

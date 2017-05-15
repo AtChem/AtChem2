@@ -79,28 +79,30 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine removeConstrainedSpeciesFromProbSpec( y, z, constrainedSpecies )
+  subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecies, z )
     implicit none
-    real(kind=DP) :: y(:), z(*)
-    integer(kind=NPI) :: constrainedSpecies(:), zCounter, speciesConstrained, i, k
+
+    real(kind=DP), intent(in) :: y(:)
+    integer(kind=NPI), intent(in) :: constrainedSpecies(:)
+    real(kind=DP), intent(inout) :: z(*)
+    integer(kind=NPI) :: zCounter, i, k
+    logical :: speciesConstrained
 
     zCounter = 1
-    ! loop through y()
+    ! loop through y(), check if its items are in constrainedSpecies
     do i = 1, size( y )
-      speciesConstrained = 0
-      ! loop through constrained species
+      speciesConstrained = .false.
       do k = 1, size( constrainedSpecies )
         if ( i == constrainedSpecies(k) ) then
-          speciesConstrained = 1
+          ! exit loop if in constrainedSpecies
+          speciesConstrained = .true.
+          exit
         end if
       end do
-      if ( speciesConstrained == 1 ) then
-        ! do nothing
-      else if ( speciesConstrained == 0 ) then
+      ! if item is not in constrainedSpecies, then add species to z.
+      if ( speciesConstrained .eqv. .false. ) then
         z(zCounter) = y(i)
         zCounter = zCounter + 1
-      else
-        write (*,*) 'error removing constrained species from y()'
       end if
     end do
     return

@@ -123,7 +123,7 @@ PROGRAM ATCHEM
       implicit none
       !
       integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
-      real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
+      real(kind=DP) :: t, y(*), ydot(*), rpar(*), concAtT, dummy
       real(kind=DP), allocatable :: dy(:), z(:)
       integer(kind=NPI) :: i
     end subroutine FCVFUN
@@ -793,7 +793,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   implicit none
   !
   integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
-  real(kind=DP) :: t, y(*), ydot(*), rpar (*), concAtT, dummy
+  real(kind=DP) :: t, y(*), ydot(*), rpar(*), concAtT, dummy
   real(kind=DP), allocatable :: dy(:), z(:)
   integer(kind=NPI) :: i
 

@@ -201,22 +201,21 @@ contains
     return
   end subroutine outputInstantaneousRates
 
-  subroutine outputSpeciesOutputRequired( t, arrayOfConcs, arrayOfConcsSize )
+  subroutine outputSpeciesOutputRequired( t, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
     ! If any concentration is negative, then set it to zero before printing.
     implicit none
 
     real(kind=DP), intent(in) :: t
-    real(kind=DP), intent(inout) :: arrayOfConcs(*)
-    integer(kind=NPI), intent(in) :: arrayOfConcsSize
+    real(kind=DP), intent(inout) :: arrayOfConcs(:)
     integer(kind=NPI) :: i
 
-    do i = 1, arrayOfConcsSize
+    do i = 1, size( arrayOfConcs )
       if ( arrayOfConcs(i) < 0.0 ) then
         arrayOfConcs(i) = 0d0
       end if
     end do
-    write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, arrayOfConcsSize)
+    write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
   end subroutine outputSpeciesOutputRequired
 end module outputFunctions_mod

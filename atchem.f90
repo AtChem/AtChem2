@@ -233,7 +233,7 @@ PROGRAM ATCHEM
   write (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION
-  call readPhotolysisConstants( ck, cl, cmm, cnn, photoRateNames, transmissionFactor )
+  call readPhotolysisConstants()
   write (*,*)
   !   Set default value for photonames array
   do i = 1, 200

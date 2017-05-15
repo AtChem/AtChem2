@@ -94,27 +94,24 @@ contains
   end subroutine readJFacSpecies
 
 
-  subroutine readPhotolysisRates( ck, cl, cmm, cnn, str, tf )
+  subroutine readPhotolysisRates()
     ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
     ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
     ! modelConfiguration/photolysisRates.config.
-    use photolysisRates, only : maxNrOfPhotoRates, nrOfPhotoRates
+    use photolysisRates, only : maxNrOfPhotoRates, nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor
     use directories, only : param_dir
-    use storage, only : maxPhotoRateNameLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
-    integer(kind=NPI) :: i, ck(:)
+    integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
-    real(kind=DP) :: cl(:), cmm(:), cnn(:), tf(:)
-    character(len=maxPhotoRateNameLength) :: str(:)
 
     write (*,*) 'Reading photolysis rates from file...'
     open (10, file=trim( param_dir ) // '/photolysisRates.config', status='old')
     ! Ignore first line
     read (10,*)
     do i = 1, maxNrOfPhotoRates
-      read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+      read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
       if ( ierr /= 0 ) then
         ! We've reached the end of file, so exit this loop
         exit
@@ -124,13 +121,13 @@ contains
     close (10, status='keep')
 
     if ( nrOfPhotoRates > 3 ) then
-      write (*,*) ck(1), cl(1), cmm(1), cnn(1), str(1), tf(1)
+      write (*,*) ck(1), cl(1), cmm(1), cnn(1), photoRateNames(1), transmissionFactor(1)
       write (*,*) '...'
       write (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
-                  cnn(nrOfPhotoRates), str(nrOfPhotoRates), tf(nrOfPhotoRates)
+                  cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates)
     else
       do i = 1, nrOfPhotoRates
-        write (*,*) ck(i), cl(i), cmm(i), cnn(i), str(i), tf(i)
+        write (*,*) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
       end do
     end if
     write (*,*) 'Finished reading photolysis rates.'
@@ -139,19 +136,17 @@ contains
   end subroutine readPhotolysisRates
 
 
-  subroutine readPhotolysisConstants( ck, cl, cmm, cnn, str, tf )
+  subroutine readPhotolysisConstants()
     ! If modelConfiguration/photolysisConstants.config exists, then read in
     ! 3 values to fill ck, cl and str.
     ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
-    use photolysisRates, only : usePhotolysisConstants, maxNrOfPhotoRates, nrOfPhotoRates
+    use photolysisRates, only : usePhotolysisConstants, maxNrOfPhotoRates, nrOfPhotoRates, &
+                                ck, cl, photoRateNames
     use directories, only : param_dir
-    use storage, only : maxPhotoRateNameLength
     implicit none
 
-    integer(kind=NPI) :: i, ck(:)
+    integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
-    real(kind=DP) :: cl(:), cmm(:), cnn(:), tf(:)
-    character(len=maxPhotoRateNameLength) :: str(:)
     logical :: file_exists
 
     ! Check whether file exists correctly in readPhotolysisConstants,
@@ -160,7 +155,7 @@ contains
     if ( file_exists .eqv. .false. ) then
       usePhotolysisConstants = .false.
       write (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
-      call readPhotolysisRates( ck, cl, cmm, cnn, str, tf )
+      call readPhotolysisRates()
       return
     end if
     usePhotolysisConstants = .true.
@@ -170,7 +165,7 @@ contains
     open (10, file=trim( param_dir ) // '/photolysisConstants.config', status='old', iostat=ierr)
     read (10,*)
     do i = 1, maxNrOfPhotoRates
-      read (10,*, iostat=ierr) ck(i), cl(i), str(i)
+      read (10,*, iostat=ierr) ck(i), cl(i), photoRateNames(i)
       if ( ierr /= 0 ) then
         exit
       end if
@@ -178,12 +173,12 @@ contains
     end do
     close (10, status='keep')
     if ( nrOfPhotoRates > 3 ) then
-      write (*,*) ck(1), cl(1), str(1)
+      write (*,*) ck(1), cl(1), photoRateNames(1)
       write (*,*) '...'
-      write (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), str(nrOfPhotoRates)
+      write (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates)
     else
       do i = 1, nrOfPhotoRates
-        write (*,*) ck(i), cl(i), str(i)
+        write (*,*) ck(i), cl(i), photoRateNames(i)
       end do
     end if
     write (*,*) 'Finished reading photolysis constants.'
@@ -241,7 +236,7 @@ contains
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
 
     ! GET NAMES OF PHOTO RATES
-    call readPhotolysisConstants( ck, cl, cmm, cnn, photoRateNames, transmissionFactor )
+    call readPhotolysisConstants()
     write (*,*)
 
     numConPhotoRates = 0

@@ -169,12 +169,12 @@ contains
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
                                      envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
-      H2O = envVarAtT
+      h2o = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
-      H2O = envVarFixedValues(envVarNum)
+      h2o = envVarFixedValues(envVarNum)
     else
-      H2O = -1
+      h2o = -1
     end if
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
     envVarNumH2O = envVarNum
@@ -254,14 +254,14 @@ contains
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
                                      envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
       rh = envVarAtT
-      h2o =  convertRHtoH2O(RH, temp, pressure)
+      h2o =  convertRHtoH2O(rh, temp, pressure)
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
       rh = envVarFixedValues(envVarNum)
-      h2o = convertRHtoH2O( RH, temp, pressure )
+      h2o = convertRHtoH2O( rh, temp, pressure )
       ! IF NOTUSED
     else
-      RH = -1
+      rh = -1
     end if
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
     currentEnvVarValues(envVarNum) = rh
@@ -281,11 +281,9 @@ contains
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
       dilute = envVarFixedValues(envVarNum)
-
       !IF NOTUSED
     else
       dilute = 0
-
     end if
 
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT

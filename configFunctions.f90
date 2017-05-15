@@ -3,19 +3,21 @@ module configFunctions_mod
 contains
   subroutine calcDateParameters()
     use date
+    implicit none
+
     integer :: i, monthList(12)
 
-    monthList = (/31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31/)
+    monthList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     ! calculate which day of the year day/month refers to
     dayOfYear = 0
-    do i = 1, month-1
+    do i = 1, month - 1
       dayOfYear = dayOfYear + monthList(i)
     end do
-    dayOfYear = dayOfYear + day -1
+    dayOfYear = dayOfYear + day - 1
     ! This day refers to the following fraction through the year
     dayAsFractionOfYear = dayOfYear / 365
     ! Set number of seconds per year
-    secondsInYear = 3.6525d+02*2.40d+01*3.60d+03
+    secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
     return
   end subroutine calcDateParameters
 
@@ -39,20 +41,20 @@ contains
     write (61,*) 't NFELS NJTV NPE NPS'
 
     ! OTHER OUPUT
-    write (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, size(specOutReqNames))
+    write (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, size( specOutReqNames ))
     ! 51, 53, 54, 55 don't need a header.
     write (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
-    write (58,*) 't ', (trim(photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
+    write (58,*) 't ', (trim( photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
     write (59,*) 't secx cosx lat longt lha sinld cosld'
     write (62,*) 't currentStepSize previousStepSize'
     return
   end subroutine writeFileHeaders
 
 
-  subroutine matchNameToNumber( masterSpeciesList, &
-                                testSpeciesList, &
+  subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
                                 returnArray, returnArraySize )
     use storage, only : maxSpecLength
+    implicit none
     ! This takes in masterSpeciesList, and checks whether each member of
     ! testspeciesList is in masterSpeciesList.
     ! When it finds a match, it adds the number of the line in masterSpeciesList to
@@ -63,22 +65,22 @@ contains
     character(len=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
     integer(kind=NPI), intent(out) :: returnArray(:), returnArraySize
     integer :: i, j
-    logical match
+    logical :: match
 
     returnArraySize = 0
     ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
     ! returnArray with the number of the species from testSpeciesList within the masterSpeciesList
-    do i = 1, size(testSpeciesList)
+    do i = 1, size( testSpeciesList )
       match = .false.
-      do j = 1, size(masterSpeciesList)
-        if (masterSpeciesList(j)==testSpeciesList(i)) then
+      do j = 1, size( masterSpeciesList )
+        if ( masterSpeciesList(j) == testSpeciesList(i) ) then
           match = .true.
           returnArraySize = returnArraySize + 1
           returnArray(returnArraySize) = j
         end if
       end do
       ! substitute empty strings for invalid species
-      if (match.eqv..false.) then
+      if ( match .eqv. .false. ) then
         testSpeciesList(i) = ''
       end if
     end do
@@ -94,8 +96,8 @@ contains
     integer(kind=NPI) :: j, id
 
     id = 0
-    do j = 1, size(masterList)
-      if (masterList(j)==target) then
+    do j = 1, size( masterList )
+      if ( masterList(j) == target ) then
         id = j
         return
       end if
@@ -115,25 +117,25 @@ contains
     integer(kind=NPI), intent(inout) :: r(:,:)
     integer(kind=NPI) :: rCounter, i, j
 
-    if (size(arrayLen)/=size(r, 1)) then
-      stop "size(arrayLen)/=size(r, 1) in findReactionsWithProductOrReactant()."
+    if ( size( arrayLen ) /= size( r, 1 ) ) then
+      stop "size(arrayLen) /= size(r, 1) in findReactionsWithProductOrReactant()."
     end if
     ! initialise counter for r array
     rCounter = 2
     ! loop over interesting species (i.e. over 1st index of r)
-    do i = 1, size(arrayLen)
+    do i = 1, size( arrayLen )
       ! loop over elements of 2nd index of chs
-      do j = 1, size(chs, 2)
+      do j = 1, size( chs, 2 )
         ! Is the second element of this row in chs (a species number) equal to the first element of this column in r (the interesting species number)?
         ! If so, then append the first element of this row in chs (the equation number) to this row in r,
         ! and update the length counter arrayLen for this row.
-        if (chs(2, j)==r(i, 1)) then
+        if ( chs(2, j) == r(i, 1) ) then
           ! Match found
           r(i, rCounter) = chs(1, j)
           rCounter = rCounter + 1
         end if
       end do
-      arrayLen(i) = rCounter -1
+      arrayLen(i) = rCounter - 1
       rCounter = 2
     end do
 
@@ -158,18 +160,18 @@ contains
     integer(kind=NPI) :: j, i
     logical :: match
 
-    if (size(concSpeciesNames)/=size(inputConcentrations)) then
-      stop "size(concSpeciesNames)/=size(inputConcentrations) in setConcentrations()."
+    if ( size( concSpeciesNames ) /= size( inputConcentrations ) ) then
+      stop "size(concSpeciesNames) /= size(inputConcentrations) in setConcentrations()."
     end if
-    if (size(refSpeciesNames)/=size(outputConcentrations)) then
-      stop "size(refSpeciesNames)/=size(outputConcentrations) in setConcentrations()."
+    if ( size( refSpeciesNames ) /= size( outputConcentrations ) ) then
+      stop "size(refSpeciesNames) /= size(outputConcentrations) in setConcentrations()."
     end if
-    do i = 1, size(concSpeciesNames)
+    do i = 1, size( concSpeciesNames )
       match = .false.
       k = concSpeciesNames(i)
-      do j = 1, size(refSpeciesNames)
+      do j = 1, size( refSpeciesNames )
         m = refSpeciesNames(j)
-        if (m==k) then
+        if ( m == k ) then
           match = .true.
           ! Set concentration in outputConcentrations
           outputConcentrations(j) = inputConcentrations(i)
@@ -179,7 +181,7 @@ contains
           write (54,*) 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)!
         end if
       end do
-      if (match.eqv..false.) then
+      if ( match .eqv. .false. ) then
         ! If we reach this point, we've failed to find this species
         write (51,*) "Error in setConcentrations"
         write (51,*) "Can't find species: ", k, " in species list"

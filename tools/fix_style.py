@@ -10,7 +10,7 @@
 
 def replace_any_case_with_lower_first(string, to_output):
     # Replaces the first word(s) with its lowercase if it matches string
-    if re.match('^\s*'+string, to_output.upper(), flags=re.IGNORECASE):
+    if re.match('^\s*'+string, to_output, flags=re.IGNORECASE):
         to_output = re.sub(string, string.lower(), to_output, 1, flags=re.IGNORECASE)
     return to_output
 
@@ -85,7 +85,10 @@ with open(out_filename, 'w') as output_file:
             for i in range(len(split_line)):
                 to_output = '!'.join(split_line[0:i+1])
                 if even_quotes(to_output):
-                    comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    if len(split_line)>=i+2 and not split_line[i+1].isspace():
+                        comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    else:
+                        comment = ''
                     break
         else:
             comment = ''
@@ -105,9 +108,9 @@ with open(out_filename, 'w') as output_file:
             currently_on_multiline = True
 
         # Replace .LT. etc with symbols.
-        to_output = re.sub('\s*\.LT\.\s*', ' < ', to_output, flags=re.IGNORECASE)
+        to_output = re.sub('\s*\.LT\.\s*', ' < ',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.LE\.\s*', ' <= ', to_output, flags=re.IGNORECASE)
-        to_output = re.sub('\s*\.GT\.\s*', ' > ', to_output, flags=re.IGNORECASE)
+        to_output = re.sub('\s*\.GT\.\s*', ' > ',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.GE\.\s*', ' >= ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.EQ\.\s*', ' == ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.NE\.\s*', ' /= ', to_output, flags=re.IGNORECASE)
@@ -125,8 +128,6 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('FILE\s*=',   'file=',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('EXIST\s*=',  'exist=',  to_output, flags=re.IGNORECASE)
 
-        # Place all :: with exactly one space either side.
-        to_output = re.sub('\s*::\s*', ' :: ', to_output)
         # Any ending bracket followed by a double-quote, should have a single space.
         to_output = re.sub('\)(?=")', ') ', to_output)
         # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, or single-quote
@@ -148,9 +149,15 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub(",(?=[a-zA-Z0-9('-])", ', ', to_output)
 
         # These are modifiers so should be lowercase
-        to_output = re.sub(',\s*ONLY\s*:\s*', ', only : ', to_output, flags=re.IGNORECASE)
-        to_output = re.sub(',\s*OPTIONAL\s*', ', optional', to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*ONLY\s*:\s*',   ', only : ',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*OPTIONAL\s*',   ', optional',   to_output, flags=re.IGNORECASE)
         to_output = re.sub(',\s*CONTIGUOUS\s*', ', contiguous', to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PARAMETER\s*',  ', parameter',  to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PRIVATE\s*',    ', private',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub(',\s*PUBLIC\s*',     ', public',     to_output, flags=re.IGNORECASE)
+
+        # Place all :: with exactly one space either side.
+        to_output = re.sub('\s*::\s*', ' :: ', to_output)
 
         # If it's a CALL etc line, then make the first opening bracket be preceded by no whitespace,
         # last bracket to be preceded by one space (while handling the case where this is split over multiple lines)
@@ -178,10 +185,13 @@ with open(out_filename, 'w') as output_file:
         to_output = replace_any_case_with_lower_first('ELSE', to_output)
         to_output = replace_any_case_with_lower_first('WRITE', to_output)
         to_output = replace_any_case_with_lower_first('READ', to_output)
+        to_output = replace_any_case_with_lower_first('INQUIRE', to_output)
+        to_output = replace_any_case_with_lower_first('PRINT', to_output)
         to_output = replace_any_case_with_lower_first('STOP', to_output)
         to_output = replace_any_case_with_lower_first('EXIT', to_output)
         to_output = replace_any_case_with_lower_first('OPEN', to_output)
         to_output = replace_any_case_with_lower_first('CLOSE', to_output)
+        to_output = replace_any_case_with_lower_first('INCLUDE', to_output)
         to_output = replace_any_case_with_lower_first('IF', to_output)
         to_output = replace_any_case_with_lower_first('END IF', to_output)
         to_output = replace_any_case_with_lower_first('SELECT CASE', to_output)
@@ -189,6 +199,9 @@ with open(out_filename, 'w') as output_file:
         to_output = replace_any_case_with_lower_first('END SELECT', to_output)
         to_output = replace_any_case_with_lower_first('ALLOCATE', to_output)
         to_output = replace_any_case_with_lower_first('DEALLOCATE', to_output)
+        to_output = replace_any_case_with_lower_first('DATA', to_output)
+        to_output = replace_any_case_with_lower_first('PRIVATE', to_output)
+        to_output = replace_any_case_with_lower_first('PUBLIC', to_output)
 
         # Split 'enddo' and 'endif' into two words, lowercase
         if re.match('\s*enddo', to_output, flags=re.IGNORECASE):
@@ -208,6 +221,8 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('\.false\.', '.false.', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.eqv\.',   '.eqv.',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.not\.',   '.not.',   to_output, flags=re.IGNORECASE)
+        to_output = re.sub('\.or\.',    '.or.',    to_output, flags=re.IGNORECASE)
+        to_output = re.sub('\.and\.',   '.and.',   to_output, flags=re.IGNORECASE)
 
         # If it's a INTEGER, REAL or CHARACTER line, then make the first opening bracket be preceded by no whitespace,
         # first closing bracket to be preceded by one space unless there's a comma.

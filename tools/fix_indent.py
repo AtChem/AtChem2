@@ -63,6 +63,7 @@ with open(out_filename, 'w') as output_file:
     this_line_ends_ampersand = False
     next_line_indent_more = False
     empty_line = False
+    start_select = False
     indent = 0
     outputs = []
     for line in lines:
@@ -76,7 +77,10 @@ with open(out_filename, 'w') as output_file:
             for i in range(len(split_line)):
                 to_output = '!'.join(split_line[0:i+1])
                 if even_quotes(to_output):
-                    comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    if len(split_line)>=i+2 and not split_line[i+1].isspace():
+                        comment = strip_newline('!'+'!'.join(split_line[i+1:]))
+                    else:
+                        comment = ''
                     break
         else:
             comment = ''
@@ -101,12 +105,32 @@ with open(out_filename, 'w') as output_file:
                   or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE):
                     indent = indent-1
 
-                # match if, do, subroutine, function, module, else, contains, program, interface, to set the next line indent higher
+                # Handle the fact that each case of a select structure doesn't end in an 'end', so the 'end selec' needs to go back twice.
+                if re.match('^\s*end select\s*', to_output, flags=re.IGNORECASE):
+                    indent = indent - 1
+
+                # match if, do, subroutine, function, module, else, contains, program, interface, select to set the next line indent higher
                 if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE) or re.match('^\s*else\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*do\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*subroutine\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*function\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE):
+                    or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) \
+                    or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*select\s*', to_output, flags=re.IGNORECASE) \
+                    or re.match('^\s*case\s*', to_output, flags=re.IGNORECASE):
                     next_line_indent_more = True
+
+                # set start_select when we enter a select structure
+                if re.match('^\s*select\s*', to_output, flags=re.IGNORECASE):
+                    start_select = True
+
+                # if at a 'case' statement, check whether it's the first one, via start_select
+                # - if so, don't change the indent, as we just want it to be indented next time
+                # otherwise, unindent by one
+                if re.match('^\s*case\s*', to_output, flags=re.IGNORECASE):
+                    if start_select:
+                        start_select = False
+                    else:
+                        indent = indent-1
+
             else:
                 next_line_indent_more = False
 

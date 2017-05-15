@@ -4,7 +4,7 @@
 
 PROGRAM ATCHEM
 
-  use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+  use, intrinsic :: iso_fortran_env, only : stderr => error_unit
   use types_mod
   use species
   use constraints
@@ -108,7 +108,7 @@ PROGRAM ATCHEM
       integer(kind=NPI) :: ipar (*), ier, neq, i, np
       integer :: j
       real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
-      real(kind=DP), allocatable :: yPlusV (:), yPlusVi(:)
+      real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
     end subroutine FCVJTIMES
 
     subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
@@ -146,27 +146,27 @@ PROGRAM ATCHEM
 
   ! Read in command line argument to direct output files to a given directory
   cmd_arg_count = command_argument_count()
-  if (cmd_arg_count>0) then
+  if ( cmd_arg_count > 0 ) then
     call get_command_argument( 1, output_dir )
   else
     output_dir = "modelOutput"
   end if
-  if (cmd_arg_count>1) then
+  if ( cmd_arg_count > 1 ) then
     call get_command_argument( 2, instantaneousRates_dir )
   else
     instantaneousRates_dir = "instantaneousRates"
   end if
-  if (cmd_arg_count>2) then
+  if ( cmd_arg_count > 2 ) then
     call get_command_argument( 3, param_dir )
   else
     param_dir = "modelConfiguration"
   end if
-  if (cmd_arg_count>3) then
+  if ( cmd_arg_count > 3 ) then
     call get_command_argument( 4, spec_constraints_dir )
   else
     spec_constraints_dir = "speciesConstraints"
   end if
-  if (cmd_arg_count>4) then
+  if ( cmd_arg_count > 4 ) then
     call get_command_argument( 5, env_constraints_dir )
   else
     env_constraints_dir = "environmentConstraints"
@@ -176,19 +176,19 @@ PROGRAM ATCHEM
   write (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
   write (*,*) 'Parameter dir is ', param_dir
   !   OPEN FILES FOR OUTPUT
-  open (unit=50, file=trim(output_dir) // "/concentration.output")
-  open (unit=51, file=trim(output_dir) // "/errors.output")
-  open (unit=52, file=trim(output_dir) // "/envVar.output")
-  open (unit=53, file=trim(output_dir) // "/finalModelState.output")
-  open (unit=54, file=trim(output_dir) // "/initialConditionsSetting.output")
-  open (unit=55, file=trim(output_dir) // "/jacobian.output")
-  open (unit=56, file=trim(output_dir) // "/lossRates.output")
-  open (unit=57, file=trim(output_dir) // "/mainSolverParameters.output")
-  open (unit=58, file=trim(output_dir) // "/photolysisRates.output")
-  open (unit=59, file=trim(output_dir) // "/photoRateCalcParameters.output")
-  open (unit=60, file=trim(output_dir) // "/productionRates.output")
-  open (unit=61, file=trim(output_dir) // "/sparseSolverParameters.output")
-  open (unit=62, file=trim(output_dir) // "/stepSize.output")
+  open (unit=50, file=trim( output_dir ) // "/concentration.output")
+  open (unit=51, file=trim( output_dir ) // "/errors.output")
+  open (unit=52, file=trim( output_dir ) // "/envVar.output")
+  open (unit=53, file=trim( output_dir ) // "/finalModelState.output")
+  open (unit=54, file=trim( output_dir ) // "/initialConditionsSetting.output")
+  open (unit=55, file=trim( output_dir ) // "/jacobian.output")
+  open (unit=56, file=trim( output_dir ) // "/lossRates.output")
+  open (unit=57, file=trim( output_dir ) // "/mainSolverParameters.output")
+  open (unit=58, file=trim( output_dir ) // "/photolysisRates.output")
+  open (unit=59, file=trim( output_dir ) // "/photoRateCalcParameters.output")
+  open (unit=60, file=trim( output_dir ) // "/productionRates.output")
+  open (unit=61, file=trim( output_dir ) // "/sparseSolverParameters.output")
+  open (unit=62, file=trim( output_dir ) // "/stepSize.output")
   flush(6)
 
   call readNumberOfSpeciesAndReactions()
@@ -290,7 +290,7 @@ PROGRAM ATCHEM
   !    READ IN SOLVER PARAMETERS
   allocate(tempForSolverParameters(100))
   write (*,*) 'Reading solver parameters from file...'
-  call getParametersFromFile( trim(param_dir) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
+  call getParametersFromFile( trim( param_dir ) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
   write (*,*) 'Finished reading solver parameters from file.'
   allocate (solverParameters(solverParameterSize))
   do i = 1, solverParameterSize
@@ -300,13 +300,13 @@ PROGRAM ATCHEM
   !   READ IN MODEL PARAMETERS
   allocate(tempForModelParameters(100))
   write (*,*) 'Reading model parameters from file...'
-  call getParametersFromFile( trim(param_dir) //  "/model.parameters", tempForModelParameters, modelParameterSize )
+  call getParametersFromFile( trim( param_dir ) //  "/model.parameters", tempForModelParameters, modelParameterSize )
   write (*,*) 'Finished reading model parameters from file.'
   allocate (modelParameters(modelParameterSize))
   do i = 1, modelParameterSize
     modelParameters(i) = tempForModelParameters(i)
   end do
-  deallocate(tempForModelParameters)
+  deallocate (tempForModelParameters)
   write (*,*)
 
   !   SET SOLVER PARAMETERS
@@ -341,9 +341,9 @@ PROGRAM ATCHEM
   preconBandLower = solverParameters(10)
 
   ! float format
-  100 FORMAT (A17, E11.3)
+  100 format (A17, E11.3)
   ! integer format
-  200 FORMAT (A17, I11)
+  200 format (A17, I11)
   write (*,*) 'Solver parameters:'
   write (*,*) '------------------'
   write (*, 100) 'atol: ', atol
@@ -355,7 +355,7 @@ PROGRAM ATCHEM
   write (*, 100) 'maxStep: ', maxStep
   write (*, 200) 'preconBandUpper: ', preconBandUpper
   write (*, 200) 'preconBandLower: ', preconBandLower
-  write (*, '(A17, A29) ') 'solverType: ', adjustl(solverTypeName(solverType))
+  write (*, '(A17, A29) ') 'solverType: ', adjustl( solverTypeName(solverType) )
   write (*,*) '------------------'
   write (*,*)
 
@@ -401,18 +401,18 @@ PROGRAM ATCHEM
   irOutStepSize = modelParameters(16)
 
   ! float format
-  300 FORMAT (A52, E11.3)
+  300 format (A52, E11.3)
   ! integer format
-  400 FORMAT (A52, I11)
+  400 format (A52, I11)
   ! string format
-  500 FORMAT (A52, A17)
+  500 format (A52, A17)
   write (*,*) 'Model parameters:'
   write (*,*) '-----------------'
   write (*, 400) 'number of steps: ', maxNumTimesteps
   write (*, 300) 'step size (seconds): ', timestepSize
-  write (*, 500) 'species interpolation method: ', adjustl(interpolationMethodName(speciesInterpolationMethod))
-  write (*, 500) 'conditions interpolation method: ', adjustl(interpolationMethodName(conditionsInterpolationMethod))
-  write (*, 500) 'dec interpolation method: ', adjustl(interpolationMethodName(decInterpolationMethod))
+  write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
+  write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
+  write (*, 500) 'dec interpolation method: ', adjustl( interpolationMethodName(decInterpolationMethod) )
   write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
   write (*, 400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
   write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
@@ -466,7 +466,7 @@ PROGRAM ATCHEM
   do species_counter = 1, SORNumberSize
     SORNumber(species_counter) = tempSORNumber(species_counter)
   end do
-  deallocate(tempSORNumber)
+  deallocate (tempSORNumber)
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
@@ -508,18 +508,18 @@ PROGRAM ATCHEM
   ipar(2) = numReac
 
   call FNVINITS( 1, neq, ier )
-  if (ier/=0) then
+  if ( ier /= 0 ) then
     write (stderr, 20) ier
-    20   FORMAT (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
+    20   format (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
     stop
   end if
 
   write (*, '(A30, E15.3) ') 't0 = ', t0
   call FCVMALLOC( t0, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
-  if (ier/=0) then
+  if ( ier /= 0 ) then
     write (stderr, 30) ier
-    30   FORMAT (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
+    30   format (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
     stop
   end if
 
@@ -531,21 +531,21 @@ PROGRAM ATCHEM
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER
-  if (solverType==1) then
+  if ( solverType == 1 ) then
     call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
-  else if (solverType==2) then
+  else if ( solverType == 2 ) then
     call FCVSPGMR( 1, 1, lookBack, deltaMain, ier )
     call FCVBPINIT( neq, preconBandUpper, preconBandLower, ier )
-    if (ier/=0 ) then
+    if ( ier /= 0 ) then
       write (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
       call FCVFREE()
       stop
     end if
     ! DENSE SOLVER
-  else if (solverType==3) then
+  else if ( solverType == 3 ) then
     ! make sure no Jacobian approximation is required
-    if (JVapprox==1) then
+    if ( JVapprox == 1 ) then
       write (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'!
       write (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
       stop
@@ -558,7 +558,7 @@ PROGRAM ATCHEM
     stop
   end if
   ! ERROR HANDLING
-  if (ier/=0) then
+  if ( ier /= 0 ) then
     write (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
     call FCVFREE()
     stop
@@ -567,13 +567,13 @@ PROGRAM ATCHEM
   ! Use Jacobian approximation if required. Calling FCVSPILSSETJAC() with non-zero flag
   ! specifies that spgmr, spbcg, or sptfqmr should use the supplied FCVJTIMES() (in solverfunctions.f90).
   ! In our case, solverType={1,2} calls SPGMR above, while solverType=3 errors out if JvApprox=1
-  if (JVapprox==1) then
+  if ( JVapprox == 1 ) then
     call FCVSPILSSETJAC( 1, ier )
   end if
 
-  if (ier/=0) then
+  if ( ier /= 0 ) then
     write (stderr, 40) ier
-    40   FORMAT (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
+    40   format (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
     call FCVFREE()
     stop
   end if
@@ -585,12 +585,12 @@ PROGRAM ATCHEM
   !    RUN MODEL
   !    ********************************************************************************************************
 
-  do while (currentNumTimestep<maxNumTimesteps)
+  do while ( currentNumTimestep < maxNumTimesteps )
 
     ! GET CONCENTRATIONS FOR SOLVED SPECIES
     write (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
     call FCVODE( tout, t, z, itask, ier )
-    if (ier/=0) then
+    if ( ier /= 0 ) then
       write (*,*) 'ier POST FCVODE()= ', ier
     end if
     flush(6)
@@ -609,17 +609,17 @@ PROGRAM ATCHEM
     ! write (stderr, fmt) t, y (1), y (2)
 
     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-    time = INT( t )
+    time = int( t )
 
-    elapsed = INT( t-modelStartTime )
-    if (MOD( elapsed, ratesOutputStepSize )==0) then
+    elapsed = int( t-modelStartTime )
+    if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1, speciesNames )
       call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0, speciesNames )
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
     write (*,*) 'time = ', time
-    if (MOD( elapsed, jacobianOutputStepSize )==0) then
+    if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numSpec, numReac, speciesConcs, fy, t )
       call outputjfy( fy, numSpec, t )
     end if
@@ -629,7 +629,7 @@ PROGRAM ATCHEM
     call outputPhotolysisRates( j, t )
 
     !OUTPUT INSTANTANEOUS RATES
-    if (MOD (elapsed, irOutStepSize)==0) then
+    if ( mod( elapsed, irOutStepSize ) == 0 ) then
       call outputInstantaneousRates( time, numReac )
     end if
 
@@ -653,7 +653,7 @@ PROGRAM ATCHEM
     ! previousSeconds = currentSeconds
 
     ! ERROR HANDLING
-    if (ier<0) then
+    if ( ier < 0 ) then
       fmt = "(///' SUNDIALS_ERROR: FCVODE()returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
       write (stderr, fmt) ier, iout (15)
       ! free memory
@@ -661,7 +661,7 @@ PROGRAM ATCHEM
       stop
     end if
 
-    if (ier==0) then
+    if ( ier == 0 ) then
       tminus1 = t
       tout = tout + timestepSize
       currentNumTimestep = currentNumTimestep + 1
@@ -670,7 +670,7 @@ PROGRAM ATCHEM
   end do
 
   call FCVDKY( t, 1, z, ier )
-  if (ier/=0) then
+  if ( ier /= 0 ) then
     fmt = "(///' SUNDIALS_ERROR: FCVDKY()returned ier = ', I4) "
     write (stderr, fmt) ier
     call FCVFREE()
@@ -695,7 +695,7 @@ PROGRAM ATCHEM
                  iout (lnni), iout (lncf), iout (lnetf )
 
   call SYSTEM_CLOCK( runEnd, rate )
-  runTime =(runEnd - runStart) / rate
+  runTime = ( runEnd - runStart ) / rate
   write (*,*) 'Runtime = ', runTime
 
   !   deallocate all
@@ -750,9 +750,9 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   integer(kind=NPI) :: ipar (*), ier, neq, i, np
   integer :: j
   real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
-  real(kind=DP), allocatable :: yPlusV (:), yPlusVi(:)
+  real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
   np = getNumberOfSpecies()
-  allocate (yPlusV (np), yPlusVi(np))
+  allocate (yPlusV(np), yPlusVi(np))
 
   neq = ipar(1)
   delta = 1.00d-03
@@ -772,7 +772,7 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
 
   ! JVminus1 + deltaJV
   do i = 1, neq
-    fjv(i) = (yPlusVi(i) - fy(i)) / delta
+    fjv(i) = ( yPlusVi(i) - fy(i) ) / delta
   end do
   deallocate (yPlusV, yPlusVi)
 
@@ -806,11 +806,11 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   allocate (dy(np), z(np))
 
   do i = 1, numberOfConstrainedSpecies
-    if (i<=numberOfVariableConstrainedSpecies) then
+    if ( i <= numberOfVariableConstrainedSpecies ) then
       call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, &
                                      1, i, maxNumberOfDataPoints, numberOfVariableConstrainedSpecies )
     else
-      concAtT = dataFixedY (i-numberOfVariableConstrainedSpecies)
+      concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if
     constrainedConcs(i) = concAtT
     call setConstrainedConc( i, concAtT )

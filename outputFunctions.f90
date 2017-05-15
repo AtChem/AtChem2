@@ -61,7 +61,7 @@ contains
 
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     ! Given a list speciesNames, and an integer reactionNumber, return reaction,
-    ! a string containing
+    ! a string containing the string representing that reaction.
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
     implicit none

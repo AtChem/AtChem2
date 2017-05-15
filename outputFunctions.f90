@@ -53,7 +53,7 @@ contains
   end subroutine outputPhotolysisRates
 
 
-  subroutine getReaction( speciesNames, reactionNumber, reaction )
+  pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     ! Given a list speciesNames, and an integer reactionNumber, return reaction,
     ! a string containing
     use reactionStructure
@@ -64,8 +64,7 @@ contains
     character(len=maxSpecLength), intent(in) :: speciesNames(*)
     integer(kind=NPI) :: i, numReactants, numProducts
     integer(kind=NPI), intent(in) :: reactionNumber
-    character(len=maxReactionStringLength) :: reactantStr, productStr
-    character(len=maxReactionStringLength), intent(out) :: reaction
+    character(len=maxReactionStringLength) :: reactantStr, productStr, reaction
 
     ! Loop over reactants, and copy the reactant name for any reactant used in
     ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
@@ -110,7 +109,7 @@ contains
     reaction = trim( reactantStr ) // trim( productStr )
 
     return
-  end subroutine getReaction
+  end function getReaction
 
 
   subroutine outputRates( r, arrayLen, t, p, flag, speciesNames )
@@ -137,7 +136,7 @@ contains
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
 
-          call getReaction( speciesNames, r(i, j), reaction )
+          reaction = getReaction( speciesNames, r(i, j) )
           ! Flag = 0 for reaction, 1 for loss
           if ( flag == 0 ) then
             write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )

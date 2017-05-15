@@ -2,8 +2,11 @@ module outputFunctions_mod
   use types_mod
 contains
   subroutine ro2Sum( ro2, y )
+    implicit none
+
     real(kind=DP) :: ro2
-    real(kind=DP), intent (in) :: y(*)
+    real(kind=DP), intent(in) :: y(*)
+
     ro2 = 0.00e+00
   end subroutine ro2Sum
 
@@ -14,7 +17,7 @@ contains
     integer(kind=NPI) :: i
     real(kind=DP), intent(in) :: t
 
-    if (ro2<0) ro2 = 0.0
+    if ( ro2 < 0 ) ro2 = 0.0
     write (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
     return
@@ -23,6 +26,7 @@ contains
   !--------------------------------------------------------------------
   subroutine outputjfy( fy, nsp, t )
     implicit none
+
     integer(kind=NPI), intent(in) :: nsp
     integer(kind=NPI) :: i, j
     real(kind=DP), intent(in) :: fy(nsp, nsp), t
@@ -37,6 +41,7 @@ contains
   !     ---------------------------------------------------------------
   subroutine outputPhotolysisRates( j, t )
     use photolysisRates, only : nrOfPhotoRates, ck
+    implicit none
 
     real(kind=DP), intent(in) :: j(*), t
     integer(kind=NPI) :: i
@@ -55,12 +60,12 @@ contains
     integer(kind=NPI) :: i, j
     ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
     ! using the elements of specInt as a key
-    if (size(interestSpeciesConcList)/=size(speciesOfInterest)) then
-      stop 'size(interestSpeciesConcList)/=size(speciesOfInterest) in getConcForSpecInt'
+    if ( size( interestSpeciesConcList ) /= size( speciesOfInterest ) ) then
+      stop 'size(interestSpeciesConcList) /= size(speciesOfInterest) in getConcForSpecInt'
     end if
-    do i = 1, size(masterConcList)
-      do j = 1, size(speciesOfInterest)
-        if (speciesOfInterest(j)==i) then
+    do i = 1, size( masterConcList )
+      do j = 1, size( speciesOfInterest )
+        if ( speciesOfInterest(j) == i ) then
           interestSpeciesConcList(j) = masterConcList(i)
         end if
       end do
@@ -88,7 +93,7 @@ contains
     ! String these together with '+', and append a '='
     numReactants = 0
     do i = 1, lhs_size
-      if (clhs(1, i)==reactionNumber) then
+      if ( clhs(1, i) == reactionNumber ) then
         numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
       end if
@@ -96,13 +101,12 @@ contains
 
     reactantStr = ' '
     do i = 1, numReactants
-      reactantStr = trim(adjustl(trim(reactantStr) // trim(reactants(i))))
-      if (i<numReactants) then
-        reactantStr = trim(reactantStr) // '+'
+      reactantStr = trim( adjustl( trim( reactantStr ) // trim( reactants(i) ) ) )
+      if ( i < numReactants ) then
+        reactantStr = trim( reactantStr ) // '+'
       end if
     end do
-    reactantStr = trim(reactantStr) // '='
-
+    reactantStr = trim( reactantStr ) // '='
 
     ! Loop over products, and copy the product name for any product created in
     ! reaction reactionNumber. use numProducts as a counter of the number of products.
@@ -110,7 +114,7 @@ contains
     ! result in reaction, which is returned
     numProducts = 0
     do i = 1, rhs_size
-      if (crhs(1, i)==reactionNumber) then
+      if ( crhs(1, i) == reactionNumber ) then
         numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))
       end if
@@ -118,13 +122,13 @@ contains
 
     productStr = ' '
     do i = 1, numProducts
-      productStr = trim(adjustl(trim(productStr) // trim(products(i))))
-      if (i<numProducts) then
-        productStr = trim(productStr) // '+'
+      productStr = trim( adjustl( trim( productStr ) // trim( products(i) ) ) )
+      if ( i < numProducts ) then
+        productStr = trim( productStr ) // '+'
       end if
     end do
 
-    reaction = trim(reactantStr) // trim(productStr)
+    reaction = trim( reactantStr ) // trim( productStr )
 
     return
   end subroutine getReaction
@@ -133,7 +137,7 @@ contains
 
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
-    use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
@@ -143,26 +147,26 @@ contains
     integer(kind=NPI) :: i, j
     character(len=maxReactionStringLength) :: reaction
 
-    if (size( r, 1 ) /= size( arrayLen )) then
+    if ( size( r, 1 ) /= size( arrayLen ) ) then
       stop "size( r, 1 ) /= size( arrayLen ) in outputRates()."
     end if
     do i = 1, size( arrayLen )
-      if (arrayLen(i) > size( r, 2 )) then
+      if ( arrayLen(i) > size( r, 2 ) ) then
         write (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i
         stop
       end if
       do j = 2, arrayLen(i)
-        if (r(i, j)/=-1) then
+        if ( r(i, j) /= -1 ) then
 
           call getReaction( speciesNames, r(i, j), reaction )
           ! Flag = 0 for reaction, 1 for loss
-          if (flag==0) then
-            write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
+          if ( flag == 0 ) then
+            write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
           else
-            if (flag/=1) then
+            if ( flag /= 1 ) then
               stop "Unexpected flag value to outputRates()"
             end if
-            write (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim(reaction)
+            write (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
           end if
         end if
       end do
@@ -175,7 +179,7 @@ contains
     use directories, only : instantaneousRates_dir
     use productionAndLossRates, only : ir
     use storage, only : maxFilepathLength
-    use, intrinsic :: iso_fortran_env, only : stderr=>error_unit
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=QI), intent(in) :: time
@@ -186,7 +190,7 @@ contains
 
     write (strTime,*) time
 
-    irfileLocation = trim(instantaneousRates_dir) // '/' // ADJUSTL (strTime)
+    irfileLocation = trim( instantaneousRates_dir ) // '/' // adjustl( strTime )
 
     open (10, file=irfileLocation)
     do i = 1, numReac
@@ -209,7 +213,7 @@ contains
     integer(kind=NPI) :: i
 
     do i = 1, arrayOfConcsSize
-      if (arrayOfConcs(i)<0) then
+      if ( arrayOfConcs(i) < 0.0 ) then
         arrayOfConcs(i) = 0d0
       end if
     end do

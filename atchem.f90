@@ -488,7 +488,7 @@ PROGRAM ATCHEM
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-  call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest, SORNumberSize )
+  call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is y with all the constrained species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, z, constrainedSpecies )
@@ -625,7 +625,7 @@ PROGRAM ATCHEM
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-    call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest, SORNumberSize )
+    call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( j, t )
 
     !OUTPUT INSTANTANEOUS RATES

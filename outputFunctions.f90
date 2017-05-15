@@ -23,7 +23,7 @@ contains
     return
   end subroutine outputEnvVar
 
-  !--------------------------------------------------------------------
+
   subroutine output_jfy( fy, t )
     implicit none
 
@@ -40,7 +40,7 @@ contains
     write (55,*) '---------------'
   end subroutine output_jfy
 
-  !     ---------------------------------------------------------------
+
   subroutine outputPhotolysisRates( t )
     use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
@@ -52,30 +52,7 @@ contains
     return
   end subroutine outputPhotolysisRates
 
-  !     ---------------------------------------------------------------
-  subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
-    ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
-    ! in the same order as the species are in specInt
-    real(kind=DP), intent(in) :: masterConcList(:)
-    integer(kind=NPI), intent(in) :: speciesOfInterest(:)
-    real(kind=DP), intent(out) :: interestSpeciesConcList(:)
-    integer(kind=NPI) :: i, j
-    ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
-    ! using the elements of specInt as a key
-    if ( size( interestSpeciesConcList ) /= size( speciesOfInterest ) ) then
-      stop 'size(interestSpeciesConcList) /= size(speciesOfInterest) in getConcForSpecInt'
-    end if
-    do i = 1, size( masterConcList )
-      do j = 1, size( speciesOfInterest )
-        if ( speciesOfInterest(j) == i ) then
-          interestSpeciesConcList(j) = masterConcList(i)
-        end if
-      end do
-    end do
-    return
-  end subroutine getConcForSpecInt
 
-  !     ---------------------------------------------------------------
   subroutine getReaction( speciesNames, reactionNumber, reaction )
     ! Given a list speciesNames, and an integer reactionNumber, return reaction,
     ! a string containing
@@ -135,6 +112,7 @@ contains
     return
   end subroutine getReaction
 
+
   subroutine outputRates( r, arrayLen, t, p, flag, speciesNames )
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
@@ -175,6 +153,7 @@ contains
     return
   end subroutine outputRates
 
+
   subroutine outputInstantaneousRates( time, numReac )
     use reactionStructure
     use directories, only : instantaneousRates_dir
@@ -202,6 +181,7 @@ contains
 
     return
   end subroutine outputInstantaneousRates
+
 
   subroutine outputSpeciesOutputRequired( t, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.

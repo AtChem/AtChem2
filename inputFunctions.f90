@@ -223,7 +223,8 @@ contains
 
 
   subroutine readPhotoRates()
-    use photolysisRates
+    use photolysisRates, only : photoX, photoY, photoY2, numConPhotoRates, maxNrOfConPhotoRates, photoNumberOfPoints, &
+                                constrainedPhotoRates, nrOfPhotoRates, photoRateNames, constrainedPhotoRatesNumbers, ck
     use directories, only : param_dir, env_constraints_dir
     use storage, only : maxPhotoRateNameLength, maxFilepathLength
     implicit none
@@ -472,7 +473,8 @@ contains
 
   subroutine readSpeciesConstraints( t, y )
     use species
-    use constraints
+    use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
+                            setNumberOfConstrainedSpecies, setConstrainedConc
     use chemicalConstraints
     use directories, only : param_dir, spec_constraints_dir
     use photolysisRates, only : maxNrOfPhotoRates
@@ -605,8 +607,8 @@ contains
                   dataFixedY(numberOfFixedConstrainedSpecies)
     else
       do i = 1, numberOfFixedConstrainedSpecies
-        write (*,*) i, constrainedNames(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
-                    dataFixedY(numberOfFixedConstrainedSpecies)
+        write (*,*) i, constrainedNames(i + numberOfVariableConstrainedSpecies), &
+                    dataFixedY(i)
       end do
     end if
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'

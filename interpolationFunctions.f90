@@ -49,13 +49,13 @@ contains
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
+      call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
       if ( concAtT <= 0 ) then
         concAtT = 0
       end if
       ! CUBIC SPLINE INTERPOLATION (LN)
     else if ( interpMethod == 2 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
+      call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
       concAtT = exp( concAtT )
       ! PIECEWISE CONSTANT INTERPOLATION
     else if ( interpMethod == 3 ) then
@@ -105,7 +105,7 @@ contains
     return
   end subroutine getConstrainedQuantAtT2D
 
-  subroutine splint2D( xa, ya, y2a, n, x, ind, y )
+  subroutine cubic_spline( xa, ya, y2a, n, x, ind, y )
     use types_mod
     implicit none
 
@@ -122,7 +122,7 @@ contains
     real(kind=DP) :: a, b, h
 
     if ( n > size( xa, 2 ) ) then
-      stop 'n > size( xa, 2 ) in splint2D()'
+      stop 'n > size( xa, 2 ) in cubic_spline()'
     end if
 
     klo = 1
@@ -143,7 +143,7 @@ contains
     h = xa(ind, khi) - xa(ind, klo)
 
     if ( h == 0. ) then
-      print *, 'Bad input in splint2D()! The xa''s must be distinct'!
+      print *, 'Bad input in cubic_spline()! The xa''s must be distinct'!
       stop
     end if
 
@@ -151,5 +151,5 @@ contains
     b = ( x - xa(ind, klo) ) / h
     y = a * ya(ind, klo) + b * ya(ind, khi) + ( ( a ** 3 - a ) * y2a(ind, klo) + ( b ** 3 - b ) * y2a(ind, khi) ) * ( h ** 2 ) / 6.
     return
-  end subroutine splint2D
+  end subroutine cubic_spline
 end module interpolationFunctions_mod

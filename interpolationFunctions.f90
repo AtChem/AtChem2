@@ -1,6 +1,9 @@
 module interpolationFunctions_mod
 contains
   subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, constraintType, ind, concAtT )
+    ! This routine returns in concAtT the value of the requested quantity (referenced
+    ! by the ind-th line of x, y, y2) based upon the constraint data given and
+    ! interpolation method given
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use interpolationMethod
@@ -61,6 +64,7 @@ contains
         if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
           concAtT = y(ind, i)
           fac_int_found = .true.
+          exit
         end if
       end do
       if ( fac_int_found .eqv. .false. ) then
@@ -82,7 +86,7 @@ contains
       if ( lin_int_suc .eqv. .false. ) then
         concAtT = y(ind, dataNumberOfPoints)
         write (*,*) 'Failed to lin int'
-      else if ( lin_int_suc .eqv. .true. ) then
+      else
         ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
         xBefore = x(ind, indexBefore)
         yBefore = y(ind, indexBefore)
@@ -108,14 +112,17 @@ contains
     integer(kind=NPI), intent(in) :: ind, n
     real(kind=DP), intent(in) :: x, xa(:,:), y2a(:,:), ya(:,:)
     real(kind=DP), intent(out) :: y
-    ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
-    ! (with the xai�s in order), and given the array y2a(1:n), which is the output
-    ! from spline above, and given a value of x, this routine returns a
-    ! cubic-spline interpolated value y.
+    ! This routine returns the value y which is the evaluation at x of the cubic spline through
+    ! points ya(ind,:) at xa(ind,:), with second derivatives there of y2a(ind,:)
+
+    ! n is the maximum number of values in this line of x1, ya, y2a (which may not be the
+    ! length of this line if different species have different constraint times, for example)
+
     integer(kind=NPI) :: k, khi, klo
     real(kind=DP) :: a, b, h
 
-    klo = 1 !We will find the right place in the table by means of bisection.
+    klo = 1
+    ! We will find the right place in the table by means of bisection.
     ! This is optimal if sequential calls to this routine are at random values of
     ! x. If sequential calls are in order, and closely spaced, one would do better
     ! to store previous values of klo and khi and test if they remain appropriate

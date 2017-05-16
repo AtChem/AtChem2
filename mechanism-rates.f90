@@ -7,7 +7,7 @@ contains
     use zenithData1, only : cosX, secX
     use constraints
     use envVars, only : ro2
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+    use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use outputFunctions_mod, only : ro2sum
     use constraintFunctions_mod, only : getEnvVarsAtT
     use utilityFunctions_mod, only : atmosphere
@@ -50,7 +50,7 @@ contains
     end do
 
     do i = 1, numConPhotoRates
-      call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints(i), 2_SI, i, photoRateAtT )
+      call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints(i), 2_SI, i, photoRateAtT )
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     end do
 

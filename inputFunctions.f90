@@ -481,7 +481,7 @@ contains
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : matchOneNameToNumber
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+    use interpolationFunctions_mod, only : getConstrainedQuantAtT
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -633,7 +633,7 @@ contains
     write (*,*) 'Initialising concentrations of constrained species...'
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
+        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
       else
         concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if

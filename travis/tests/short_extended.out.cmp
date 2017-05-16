@@ -125,8 +125,7 @@ preconBandLower:         750
  Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...
  Finished counting the names of fixed-concentration constrained species.
  Number of names of fixed-concentration constrained species:                    0
- Reading in the names of variable-concentration constrained species...
- Finished reading the names of variable-concentration constrained species
+ Skipped reading the names of variable-concentration constrained species
  maxNumberOfDataPoints:       10000
  Allocating storage for variable-concentration constrained species...
  Finished allocating storage for variable-concentration constrained species.

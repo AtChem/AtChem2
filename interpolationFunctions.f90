@@ -32,15 +32,18 @@ contains
     end if
 
     ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
-    if ( constraintType == 1_SI ) then
-      call getSpeciesInterpMethod( interpMethod )
-    else if ( constraintType == 2_SI ) then
-      call getConditionsInterpMethod( interpMethod )
-    else if ( constraintType == 3_SI ) then
-      call getDecInterpMethod( interpMethod )
-    else
-      write (*,*) 'Error in setting constraintType, error = ', constraintType
-    end if
+    select case ( constraintType )
+      case (1_SI)
+        call getSpeciesInterpMethod( interpMethod )
+      case (2_SI)
+        call getConditionsInterpMethod( interpMethod )
+      case (3_SI)
+        call getDecInterpMethod( interpMethod )
+      case default
+        write (*,*) 'Error in setting constraintType, error = ', constraintType
+        stop
+    end select
+
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then

@@ -33,13 +33,13 @@ contains
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, maxPoints, concAtT )
+      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
       if ( concAtT <= 0 ) then
         concAtT = 0
       end if
       ! CUBIC SPLINE INTERPOLATION (LN)
     else if ( interpMethod == 2 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, maxPoints, concAtT )
+      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
       concAtT = exp( concAtT )
       ! PIECEWISE CONSTANT INTERPOLATION
     else if ( interpMethod == 3 ) then
@@ -88,13 +88,12 @@ contains
     return
   end subroutine getConstrainedQuantAtT2D
 
-  subroutine splint2D( xa, ya, y2a, n, x, ind, maxPoints, y )
+  subroutine splint2D( xa, ya, y2a, n, x, ind, y )
     use types_mod
     implicit none
 
     integer(kind=NPI), intent(in) :: ind, n
-    integer(kind=QI), intent(in) :: maxPoints
-    real(kind=DP), intent(in) :: x, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
+    real(kind=DP), intent(in) :: x, xa(:,:), y2a(:,:), ya(:,:)
     real(kind=DP), intent(out) :: y
     ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
     ! (with the xai�s in order), and given the array y2a(1:n), which is the output

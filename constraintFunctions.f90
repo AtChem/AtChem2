@@ -35,7 +35,7 @@ contains
     !GET CURRENT VALUE OF basePhotoRate
 
     call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), 2, &
-                                   basePhotoRateNum, maxNumberOfDataPoints, numConPhotoRates, JSpeciesAtT )
+                                   basePhotoRateNum, JSpeciesAtT )
 
     if ( JSpeciesAtT == 0 ) then
       jfac = 0
@@ -131,8 +131,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       pressure = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -150,8 +149,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       temp = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -169,8 +167,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       h2o = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -190,8 +187,7 @@ contains
       M = calcM(pressure, temp)
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       m = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -210,8 +206,7 @@ contains
       call calcDec( dec, t )
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       dec = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -233,8 +228,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       blh = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -253,8 +247,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       rh = envVarAtT
       h2o =  convertRHtoH2O(rh, temp, pressure)
       ! IF FIXED
@@ -277,8 +270,7 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       dilute = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -305,8 +297,7 @@ contains
       call calcJFac( jfac, t )
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       jfac = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -329,8 +320,7 @@ contains
       write (*,*) "No calculation available for ROOFOPEN Variable"
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
-                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
+      call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2, envVarNum, envVarAtT )
       roofOpen = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then

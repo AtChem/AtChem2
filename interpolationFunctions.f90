@@ -8,8 +8,8 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: t
-    integer(kind=NPI), intent(in) :: dataNumberOfPoints
     real(kind=DP), intent(in) :: x(:,:), y(:,:), y2(:,:)
+    integer(kind=NPI), intent(in) :: dataNumberOfPoints
     integer(kind=SI), intent(in) :: constraintType
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT

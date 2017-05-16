@@ -109,8 +109,8 @@ contains
     use types_mod
     implicit none
 
-    integer(kind=NPI), intent(in) :: ind, n
-    real(kind=DP), intent(in) :: x, xa(:,:), y2a(:,:), ya(:,:)
+    real(kind=DP), intent(in) :: xa(:,:), y2a(:,:), ya(:,:), x
+    integer(kind=NPI), intent(in) :: n, ind
     real(kind=DP), intent(out) :: y
     ! This routine returns the value y which is the evaluation at x of the cubic spline through
     ! points ya(ind,:) at xa(ind,:), with second derivatives there of y2a(ind,:)

@@ -476,9 +476,9 @@ contains
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
                             setNumberOfConstrainedSpecies, setConstrainedConc
-    use chemicalConstraints
+    use chemicalConstraints, only : numberOfConstrainedSpecies, constrainedSpecies, constrainedNames, dataX, dataY, dataY2, &
+                                    speciesNumberOfPoints, dataFixedY, constrainedConcs
     use directories, only : param_dir, spec_constraints_dir
-    use photolysisRates, only : maxNrOfPhotoRates
     use storage, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : matchOneNameToNumber
     use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
@@ -489,7 +489,6 @@ contains
     real(kind=DP) :: concAtT, value
     integer(kind=NPI) :: i, j, id, numberOfSpecies
     integer :: k, dataNumberOfPoints
-    integer(kind=NPI) :: localNumberOfConstrainedSpecies
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
@@ -508,8 +507,8 @@ contains
     write (*,*) 'Finished counting the names of fixed-concentration constrained species.'
     write (*,*) 'Number of names of fixed-concentration constrained species:', numberOfFixedConstrainedSpecies
 
-    localNumberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    allocate (constrainedSpecies(localNumberOfConstrainedSpecies), constrainedNames(localNumberOfConstrainedSpecies) )
+    numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
+    allocate (constrainedSpecies(numberOfConstrainedSpecies), constrainedNames(numberOfConstrainedSpecies) )
 
     ! fill constrainedNames and constrainedSpecies with the names and numbers of variable-concentration constrained species
     if ( numberOfVariableConstrainedSpecies > 0 ) then
@@ -613,26 +612,26 @@ contains
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    write (51,*) "Total number of constrained species:", localNumberOfConstrainedSpecies
+    write (51,*) "Total number of constrained species:", numberOfConstrainedSpecies
 
     ! ERROR HANDLING
     numberOfSpecies = getNumberOfSpecies()
-    if ( localNumberOfConstrainedSpecies >= numberOfSpecies ) then
+    if ( numberOfConstrainedSpecies >= numberOfSpecies ) then
       write (51,*) "Error: number of constrained species >= number of species "
-      write (51,*) "number of constrained species = ", localNumberOfConstrainedSpecies
+      write (51,*) "number of constrained species = ", numberOfConstrainedSpecies
       write (51,*) "number of species = ", numberOfSpecies
       stop 2
     end if
 
-    allocate (constrainedConcs(localNumberOfConstrainedSpecies) )
+    allocate (constrainedConcs(numberOfConstrainedSpecies) )
 
-    call setNumberOfConstrainedSpecies( localNumberOfConstrainedSpecies )
+    call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     write (*,*) 'Finished reading constrained species.'
 
     ! initialise concentrations of constrained species
     write (*,*) 'Initialising concentrations of constrained species...'
-    do i = 1, localNumberOfConstrainedSpecies
+    do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
         call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, 1, i, &
                                        maxNumberOfDataPoints, numberOfVariableConstrainedSpecies )

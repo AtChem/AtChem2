@@ -489,7 +489,7 @@ contains
     real(kind=DP) :: concAtT, value
     integer(kind=NPI) :: i, j, id, numberOfSpecies
     integer :: k, dataNumberOfPoints
-    integer(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
+    integer(kind=NPI) :: localNumberOfConstrainedSpecies
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
@@ -498,24 +498,24 @@ contains
 
     ! read in number of variable-concentration constrained species
     write (*,*) 'Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
-    countOfVarConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
+    numberOfVariableConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
     write (*,*) 'Finished counting the names of variable-concentration constrained species.'
-    write (*,*) 'Number of names of variable-concentration constrained species:', countOfVarConSpecNames
+    write (*,*) 'Number of names of variable-concentration constrained species:', numberOfVariableConstrainedSpecies
 
     ! read in number of fixed-concentration constrained species
     write (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
-    countOfFixConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
+    numberOfFixedConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
     write (*,*) 'Finished counting the names of fixed-concentration constrained species.'
-    write (*,*) 'Number of names of fixed-concentration constrained species:', countOfFixConSpecNames
+    write (*,*) 'Number of names of fixed-concentration constrained species:', numberOfFixedConstrainedSpecies
 
-    countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
-    allocate (constrainedSpecies(countOfConNames), constrainedNames(countOfConNames) )
+    localNumberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
+    allocate (constrainedSpecies(localNumberOfConstrainedSpecies), constrainedNames(localNumberOfConstrainedSpecies) )
 
-
-    if ( countOfVarConSpecNames > 0 ) then
+    ! fill constrainedNames and constrainedSpecies with the names and numbers of variable-concentration constrained species
+    if ( numberOfVariableConstrainedSpecies > 0 ) then
       write (*,*) 'Reading in the names of variable-concentration constrained species...'
       call read_in_single_column_string_file( trim( param_dir ) // '/constrainedSpecies.config', constrainedNames )
-      do i = 1, countOfVarConSpecNames
+      do i = 1, numberOfVariableConstrainedSpecies
         id = matchOneNameToNumber( speciesNames, constrainedNames(i) )
         if ( id /= 0 ) then
           constrainedSpecies(i) = id
@@ -524,10 +524,6 @@ contains
           stop
         end if
       end do
-
-
-      ! TODO: remove
-      numberOfVariableConstrainedSpecies = countOfVarConSpecNames
       write (*,*) 'Finished reading the names of variable-concentration constrained species'
     else
       write (*,*) 'Skipped reading the names of variable-concentration constrained species'
@@ -540,7 +536,7 @@ contains
     allocate (dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     write (*,*) 'Finished allocating storage for variable-concentration constrained species.'
 
-    if ( countOfVarConSpecNames > 0 ) then
+    if ( numberOfVariableConstrainedSpecies > 0 ) then
       if ( numberOfVariableConstrainedSpecies > 3 ) then
         write (*,*) 1, constrainedNames(1)
         write (*,*) '...'
@@ -555,8 +551,8 @@ contains
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
     write (*,*) 'Reading concentration data for variable-concentration constrained species...'
-    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
-    if ( countOfVarConSpecNames > 0 ) then
+    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+numberOfFixedConstrainedSpecies) )
+    if ( numberOfVariableConstrainedSpecies > 0 ) then
       do i = 1, numberOfVariableConstrainedSpecies
         if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
           write (*,*) constrainedNames(i), '...'
@@ -582,13 +578,13 @@ contains
     end if
 
     ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
-    allocate (dataFixedY(countOfFixConSpecNames))
+    allocate (dataFixedY(numberOfFixedConstrainedSpecies))
     write (*,*) 'Reading in the names and concentration of the fixed constrained species ' // &
                 '(in file constrainedFixedSpecies.config)...'
     open (14, file=trim( param_dir ) // '/constrainedFixedSpecies.config', status='old') ! input file
     id = 0
     j = 0
-    do i = 1, countOfFixConSpecNames
+    do i = 1, numberOfFixedConstrainedSpecies
       read (14,*) name, value
       id = matchOneNameToNumber( speciesNames, name )
       if (id/=0) then
@@ -617,26 +613,26 @@ contains
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    write (51,*) "Total number of constrained species:", numberOfConstrainedSpecies
+    write (51,*) "Total number of constrained species:", localNumberOfConstrainedSpecies
 
     ! ERROR HANDLING
     numberOfSpecies = getNumberOfSpecies()
-    if ( numberOfConstrainedSpecies >= numberOfSpecies ) then
+    if ( localNumberOfConstrainedSpecies >= numberOfSpecies ) then
       write (51,*) "Error: number of constrained species >= number of species "
-      write (51,*) "number of constrained species = ", numberOfConstrainedSpecies
+      write (51,*) "number of constrained species = ", localNumberOfConstrainedSpecies
       write (51,*) "number of species = ", numberOfSpecies
       stop 2
     end if
 
-    allocate (constrainedConcs(numberOfConstrainedSpecies) )
+    allocate (constrainedConcs(localNumberOfConstrainedSpecies) )
 
-    call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
+    call setNumberOfConstrainedSpecies( localNumberOfConstrainedSpecies )
 
     write (*,*) 'Finished reading constrained species.'
 
     ! initialise concentrations of constrained species
     write (*,*) 'Initialising concentrations of constrained species...'
-    do i = 1, numberOfConstrainedSpecies
+    do i = 1, localNumberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
         call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), concAtT, 1, i, &
                                        maxNumberOfDataPoints, numberOfVariableConstrainedSpecies )

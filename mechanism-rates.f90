@@ -50,8 +50,8 @@ contains
     end do
 
     do i = 1, numConPhotoRates
-      call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints(i), photoRateAtT, 2, i, &
-                                     maxNumberOfDataPoints, numConPhotoRates )
+      call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints(i), 2, i, &
+                                     maxNumberOfDataPoints, numConPhotoRates, photoRateAtT )
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     end do
 

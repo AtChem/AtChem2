@@ -80,7 +80,7 @@ module constraints
   save
 
   integer(kind=NPI) :: numberOfConstrainedSpecies
-  integer :: maxNumberOfDataPoints
+  integer(kind=QI) :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
   real(kind=DP), allocatable :: constrainedConcs(:)

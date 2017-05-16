@@ -19,6 +19,20 @@ contains
     integer(kind=NPI) :: i, indexBefore, indexAfter
     integer :: linintsuc
 
+    ! Sanity checks on sizes of x, y and y2.
+    if ( size( x, 1 ) /= size( y, 1 ) ) then
+      stop 'size( x, 1 ) /= size( y, 1 ) in getConstrainedQuantAtT2D()'
+    end if
+    if ( size( x, 1 ) /= size( y2, 1 ) ) then
+      stop 'size( x, 1 ) /= size( y2, 1 ) in getConstrainedQuantAtT2D()'
+    end if
+    if ( size( x, 2 ) /= size( y, 2 ) ) then
+      stop 'size( x, 2 ) /= size( y, 2 ) in getConstrainedQuantAtT2D()'
+    end if
+    if ( size( x, 2 ) /= size( y2, 2 ) ) then
+      stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT2D()'
+    end if
+
     ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
     if ( constraintType == 1 ) then
       call getSpeciesInterpMethod( interpMethod )

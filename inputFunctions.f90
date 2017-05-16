@@ -488,33 +488,30 @@ contains
     integer :: k, dataNumberOfPoints
     integer(kind=IntErr) :: ierr
     integer(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
-    character(len=maxSpecLength), allocatable :: speciesName(:)
+    character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
 
-    speciesName =  getSpeciesList()
+    speciesNames =  getSpeciesList()
 
-    ! READ IN SPECIES TO BE CONSTRAINED
-    write (*,*) 'Counting the species to be variably constrained (in file constrainedSpecies.config)...'
+    ! read in number of variably-constrained species
+    write (*,*) 'Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
     countOfVarConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
+    write (*,*) 'Finished counting the names of variable-concentration constrained species.'
+    write (*,*) 'Number of names of variable-concentration constrained species:', countOfVarConSpecNames
 
-    write (*,*) 'Finished counting the names of the species to be variably constrained.'
-    write (*,*) 'Number of names for variable constrained species:', countOfVarConSpecNames
-
-    ! read in numberOfFixedConstrainedSpecies
-
+    ! read in number of fixed-constrained species
     write (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
     countOfFixConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
-    write (*,*) 'Finished counting the names of fixed-concentration species'
-
-    write (*,*) 'Number names of fixed constrained species:', countOfFixConSpecNames
+    write (*,*) 'Finished counting the names of fixed-concentration constrained species.'
+    write (*,*) 'Number of names of fixed-concentration constrained species:', countOfFixConSpecNames
 
     countOfConNames = countOfVarConSpecNames + countOfFixConSpecNames
-    allocate (constrainedSpecies(countOfConNames), constrainedName(countOfConNames) )
+    allocate (constrainedSpecies(countOfConNames), constrainedNames(countOfConNames) )
 
 
 
-    write (*,*) 'Reading in the names of variable constrained species...'
+    write (*,*) 'Reading in the names of variable-concentration constrained species...'
     open (12, file=trim( param_dir ) // '/constrainedSpecies.config', status='old') ! input file
     j = 0
     do i = 1, maxNrOfPhotoRates
@@ -522,46 +519,47 @@ contains
       if ( ierr /= 0 ) then
         exit
       end if
-      id = matchOneNameToNumber( speciesName, name )
+      id = matchOneNameToNumber( speciesNames, name )
       if ( id /= 0 ) then
         j = j + 1
-        constrainedName(j) = name
+        constrainedNames(j) = name
         constrainedSpecies(j) = id
       end if
     end do
     close (12, status='keep')
     numberOfVariableConstrainedSpecies = j
-    write (*,*) 'Finished reading the names of variable constrained species'
-    write (*,*) 'Number of variable constrained species:', numberOfVariableConstrainedSpecies
-
+    write (*,*) 'Finished reading the names of variable-concentration constrained species'
+    if (countOfVarConSpecNames /= numberOfVariableConstrainedSpecies) then
+      stop "countOfVarConSpecNames /= numberOfVariableConstrainedSpecies in readSpeciesConstraints()."
+    end if
     write (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
-    write (*,*) 'Allocating storage for variable constrained species...'
+    write (*,*) 'Allocating storage for variable-concentration constrained species...'
     allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     allocate (dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
-    write (*,*) 'Finished allocating storage for variable constrained species.'
+    write (*,*) 'Finished allocating storage for variable-concentration constrained species.'
 
     if ( numberOfVariableConstrainedSpecies > 3 ) then
-      write (*,*) 1, constrainedName(1)
+      write (*,*) 1, constrainedNames(1)
       write (*,*) '...'
-      write (*,*) numberOfVariableConstrainedSpecies, constrainedName(numberOfVariableConstrainedSpecies)
+      write (*,*) numberOfVariableConstrainedSpecies, constrainedNames(numberOfVariableConstrainedSpecies)
     else
       do i = 1, numberOfVariableConstrainedSpecies
-        write (*,*) i, constrainedName(i)
+        write (*,*) i, constrainedNames(i)
       end do
     end if
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
-    write (*,*) 'Reading concentration data for variable constrained species...'
+    write (*,*) 'Reading concentration data for variable-concentration constrained species...'
     allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
     do i = 1, numberOfVariableConstrainedSpecies
       if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
-        write (*,*) constrainedName(i), '...'
+        write (*,*) constrainedNames(i), '...'
       else
         if ( i == 2 ) write (*,*) '...'
       end if
 
-      fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedName(i) )
+      fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
       open (13, file=fileLocation, status='old')
 
       read (13,*) dataNumberOfPoints
@@ -575,7 +573,6 @@ contains
         read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
       end do
       close (13, status='keep')
-
     end do
 
 
@@ -588,10 +585,10 @@ contains
     j = 0
     do i = 1, countOfFixConSpecNames
       read (14,*) name, value
-      id = matchOneNameToNumber( speciesName, name )
+      id = matchOneNameToNumber( speciesNames, name )
       if (id/=0) then
         j = j+1
-        constrainedName(j + numberOfVariableConstrainedSpecies) = name
+        constrainedNames(j + numberOfVariableConstrainedSpecies) = name
         dataFixedY(j) = value
         constrainedSpecies(j + numberOfVariableConstrainedSpecies) = id
       end if
@@ -601,14 +598,14 @@ contains
     write (51,*) 'Number of fixed constrained species:', numberOfFixedConstrainedSpecies
 
     if ( numberOfFixedConstrainedSpecies > 3 ) then
-      write (*,*) 1, constrainedName(1 + numberOfVariableConstrainedSpecies), dataFixedY(1)
+      write (*,*) 1, constrainedNames(1 + numberOfVariableConstrainedSpecies), dataFixedY(1)
       write (*,*) '...'
       write (*,*) numberOfFixedConstrainedSpecies, &
-                  constrainedName(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
+                  constrainedNames(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
                   dataFixedY(numberOfFixedConstrainedSpecies)
     else
       do i = 1, numberOfFixedConstrainedSpecies
-        write (*,*) i, constrainedName(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
+        write (*,*) i, constrainedNames(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
                     dataFixedY(numberOfFixedConstrainedSpecies)
       end do
     end if

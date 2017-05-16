@@ -716,7 +716,7 @@ PROGRAM ATCHEM
   !   deallocate arrays from module species
   call deallocateSpeciesList
   !   deallocate arrays from module chemicalConstraints
-  deallocate (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedName)
+  deallocate (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedNames)
   deallocate (speciesNumberOfPoints, constrainedSpecies)
   !   deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)

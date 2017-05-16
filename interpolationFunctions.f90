@@ -1,19 +1,24 @@
 module interpolationFunctions_mod
 contains
-  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, concAtT, constraintType, ind, maxPoints, nConSpec )
+  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, constraintType, ind, maxPoints, nConSpec, concAtT )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use interpolationMethod
     use chemicalConstraints
     implicit none
 
-    integer :: linintsuc, constraintType, maxPoints
-    integer(kind=NPI) :: nConSpec, dataNumberOfPoints
-    real(kind=DP) :: t, x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2(nConSpec, maxPoints), concAtT
+    real(kind=DP), intent(in) :: t
+    integer(kind=QI), intent(in) :: maxPoints
+    integer(kind=NPI), intent(in) :: nConSpec, dataNumberOfPoints
+    real(kind=DP), intent(in) :: x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2(nConSpec, maxPoints)
+    integer, intent(in) :: constraintType
+    integer(kind=NPI), intent(in) :: ind
+    real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
     integer :: facintfound
     integer(kind=SI) :: interpMethod
-    integer(kind=NPI) :: ind, i, indexBefore, indexAfter
+    integer(kind=NPI) :: i, indexBefore, indexAfter
+    integer :: linintsuc
 
     ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
     if ( constraintType == 1 ) then
@@ -28,13 +33,13 @@ contains
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
+      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, maxPoints, concAtT )
       if ( concAtT <= 0 ) then
         concAtT = 0
       end if
       ! CUBIC SPLINE INTERPOLATION (LN)
     else if ( interpMethod == 2 ) then
-      call splint2D( x, y, y2, dataNumberOfPoints, t, concAtT, ind, maxPoints )
+      call splint2D( x, y, y2, dataNumberOfPoints, t, ind, maxPoints, concAtT )
       concAtT = exp( concAtT )
       ! PIECEWISE CONSTANT INTERPOLATION
     else if ( interpMethod == 3 ) then
@@ -46,7 +51,7 @@ contains
         end if
       end do
       if ( facintfound == 0 ) then
-        write (*,*) 'error in peicewise constant interpolation'
+        write (*,*) 'error in piecewise constant interpolation'
         write (*,*) t, dataNumberOfPoints, concAtT
         concAtT = y(ind, dataNumberOfPoints)
       end if
@@ -83,13 +88,14 @@ contains
     return
   end subroutine getConstrainedQuantAtT2D
 
-  subroutine splint2D( xa, ya, y2a, n, x, y, ind, maxPoints )
+  subroutine splint2D( xa, ya, y2a, n, x, ind, maxPoints, y )
     use types_mod
     implicit none
 
-    integer maxPoints
-    integer(kind=NPI) :: ind, n
-    real(kind=DP) :: x, y, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
+    integer(kind=NPI), intent(in) :: ind, n
+    integer(kind=QI), intent(in) :: maxPoints
+    real(kind=DP), intent(in) :: x, xa(100, maxPoints), y2a(100, maxPoints), ya(100, maxPoints)
+    real(kind=DP), intent(out) :: y
     ! Given the arrays xa(1:n) and ya(1:n) of length n, which tabulate a function
     ! (with the xai�s in order), and given the array y2a(1:n), which is the output
     ! from spline above, and given a value of x, this routine returns a

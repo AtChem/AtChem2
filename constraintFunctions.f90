@@ -34,8 +34,8 @@ contains
 
     !GET CURRENT VALUE OF basePhotoRate
 
-    call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), JSpeciesAtT, 2, &
-                                   basePhotoRateNum, maxNumberOfDataPoints, numConPhotoRates )
+    call getConstrainedQuantAtT2D( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), 2, &
+                                   basePhotoRateNum, maxNumberOfDataPoints, numConPhotoRates, JSpeciesAtT )
 
     if ( JSpeciesAtT == 0 ) then
       jfac = 0
@@ -132,7 +132,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       pressure = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -151,7 +151,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       temp = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -170,7 +170,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       h2o = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -191,7 +191,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       m = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -211,7 +211,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       dec = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -234,7 +234,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       blh = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -254,7 +254,7 @@ contains
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       rh = envVarAtT
       h2o =  convertRHtoH2O(rh, temp, pressure)
       ! IF FIXED
@@ -278,7 +278,7 @@ contains
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       dilute = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -306,7 +306,7 @@ contains
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       jfac = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -330,7 +330,7 @@ contains
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT2D( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints (envVarNum), &
-                                     envVarAtT, 2, envVarNum, maxNumberOfDataPoints, numEnvVars )
+                                     2, envVarNum, maxNumberOfDataPoints, numEnvVars, envVarAtT )
       roofOpen = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then

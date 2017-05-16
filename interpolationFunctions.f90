@@ -121,6 +121,10 @@ contains
     integer(kind=NPI) :: k, khi, klo
     real(kind=DP) :: a, b, h
 
+    if ( n > size( xa, 2 ) ) then
+      stop 'n > size( xa, 2 ) in splint2D()'
+    end if
+
     klo = 1
     ! We will find the right place in the table by means of bisection.
     ! This is optimal if sequential calls to this routine are at random values of
@@ -139,7 +143,7 @@ contains
     h = xa(ind, khi) - xa(ind, klo)
 
     if ( h == 0. ) then
-      print *, 'Bad input in splint2D! The xa''s must be distinct'!
+      print *, 'Bad input in splint2D()! The xa''s must be distinct'!
       stop
     end if
 

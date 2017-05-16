@@ -808,7 +808,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   do i = 1, numberOfConstrainedSpecies
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1, i, concAtT )
+      call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
     else
       concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if

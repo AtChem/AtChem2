@@ -633,7 +633,7 @@ contains
     write (*,*) 'Initialising concentrations of constrained species...'
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1, i, concAtT )
+        call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
       else
         concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if

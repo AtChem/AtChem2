@@ -207,30 +207,30 @@ module interpolationMethod
 
 contains
 
-  subroutine getSpeciesInterpMethod( n )
+  pure function getSpeciesInterpMethod() result ( n )
     integer(kind=SI) :: n
     n = speciesInterpMethod
-  end subroutine getSpeciesInterpMethod
+  end function getSpeciesInterpMethod
 
   subroutine setSpeciesInterpMethod( n )
     integer(kind=SI) :: n
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
-  subroutine getConditionsInterpMethod( n )
+  pure function getConditionsInterpMethod() result ( n )
     integer(kind=SI) :: n
     n = conditionsInterpMethod
-  end subroutine getConditionsInterpMethod
+  end function getConditionsInterpMethod
 
   subroutine setConditionsInterpMethod( n )
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
 
-  subroutine getDecInterpMethod( n )
+  pure function getDecInterpMethod() result ( n )
     integer(kind=SI) :: n
     n = decInterpMethod
-  end subroutine getDecInterpMethod
+  end function getDecInterpMethod
 
   subroutine setDecInterpMethod( n )
     integer(kind=SI) :: n

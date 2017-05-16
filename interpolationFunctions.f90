@@ -34,59 +34,60 @@ contains
     end if
 
     ! CUBIC SPLINE INTERPOLATION
-    if ( interpMethod == 1 ) then
-      call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
-      if ( concAtT <= 0 ) then
-        concAtT = 0
-      end if
-      ! CUBIC SPLINE INTERPOLATION (LN)
-    else if ( interpMethod == 2 ) then
-      call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
-      concAtT = exp( concAtT )
-      ! PIECEWISE CONSTANT INTERPOLATION
-    else if ( interpMethod == 3 ) then
-      fac_int_found = .false.
-      do i = 1, dataNumberOfPoints
-        if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
-          concAtT = y(ind, i)
-          fac_int_found = .true.
-          exit
+    select case ( interpMethod )
+      case ( 1 )
+        call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
+        if ( concAtT <= 0 ) then
+          concAtT = 0
         end if
-      end do
-      if ( fac_int_found .eqv. .false. ) then
-        write (*,*) 'error in piecewise constant interpolation'
-        write (*,*) t, dataNumberOfPoints, concAtT
-        concAtT = y(ind, dataNumberOfPoints)
-      end if
-      ! PIECEWISE LINEAR INTERPOLATION
-    else if ( interpMethod == 4 ) then
-      ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
-      lin_int_suc = .false.
-      do i = 1, dataNumberOfPoints
-        if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
-          indexBefore = i
-          indexAfter = i + 1
-          lin_int_suc = .true.
+        ! CUBIC SPLINE INTERPOLATION (LN)
+      case ( 2 )
+        call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
+        concAtT = exp( concAtT )
+        ! PIECEWISE CONSTANT INTERPOLATION
+      case ( 3 )
+        fac_int_found = .false.
+        do i = 1, dataNumberOfPoints
+          if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
+            concAtT = y(ind, i)
+            fac_int_found = .true.
+            exit
+          end if
+        end do
+        if ( fac_int_found .eqv. .false. ) then
+          write (*,*) 'error in piecewise constant interpolation'
+          write (*,*) t, dataNumberOfPoints, concAtT
+          concAtT = y(ind, dataNumberOfPoints)
         end if
-      end do
-      if ( lin_int_suc .eqv. .false. ) then
-        concAtT = y(ind, dataNumberOfPoints)
-        write (*,*) 'Failed to lin int'
-      else
-        ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
-        xBefore = x(ind, indexBefore)
-        yBefore = y(ind, indexBefore)
-        xAfter = x(ind, indexAfter)
-        yAfter = y(ind, indexAfter)
-        ! DO LINEAR INTERPOLATION (Y = MX + C)
-        m = ( yAfter - yBefore ) / ( xAfter - xBefore )
-        c = yAfter - ( m * xAfter )
-        concAtT = m * t + c
-      end if
-    else
-      write (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
-      stop
-    end if
+        ! PIECEWISE LINEAR INTERPOLATION
+      case ( 4 )
+        ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
+        lin_int_suc = .false.
+        do i = 1, dataNumberOfPoints
+          if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
+            indexBefore = i
+            indexAfter = i + 1
+            lin_int_suc = .true.
+          end if
+        end do
+        if ( lin_int_suc .eqv. .false. ) then
+          concAtT = y(ind, dataNumberOfPoints)
+          write (*,*) 'Failed to lin int'
+        else
+          ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
+          xBefore = x(ind, indexBefore)
+          yBefore = y(ind, indexBefore)
+          xAfter = x(ind, indexAfter)
+          yAfter = y(ind, indexAfter)
+          ! DO LINEAR INTERPOLATION (Y = MX + C)
+          m = ( yAfter - yBefore ) / ( xAfter - xBefore )
+          c = yAfter - ( m * xAfter )
+          concAtT = m * t + c
+        end if
+      case default
+        write (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
+        stop
+    end select
 
     return
   end subroutine getConstrainedQuantAtT

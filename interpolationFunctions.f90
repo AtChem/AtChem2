@@ -1,6 +1,6 @@
 module interpolationFunctions_mod
 contains
-  subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, constraintType, ind, concAtT )
+  subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, interpMethod, ind, concAtT )
     ! This routine returns in concAtT the value of the requested quantity (referenced
     ! by the ind-th line of x, y, y2) based upon the constraint data given and
     ! interpolation method given
@@ -12,11 +12,10 @@ contains
 
     real(kind=DP), intent(in) :: t, x(:,:), y(:,:), y2(:,:)
     integer(kind=NPI), intent(in) :: dataNumberOfPoints
-    integer(kind=SI), intent(in) :: constraintType
+    integer(kind=SI), intent(in) :: interpMethod
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
-    integer(kind=SI) :: interpMethod
     integer(kind=NPI) :: i, indexBefore, indexAfter
     logical :: fac_int_found, lin_int_suc
 
@@ -33,19 +32,6 @@ contains
     if ( size( x, 2 ) /= size( y2, 2 ) ) then
       stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT()'
     end if
-
-    ! Get interpolation method for given constraint type
-    select case ( constraintType )
-      case (1_SI)
-        call getSpeciesInterpMethod( interpMethod )
-      case (2_SI)
-        call getConditionsInterpMethod( interpMethod )
-      case (3_SI)
-        call getDecInterpMethod( interpMethod )
-      case default
-        write (*,*) 'Error in setting constraintType, error = ', constraintType
-        stop
-    end select
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then

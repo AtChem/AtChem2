@@ -482,6 +482,7 @@ contains
     use storage, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : matchOneNameToNumber
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolationMethod , only : getSpeciesInterpMethod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -633,7 +634,7 @@ contains
     write (*,*) 'Initialising concentrations of constrained species...'
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
+        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT )
       else
         concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if

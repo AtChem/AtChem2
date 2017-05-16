@@ -9,6 +9,7 @@ contains
     use photolysisRates
     use constraints
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolationMethod, only : getConditionsInterpMethod
 
     implicit none
     real(kind=DP) :: jfac, JSpeciesAtT, t
@@ -34,8 +35,8 @@ contains
 
     !GET CURRENT VALUE OF basePhotoRate
 
-    call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), 2_SI, &
-                                   basePhotoRateNum, JSpeciesAtT )
+    call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), &
+                                 getConditionsInterpMethod(), basePhotoRateNum, JSpeciesAtT )
 
     if ( JSpeciesAtT == 0 ) then
       jfac = 0
@@ -115,6 +116,7 @@ contains
     use constraints
     use zenithData1
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolationMethod, only : getConditionsInterpMethod
     use conversionFunctions_mod
     use utilityFunctions_mod, only : zenith
     implicit none
@@ -131,7 +133,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       pressure = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -149,7 +152,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       temp = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -167,7 +171,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       h2o = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -187,7 +192,8 @@ contains
       M = calcM(pressure, temp)
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       m = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -206,7 +212,8 @@ contains
       call calcDec( dec, t )
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       dec = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -228,7 +235,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       blh = envVarAtT
       ! IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -247,7 +255,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       rh = envVarAtT
       h2o =  convertRHtoH2O(rh, temp, pressure)
       ! IF FIXED
@@ -270,7 +279,8 @@ contains
     if ( envVarTypesNum(envVarNum) == 1 ) then
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       dilute = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -297,7 +307,8 @@ contains
       call calcJFac( jfac, t )
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       jfac = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then
@@ -320,7 +331,8 @@ contains
       write (*,*) "No calculation available for ROOFOPEN Variable"
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), 2_SI, envVarNum, envVarAtT )
+      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
       roofOpen = envVarAtT
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3 ) then

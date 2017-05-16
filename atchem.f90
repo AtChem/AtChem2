@@ -785,6 +785,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use constraints
   use reactionStructure
   use chemicalConstraints
+  use interpolationMethod, only : getSpeciesInterpMethod
   use interpolationFunctions_mod, only : getConstrainedQuantAtT
   use constraintFunctions_mod
   use solverFunctions_mod, only : resid
@@ -808,7 +809,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   do i = 1, numberOfConstrainedSpecies
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
+      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT )
     else
       concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if

@@ -7,8 +7,7 @@ contains
     use chemicalConstraints
     implicit none
 
-    real(kind=DP), intent(in) :: t
-    real(kind=DP), intent(in) :: x(:,:), y(:,:), y2(:,:)
+    real(kind=DP), intent(in) :: t, x(:,:), y(:,:), y2(:,:)
     integer(kind=NPI), intent(in) :: dataNumberOfPoints
     integer(kind=SI), intent(in) :: constraintType
     integer(kind=NPI), intent(in) :: ind

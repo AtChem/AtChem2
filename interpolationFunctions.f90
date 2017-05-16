@@ -31,7 +31,7 @@ contains
       stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT2D()'
     end if
 
-    ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
+    ! Get interpolation method for given constraint type
     select case ( constraintType )
       case (1_SI)
         call getSpeciesInterpMethod( interpMethod )
@@ -43,7 +43,6 @@ contains
         write (*,*) 'Error in setting constraintType, error = ', constraintType
         stop
     end select
-
 
     ! CUBIC SPLINE INTERPOLATION
     if ( interpMethod == 1 ) then
@@ -59,8 +58,8 @@ contains
     else if ( interpMethod == 3 ) then
       fac_int_found = .false.
       do i = 1, dataNumberOfPoints
-        if ( (t >= X(ind, i) ) .and. ( t < X(ind, i+1) ) ) then
-          concAtT = Y(ind, i)
+        if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
+          concAtT = y(ind, i)
           fac_int_found = .true.
         end if
       end do

@@ -116,7 +116,7 @@ PROGRAM ATCHEM
       use constraints
       use reactionStructure
       use chemicalConstraints
-      use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+      use interpolationFunctions_mod, only : getConstrainedQuantAtT
       use constraintFunctions_mod
 
       ! Fortran routine for right-hand side function.
@@ -366,7 +366,7 @@ PROGRAM ATCHEM
   timestepSize = modelParameters(2)
   ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
   ! the private member of MODULE interpolationMethod.
-  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT2D.
+  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
   ! Values:
   ! 1: Cubic spline interpolation
   ! 2: Cubic spline interpolation (log) TODO: this just outputs the exponential of the value. Is this right?
@@ -379,7 +379,7 @@ PROGRAM ATCHEM
   call setConditionsInterpMethod( conditionsInterpolationMethod )
   decInterpolationMethod = modelParameters(5)
   call setDecInterpMethod( decInterpolationMethod )
-  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT2D and readEnvVar
+  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
   ! Member variable of chemicalConstraints.
   numberOfConstrainedSpecies = modelParameters(7)
@@ -785,7 +785,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use constraints
   use reactionStructure
   use chemicalConstraints
-  use interpolationFunctions_mod, only : getConstrainedQuantAtT2D
+  use interpolationFunctions_mod, only : getConstrainedQuantAtT
   use constraintFunctions_mod
   use solverFunctions_mod, only : resid
 
@@ -808,7 +808,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   do i = 1, numberOfConstrainedSpecies
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT2D( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
+      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), 1_SI, i, concAtT )
     else
       concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if

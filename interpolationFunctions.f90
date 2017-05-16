@@ -1,6 +1,6 @@
 module interpolationFunctions_mod
 contains
-  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, constraintType, ind, concAtT )
+  subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, constraintType, ind, concAtT )
     ! This routine returns in concAtT the value of the requested quantity (referenced
     ! by the ind-th line of x, y, y2) based upon the constraint data given and
     ! interpolation method given
@@ -22,16 +22,16 @@ contains
 
     ! Sanity checks on sizes of x, y and y2.
     if ( size( x, 1 ) /= size( y, 1 ) ) then
-      stop 'size( x, 1 ) /= size( y, 1 ) in getConstrainedQuantAtT2D()'
+      stop 'size( x, 1 ) /= size( y, 1 ) in getConstrainedQuantAtT()'
     end if
     if ( size( x, 1 ) /= size( y2, 1 ) ) then
-      stop 'size( x, 1 ) /= size( y2, 1 ) in getConstrainedQuantAtT2D()'
+      stop 'size( x, 1 ) /= size( y2, 1 ) in getConstrainedQuantAtT()'
     end if
     if ( size( x, 2 ) /= size( y, 2 ) ) then
-      stop 'size( x, 2 ) /= size( y, 2 ) in getConstrainedQuantAtT2D()'
+      stop 'size( x, 2 ) /= size( y, 2 ) in getConstrainedQuantAtT()'
     end if
     if ( size( x, 2 ) /= size( y2, 2 ) ) then
-      stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT2D()'
+      stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT()'
     end if
 
     ! Get interpolation method for given constraint type
@@ -103,7 +103,7 @@ contains
     end if
 
     return
-  end subroutine getConstrainedQuantAtT2D
+  end subroutine getConstrainedQuantAtT
 
   subroutine cubic_spline( xa, ya, y2a, n, x, ind, y )
     use types_mod

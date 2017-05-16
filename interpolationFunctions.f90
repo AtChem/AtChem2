@@ -1,6 +1,6 @@
 module interpolationFunctions_mod
 contains
-  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, constraintType, ind, maxPoints, nConSpec, concAtT )
+  subroutine getConstrainedQuantAtT2D( t, x, y, y2, dataNumberOfPoints, constraintType, ind, concAtT )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use interpolationMethod
@@ -8,9 +8,8 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: t
-    integer(kind=QI), intent(in) :: maxPoints
-    integer(kind=NPI), intent(in) :: nConSpec, dataNumberOfPoints
-    real(kind=DP), intent(in) :: x(nConSpec, maxPoints), y(nConSpec, maxPoints), y2(nConSpec, maxPoints)
+    integer(kind=NPI), intent(in) :: dataNumberOfPoints
+    real(kind=DP), intent(in) :: x(:,:), y(:,:), y2(:,:)
     integer, intent(in) :: constraintType
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT

@@ -472,6 +472,7 @@ contains
 
 
   subroutine readSpeciesConstraints( t, y )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
                             setNumberOfConstrainedSpecies, setConstrainedConc
@@ -488,7 +489,6 @@ contains
     real(kind=DP) :: concAtT, value
     integer(kind=NPI) :: i, j, id, numberOfSpecies
     integer :: k, dataNumberOfPoints
-    integer(kind=IntErr) :: ierr
     integer(kind=NPI) :: countOfVarConSpecNames, countOfFixConSpecNames, countOfConNames
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
@@ -496,13 +496,13 @@ contains
 
     speciesNames =  getSpeciesList()
 
-    ! read in number of variably-constrained species
+    ! read in number of variable-concentration constrained species
     write (*,*) 'Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
     countOfVarConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
     write (*,*) 'Finished counting the names of variable-concentration constrained species.'
     write (*,*) 'Number of names of variable-concentration constrained species:', countOfVarConSpecNames
 
-    ! read in number of fixed-constrained species
+    ! read in number of fixed-concentration constrained species
     write (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
     countOfFixConSpecNames = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
     write (*,*) 'Finished counting the names of fixed-concentration constrained species.'
@@ -512,28 +512,27 @@ contains
     allocate (constrainedSpecies(countOfConNames), constrainedNames(countOfConNames) )
 
 
+    if ( countOfVarConSpecNames > 0 ) then
+      write (*,*) 'Reading in the names of variable-concentration constrained species...'
+      call read_in_single_column_string_file( trim( param_dir ) // '/constrainedSpecies.config', constrainedNames )
+      do i = 1, countOfVarConSpecNames
+        id = matchOneNameToNumber( speciesNames, constrainedNames(i) )
+        if ( id /= 0 ) then
+          constrainedSpecies(i) = id
+        else
+          write (stderr,*) 'Supplied constrained species ', constrainedNames(i), ' is not a species in the problem.'
+          stop
+        end if
+      end do
 
-    write (*,*) 'Reading in the names of variable-concentration constrained species...'
-    open (12, file=trim( param_dir ) // '/constrainedSpecies.config', status='old') ! input file
-    j = 0
-    do i = 1, maxNrOfPhotoRates
-      read (12,*, iostat=ierr) name
-      if ( ierr /= 0 ) then
-        exit
-      end if
-      id = matchOneNameToNumber( speciesNames, name )
-      if ( id /= 0 ) then
-        j = j + 1
-        constrainedNames(j) = name
-        constrainedSpecies(j) = id
-      end if
-    end do
-    close (12, status='keep')
-    numberOfVariableConstrainedSpecies = j
-    write (*,*) 'Finished reading the names of variable-concentration constrained species'
-    if (countOfVarConSpecNames /= numberOfVariableConstrainedSpecies) then
-      stop "countOfVarConSpecNames /= numberOfVariableConstrainedSpecies in readSpeciesConstraints()."
+
+      ! TODO: remove
+      numberOfVariableConstrainedSpecies = countOfVarConSpecNames
+      write (*,*) 'Finished reading the names of variable-concentration constrained species'
+    else
+      write (*,*) 'Skipped reading the names of variable-concentration constrained species'
     end if
+
     write (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
     write (*,*) 'Allocating storage for variable-concentration constrained species...'
     allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
@@ -541,42 +540,46 @@ contains
     allocate (dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     write (*,*) 'Finished allocating storage for variable-concentration constrained species.'
 
-    if ( numberOfVariableConstrainedSpecies > 3 ) then
-      write (*,*) 1, constrainedNames(1)
-      write (*,*) '...'
-      write (*,*) numberOfVariableConstrainedSpecies, constrainedNames(numberOfVariableConstrainedSpecies)
-    else
-      do i = 1, numberOfVariableConstrainedSpecies
-        write (*,*) i, constrainedNames(i)
-      end do
+    if ( countOfVarConSpecNames > 0 ) then
+      if ( numberOfVariableConstrainedSpecies > 3 ) then
+        write (*,*) 1, constrainedNames(1)
+        write (*,*) '...'
+        write (*,*) numberOfVariableConstrainedSpecies, constrainedNames(numberOfVariableConstrainedSpecies)
+      else
+        do i = 1, numberOfVariableConstrainedSpecies
+          write (*,*) i, constrainedNames(i)
+        end do
+      end if
     end if
+
 
     ! READ CONCENTRATION DATA FOR VARIABLE CONSTRAINED SPECIES
     write (*,*) 'Reading concentration data for variable-concentration constrained species...'
     allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+countOfFixConSpecNames) )
-    do i = 1, numberOfVariableConstrainedSpecies
-      if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
-        write (*,*) constrainedNames(i), '...'
-      else
-        if ( i == 2 ) write (*,*) '...'
-      end if
+    if ( countOfVarConSpecNames > 0 ) then
+      do i = 1, numberOfVariableConstrainedSpecies
+        if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
+          write (*,*) constrainedNames(i), '...'
+        else
+          if ( i == 2 ) write (*,*) '...'
+        end if
 
-      fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
-      open (13, file=fileLocation, status='old')
+        fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
+        open (13, file=fileLocation, status='old')
 
-      read (13,*) dataNumberOfPoints
-      if ( dataNumberOfPoints > maxNumberOfDataPoints ) then
-        dataNumberOfPoints = maxNumberOfDataPoints
-        write (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'!
-      end if
+        read (13,*) dataNumberOfPoints
+        if ( dataNumberOfPoints > maxNumberOfDataPoints ) then
+          dataNumberOfPoints = maxNumberOfDataPoints
+          write (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'!
+        end if
 
-      speciesNumberOfPoints(i) = dataNumberOfPoints
-      do k = 1, dataNumberOfPoints
-        read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
+        speciesNumberOfPoints(i) = dataNumberOfPoints
+        do k = 1, dataNumberOfPoints
+          read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
+        end do
+        close (13, status='keep')
       end do
-      close (13, status='keep')
-    end do
-
+    end if
 
     ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
     allocate (dataFixedY(countOfFixConSpecNames))

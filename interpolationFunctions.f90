@@ -10,7 +10,7 @@ contains
     real(kind=DP), intent(in) :: t
     integer(kind=NPI), intent(in) :: dataNumberOfPoints
     real(kind=DP), intent(in) :: x(:,:), y(:,:), y2(:,:)
-    integer, intent(in) :: constraintType
+    integer(kind=SI), intent(in) :: constraintType
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
@@ -33,11 +33,11 @@ contains
     end if
 
     ! GET INTERPOLATION METHOD FOR GIVEN CONSTRAINT TYPE
-    if ( constraintType == 1 ) then
+    if ( constraintType == 1_SI ) then
       call getSpeciesInterpMethod( interpMethod )
-    else if ( constraintType == 2 ) then
+    else if ( constraintType == 2_SI ) then
       call getConditionsInterpMethod( interpMethod )
-    else if ( constraintType == 3 ) then
+    else if ( constraintType == 3_SI ) then
       call getDecInterpMethod( interpMethod )
     else
       write (*,*) 'Error in setting constraintType, error = ', constraintType

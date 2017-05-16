@@ -4,3 +4,6 @@
 atchem
 mechanism-rate-coefficients.f90
 makefile.*
+mechanism.prod
+mechanism.reac
+mechanism.species

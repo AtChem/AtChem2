@@ -14,10 +14,9 @@ contains
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
-    integer :: facintfound
     integer(kind=SI) :: interpMethod
     integer(kind=NPI) :: i, indexBefore, indexAfter
-    integer :: linintsuc
+    logical :: fac_int_found, lin_int_suc
 
     ! Sanity checks on sizes of x, y and y2.
     if ( size( x, 1 ) /= size( y, 1 ) ) then
@@ -56,14 +55,14 @@ contains
       concAtT = exp( concAtT )
       ! PIECEWISE CONSTANT INTERPOLATION
     else if ( interpMethod == 3 ) then
-      facintfound = 0
+      fac_int_found = .false.
       do i = 1, dataNumberOfPoints
         if ( (t >= X(ind, i) ) .and. ( t < X(ind, i+1) ) ) then
           concAtT = Y(ind, i)
-          facintfound = 1
+          fac_int_found = .true.
         end if
       end do
-      if ( facintfound == 0 ) then
+      if ( fac_int_found .eqv. .false. ) then
         write (*,*) 'error in piecewise constant interpolation'
         write (*,*) t, dataNumberOfPoints, concAtT
         concAtT = y(ind, dataNumberOfPoints)
@@ -71,19 +70,19 @@ contains
       ! PIECEWISE LINEAR INTERPOLATION
     else if ( interpMethod == 4 ) then
       ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
-      linintsuc = 0
+      lin_int_suc = .false.
       do i = 1, dataNumberOfPoints
         if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
           indexBefore = i
           indexAfter = i + 1
-          linintsuc = 1
+          lin_int_suc = .true.
         end if
       end do
-      if ( linintsuc == 0 ) then
+      if ( lin_int_suc .eqv. .false. ) then
         concAtT = y(ind, dataNumberOfPoints)
         write (*,*) 'Failed to lin int'
-      else if ( linintsuc == 1 ) then
-        ! INDENTIFY COORIDANTES OF ENCLOSING DATA POINTS
+      else if ( lin_int_suc .eqv. .true. ) then
+        ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
         xBefore = x(ind, indexBefore)
         yBefore = y(ind, indexBefore)
         xAfter = x(ind, indexAfter)

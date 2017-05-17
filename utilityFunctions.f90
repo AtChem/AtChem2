@@ -48,7 +48,7 @@ contains
     sinld = sin( lat ) * sin( dec )
     cosld = cos( lat ) * cos( dec )
 
-    call ramp( cos( lha ) * cosld + sinld, rampValue )
+    rampValue = ramp( cos( lha ) * cosld + sinld )
     secx = 1.0 / ( rampValue + 1.00d-30 )
 
     cosx = cos( lha ) * cosld + sinld
@@ -56,14 +56,15 @@ contains
     return
   end subroutine zenith
 
-  subroutine ramp( arg1, rampValue )
+  pure function ramp( arg1 ) result ( rampValue )
     use types_mod
     implicit none
 
-    real(kind=DP) :: arg1, arg2, rampValue
+    real(kind=DP), intent(in) :: arg1
+    real(kind=DP) :: arg2, rampValue
 
     arg2 = abs( arg1 )
     rampValue = ( arg1 + arg2 ) / 2
     return
-  end subroutine ramp
+  end function ramp
 end module utilityFunctions_mod

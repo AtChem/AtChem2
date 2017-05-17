@@ -104,9 +104,17 @@ PROGRAM ATCHEM
       use species
       implicit none
 
-      integer(kind=NPI) :: ipar (*), ier, neq, i, np
+      real(kind=DP), intent(in) :: v(*)
+      real(kind=DP), intent(out) :: fjv(*)
+      real(kind=DP), intent(in) :: t, y(*), fy(*)
+      real(kind=DP), intent(out) :: h
+      integer(kind=NPI), intent(in) :: ipar (*)
+      real(kind=DP), intent(in) :: rpar(*), work(*)
+      integer(kind=NPI), intent(out) :: ier
+
+      integer(kind=NPI) :: neq, i, np
       integer :: j
-      real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
+      real(kind=DP) :: delta, deltaV, dummy
       real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
     end subroutine FCVJTIMES
 
@@ -122,8 +130,14 @@ PROGRAM ATCHEM
       ! Fortran routine for right-hand side function.
       implicit none
       !
-      integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
-      real(kind=DP) :: t, y(*), ydot(*), rpar(*), concAtT, dummy
+      real(kind=DP), intent(in) :: t, y(*)
+      real(kind=DP), intent(out) :: ydot(*)
+      integer(kind=NPI), intent(in) :: ipar(*)
+      real(kind=DP), intent(in) :: rpar(*)
+      integer(kind=NPI), intent(out) :: ier
+
+      integer(kind=NPI) :: nConSpec, np, numReac
+      real(kind=DP) :: concAtT, dummy
       real(kind=DP), allocatable :: dy(:), z(:)
       integer(kind=NPI) :: i
     end subroutine FCVFUN
@@ -746,10 +760,19 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   use species
   implicit none
 
-  integer(kind=NPI) :: ipar (*), ier, neq, i, np
+  real(kind=DP), intent(in) :: v(*)
+  real(kind=DP), intent(out) :: fjv(*)
+  real(kind=DP), intent(in) :: t, y(*), fy(*)
+  real(kind=DP), intent(out) :: h
+  integer(kind=NPI), intent(in) :: ipar (*)
+  real(kind=DP), intent(in) :: rpar(*), work(*)
+  integer(kind=NPI), intent(out) :: ier
+
+  integer(kind=NPI) :: neq, i, np
   integer :: j
-  real(kind=DP) :: t, h, rpar(*), y(*), v(*), fjv(*), fy(*), work(*), delta, deltaV, dummy
+  real(kind=DP) :: delta, deltaV, dummy
   real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
+
   np = getNumberOfSpecies()
   allocate (yPlusV(np), yPlusVi(np))
 
@@ -793,8 +816,14 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   ! Fortran routine for right-hand side function.
   implicit none
   !
-  integer(kind=NPI) :: ipar(*), ier, nConSpec, np, numReac
-  real(kind=DP) :: t, y(*), ydot(*), rpar(*), concAtT, dummy
+  real(kind=DP), intent(in) :: t, y(*)
+  real(kind=DP), intent(out) :: ydot(*)
+  integer(kind=NPI), intent(in) :: ipar(*)
+  real(kind=DP), intent(in) :: rpar(*)
+  integer(kind=NPI), intent(out) :: ier
+
+  integer(kind=NPI) :: nConSpec, np, numReac
+  real(kind=DP) :: concAtT, dummy
   real(kind=DP), allocatable :: dy(:), z(:)
   integer(kind=NPI) :: i
 

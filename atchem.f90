@@ -600,7 +600,7 @@ PROGRAM ATCHEM
       constrainedConcs(species_counter) = d
     end do
 
-    call addConstrainedSpeciesToProbSpec( z, speciesConcs, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs )
+    call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
 
     ! OUTPUT ON SCREEN
     fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
@@ -818,7 +818,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   end do
 
-  call addConstrainedSpeciesToProbSpec( y, z, numberOfConstrainedSpecies, constrainedSpecies, ipar(1), constrainedConcs )
+  call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
 
   call resid( np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size )
 

@@ -1,10 +1,10 @@
 module constraintFunctions_mod
-  use types_mod
 contains
 
   ! ----------------------------------------------------------------- !
 
   subroutine calcJFac( jfac, t )
+    use types_mod
     use zenithData1
     use photolysisRates
     use constraints
@@ -54,16 +54,27 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine addConstrainedSpeciesToProbSpec( z, x, numberOfConstrainedSpecies, constrainedSpecies, neq, constrainedConcs )
-    real(kind=DP) :: z(*), x(*), constrainedConcs(*)
-    integer(kind=NPI) :: constrainedSpecies(*), zCounter, neq, numberOfConstrainedSpecies, i, j, speciesConstrained
+  subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, x )
+    ! This fills x with the contents of z, plus the contents of constrainedConcs, using
+    ! constrainedSpecies as the key to which species are constrained.
+    use types_mod
+    implicit none
 
+    real(kind=DP), intent(in) :: z(*), constrainedConcs(:)
+    integer(kind=NPI), intent(in) :: constrainedSpecies(:)
+    real(kind=DP), intent(out) :: x(:)
+    integer(kind=NPI) :: zCounter, i, j, speciesConstrained
+
+    if ( size( constrainedConcs ) /= size( constrainedSpecies ) ) then
+      stop 'size( constrainedConcs ) /= size( constrainedSpecies ) in addConstrainedSpeciesToProbSpec().'
+    end if
     zCounter = 1
-    do i = 1, numberOfConstrainedSpecies + neq
+    do i = 1, size( x )
       speciesConstrained = 0
-      do j = 1, numberOfConstrainedSpecies
+      do j = 1, size( constrainedSpecies )
         if ( i == constrainedSpecies(j) ) then
           speciesConstrained = j
+          exit
         end if
       end do
       if ( speciesConstrained > 0 ) then
@@ -81,6 +92,7 @@ contains
   ! ----------------------------------------------------------------- !
 
   subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecies, z )
+    use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: y(:)
@@ -112,6 +124,7 @@ contains
   ! ----------------------------------------------------------------- !
 
   subroutine getEnvVarsAtT( t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen )
+    use types_mod
     use envVars
     use constraints
     use zenithData1
@@ -352,6 +365,7 @@ contains
 
   subroutine getEnvVarNum( name, envVarNum )
     ! Set envVarNum to the index of name within enVarNames
+    use types_mod
     use envVars, only : envVarNames, numEnvVars
     implicit none
 
@@ -371,6 +385,7 @@ contains
 
   subroutine test_jfac()
     ! check jfac data consistency
+    use types_mod
     use photolysisRates
     use envVars
     implicit none

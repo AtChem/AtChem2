@@ -1,33 +1,34 @@
 module solverFunctions_mod
 contains!     ---------------------------------------------------------------
-  subroutine resid( nsp, nr, clocktime, y, dy, lhs, rhs, coeff, size1, size2 )
+  subroutine resid( nr, clocktime, y, dy, lhs, rhs, coeff )
     ! calculate rhs of rate eqn dy()
     use types_mod
-    use productionAndLossRates
+    use productionAndLossRates, only : ir, productionRates, lossRates
     use mechanismRates_mod
     implicit none
 
     integer(kind=NPI) :: i
-    integer(kind=NPI) :: nsp ! number of species involved
     integer(kind=NPI) :: nr ! number of reactions
-    integer(kind=NPI) :: size1, size2 !number of entries in each equation array
-    integer(kind=NPI) :: lhs(3, size1), rhs(2, size2)
-    real(kind=DP) :: coeff(*) ! coeff term of rhs
+    integer(kind=NPI) :: lhs(:,:), rhs(:,:)
+    real(kind=DP) :: coeff(:) ! coeff term of rhs
     real(kind=DP) :: y(:) ! concentration array
     real(kind=DP) :: p(nr) ! array to hold rates
     real(kind=DP) :: r(nr) ! working array
-    real(kind=DP) :: dy(*) ! array to hold value of rate equations
+    real(kind=DP) :: dy(:) ! array to hold value of rate equations
     real(kind=DP) :: clocktime
 
-    ! set rate eqn to zero
-    do i = 1, nsp
-      dy(i) = 0
-    end do
+    if ( size( lhs, 1 ) /= 3 ) then
+      stop 'size( lhs, 1 ) /= 3 in resid()'
+    end if
+    if ( size( rhs, 1 ) /= 2 ) then
+      stop 'size( rhs, 1 ) /= 2 in resid()'
+    end if
 
-    do i = 1, nr
-      productionRates(i) = 0
-      lossRates(i) = 0
-    end do
+    ! set rate eqn to zero
+    dy(:) = 0
+
+    productionRates(:) = 0
+    lossRates(:) = 0
 
     ! get values of reactions rates
     call mechanism_rates( clocktime, y, p )
@@ -37,17 +38,17 @@ contains!     ---------------------------------------------------------------
       r(i) = p(i)
     end do
 
-    do i = 1, size1
+    do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lhs(3, i)
       ir(lhs(1, i)) = r(lhs(1, i))
     end do
 
-    do i = 1, size1
+    do i = 1, size( lhs, 2 )
       dy(lhs(2, i)) = dy(lhs(2, i)) - lhs(3, i) * r(lhs(1, i))
       lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
     end do
 
-    do i = 1, size2
+    do i = 1, size( rhs, 2 )
       dy(rhs(2, i)) = dy(rhs(2, i)) + coeff(i) * r(rhs(1, i))
       productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + coeff(i) * r(rhs(1, i))
     end do

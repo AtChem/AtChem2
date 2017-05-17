@@ -55,7 +55,7 @@ contains!     ---------------------------------------------------------------
     return
   end subroutine resid
 
-  subroutine jfy( nr, y, fy, t )
+  subroutine jfy( nr, y, t, fy )
     ! routine for calculating the Jacobian of the system
     ! nr = number of reactions
     ! for each species calculate the rhs of the rate equation
@@ -82,10 +82,10 @@ contains!     ---------------------------------------------------------------
     implicit none
 
     integer(kind=NPI), intent(in) :: nr
-    integer(kind=NPI) :: j
-    real(kind=DP) :: p(nr), r(nr), t
-    real(kind=DP), intent(in) :: y(:)
+    real(kind=DP), intent(in) :: y(:), t
     real(kind=DP), intent(out) :: fy(size( y ),*)
+    integer(kind=NPI) :: j
+    real(kind=DP) :: p(nr), r(nr)
     integer(kind=NPI) :: is
 
     ! set jacobian matrix to zero

@@ -16,14 +16,16 @@ contains
     return
   end subroutine temperature
 
-  subroutine atmosphere( o2, n2, m )
+  subroutine atmosphere( m, o2, n2 )
     use types_mod
     implicit none
 
-    real(kind=DP) :: o2, n2, m
+    real(kind=DP), intent(in) :: m
+    real(kind=DP) :: o2, n2
 
     o2 = 0.2095 * m
     n2 = 0.7809 * m
+    return
   end subroutine atmosphere
 
   subroutine zenith( ttime, dec, theta, secx, cosx )

@@ -127,7 +127,9 @@ contains
   ! ----------------------------------------------------------------- !
 
   subroutine getEnvVarsAtT( t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
+    use storage, only : maxEnvVarNameLength
     use envVars
     use constraints
     use zenithData1
@@ -137,228 +139,138 @@ contains
     use utilityFunctions_mod, only : zenith
     implicit none
 
-    real(kind=DP) :: t, envVarAtT, theta
-    real(kind=DP) :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
+    real(kind=DP) :: t, theta
+    real(kind=DP) :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen, this_env_val
     integer(kind=NPI) :: envVarNum
+    character(len=maxEnvVarNameLength) :: this_env_var_name
+    logical :: got_temp, got_press, got_h2o, got_dec
 
-    ! ********************************************
-    ! GET PRESSURE AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'PRESS' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      pressure = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      pressure = envVarFixedValues(envVarNum)
-    else
-      pressure = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = pressure
-    ! ********************************************
-    ! GET TEMP AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'TEMP' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      temp = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      temp = envVarFixedValues(envVarNum)
-    else
-      temp = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = temp
-    ! ********************************************
-    ! GET H2O AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'H2O' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      h2o = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      h2o = envVarFixedValues(envVarNum)
-    else
-      h2o = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = H2O
-    ! ********************************************
-    ! GET M AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'M' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      M = calcM(pressure, temp)
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      m = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      m = envVarFixedValues(envVarNum)
-    else
-      m = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = m
-    ! ********************************************
-    ! GET DEC AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'DEC' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      call calcDec( dec, t )
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      dec = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      dec = envVarFixedValues(envVarNum)
-      ! IF NOTUSED
-    else
-      write (*,*) 'Error! DEC variable must be provided.' // &
-                  'Please set it to the declination angle of the sun ' // &
-                  '(or to CALC and then set a correct date ).'
-      stop 2
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = dec
-    ! ********************************************
-    ! GET BOUNDARY LAYER HEIGHT AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'BLHEIGHT' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      blh = envVarAtT
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      blh = envVarFixedValues(envVarNum)
-      ! IF NOTUSED
-    else
-      blh = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = blh
-    ! ********************************************
-    ! GET RELATIVE HUMIDITY AT T
-    ! ********************************************
-    envVarNum = getEnvVarNum( 'RH' )
-    ! IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      ! IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      rh = envVarAtT
-      h2o =  convertRHtoH2O(rh, temp, pressure)
-      ! IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      rh = envVarFixedValues(envVarNum)
-      h2o = convertRHtoH2O( rh, temp, pressure )
-      ! IF NOTUSED
-    else
-      rh = -1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = rh
-    currentEnvVarValues(getEnvVarNum( 'H2O' )) = h2o
+    got_temp = .false.
+    got_press = .false.
+    got_h2o = .false.
+    got_dec = .false.
+    ! loop over eavh environment variable
+    do envVarNum = 1, size( envVarNames )
+      this_env_var_name = envVarNames(envVarNum)
 
-    !*********************************************
-    !GET DILUTE AT T
-    !*********************************************
-    envVarNum = getEnvVarNum( 'DILUTE' )
-    !IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      !IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      dilute = envVarAtT
-      !IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      dilute = envVarFixedValues(envVarNum)
-      !IF NOTUSED
-    else
-      dilute = 0
-    end if
+      ! Need to keep track of whether RH is called before or after H2O.
+      ! Handle the fact pressure and temperature _may_ need calculating before M,
+      ! and pressure, temperature and H2O before RH, and DEC before JFAC
 
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = dilute
+      ! Find which type it is (calc, constrained, fixed, other)
+      select case ( envVarTypesNum(envVarNum) )
+        case ( 1 ) !CALC
+          select case ( this_env_var_name )
+            case ( 'PRESS', 'TEMP', 'H2O', 'BLHEIGHT', 'RH', 'DILUTE', 'ROOFOPEN' )
+              write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
+              stop
+            case ( 'M' )
+              if ( got_temp .eqv. .false. ) then
+                stop 'not got temp before m'
+              end if
+              if ( got_press .eqv. .false. ) then
+                stop 'not got press before m'
+              end if
+              this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), currentEnvVarValues(getEnvVarNum( 'TEMP' )))
+            case ( 'DEC' )
+              call calcDec( this_env_val, t )
+            case ( 'JFAC' )
+              if ( got_dec .eqv. .false. ) then
+                stop 'not got dec before jfac'
+              end if
+              call calcJFac( t, this_env_val )
+            case default
+              write (stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
+              stop
+          end select
 
-    !*********************************************
-    !COMPUTE PARAMETERS FOR PHOTOLYSIS RATES
-    !*********************************************
-    call zenith( theta, secx, cosx, t, dec )
+        case ( 2 ) ! CONSTRAINED
+          call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+                                       getConditionsInterpMethod(), envVarNum, this_env_val )
+          ! if RH, then set H2O based upon RH,
+          if ( this_env_var_name == 'RH' ) then
+            if ( got_temp .eqv. .false. ) then
+              stop 'not got TEMP before RH'
+            end if
+            if ( got_press .eqv. .false. ) then
+              stop 'not got PRESS before RH'
+            end if
+            if ( got_h2o .eqv. .false. ) then
+              stop 'not got H2O before RH, so this will be overwritten when H2O is processed'
+            end if
+            currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
+                                                                        currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
+                                                                        currentEnvVarValues(getEnvVarNum( 'PRESS' )))
+          end if
 
-    !*********************************************
-    !GET JFAC AT T
-    !*********************************************
-    envVarNum = getEnvVarNum( 'JFAC' )
-    !IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      call calcJFac( t, jfac )
-      !IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      jfac = envVarAtT
-      !IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      jfac = envVarFixedValues(envVarNum)
-      !IF NOTUSED
-    else
-      !set jfac = , so no effect on photolysis calculations
-      jfac = 1
-    end if
+        case ( 3 ) ! FIXED VALUE
+          this_env_val = envVarFixedValues(envVarNum)
+          ! if RH, then set H2O based upon RH,
+          if ( this_env_var_name == 'RH' ) then
+            if ( got_temp .eqv. .false. ) then
+              stop 'not got TEMP before RH'
+            end if
+            if ( got_press .eqv. .false. ) then
+              stop 'not got PRESS before RH'
+            end if
+            if ( got_h2o .eqv. .false. ) then
+              stop 'not got H2O before RH, so this will be overwritten when H2O is processed'
+            end if
+            currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
+                                                                        currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
+                                                                        currentEnvVarValues(getEnvVarNum( 'PRESS' )))
+          end if
 
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = jfac
-
-    !*********************************************
-    !GET ROOFOPEN AT T
-    !*********************************************
-    envVarNum = getEnvVarNum( 'ROOFOPEN' )
-    !IF CALC
-    if ( envVarTypesNum(envVarNum) == 1 ) then
-      write (*,*) "No calculation available for ROOFOPEN Variable"
-      !IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
-      call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
-                                   getConditionsInterpMethod(), envVarNum, envVarAtT )
-      roofOpen = envVarAtT
-      !IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
-      roofOpen = envVarFixedValues(envVarNum)
-      !IF NOTUSED
-    else
-      !set roofopen = , so no effect on photolysis calculations
-      roofOpen = 1
-    end if
-    ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    currentEnvVarValues(envVarNum) = roofOpen
+        case default
+          select case ( this_env_var_name )
+            case ( 'PRESS', 'TEMP', 'H2O', 'M', 'BLHEIGHT', 'RH' )
+              this_env_val = -1
+            case ( 'DEC' )
+              stop 'Error! DEC variable must be provided.' // &
+                   'Please set it to the declination angle of the sun ' // &
+                   '(or to CALC and then set a correct date ).'
+            case ( 'DILUTE' )
+              this_env_val = 0
+            case ( 'JFAC', 'ROOFOPEN' )
+              this_env_val = 1
+            case default
+              write (stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
+              stop
+          end select
+      end select
+      currentEnvVarValues(envVarNum) = this_env_val
+      ! Copy this_env_var_name to the correct output variable
+      select case ( this_env_var_name )
+        case ( 'TEMP' )
+          temp = this_env_val
+          got_temp = .true.
+        case ( 'RH' )
+          rh = this_env_val
+        case ( 'H2O' )
+          h2o = this_env_val
+          got_h2o = .true.
+        case ( 'DEC' )
+          dec = this_env_val
+          got_dec = .true.
+          call zenith( theta, secx, cosx, t, dec )
+        case ( 'PRESS' )
+          pressure = this_env_val
+          got_press = .true.
+        case ( 'M' )
+          m = this_env_val
+        case ( 'BLHEIGHT' )
+          blh = this_env_val
+        case ( 'DILUTE' )
+          dilute = this_env_val
+        case ( 'JFAC' )
+          jfac = this_env_val
+        case ( 'ROOFOPEN' )
+          roofOpen = this_env_val
+        case default
+          write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
+          stop
+      end select
+    end do
 
     return
   end subroutine getEnvVarsAtT

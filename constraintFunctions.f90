@@ -139,12 +139,12 @@ contains
 
     real(kind=DP) :: t, envVarAtT, theta
     real(kind=DP) :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen
-    integer(kind=NPI) :: envVarNum, envVarNumH2O
+    integer(kind=NPI) :: envVarNum
 
     ! ********************************************
     ! GET PRESSURE AT T
     ! ********************************************
-    call getEnvVarNum( 'PRESS', envVarNum )
+    envVarNum = getEnvVarNum( 'PRESS' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
@@ -163,7 +163,7 @@ contains
     ! ********************************************
     ! GET TEMP AT T
     ! ********************************************
-    call getEnvVarNum( 'TEMP', envVarNum )
+    envVarNum = getEnvVarNum( 'TEMP' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
@@ -182,7 +182,7 @@ contains
     ! ********************************************
     ! GET H2O AT T
     ! ********************************************
-    call getEnvVarNum( 'H2O', envVarNum )
+    envVarNum = getEnvVarNum( 'H2O' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
@@ -197,12 +197,11 @@ contains
       h2o = -1
     end if
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
-    envVarNumH2O = envVarNum
     currentEnvVarValues(envVarNum) = H2O
     ! ********************************************
     ! GET M AT T
     ! ********************************************
-    call getEnvVarNum( 'M', envVarNum )
+    envVarNum = getEnvVarNum( 'M' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       M = calcM(pressure, temp)
@@ -222,7 +221,7 @@ contains
     ! ********************************************
     ! GET DEC AT T
     ! ********************************************
-    call getEnvVarNum( 'DEC', envVarNum )
+    envVarNum = getEnvVarNum( 'DEC' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       call calcDec( dec, t )
@@ -246,7 +245,7 @@ contains
     ! ********************************************
     ! GET BOUNDARY LAYER HEIGHT AT T
     ! ********************************************
-    call getEnvVarNum( 'BLHEIGHT', envVarNum )
+    envVarNum = getEnvVarNum( 'BLHEIGHT' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
@@ -266,7 +265,7 @@ contains
     ! ********************************************
     ! GET RELATIVE HUMIDITY AT T
     ! ********************************************
-    call getEnvVarNum( 'RH', envVarNum )
+    envVarNum = getEnvVarNum( 'RH' )
     ! IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       ! IF CONSTRAINED
@@ -285,12 +284,12 @@ contains
     end if
     ! CAPTURE CURRENT ENVVAR VALUES FOR OUTPUT
     currentEnvVarValues(envVarNum) = rh
-    currentEnvVarValues(envVarNumH2O) = h2o
+    currentEnvVarValues(getEnvVarNum( 'H2O' )) = h2o
 
     !*********************************************
     !GET DILUTE AT T
     !*********************************************
-    call getEnvVarNum( 'DILUTE', envVarNum )
+    envVarNum = getEnvVarNum( 'DILUTE' )
     !IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       !IF CONSTRAINED
@@ -317,7 +316,7 @@ contains
     !*********************************************
     !GET JFAC AT T
     !*********************************************
-    call getEnvVarNum( 'JFAC', envVarNum )
+    envVarNum = getEnvVarNum( 'JFAC' )
     !IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       call calcJFac( t, jfac )
@@ -341,7 +340,7 @@ contains
     !*********************************************
     !GET ROOFOPEN AT T
     !*********************************************
-    call getEnvVarNum( 'ROOFOPEN', envVarNum )
+    envVarNum = getEnvVarNum( 'ROOFOPEN' )
     !IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
       write (*,*) "No calculation available for ROOFOPEN Variable"
@@ -366,23 +365,30 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine getEnvVarNum( name, envVarNum )
+  function getEnvVarNum( name ) result ( envVarNum )
     ! Set envVarNum to the index of name within enVarNames
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use envVars, only : envVarNames, numEnvVars
     implicit none
 
-    character, intent(in) :: name*(*)
-    integer(kind=NPI), intent(out) :: envVarNum
+    character(len=*), intent(in) :: name
+    integer(kind=NPI) :: envVarNum
     integer(kind=NPI) :: i
 
+    envVarNum = 0
     do i = 1, numEnvVars
       if ( name == trim( envVarNames(i) ) ) then
         envVarNum = i
+        exit
       end if
     end do
+    if ( envVarNum == 0 ) then
+      write (stderr,*) 'The name ' // trim( name ) // 'is not found in getEnvVarNum().'
+      stop
+    end if
     return
-  end subroutine getEnvVarNum
+  end function getEnvVarNum
 
   ! ----------------------------------------------------------------- !
 
@@ -394,8 +400,7 @@ contains
     implicit none
     integer(kind=NPI) :: envVarNum
     ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
-    envVarNum = 0
-    call getEnvVarNum( 'JFAC', envVarNum )
+    envVarNum = getEnvVarNum( 'JFAC' )
     !IF CALC
     ! If JFAC is CALC and there's no JFAC species, the program should complain
     if ( envVarTypesNum(envVarNum) == 1 ) then

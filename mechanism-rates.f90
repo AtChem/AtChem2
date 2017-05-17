@@ -1,7 +1,7 @@
 module mechanismRates_mod
 
 contains
-  subroutine mechanism_rates( p, t, y, mnsp )
+  subroutine mechanism_rates( t, y, mnsp, p )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage, only : maxEnvVarNameLength
@@ -17,7 +17,7 @@ contains
     implicit none
 
     ! calculates rate constants from arrhenius information
-    real(kind=DP), intent(out) :: p(*)
+    real(kind=DP), intent(out) :: p(:)
     real(kind=DP), intent(in) :: t
     integer(kind=NPI), intent(in) :: mnsp
     real(kind=DP), intent(in) :: y(mnsp)

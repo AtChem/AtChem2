@@ -30,7 +30,7 @@ contains!     ---------------------------------------------------------------
     end do
 
     ! get values of reactions rates
-    call mechanism_rates( p, clocktime, y, nsp )
+    call mechanism_rates( clocktime, y, nsp, p )
 
     ! calculation of rhs of rate equations
     do i = 1, nr
@@ -93,7 +93,7 @@ contains!     ---------------------------------------------------------------
     fy(1:ny, 1:ny) = 0.0
 
     ! call routine to get reaction rates in array p
-    call mechanism_rates( p, t, y, ny )
+    call mechanism_rates( t, y, ny, p )
 
     do j = 1, ny
       r(1:nr) = 0.0

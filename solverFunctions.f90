@@ -1,20 +1,20 @@
 module solverFunctions_mod
 contains!     ---------------------------------------------------------------
-  subroutine resid( nr, clocktime, y, dy, lhs, rhs, coeff )
+  subroutine resid( nr, time, y, dy, lhs, rhs, coeff )
     ! calculate rhs of rate eqn dy()
     use types_mod
     use productionAndLossRates, only : ir, productionRates, lossRates
     use mechanismRates_mod
     implicit none
 
-    integer(kind=NPI) :: i
-    integer(kind=NPI) :: nr ! number of reactions
-    integer(kind=NPI) :: lhs(:,:), rhs(:,:)
-    real(kind=DP) :: coeff(:) ! coeff term of rhs
-    real(kind=DP) :: y(:) ! concentration array
+    integer(kind=NPI), intent(in) :: nr ! number of reactions
+    real(kind=DP), intent(in) :: time, y(:) ! concentration array
+    real(kind=DP), contiguous, intent(out) :: dy(:) ! array to hold value of rate equations
+    integer(kind=NPI), intent(in) :: lhs(:,:), rhs(:,:)
+    real(kind=DP), intent(in) :: coeff(:) ! coeff term of rhs
+    
     real(kind=DP) :: r(nr) ! working array
-    real(kind=DP) :: dy(:) ! array to hold value of rate equations
-    real(kind=DP) :: clocktime
+    integer(kind=NPI) :: i
 
     if ( size( lhs, 1 ) /= 3 ) then
       stop 'size( lhs, 1 ) /= 3 in resid()'
@@ -25,12 +25,11 @@ contains!     ---------------------------------------------------------------
 
     ! set rate eqn to zero
     dy(:) = 0
-
     productionRates(:) = 0
     lossRates(:) = 0
 
     ! get values of reactions rates
-    call mechanism_rates( clocktime, y, r )
+    call mechanism_rates( time, y, r )
 
     do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lhs(3, i)

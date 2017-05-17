@@ -64,7 +64,7 @@ contains
       end select
     end do
 
-    call atmosphere( o2, n2, m )
+    call atmosphere( m, o2, n2 )
 
     !O2 = 0.2095*m
     !N2 = 0.7809*m

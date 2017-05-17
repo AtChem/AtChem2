@@ -164,7 +164,7 @@ contains
   end subroutine outputRates
 
 
-  subroutine outputInstantaneousRates( time, numReac )
+  subroutine outputInstantaneousRates( time )
     use reactionStructure
     use directories, only : instantaneousRates_dir
     use productionAndLossRates, only : ir
@@ -173,7 +173,6 @@ contains
     implicit none
 
     integer(kind=QI), intent(in) :: time
-    integer(kind=NPI), intent(in) :: numReac
     integer(kind=NPI) :: i
     character(len=maxFilepathLength+30) :: irfileLocation
     character(len=30) :: strTime
@@ -183,7 +182,7 @@ contains
     irfileLocation = trim( instantaneousRates_dir ) // '/' // adjustl( strTime )
 
     open (10, file=irfileLocation)
-    do i = 1, numReac
+    do i = 1, size( ir )
       write (10,*) ir(i)
     end do
     close (10, status='keep')

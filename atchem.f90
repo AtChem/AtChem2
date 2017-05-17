@@ -629,7 +629,7 @@ PROGRAM ATCHEM
 
     !OUTPUT INSTANTANEOUS RATES
     if ( mod( elapsed, irOutStepSize ) == 0 ) then
-      call outputInstantaneousRates( time, numReac )
+      call outputInstantaneousRates( time )
     end if
 
     ! OUTPUT FOR CVODE MAIN SOLVER

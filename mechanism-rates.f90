@@ -1,7 +1,7 @@
 module mechanismRates_mod
 
 contains
-  subroutine mechanism_rates( t, y, mnsp, p )
+  subroutine mechanism_rates( t, y, p )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage, only : maxEnvVarNameLength
@@ -17,14 +17,12 @@ contains
     implicit none
 
     ! calculates rate constants from arrhenius information
-    real(kind=DP), intent(out) :: p(:)
     real(kind=DP), intent(in) :: t
-    integer(kind=NPI), intent(in) :: mnsp
-    real(kind=DP), intent(in) :: y(mnsp)
-    real(kind=DP) :: temp, pressure, dummy, this_env_val
+    real(kind=DP), intent(in) :: y(:)
+    real(kind=DP), intent(out) :: p(:)
 
+    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
-    real(kind=DP) :: photoRateAtT
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
     include 'modelConfiguration/mechanism-rate-declarations.f90'

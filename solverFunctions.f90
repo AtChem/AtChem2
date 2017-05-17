@@ -13,7 +13,7 @@ contains!     ---------------------------------------------------------------
     integer(kind=NPI) :: size1, size2 !number of entries in each equation array
     integer(kind=NPI) :: lhs(3, size1), rhs(2, size2)
     real(kind=DP) :: coeff(*) ! coeff term of rhs
-    real(kind=DP) :: y(*) ! concentration array
+    real(kind=DP) :: y(:) ! concentration array
     real(kind=DP) :: p(nr) ! array to hold rates
     real(kind=DP) :: r(nr) ! working array
     real(kind=DP) :: dy(*) ! array to hold value of rate equations
@@ -30,7 +30,7 @@ contains!     ---------------------------------------------------------------
     end do
 
     ! get values of reactions rates
-    call mechanism_rates( clocktime, y, nsp, p )
+    call mechanism_rates( clocktime, y, p )
 
     ! calculation of rhs of rate equations
     do i = 1, nr
@@ -55,9 +55,8 @@ contains!     ---------------------------------------------------------------
     return
   end subroutine resid
 
-  subroutine jfy( ny, nr, y, fy, t )
+  subroutine jfy( nr, y, fy, t )
     ! routine for calculating the Jacobian of the system
-    ! ny = number of species
     ! nr = number of reactions
     ! for each species calculate the rhs of the rate equation
     ! for the reactants array
@@ -82,20 +81,20 @@ contains!     ---------------------------------------------------------------
     use reactionStructure ! access is, crhs, nclhs, rhs_size
     implicit none
 
-    integer(kind=NPI), intent(in) :: ny, nr
+    integer(kind=NPI), intent(in) :: nr
     integer(kind=NPI) :: j
     real(kind=DP) :: p(nr), r(nr), t
-    real(kind=DP) :: y(*)
-    real(kind=DP), intent(out) :: fy(ny,*)
+    real(kind=DP), intent(in) :: y(:)
+    real(kind=DP), intent(out) :: fy(size( y ),*)
     integer(kind=NPI) :: is
 
     ! set jacobian matrix to zero
-    fy(1:ny, 1:ny) = 0.0
+    fy(1:size( y ), 1:size( y )) = 0.0
 
     ! call routine to get reaction rates in array p
-    call mechanism_rates( t, y, ny, p )
+    call mechanism_rates( t, y, p )
 
-    do j = 1, ny
+    do j = 1, size( y )
       r(1:nr) = 0.0
       do is = 1, lhs_size
         if ( clhs(2, is) == j ) then

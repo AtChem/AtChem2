@@ -619,7 +619,7 @@ PROGRAM ATCHEM
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
     write (*,*) 'time = ', time
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
-      call jfy( numReac, speciesConcs, fy, t )
+      call jfy( numReac, speciesConcs, t, fy )
       call output_jfy( fy, t )
     end if
 

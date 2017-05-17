@@ -252,7 +252,7 @@ contains
         case ( 'DEC' )
           dec = this_env_val
           got_dec = .true.
-          call zenith( theta, secx, cosx, t, dec )
+          call zenith( t, dec, theta, secx, cosx )
         case ( 'PRESS' )
           pressure = this_env_val
           got_press = .true.

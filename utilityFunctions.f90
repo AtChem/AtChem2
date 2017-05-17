@@ -26,14 +26,14 @@ contains
     n2 = 0.7809 * m
   end subroutine atmosphere
 
-  subroutine zenith( theta, secx, cosx, ttime, dec )
+  subroutine zenith( ttime, dec, theta, secx, cosx )
     use zenithData
     use SZACalcVars
     implicit none
 
-    real(kind=DP) :: pi, radian, rampValue
     real(kind=DP), intent(in) :: ttime, dec
     real(kind=DP), intent(out) :: theta, secx, cosx
+    real(kind=DP) :: pi, radian, rampValue
     ! solar declination angle from July 1st - Harwell traj model
 
     lat = latitude

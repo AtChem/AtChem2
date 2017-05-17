@@ -12,7 +12,7 @@ contains!     ---------------------------------------------------------------
     real(kind=DP), contiguous, intent(out) :: dy(:) ! array to hold value of rate equations
     integer(kind=NPI), intent(in) :: lhs(:,:), rhs(:,:)
     real(kind=DP), intent(in) :: coeff(:) ! coeff term of rhs
-    
+
     real(kind=DP) :: r(nr) ! working array
     integer(kind=NPI) :: i
 
@@ -22,7 +22,10 @@ contains!     ---------------------------------------------------------------
     if ( size( rhs, 1 ) /= 2 ) then
       stop 'size( rhs, 1 ) /= 2 in resid()'
     end if
-
+    if ( size( rhs, 2 ) /= size( coeff ) ) then
+      stop 'size( rhs, 2 ) /= coeff in resid()'
+    end if
+    
     ! set rate eqn to zero
     dy(:) = 0
     productionRates(:) = 0

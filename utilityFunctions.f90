@@ -19,7 +19,7 @@ contains
   subroutine atmosphere( o2, n2, m )
     use types_mod
     implicit none
-    
+
     real(kind=DP) :: o2, n2, m
 
     o2 = 0.2095 * m
@@ -31,10 +31,10 @@ contains
     use SZACalcVars
     implicit none
 
-    real(kind=DP) :: pi, radian, dec, ttime, theta, cosx, secx
-    real(kind=DP) :: rampValue
-    ! real(kind=DP) :: , sinld, cosld, lat, lha, longt
-    ! solar declinatin angle from July 1st - Harwell traj model
+    real(kind=DP) :: pi, radian, rampValue
+    real(kind=DP), intent(in) :: ttime, dec
+    real(kind=DP), intent(out) :: theta, secx, cosx
+    ! solar declination angle from July 1st - Harwell traj model
 
     lat = latitude
     longt = longitude

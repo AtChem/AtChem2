@@ -173,7 +173,7 @@ contains
               end if
               this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), currentEnvVarValues(getEnvVarNum( 'TEMP' )))
             case ( 'DEC' )
-              call calcDec( this_env_val, t )
+              this_env_val = calcDec( t )
             case ( 'JFAC' )
               if ( got_dec .eqv. .false. ) then
                 stop 'not got dec before jfac'

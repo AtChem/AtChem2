@@ -4,12 +4,13 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine calcDec( dec, t )
+  pure function calcDec( t ) result ( dec )
     ! calculate the declination of the Sun as seen from Earth.
     use date, only : secondsInYear, dayAsFractionOfYear
     implicit none
 
-    real(kind=DP) :: dec, t, pi, daysInYear, maxDecInRad, currentFYear, temporary
+    real(kind=DP), intent(in) :: t
+    real(kind=DP) :: dec, pi, daysInYear, maxDecInRad, currentFYear, temporary
 
     daysInYear = 365.24
     pi = 4.0 * atan( 1.0 )
@@ -18,17 +19,17 @@ contains
     temporary = 2.0 * 0.0167 * sin( 2 * pi * ( currentFYear - ( 2.0 / daysInYear ) ) )
     dec = asin( sin( -maxDecInRad ) * cos( ( 2.0 * pi ) * ( currentFYear + ( 10.0 / daysInYear ) ) + temporary ) )
     return
-  end subroutine calcDec
+  end function calcDec
 
   ! ----------------------------------------------------------------- !
 
-  function calcM( press, temp ) result ( m )
+  pure function calcM( press, temp ) result ( m )
     ! calculate the number density of air (molecule cm-3) from
     ! pressure (mbar) and temperature (K)
     implicit none
 
-    real(kind=DP) :: press, temp, m
-    real(kind=DP) :: press_pa
+    real(kind=DP), intent(in) :: press, temp
+    real(kind=DP) :: m, press_pa
 
     press_pa = press * 1.0d+2
     m = ( 6.02214129d+23 / 8.3144621 ) * ( press_pa / temp )
@@ -37,12 +38,13 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  function calcPressure( m, temp ) result ( press )
+  pure function calcPressure( m, temp ) result ( press )
     ! calculate pressure (mbar) from the number density of air
     ! (molecule cm-3) and temperature (K)
     implicit none
 
-    real(kind=DP) :: m, temp, press
+    real(kind=DP), intent(in) :: m, temp
+    real(kind=DP) :: press
     real(kind=DP) :: press_pa
 
     press_pa = ( m * temp ) / ( 6.02214129d+23 / 8.3144621 )
@@ -52,13 +54,13 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  function convertRHtoH2O( rh, temp, press ) result ( h2o )
+  pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
     ! convert relative humidity to water concentration (molecule cm-3)
     ! pressure in mbar, temperature in K
     implicit none
 
-    real(kind=DP) :: rh, temp, press, h2o
-    real(kind=DP) :: exponent, e1
+    real(kind=DP), intent(in) :: rh, temp, press
+    real(kind=DP) :: h2o, exponent, e1
 
     exponent = exp( -1.00d00 * ( 597.30d00 - 0.57d00 * ( temp - 273.16d00 ) ) * &
                    18.00d00 / 1.986d00 * ( 1.00d00 / temp - 1.00d00 / 273.16d00 ) )

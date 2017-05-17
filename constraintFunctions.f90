@@ -16,11 +16,11 @@ contains
     real(kind=DP), intent(out) :: jfac
     real(kind=DP) :: JSpeciesAtT
     integer(kind=NPI) :: basePhotoRateNum, i
-    integer :: firstTime = 1
+    logical :: firstTime = .true.
 
-    if ( firstTime == 1 ) then
+    if ( firstTime .eqv. .true. ) then
       write (*,*) "basePhotoRate: ", jFacSpecies
-      firstTime = 0
+      firstTime = .false.
     end if
 
     !GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY

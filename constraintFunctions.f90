@@ -3,18 +3,21 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine calcJFac( jfac, t )
+  subroutine calcJFac( t, jfac )
     use types_mod
     use zenithData1
     use photolysisRates
     use constraints
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
-
     implicit none
-    real(kind=DP) :: jfac, JSpeciesAtT, t
+
+    real(kind=DP), intent(in) :: t
+    real(kind=DP), intent(out) :: jfac
+    real(kind=DP) :: JSpeciesAtT
     integer(kind=NPI) :: basePhotoRateNum, i
     integer :: firstTime = 1
+
     if ( firstTime == 1 ) then
       write (*,*) "basePhotoRate: ", jFacSpecies
       firstTime = 0
@@ -45,7 +48,7 @@ contains
         jfac = JspeciesAtT / ( transmissionFactor(jfacSpeciesLine) * cl(jfacSpeciesLine) * &
                ( cosx ** cmm(jfacSpeciesLine) ) * exp( -cnn(jfacSpeciesLine) * secx ) )
       else
-        write (*,*) 'Error! JFAC should not be used, as constant photolysis rates have been provided.'!
+        write (*,*) 'Error! JFAC should not be used, as constant photolysis rates have been provided.'
         stop 2
       end if
     end if
@@ -317,7 +320,7 @@ contains
     call getEnvVarNum( 'JFAC', envVarNum )
     !IF CALC
     if ( envVarTypesNum(envVarNum) == 1 ) then
-      call calcJFac( jfac, t )
+      call calcJFac( t, jfac )
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
       call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &

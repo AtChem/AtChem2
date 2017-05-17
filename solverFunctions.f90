@@ -12,7 +12,6 @@ contains!     ---------------------------------------------------------------
     integer(kind=NPI) :: lhs(:,:), rhs(:,:)
     real(kind=DP) :: coeff(:) ! coeff term of rhs
     real(kind=DP) :: y(:) ! concentration array
-    real(kind=DP) :: p(nr) ! array to hold rates
     real(kind=DP) :: r(nr) ! working array
     real(kind=DP) :: dy(:) ! array to hold value of rate equations
     real(kind=DP) :: clocktime
@@ -31,12 +30,7 @@ contains!     ---------------------------------------------------------------
     lossRates(:) = 0
 
     ! get values of reactions rates
-    call mechanism_rates( clocktime, y, p )
-
-    ! calculation of rhs of rate equations
-    do i = 1, nr
-      r(i) = p(i)
-    end do
+    call mechanism_rates( clocktime, y, r )
 
     do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lhs(3, i)

@@ -820,7 +820,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
 
-  call resid( np, numReac, t, z, dy, clhs, crhs, ccoeff, lhs_size, rhs_size )
+  call resid( numReac, t, z, dy, clhs, crhs, ccoeff )
 
   call removeConstrainedSpeciesFromProbSpec( dy, constrainedSpecies, ydot )
 

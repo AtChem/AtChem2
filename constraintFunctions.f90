@@ -141,21 +141,38 @@ contains
 
     real(kind=DP) :: t, theta
     real(kind=DP) :: this_env_val
-    integer(kind=NPI) :: envVarNum
-    character(len=maxEnvVarNameLength) :: this_env_var_name
-    logical :: got_temp, got_press, got_h2o, got_dec
+    integer(kind=NPI) :: envVarNum, orderedEnvVarNum
+    character(len=maxEnvVarNameLength) :: this_env_var_name, orderedEnvVarNames(size( envVarNames ))
 
-    got_temp = .false.
-    got_press = .false.
-    got_h2o = .false.
-    got_dec = .false.
-    ! loop over eavh environment variable
-    do envVarNum = 1, size( envVarNames )
-      this_env_var_name = envVarNames(envVarNum)
+    ! loop over eavh environment variable, in a defined order, rather than just
+    ! the order of envVarNames, so we can ensure the right ones are calculated before
+    ! each other
+    ! Specifically, handle the fact pressure and temperature _may_ need calculating before M,
+    ! and pressure, temperature and H2O before RH, and DEC before JFAC
+    ! Currently this relies on environmentVariables.config having exactly the lines relating to these 10 variables.
+    !
+    ! To add another environment variable, the user would need to add that line to environmentVariables.config,
+    ! and then add this as element 11 in the orderedEnvVarNames initialisation below.
+    ! Its treatment needs defining in each of cases 1-3 and default below,
+    if ( size( envVarNames ) /= 10 ) then
+      write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
+    end if
+    orderedEnvVarNames(1) = 'PRESS'
+    orderedEnvVarNames(2) = 'TEMP'
+    orderedEnvVarNames(3) = 'M'
+    orderedEnvVarNames(4) = 'H2O'
+    orderedEnvVarNames(5) = 'BLHEIGHT'
+    orderedEnvVarNames(6) = 'RH'
+    orderedEnvVarNames(7) = 'DEC'
+    orderedEnvVarNames(8) = 'JFAC'
+    orderedEnvVarNames(9) = 'DILUTE'
+    orderedEnvVarNames(10) = 'ROOFOPEN'
 
-      ! Need to keep track of whether RH is called before or after H2O.
-      ! Handle the fact pressure and temperature _may_ need calculating before M,
-      ! and pressure, temperature and H2O before RH, and DEC before JFAC
+    do orderedEnvVarNum = 1, size( envVarNames )
+      ! loop over in a defined order, then find which number that is in the unordered list that
+      ! comes from the input file
+      this_env_var_name = orderedEnvVarNames(orderedEnvVarNum)
+      envVarNum = getEnvVarNum( trim( this_env_var_name ) )
 
       ! Find which type it is (calc, constrained, fixed, other)
       select case ( envVarTypesNum(envVarNum) )
@@ -165,19 +182,10 @@ contains
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
-              if ( got_temp .eqv. .false. ) then
-                stop 'not got temp before m'
-              end if
-              if ( got_press .eqv. .false. ) then
-                stop 'not got press before m'
-              end if
               this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), currentEnvVarValues(getEnvVarNum( 'TEMP' )))
             case ( 'DEC' )
               this_env_val = calcDec( t )
             case ( 'JFAC' )
-              if ( got_dec .eqv. .false. ) then
-                stop 'not got dec before jfac'
-              end if
               call calcJFac( t, this_env_val )
             case default
               write (stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
@@ -189,15 +197,6 @@ contains
                                        getConditionsInterpMethod(), envVarNum, this_env_val )
           ! if RH, then set H2O based upon RH,
           if ( this_env_var_name == 'RH' ) then
-            if ( got_temp .eqv. .false. ) then
-              stop 'not got TEMP before RH'
-            end if
-            if ( got_press .eqv. .false. ) then
-              stop 'not got PRESS before RH'
-            end if
-            if ( got_h2o .eqv. .false. ) then
-              stop 'not got H2O before RH, so this will be overwritten when H2O is processed'
-            end if
             currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
                                                                         currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
                                                                         currentEnvVarValues(getEnvVarNum( 'PRESS' )))
@@ -207,15 +206,6 @@ contains
           this_env_val = envVarFixedValues(envVarNum)
           ! if RH, then set H2O based upon RH,
           if ( this_env_var_name == 'RH' ) then
-            if ( got_temp .eqv. .false. ) then
-              stop 'not got TEMP before RH'
-            end if
-            if ( got_press .eqv. .false. ) then
-              stop 'not got PRESS before RH'
-            end if
-            if ( got_h2o .eqv. .false. ) then
-              stop 'not got H2O before RH, so this will be overwritten when H2O is processed'
-            end if
             currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
                                                                         currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
                                                                         currentEnvVarValues(getEnvVarNum( 'PRESS' )))
@@ -241,21 +231,9 @@ contains
       currentEnvVarValues(envVarNum) = this_env_val
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
-        case ( 'TEMP' )
-          got_temp = .true.
-        case ( 'RH' )
-        case ( 'H2O' )
-          got_h2o = .true.
+        case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN' )
         case ( 'DEC' )
-          got_dec = .true.
           call zenith( t, this_env_val, theta, secx, cosx )
-        case ( 'PRESS' )
-          got_press = .true.
-        case ( 'M' )
-        case ( 'BLHEIGHT' )
-        case ( 'DILUTE' )
-        case ( 'JFAC' )
-        case ( 'ROOFOPEN' )
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop

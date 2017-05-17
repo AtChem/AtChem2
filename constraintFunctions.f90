@@ -126,7 +126,7 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine getEnvVarsAtT( t, temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen )
+  subroutine getEnvVarsAtT( t )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage, only : maxEnvVarNameLength
@@ -140,7 +140,7 @@ contains
     implicit none
 
     real(kind=DP) :: t, theta
-    real(kind=DP) :: temp, rh, h2o, dec, pressure, m, blh, dilute, jfac, roofOpen, this_env_val
+    real(kind=DP) :: this_env_val
     integer(kind=NPI) :: envVarNum
     character(len=maxEnvVarNameLength) :: this_env_var_name
     logical :: got_temp, got_press, got_h2o, got_dec
@@ -242,30 +242,20 @@ contains
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
         case ( 'TEMP' )
-          temp = this_env_val
           got_temp = .true.
         case ( 'RH' )
-          rh = this_env_val
         case ( 'H2O' )
-          h2o = this_env_val
           got_h2o = .true.
         case ( 'DEC' )
-          dec = this_env_val
           got_dec = .true.
-          call zenith( t, dec, theta, secx, cosx )
+          call zenith( t, this_env_val, theta, secx, cosx )
         case ( 'PRESS' )
-          pressure = this_env_val
           got_press = .true.
         case ( 'M' )
-          m = this_env_val
         case ( 'BLHEIGHT' )
-          blh = this_env_val
         case ( 'DILUTE' )
-          dilute = this_env_val
         case ( 'JFAC' )
-          jfac = this_env_val
         case ( 'ROOFOPEN' )
-          roofOpen = this_env_val
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop

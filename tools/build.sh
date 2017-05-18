@@ -8,8 +8,9 @@ set -e
 echo ''
 echo $1
 echo $2
+echo $3
 echo "call ./tools/setup_atchem.py"
-python ./tools/setup_atchem.py $1 $2
+python ./tools/setup_atchem.py $1 $2 $3
 echo ''
 echo "make" $1
 make --always-make

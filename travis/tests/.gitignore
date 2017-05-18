@@ -3,9 +3,9 @@
 *.output
 *.out
 */instantaneousRates/*
-mechanism.prod
-mechanism.reac
-mechanism.species
+*/*/mechanism.prod
+*/*/mechanism.reac
+*/*/mechanism.species
 
 # Except configurationa and reference files
 

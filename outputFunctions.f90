@@ -208,4 +208,24 @@ contains
     write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
   end subroutine outputSpeciesOutputRequired
+
+
+  subroutine outputFinalModelState( names, concentrations )
+    ! This routine outputs speciesNames and speciesConcs to modelOutput/finalModelState.output
+    use types_mod
+    implicit none
+
+    character(len=*), intent(in) :: names(:)
+    real(kind=DP), intent(in) :: concentrations(:)
+    integer(kind=NPI) :: species_counter
+
+    if ( size( names ) /= size( concentrations ) ) then
+      stop 'size( speciesName ) /= size( concentrations ) in outputFinalModelState().'
+    end if
+    do species_counter = 1, size( names )
+      write (53,*) names(species_counter), concentrations(species_counter)
+    end do
+
+    return
+  end subroutine outputFinalModelState
 end module outputFunctions_mod

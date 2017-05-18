@@ -3,6 +3,7 @@
 *.mod
 atchem
 mechanism-rate-coefficients.f90
+mechanism-rate-declarations.f90
 makefile.*
 mechanism.prod
 mechanism.reac

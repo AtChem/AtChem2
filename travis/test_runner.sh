@@ -133,7 +133,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test.fac &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test.fac . &> /dev/null
 
   # Run atchem with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...

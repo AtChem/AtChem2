@@ -25,7 +25,7 @@ contains
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
-    include 'modelConfiguration/mechanism-rate-declarations.f90'
+    include 'mechanism-rate-declarations.f90'
 
     call ro2sum( ro2, y )
     dummy = y(1)
@@ -87,7 +87,7 @@ contains
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     end do
 
-    include 'modelConfiguration/mechanism-rate-coefficients.f90'
+    include 'mechanism-rate-coefficients.f90'
     return
   end subroutine mechanism_rates
 end module mechanismRates_mod

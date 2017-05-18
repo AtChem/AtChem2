@@ -2,4 +2,3 @@
 *.fac
 mechanism.*
 *.pyc
-mechanism-rate-coefficients.f90

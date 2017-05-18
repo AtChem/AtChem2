@@ -56,7 +56,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR TIME PARAMETERS
   integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
-  integer :: numSteps
+  integer :: maxNumSteps
   integer(kind=NPI) :: numSpec, numReac
   real(kind=DP) :: tminus1, timestepSize
 
@@ -341,17 +341,19 @@ PROGRAM ATCHEM
   lookBack = solverParameters(6)
   ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
   maxStep = solverParameters(7)
+  ! From CVODE docs: Maximum no. of internal steps before tout. Passed via FCVSETIIN().
+  maxNumsteps = solverParameters(8)
   ! USed to choose which solver to use:
   ! 1: SPGMR
   ! 2: SPGMR + Banded preconditioner
   ! 3: Dense solver
   ! otherwise: error
-  solverType = solverParameters(8)
+  solverType = solverParameters(9)
   ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower) are the upper
   ! and lower half- bandwidths of the band matrix that is retained as an
   ! approximation of the Jacobian.
-  preconBandUpper = solverParameters(9)
-  preconBandLower = solverParameters(10)
+  preconBandUpper = solverParameters(10)
+  preconBandLower = solverParameters(11)
 
   ! float format
   100 format (A17, E11.3)
@@ -536,8 +538,7 @@ PROGRAM ATCHEM
     stop
   end if
 
-  numsteps = 100000
-  call FCVSETIIN( 'MAX_NSTEPS', numsteps, ier )
+  call FCVSETIIN( 'MAX_NSTEPS', maxNumSteps, ier )
   write (*,*) 'setting maxsteps ier = ', ier
 
   call FCVSETRIN( 'MAX_STEP', maxStep, ier )

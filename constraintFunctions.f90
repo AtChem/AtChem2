@@ -143,6 +143,7 @@ contains
     real(kind=DP) :: this_env_val
     integer(kind=NPI) :: envVarNum, orderedEnvVarNum
     character(len=maxEnvVarNameLength) :: this_env_var_name, orderedEnvVarNames(size( envVarNames ))
+    logical :: pressure_set, rh_set, temp_set
 
     ! loop over eavh environment variable, in a defined order, rather than just
     ! the order of envVarNames, so we can ensure the right ones are calculated before
@@ -158,15 +159,19 @@ contains
       write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
     end if
     orderedEnvVarNames(1) = 'PRESS'
-    orderedEnvVarNames(2) = 'TEMP'
-    orderedEnvVarNames(3) = 'M'
-    orderedEnvVarNames(4) = 'H2O'
-    orderedEnvVarNames(5) = 'BLHEIGHT'
-    orderedEnvVarNames(6) = 'RH'
+    orderedEnvVarNames(2) = 'M'
+    orderedEnvVarNames(3) = 'TEMP'
+    orderedEnvVarNames(4) = 'RH'
+    orderedEnvVarNames(5) = 'H2O'
+    orderedEnvVarNames(6) = 'BLHEIGHT'
     orderedEnvVarNames(7) = 'DEC'
     orderedEnvVarNames(8) = 'JFAC'
     orderedEnvVarNames(9) = 'DILUTE'
     orderedEnvVarNames(10) = 'ROOFOPEN'
+
+    pressure_set = .false.
+    rh_set = .false.
+    temp_set = .false.
 
     do orderedEnvVarNum = 1, size( envVarNames )
       ! loop over in a defined order, then find which number that is in the unordered list that
@@ -178,11 +183,27 @@ contains
       select case ( envVarTypesNum(envVarNum) )
         case ( 1 ) !CALC
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'H2O', 'BLHEIGHT', 'RH', 'DILUTE', 'ROOFOPEN' )
+            case ( 'PRESS', 'TEMP', 'BLHEIGHT', 'RH', 'DILUTE', 'ROOFOPEN' )
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
-              this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), currentEnvVarValues(getEnvVarNum( 'TEMP' )))
+              if ( ( temp_set .eqv. .true. ) .and. ( pressure_set .eqv. .true. ) ) then
+                this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), &
+                                     currentEnvVarValues(getEnvVarNum( 'TEMP' )))
+              else
+                write (stderr,*) 'getEnvVarsAtT(): calcM() called, but no value was yet given to either TEMP or PRESS.'
+                stop
+              end if
+            case ( 'H2O' )
+              if ( ( rh_set .eqv. .true. ) .and. ( temp_set .eqv. .true. ) .and. ( pressure_set .eqv. .true. ) ) then
+                this_env_val = convertRHtoH2O(currentEnvVarValues(getEnvVarNum( 'RH' )), &
+                                              currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
+                                              currentEnvVarValues(getEnvVarNum( 'PRESS' )))
+              else
+                write (stderr,*) 'getEnvVarsAtT(): convertRHtoH2O() called, but no value is yet given to either RH, TEMP, or PRESS.'
+                stop
+              end if
+
             case ( 'DEC' )
               this_env_val = calcDec( t )
             case ( 'JFAC' )
@@ -195,32 +216,31 @@ contains
         case ( 2 ) ! CONSTRAINED
           call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
                                        getConditionsInterpMethod(), envVarNum, this_env_val )
-          ! if RH, then set H2O based upon RH,
-          if ( this_env_var_name == 'RH' ) then
-            currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
-                                                                        currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
-                                                                        currentEnvVarValues(getEnvVarNum( 'PRESS' )))
-          end if
+
+          if (this_env_var_name == 'PRESS') pressure_set = .true.
+          if (this_env_var_name == 'TEMP') temp_set = .true.
+          if (this_env_var_name == 'RH') rh_set = .true.
 
         case ( 3 ) ! FIXED VALUE
           this_env_val = envVarFixedValues(envVarNum)
-          ! if RH, then set H2O based upon RH,
-          if ( this_env_var_name == 'RH' ) then
-            currentEnvVarValues(getEnvVarNum( 'H2O' )) = convertRHtoH2O(this_env_val, &
-                                                                        currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
-                                                                        currentEnvVarValues(getEnvVarNum( 'PRESS' )))
-          end if
+
+          if (this_env_var_name == 'PRESS') pressure_set = .true.
+          if (this_env_var_name == 'TEMP') temp_set = .true.
+          if (this_env_var_name == 'RH') rh_set = .true.
 
         case default
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'H2O', 'M', 'BLHEIGHT', 'RH' )
+            case ( 'M' )
+              this_env_val = 2.46e+19
+            case ( 'TEMP' )
+              this_env_val = 298.15
+              temp_set = .true.
+            case ( 'H2O' )
+              this_env_val = 3.91e+17
+            case ( 'PRESS', 'BLHEIGHT', 'RH', 'DILUTE' )
               this_env_val = -1
             case ( 'DEC' )
-              stop 'Error! DEC variable must be provided.' // &
-                   'Please set it to the declination angle of the sun ' // &
-                   '(or to CALC and then set a correct date ).'
-            case ( 'DILUTE' )
-              this_env_val = 0
+              this_env_val = 0.41
             case ( 'JFAC', 'ROOFOPEN' )
               this_env_val = 1
             case default

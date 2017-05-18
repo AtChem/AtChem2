@@ -525,7 +525,7 @@ PROGRAM ATCHEM
   call FNVINITS( 1, neq, ier )
   if ( ier /= 0 ) then
     write (stderr, 20) ier
-    20   format (///' SUNDIALS_ERROR: FNVINITS()returned ier = ', I5)
+    20   format (///' SUNDIALS_ERROR: FNVINITS() returned ier = ', I5)
     stop
   end if
 
@@ -534,7 +534,7 @@ PROGRAM ATCHEM
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
     write (stderr, 30) ier
-    30   format (///' SUNDIALS_ERROR: FCVMALLOC()returned ier = ', I5)
+    30   format (///' SUNDIALS_ERROR: FCVMALLOC() returned ier = ', I5)
     stop
   end if
 
@@ -587,7 +587,7 @@ PROGRAM ATCHEM
 
   if ( ier /= 0 ) then
     write (stderr, 40) ier
-    40   format (///' SUNDIALS_ERROR: FCVDENSE()returned ier = ', I5)
+    40   format (///' SUNDIALS_ERROR: FCVDENSE() returned ier = ', I5)
     call FCVFREE()
     stop
   end if
@@ -668,7 +668,7 @@ PROGRAM ATCHEM
 
     ! ERROR HANDLING
     if ( ier < 0 ) then
-      fmt = "(///' SUNDIALS_ERROR: FCVODE()returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
+      fmt = "(///' SUNDIALS_ERROR: FCVODE() returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
       write (stderr, fmt) ier, iout (15)
       ! free memory
       call FCVFREE()
@@ -685,7 +685,7 @@ PROGRAM ATCHEM
 
   call FCVDKY( t, 1, z, ier )
   if ( ier /= 0 ) then
-    fmt = "(///' SUNDIALS_ERROR: FCVDKY()returned ier = ', I4) "
+    fmt = "(///' SUNDIALS_ERROR: FCVDKY() returned ier = ', I4) "
     write (stderr, fmt) ier
     call FCVFREE()
     stop

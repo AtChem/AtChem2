@@ -129,9 +129,9 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('EXIST\s*=',  'exist=',  to_output, flags=re.IGNORECASE)
 
         # Any ending bracket followed by a double-quote, should have a single space.
-        to_output = re.sub('\)(?=")', ') ', to_output)
+        to_output = re.sub('\)(?=")', ')', to_output)
         # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, or single-quote
-        to_output = re.sub("\)(?=[\w\d'])", ') ', to_output)
+        to_output = re.sub("\)(?=[\w\d])", ') ', to_output)
         # Any ending bracket already followed by whitespace should be followed by exactly one space
         to_output = re.sub('\)[ \t]+', ') ', to_output)
 
@@ -237,14 +237,14 @@ with open(out_filename, 'w') as output_file:
             to_output = re.sub('IF\s*', 'if ', to_output, flags=re.IGNORECASE)
             to_output = re.sub('\s*THEN', ' then', to_output, flags=re.IGNORECASE)
 
-        # add space before last bracket of preocedure call or definition, handling mutliple lines
+        # add space before last bracket of procedure call or definition, handling multiple lines
         if is_inside_procedure and not this_line_ends_ampersand:
             if re.search('(?<=[a-zA-Z0-9])\)', to_output):
                 to_output = re.sub(r"\s*\)(?=[^\)]*$)", r" )", to_output)
             is_inside_procedure = False
 
         # convert any ( ) to ()
-        to_output = re.sub('\s*\(\s*\)\s*', '()', to_output)
+        to_output = re.sub('\s*\(\s+\)\s*', '()', to_output)
 
         # separate ')result' to ') result'
         if re.match('^\s*FUNCTION', to_output, flags=re.IGNORECASE) or re.match('^\s*PURE FUNCTION', to_output, flags=re.IGNORECASE):

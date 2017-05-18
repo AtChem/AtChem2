@@ -492,8 +492,7 @@ contains
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(inout) :: y(:)
     real(kind=DP) :: concAtT, value
-    integer(kind=NPI) :: i, j, id, numberOfSpecies
-    integer :: k, dataNumberOfPoints
+    integer(kind=NPI) :: i, j, id, numberOfSpecies, k, dataNumberOfPoints
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
@@ -565,15 +564,15 @@ contains
         end if
 
         fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
-        open (13, file=fileLocation, status='old')
-
-        read (13,*) dataNumberOfPoints
+        ! Count lines in file
+        dataNumberOfPoints = count_lines_in_file( fileLocation )
         if ( dataNumberOfPoints > maxNumberOfDataPoints ) then
           dataNumberOfPoints = maxNumberOfDataPoints
           write (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'!
         end if
-
         speciesNumberOfPoints(i) = dataNumberOfPoints
+        ! Read contents of file
+        open (13, file=fileLocation, status='old')
         do k = 1, dataNumberOfPoints
           read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
         end do

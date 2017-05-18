@@ -6,7 +6,7 @@ import sys
 import fix_mechanism_fac
 
 
-def convert(input_file, output_dir):
+def convert(input_file, output_dir, mc_dir):
     script_directory = os.path.dirname(os.path.abspath(__file__))
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
@@ -70,7 +70,7 @@ def convert(input_file, output_dir):
     reactionNumber = 0
 
     with open(os.path.join(input_directory, 'mechanism.reactemp'), 'w') as reac_temp_file, open(
-            os.path.join(input_directory, 'mechanism.prod'), 'w') as prod_file:
+            os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
         # Loop over all lines in the reaction_definitions section of the input file
         for line in reaction_definitions:
 
@@ -176,7 +176,7 @@ def convert(input_file, output_dir):
     # Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model (move the last line to
     # the first line).
     with open(os.path.join(input_directory, 'mechanism.reactemp')) as reac_temp_file, open(
-            os.path.join(input_directory, 'mechanism.reac'), 'w') as reac_file:
+            os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file:
         st = reac_temp_file.readlines()
         # Write last line
         reac_file.write(st[len(st) - 1])
@@ -185,7 +185,7 @@ def convert(input_file, output_dir):
             reac_file.write(line)
 
     # Write speciesList to mechanism.species, indexed by (1 to len(speciesList))
-    with open(os.path.join(input_directory, 'mechanism.species'), 'w') as species_file:
+    with open(os.path.join(mc_dir, 'mechanism.species'), 'w') as species_file:
         for i, x in zip(range(1, len(speciesList) + 1), speciesList):
             species_file.write(str(i) + ' ' + str(x) + '\n')
 
@@ -472,7 +472,9 @@ def main():
     input_filename = sys.argv[1]
     assert len(sys.argv) > 2, 'Please enter a directory as second argument, pointing to the directory containing source files of AtChem.'
     output_directory = sys.argv[2]
-    convert(input_filename, output_directory)
+    assert len(sys.argv) > 3, 'Please enter a directory as third argument, pointing to the directory for mechanism.species etc.'
+    param_directory = sys.argv[3]
+    convert(input_filename, output_directory, param_directory)
 
 if __name__ == '__main__':
     main()

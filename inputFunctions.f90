@@ -2,6 +2,7 @@ module inputFunctions_mod
   use types_mod
 contains
   subroutine readReactions( lhs, rhs, coeff )
+    use directories, only : param_dir
     implicit none
 
     ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
@@ -21,7 +22,7 @@ contains
     end if
 
     write (*,*) 'Reading reactants (lhs) from mechanism.reac...'
-    open (10, file='modelConfiguration/mechanism.reac', status='old') ! input file for lhs of equations
+    open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
     count = 0
     read (10,*, iostat=ierr)
@@ -36,7 +37,7 @@ contains
     close (10, status='keep')
 
     write (*,*) 'Reading products (rhs) from mechanism.prod...'
-    open (11, file='modelConfiguration/mechanism.prod', status='old') ! input file for rhs of equations
+    open (11, file=trim( param_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
     count = 0
     ierr = 0
@@ -188,13 +189,14 @@ contains
 
 
   subroutine getReactantAndProductListSizes()
+    use directories, only : param_dir
     use reactionStructure, only : lhs_size, rhs_size
     implicit none
     ! outputs lhs_size and rhs_size, which hold the number of lines in
     ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
     ! last line
-    lhs_size = count_lines_in_file( 'modelConfiguration/mechanism.reac', skip_first_line_in=.true. )
-    rhs_size = count_lines_in_file( 'modelConfiguration/mechanism.prod', skip_first_line_in=.false. )
+    lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
+    rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.false. )
 
     return
   end subroutine getReactantAndProductListSizes
@@ -343,12 +345,13 @@ contains
 
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
+    use directories, only : param_dir
     use species, only : setNumberOfSpecies, setNumberOfReactions
     implicit none
 
     integer(kind=NPI) :: numSpec, numReac
     !    READ IN MECHANISM PARAMETERS
-    open (10, file='modelConfiguration/mechanism.reac', status='old') ! input file
+    open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file
     read (10,*) numSpec, numReac
     close (10, status='keep')
 
@@ -363,6 +366,7 @@ contains
 
 
   subroutine readSpecies( speciesName )
+    use directories, only : param_dir
     use storage, only : maxSpecLength
     implicit none
 
@@ -371,7 +375,7 @@ contains
 
     ! Read in species number and name from mC/mechanism.species to speciesName
     ! and sdummy (to be thrown).
-    open (10, file='modelConfiguration/mechanism.species') ! input file
+    open (10, file=trim( param_dir ) // '/mechanism.species') ! input file
     do j = 1, size ( speciesName )
       read (10,*) dummy, speciesName(j)
     end do

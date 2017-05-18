@@ -692,9 +692,7 @@ PROGRAM ATCHEM
   end if
 
   !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
-  do species_counter = 1, numSpec
-    write (53,*) speciesNames(species_counter), speciesConcs(species_counter)
-  end do
+  call outputFinalModelState( speciesNames, speciesConcs )
 
   !   printing of final statistics desactivated - nobody finds it useful
   !   FINAL ON SCREEN OUTPUT

@@ -22,6 +22,7 @@ contains
     end if
 
     write (*,*) 'Reading reactants (lhs) from mechanism.reac...'
+    call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'readReactions()')
     open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
     count = 0
@@ -37,6 +38,7 @@ contains
     close (10, status='keep')
 
     write (*,*) 'Reading products (rhs) from mechanism.prod...'
+    call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'readReactions()')
     open (11, file=trim( param_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
     count = 0
@@ -108,6 +110,7 @@ contains
     integer(kind=IntErr) :: ierr
 
     write (*,*) 'Reading photolysis rates from file...'
+    call inquire_or_abort( trim( param_dir ) // '/photolysisRates.config', 'readPhotolysisRates()')
     open (10, file=trim( param_dir ) // '/photolysisRates.config', status='old')
     ! Ignore first line
     read (10,*)
@@ -192,10 +195,13 @@ contains
     use directories, only : param_dir
     use reactionStructure, only : lhs_size, rhs_size
     implicit none
+
     ! outputs lhs_size and rhs_size, which hold the number of lines in
     ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
     ! last line
+    call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
     lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
     rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.false. )
 
     return
@@ -210,6 +216,8 @@ contains
     character(len=*), intent(in) :: input_file
     real(kind=DP), intent(out) :: parameterArray(:)
     integer(kind=DI), intent(out) :: numValidEntries
+
+    call inquire_or_abort( input_file, 'getParametersFromFile()')
 
     open (10, file=input_file, status='old') ! input file
     numValidEntries = 0
@@ -245,6 +253,7 @@ contains
     numConPhotoRates = 0
     ! GET NAMES OF CONSTRAINED PHOTO RATES
     write (*,*) 'Reading names of constrained photolysis rates from file...'
+    call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoRates()')
     open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
     do i = 1, maxNrOfConPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoRates(i)
@@ -289,6 +298,7 @@ contains
         string = constrainedPhotoRates(i)
         write (*,*) string, '...'
         fileLocation = fileLocationPrefix // string
+        call inquire_or_abort( fileLocation, 'readPhotoRates()')
         open (11, file=fileLocation, status='old')
         read (11,*) photoNumberOfPoints(i)
         do k = 1, photoNumberOfPoints(i)
@@ -347,11 +357,17 @@ contains
     use types_mod
     use directories, only : param_dir
     use species, only : setNumberOfSpecies, setNumberOfReactions
+    use storage, only : maxFilepathLength
     implicit none
 
     integer(kind=NPI) :: numSpec, numReac
+    character(len=maxFilepathLength) :: fileLocation
+
+    fileLocation = trim( param_dir ) // '/mechanism.reac'
     !    READ IN MECHANISM PARAMETERS
-    open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file
+    call inquire_or_abort( fileLocation, 'readNumberOfSpeciesAndReactions()')
+
+    open (10, file=fileLocation, status='old') ! input file
     read (10,*) numSpec, numReac
     close (10, status='keep')
 
@@ -367,15 +383,18 @@ contains
 
   subroutine readSpecies( speciesName )
     use directories, only : param_dir
-    use storage, only : maxSpecLength
+    use storage, only : maxSpecLength, maxFilepathLength
     implicit none
 
     character(len=maxSpecLength), intent(out) :: speciesName(:)
     integer(kind=NPI) :: j, dummy
+    character(len=maxFilepathLength) :: fileLocation
 
+    fileLocation=trim( param_dir ) // '/mechanism.species'
     ! Read in species number and name from mC/mechanism.species to speciesName
     ! and sdummy (to be thrown).
-    open (10, file=trim( param_dir ) // '/mechanism.species') ! input file
+    call inquire_or_abort( fileLocation, 'readSpecies()')
+    open (10, file=fileLocation) ! input file
     do j = 1, size ( speciesName )
       read (10,*) dummy, speciesName(j)
     end do
@@ -398,15 +417,15 @@ contains
     character(len=maxSpecLength), allocatable, intent(out) :: concSpeciesNames(:)
     real(kind=DP), allocatable, intent(out) :: concentration(:)
     character(len=maxSpecLength) :: k
-    character(len=maxFilepathLength) :: file
+    character(len=maxFilepathLength) :: filename
     real(kind=DP) :: l
     integer(kind=NPI) :: numLines, i, nsp
     integer(kind=IntErr) :: ierr
 
     write (*,*) 'Reading initial concentrations...'
-    file= trim( param_dir ) // '/initialConcentrations.config'
+    filename = trim( param_dir ) // '/initialConcentrations.config'
     ! Count lines in file, allocate appropriately
-    numLines = count_lines_in_file( trim( file ), .false. )
+    numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()
     if ( numLines > nsp ) then
       write (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
@@ -415,7 +434,7 @@ contains
     end if
     allocate (concSpeciesNames(numLines), concentration(numLines) )
 
-    open (10, file=trim( file ), status='old') ! input file for lhs of equations
+    open (10, file=trim( filename ), status='old') ! input file for lhs of equations
     i = 0
     read (10,*, iostat=ierr) k, l
     do while ( ierr == 0 )
@@ -452,16 +471,11 @@ contains
     character(len=maxSpecLength), allocatable, intent(out) :: r(:)
     integer(kind=NPI), intent(out) :: length
     integer(kind=NPI) :: j
-    logical :: file_exists
 
-    inquire(file=trim( filename ), exist=file_exists)
-    if ( file_exists .eqv. .false. ) then
-      write (*,*) 'No ' // filename // ' file exists.'
-    else
-      length = count_lines_in_file ( trim( filename ), .false. )
-      allocate (r(length) )
-      call read_in_single_column_string_file( trim( filename ), r, .false. )
-    end if
+    length = count_lines_in_file ( trim( filename ), .false. )
+    allocate (r(length) )
+    call read_in_single_column_string_file( trim( filename ), r, .false. )
+
     if ( length > 3 ) then
       write (*,*) 1, ' ', r(1)
       write (*,*) '...'
@@ -572,6 +586,7 @@ contains
         end if
         speciesNumberOfPoints(i) = dataNumberOfPoints
         ! Read contents of file
+        call inquire_or_abort( fileLocation, 'readSpeciesConstraints()')
         open (13, file=fileLocation, status='old')
         do k = 1, dataNumberOfPoints
           read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
@@ -582,9 +597,11 @@ contains
 
     ! READ IN NAMES AND CONCENTRATION DATA FOR FIXED CONSTRAINED SPECIES
     allocate (dataFixedY(numberOfFixedConstrainedSpecies))
+    fileLocation = trim( param_dir ) // '/constrainedFixedSpecies.config'
     write (*,*) 'Reading in the names and concentration of the fixed constrained species ' // &
                 '(in file constrainedFixedSpecies.config)...'
-    open (14, file=trim( param_dir ) // '/constrainedFixedSpecies.config', status='old') ! input file
+    call inquire_or_abort( fileLocation, 'readSpeciesConstraints()')
+    open (14, file=fileLocation, status='old') ! input file
     id = 0
     j = 0
     do i = 1, numberOfFixedConstrainedSpecies
@@ -681,7 +698,9 @@ contains
     allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
     allocate (envVarFixedValues(numEnvVars) )
 
-    open (10, file=trim( param_dir ) // '/environmentVariables.config', status='old') ! input file
+    fileLocation = trim( param_dir ) // '/environmentVariables.config'
+    call inquire_or_abort( fileLocation, 'readEnvVar()')
+    open (10, file=fileLocation, status='old') ! input file
     ! Read in environment variables - if
     do i = 1, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
@@ -721,7 +740,7 @@ contains
         write (*,*) 'Reading constraint data for', envVarNames(i)
 
         fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
-
+        call inquire_or_abort( fileLocation, 'readEnvVar()')
         open (11, file=fileLocation, status='old')
 
         read (11,*) envVarNumberOfPoints(i)
@@ -751,6 +770,7 @@ contains
     else
       skip_first_line = skip_first_line_in
     end if
+    call inquire_or_abort( filename, 'count_lines_in_file()')
     counter = 0
     ierr = 0
     open (11, file=filename, status='old')
@@ -782,6 +802,7 @@ contains
     else
       skip_first_line = skip_first_line_in
     end if
+    call inquire_or_abort( filename, 'read_in_single_column_string_file()')
     open (10, file=filename, status='old')
     ! Skip first line if necessary.
     if ( skip_first_line ) read (11,*, iostat=ierr) c
@@ -796,4 +817,19 @@ contains
     end do
     close (10, status='keep')
   end subroutine read_in_single_column_string_file
+
+
+  subroutine inquire_or_abort( filename, calling_subroutine )
+    implicit none
+
+    character(len=*) :: filename, calling_subroutine
+    logical :: file_exists
+
+    inquire(file=filename, exist=file_exists)
+    if ( file_exists .eqv. .false. ) then
+      write (*,*) trim( calling_subroutine ) // ": No file '" // trim( filename ) // "' exists, so aborting."
+      stop
+    end if
+
+  end subroutine inquire_or_abort
 end module inputFunctions_mod

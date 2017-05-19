@@ -34,6 +34,24 @@ contains
   end subroutine outputEnvVar
 
 
+  subroutine outputStepSize( t, prev, this )
+    use envVars
+    implicit none
+
+    real(kind=DP), intent(in) :: t, prev, this
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (62, '(3a17) ') 't', 'currentStepSize', 'previousStepSize'
+      first_time = .false.
+    end if
+
+    write (62, '(3 (1P e17.3)) ') t, prev, this
+
+    return
+  end subroutine outputStepSize
+
+
   subroutine outputPhotoRateCalcParameters( t )
     use zenithData
     use zenithData1

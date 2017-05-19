@@ -647,7 +647,7 @@ PROGRAM ATCHEM
     ! OUTPUT FOR SPARSE SOLVER
     write (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
     ! OUTPUT STEP SIZE
-    write (62,*) t, ' ', rout (3), ' ', rout (2)
+    call outputStepSize( t, rout (3), rout (2) )
 
     !OUTPUT ENVVAR VALUES
     call ro2sum( ro2, speciesConcs )

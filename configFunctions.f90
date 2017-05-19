@@ -31,9 +31,6 @@ contains
     ! OUTPUT FOR SPARSE SOLVER
     write (61,*) 't NFELS NJTV NPE NPS'
 
-    ! OTHER OUPUT
-    ! 51, 53, 54, 55 don't need a header.
-    write (62,*) 't currentStepSize previousStepSize'
     return
   end subroutine writeFileHeaders
 

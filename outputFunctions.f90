@@ -46,14 +46,20 @@ contains
   end subroutine output_jfy
 
 
-  subroutine outputPhotolysisRates( t )
+  subroutine outputPhotolysisRates( photoRateNamesForHeader, t )
     use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
 
+    character(len=*), intent(in) :: photoRateNamesForHeader(:)
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: i
+    logical :: firstTime = .true.
 
-    write (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    if ( firstTime .eqv. .true. ) then
+      write (58, '(100a15) ') 't', (trim( photoRateNamesForHeader(ck(i)) ), i = 1, nrOfPhotoRates)
+      firstTime = .false.
+    end if
+    write (58, '(100e15.5) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
 
     return
   end subroutine outputPhotolysisRates

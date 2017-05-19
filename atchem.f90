@@ -486,7 +486,7 @@ PROGRAM ATCHEM
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
   !   Write file output headers
-  call writeFileHeaders( photoRateNamesForHeader, speciesOutputRequired )
+  call writeFileHeaders( speciesOutputRequired )
 
   flush(stderr)
   !    ********************************************************************************************************
@@ -640,7 +640,7 @@ PROGRAM ATCHEM
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
     call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
-    call outputPhotolysisRates( t )
+    call outputPhotolysisRates( photoRateNamesForHeader, t )
 
     !OUTPUT INSTANTANEOUS RATES
     if ( mod( elapsed, irOutStepSize ) == 0 ) then

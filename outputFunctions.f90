@@ -120,7 +120,7 @@ contains
   subroutine output_jfy( t, fy )
     implicit none
 
-    real(kind=DP), intent(in) :: fy(:,:), t
+    real(kind=DP), intent(in) :: t, fy(:,:)
     integer(kind=NPI) :: i, j
 
     if ( size( fy, 1 ) /= size( fy, 2 ) ) then
@@ -140,8 +140,8 @@ contains
     use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
 
-    character(len=*), intent(in) :: photoRateNamesForHeader(:)
     real(kind=DP), intent(in) :: t
+    character(len=*), intent(in) :: photoRateNamesForHeader(:)
     integer(kind=NPI) :: i
     logical :: firstTime = .true.
 

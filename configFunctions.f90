@@ -21,19 +21,6 @@ contains
     return
   end subroutine calcDateParameters
 
-  subroutine writeFileHeaders()
-    implicit none
-
-    ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
-    ! OUTPUT FOR CVODE MAIN SOLVER
-    write (57,*) 't LNST LNFE LNETF LNGE'
-
-    ! OUTPUT FOR SPARSE SOLVER
-    write (61,*) 't NFELS NJTV NPE NPS'
-
-    return
-  end subroutine writeFileHeaders
-
 
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
                                 returnArray, returnArraySize )

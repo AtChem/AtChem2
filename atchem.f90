@@ -35,16 +35,12 @@ PROGRAM ATCHEM
   integer(kind=QI) :: ier
   integer :: i
   integer(kind=NPI) :: species_counter
-  integer :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
-  integer :: nfels, njtv, npe, nps
   integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
   real(kind=DP) :: rtol, t, t0, tout
   real(kind=DP) :: atol, rout(6)
   real(kind=DP) :: rpar(1)
-  data lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
-       lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
   real(kind=DP), allocatable :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
@@ -485,9 +481,6 @@ PROGRAM ATCHEM
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
-  !   Write file output headers
-  call writeFileHeaders()
-
   flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS
@@ -643,9 +636,8 @@ PROGRAM ATCHEM
     end if
 
     ! OUTPUT FOR CVODE MAIN SOLVER
-    write (57,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
-    ! OUTPUT FOR SPARSE SOLVER
-    write (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
+    call outputSolverParameters( t, iout, solverType )
+
     ! OUTPUT STEP SIZE
     call outputStepSize( t, rout (3), rout (2) )
 
@@ -698,8 +690,8 @@ PROGRAM ATCHEM
         "' No. nonlinear convergence failures = ', I4/" // &
         "' No. error test failures = ', I4/) "
 
-  write (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
-                 iout (lnni), iout (lncf), iout (lnetf )
+  write (*, fmt) iout (3), iout (4), iout (17), iout (8), &
+                 iout (7), iout (6), iout (5)
 
   call SYSTEM_CLOCK( runEnd, rate )
   runTime = ( runEnd - runStart ) / rate

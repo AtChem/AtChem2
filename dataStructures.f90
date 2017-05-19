@@ -27,7 +27,7 @@ module storage
   integer, parameter :: maxFilepathLength=100
   integer, parameter :: maxReactionStringLength=1000
 
-end module
+end module storage
 
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC

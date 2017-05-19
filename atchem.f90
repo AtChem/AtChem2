@@ -594,8 +594,6 @@ PROGRAM ATCHEM
 
   do while ( currentNumTimestep < maxNumTimesteps )
 
-    time = int( t )
-    write (*,*) 'time = ', time
     call outputPhotoRateCalcParameters( t )
 
     ! GET CONCENTRATIONS FOR SOLVED SPECIES
@@ -604,6 +602,9 @@ PROGRAM ATCHEM
       write (*,*) 'ier POST FCVODE()= ', ier
     end if
     flush(6)
+
+    time = int( t )
+    write (*,*) 'time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
     do species_counter = 1, numberOfConstrainedSpecies

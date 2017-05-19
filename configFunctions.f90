@@ -21,12 +21,10 @@ contains
     return
   end subroutine calcDateParameters
 
-  subroutine writeFileHeaders( specOutReqNames )
+  subroutine writeFileHeaders()
     use envVars
-    use storage, only : maxSpecLength
     implicit none
 
-    character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
     integer(kind=NPI) :: i
 
     ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
@@ -37,7 +35,6 @@ contains
     write (61,*) 't NFELS NJTV NPE NPS'
 
     ! OTHER OUPUT
-    write (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, size( specOutReqNames ))
     ! 51, 53, 54, 55 don't need a header.
     write (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
     write (59,*) 't secx cosx lat longt lha sinld cosld'

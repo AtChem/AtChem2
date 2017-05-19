@@ -486,7 +486,7 @@ PROGRAM ATCHEM
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
   !   Write file output headers
-  call writeFileHeaders( speciesOutputRequired )
+  call writeFileHeaders()
 
   flush(stderr)
   !    ********************************************************************************************************
@@ -503,7 +503,7 @@ PROGRAM ATCHEM
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-  call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
+  call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is y with all the constrained species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
@@ -639,7 +639,7 @@ PROGRAM ATCHEM
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-    call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
+    call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( photoRateNamesForHeader, t )
 
     !OUTPUT INSTANTANEOUS RATES

@@ -207,21 +207,33 @@ contains
   end subroutine outputInstantaneousRates
 
 
-  subroutine outputSpeciesOutputRequired( t, arrayOfConcs )
+  subroutine outputSpeciesOutputRequired( t, specOutReqNames, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
     ! If any concentration is negative, then set it to zero before printing.
+    use storage, only : maxSpecLength
     implicit none
 
     real(kind=DP), intent(in) :: t
+    character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
     real(kind=DP), intent(inout) :: arrayOfConcs(:)
     integer(kind=NPI) :: i
+    logical :: first_time = .true.
+
+    if ( size( specOutReqNames ) /= size( arrayOfConcs ) ) then
+      stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOutputRequired()."
+    end if
+
+    if ( first_time .eqv. .true. ) then
+      write (50, '(100a15) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
+      first_time = .false.
+    end if
 
     do i = 1, size( arrayOfConcs )
       if ( arrayOfConcs(i) < 0.0 ) then
         arrayOfConcs(i) = 0d0
       end if
     end do
-    write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+    write (50, '(100e15.5) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
   end subroutine outputSpeciesOutputRequired
 

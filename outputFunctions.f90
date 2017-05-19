@@ -64,14 +64,14 @@ contains
 
     if ( first_time .eqv. .true. ) then
       ! OUTPUT FOR CVODE MAIN SOLVER
-      write (57, '(13a11) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'NGE'
+      write (57, '(13a9) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR'
       ! OUTPUT FOR SPARSE SOLVER
       if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
         ! CVSPILS type solver
-        write (61, '(10a11) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
+        write (61, '(10a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
       else if ( solver_type == 3 ) then
         ! CVDLS type solver
-        write (61, '(6a11) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
+        write (61, '(6a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
       else
         write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
         write (stderr,*) 'Available options are 1, 2, 3.'
@@ -81,14 +81,14 @@ contains
     end if
 
     ! OUTPUT FOR MAIN SOLVER
-    write (57, '(1P e11.3, 12i11) ') t, (array(i), i = 1, 12)
+    write (57, '(1P e11.3, 11i9) ') t, (array(i), i = 1, 11)
     ! OUTPUT FOR SPARSE SOLVER
     if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
       ! CVSPILS type solver
-      write (61, '(1P e11.3, 9i11) ') t, (array(i), i = 13, 21)
+      write (61, '(1P e11.3, 9i9) ') t, (array(i), i = 13, 21)
     else if ( solver_type == 3 ) then
       ! CVDLS type solver
-      write (61, '(1P e1.3, 5i11) ') t, (array(i), i = 13, 17)
+      write (61, '(1P e1.3, 5i9) ') t, (array(i), i = 13, 17)
     else
       write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
       write (stderr,*) 'Available options are 1, 2, 3.'

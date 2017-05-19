@@ -38,7 +38,7 @@ PROGRAM ATCHEM
   integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
-  real(kind=DP) :: rtol, t, t0, tout
+  real(kind=DP) :: rtol, t, tout
   real(kind=DP) :: atol, rout(6)
   real(kind=DP) :: rpar(1)
   real(kind=DP), allocatable :: speciesConcs(:)
@@ -54,7 +54,7 @@ PROGRAM ATCHEM
   integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
   integer :: maxNumSteps
   integer(kind=NPI) :: numSpec, numReac
-  real(kind=DP) :: tminus1, timestepSize
+  real(kind=DP) :: timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   real(kind=DP), allocatable :: initialConcentrations(:)
@@ -397,7 +397,7 @@ PROGRAM ATCHEM
   numberOfConstrainedSpecies = modelParameters(7)
   ! Frequency at which outputRates is called below.
   ratesOutputStepSize = modelParameters(8)
-  ! Start time of model. Used to set t0, and to calculate the elapsed time.
+  ! Start time of model. Used to set t initially, and to calculate the elapsed time.
   modelStartTime = modelParameters(9)
   ! Frequency at which output_jfy is called below.
   jacobianOutputStepSize = modelParameters(10)
@@ -440,10 +440,8 @@ PROGRAM ATCHEM
   call calcDateParameters()
 
   !   HARD CODED SOLVER PARAMETERS
-  t0 = modelStartTime
-  tout = timestepSize
-  tout = tout + t0
-  t = t0
+  t = modelStartTime
+  tout = timestepSize + t
   ! Parameters for FCVMALLOC(). (Comments from cvode guide)
   ! meth specifies the basic integration: 1 for Adams (nonstiff) or 2 for BDF stiff)
   meth = 2
@@ -522,8 +520,8 @@ PROGRAM ATCHEM
     stop
   end if
 
-  write (*, '(A30, E15.3) ') 't0 = ', t0
-  call FCVMALLOC( t0, z, meth, itmeth, iatol, rtol, atol, &
+  write (*, '(A30, E15.3) ') 't0 = ', t
+  call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
     write (stderr, 30) ier
@@ -663,11 +661,9 @@ PROGRAM ATCHEM
       stop
     end if
 
-    if ( ier == 0 ) then
-      tminus1 = t
-      tout = tout + timestepSize
-      currentNumTimestep = currentNumTimestep + 1
-    end if
+    ! increment time
+    tout = tout + timestepSize
+    currentNumTimestep = currentNumTimestep + 1
 
   end do
 

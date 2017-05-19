@@ -17,11 +17,18 @@ contains
     use envVars
     implicit none
 
-    integer(kind=NPI) :: i
     real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: i
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (52, '(100a15) ') 'time', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
+      first_time = .false.
+    end if
 
     if ( ro2 < 0 ) ro2 = 0.0
-    write (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+
+    write (52, '(100e15.5) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
     return
   end subroutine outputEnvVar

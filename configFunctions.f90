@@ -22,10 +22,7 @@ contains
   end subroutine calcDateParameters
 
   subroutine writeFileHeaders()
-    use envVars
     implicit none
-
-    integer(kind=NPI) :: i
 
     ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
     ! OUTPUT FOR CVODE MAIN SOLVER
@@ -36,7 +33,6 @@ contains
 
     ! OTHER OUPUT
     ! 51, 53, 54, 55 don't need a header.
-    write (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
     write (59,*) 't secx cosx lat longt lha sinld cosld'
     write (62,*) 't currentStepSize previousStepSize'
     return

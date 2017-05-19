@@ -117,7 +117,7 @@ contains
   end subroutine outputPhotoRateCalcParameters
 
 
-  subroutine output_jfy( fy, t )
+  subroutine output_jfy( t, fy )
     implicit none
 
     real(kind=DP), intent(in) :: fy(:,:), t
@@ -136,7 +136,7 @@ contains
   end subroutine output_jfy
 
 
-  subroutine outputPhotolysisRates( photoRateNamesForHeader, t )
+  subroutine outputPhotolysisRates( t, photoRateNamesForHeader )
     use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
 

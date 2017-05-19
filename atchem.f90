@@ -594,8 +594,11 @@ PROGRAM ATCHEM
 
   do while ( currentNumTimestep < maxNumTimesteps )
 
-    ! GET CONCENTRATIONS FOR SOLVED SPECIES
+    time = int( t )
+    write (*,*) 'time = ', time
     call outputPhotoRateCalcParameters( t )
+
+    ! GET CONCENTRATIONS FOR SOLVED SPECIES
     call FCVODE( tout, t, z, itask, ier )
     if ( ier /= 0 ) then
       write (*,*) 'ier POST FCVODE()= ', ier
@@ -610,9 +613,7 @@ PROGRAM ATCHEM
 
     call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
 
-    ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-    time = int( t )
-
+    ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1 )
@@ -620,15 +621,14 @@ PROGRAM ATCHEM
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
-    write (*,*) 'time = ', time
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numReac, speciesConcs, t, fy )
-      call output_jfy( fy, t )
+      call output_jfy( t, fy )
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
     call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
-    call outputPhotolysisRates( photoRateNamesForHeader, t )
+    call outputPhotolysisRates( t, photoRateNamesForHeader )
 
     !OUTPUT INSTANTANEOUS RATES
     if ( mod( elapsed, irOutStepSize ) == 0 ) then

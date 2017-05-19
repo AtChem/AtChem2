@@ -135,14 +135,32 @@ contains
     real(kind=DP), intent(in) :: t, p(:)
     integer, intent(in) :: flag
     character(len=maxSpecLength), allocatable :: speciesNames(:)
-    integer(kind=NPI) :: i, j
+    integer(kind=NPI) :: i, j, output_file_number
     character(len=maxReactionStringLength) :: reaction
+    logical :: first_time = .true.
 
     if ( size( r, 1 ) /= size( arrayLen ) ) then
       stop "size( r, 1 ) /= size( arrayLen ) in outputRates()."
     end if
+    ! Add headers at the first call
+    if ( first_time .eqv. .true. ) then
+      write (56,*) '          time speciesNumber speciesName reactionNumber           rate'
+      write (60,*) '          time speciesNumber speciesName reactionNumber           rate'
+      first_time = .false.
+    end if
 
     speciesNames = getSpeciesList()
+
+    ! Flag = 0 for loss, 1 for production
+    select case ( flag )
+      case ( 0 )
+        output_file_number = 56
+      case ( 1 )
+        output_file_number = 60
+      case default
+        write (stderr,*) "Unexpected flag value to outputRates(). flag = ", flag
+        stop
+    end select
 
     do i = 1, size( arrayLen )
       if ( arrayLen(i) > size( r, 2 ) ) then
@@ -151,17 +169,9 @@ contains
       end if
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
-
           reaction = getReaction( speciesNames, r(i, j) )
-          ! Flag = 0 for reaction, 1 for loss
-          if ( flag == 0 ) then
-            write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
-          else
-            if ( flag /= 1 ) then
-              stop "Unexpected flag value to outputRates()"
-            end if
-            write (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
-          end if
+          write (output_file_number, '(e15.5, I14, A12, I15, e15.5, A40)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), r(i, j), &
+                                                                           p(r(i, j)), trim( reaction )
         end if
       end do
     end do

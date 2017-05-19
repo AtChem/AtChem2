@@ -34,8 +34,6 @@ contains
     write (57,*) 't LNST LNFE LNETF LNGE'
 
     ! OUTPUT FOR SPARSE SOLVER
-    write (56,*) 'time speciesNumber speciesName reactionNumber rate'
-    write (60,*) 'time speciesNumber speciesName reactionNumber rate'
     write (61,*) 't NFELS NJTV NPE NPS'
 
     ! OTHER OUPUT

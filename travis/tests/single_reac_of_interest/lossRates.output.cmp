@@ -1,3 +1,3 @@
- time speciesNumber speciesName reactionNumber rate
-   6600.0000000000000                 74  HOCH2CO3H           221     2.4662613540507671E-031  HOCH2CO3H+OH=HOCH2CO3
-   6600.0000000000000                 74  HOCH2CO3H           222     0.0000000000000000       HOCH2CO3H=HCHO+HO2+OH
+           time speciesNumber speciesName reactionNumber           rate
+    0.66000E+04            74   HOCH2CO3H            221    0.24663E-30                   HOCH2CO3H+OH=HOCH2CO3
+    0.66000E+04            74   HOCH2CO3H            222    0.00000E+00                   HOCH2CO3H=HCHO+HO2+OH

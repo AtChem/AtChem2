@@ -617,11 +617,6 @@ PROGRAM ATCHEM
 
     call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
 
-    ! OUTPUT ON SCREEN
-    fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
-    ! printing concentration of two first species - seems unnecessary at the moment
-    ! write (stderr, fmt) t, y (1), y (2)
-
     ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     time = int( t )
 

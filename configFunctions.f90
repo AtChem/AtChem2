@@ -33,7 +33,6 @@ contains
 
     ! OTHER OUPUT
     ! 51, 53, 54, 55 don't need a header.
-    write (59,*) 't secx cosx lat longt lha sinld cosld'
     write (62,*) 't currentStepSize previousStepSize'
     return
   end subroutine writeFileHeaders

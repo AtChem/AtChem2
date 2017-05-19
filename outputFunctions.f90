@@ -34,6 +34,25 @@ contains
   end subroutine outputEnvVar
 
 
+  subroutine outputPhotoRateCalcParameters( t )
+    use zenithData
+    use zenithData1
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (59, '(100a15) ') 't', 'secx', 'cosx', 'lat', 'longt', 'lha', 'sinld', 'cosld'
+      first_time = .false.
+    end if
+
+    write (59, '(100(1P e15.5)) ') t, secx, cosx, lat, longt, lha, sinld, cosld
+
+    return
+  end subroutine outputPhotoRateCalcParameters
+
+
   subroutine output_jfy( fy, t )
     implicit none
 

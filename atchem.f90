@@ -602,7 +602,7 @@ PROGRAM ATCHEM
   do while ( currentNumTimestep < maxNumTimesteps )
 
     ! GET CONCENTRATIONS FOR SOLVED SPECIES
-    write (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
+    call outputPhotoRateCalcParameters( t )
     call FCVODE( tout, t, z, itask, ier )
     if ( ier /= 0 ) then
       write (*,*) 'ier POST FCVODE()= ', ier

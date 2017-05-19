@@ -21,35 +21,6 @@ contains
     return
   end subroutine calcDateParameters
 
-  subroutine writeFileHeaders( photoRateNamesForHeader, specOutReqNames )
-    use envVars
-    use photolysisRates, only : nrOfPhotoRates, ck
-    use storage, only : maxPhotoRateNameLength, maxSpecLength
-    implicit none
-
-    character(len=maxPhotoRateNameLength), intent(in) :: photoRateNamesForHeader(:)
-    character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
-    integer(kind=NPI) :: i
-
-    ! WRITE FILE OUTPUT HEADERS AND OUTPUT AT t = 0
-    ! OUTPUT FOR CVODE MAIN SOLVER
-    write (57,*) 't LNST LNFE LNETF LNGE'
-
-    ! OUTPUT FOR SPARSE SOLVER
-    write (56,*) 'time speciesNumber speciesName reactionNumber rate'
-    write (60,*) 'time speciesNumber speciesName reactionNumber rate'
-    write (61,*) 't NFELS NJTV NPE NPS'
-
-    ! OTHER OUPUT
-    write (50, '(100 (1x, a)) ') 't         ', (specOutReqNames(i), i = 1, size( specOutReqNames ))
-    ! 51, 53, 54, 55 don't need a header.
-    write (52,*) 'time ', (envVarNames(i), i = 1, numEnvVars), 'RO2'
-    write (58,*) 't ', (trim( photoRateNamesForHeader(ck(i)) )// '    ', i = 1, nrOfPhotoRates)
-    write (59,*) 't secx cosx lat longt lha sinld cosld'
-    write (62,*) 't currentStepSize previousStepSize'
-    return
-  end subroutine writeFileHeaders
-
 
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
                                 returnArray, returnArraySize )

@@ -35,16 +35,12 @@ PROGRAM ATCHEM
   integer(kind=QI) :: ier
   integer :: i
   integer(kind=NPI) :: species_counter
-  integer :: lnst, lnfe, lnsetup, lnni, lncf, lnetf, lnje
-  integer :: nfels, njtv, npe, nps
   integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
-  real(kind=DP) :: rtol, t, t0, tout
+  real(kind=DP) :: rtol, t, tout
   real(kind=DP) :: atol, rout(6)
   real(kind=DP) :: rpar(1)
-  data lnst/3/, lnfe/4/, lnetf/5/, lncf/6/, lnni/7/, lnsetup/8/, &
-       lnje/17/, nfels/16/, njtv/17/ , npe/18/, nps/19/
   real(kind=DP), allocatable :: speciesConcs(:)
 
   !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
@@ -58,7 +54,7 @@ PROGRAM ATCHEM
   integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
   integer :: maxNumSteps
   integer(kind=NPI) :: numSpec, numReac
-  real(kind=DP) :: tminus1, timestepSize
+  real(kind=DP) :: timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   real(kind=DP), allocatable :: initialConcentrations(:)
@@ -401,7 +397,7 @@ PROGRAM ATCHEM
   numberOfConstrainedSpecies = modelParameters(7)
   ! Frequency at which outputRates is called below.
   ratesOutputStepSize = modelParameters(8)
-  ! Start time of model. Used to set t0, and to calculate the elapsed time.
+  ! Start time of model. Used to set t initially, and to calculate the elapsed time.
   modelStartTime = modelParameters(9)
   ! Frequency at which output_jfy is called below.
   jacobianOutputStepSize = modelParameters(10)
@@ -444,10 +440,8 @@ PROGRAM ATCHEM
   call calcDateParameters()
 
   !   HARD CODED SOLVER PARAMETERS
-  t0 = modelStartTime
-  tout = timestepSize
-  tout = tout + t0
-  t = t0
+  t = modelStartTime
+  tout = timestepSize + t
   ! Parameters for FCVMALLOC(). (Comments from cvode guide)
   ! meth specifies the basic integration: 1 for Adams (nonstiff) or 2 for BDF stiff)
   meth = 2
@@ -485,9 +479,6 @@ PROGRAM ATCHEM
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 
-  !   Write file output headers
-  call writeFileHeaders( photoRateNamesForHeader, speciesOutputRequired )
-
   flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS
@@ -503,7 +494,7 @@ PROGRAM ATCHEM
   !test
   ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-  call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
+  call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is y with all the constrained species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
@@ -529,8 +520,8 @@ PROGRAM ATCHEM
     stop
   end if
 
-  write (*, '(A30, E15.3) ') 't0 = ', t0
-  call FCVMALLOC( t0, z, meth, itmeth, iatol, rtol, atol, &
+  write (*, '(A30, E15.3) ') 't0 = ', t
+  call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
     write (stderr, 30) ier
@@ -601,13 +592,17 @@ PROGRAM ATCHEM
 
   do while ( currentNumTimestep < maxNumTimesteps )
 
+    call outputPhotoRateCalcParameters( t )
+
     ! GET CONCENTRATIONS FOR SOLVED SPECIES
-    write (59,*) t, secx, cosx, lat, longt, lha, sinld, cosld
     call FCVODE( tout, t, z, itask, ier )
     if ( ier /= 0 ) then
       write (*,*) 'ier POST FCVODE()= ', ier
     end if
     flush(6)
+
+    time = int( t )
+    write (*,*) 'time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
     do species_counter = 1, numberOfConstrainedSpecies
@@ -617,14 +612,7 @@ PROGRAM ATCHEM
 
     call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
 
-    ! OUTPUT ON SCREEN
-    fmt = "('At t = ', E12.4, '   y = ', 3E14.6) "
-    ! printing concentration of two first species - seems unnecessary at the moment
-    ! write (stderr, fmt) t, y (1), y (2)
-
-    ! OUTPUT RATES OF PRODUCTION ON LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
-    time = int( t )
-
+    ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1 )
@@ -632,15 +620,14 @@ PROGRAM ATCHEM
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
-    write (*,*) 'time = ', time
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numReac, speciesConcs, t, fy )
-      call output_jfy( fy, t )
+      call output_jfy( t, fy )
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-    call outputSpeciesOutputRequired( t, concsOfSpeciesOfInterest )
-    call outputPhotolysisRates( t )
+    call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
+    call outputPhotolysisRates( t, photoRateNamesForHeader )
 
     !OUTPUT INSTANTANEOUS RATES
     if ( mod( elapsed, irOutStepSize ) == 0 ) then
@@ -648,11 +635,10 @@ PROGRAM ATCHEM
     end if
 
     ! OUTPUT FOR CVODE MAIN SOLVER
-    write (57,*) t, ' ', iout (lnst), ' ', iout (lnfe), ' ', iout (lnetf)
-    ! OUTPUT FOR SPARSE SOLVER
-    write (61,*) t, ' ', iout (nfels), ' ', iout (njtv), ' ', iout (npe), ' ', iout (nps)
+    call outputSolverParameters( t, iout, solverType )
+
     ! OUTPUT STEP SIZE
-    write (62,*) t, ' ', rout (3), ' ', rout (2)
+    call outputStepSize( t, rout (3), rout (2) )
 
     !OUTPUT ENVVAR VALUES
     call ro2sum( ro2, speciesConcs )
@@ -675,11 +661,9 @@ PROGRAM ATCHEM
       stop
     end if
 
-    if ( ier == 0 ) then
-      tminus1 = t
-      tout = tout + timestepSize
-      currentNumTimestep = currentNumTimestep + 1
-    end if
+    ! increment time
+    tout = tout + timestepSize
+    currentNumTimestep = currentNumTimestep + 1
 
   end do
 
@@ -703,8 +687,8 @@ PROGRAM ATCHEM
         "' No. nonlinear convergence failures = ', I4/" // &
         "' No. error test failures = ', I4/) "
 
-  write (*, fmt) iout (lnst), iout (LNFE), iout (lnje), iout (lnsetup), &
-                 iout (lnni), iout (lncf), iout (lnetf )
+  write (*, fmt) iout (3), iout (4), iout (17), iout (8), &
+                 iout (7), iout (6), iout (5)
 
   call SYSTEM_CLOCK( runEnd, rate )
   runTime = ( runEnd - runStart ) / rate

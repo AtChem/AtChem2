@@ -17,20 +17,110 @@ contains
     use envVars
     implicit none
 
-    integer(kind=NPI) :: i
     real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: i
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (52, '(100a15) ') 'time', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
+      first_time = .false.
+    end if
 
     if ( ro2 < 0 ) ro2 = 0.0
-    write (52,*) t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+
+    write (52, '(100e15.5) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
     return
   end subroutine outputEnvVar
 
 
-  subroutine output_jfy( fy, t )
+  subroutine outputStepSize( t, prev, this )
+    use envVars
     implicit none
 
-    real(kind=DP), intent(in) :: fy(:,:), t
+    real(kind=DP), intent(in) :: t, prev, this
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (62, '(3a17) ') 't', 'currentStepSize', 'previousStepSize'
+      first_time = .false.
+    end if
+
+    write (62, '(3 (1P e17.3)) ') t, prev, this
+
+    return
+  end subroutine outputStepSize
+
+
+  subroutine outputSolverParameters( t, array, solver_type )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    integer(kind=NPI), intent(in) :: array(:)
+    integer, intent(in) :: solver_type
+    integer(kind=SI) :: i
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      ! OUTPUT FOR CVODE MAIN SOLVER
+      write (57, '(13a9) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR'
+      ! OUTPUT FOR SPARSE SOLVER
+      if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
+        ! CVSPILS type solver
+        write (61, '(10a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
+      else if ( solver_type == 3 ) then
+        ! CVDLS type solver
+        write (61, '(6a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
+      else
+        write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
+        write (stderr,*) 'Available options are 1, 2, 3.'
+        stop
+      end if
+      first_time = .false.
+    end if
+
+    ! OUTPUT FOR MAIN SOLVER
+    write (57, '(1P e11.3, 11i9) ') t, (array(i), i = 1, 11)
+    ! OUTPUT FOR SPARSE SOLVER
+    if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
+      ! CVSPILS type solver
+      write (61, '(1P e11.3, 9i9) ') t, (array(i), i = 13, 21)
+    else if ( solver_type == 3 ) then
+      ! CVDLS type solver
+      write (61, '(1P e1.3, 5i9) ') t, (array(i), i = 13, 17)
+    else
+      write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
+      write (stderr,*) 'Available options are 1, 2, 3.'
+      stop
+    end if
+    return
+  end subroutine outputSolverParameters
+
+
+  subroutine outputPhotoRateCalcParameters( t )
+    use zenithData
+    use zenithData1
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    logical :: first_time = .true.
+
+    if ( first_time .eqv. .true. ) then
+      write (59, '(100a15) ') 't', 'secx', 'cosx', 'lat', 'longt', 'lha', 'sinld', 'cosld'
+      first_time = .false.
+    end if
+
+    write (59, '(100(1P e15.5)) ') t, secx, cosx, lat, longt, lha, sinld, cosld
+
+    return
+  end subroutine outputPhotoRateCalcParameters
+
+
+  subroutine output_jfy( t, fy )
+    implicit none
+
+    real(kind=DP), intent(in) :: t, fy(:,:)
     integer(kind=NPI) :: i, j
 
     if ( size( fy, 1 ) /= size( fy, 2 ) ) then
@@ -46,14 +136,20 @@ contains
   end subroutine output_jfy
 
 
-  subroutine outputPhotolysisRates( t )
+  subroutine outputPhotolysisRates( t, photoRateNamesForHeader )
     use photolysisRates, only : nrOfPhotoRates, ck, j
     implicit none
 
     real(kind=DP), intent(in) :: t
+    character(len=*), intent(in) :: photoRateNamesForHeader(:)
     integer(kind=NPI) :: i
+    logical :: firstTime = .true.
 
-    write (58, '(100 (1x, e12.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    if ( firstTime .eqv. .true. ) then
+      write (58, '(100a15) ') 't', (trim( photoRateNamesForHeader(ck(i)) ), i = 1, nrOfPhotoRates)
+      firstTime = .false.
+    end if
+    write (58, '(100e15.5) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
 
     return
   end subroutine outputPhotolysisRates
@@ -129,14 +225,32 @@ contains
     real(kind=DP), intent(in) :: t, p(:)
     integer, intent(in) :: flag
     character(len=maxSpecLength), allocatable :: speciesNames(:)
-    integer(kind=NPI) :: i, j
+    integer(kind=NPI) :: i, j, output_file_number
     character(len=maxReactionStringLength) :: reaction
+    logical :: first_time = .true.
 
     if ( size( r, 1 ) /= size( arrayLen ) ) then
       stop "size( r, 1 ) /= size( arrayLen ) in outputRates()."
     end if
+    ! Add headers at the first call
+    if ( first_time .eqv. .true. ) then
+      write (56,*) '          time speciesNumber speciesName reactionNumber           rate'
+      write (60,*) '          time speciesNumber speciesName reactionNumber           rate'
+      first_time = .false.
+    end if
 
     speciesNames = getSpeciesList()
+
+    ! Flag = 0 for loss, 1 for production
+    select case ( flag )
+      case ( 0 )
+        output_file_number = 56
+      case ( 1 )
+        output_file_number = 60
+      case default
+        write (stderr,*) "Unexpected flag value to outputRates(). flag = ", flag
+        stop
+    end select
 
     do i = 1, size( arrayLen )
       if ( arrayLen(i) > size( r, 2 ) ) then
@@ -145,17 +259,9 @@ contains
       end if
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
-
           reaction = getReaction( speciesNames, r(i, j) )
-          ! Flag = 0 for reaction, 1 for loss
-          if ( flag == 0 ) then
-            write (56,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
-          else
-            if ( flag /= 1 ) then
-              stop "Unexpected flag value to outputRates()"
-            end if
-            write (60,*) t, ' ', r(i, 1), ' ', speciesNames(r(i, 1)), ' ', r(i, j), ' ', p(r(i, j)), ' ', trim( reaction )
-          end if
+          write (output_file_number, '(e15.5, I14, A12, I15, e15.5, A40)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), r(i, j), &
+                                                                           p(r(i, j)), trim( reaction )
         end if
       end do
     end do
@@ -191,21 +297,33 @@ contains
   end subroutine outputInstantaneousRates
 
 
-  subroutine outputSpeciesOutputRequired( t, arrayOfConcs )
+  subroutine outputSpeciesOutputRequired( t, specOutReqNames, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
     ! If any concentration is negative, then set it to zero before printing.
+    use storage, only : maxSpecLength
     implicit none
 
     real(kind=DP), intent(in) :: t
+    character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
     real(kind=DP), intent(inout) :: arrayOfConcs(:)
     integer(kind=NPI) :: i
+    logical :: first_time = .true.
+
+    if ( size( specOutReqNames ) /= size( arrayOfConcs ) ) then
+      stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOutputRequired()."
+    end if
+
+    if ( first_time .eqv. .true. ) then
+      write (50, '(100a15) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
+      first_time = .false.
+    end if
 
     do i = 1, size( arrayOfConcs )
       if ( arrayOfConcs(i) < 0.0 ) then
         arrayOfConcs(i) = 0d0
       end if
     end do
-    write (50, '(100 (1x, e15.5e3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+    write (50, '(100e15.5) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
   end subroutine outputSpeciesOutputRequired
 

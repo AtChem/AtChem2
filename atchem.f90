@@ -675,7 +675,7 @@ PROGRAM ATCHEM
     stop
   end if
 
-  !   OUPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
+  !   OUTPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
   call outputFinalModelState( speciesNames, speciesConcs )
 
   !   printing of final statistics desactivated - nobody finds it useful

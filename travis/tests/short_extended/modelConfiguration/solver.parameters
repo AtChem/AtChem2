@@ -1,15 +1,15 @@
-1.0e-03			atol
-1.0e-04	 		rtol
-0				Jv approximation (1 = Yes, 0 = No)
-1.0e-03			delta Jv
-1.0e-04			delta main
+1.0e-03		atol
+1.0e-04	 	rtol
+0				  Jv approximation (1 = Yes, 0 = No)
+1.0e-03		delta Jv
+1.0e-04		Delta main
 100				Lookback
 100				maximum solver step size (seconds)
 100000    maximum number of steps in solver
-2				Solver Type (1 = SPGMR, 2 = SPGMR + Banded Preconditioner, 3 = Dense)
+2				  Solver Type (1 = SPGMR, 2 = SPGMR + Banded Preconditioner, 3 = Dense)
 750				Banded Preconditioner Upper Bandwidth
 750				Banded Preconditioner Lower Bandwidth
--9999	-9999	-9999	-9999 	End of File
+-9999	 	  End of File
 
 For one day
 96.0e+00		number of steps
@@ -19,9 +19,9 @@ for two days
 192.0e+00		number of steps
 900.0e+00		step size
 
-2880.0e+00		number of steps
+2880.0e+00	number of steps
 60.0e+00		step size
 
 standard
-1.0e-04		atol
-1.0e-06	 	rtol
+1.0e-04		  atol
+1.0e-06	 	  rtol

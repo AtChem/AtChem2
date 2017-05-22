@@ -10,7 +10,7 @@ PROGRAM ATCHEM
   use constraints
   use interpolationMethod
   use reactionStructure
-  use photolysisRates
+  use photolysisRates_mod
   use chemicalConstraints
   use zenithData
   use zenithData1

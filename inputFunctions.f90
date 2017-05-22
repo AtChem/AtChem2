@@ -380,6 +380,8 @@ contains
     implicit none
 
     integer(kind=NPI) :: i, counter, k
+    integer(kind=IntErr) :: ierr
+    real(kind=DP) :: input1, input2
     character(len=10) :: dummy
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxEnvVarNameLength) :: fileLocation
@@ -443,11 +445,16 @@ contains
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         open (11, file=fileLocation, status='old')
 
-        read (11,*) envVarNumberOfPoints(i)
-        do k = 1, envVarNumberOfPoints(i)
-          read (11,*) envVarX(i, k), envVarY(i, k) ! envVarY2 (i, k)
+        k = 0
+        read (11,*, iostat=ierr) input1, input2
+        do while ( ierr == 0 )
+          k = k + 1
+          envVarX(i, k) = input1
+          envVarY(i, k) = input2
+          read (11,*, iostat=ierr) input1, input2
         end do
         close (11, status='keep')
+        envVarNumberOfPoints(i) = k
         write (*,*) 'Finished reading constraint data.'
       end if
     end do

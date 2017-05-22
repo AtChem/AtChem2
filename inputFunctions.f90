@@ -186,18 +186,23 @@ contains
     ! If modelConfiguration/photolysisConstants.config exists, then read in
     ! 3 values to fill ck, cl and str.
     ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
-    use photolysisRates, only : usePhotolysisConstants, maxNrOfPhotoRates, nrOfPhotoRates, &
-                                ck, cl, photoRateNames
+    use photolysisRates, only : usePhotolysisConstants, nrOfPhotoRates, &
+                                ck, cl, photoRateNames, allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
+    use storage, only : maxFilepathLength
     implicit none
 
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
+    character(len=maxFilepathLength) :: filename
     logical :: file_exists
+    logical :: allocated = .false.
+    logical :: allocated_j = .false.
 
     ! Check whether file exists correctly in readPhotolysisConstants,
+    filename = trim( param_dir ) // '/photolysisConstants.config'
     write (*,*) 'Looking for photolysis constants file...'
-    inquire(file=trim( param_dir ) // '/photolysisConstants.config', exist=file_exists)
+    inquire(file=filename, exist=file_exists)
     if ( file_exists .eqv. .false. ) then
       usePhotolysisConstants = .false.
       write (*,*) 'Photolysis constants file not found, trying photolysis rates file...'
@@ -206,17 +211,25 @@ contains
     end if
     usePhotolysisConstants = .true.
 
-    nrOfPhotoRates = 0
     write (*,*) 'Reading photolysis constants from file...'
-    open (10, file=trim( param_dir ) // '/photolysisConstants.config', status='old', iostat=ierr)
-    read (10,*)
-    do i = 1, maxNrOfPhotoRates
+    nrOfPhotoRates = count_lines_in_file( filename, .true. )
+    if ( allocated .eqv. .false. ) then
+      call allocate_photolysis_rates_variables()
+      allocated = .true.
+    end if
+    open (10, file=filename, status='old', iostat=ierr)
+    read (10,*) ! Ignore first line
+    do i = 1, nrOfPhotoRates
       read (10,*, iostat=ierr) ck(i), cl(i), photoRateNames(i)
       if ( ierr /= 0 ) then
-        exit
+        stop 'readPhotolysisConstants(): error reading file'
       end if
-      nrOfPhotoRates = i
     end do
+    if ( allocated_j .eqv. .false. ) then
+      size_of_j = maxval(ck)
+      call allocate_photolysis_j()
+      allocated_j = .true.
+    end if
     close (10, status='keep')
     if ( nrOfPhotoRates > 3 ) then
       write (*,*) ck(1), cl(1), photoRateNames(1)
@@ -237,29 +250,41 @@ contains
     ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
     ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
     ! modelConfiguration/photolysisRates.config.
-    use photolysisRates, only : maxNrOfPhotoRates, nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor
+    use photolysisRates, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
+                                allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
+    use storage, only : maxFilepathLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
+    character(len=maxFilepathLength) :: filename
+    logical :: allocated = .false.
+    logical :: allocated_j = .false.
 
+    filename = trim( param_dir ) // '/photolysisRates.config'
     write (*,*) 'Reading photolysis rates from file...'
-    call inquire_or_abort( trim( param_dir ) // '/photolysisRates.config', 'readPhotolysisRates()')
-    open (10, file=trim( param_dir ) // '/photolysisRates.config', status='old')
-    ! Ignore first line
-    read (10,*)
-    do i = 1, maxNrOfPhotoRates
+    call inquire_or_abort( filename, 'readPhotolysisRates()')
+    nrOfPhotoRates = count_lines_in_file( filename, .true. )
+    if ( allocated .eqv. .false. ) then
+      call allocate_photolysis_rates_variables()
+      allocated = .true.
+    end if
+    open (10, file=filename, status='old')
+    read (10,*) ! Ignore first line
+    do i = 1, nrOfPhotoRates
       read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
       if ( ierr /= 0 ) then
-        ! We've reached the end of file, so exit this loop
-        exit
+        stop 'readPhotolysisRates(): error reading file'
       end if
-      nrOfPhotoRates = i
     end do
     close (10, status='keep')
-
+    if ( allocated_j .eqv. .false. ) then
+      size_of_j = maxval(ck)
+      call allocate_photolysis_j()
+      allocated_j = .true.
+    end if
     if ( nrOfPhotoRates > 3 ) then
       write (*,*) ck(1), cl(1), cmm(1), cnn(1), photoRateNames(1), transmissionFactor(1)
       write (*,*) '...'

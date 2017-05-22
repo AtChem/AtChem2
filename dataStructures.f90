@@ -262,18 +262,39 @@ module photolysisRates
   implicit none
   save
 
-  integer, parameter :: maxNrOfPhotoRates = 200, maxNrOfConPhotoRates = 100
-  integer(kind=NPI) :: ck(maxNrOfPhotoRates), numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
+  integer, parameter :: maxNrOfConPhotoRates = 100
+  integer(kind=NPI) :: numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
   integer(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
   integer(kind=NPI) :: nrOfPhotoRates
+  integer(kind=NPI), allocatable :: ck(:)
   logical :: usePhotolysisConstants
-  real(kind=DP) :: cl(maxNrOfPhotoRates), cmm(maxNrOfPhotoRates), cnn(maxNrOfPhotoRates)
-  real(kind=DP) :: j(maxNrOfPhotoRates), transmissionFactor(maxNrOfPhotoRates)
-  character(len=maxPhotoRateNameLength) :: photoRateNames(maxNrOfPhotoRates)
+  real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
+  real(kind=DP), allocatable :: j(:)
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:)
   character(len=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:), photoY2(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
+  integer(kind=NPI) :: size_of_j
 
+contains
+  subroutine allocate_photolysis_constants_variables()
+    implicit none
+
+    allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates))
+  end subroutine allocate_photolysis_constants_variables
+
+  subroutine allocate_photolysis_rates_variables()
+    implicit none
+
+    allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates))
+    allocate (cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates))
+  end subroutine allocate_photolysis_rates_variables
+
+  subroutine allocate_photolysis_j()
+    implicit none
+
+    allocate (j(size_of_j))
+  end subroutine allocate_photolysis_j
 end module photolysisRates
 
 !    ********************************************************************************************************

@@ -137,7 +137,7 @@ contains
 
 
   subroutine outputPhotolysisRates( t, photoRateNamesForHeader )
-    use photolysisRates, only : nrOfPhotoRates, ck, j
+    use photolysisRates_mod, only : nrOfPhotoRates, ck, j
     implicit none
 
     real(kind=DP), intent(in) :: t

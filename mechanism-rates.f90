@@ -5,7 +5,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage, only : maxEnvVarNameLength
-    use photolysisRates
+    use photolysisRates_mod
     use zenithData1, only : cosX, secX
     use constraints
     use envVars, only : ro2, envVarNames, currentEnvVarValues

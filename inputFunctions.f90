@@ -186,8 +186,8 @@ contains
     ! If modelConfiguration/photolysisConstants.config exists, then read in
     ! 3 values to fill ck, cl and str.
     ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
-    use photolysisRates, only : usePhotolysisConstants, nrOfPhotoRates, &
-                                ck, cl, photoRateNames, allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
+    use photolysisRates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
+                                    allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
     use storage, only : maxFilepathLength
     implicit none
@@ -250,8 +250,8 @@ contains
     ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
     ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
     ! modelConfiguration/photolysisRates.config.
-    use photolysisRates, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
-                                allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
+    use photolysisRates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
+                                    allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
     use storage, only : maxFilepathLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -305,7 +305,7 @@ contains
     ! Read modelConfiguration/JFacSpecies.config, and store this in jFacSpecies.
     ! Test this against known species, and if it is known then set jfacSpeciesLine
     ! to that line number in photoRateNames
-    use photolysisRates
+    use photolysisRates_mod
     use directories, only : param_dir
     implicit none
 
@@ -531,7 +531,7 @@ contains
 
 
   subroutine readPhotoRates()
-    use photolysisRates, only : photoX, photoY, photoY2, numConPhotoRates, maxNrOfConPhotoRates, photoNumberOfPoints, &
+    use photolysisRates_mod, only : photoX, photoY, photoY2, numConPhotoRates, maxNrOfConPhotoRates, photoNumberOfPoints, &
                                 constrainedPhotoRates, nrOfPhotoRates, photoRateNames, constrainedPhotoRatesNumbers, ck
     use directories, only : param_dir, env_constraints_dir
     use storage, only : maxPhotoRateNameLength, maxFilepathLength

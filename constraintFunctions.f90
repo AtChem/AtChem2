@@ -6,7 +6,7 @@ contains
   subroutine calcJFac( t, jfac )
     use types_mod
     use zenithData1
-    use photolysisRates
+    use photolysisRates_mod
     use constraints
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
@@ -295,7 +295,7 @@ contains
   subroutine test_jfac()
     ! check jfac data consistency
     use types_mod
-    use photolysisRates
+    use photolysisRates_mod
     use envVars
     implicit none
     integer(kind=NPI) :: envVarNum

@@ -256,7 +256,7 @@ end module reactionStructure
 !    ********************************************************************************************************
 !    PHOTOLYSIS RATES METHOD MODULE
 !    ********************************************************************************************************
-module photolysisRates
+module photolysisRates_mod
   use types_mod
   use storage, only : maxPhotoRateNameLength
   implicit none
@@ -295,7 +295,7 @@ contains
 
     allocate (j(size_of_j))
   end subroutine allocate_photolysis_j
-end module photolysisRates
+end module photolysisRates_mod
 
 !    ********************************************************************************************************
 !    CHEMICAL CONSTRAINTS MODULE

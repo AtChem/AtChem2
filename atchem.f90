@@ -595,10 +595,7 @@ PROGRAM ATCHEM
     write (*, '(A, I0)') ' time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-    do species_counter = 1, numberOfConstrainedSpecies
-      call getConstrainedConc( species_counter, d )
-      constrainedConcs(species_counter) = d
-    end do
+    constrainedConcs = getConstrainedConcs()
 
     call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
 

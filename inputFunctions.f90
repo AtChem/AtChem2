@@ -750,7 +750,6 @@ contains
       end if
     end do
     close (14, status='keep')
-    numberOfFixedConstrainedSpecies = j
     write (51, '(A, I0)') 'Number of fixed constrained species: ', numberOfFixedConstrainedSpecies
 
     if ( numberOfFixedConstrainedSpecies > 3 ) then
@@ -767,7 +766,6 @@ contains
     end if
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
-    numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
     write (51, '(A, I0)') "Total number of constrained species: ", numberOfConstrainedSpecies
 
     ! ERROR HANDLING

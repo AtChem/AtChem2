@@ -1,8 +1,7 @@
 module configFunctions_mod
   use types_mod
 contains
-  subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
-                                returnArray )
+  subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use storage, only : maxSpecLength
     implicit none
@@ -22,7 +21,7 @@ contains
     ! returnArray the number of the species from testSpeciesList within the masterSpeciesList. Otherwise, abort.
     do i = 1, size( testSpeciesList )
       counter = counter + 1
-      if (counter > size( returnArray ) ) then
+      if ( counter > size( returnArray ) ) then
         write (stderr,*) 'matchNameToNumber(): counter > size( returnArray ).'
         stop
       end if

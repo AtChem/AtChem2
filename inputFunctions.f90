@@ -621,7 +621,7 @@ contains
                                     speciesNumberOfPoints, dataFixedY, constrainedConcs
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
-    use configFunctions_mod, only : matchOneNameToNumber
+    use configFunctions_mod, only : getIndexWithinList
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod , only : getSpeciesInterpMethod
     implicit none
@@ -656,7 +656,7 @@ contains
       write (*,*) 'Reading in the names of variable-concentration constrained species...'
       call read_in_single_column_string_file( trim( param_dir ) // '/constrainedSpecies.config', constrainedNames )
       do i = 1, numberOfVariableConstrainedSpecies
-        id = matchOneNameToNumber( speciesNames, constrainedNames(i) )
+        id = getIndexWithinList( speciesNames, constrainedNames(i) )
         if ( id /= 0 ) then
           constrainedSpecies(i) = id
         else
@@ -729,7 +729,7 @@ contains
     j = 0
     do i = 1, numberOfFixedConstrainedSpecies
       read (14,*) name, value
-      id = matchOneNameToNumber( speciesNames, name )
+      id = getIndexWithinList( speciesNames, name )
       if (id/=0) then
         j = j+1
         constrainedNames(j + numberOfVariableConstrainedSpecies) = name

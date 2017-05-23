@@ -240,9 +240,7 @@ PROGRAM ATCHEM
   call readPhotolysisConstants()
   write (*,*)
   !   Set default value for photonames array
-  do i = 1, 200
-    photoRateNamesForHeader(i) = 'na'
-  end do
+  photoRateNamesForHeader(:) = 'na'
 
   do i = 1, nrOfPhotoRates
     photoRateNamesForHeader(ck(i)) = photoRateNames(i)

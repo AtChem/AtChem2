@@ -1,5 +1,4 @@
 module inputFunctions_mod
-  use types_mod
 contains
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
@@ -30,6 +29,7 @@ contains
 
 
   subroutine getReactantAndProductListSizes()
+    use types_mod
     use directories, only : param_dir
     use reactionStructure, only : lhs_size, rhs_size
     implicit none
@@ -47,6 +47,7 @@ contains
 
 
   subroutine readReactions( lhs, rhs, coeff )
+    use types_mod
     use directories, only : param_dir
     implicit none
 
@@ -104,6 +105,7 @@ contains
 
 
   subroutine readSpecies( speciesName )
+    use types_mod
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
     implicit none
@@ -131,6 +133,7 @@ contains
     ! Checks that there aren't more inputs than species.
     ! concSpeciesNames is filled with all species names of initial concentrations,
     ! concentration is filled with corresponding concentration VALUES
+    use types_mod
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
@@ -138,7 +141,7 @@ contains
 
     character(len=maxSpecLength), allocatable, intent(out) :: concSpeciesNames(:)
     real(kind=DP), allocatable, intent(out) :: concentration(:)
-    character(len=maxSpecLength) :: k, char_maxSpecLength
+    character(len=maxSpecLength) :: k
     character(len=maxFilepathLength) :: filename
     real(kind=DP) :: l
     integer(kind=NPI) :: numLines, i, nsp
@@ -186,6 +189,7 @@ contains
     ! If modelConfiguration/photolysisConstants.config exists, then read in
     ! 3 values to fill ck, cl and str.
     ! Otherwise, call ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
+    use types_mod
     use photolysisRates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
                                     allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
@@ -250,6 +254,7 @@ contains
     ! This is called from readPhotolysisConstants if modelConfiguration/photolysisConstants.config
     ! doesn't exist. It reads ck, cl, cmm, cnn, str, and tf from
     ! modelConfiguration/photolysisRates.config.
+    use types_mod
     use photolysisRates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
                                     allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories, only : param_dir
@@ -307,6 +312,7 @@ contains
     ! Read modelConfiguration/JFacSpecies.config, and store this in jFacSpecies.
     ! Test this against known species, and if it is known then set jfacSpeciesLine
     ! to that line number in photoRateNames
+    use types_mod
     use photolysisRates_mod
     use directories, only : param_dir
     implicit none
@@ -346,6 +352,7 @@ contains
     ! Read in contents of modelConfiguration/production/lossRatesOutput.config, which
     ! contains a list of the species we want to have outputted to mC/production/lossRates.output
     ! Output the contents in r, with i as the length of r.
+    use types_mod
     use storage, only : maxSpecLength
     implicit none
 
@@ -374,6 +381,7 @@ contains
   subroutine getParametersFromFile( input_file, parameterArray, numValidEntries )
     ! Read in parameters from file at input_file, and save the contents of each
     ! line to an element of the array
+    use types_mod
     implicit none
 
     character(len=*), intent(in) :: input_file
@@ -400,6 +408,7 @@ contains
     ! envVarTypesNum for each one. In the case of a constrained variable, this
     ! also reads in the constraint data from environmentConstraints directory, the
     ! file named after the environmental variable.
+    use types_mod
     use envVars
     use directories, only : param_dir, env_constraints_dir
     use constraints, only : maxNumberOfDataPoints
@@ -492,6 +501,7 @@ contains
 
 
   subroutine readSpeciesOutputRequired( r )
+    use types_mod
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
@@ -533,6 +543,7 @@ contains
 
 
   subroutine readPhotoRates()
+    use types_mod
     use photolysisRates_mod, only : photoX, photoY, photoY2, numConPhotoRates, maxNrOfConPhotoRates, photoNumberOfPoints, &
                                 constrainedPhotoRates, nrOfPhotoRates, photoRateNames, constrainedPhotoRatesNumbers, ck
     use directories, only : param_dir, env_constraints_dir
@@ -614,6 +625,7 @@ contains
 
   subroutine readSpeciesConstraints( t, y )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
                             setNumberOfConstrainedSpecies, setConstrainedConc
@@ -792,6 +804,9 @@ contains
 
 
   function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
+    use types_mod
+    implicit none
+
     character(len=*), intent(in) :: filename
     logical, intent(in), optional :: skip_first_line_in
     integer(kind=NPI) :: counter
@@ -821,7 +836,9 @@ contains
   end function count_lines_in_file
 
   subroutine read_in_single_column_string_file( filename, output_vector, skip_first_line_in )
+    use types_mod
     use storage, only : maxSpecLength
+    implicit none
 
     character(len=*), intent(in) :: filename
     character(len=*), intent(out) :: output_vector(:)

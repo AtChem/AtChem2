@@ -1,18 +1,16 @@
 module configFunctions_mod
-  use types_mod
 contains
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
     use storage, only : maxSpecLength
     implicit none
     ! This takes in masterSpeciesList, and checks whether each member of
     ! testspeciesList is in masterSpeciesList.
     ! When it finds a match, it adds the number of the line in masterSpeciesList to
-    ! returnArray in the next available space.
-    ! returnArraySize contains the size of returnArray, which is the
-    ! number of times a match was made
-    character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
-    character(len=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
+    ! returnArray in the next available space, thus each element of returnArray corresponds to the
+    ! same element in testSpeciesList. If not found, then abort.
+    character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:), testSpeciesList(:)
     integer(kind=NPI), intent(out) :: returnArray(:)
     integer(kind=NPI) :: counter, i
 
@@ -34,8 +32,10 @@ contains
     return
   end subroutine matchNameToNumber
 
+
   pure function getIndexWithinList( masterList, target ) result ( id )
     ! Search masterList for target, and return the index id. If not found, return 0.
+    use types_mod
     implicit none
 
     character(len=*), contiguous, intent(in) :: masterList(:)
@@ -53,12 +53,14 @@ contains
 
 
   subroutine findReactionsWithProductOrReactant( r, chs, arrayLen )
-    use types_mod
     ! For each interesting species, held in the first element of each row of r,
     ! find all reactions in chs which match (i.e. second column of chs matches first element
     ! of given row from r), and append the number of that reaction (first column of chs)
     ! to this row of r.
     ! arrayLen keeps track of how long each row in r is.
+    use types_mod
+    implicit none
+
     integer(kind=NPI), intent(in) :: chs(:,:)
     integer(kind=NPI), intent(out) :: arrayLen(:)
     integer(kind=NPI), intent(inout) :: r(:,:)
@@ -91,6 +93,7 @@ contains
 
 
   subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
+    use types_mod
     ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
     ! in the same order as the species are in specInt
     real(kind=DP), intent(in) :: masterConcList(:)
@@ -120,6 +123,7 @@ contains
     ! then transer the value from inputConcentrations to outputConcentrations. If no match is found,
     ! output this to errors.output, but don't stop, just ignore the input value.
     ! Print outcome of each search into initialConditionsSetting.output.
+    use types_mod
     use storage, only : maxSpecLength
     implicit none
 

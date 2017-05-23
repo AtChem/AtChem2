@@ -105,8 +105,7 @@ PROGRAM ATCHEM
       integer(kind=NPI), intent(out) :: ier
 
       integer(kind=NPI) :: neq, i, np
-      integer :: j
-      real(kind=DP) :: delta, deltaV, dummy
+      real(kind=DP) :: delta, dummy
       real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
     end subroutine FCVJTIMES
 
@@ -727,8 +726,7 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   integer(kind=NPI), intent(out) :: ier
 
   integer(kind=NPI) :: neq, i, np
-  integer :: j
-  real(kind=DP) :: delta, deltaV, dummy
+  real(kind=DP) :: delta, dummy
   real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
 
   np = getNumberOfSpecies()
@@ -741,10 +739,8 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   dummy = work(1)
 
   ! calculate y + delta v
-  j = 0
   do i = 1, neq
-    deltaV = delta * v(i)
-    yPlusV (i) = y(i) + deltaV
+    yPlusV (i) = y(i) + delta * v(i)
   end do
 
   ! get f(y + delta v)

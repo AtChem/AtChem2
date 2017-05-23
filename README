@@ -1,45 +1,29 @@
-This folder contains sources of the AtChem application. Directory web_tools contains Python scripts necessary for running AtChem on-line.
+This directory contains sources of the AtChem application. The tools directory contains scripts for building the AtChem executable for a given input, while the travis directory contains the testsuite files.
 
 *******************************
-* Building CVODE library
+* Dependencies
 *******************************
 
-The library CVODE, version 2.5.0 or lower, is necessary for running AtChem and AtChem on-line. 
-You build it and install with commands like below:
+AtChem requires a working Fortran compiler, BLAS and LAPACK libraries, CVODE library, and a Python 2 installation. Running the testsuite additionally requires a numdiff installation.
 
-./configure CC=gcc CFLAGS=-g F77=gfortran --enable-examples –prefix=/opt/cvode
-make
-make install
-
-******************************
-* Building AtChem on-line
-******************************
-
-Make sure you have Apache running with mod_python enabled. Uncompress the sources in a web directory (i.e. /var/www/html). In the top-level directory, (e.g. /var/www/html/atchem_rev125), type "make webapp". This will create a file structure and permissions necessary for running AtChem on-line. Edit makefile.local and set LIBDIR macro to the location of CVODE libraries (e.g. LIBDIR   = /var/www/html/mcm/CVODE/lib). Now you should be able to see the AtChem web pages and run the application.
+Please refer to https://github.com/AtChem/AtChem/wiki/Dependencies for installation instructions of these dependencies.
 
 ******************************
 * Building AtChem
 ******************************
 
-Run make makefile.local and set the macro LIBDIR to the location of the CVODE libraries. Type "make" in the top-level directory and this should create an executable atchem file. This is for a default configuration, which is currently set to the simplest case - A becomes B with a given reaction rate.
+Please refer to https://github.com/AtChem/AtChem/wiki/Installation for installation instructions. Very briefly:
+
+Run make makefile.local and set the variable CVODELIB to the location of the CVODE libraries. Type "./tools/build.sh mcm_subset.fac" in the top-level directory and this should create an executable atchem file. This is for a default configuration. Run by typing "./atchem".
 
 ******************************
 * Converting FACSMILE to AtChem
 ******************************
 
-You need to provide a set of files defining your species, reactions, reaction rates and constraints. Internally, AtChem doesn't use FACSIMILE files, but its own format, consisting of several files, all to be placed in directory modelConfiguration. An apprpriate converter is supplied in web_tools/run_atchem. It is called facsmileToFortranMechanismConverter.py and it should be able to translate an aribtrary set of FACSIMILE reactions to the AtChem internal format. You have to run the converter in a directory containing file mechanism.fac (with the FACSIMILE reactions) and mechanism-rates.f90 (one of AtChem source files). Run the tranlator using the command
-    python [path-to-atchem-sources]/web_tools/run_atchem/facsmileToFortranMechanismConverter.py
-replacing [path-to-atchem-sources] by the appropriate path. This will create several files that need to be placed in modelConfiguration.f90 (thus overwriting the existing files with the default configuration).
+The build.sh script in the tools directory is sufficient to convert a .fac file to a format usable by AtChem. This makes use of the underlying scripts setup_atchem.py, fix_mechanism_fac.py, and mech_converter.py
 
 ******************************
 * Running AtChem
 ******************************
 
-After making placing your configuration files in modelConfiguration, run "make" in the top-level directory of AtChem sources and then run "./atchem". Output files should appear in modelOutput and InstantaneousRates.
-
-******************************
-* Warning
-******************************
-
-Prospective users should be warned that it is easier to use AtChem on-line than AtChem, as the on-line python wrapper fixes the input files on the fly (e.g. Fortran will complain if a file is not ended wiht end-of-line character). If you have troubles making AtChem work with your data, your best bet is to try to run your configuration with AtChem on-line (using just one timestep) and download programinput.zip. This zipped set of files can be obtained in following way. On the results page, copy the link to the input files. Change userinput.zip to programinput.zip - you will obtain a link to the converted files. You can then uncompress them and add them to the atchem sources, overwriting existing files in modelConfiguration, or just compare to your initial data and see what fix was necessary to make it work.
-
+After making placing your configuration files in modelConfiguration, run "tools/build.sh" in the top-level directory of AtChem sources, with argument pointing to a the input .fac file, and then run "./atchem". Output files should appear in modelOutput and instantaneousRates, although these are also configurable.

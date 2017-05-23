@@ -103,12 +103,8 @@ contains!     ---------------------------------------------------------------
           r(clhs(1, is)) = r(clhs(1, is)) * y(clhs(2, is)) ** clhs(3, is)
         end if
       end do
-      do is = 1, lhs_size
-        fy(clhs(2, is), j) = fy(clhs(2, is), j) - clhs(3, is) * r(clhs(1, is))
-      end do
-      do is = 1, rhs_size
-        fy(crhs(2, is), j) = fy(crhs(2, is), j) + ccoeff(is) * r(crhs(1, is))
-      end do
+      fy(clhs(2,:), j) = fy(clhs(2,:), j) - clhs(3,:) * r(clhs(1,:))
+      fy(crhs(2,:), j) = fy(crhs(2,:), j) + ccoeff(:) * r(crhs(1,:))
     end do
 
     return

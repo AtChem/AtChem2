@@ -19,7 +19,7 @@ contains
     logical :: firstTime = .true.
 
     if ( firstTime .eqv. .true. ) then
-      write (*,*) "basePhotoRate: ", jFacSpecies
+      write (*,*) "basePhotoRate: ", trim( jFacSpecies )
       firstTime = .false.
     end if
 
@@ -310,7 +310,7 @@ contains
       end if
       ! If jfacSpeciesLine = 0 (no line in photolysis rates matches the JFac species), program should complain
       if ( jfacSpeciesLine == 0 ) then
-        write (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', jFacSpecies
+        write (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', trim( jFacSpecies )
       end if
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
@@ -321,7 +321,7 @@ contains
     else
       if ( '' /= trim( jFacSpecies ) ) then
         write (*,*) 'Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'!
-        write (*,*) 'JFac species: ', jFacSpecies
+        write (*,*) 'JFac species: ', trim( jFacSpecies )
         stop 2
       end if
     end if

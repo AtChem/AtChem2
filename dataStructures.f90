@@ -74,6 +74,23 @@ module envVars
 end module envVars
 
 !    ********************************************************************************************************
+!    CHEMICAL CONSTRAINTS MODULE
+!    ********************************************************************************************************
+module chemicalConstraints
+  use types_mod
+  use storage, only : maxSpecLength
+  implicit none
+  save
+
+  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
+  real(kind=DP), allocatable :: constrainedConcs(:)
+  integer(kind=NPI) :: numberOfConstrainedSpecies
+  character(len=maxSpecLength), allocatable :: constrainedNames(:)
+  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)
+
+end module chemicalConstraints
+
+!    ********************************************************************************************************
 module constraints
   use types_mod
   implicit none
@@ -101,7 +118,7 @@ contains
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
     allocate (constrainedSpecies(n), constrainedConcs(n))
-    write (*,*) 'Setting size of constraint arrays, n = ', n
+    write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
 
   subroutine deallocateConstrainedSpecies()
@@ -296,23 +313,6 @@ contains
     allocate (j(size_of_j))
   end subroutine allocate_photolysis_j
 end module photolysisRates_mod
-
-!    ********************************************************************************************************
-!    CHEMICAL CONSTRAINTS MODULE
-!    ********************************************************************************************************
-module chemicalConstraints
-  use types_mod
-  use storage, only : maxSpecLength
-  implicit none
-  save
-
-  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-  real(kind=DP), allocatable :: constrainedConcs(:)
-  integer(kind=NPI) :: numberOfConstrainedSpecies
-  character(len=maxSpecLength), allocatable :: constrainedNames(:)
-  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)
-
-end module chemicalConstraints
 
 !    ********************************************************************************************************
 !    PHOTOLYSIS RATES PARAMETERS MODULE

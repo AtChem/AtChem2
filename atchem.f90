@@ -33,7 +33,6 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR SOLVER PARAMETERS
   integer(kind=QI) :: ier
   integer :: i
-  integer(kind=NPI) :: species_counter
   integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
@@ -47,7 +46,6 @@ PROGRAM ATCHEM
   integer :: JvApprox, lookBack
   integer(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
   integer :: preconBandUpper, preconBandLower, solverType
-  real(kind=DP) :: d
 
   !   DECLARATIONS FOR TIME PARAMETERS
   integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds

@@ -35,13 +35,13 @@
       1 OH        
       2 HO2       
  Finished reading products of interest.
- rateOfProdNS (number of species found): 2
+ products of interest (number of species found): 2
 
  Reading reactants of interest...
       1 OH        
       2 HO2       
  Finished reading reactants of interest.
- rateOfLossNS (number of species found): 2
+ reactants of interest (number of species found): 2
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.

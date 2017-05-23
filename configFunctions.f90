@@ -2,7 +2,7 @@ module configFunctions_mod
   use types_mod
 contains
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
-                                returnArray, returnArraySize )
+                                returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use storage, only : maxSpecLength
     implicit none
@@ -14,24 +14,20 @@ contains
     ! number of times a match was made
     character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:)
     character(len=maxSpecLength), contiguous, intent(inout) :: testSpeciesList(:)
-    integer(kind=NPI), intent(out) :: returnArray(:), returnArraySize
-    integer :: i, j
-    logical :: match
+    integer(kind=NPI), intent(out) :: returnArray(:)
+    integer(kind=NPI) :: counter, i
 
-    returnArraySize = 0
-    ! loop over testSpeciesList, and masterSpeciesList. If a match is made, then append
-    ! returnArray with the number of the species from testSpeciesList within the masterSpeciesList
+    counter = 0
+    ! loop over each element of testSpeciesList. If a match is made, then append to
+    ! returnArray the number of the species from testSpeciesList within the masterSpeciesList. Otherwise, abort.
     do i = 1, size( testSpeciesList )
-      match = .false.
-      do j = 1, size( masterSpeciesList )
-        if ( masterSpeciesList(j) == testSpeciesList(i) ) then
-          match = .true.
-          returnArraySize = returnArraySize + 1
-          returnArray(returnArraySize) = j
-        end if
-      end do
-      ! substitute empty strings for invalid species
-      if ( match .eqv. .false. ) then
+      counter = counter + 1
+      if (counter > size( returnArray ) ) then
+        write (stderr,*) 'matchNameToNumber(): counter > size( returnArray ).'
+        stop
+      end if
+      returnArray(counter) = getIndexWithinList(masterSpeciesList, testSpeciesList(i))
+      if ( returnArray(counter) == 0 ) then
         write (stderr,*) 'matchNameToNumber(): ' // testSpeciesList(i) // ' not found in list.'
         stop
       end if

@@ -62,7 +62,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: returnArray(:), tempSORNumber(:), SORNumber(:)
-  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
+  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
   integer(kind=NPI) :: prodIntNameSize, reacIntNameSize
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
@@ -263,14 +263,14 @@ PROGRAM ATCHEM
   write (*,*) 'Finished reading products of interest.'
 
   allocate (prodIntSpecies(prodIntNameSize, rhs_size))
-  allocate (prodArrayLen(prodIntNameSize))
+  allocate (prodIntSpeciesLengths(prodIntNameSize))
   ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, prodIntName, prodIntSpecies(:, 1) )
   ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
 
   ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
-  call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodArrayLen )
+  call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodIntSpeciesLengths )
   write (*, '(A, I0)') ' products of interest (number of species found): ', prodIntNameSize
   write (*,*)
 
@@ -280,14 +280,14 @@ PROGRAM ATCHEM
   write (*,*) 'Finished reading reactants of interest.'
 
   allocate (reacIntSpecies(reacIntNameSize, lhs_size))
-  allocate (lossArrayLen(reacIntNameSize))
+  allocate (reacIntSpeciesLengths(reacIntNameSize))
   ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, reacIntName, reacIntSpecies(:, 1) )
   ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
 
   ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
-  call findReactionsWithProductOrReactant( reacIntSpecies, clhs, lossArrayLen )
+  call findReactionsWithProductOrReactant( reacIntSpecies, clhs, reacIntSpeciesLengths )
   write (*, '(A, I0)') ' reactants of interest (number of species found): ', reacIntNameSize
   write (*,*)
 
@@ -608,8 +608,8 @@ PROGRAM ATCHEM
     ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( prodIntSpecies, prodArrayLen, t, productionRates, 1 )
-      call outputRates( reacIntSpecies, lossArrayLen, t, lossRates, 0 )
+      call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1 )
+      call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0 )
     end if
 
     ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
@@ -698,8 +698,8 @@ PROGRAM ATCHEM
   deallocate (fy, ir)
   deallocate (lossRates, productionRates)
   deallocate (clhs, crhs, ccoeff)
-  deallocate (prodArrayLen)
-  deallocate (lossArrayLen)
+  deallocate (prodIntSpeciesLengths)
+  deallocate (reacIntSpeciesLengths)
   !   deallocate data allocated before in input functions(inputFunctions.f)
   !   deallocate arrays from module constraints
   call deallocateConstrainedSpecies()

@@ -456,9 +456,6 @@ PROGRAM ATCHEM
   allocate (SORNumber(size( speciesOutputRequired )), concsOfSpeciesOfInterest(size( speciesOutputRequired )))
   call matchNameToNumber( speciesNames, speciesOutputRequired, SORNumber )
 
-  ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
-  call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
-
   flush(stderr)
   !    ********************************************************************************************************
   !    CONSTRAINTS

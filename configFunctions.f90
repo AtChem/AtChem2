@@ -169,16 +169,16 @@ contains
           match = .true.
           ! Set concentration in outputConcentrations
           outputConcentrations(j) = inputConcentrations(i)
-          write (54,*) 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
+          write (54, '(A, A, A, 1P e15.3)') 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
           exit
         else
-          write (54,*) 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)!
+          write (54, '(A, A, A, A, A, 1P e15.3)') 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)!
         end if
       end do
       if ( match .eqv. .false. ) then
         ! If we reach this point, we've failed to find this species
         write (51,*) "Error in setConcentrations"
-        write (51,*) "Can't find species: ", k, " in species list"
+        write (51, '(A, A, A)') "Can't find species: ", k, " in species list"
       end if
     end do
     return

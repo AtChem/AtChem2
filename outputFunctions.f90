@@ -22,13 +22,13 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (52, '(100a15) ') 'time', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
+      write (52, '(100A15) ') 'time', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
       first_time = .false.
     end if
 
     if ( ro2 < 0 ) ro2 = 0.0
 
-    write (52, '(100e15.5) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+    write (52, '(100 (1P e15.5)) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
     return
   end subroutine outputEnvVar
@@ -42,7 +42,7 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (62, '(3a17) ') 't', 'currentStepSize', 'previousStepSize'
+      write (62, '(3A17) ') 't', 'currentStepSize', 'previousStepSize'
       first_time = .false.
     end if
 
@@ -64,14 +64,14 @@ contains
 
     if ( first_time .eqv. .true. ) then
       ! OUTPUT FOR CVODE MAIN SOLVER
-      write (57, '(13a9) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR'
+      write (57, '(13A9) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR'
       ! OUTPUT FOR SPARSE SOLVER
       if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
         ! CVSPILS type solver
-        write (61, '(10a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
+        write (61, '(10A9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
       else if ( solver_type == 3 ) then
         ! CVDLS type solver
-        write (61, '(6a9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
+        write (61, '(6A9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
       else
         write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
         write (stderr,*) 'Available options are 1, 2, 3.'
@@ -81,14 +81,14 @@ contains
     end if
 
     ! OUTPUT FOR MAIN SOLVER
-    write (57, '(1P e11.3, 11i9) ') t, (array(i), i = 1, 11)
+    write (57, '(1P e11.3, 11I9) ') t, (array(i), i = 1, 11)
     ! OUTPUT FOR SPARSE SOLVER
     if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
       ! CVSPILS type solver
-      write (61, '(1P e11.3, 9i9) ') t, (array(i), i = 13, 21)
+      write (61, '(1P e11.3, 9I9) ') t, (array(i), i = 13, 21)
     else if ( solver_type == 3 ) then
       ! CVDLS type solver
-      write (61, '(1P e1.3, 5i9) ') t, (array(i), i = 13, 17)
+      write (61, '(1P e1.3, 5I9) ') t, (array(i), i = 13, 17)
     else
       write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
       write (stderr,*) 'Available options are 1, 2, 3.'
@@ -107,7 +107,7 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (59, '(100a15) ') 't', 'secx', 'cosx', 'lat', 'longt', 'lha', 'sinld', 'cosld'
+      write (59, '(100A15) ') 't', 'secx', 'cosx', 'lat', 'longt', 'lha', 'sinld', 'cosld'
       first_time = .false.
     end if
 
@@ -128,7 +128,7 @@ contains
     end if
     ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
     do i = 1, size( fy, 1)
-      write (55, '(100 (1x, e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
+      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
     end do
     write (55,*) '---------------'
 
@@ -146,10 +146,10 @@ contains
     logical :: firstTime = .true.
 
     if ( firstTime .eqv. .true. ) then
-      write (58, '(100a15) ') 't', (trim( photoRateNamesForHeader(ck(i)) ), i = 1, nrOfPhotoRates)
+      write (58, '(100A15) ') 't', (trim( photoRateNamesForHeader(ck(i)) ), i = 1, nrOfPhotoRates)
       firstTime = .false.
     end if
-    write (58, '(100e15.5) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    write (58, '(100 (1P e15.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
 
     return
   end subroutine outputPhotolysisRates
@@ -260,8 +260,8 @@ contains
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
           reaction = getReaction( speciesNames, r(i, j) )
-          write (output_file_number, '(e15.5, I14, A12, I15, e15.5, A40)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), r(i, j), &
-                                                                           p(r(i, j)), trim( reaction )
+          write (output_file_number, '(1P e15.5, I14, A12, I15, 1P e15.5, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
+                                                                                   r(i, j), p(r(i, j)), '  ', trim( reaction )
         end if
       end do
     end do
@@ -314,7 +314,7 @@ contains
     end if
 
     if ( first_time .eqv. .true. ) then
-      write (50, '(100a15) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
+      write (50, '(100A15) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
       first_time = .false.
     end if
 
@@ -323,7 +323,7 @@ contains
         arrayOfConcs(i) = 0d0
       end if
     end do
-    write (50, '(100e15.5) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+    write (50, '(100 (1P e15.5)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
   end subroutine outputSpeciesOutputRequired
 

@@ -1,12 +1,12 @@
- no match, m = O          != k = H2O2       concentration =    5000.0000000000000     
- no match, m = O3         != k = H2O2       concentration =    5000.0000000000000     
- no match, m = NO         != k = H2O2       concentration =    5000.0000000000000     
- no match, m = NO2        != k = H2O2       concentration =    5000.0000000000000     
- no match, m = NO3        != k = H2O2       concentration =    5000.0000000000000     
- no match, m = O1D        != k = H2O2       concentration =    5000.0000000000000     
- no match, m = N2O5       != k = H2O2       concentration =    5000.0000000000000     
- no match, m = OH         != k = H2O2       concentration =    5000.0000000000000     
- no match, m = HO2        != k = H2O2       concentration =    5000.0000000000000     
- no match, m = H2         != k = H2O2       concentration =    5000.0000000000000     
- no match, m = CO         != k = H2O2       concentration =    5000.0000000000000     
- match, m = k = H2O2       concentration =    5000.0000000000000     
+no match, m = O          != k = H2O2       concentration =       5.000E+03
+no match, m = O3         != k = H2O2       concentration =       5.000E+03
+no match, m = NO         != k = H2O2       concentration =       5.000E+03
+no match, m = NO2        != k = H2O2       concentration =       5.000E+03
+no match, m = NO3        != k = H2O2       concentration =       5.000E+03
+no match, m = O1D        != k = H2O2       concentration =       5.000E+03
+no match, m = N2O5       != k = H2O2       concentration =       5.000E+03
+no match, m = OH         != k = H2O2       concentration =       5.000E+03
+no match, m = HO2        != k = H2O2       concentration =       5.000E+03
+no match, m = H2         != k = H2O2       concentration =       5.000E+03
+no match, m = CO         != k = H2O2       concentration =       5.000E+03
+match, m = k = H2O2       concentration =       5.000E+03

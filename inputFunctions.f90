@@ -23,8 +23,8 @@ contains
     call setNumberOfReactions( numReac )
 
     write (*,*)
-    write (*,*) 'Number of Species = ', numSpec
-    write (*,*) 'Number of Reactions = ', numReac
+    write (*, '(A, I0)') ' Number of Species   = ', numSpec
+    write (*, '(A, I0)') ' Number of Reactions = ', numReac
     write (*,*)
   end subroutine readNumberOfSpeciesAndReactions
 
@@ -138,7 +138,7 @@ contains
 
     character(len=maxSpecLength), allocatable, intent(out) :: concSpeciesNames(:)
     real(kind=DP), allocatable, intent(out) :: concentration(:)
-    character(len=maxSpecLength) :: k
+    character(len=maxSpecLength) :: k, char_maxSpecLength
     character(len=maxFilepathLength) :: filename
     real(kind=DP) :: l
     integer(kind=NPI) :: numLines, i, nsp
@@ -151,8 +151,8 @@ contains
     nsp = getNumberOfSpecies()
     if ( numLines > nsp ) then
       write (51,*) "Error:(number of species initial concentrations are set for) > (number of species) "
-      write (51,*) "(number of species initial concentrations are set for) = ", numLines
-      write (51,*) "(number of species) = ", nsp
+      write (51, '(A, I0)') "(number of species initial concentrations are set for) = ", numLines
+      write (51, '(A, I0)') "(number of species) = ", nsp
     end if
     allocate (concSpeciesNames(numLines), concentration(numLines) )
 
@@ -168,12 +168,12 @@ contains
     close (10, status='keep')
 
     if ( numLines > 3 ) then
-      write (*,*) 1, ' ', concSpeciesNames(1), ' ', concentration(1)
+      write (*, '(I7, A, A, A, 1P e15.3)') 1, ' ', concSpeciesNames(1), ' ', concentration(1)
       write (*,*) '...'
-      write (*,*) numLines, ' ', concSpeciesNames(numLines), ' ', concentration(numLines)
+      write (*, '(I7, A, A, A, 1P e15.3)') numLines, ' ', concSpeciesNames(numLines), ' ', concentration(numLines)
     else
       do i = 1, numLines
-        write (*,*) i, ' ', concSpeciesNames(i), ' ', concentration(i)
+        write (*, '(I7, A, A, A, 1P e15.3)') i, ' ', concSpeciesNames(i), ' ', concentration(i)
       end do
     end if
     write (*,*) 'Finished reading initial concentrations.'
@@ -232,16 +232,16 @@ contains
     end if
     close (10, status='keep')
     if ( nrOfPhotoRates > 3 ) then
-      write (*,*) ck(1), cl(1), photoRateNames(1)
+      write (*, '(I7, 1P e15.3, 1P e15.3)') ck(1), cl(1), photoRateNames(1)
       write (*,*) '...'
-      write (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates)
+      write (*, '(I7, 1P e15.3, 1P e15.3)') ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates)
     else
       do i = 1, nrOfPhotoRates
-        write (*,*) ck(i), cl(i), photoRateNames(i)
+        write (*, '(I7, 1P e15.3, 1P e15.3)') ck(i), cl(i), photoRateNames(i)
       end do
     end if
     write (*,*) 'Finished reading photolysis constants.'
-    write (*,*) 'Number of photolysis rates:', nrOfPhotoRates
+    write (*, '(A, I0)') ' Number of photolysis rates: ', nrOfPhotoRates
     return
   end subroutine readPhotolysisConstants
 
@@ -286,17 +286,19 @@ contains
       allocated_j = .true.
     end if
     if ( nrOfPhotoRates > 3 ) then
-      write (*,*) ck(1), cl(1), cmm(1), cnn(1), photoRateNames(1), transmissionFactor(1)
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
+                                ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
       write (*,*) '...'
-      write (*,*) ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
-                  cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates)
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
+                  cnn(nrOfPhotoRates), adjustr( photoRateNames(nrOfPhotoRates) ), transmissionFactor(nrOfPhotoRates)
     else
       do i = 1, nrOfPhotoRates
-        write (*,*) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
+        write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
+                                ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
       end do
     end if
     write (*,*) 'Finished reading photolysis rates.'
-    write (*,*) 'Number of photolysis rates:', nrOfPhotoRates
+    write (*, '(A, I0)') ' Number of photolysis rates: ', nrOfPhotoRates
     return
   end subroutine readPhotolysisRates
 
@@ -357,12 +359,12 @@ contains
     call read_in_single_column_string_file( trim( filename ), r, .false. )
 
     if ( length > 3 ) then
-      write (*,*) 1, ' ', r(1)
+      write (*, '(I7, A, A)') 1, ' ', r(1)
       write (*,*) '...'
-      write (*,*) length, ' ', r(length)
+      write (*, '(I7, A, A)') length, ' ', r(length)
     else
       do j = 1, length
-        write (*,*) j, ' ', r(j)
+        write (*, '(I7, A, A)') j, ' ', r(j)
       end do
     end if
     return
@@ -421,7 +423,7 @@ contains
     ! Allocate storage for current values of env vars used for output
     allocate (currentEnvVarValues(numEnvVars) )
 
-    write (*,*) 'Number of environment variables: ', numEnvVars
+    write (*, '(A, I0)') ' Number of environment variables: ', numEnvVars
     allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
     allocate (envVarFixedValues(numEnvVars) )
 
@@ -431,7 +433,7 @@ contains
     ! Read in environment variables - if
     do i = 1, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
-      write (*, '(A, A4, A12, A30) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
+      write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
 
       select case ( trim( envVarTypes(i) ) )
         case ('CALC')
@@ -464,7 +466,7 @@ contains
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
 
-        write (*,*) 'Reading constraint data for', envVarNames(i)
+        write (*,*) 'Reading constraint data for', trim( envVarNames(i) )
 
         fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
         call inquire_or_abort( fileLocation, 'readEnvVar()')
@@ -510,19 +512,19 @@ contains
     nsp = getNumberOfSpecies()
     if ( length > nsp ) then
       write (51,*) 'Error: Number of (number of species output is required for) > (number of species) '
-      write (51,*) "(number of species output is required for) = ", length
-      write (51,*) "(number of species) = ", nsp
+      write (51, '(A, I0)') "(number of species output is required for) = ", length
+      write (51, '(A, I0)') "(number of species) = ", nsp
       stop 2
     end if
 
-    write (*,*) 'Output required for concentration of', length, 'species:'
+    write (*, '(A, I0, A)') ' Output required for concentration of ', length, ' species:'
     if ( length > 3 ) then
-      write (*,*) 1, r(1)
+      write (*, '(I7, A, A)') 1, ' ', r(1)
       write (*,*) '...'
-      write (*,*) length, r(length)
+      write (*, '(I7, A, A)') length, ' ', r(length)
     else
       do j = 1, length
-        write (*,*) j, r(j)
+        write (*, '(I7, A, A)') j, ' ', r(j)
       end do
     end if
 
@@ -571,7 +573,7 @@ contains
       end do
     end if
     write (*,*) 'Finished reading names of constrained photolysis rates.'
-    write (*,*) 'Number of constrained photorates:', numConPhotoRates
+    write (*, '(A, I0)') ' Number of constrained photorates: ', numConPhotoRates
 
     ! GET NUMBERS OF CONSTRAINED PHOTO RATES
     do i = 1, numConPhotoRates
@@ -638,13 +640,13 @@ contains
     write (*,*) 'Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
     numberOfVariableConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
     write (*,*) 'Finished counting the names of variable-concentration constrained species.'
-    write (*,*) 'Number of names of variable-concentration constrained species:', numberOfVariableConstrainedSpecies
+    write (*, '(A, I0)') ' Number of names of variable-concentration constrained species: ', numberOfVariableConstrainedSpecies
 
     ! read in number of fixed-concentration constrained species
     write (*,*) 'Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
     numberOfFixedConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
     write (*,*) 'Finished counting the names of fixed-concentration constrained species.'
-    write (*,*) 'Number of names of fixed-concentration constrained species:', numberOfFixedConstrainedSpecies
+    write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
     allocate (constrainedSpecies(numberOfConstrainedSpecies), constrainedNames(numberOfConstrainedSpecies) )
@@ -658,7 +660,7 @@ contains
         if ( id /= 0 ) then
           constrainedSpecies(i) = id
         else
-          write (stderr,*) 'Supplied constrained species ', constrainedNames(i), ' is not a species in the problem.'
+          write (stderr, '(A, I0, A)') 'Supplied constrained species ', constrainedNames(i), ' is not a species in the problem.'
           stop
         end if
       end do
@@ -667,7 +669,7 @@ contains
       write (*,*) 'Skipped reading the names of variable-concentration constrained species'
     end if
 
-    write (*,*) 'maxNumberOfDataPoints:', maxNumberOfDataPoints
+    write (*, '(A, I0)') ' maxNumberOfDataPoints: ', maxNumberOfDataPoints
     write (*,*) 'Allocating storage for variable-concentration constrained species...'
     allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
@@ -676,12 +678,12 @@ contains
 
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       if ( numberOfVariableConstrainedSpecies > 3 ) then
-        write (*,*) 1, constrainedNames(1)
+        write (*, '(I7, A, A)') 1, ' ', constrainedNames(1)
         write (*,*) '...'
-        write (*,*) numberOfVariableConstrainedSpecies, constrainedNames(numberOfVariableConstrainedSpecies)
+        write (*, '(I7, A, A)') numberOfVariableConstrainedSpecies, ' ', constrainedNames(numberOfVariableConstrainedSpecies)
       else
         do i = 1, numberOfVariableConstrainedSpecies
-          write (*,*) i, constrainedNames(i)
+          write (*, '(I7, A, A)') i, ' ', constrainedNames(i)
         end do
       end if
     end if
@@ -703,7 +705,7 @@ contains
         dataNumberOfPoints = count_lines_in_file( fileLocation )
         if ( dataNumberOfPoints > maxNumberOfDataPoints ) then
           dataNumberOfPoints = maxNumberOfDataPoints
-          write (*,*) 'Warning! Truncated constraint data to', dataNumberOfPoints, '.'!
+          write (*, '(A, I0, A)') ' Warning! Truncated constraint data to ', dataNumberOfPoints, ' points.'!
         end if
         speciesNumberOfPoints(i) = dataNumberOfPoints
         ! Read contents of file
@@ -737,31 +739,31 @@ contains
     end do
     close (14, status='keep')
     numberOfFixedConstrainedSpecies = j
-    write (51,*) 'Number of fixed constrained species:', numberOfFixedConstrainedSpecies
+    write (51, '(A, I0)') 'Number of fixed constrained species: ', numberOfFixedConstrainedSpecies
 
     if ( numberOfFixedConstrainedSpecies > 3 ) then
-      write (*,*) 1, constrainedNames(1 + numberOfVariableConstrainedSpecies), dataFixedY(1)
+      write (*, '(I7, A, A, A, 1P e15.3)') 1, ' ', constrainedNames(1 + numberOfVariableConstrainedSpecies), ' ', dataFixedY(1)
       write (*,*) '...'
-      write (*,*) numberOfFixedConstrainedSpecies, &
-                  constrainedNames(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), &
+      write (*, '(I7, A, A, A, 1P e15.3)') numberOfFixedConstrainedSpecies, ' ', &
+                  constrainedNames(numberOfFixedConstrainedSpecies + numberOfVariableConstrainedSpecies), ' ', &
                   dataFixedY(numberOfFixedConstrainedSpecies)
     else
       do i = 1, numberOfFixedConstrainedSpecies
-        write (*,*) i, constrainedNames(i + numberOfVariableConstrainedSpecies), &
+        write (*, '(I7, A, A, A, 1P e15.3)') i, ' ', constrainedNames(i + numberOfVariableConstrainedSpecies), ' ', &
                     dataFixedY(i)
       end do
     end if
     write (*,*) 'Finished reading in the names and concentration of fixed-concentration species.'
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    write (51,*) "Total number of constrained species:", numberOfConstrainedSpecies
+    write (51, '(A, I0)') "Total number of constrained species: ", numberOfConstrainedSpecies
 
     ! ERROR HANDLING
     numberOfSpecies = getNumberOfSpecies()
     if ( numberOfConstrainedSpecies >= numberOfSpecies ) then
       write (51,*) "Error: number of constrained species >= number of species "
-      write (51,*) "number of constrained species = ", numberOfConstrainedSpecies
-      write (51,*) "number of species = ", numberOfSpecies
+      write (51, '(A, I0)') "number of constrained species = ", numberOfConstrainedSpecies
+      write (51, '(A, I0)') "number of species = ", numberOfSpecies
       stop 2
     end if
 

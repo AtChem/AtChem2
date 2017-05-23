@@ -1,48 +1,49 @@
- Output dir is travis/tests/spec_yes_env_no                                                                        
- Instantaneous rates dir is travis/tests/spec_yes_env_no/instantaneousRates                                                     
- Parameter dir is travis/tests/spec_yes_env_no/modelConfiguration                                                     
+ Output dir is travis/tests/spec_yes_env_no
+ Instantaneous rates dir is travis/tests/spec_yes_env_no/instantaneousRates
+ Parameter dir is travis/tests/spec_yes_env_no/modelConfiguration
 
- Number of Species =                    29
- Number of Reactions =                    71
+ Number of Species   = 29
+ Number of Reactions = 71
 
  Reading reactants (lhs) from mechanism.reac...
  Reading products (rhs) from mechanism.prod...
  Finished reading lhs and rhs data.
- Size of lhs =                  114 size of rhs2 =                   100 .
+ Size of lhs = 114
+ Size of rhs = 100
 
  Reading species names from mechanism.species...
  Finished reading species names.
 
  Reading initial concentrations...
-                    1  CH4           47500000000000.000     
-                    2  NO2           264000000000.00000     
-                    3  O3            1320000000000.0000     
+      1 CH4              4.750E+13
+      2 NO2              2.640E+11
+      3 O3               1.320E+12
  Finished reading initial concentrations.
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-                    1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
+      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
  ...
-                   61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
+     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
  Finished reading photolysis rates.
- Number of photolysis rates:                   35
+ Number of photolysis rates: 35
 
  Reading JFacSpecies...
  JFacSpecies = 
  Finished reading JFacSpecies.
 
  Reading products of interest...
-                    1  OH        
-                    2  HO2       
+      1 OH        
+      2 HO2       
  Finished reading products of interest.
- rateOfProdNS (number of species found):                    2
+ rateOfProdNS (number of species found): 2
 
  Reading reactants of interest...
-                    1  OH        
-                    2  HO2       
+      1 OH        
+      2 HO2       
  Finished reading reactants of interest.
- rateOfLossNS (number of species found):                    2
+ rateOfLossNS (number of species found): 2
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.
@@ -51,16 +52,16 @@
 
  Solver parameters:
  ------------------
-           atol:   0.100E-02
-           rtol:   0.100E-03
-     JacVApprox:           0
-        deltaJv:   0.100E-02
-      deltaMain:   0.100E-03
-       lookBack:         100
-        maxStep:   0.100E+03
-preconBandUpper:         750
-preconBandLower:         750
-     solverType: SPGMR + Banded Preconditioner
+            atol:   1.000E-03
+            rtol:   1.000E-04
+      JacVApprox:           0
+         deltaJv:   1.000E-03
+       deltaMain:   1.000E-04
+        lookBack:         100
+         maxStep:   1.000E+02
+ preconBandUpper:         750
+ preconBandLower:         750
+      solverType: SPGMR + Banded Preconditioner 
  ------------------
 
  Model parameters:
@@ -82,17 +83,17 @@ preconBandLower:         750
  -----------------
 
  Reading environment variables...
- Number of environment variables:                    10
- 1      M                             2.538e+19
- 2      TEMP                                293
- 3      PRESS                           NOTUSED
- 4      RH                              NOTUSED
- 5      H2O                           2.538e+17
- 6      DEC                               0.414
- 7      BLHEIGHT                        NOTUSED
- 8      DILUTE                          NOTUSED
- 9      JFAC                            NOTUSED
- 10     ROOFOPEN                        NOTUSED
+ Number of environment variables: 10
+ 1      M                   2.538e+19
+ 2      TEMP                      293
+ 3      PRESS                 NOTUSED
+ 4      RH                    NOTUSED
+ 5      H2O                 2.538e+17
+ 6      DEC                     0.414
+ 7      BLHEIGHT              NOTUSED
+ 8      DILUTE                NOTUSED
+ 9      JFAC                  NOTUSED
+ 10     ROOFOPEN              NOTUSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -100,63 +101,64 @@ preconBandLower:         750
 
  Reading concentration output from file...
  Finished reading concentration output from file.
- Output required for concentration of                    3 species:
-                    1 CH4       
-                    2 NO2       
-                    3 O3        
+ Output required for concentration of 3 species:
+      1 CH4       
+      2 NO2       
+      3 O3        
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
-                    1   6.0730000000000003E-005   1.7430000000000001       0.47399999999999998      J1       1.0000000000000000     
+      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
  ...
-                   61   7.5370000000000005E-004  0.49900000000000000       0.26600000000000001      J61      1.0000000000000000     
+     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
  Finished reading photolysis rates.
- Number of photolysis rates:                   35
+ Number of photolysis rates: 35
 
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
- Number of constrained photorates:                    0
+ Number of constrained photorates: 0
 
  Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...
  Finished counting the names of variable-concentration constrained species.
- Number of names of variable-concentration constrained species:                    2
+ Number of names of variable-concentration constrained species: 2
  Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...
  Finished counting the names of fixed-concentration constrained species.
- Number of names of fixed-concentration constrained species:                    0
+ Number of names of fixed-concentration constrained species: 0
  Reading in the names of variable-concentration constrained species...
  Finished reading the names of variable-concentration constrained species
- maxNumberOfDataPoints:       50000
+ maxNumberOfDataPoints: 50000
  Allocating storage for variable-concentration constrained species...
  Finished allocating storage for variable-concentration constrained species.
-                    1 CH4       
-                    2 O3        
+      1 CH4       
+      2 O3        
  Reading concentration data for variable-concentration constrained species...
  CH4       ...
  O3        ...
  Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...
  Finished reading in the names and concentration of fixed-concentration species.
- Setting size of constraint arrays, n =                     2
+ Setting size of constraint arrays, n = 2
  Finished reading constrained species.
  Initialising concentrations of constrained species...
  Finished initialising concentrations of constrained species.
 
-                        neq =     27
- numberOfConstrainedSpecies =      2
+                        neq = 27
+ numberOfConstrainedSpecies = 2
                          t0 =       0.000E+00
- setting maxsteps ier =            0
- time =          900
- time =         1800
- time =         2700
- time =         3600
+ setting maxnumsteps ier = 0
+ setting maxstep ier = 0
+ time = 900
+ time = 1800
+ time = 2700
+ time = 3600
 
 
-Final statistics:
+ Final statistics:
 
- No. steps =  160   No. f-s =  218   No. J-s =  406   No. LU-s =   58
- No. nonlinear iterations =  215
- No. nonlinear convergence failures =    0
- No. error test failures =   12
+ No. steps = 160   No. f-s = 218   No. J-s = 406   No. LU-s = 58
+ No. nonlinear iterations = 215
+ No. nonlinear convergence failures = 0
+ No. error test failures = 12
 
- Runtime =            0
+ Runtime = 0
  Deallocating memory.

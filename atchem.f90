@@ -181,9 +181,9 @@ PROGRAM ATCHEM
     env_constraints_dir = "environmentConstraints"
   end if
 
-  write (*,*) 'Output dir is ', output_dir
-  write (*,*) 'Instantaneous rates dir is ', instantaneousRates_dir
-  write (*,*) 'Parameter dir is ', param_dir
+  write (*,*) 'Output dir is ', trim( output_dir )
+  write (*,*) 'Instantaneous rates dir is ', trim( instantaneousRates_dir )
+  write (*,*) 'Parameter dir is ', trim( param_dir )
   !   OPEN FILES FOR OUTPUT
   open (unit=50, file=trim( output_dir ) // "/concentration.output")
   open (unit=51, file=trim( output_dir ) // "/errors.output")
@@ -223,7 +223,8 @@ PROGRAM ATCHEM
   call readReactions( clhs, crhs, ccoeff )
   neq = numSpec
 
-  write (*,*) 'Size of lhs =', lhs_size, 'size of rhs2 = ', rhs_size, '.'
+  write (*, '(A, I0)') ' Size of lhs = ', lhs_size
+  write (*, '(A, I0)') ' Size of rhs = ', rhs_size
 
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
@@ -273,7 +274,7 @@ PROGRAM ATCHEM
   end do
   ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
   call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodArrayLen )
-  write (*,*) 'rateOfProdNS (number of species found):', rateOfProdNS
+  write (*, '(A, I0)') ' rateOfProdNS (number of species found): ', rateOfProdNS
   write (*,*)
 
   ! Read in reactant species of interest, and set up variables to hold these
@@ -292,7 +293,7 @@ PROGRAM ATCHEM
   end do
   ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
   call findReactionsWithProductOrReactant( reacIntSpecies, clhs, lossArrayLen )
-  write (*,*) 'rateOfLossNS (number of species found):', rateOfLossNS
+  write (*, '(A, I0)') ' rateOfLossNS (number of species found): ', rateOfLossNS
   write (*,*)
 
 
@@ -352,9 +353,9 @@ PROGRAM ATCHEM
   preconBandLower = solverParameters(11)
 
   ! float format
-  100 format (A17, E11.3)
+  100 format (A18, 1P E11.3)
   ! integer format
-  200 format (A17, I11)
+  200 format (A18, I11)
   write (*,*) 'Solver parameters:'
   write (*,*) '------------------'
   write (*, 100) 'atol: ', atol
@@ -366,7 +367,7 @@ PROGRAM ATCHEM
   write (*, 100) 'maxStep: ', maxStep
   write (*, 200) 'preconBandUpper: ', preconBandUpper
   write (*, 200) 'preconBandLower: ', preconBandLower
-  write (*, '(A17, A29) ') 'solverType: ', adjustl( solverTypeName(solverType) )
+  write (*, '(A18, A)') 'solverType: ', adjustl( solverTypeName(solverType) )
   write (*,*) '------------------'
   write (*,*)
 
@@ -501,8 +502,8 @@ PROGRAM ATCHEM
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - numberOfConstrainedSpecies
-  write (*, '(A30, I6) ') 'neq = ', neq
-  write (*, '(A30, I6) ') 'numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
+  write (*, '(A30, I0) ') ' neq = ', neq
+  write (*, '(A30, I0) ') ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
 
   flush(stderr)
 
@@ -520,7 +521,7 @@ PROGRAM ATCHEM
     stop
   end if
 
-  write (*, '(A30, E15.3) ') 't0 = ', t
+  write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
@@ -530,9 +531,10 @@ PROGRAM ATCHEM
   end if
 
   call FCVSETIIN( 'MAX_NSTEPS', maxNumSteps, ier )
-  write (*,*) 'setting maxsteps ier = ', ier
+  write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
 
   call FCVSETRIN( 'MAX_STEP', maxStep, ier )
+  write (*, '(A, I0)') ' setting maxstep ier = ', ier
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER
@@ -602,7 +604,7 @@ PROGRAM ATCHEM
     flush(6)
 
     time = int( t )
-    write (*,*) 'time = ', time
+    write (*, '(A, I0)') ' time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
     do species_counter = 1, numberOfConstrainedSpecies
@@ -680,19 +682,19 @@ PROGRAM ATCHEM
 
   !   printing of final statistics desactivated - nobody finds it useful
   !   FINAL ON SCREEN OUTPUT
-  fmt = "(//'Final statistics:'//" // &
-        "' No. steps = ', I4, '   No. f-s = ', I4, " // &
-        "'   No. J-s = ', I4, '   No. LU-s = ', I4/" // &
-        "' No. nonlinear iterations = ', I4/" // &
-        "' No. nonlinear convergence failures = ', I4/" // &
-        "' No. error test failures = ', I4/) "
+  fmt = "(//' Final statistics:'//" // &
+        "' No. steps = ', I0, '   No. f-s = ', I0, " // &
+        "'   No. J-s = ', I0, '   No. LU-s = ', I0/" // &
+        "' No. nonlinear iterations = ', I0/" // &
+        "' No. nonlinear convergence failures = ', I0/" // &
+        "' No. error test failures = ', I0/) "
 
   write (*, fmt) iout (3), iout (4), iout (17), iout (8), &
                  iout (7), iout (6), iout (5)
 
   call SYSTEM_CLOCK( runEnd, rate )
   runTime = ( runEnd - runStart ) / rate
-  write (*,*) 'Runtime = ', runTime
+  write (*, '(A, I0)') ' Runtime = ', runTime
 
   !   deallocate all
   write (*,*) 'Deallocating memory.'

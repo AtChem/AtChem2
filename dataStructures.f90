@@ -341,18 +341,9 @@ module zenithData
   implicit none
   save
 
-  real(kind=DP) :: lat, longt, lha, sinld, cosld
+  real(kind=DP) :: lat, longt, lha, sinld, cosld, cosX, secX
 
 end module zenithData
-
-module zenithData1
-  use types_mod
-  implicit none
-  save
-
-  real(kind=DP) :: cosX, secX
-
-end module zenithData1
 
 !    ********************************************************************************************************
 !    RATES OF PRODUCTION AND LOSS MODULE

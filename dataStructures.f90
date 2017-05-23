@@ -51,6 +51,25 @@ module date
   integer :: day, month, year, dayOfYear
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 
+contains
+  subroutine calcDateParameters()
+    implicit none
+
+    integer :: i, monthList(12)
+
+    monthList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    ! calculate which day of the year day/month refers to
+    dayOfYear = 0
+    do i = 1, month - 1
+      dayOfYear = dayOfYear + monthList(i)
+    end do
+    dayOfYear = dayOfYear + day - 1
+    ! This day refers to the following fraction through the year
+    dayAsFractionOfYear = dayOfYear / 365
+    ! Set number of seconds per year
+    secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
+    return
+  end subroutine calcDateParameters
 end module date
 !    ********************************************************************************************************
 !    ENVIRONMENT VARIABLES MODULE

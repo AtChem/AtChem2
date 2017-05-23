@@ -1,27 +1,6 @@
 module configFunctions_mod
   use types_mod
 contains
-  subroutine calcDateParameters()
-    use date
-    implicit none
-
-    integer :: i, monthList(12)
-
-    monthList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    ! calculate which day of the year day/month refers to
-    dayOfYear = 0
-    do i = 1, month - 1
-      dayOfYear = dayOfYear + monthList(i)
-    end do
-    dayOfYear = dayOfYear + day - 1
-    ! This day refers to the following fraction through the year
-    dayAsFractionOfYear = dayOfYear / 365
-    ! Set number of seconds per year
-    secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
-    return
-  end subroutine calcDateParameters
-
-
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
                                 returnArray, returnArraySize )
     use storage, only : maxSpecLength
@@ -58,7 +37,7 @@ contains
     return
   end subroutine matchNameToNumber
 
-  pure function matchOneNameToNumber( masterList, target ) result ( id )
+  pure function getIndexWithinList( masterList, target ) result ( id )
     ! Search masterList for target, and return the index id. If not found, return 0.
     implicit none
 
@@ -73,7 +52,7 @@ contains
         return
       end if
     end do
-  end function matchOneNameToNumber
+  end function getIndexWithinList
 
 
   subroutine findReactionsWithProductOrReactant( r, chs, arrayLen )

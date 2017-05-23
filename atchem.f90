@@ -291,9 +291,7 @@ PROGRAM ATCHEM
   call getParametersFromFile( trim( param_dir ) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
   write (*,*) 'Finished reading solver parameters from file.'
   allocate (solverParameters(solverParameterSize))
-  do i = 1, solverParameterSize
-    solverParameters(i) = tempForSolverParameters(i)
-  end do
+  solverParameters(:) = tempForSolverParameters(1:solverParameterSize)
   deallocate(tempForSolverParameters)
   !   READ IN MODEL PARAMETERS
   allocate(tempForModelParameters(100))
@@ -301,9 +299,7 @@ PROGRAM ATCHEM
   call getParametersFromFile( trim( param_dir ) //  "/model.parameters", tempForModelParameters, modelParameterSize )
   write (*,*) 'Finished reading model parameters from file.'
   allocate (modelParameters(modelParameterSize))
-  do i = 1, modelParameterSize
-    modelParameters(i) = tempForModelParameters(i)
-  end do
+  modelParameters(:) = tempForModelParameters(1:modelParameterSize)
   deallocate (tempForModelParameters)
   write (*,*)
 

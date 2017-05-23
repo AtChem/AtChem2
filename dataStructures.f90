@@ -146,11 +146,10 @@ contains
 
   ! METHODS FOR constrainedConcs
 
-  subroutine getConstrainedConc( n, r )
-    integer(kind=NPI) :: n
-    real(kind=DP) :: r
-    r = constrainedConcs(n)
-  end subroutine getConstrainedConc
+  pure function getConstrainedConcs() result ( r )
+    real(kind=DP) :: r(numberOfConstrainedSpecies)
+    r = constrainedConcs(:)
+  end function getConstrainedConcs
 
   subroutine setConstrainedConc( n, r )
     integer(kind=NPI) :: n

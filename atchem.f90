@@ -454,8 +454,7 @@ PROGRAM ATCHEM
 
   ! Allocate SORNumber and fill with the global numbering of the species found in speciesOutputRequired
   allocate (SORNumber(size( speciesOutputRequired )), concsOfSpeciesOfInterest(size( speciesOutputRequired )))
-  call matchNameToNumber( speciesNames, speciesOutputRequired, &
-                          SORNumber )
+  call matchNameToNumber( speciesNames, speciesOutputRequired, SORNumber )
 
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )

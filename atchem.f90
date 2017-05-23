@@ -725,12 +725,12 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   real(kind=DP), intent(in) :: rpar(*), work(*)
   integer(kind=NPI), intent(out) :: ier
 
-  integer(kind=NPI) :: neq, i, np
+  integer(kind=NPI) :: neq, np
   real(kind=DP) :: delta, dummy
-  real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
+  real(kind=DP), allocatable :: yPlusV(:), fyPlusV(:)
 
   np = getNumberOfSpecies()
-  allocate (yPlusV(np), yPlusVi(np))
+  allocate (yPlusV(np), fyPlusV(np))
 
   neq = ipar(1)
   delta = 1.00d-03
@@ -739,18 +739,15 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   dummy = work(1)
 
   ! calculate y + delta v
-  do i = 1, neq
-    yPlusV (i) = y(i) + delta * v(i)
-  end do
+  yPlusV(1:neq) = y(1:neq) + delta * v(1:neq)
 
-  ! get f(y + delta v)
-  call FCVFUN( t, yPlusV, yPlusVi, ipar, rpar, ier )
+  ! get f(y + delta v) into fyPlusVi
+  call FCVFUN( t, yPlusV, fyPlusV, ipar, rpar, ier )
 
   ! JVminus1 + deltaJV
-  do i = 1, neq
-    fjv(i) = ( yPlusVi(i) - fy(i) ) / delta
-  end do
-  deallocate (yPlusV, yPlusVi)
+  fjv(1:neq) = ( fyPlusV(1:neq) - fy(1:neq) ) / delta
+
+  deallocate (yPlusV, fyPlusV)
 
   return
 end subroutine FCVJTIMES

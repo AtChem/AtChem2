@@ -35,12 +35,12 @@
  Reading products of interest...
       1 MEK       
  Finished reading products of interest.
- rateOfProdNS (number of species found): 1
+ products of interest (number of species found): 1
 
  Reading reactants of interest...
       1 HOCH2CO3H 
  Finished reading reactants of interest.
- rateOfLossNS (number of species found): 1
+ reactants of interest (number of species found): 1
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.

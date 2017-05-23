@@ -63,11 +63,10 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: returnArray(:), tempSORNumber(:), SORNumber(:)
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodArrayLen(:), lossArrayLen(:)
-  integer(kind=NPI) :: SORNumberSize, prodIntNameSize, reacIntNameSize
+  integer(kind=NPI) :: prodIntNameSize, reacIntNameSize
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
-  integer(kind=NPI) :: rateOfProdNS, rateOfLossNS
   integer :: ratesOutputStepSize, time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
@@ -262,38 +261,34 @@ PROGRAM ATCHEM
   write (*,*) 'Reading products of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, prodIntNameSize )
   write (*,*) 'Finished reading products of interest.'
-  ! Fill returnArray with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
-  call matchNameToNumber( speciesNames, prodIntName, returnArray, rateOfProdNS )
+
+  allocate (prodIntSpecies(prodIntNameSize, rhs_size))
+  allocate (prodArrayLen(prodIntNameSize))
+  ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
+  call matchNameToNumber( speciesNames, prodIntName, prodIntSpecies(:, 1) )
   ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
-  allocate (prodArrayLen(rateOfProdNS))
-  allocate (prodIntSpecies(rateOfProdNS, rhs_size))
-  ! Write product species number to first element of each row of prodIntSpecies
-  do species_counter = 1, rateOfProdNS
-    prodIntSpecies(species_counter, 1) = returnArray(species_counter)
-  end do
+
   ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
   call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodArrayLen )
-  write (*, '(A, I0)') ' rateOfProdNS (number of species found): ', rateOfProdNS
+  write (*, '(A, I0)') ' products of interest (number of species found): ', prodIntNameSize
   write (*,*)
 
   ! Read in reactant species of interest, and set up variables to hold these
   write (*,*) 'Reading reactants of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, reacIntNameSize )
   write (*,*) 'Finished reading reactants of interest.'
-  ! Fill returnArray with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
-  call matchNameToNumber( speciesNames, reacIntName, returnArray, rateOfLossNS )
+
+  allocate (reacIntSpecies(reacIntNameSize, lhs_size))
+  allocate (lossArrayLen(reacIntNameSize))
+  ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
+  call matchNameToNumber( speciesNames, reacIntName, reacIntSpecies(:, 1) )
   ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
-  allocate (lossArrayLen(rateOfLossNS))
-  allocate (reacIntSpecies(rateOfLossNS, lhs_size))
-  ! Write reactant species number to first element of each row of reacIntSpecies
-  do species_counter = 1, rateOfLossNS
-    reacIntSpecies(species_counter, 1) = returnArray(species_counter)
-  end do
+
   ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
   call findReactionsWithProductOrReactant( reacIntSpecies, clhs, lossArrayLen )
-  write (*, '(A, I0)') ' rateOfLossNS (number of species found): ', rateOfLossNS
+  write (*, '(A, I0)') ' reactants of interest (number of species found): ', reacIntNameSize
   write (*,*)
 
 
@@ -468,15 +463,11 @@ PROGRAM ATCHEM
   ! fill speciesOutputRequired with the names of species to output to concentration.output
   call readSpeciesOutputRequired( speciesOutputRequired )
 
-  ! fill SORNumber with the global numbering of the species found in speciesOutputRequired
+  ! Allocate SORNumber and fill with the global numbering of the species found in speciesOutputRequired
+  allocate (SORNumber(size( speciesOutputRequired )), concsOfSpeciesOfInterest(size( speciesOutputRequired )))
   call matchNameToNumber( speciesNames, speciesOutputRequired, &
-                          tempSORNumber, SORNumberSize )
-  ! Allocate SORNumber and fill from temporary array
-  allocate (SORNumber(SORNumberSize), concsOfSpeciesOfInterest(SORNumberSize))
-  do species_counter = 1, SORNumberSize
-    SORNumber(species_counter) = tempSORNumber(species_counter)
-  end do
-  deallocate (tempSORNumber)
+                          SORNumber )
+
   ! fill concsOfSpeciesOfInterest with the concentrations of the species to be output
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
 

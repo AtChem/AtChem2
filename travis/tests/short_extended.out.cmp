@@ -37,14 +37,14 @@
  ...
       6 HOCH2CO3H 
  Finished reading products of interest.
- rateOfProdNS (number of species found): 6
+ products of interest (number of species found): 6
 
  Reading reactants of interest...
       1 OH        
  ...
       5 HOCH2CO3H 
  Finished reading reactants of interest.
- rateOfLossNS (number of species found): 5
+ reactants of interest (number of species found): 5
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.

@@ -100,7 +100,6 @@ contains
 
   subroutine outputPhotoRateCalcParameters( t )
     use zenithData
-    use zenithData1
     implicit none
 
     real(kind=DP), intent(in) :: t

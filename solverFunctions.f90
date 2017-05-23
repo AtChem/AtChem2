@@ -119,7 +119,7 @@ contains!     ---------------------------------------------------------------
     use types_mod
     use storage, only : maxEnvVarNameLength
     use photolysisRates_mod
-    use zenithData1, only : cosX, secX
+    use zenithData, only : cosX, secX
     use envVars, only : ro2, envVarNames, currentEnvVarValues
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod

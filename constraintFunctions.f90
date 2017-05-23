@@ -5,7 +5,7 @@ contains
 
   subroutine calcJFac( t, jfac )
     use types_mod
-    use zenithData1
+    use zenithData
     use photolysisRates_mod
     use constraints
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
@@ -132,14 +132,14 @@ contains
     use storage, only : maxEnvVarNameLength
     use envVars
     use constraints
-    use zenithData1
+    use zenithData
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
     use conversionFunctions_mod
     use utilityFunctions_mod, only : zenith
     implicit none
 
-    real(kind=DP) :: t, theta
+    real(kind=DP) :: t
     real(kind=DP) :: this_env_val
     integer(kind=NPI) :: envVarNum, orderedEnvVarNum
     character(len=maxEnvVarNameLength) :: this_env_var_name, orderedEnvVarNames(size( envVarNames ))
@@ -253,7 +253,7 @@ contains
       select case ( this_env_var_name )
         case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN' )
         case ( 'DEC' )
-          call zenith( t, this_env_val, theta, secx, cosx )
+          call zenith( t, this_env_val )
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop

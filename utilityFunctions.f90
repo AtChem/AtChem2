@@ -28,13 +28,12 @@ contains
     return
   end subroutine atmosphere
 
-  subroutine zenith( ttime, dec, theta, secx, cosx )
+  subroutine zenith( ttime, dec )
     use zenithData
     use SZACalcVars
     implicit none
 
     real(kind=DP), intent(in) :: ttime, dec
-    real(kind=DP), intent(out) :: theta, secx, cosx
     real(kind=DP) :: pi, radian, rampValue
     ! solar declination angle from July 1st - Harwell traj model
 
@@ -46,7 +45,6 @@ contains
     radian = 180.0 / pi
     lat = lat / radian
     ! dec = dec/radian
-    theta = acos( cos( lha ) * cos( dec ) * cos( lat ) + sin( dec ) * sin( lat ) + 1.0D-30 )
     sinld = sin( lat ) * sin( dec )
     cosld = cos( lat ) * cos( dec )
 

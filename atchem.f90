@@ -13,7 +13,6 @@ PROGRAM ATCHEM
   use photolysisRates_mod
   use chemicalConstraints
   use zenithData
-  use zenithData1
   use productionAndLossRates
   use envVars
   use SZACalcVars

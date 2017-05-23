@@ -3,6 +3,7 @@ module configFunctions_mod
 contains
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, &
                                 returnArray, returnArraySize )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use storage, only : maxSpecLength
     implicit none
     ! This takes in masterSpeciesList, and checks whether each member of
@@ -31,7 +32,8 @@ contains
       end do
       ! substitute empty strings for invalid species
       if ( match .eqv. .false. ) then
-        testSpeciesList(i) = ''
+        write (stderr,*) 'matchNameToNumber(): ' // testSpeciesList(i) // ' not found in list.'
+        stop
       end if
     end do
     return

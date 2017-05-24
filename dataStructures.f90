@@ -102,7 +102,6 @@ module chemicalConstraints
   save
 
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-  integer(kind=NPI) :: numberOfConstrainedSpecies
   character(len=maxSpecLength), allocatable :: constrainedNames(:)
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)
 
@@ -126,12 +125,14 @@ contains
 
   ! METHODS FOR numberOfConstrainedSpecies
 
-  subroutine getNumberOfConstrainedSpecies( n )
+  pure function getNumberOfConstrainedSpecies() result ( n )
+    implicit none
     integer(kind=NPI) :: n
     n = numberOfConstrainedSpecies
-  end subroutine getNumberOfConstrainedSpecies
+  end function getNumberOfConstrainedSpecies
 
   subroutine setNumberOfConstrainedSpecies( n )
+    implicit none
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
     allocate (constrainedConcs(n))
@@ -139,17 +140,20 @@ contains
   end subroutine setNumberOfConstrainedSpecies
 
   subroutine deallocateConstrainedSpecies()
+    implicit none
     deallocate (constrainedConcs)
   end subroutine deallocateConstrainedSpecies
 
   ! METHODS FOR constrainedConcs
 
   pure function getConstrainedConcs() result ( r )
+    implicit none
     real(kind=DP) :: r(numberOfConstrainedSpecies)
     r = constrainedConcs(:)
   end function getConstrainedConcs
 
   subroutine setConstrainedConcs( r )
+    implicit none
     real(kind=DP) :: r(:)
     constrainedConcs(:) = r(:)
   end subroutine setConstrainedConcs
@@ -171,31 +175,37 @@ module species
 contains
 
   pure function getNumberOfSpecies() result ( n )
+    implicit none
     integer(kind=NPI) :: n
     n = numSpecies
   end function getNumberOfSpecies
 
   subroutine setNumberOfSpecies( n )
+    implicit none
     integer(kind=NPI) :: n
     numSpecies = n
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
   pure function getNumberOfReactions() result ( n )
+    implicit none
     integer(kind=NPI) :: n
     n = numReactions
   end function getNumberOfReactions
 
   subroutine setNumberOfReactions( n )
+    implicit none
     integer(kind=NPI) :: n
     numReactions = n
   end subroutine setNumberOfReactions
 
   subroutine deallocateSpeciesList
+    implicit none
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
   function getSpeciesList() result ( sl )
+    implicit none
     character(len=maxSpecLength), allocatable :: sl(:)
     allocate (sl(numSpecies) )
     do i = 1, numSpecies
@@ -204,6 +214,7 @@ contains
   end function getSpeciesList
 
   subroutine setSpeciesList( sl )
+    implicit none
     character(len=maxSpecLength) :: sl(:)
     do i = 1, numSpecies
       speciesList(i) = sl(i)
@@ -227,31 +238,37 @@ module interpolationMethod
 contains
 
   pure function getSpeciesInterpMethod() result ( n )
+    implicit none
     integer(kind=SI) :: n
     n = speciesInterpMethod
   end function getSpeciesInterpMethod
 
   subroutine setSpeciesInterpMethod( n )
+    implicit none
     integer(kind=SI) :: n
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
   pure function getConditionsInterpMethod() result ( n )
+    implicit none
     integer(kind=SI) :: n
     n = conditionsInterpMethod
   end function getConditionsInterpMethod
 
   subroutine setConditionsInterpMethod( n )
+    implicit none
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
 
   pure function getDecInterpMethod() result ( n )
+    implicit none
     integer(kind=SI) :: n
     n = decInterpMethod
   end function getDecInterpMethod
 
   subroutine setDecInterpMethod( n )
+    implicit none
     integer(kind=SI) :: n
     decInterpMethod = n
   end subroutine setDecInterpMethod

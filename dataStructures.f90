@@ -122,7 +122,7 @@ module constraints
 
   private :: numberOfConstrainedSpecies, constrainedConcs
   public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies
-  public :: getConstrainedConcs, setConstrainedConc
+  public :: getConstrainedConcs, setConstrainedConcs
 contains
 
   ! METHODS FOR numberOfConstrainedSpecies
@@ -150,11 +150,10 @@ contains
     r = constrainedConcs(:)
   end function getConstrainedConcs
 
-  subroutine setConstrainedConc( n, r )
-    integer(kind=NPI) :: n
-    real(kind=DP) :: r
-    constrainedConcs(n) = r
-  end subroutine setConstrainedConc
+  subroutine setConstrainedConcs( r )
+    real(kind=DP) :: r(:)
+    constrainedConcs(:) = r(:)
+  end subroutine setConstrainedConcs
 end module constraints
 
 module species

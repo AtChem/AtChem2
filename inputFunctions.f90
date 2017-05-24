@@ -643,7 +643,7 @@ contains
     use types_mod
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
-                            setNumberOfConstrainedSpecies, setConstrainedConc
+                            setNumberOfConstrainedSpecies, setConstrainedConcs
     use chemicalConstraints, only : numberOfConstrainedSpecies, constrainedSpecies, constrainedNames, dataX, dataY, dataY2, &
                                     speciesNumberOfPoints, dataFixedY, constrainedConcs
     use directories, only : param_dir, spec_constraints_dir
@@ -655,7 +655,8 @@ contains
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(inout) :: y(:)
-    real(kind=DP) :: concAtT, value
+    real(kind=DP), allocatable :: concAtT(:)
+    real(kind=DP) :: value
     integer(kind=NPI) :: i, j, id, numberOfSpecies, k, dataNumberOfPoints
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     character(len=maxSpecLength) :: name
@@ -800,16 +801,17 @@ contains
 
     ! initialise concentrations of constrained species
     write (*,*) 'Initialising concentrations of constrained species...'
+    allocate (concAtT(numberOfConstrainedSpecies))
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT )
+        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
       else
-        concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
+        concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if
-      constrainedConcs(i) = concAtT
-      call setConstrainedConc( i, concAtT )
-      y(constrainedSpecies(i)) = concAtT
+      y(constrainedSpecies(i)) = concAtT(i)
     end do
+    constrainedConcs(:) = concAtT(:)
+    call setConstrainedConcs( concAtT )
     write (*,*) 'Finished initialising concentrations of constrained species.'
 
     return

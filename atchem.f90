@@ -468,7 +468,7 @@ PROGRAM ATCHEM
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
   call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
-  ! This outputs z, which is y with all the constrained species removed.
+  ! This outputs z, which is speciesConcs with all the constrained species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)

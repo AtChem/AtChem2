@@ -102,7 +102,6 @@ module chemicalConstraints
   save
 
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-  real(kind=DP), allocatable :: constrainedConcs(:)
   integer(kind=NPI) :: numberOfConstrainedSpecies
   character(len=maxSpecLength), allocatable :: constrainedNames(:)
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)

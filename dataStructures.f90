@@ -102,7 +102,6 @@ module chemicalConstraints
   save
 
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
 end module chemicalConstraints
 
@@ -117,6 +116,7 @@ module constraints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
+  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
   private :: numberOfConstrainedSpecies, constrainedConcs, constrainedSpecies
   public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies

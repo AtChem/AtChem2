@@ -28,49 +28,61 @@ contains
   end subroutine readNumberOfSpeciesAndReactions
 
 
-  subroutine getReactantAndProductListSizes()
+  subroutine getAndAllocateReactantAndProductListSizes()
     use types_mod
     use directories, only : param_dir
-    use reactionStructure, only : lhs_size, rhs_size
+    use reactionStructure
     implicit none
 
     ! outputs lhs_size and rhs_size, which hold the number of lines in
     ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
     ! last line
+    integer(kind=NPI) :: lhs_size, rhs_size
     call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
     lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
     call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
     rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.false. )
 
+    allocate (clhs(2, lhs_size), crhs(2, rhs_size), clcoeff(lhs_size), crcoeff(rhs_size))
+
+    write (*, '(A, I0)') ' Size of lhs = ', lhs_size
+    write (*, '(A, I0)') ' Size of rhs = ', rhs_size
+    write (*,*)
     return
-  end subroutine getReactantAndProductListSizes
+  end subroutine getAndAllocateReactantAndProductListSizes
 
 
-  subroutine readReactions( lhs, rhs, coeff )
+  subroutine readReactions( lhs, lcoeff, rhs, rcoeff )
     use types_mod
     use directories, only : param_dir
     implicit none
 
     ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
     integer(kind=NPI), intent(out) :: lhs(:,:), rhs(:,:)
-    real(kind=DP), intent(out) :: coeff(:)
+    real(kind=DP), intent(out) :: lcoeff(:), rcoeff(:)
     integer(kind=NPI) :: k, l, count
     integer(kind=IntErr) :: ierr
 
-    if ( size( lhs, 1 ) /= 3 ) then
-      stop "size( lhs, 1 ) /= 3 in readReactions()."
+    if ( size( lhs, 1 ) /= 2 ) then
+      stop "size( lhs, 1 ) /= 2 in readReactions()."
     end if
     if ( size( rhs, 1 ) /= 2 ) then
       stop "size( rhs, 1 ) /= 2 in readReactions()."
     end if
-    if ( size( coeff ) /= size( rhs, 2 ) ) then
-      stop "size( coeff ) /= size( rhs, 2 ) in readReactions()."
+    if ( size( lcoeff ) /= size( lhs, 2 ) ) then
+      stop "size( lcoeff ) /= size( lhs, 2 ) in readReactions()."
+    end if
+    if ( size( rcoeff ) /= size( rhs, 2 ) ) then
+      stop "size( rcoeff ) /= size( rhs, 2 ) in readReactions()."
     end if
 
     write (*,*) 'Reading reactants (lhs) from mechanism.reac...'
     call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'readReactions()')
     open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
+    ! lhs(1, i) contains the reaction number
+    ! lhs(2, i) contains the species number of the reactant
+    ! lhs(3, i) contains 1 as a constant factor (stoichiometric coefficient)
     count = 0
     read (10,*, iostat=ierr)
     read (10,*, iostat=ierr) k, l
@@ -78,7 +90,7 @@ contains
       count = count + 1
       lhs(1, count) = k
       lhs(2, count) = l
-      lhs(3, count) = 1
+      lcoeff(count) = 1.0
       read (10,*, iostat=ierr) k, l
     end do
     close (10, status='keep')
@@ -87,6 +99,9 @@ contains
     call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'readReactions()')
     open (11, file=trim( param_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
+    ! rhs(1, i) contains the reaction number
+    ! rhs(2, i) contains the species number of the product
+    ! coeff(i) contains 1.0 as a constant factor (stoichiometric coefficient)
     count = 0
     ierr = 0
     read (11,*, iostat=ierr) k, l
@@ -94,7 +109,7 @@ contains
       count = count + 1
       rhs(1, count) = k
       rhs(2, count) = l
-      coeff(count) = 1
+      rcoeff(count) = 1.0
       read (11,*, iostat=ierr) k, l
     end do
     close (11, status='keep')

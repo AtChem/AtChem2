@@ -283,8 +283,7 @@ module reactionStructure
   save
 
   integer(kind=NPI), allocatable :: clhs(:,:), crhs(:,:)
-  integer(kind=NPI) :: lhs_size, rhs_size
-  real(kind=DP), allocatable :: ccoeff(:)
+  real(kind=DP), allocatable :: clcoeff(:), crcoeff(:)
 
 end module reactionStructure
 

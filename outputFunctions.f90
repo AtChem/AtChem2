@@ -171,7 +171,7 @@ contains
     ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
     ! String these together with '+', and append a '='
     numReactants = 0
-    do i = 1, lhs_size
+    do i = 1, size( clhs, 2 )
       if ( clhs(1, i) == reactionNumber ) then
         numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
@@ -192,7 +192,7 @@ contains
     ! String these together with '+', and append this to reactantStr. Save the
     ! result in reaction, which is returned
     numProducts = 0
-    do i = 1, rhs_size
+    do i = 1, size( crhs, 2 )
       if ( crhs(1, i) == reactionNumber ) then
         numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))

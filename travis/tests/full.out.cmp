@@ -5,11 +5,12 @@
  Number of Species   = 5832
  Number of Reactions = 17224
 
+ Size of lhs = 27018
+ Size of rhs = 30225
+
  Reading reactants (lhs) from mechanism.reac...
  Reading products (rhs) from mechanism.prod...
  Finished reading lhs and rhs data.
- Size of lhs = 27018
- Size of rhs = 30225
 
  Reading species names from mechanism.species...
  Finished reading species names.
@@ -153,5 +154,5 @@
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 12
+ Runtime = 22
  Deallocating memory.

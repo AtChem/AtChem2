@@ -208,16 +208,12 @@ PROGRAM ATCHEM
   allocate (lossRates(numReac), productionRates(numReac), ir(numReac))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
-  call getReactantAndProductListSizes()
+  call getAndAllocateReactantAndProductListSizes()
 
-  allocate (clhs(3, lhs_size), crhs(2, rhs_size), ccoeff(rhs_size))
 
   !   READ IN CHEMICAL REACTIONS
-  call readReactions( clhs, crhs, ccoeff )
+  call readReactions( clhs, clcoeff, crhs, crcoeff )
   neq = numSpec
-
-  write (*, '(A, I0)') ' Size of lhs = ', lhs_size
-  write (*, '(A, I0)') ' Size of rhs = ', rhs_size
 
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
@@ -254,7 +250,7 @@ PROGRAM ATCHEM
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, numProdIntSpecies )
   write (*,*) 'Finished reading products of interest.'
 
-  allocate (prodIntSpecies(numProdIntSpecies, rhs_size))
+  allocate (prodIntSpecies(numProdIntSpecies, size( crhs, 2 )))
   allocate (prodIntSpeciesLengths(numProdIntSpecies))
   ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, prodIntName, prodIntSpecies(:, 1) )
@@ -271,7 +267,7 @@ PROGRAM ATCHEM
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, numReacIntSpecies )
   write (*,*) 'Finished reading reactants of interest.'
 
-  allocate (reacIntSpecies(numReacIntSpecies, lhs_size))
+  allocate (reacIntSpecies(numReacIntSpecies, size( clhs, 2 )))
   allocate (reacIntSpeciesLengths(numReacIntSpecies))
   ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, reacIntName, reacIntSpecies(:, 1) )
@@ -678,7 +674,7 @@ PROGRAM ATCHEM
   deallocate (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   deallocate (fy, ir)
   deallocate (lossRates, productionRates)
-  deallocate (clhs, crhs, ccoeff)
+  deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (prodIntSpeciesLengths)
   deallocate (reacIntSpeciesLengths)
   !   deallocate data allocated before in input functions(inputFunctions.f)
@@ -800,7 +796,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
 
-  call resid( numReac, t, z, dy, clhs, crhs, ccoeff )
+  call resid( numReac, t, z, dy, clhs, clcoeff, crhs, crcoeff )
 
   call removeConstrainedSpeciesFromProbSpec( dy, constrainedSpecies, ydot )
 

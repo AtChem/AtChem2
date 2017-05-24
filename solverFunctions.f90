@@ -1,6 +1,6 @@
 module solverFunctions_mod
 contains!     ---------------------------------------------------------------
-  subroutine resid( nr, time, y, dy, lhs, rhs, coeff )
+  subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     ! calculate rhs of rate eqn dy()
     use types_mod
     use productionAndLossRates, only : ir, productionRates, lossRates
@@ -10,19 +10,22 @@ contains!     ---------------------------------------------------------------
     real(kind=DP), intent(in) :: time, y(:) ! concentration array
     real(kind=DP), contiguous, intent(out) :: dy(:) ! array to hold value of rate equations
     integer(kind=NPI), intent(in) :: lhs(:,:), rhs(:,:)
-    real(kind=DP), intent(in) :: coeff(:) ! coeff term of rhs
+    real(kind=DP), intent(in) :: lcoeff(:), rcoeff(:) ! coeff term of rhs
 
     real(kind=DP) :: r(nr) ! working array
     integer(kind=NPI) :: i
 
-    if ( size( lhs, 1 ) /= 3 ) then
-      stop 'size( lhs, 1 ) /= 3 in resid()'
+    if ( size( lhs, 1 ) /= 2 ) then
+      stop 'size( lhs, 1 ) /= 2 in resid()'
     end if
     if ( size( rhs, 1 ) /= 2 ) then
       stop 'size( rhs, 1 ) /= 2 in resid()'
     end if
-    if ( size( rhs, 2 ) /= size( coeff ) ) then
-      stop 'size( rhs, 2 ) /= coeff in resid()'
+    if ( size( lhs, 2 ) /= size( lcoeff ) ) then
+      stop 'size( lhs, 2 ) /= lcoeff in resid()'
+    end if
+    if ( size( rhs, 2 ) /= size( rcoeff ) ) then
+      stop 'size( rhs, 2 ) /= rcoeff in resid()'
     end if
 
     ! set rate eqn to zero
@@ -34,18 +37,18 @@ contains!     ---------------------------------------------------------------
     call mechanism_rates( time, y, r )
 
     do i = 1, size( lhs, 2 )
-      r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lhs(3, i)
+      r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lcoeff(i)
       ir(lhs(1, i)) = r(lhs(1, i))
     end do
 
     do i = 1, size( lhs, 2 )
-      dy(lhs(2, i)) = dy(lhs(2, i)) - lhs(3, i) * r(lhs(1, i))
+      dy(lhs(2, i)) = dy(lhs(2, i)) - lcoeff(i) * r(lhs(1, i))
       lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
     end do
 
     do i = 1, size( rhs, 2 )
-      dy(rhs(2, i)) = dy(rhs(2, i)) + coeff(i) * r(rhs(1, i))
-      productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + coeff(i) * r(rhs(1, i))
+      dy(rhs(2, i)) = dy(rhs(2, i)) + rcoeff(i) * r(rhs(1, i))
+      productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + rcoeff(i) * r(rhs(1, i))
     end do
 
     return
@@ -56,16 +59,15 @@ contains!     ---------------------------------------------------------------
     ! nr = number of reactions
     ! for each species calculate the rhs of the rate equation
     ! for the reactants array
-    ! lhs_size is the number of entries
     ! clhs(1,) = reaction number
     ! clhs(2,) = species number
-    ! clhs(3,) = stoichiometric coefficient
+    ! clcoeff(:) = stoichiometric coefficient
 
     ! for the products array
     ! rhs_size is the number of entries
     ! crhs(1,) = reaction number
     ! crhs(2,) = species number
-    ! ccoeff() = stoichiometric coefficient (double precision)
+    ! crcoeff(:) = stoichiometric coefficient
 
     ! y = concentration array - dimension ny
     ! fy = jacobian array - dimension ny x ny
@@ -73,7 +75,7 @@ contains!     ---------------------------------------------------------------
     ! p = reaction rates - dimension nr
     ! r = working array - dimension nr
     use types_mod
-    use reactionStructure ! access is, crhs, nclhs, rhs_size
+    use reactionStructure ! access crhs, clhs, clcoeff, crcoeff
     implicit none
 
     integer(kind=NPI), intent(in) :: nr
@@ -86,25 +88,25 @@ contains!     ---------------------------------------------------------------
     ! set jacobian matrix to zero
     fy(1:size( y ), 1:size( y )) = 0.0
 
-    ! call routine to get reaction rates in array p
+    ! call routine to get reaction rates in array p. Each element of p corresponds to a single reaction
     call mechanism_rates( t, y, p )
 
     do j = 1, size( y )
       r(1:nr) = 0.0
-      do is = 1, lhs_size
+      do is = 1, size( clhs, 2 )
         if ( clhs(2, is) == j ) then
           r(clhs(1, is)) = p(clhs(1, is))
         end if
       end do
-      do is = 1, lhs_size
+      do is = 1, size( clhs, 2)
         if ( clhs(2, is) == j ) then
-          r(clhs(1, is)) = r(clhs(1, is)) * clhs(3, is) * y(clhs(2, is)) ** ( clhs(3, is) - 1 )
+          r(clhs(1, is)) = r(clhs(1, is)) * clcoeff(is) * y(clhs(2, is)) ** ( clcoeff(is) - 1 )
         else
-          r(clhs(1, is)) = r(clhs(1, is)) * y(clhs(2, is)) ** clhs(3, is)
+          r(clhs(1, is)) = r(clhs(1, is)) * y(clhs(2, is)) ** clcoeff(is)
         end if
       end do
-      fy(clhs(2,:), j) = fy(clhs(2,:), j) - clhs(3,:) * r(clhs(1,:))
-      fy(crhs(2,:), j) = fy(crhs(2,:), j) + ccoeff(:) * r(crhs(1,:))
+      fy(clhs(2,:), j) = fy(clhs(2,:), j) - clcoeff(:) * r(clhs(1,:))
+      fy(crhs(2,:), j) = fy(crhs(2,:), j) + crcoeff(:) * r(crhs(1,:))
     end do
 
     return
@@ -125,6 +127,7 @@ contains!     ---------------------------------------------------------------
     implicit none
 
     ! calculates rate constants from arrhenius information
+    ! output p(:) contains the rate of each reaction
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)

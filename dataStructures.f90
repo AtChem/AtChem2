@@ -118,13 +118,11 @@ module constraints
   integer(kind=NPI) :: numberOfConstrainedSpecies
   integer(kind=QI) :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
-  integer(kind=NPI), allocatable :: constrainedSpecies(:)
   real(kind=DP), allocatable :: constrainedConcs(:)
 
-  private :: numberOfConstrainedSpecies, constrainedSpecies, constrainedConcs
+  private :: numberOfConstrainedSpecies, constrainedConcs
   public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies
   public :: getConstrainedConcs, setConstrainedConc
-  public :: getConstrainedSpecies, setConstrainedSpecies
 contains
 
   ! METHODS FOR numberOfConstrainedSpecies
@@ -137,12 +135,12 @@ contains
   subroutine setNumberOfConstrainedSpecies( n )
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
-    allocate (constrainedSpecies(n), constrainedConcs(n))
+    allocate (constrainedConcs(n))
     write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
 
   subroutine deallocateConstrainedSpecies()
-    deallocate (constrainedSpecies, constrainedConcs)
+    deallocate (constrainedConcs)
   end subroutine deallocateConstrainedSpecies
 
   ! METHODS FOR constrainedConcs
@@ -157,19 +155,6 @@ contains
     real(kind=DP) :: r
     constrainedConcs(n) = r
   end subroutine setConstrainedConc
-
-  ! METHODS FOR constrainedSpecies
-
-  subroutine getConstrainedSpecies( n, j )
-    integer(kind=NPI) :: n, j
-    j = constrainedSpecies(n)
-  end subroutine getConstrainedSpecies
-
-  subroutine setConstrainedSpecies( n, j )
-    integer(kind=NPI) :: n, j
-    constrainedSpecies(n) = j
-  end subroutine setConstrainedSpecies
-
 end module constraints
 
 module species

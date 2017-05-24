@@ -57,31 +57,31 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, x )
-    ! This fills x with the contents of z, plus the contents of constrainedConcs, using
-    ! constrainedSpecies as the key to which species are constrained.
+  subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcentrations, constrainedSpecs, x )
+    ! This fills x with the contents of z, plus the contents of constrainedConcentrations, using
+    ! constrainedSpecs as the key to which species are constrained.
     use types_mod
     implicit none
 
-    real(kind=DP), intent(in) :: z(*), constrainedConcs(:)
-    integer(kind=NPI), intent(in) :: constrainedSpecies(:)
+    real(kind=DP), intent(in) :: z(*), constrainedConcentrations(:)
+    integer(kind=NPI), intent(in) :: constrainedSpecs(:)
     real(kind=DP), intent(out) :: x(:)
     integer(kind=NPI) :: zCounter, i, j, speciesConstrained
 
-    if ( size( constrainedConcs ) /= size( constrainedSpecies ) ) then
-      stop 'size( constrainedConcs ) /= size( constrainedSpecies ) in addConstrainedSpeciesToProbSpec().'
+    if ( size( constrainedConcentrations ) /= size( constrainedSpecs ) ) then
+      stop 'size( constrainedConcentrations ) /= size( constrainedSpecs ) in addConstrainedSpeciesToProbSpec().'
     end if
     zCounter = 1
     do i = 1, size( x )
       speciesConstrained = 0
-      do j = 1, size( constrainedSpecies )
-        if ( i == constrainedSpecies(j) ) then
+      do j = 1, size( constrainedSpecs )
+        if ( i == constrainedSpecs(j) ) then
           speciesConstrained = j
           exit
         end if
       end do
       if ( speciesConstrained > 0 ) then
-        x(i) = constrainedConcs(speciesConstrained)
+        x(i) = constrainedConcentrations(speciesConstrained)
       else if ( speciesConstrained == 0 ) then
         x(i) = z(zCounter)
         zCounter = zCounter + 1
@@ -94,28 +94,28 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecies, z )
+  subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecs, z )
     use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: y(:)
-    integer(kind=NPI), intent(in) :: constrainedSpecies(:)
+    integer(kind=NPI), intent(in) :: constrainedSpecs(:)
     real(kind=DP), intent(inout) :: z(*)
     integer(kind=NPI) :: zCounter, i, k
     logical :: speciesConstrained
 
     zCounter = 1
-    ! loop through y(), check if its items are in constrainedSpecies
+    ! loop through y(), check if its items are in constrainedSpecs
     do i = 1, size( y )
       speciesConstrained = .false.
-      do k = 1, size( constrainedSpecies )
-        if ( i == constrainedSpecies(k) ) then
-          ! exit loop if in constrainedSpecies
+      do k = 1, size( constrainedSpecs )
+        if ( i == constrainedSpecs(k) ) then
+          ! exit loop if in constrainedSpecs
           speciesConstrained = .true.
           exit
         end if
       end do
-      ! if item is not in constrainedSpecies, then add species to z.
+      ! if item is not in constrainedSpecs, then add species to z.
       if ( speciesConstrained .eqv. .false. ) then
         z(zCounter) = y(i)
         zCounter = zCounter + 1

@@ -644,7 +644,7 @@ contains
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
                             setNumberOfConstrainedSpecies, setConstrainedConcs
-    use chemicalConstraints, only : constrainedSpecies, constrainedNames, dataX, dataY, dataY2, &
+    use chemicalConstraints, only : constrainedSpecies, dataX, dataY, dataY2, &
                                     speciesNumberOfPoints, dataFixedY
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
@@ -659,6 +659,7 @@ contains
     real(kind=DP) :: value
     integer(kind=NPI) :: i, j, id, numberOfSpecies, k, dataNumberOfPoints, numberOfConstrainedSpecies
     character(len=maxSpecLength), allocatable :: speciesNames(:)
+    character(len=maxSpecLength), allocatable :: constrainedNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
 

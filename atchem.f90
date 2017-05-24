@@ -371,23 +371,21 @@ PROGRAM ATCHEM
   call setDecInterpMethod( decInterpolationMethod )
   ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT and readEnvVar
   maxNumberOfDataPoints = modelParameters(6)
-  ! Member variable of chemicalConstraints.
-  numberOfConstrainedSpecies = modelParameters(7)
   ! Frequency at which outputRates is called below.
-  ratesOutputStepSize = modelParameters(8)
+  ratesOutputStepSize = modelParameters(7)
   ! Start time of model. Used to set t initially, and to calculate the elapsed time.
-  modelStartTime = modelParameters(9)
+  modelStartTime = modelParameters(8)
   ! Frequency at which output_jfy is called below.
-  jacobianOutputStepSize = modelParameters(10)
+  jacobianOutputStepSize = modelParameters(9)
   ! Member variables of module SZACalcVars
-  latitude = modelParameters(11)
-  longitude = modelParameters(12)
+  latitude = modelParameters(10)
+  longitude = modelParameters(11)
   ! Member variables of module date
-  day = modelParameters(13)
-  month = modelParameters(14)
-  year = modelParameters(15)
+  day = modelParameters(12)
+  month = modelParameters(13)
+  year = modelParameters(14)
   ! Frequency at which to output instantaneous rates
-  irOutStepSize = modelParameters(16)
+  irOutStepSize = modelParameters(15)
 
   ! float format
   300 format (A52, E11.3)
@@ -403,7 +401,6 @@ PROGRAM ATCHEM
   write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
   write (*, 500) 'dec interpolation method: ', adjustl( interpolationMethodName(decInterpolationMethod) )
   write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
-  write (*, 400) 'maximum number of constrained species: ', numberOfConstrainedSpecies
   write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
   write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
   write (*, 300) 'modelStartTime: ', modelStartTime
@@ -461,8 +458,6 @@ PROGRAM ATCHEM
   call readSpeciesConstraints( t, speciesConcs )
 
   write (*,*)
-  !test
-  ! TODO: Why does this not use neq, but neq+numberOfConstrainedSpecies?
   call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
   call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
@@ -470,9 +465,9 @@ PROGRAM ATCHEM
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
-  neq = numSpec - numberOfConstrainedSpecies
+  neq = numSpec - getNumberOfConstrainedSpecies()
   write (*, '(A30, I0) ') ' neq = ', neq
-  write (*, '(A30, I0) ') ' numberOfConstrainedSpecies = ', numberOfConstrainedSpecies
+  write (*, '(A30, I0) ') ' numberOfConstrainedSpecies = ', getNumberOfConstrainedSpecies()
 
   flush(stderr)
 
@@ -760,20 +755,20 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   real(kind=DP), intent(in) :: rpar(*)
   integer(kind=NPI), intent(out) :: ier
 
-  integer(kind=NPI) :: nConSpec, np, numReac
+  integer(kind=NPI) :: numConSpec, np, numReac
   real(kind=DP) :: dummy
   real(kind=DP), allocatable :: dy(:), z(:), constrainedConcs(:)
   integer(kind=NPI) :: i
 
-  np = ipar(1) + numberOfConstrainedSpecies
+  numConSpec = getNumberOfConstrainedSpecies()
+  np = ipar(1) + numConSpec
   numReac = ipar(2)
   dummy = rpar(1)
 
-  nConSpec = numberOfConstrainedSpecies
-  allocate (dy(np), z(np), constrainedConcs(numberOfConstrainedSpecies))
+  allocate (dy(np), z(np), constrainedConcs(numConSpec))
 
   ! for each constrained species...
-  do i = 1, numberOfConstrainedSpecies
+  do i = 1, numConSpec
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
       call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), &

@@ -643,8 +643,8 @@ contains
     use types_mod
     use species
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
-                            setNumberOfConstrainedSpecies, setConstrainedConcs
-    use chemicalConstraints, only : constrainedSpecies, dataX, dataY, dataY2, &
+                            setNumberOfConstrainedSpecies, setConstrainedConcs, setConstrainedSpecies, getOneConstrainedSpecies
+    use chemicalConstraints, only : dataX, dataY, dataY2, &
                                     speciesNumberOfPoints, dataFixedY
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
@@ -658,12 +658,11 @@ contains
     real(kind=DP), allocatable :: concAtT(:)
     real(kind=DP) :: value
     integer(kind=NPI) :: i, j, id, numberOfSpecies, k, dataNumberOfPoints, numberOfConstrainedSpecies
-    character(len=maxSpecLength), allocatable :: speciesNames(:)
-    character(len=maxSpecLength), allocatable :: constrainedNames(:)
+    character(len=maxSpecLength), allocatable :: speciesNames(:), constrainedNames(:)
     character(len=maxSpecLength) :: name
     character(len=maxFilepathLength+maxSpecLength) :: fileLocation
 
-    speciesNames =  getSpeciesList()
+    speciesNames = getSpeciesList()
 
     ! read in number of variable-concentration constrained species
     write (*,*) 'Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
@@ -678,7 +677,8 @@ contains
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    allocate (constrainedSpecies(numberOfConstrainedSpecies), constrainedNames(numberOfConstrainedSpecies) )
+    allocate (constrainedNames(numberOfConstrainedSpecies) )
+    call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     ! fill constrainedNames and constrainedSpecies with the names and numbers of variable-concentration constrained species
     if ( numberOfVariableConstrainedSpecies > 0 ) then
@@ -687,7 +687,7 @@ contains
       do i = 1, numberOfVariableConstrainedSpecies
         id = getIndexWithinList( speciesNames, constrainedNames(i) )
         if ( id /= 0 ) then
-          constrainedSpecies(i) = id
+          call setConstrainedSpecies( i, id )
         else
           write (stderr, '(A, I0, A)') 'Supplied constrained species ', constrainedNames(i), ' is not a species in the problem.'
           stop
@@ -763,7 +763,7 @@ contains
         j = j+1
         constrainedNames(j + numberOfVariableConstrainedSpecies) = name
         dataFixedY(j) = value
-        constrainedSpecies(j + numberOfVariableConstrainedSpecies) = id
+        call setConstrainedSpecies( j + numberOfVariableConstrainedSpecies, id )
       end if
     end do
     close (14, status='keep')
@@ -794,8 +794,6 @@ contains
       stop 2
     end if
 
-    call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
-
     write (*,*) 'Finished reading constrained species.'
 
     ! initialise concentrations of constrained species
@@ -807,7 +805,7 @@ contains
       else
         concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if
-      y(constrainedSpecies(i)) = concAtT(i)
+      y(getOneConstrainedSpecies(i)) = concAtT(i)
     end do
     call setConstrainedConcs( concAtT )
     write (*,*) 'Finished initialising concentrations of constrained species.'

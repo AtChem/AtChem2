@@ -462,7 +462,7 @@ PROGRAM ATCHEM
   call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is speciesConcs with all the constrained species removed.
-  call removeConstrainedSpeciesFromProbSpec( speciesConcs, constrainedSpecies, z )
+  call removeConstrainedSpeciesFromProbSpec( speciesConcs, getConstrainedSpecies(), z )
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - getNumberOfConstrainedSpecies()
@@ -571,7 +571,7 @@ PROGRAM ATCHEM
     write (*, '(A, I0)') ' time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-    call addConstrainedSpeciesToProbSpec( z, getConstrainedConcs(), constrainedSpecies, speciesConcs )
+    call addConstrainedSpeciesToProbSpec( z, getConstrainedConcs(), getConstrainedSpecies(), speciesConcs )
 
     ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     elapsed = int( t-modelStartTime )
@@ -667,12 +667,13 @@ PROGRAM ATCHEM
   deallocate (reacIntSpeciesLengths)
   !   deallocate data allocated before in input functions(inputFunctions.f)
   !   deallocate arrays from module constraints
+  call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
   !   deallocate arrays from module species
   call deallocateSpeciesList
   !   deallocate arrays from module chemicalConstraints
   deallocate (dataX, dataY, dataY2, dataFixedY)
-  deallocate (speciesNumberOfPoints, constrainedSpecies)
+  deallocate (speciesNumberOfPoints)
   !   deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
   deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
@@ -780,11 +781,11 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   call setConstrainedConcs( constrainedConcs )
 
-  call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
+  call addConstrainedSpeciesToProbSpec( y, constrainedConcs, getConstrainedSpecies(), z )
 
   call resid( numReac, t, z, dy, clhs, clcoeff, crhs, crcoeff )
 
-  call removeConstrainedSpeciesFromProbSpec( dy, constrainedSpecies, ydot )
+  call removeConstrainedSpeciesFromProbSpec( dy, getConstrainedSpecies(), ydot )
 
   deallocate (dy, z)
   ier = 0

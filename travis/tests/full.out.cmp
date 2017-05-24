@@ -29,18 +29,18 @@
  Number of photolysis rates: 35
 
  Reading JFacSpecies...
- JFacSpecies =
+ JFacSpecies = 
  Finished reading JFacSpecies.
 
  Reading products of interest...
-      1 OH
-      2 HO2
+      1 OH        
+      2 HO2       
  Finished reading products of interest.
  products of interest (number of species found): 2
 
  Reading reactants of interest...
-      1 OH
-      2 HO2
+      1 OH        
+      2 HO2       
  Finished reading reactants of interest.
  reactants of interest (number of species found): 2
 
@@ -60,16 +60,16 @@
          maxStep:   1.000E+02
  preconBandUpper:         750
  preconBandLower:         750
-      solverType: SPGMR + Banded Preconditioner
+      solverType: SPGMR + Banded Preconditioner 
  ------------------
 
  Model parameters:
  -----------------
                                    number of steps:           5
                                step size (seconds):   0.900E+03
-                      species interpolation method: piecewise linear
-                   conditions interpolation method: piecewise linear
-                          dec interpolation method: piecewise linear
+                      species interpolation method: piecewise linear 
+                   conditions interpolation method: piecewise linear 
+                          dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:       10000
                                ratesOutputStepSize:        3600
               instantaneous rates output step size:         900
@@ -100,8 +100,8 @@
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 2 species:
-      1 NO2
-      2 HO2NO2
+      1 NO2       
+      2 HO2NO2    
 
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
@@ -122,6 +122,7 @@
  Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...
  Finished counting the names of fixed-concentration constrained species.
  Number of names of fixed-concentration constrained species: 0
+ Setting size of constraint arrays, n = 0
  Skipped reading the names of variable-concentration constrained species
  maxNumberOfDataPoints: 10000
  Allocating storage for variable-concentration constrained species...
@@ -129,7 +130,6 @@
  Reading concentration data for variable-concentration constrained species...
  Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...
  Finished reading in the names and concentration of fixed-concentration species.
- Setting size of constraint arrays, n = 0
  Finished reading constrained species.
  Initialising concentrations of constrained species...
  Finished initialising concentrations of constrained species.
@@ -153,5 +153,5 @@
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 22
+ Runtime = 14
  Deallocating memory.

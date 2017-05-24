@@ -102,7 +102,7 @@ module chemicalConstraints
   save
 
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:), constrainedSpecies(:)
+  integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
 end module chemicalConstraints
 
@@ -116,10 +116,12 @@ module constraints
   integer(kind=QI) :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
+  integer(kind=NPI), allocatable :: constrainedSpecies(:)
 
-  private :: numberOfConstrainedSpecies, constrainedConcs
-  public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies
-  public :: getConstrainedConcs, setConstrainedConcs
+  private :: numberOfConstrainedSpecies, constrainedConcs, constrainedSpecies
+  public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies
+  public :: getConstrainedConcs, setConstrainedConcs, deallocateConstrainedConcs
+  public :: getConstrainedSpecies, setConstrainedSpecies, deallocateConstrainedSpecies, getOneConstrainedSpecies
 contains
 
   ! METHODS FOR numberOfConstrainedSpecies
@@ -134,14 +136,9 @@ contains
     implicit none
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
-    allocate (constrainedConcs(n))
+    allocate (constrainedConcs(n), constrainedSpecies(n))
     write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
-
-  subroutine deallocateConstrainedSpecies()
-    implicit none
-    deallocate (constrainedConcs)
-  end subroutine deallocateConstrainedSpecies
 
   ! METHODS FOR constrainedConcs
 
@@ -156,6 +153,35 @@ contains
     real(kind=DP) :: r(:)
     constrainedConcs(:) = r(:)
   end subroutine setConstrainedConcs
+
+  subroutine deallocateConstrainedConcs()
+    implicit none
+    deallocate (constrainedConcs)
+  end subroutine deallocateConstrainedConcs
+
+  pure function getConstrainedSpecies() result ( r )
+    implicit none
+    integer(kind=NPI) :: r(numberOfConstrainedSpecies)
+    r = constrainedSpecies(:)
+  end function getConstrainedSpecies
+
+  pure function getOneConstrainedSpecies( i ) result ( r )
+    implicit none
+    integer(kind=NPI), intent(in) :: i
+    integer(kind=NPI) :: r
+    r = constrainedSpecies(i)
+  end function getOneConstrainedSpecies
+
+  subroutine setConstrainedSpecies( n, r )
+    implicit none
+    integer(kind=NPI) :: n, r
+    constrainedSpecies(n) = r
+  end subroutine setConstrainedSpecies
+
+  subroutine deallocateConstrainedSpecies()
+    implicit none
+    deallocate (constrainedSpecies)
+  end subroutine deallocateConstrainedSpecies
 end module constraints
 
 module species

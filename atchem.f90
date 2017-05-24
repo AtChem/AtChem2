@@ -576,9 +576,7 @@ PROGRAM ATCHEM
     write (*, '(A, I0)') ' time = ', time
 
     ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
-    constrainedConcs = getConstrainedConcs()
-
-    call addConstrainedSpeciesToProbSpec( z, constrainedConcs, constrainedSpecies, speciesConcs )
+    call addConstrainedSpeciesToProbSpec( z, getConstrainedConcs(), constrainedSpecies, speciesConcs )
 
     ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
     elapsed = int( t-modelStartTime )
@@ -678,7 +676,7 @@ PROGRAM ATCHEM
   !   deallocate arrays from module species
   call deallocateSpeciesList
   !   deallocate arrays from module chemicalConstraints
-  deallocate (dataX, dataY, dataY2, dataFixedY, constrainedConcs, constrainedNames)
+  deallocate (dataX, dataY, dataY2, dataFixedY, constrainedNames)
   deallocate (speciesNumberOfPoints, constrainedSpecies)
   !   deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
@@ -764,7 +762,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   integer(kind=NPI) :: nConSpec, np, numReac
   real(kind=DP) :: dummy
-  real(kind=DP), allocatable :: dy(:), z(:), concAtT(:)
+  real(kind=DP), allocatable :: dy(:), z(:), constrainedConcs(:)
   integer(kind=NPI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
@@ -772,20 +770,20 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   dummy = rpar(1)
 
   nConSpec = numberOfConstrainedSpecies
-  allocate (dy(np), z(np), concAtT(numberOfConstrainedSpecies))
+  allocate (dy(np), z(np), constrainedConcs(numberOfConstrainedSpecies))
 
   ! for each constrained species...
   do i = 1, numberOfConstrainedSpecies
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
+      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), &
+                                   getSpeciesInterpMethod(), i, constrainedConcs(i) )
     else
-      concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
+      constrainedConcs(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if
   end do
-  constrainedConcs(:) = concAtT(:)
 
-  call setConstrainedConcs( concAtT )
+  call setConstrainedConcs( constrainedConcs )
 
   call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
 

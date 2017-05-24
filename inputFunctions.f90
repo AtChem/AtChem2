@@ -645,7 +645,7 @@ contains
     use constraints, only : maxNumberOfDataPoints, numberOfVariableConstrainedSpecies, numberOfFixedConstrainedSpecies, &
                             setNumberOfConstrainedSpecies, setConstrainedConcs
     use chemicalConstraints, only : numberOfConstrainedSpecies, constrainedSpecies, constrainedNames, dataX, dataY, dataY2, &
-                                    speciesNumberOfPoints, dataFixedY, constrainedConcs
+                                    speciesNumberOfPoints, dataFixedY
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : getIndexWithinList
@@ -793,8 +793,6 @@ contains
       stop 2
     end if
 
-    allocate (constrainedConcs(numberOfConstrainedSpecies) )
-
     call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     write (*,*) 'Finished reading constrained species.'
@@ -810,7 +808,6 @@ contains
       end if
       y(constrainedSpecies(i)) = concAtT(i)
     end do
-    constrainedConcs(:) = concAtT(:)
     call setConstrainedConcs( concAtT )
     write (*,*) 'Finished initialising concentrations of constrained species.'
 

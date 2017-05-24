@@ -123,7 +123,8 @@ module constraints
 
   private :: numberOfConstrainedSpecies, constrainedSpecies, constrainedConcs
   public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies, deallocateConstrainedSpecies
-
+  public :: getConstrainedConcs, setConstrainedConc
+  public :: getConstrainedSpecies, setConstrainedSpecies
 contains
 
   ! METHODS FOR numberOfConstrainedSpecies

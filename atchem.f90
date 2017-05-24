@@ -763,8 +763,8 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   integer(kind=NPI), intent(out) :: ier
 
   integer(kind=NPI) :: nConSpec, np, numReac
-  real(kind=DP) :: concAtT, dummy
-  real(kind=DP), allocatable :: dy(:), z(:)
+  real(kind=DP) :: dummy
+  real(kind=DP), allocatable :: dy(:), z(:), concAtT(:)
   integer(kind=NPI) :: i
 
   np = ipar(1) + numberOfConstrainedSpecies
@@ -772,20 +772,20 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   dummy = rpar(1)
 
   nConSpec = numberOfConstrainedSpecies
-  allocate (dy(np), z(np))
+  allocate (dy(np), z(np), concAtT(numberOfConstrainedSpecies))
 
   ! for each constrained species...
   do i = 1, numberOfConstrainedSpecies
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT )
+      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
     else
-      concAtT = dataFixedY(i - numberOfVariableConstrainedSpecies)
+      concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if
-    constrainedConcs(i) = concAtT
-    call setConstrainedConc( i, concAtT )
-
   end do
+  constrainedConcs(:) = concAtT(:)
+
+  call setConstrainedConcs( concAtT )
 
   call addConstrainedSpeciesToProbSpec( y, constrainedConcs, constrainedSpecies, z )
 

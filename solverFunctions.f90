@@ -138,7 +138,7 @@ contains!     ---------------------------------------------------------------
 
     include 'mechanism-rate-declarations.f90'
 
-    call ro2sum( ro2, y )
+    ro2 = ro2sum( y )
     dummy = y(1)
 
     dec = -1e16

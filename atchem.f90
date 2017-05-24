@@ -611,7 +611,7 @@ PROGRAM ATCHEM
     call outputStepSize( t, rout (3), rout (2) )
 
     !OUTPUT ENVVAR VALUES
-    call ro2sum( ro2, speciesConcs )
+    ro2 = ro2sum( speciesConcs )
     call outputEnvVar( t )
 
     ! CALCULATE AND OUTPUT RUNTIME

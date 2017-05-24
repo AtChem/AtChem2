@@ -8,3 +8,4 @@ makefile.*
 mechanism.prod
 mechanism.reac
 mechanism.species
+ro2_rates.f90

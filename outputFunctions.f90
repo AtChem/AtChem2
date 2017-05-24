@@ -1,16 +1,16 @@
 module outputFunctions_mod
   use types_mod
 contains
-  subroutine ro2Sum( ro2, y )
+  pure function ro2Sum( y ) result ( ro2 )
     implicit none
 
-    real(kind=DP) :: ro2
     real(kind=DP), intent(in) :: y(*)
+    real(kind=DP) :: ro2
 
-    ro2 = 0.00e+00
+    include 'ro2_rates.f90'
 
     return
-  end subroutine ro2Sum
+  end function ro2Sum
 
 
   subroutine outputEnvVar( t )

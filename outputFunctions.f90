@@ -34,61 +34,36 @@ contains
   end subroutine outputEnvVar
 
 
-  subroutine outputStepSize( t, prev, this )
-    use envVars
-    implicit none
-
-    real(kind=DP), intent(in) :: t, prev, this
-    logical :: first_time = .true.
-
-    if ( first_time .eqv. .true. ) then
-      write (62, '(3A17) ') 't', 'currentStepSize', 'previousStepSize'
-      first_time = .false.
-    end if
-
-    write (62, '(3 (1P e17.3)) ') t, prev, this
-
-    return
-  end subroutine outputStepSize
-
-
-  subroutine outputSolverParameters( t, array, solver_type )
+  subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
-    real(kind=DP), intent(in) :: t
+    real(kind=DP), intent(in) :: t, prev, this
     integer(kind=NPI), intent(in) :: array(:)
     integer, intent(in) :: solver_type
     integer(kind=SI) :: i
     logical :: first_time = .true.
 
-    if ( first_time .eqv. .true. ) then
-      ! OUTPUT FOR CVODE MAIN SOLVER
-      write (57, '(13A9) ') 't', 'LENRW', 'LENIW', 'NST', 'NFE', 'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR'
-      ! OUTPUT FOR SPARSE SOLVER
-      if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
-        ! CVSPILS type solver
-        write (61, '(10A9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
-      else if ( solver_type == 3 ) then
-        ! CVDLS type solver
-        write (61, '(6A9) ') 't', 'LENRWLS', 'LENIWLS', 'LS_FLAG', 'NFELS', 'NJE'
-      else
-        write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
-        write (stderr,*) 'Available options are 1, 2, 3.'
-        stop
-      end if
-      first_time = .false.
-    end if
-
-    ! OUTPUT FOR MAIN SOLVER
-    write (57, '(1P e11.3, 11I9) ') t, (array(i), i = 1, 11)
-    ! OUTPUT FOR SPARSE SOLVER
     if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
       ! CVSPILS type solver
-      write (61, '(1P e11.3, 9I9) ') t, (array(i), i = 13, 21)
+      if ( first_time .eqv. .true. ) then
+        write (57, '(A9, 2A17, 20A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
+                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
+                                        'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
+        first_time = .false.
+      end if
+      write (57, '(1P e9.3, 2 (1P e17.3), 20I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 21)
+
     else if ( solver_type == 3 ) then
       ! CVDLS type solver
-      write (61, '(1P e1.3, 5I9) ') t, (array(i), i = 13, 17)
+      if ( first_time .eqv. .true. ) then
+        write (57, '(A9, 2A17, 16A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
+                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
+                                        'LS_FLAG', 'NFELS', 'NJE'
+        first_time = .false.
+      end if
+      write (57, '(1P e9.3, 2 (1P e17.3), 16I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 17)
+
     else
       write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
       write (stderr,*) 'Available options are 1, 2, 3.'

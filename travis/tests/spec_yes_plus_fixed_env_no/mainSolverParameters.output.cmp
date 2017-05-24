@@ -1,5 +1,5 @@
-        t    LENRW    LENIW      NST      NFE     NETF     NCFN      NNI  NSETUPS       QU     QCUR      NOR
-  9.000E+02      339       50       79      100        2        0       99       31        4        4        0
-  1.800E+03      339       50       93      123        4        0      122       34        4        4        0
-  2.700E+03      339       50      127      177       10        0      176       47        5        5        0
-  3.600E+03      339       50      162      227       14        0      226       54        3        3        0
+        t  currentStepSize previousStepSize    LENRW    LENIW      NST      NFE     NETF     NCFN      NNI  NSETUPS       QU     QCUR      NOR  LENRWLS  LENIWLS  LS_FLAG    NFELS     NJTV      NPE      NPS      NLI     NCFL
+9.000E+02        5.576E+01        5.576E+01      339       50       79      100        2        0       99       31        4        4        0    13026      105        0      156      156        2      243      156        0
+1.800E+03        5.682E+01        3.695E+01      339       50       93      123        4        0      122       34        4        4        0    13026      105        0      209      209        2      318      209        0
+2.700E+03        3.088E+01        3.088E+01      339       50      127      177       10        0      176       47        5        5        0    13026      105        0      310      310        3      469      310        0
+3.600E+03        2.005E+01        2.005E+01      339       50      162      227       14        0      226       54        3        3        0    13026      105        0      427      427        4      636      427        0

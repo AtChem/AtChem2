@@ -191,8 +191,6 @@ PROGRAM ATCHEM
   open (unit=58, file=trim( output_dir ) // "/photolysisRates.output")
   open (unit=59, file=trim( output_dir ) // "/photoRateCalcParameters.output")
   open (unit=60, file=trim( output_dir ) // "/productionRates.output")
-  open (unit=61, file=trim( output_dir ) // "/sparseSolverParameters.output")
-  open (unit=62, file=trim( output_dir ) // "/stepSize.output")
   flush(6)
 
   call readNumberOfSpeciesAndReactions()
@@ -604,11 +602,8 @@ PROGRAM ATCHEM
       call outputInstantaneousRates( time )
     end if
 
-    ! OUTPUT FOR CVODE MAIN SOLVER
-    call outputSolverParameters( t, iout, solverType )
-
-    ! OUTPUT STEP SIZE
-    call outputStepSize( t, rout (3), rout (2) )
+    ! output for CVODE solver parameters and timestep sizes
+    call outputSolverParameters( t, rout(3), rout(2), iout, solverType )
 
     !OUTPUT ENVVAR VALUES
     ro2 = ro2sum( speciesConcs )
@@ -702,8 +697,6 @@ PROGRAM ATCHEM
   close (58)
   close (59)
   close (60)
-  close (61)
-  close (62)
 
   stop
 END PROGRAM ATCHEM

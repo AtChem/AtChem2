@@ -174,9 +174,9 @@ PROGRAM ATCHEM
     env_constraints_dir = "environmentConstraints"
   end if
 
-  write (*,*) 'Output dir is ', trim( output_dir )
-  write (*,*) 'Instantaneous rates dir is ', trim( instantaneousRates_dir )
-  write (*,*) 'Parameter dir is ', trim( param_dir )
+  write (*, '(2A)') ' Output dir is ', trim( output_dir )
+  write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
+  write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
   !   OPEN FILES FOR OUTPUT
   open (unit=50, file=trim( output_dir ) // "/concentration.output")
   open (unit=51, file=trim( output_dir ) // "/errors.output")
@@ -213,9 +213,9 @@ PROGRAM ATCHEM
 
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
-  write (*,*) 'Reading species names from mechanism.species...'
+  write (*, '(A)') ' Reading species names from mechanism.species...'
   call readSpecies( speciesNames )
-  write (*,*) 'Finished reading species names.'
+  write (*, '(A)') ' Finished reading species names.'
   write (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
@@ -242,9 +242,9 @@ PROGRAM ATCHEM
   write (*,*)
 
   ! Read in product species of interest, and set up variables to hold these
-  write (*,*) 'Reading products of interest...'
+  write (*, '(A)') ' Reading products of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, numProdIntSpecies )
-  write (*,*) 'Finished reading products of interest.'
+  write (*, '(A)') ' Finished reading products of interest.'
 
   allocate (prodIntSpecies(numProdIntSpecies, size( crhs, 2 )))
   allocate (prodIntSpeciesLengths(numProdIntSpecies))
@@ -259,9 +259,9 @@ PROGRAM ATCHEM
   write (*,*)
 
   ! Read in reactant species of interest, and set up variables to hold these
-  write (*,*) 'Reading reactants of interest...'
+  write (*, '(A)') ' Reading reactants of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, numReacIntSpecies )
-  write (*,*) 'Finished reading reactants of interest.'
+  write (*, '(A)') ' Finished reading reactants of interest.'
 
   allocate (reacIntSpecies(numReacIntSpecies, size( clhs, 2 )))
   allocate (reacIntSpeciesLengths(numReacIntSpecies))
@@ -278,17 +278,17 @@ PROGRAM ATCHEM
 
   !    READ IN SOLVER PARAMETERS
   allocate(tempForSolverParameters(100))
-  write (*,*) 'Reading solver parameters from file...'
+  write (*, '(A)') ' Reading solver parameters from file...'
   call getParametersFromFile( trim( param_dir ) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
-  write (*,*) 'Finished reading solver parameters from file.'
+  write (*, '(A)') ' Finished reading solver parameters from file.'
   allocate (solverParameters(solverParameterSize))
   solverParameters(:) = tempForSolverParameters(1:solverParameterSize)
   deallocate(tempForSolverParameters)
   !   READ IN MODEL PARAMETERS
   allocate(tempForModelParameters(100))
-  write (*,*) 'Reading model parameters from file...'
+  write (*, '(A)') ' Reading model parameters from file...'
   call getParametersFromFile( trim( param_dir ) //  "/model.parameters", tempForModelParameters, modelParameterSize )
-  write (*,*) 'Finished reading model parameters from file.'
+  write (*, '(A)') ' Finished reading model parameters from file.'
   allocate (modelParameters(modelParameterSize))
   modelParameters(:) = tempForModelParameters(1:modelParameterSize)
   deallocate (tempForModelParameters)
@@ -331,8 +331,8 @@ PROGRAM ATCHEM
   100 format (A18, 1P E11.3)
   ! integer format
   200 format (A18, I11)
-  write (*,*) 'Solver parameters:'
-  write (*,*) '------------------'
+  write (*, '(A)') ' Solver parameters:'
+  write (*, '(A)') ' ------------------'
   write (*, 100) 'atol: ', atol
   write (*, 100) 'rtol: ', rtol
   write (*, 200) 'JacVApprox: ', JvApprox
@@ -343,7 +343,7 @@ PROGRAM ATCHEM
   write (*, 200) 'preconBandUpper: ', preconBandUpper
   write (*, 200) 'preconBandLower: ', preconBandLower
   write (*, '(A18, A)') 'solverType: ', adjustl( solverTypeName(solverType) )
-  write (*,*) '------------------'
+  write (*, '(A)') ' ------------------'
   write (*,*)
 
   !   SET MODEL PARAMETERS
@@ -391,8 +391,8 @@ PROGRAM ATCHEM
   400 format (A52, I11)
   ! string format
   500 format (A52, A17)
-  write (*,*) 'Model parameters:'
-  write (*,*) '-----------------'
+  write (*, '(A)') ' Model parameters:'
+  write (*, '(A)') ' -----------------'
   write (*, 400) 'number of steps: ', maxNumTimesteps
   write (*, 300) 'step size (seconds): ', timestepSize
   write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
@@ -406,7 +406,7 @@ PROGRAM ATCHEM
   write (*, 300) 'latitude: ', latitude
   write (*, 300) 'longitude: ', longitude
   write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', day, '/', month, '/', year
-  write (*,*) '-----------------'
+  write (*, '(A)') ' -----------------'
   write (*,*)
 
   ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year
@@ -561,7 +561,7 @@ PROGRAM ATCHEM
     ! GET CONCENTRATIONS FOR SOLVED SPECIES
     call FCVODE( tout, t, z, itask, ier )
     if ( ier /= 0 ) then
-      write (*,*) 'ier POST FCVODE()= ', ier
+      write (*, '(A, I0)') ' ier POST FCVODE()= ', ier
     end if
     flush(6)
 
@@ -599,14 +599,6 @@ PROGRAM ATCHEM
     !OUTPUT ENVVAR VALUES
     ro2 = ro2sum( speciesConcs )
     call outputEnvVar( t )
-
-    ! CALCULATE AND OUTPUT RUNTIME
-    ! not using timing at the moment
-    ! CALL system_clock(current, rate)
-    ! currentSeconds =(current - runStart) / rate
-    ! stepTime = currentSeconds - previousSeconds
-    ! WRITE (*,*) 'Current time = ', currentSeconds, 'step time = ', stepTime
-    ! previousSeconds = currentSeconds
 
     ! ERROR HANDLING
     if ( ier < 0 ) then
@@ -651,7 +643,7 @@ PROGRAM ATCHEM
   write (*, '(A, I0)') ' Runtime = ', runTime
 
   !   deallocate all
-  write (*,*) 'Deallocating memory.'
+  write (*, '(A)') ' Deallocating memory.'
   !   deallocate CVODE internal data
 
   call FCVFREE()

@@ -54,7 +54,7 @@ contains
           end if
         end do
         if ( fac_int_found .eqv. .false. ) then
-          write (*,*) 'error in piecewise constant interpolation'
+          write (*, '(A)') ' error in piecewise constant interpolation'
           write (*,*) t, dataNumberOfPoints, concAtT
           concAtT = y(ind, dataNumberOfPoints)
         end if
@@ -71,7 +71,7 @@ contains
         end do
         if ( lin_int_suc .eqv. .false. ) then
           concAtT = y(ind, dataNumberOfPoints)
-          write (*,*) 'Failed to lin int'
+          write (*, '(A)') ' Failed to lin int'
         else
           ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
           xBefore = x(ind, indexBefore)

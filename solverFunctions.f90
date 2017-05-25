@@ -80,7 +80,7 @@ contains!     ---------------------------------------------------------------
 
     integer(kind=NPI), intent(in) :: nr
     real(kind=DP), intent(in) :: y(:), t
-    real(kind=DP) :: fy(size( y ),size( y ))
+    real(kind=DP) :: fy(size( y ), size( y ))
     integer(kind=NPI) :: i, j
     real(kind=DP) :: p(nr), r(nr)
 
@@ -109,8 +109,8 @@ contains!     ---------------------------------------------------------------
     end do
 
     ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
-    do i = 1, size( fy, 1)
-      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
+    do i = 1, size( fy, 1 )
+      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1 ))
     end do
     write (55,*) '---------------'
 

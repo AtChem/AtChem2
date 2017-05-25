@@ -1,5 +1,47 @@
 module inputFunctions_mod
 contains
+
+  subroutine get_and_set_directories_from_command_arguments()
+    use types_mod
+    use directories
+    implicit none
+
+    integer(kind=QI) :: cmd_arg_count
+
+    ! Read in command line argument to direct output files to a given directory
+    cmd_arg_count = command_argument_count()
+    if ( cmd_arg_count > 0 ) then
+      call get_command_argument( 1, output_dir )
+    else
+      output_dir = "modelOutput"
+    end if
+    if ( cmd_arg_count > 1 ) then
+      call get_command_argument( 2, instantaneousRates_dir )
+    else
+      instantaneousRates_dir = "instantaneousRates"
+    end if
+    if ( cmd_arg_count > 2 ) then
+      call get_command_argument( 3, param_dir )
+    else
+      param_dir = "modelConfiguration"
+    end if
+    if ( cmd_arg_count > 3 ) then
+      call get_command_argument( 4, spec_constraints_dir )
+    else
+      spec_constraints_dir = "speciesConstraints"
+    end if
+    if ( cmd_arg_count > 4 ) then
+      call get_command_argument( 5, env_constraints_dir )
+    else
+      env_constraints_dir = "environmentConstraints"
+    end if
+
+    write (*, '(2A)') ' Output dir is ', trim( output_dir )
+    write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
+    write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
+  end subroutine get_and_set_directories_from_command_arguments
+
+
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
     use directories, only : param_dir

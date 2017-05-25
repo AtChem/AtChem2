@@ -16,7 +16,7 @@ PROGRAM ATCHEM
   use envVars
   use SZACalcVars
   use date
-  use directories, only : output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
+  use directories, only : output_dir, param_dir
   use storage, only : maxSpecLength, maxPhotoRateNameLength
   use inputFunctions_mod
   use configFunctions_mod
@@ -83,8 +83,6 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR IR OUTPUT
   integer :: irOutStepSize
 
-  integer(kind=QI) :: cmd_arg_count
-
   character(len=30) :: solverTypeName(3)
   character(len=20) :: interpolationMethodName(2)
 
@@ -144,38 +142,9 @@ PROGRAM ATCHEM
   call SYSTEM_CLOCK( runStart )
   previousSeconds = 0
 
-  ! Read in command line argument to direct output files to a given directory
-  cmd_arg_count = command_argument_count()
-  if ( cmd_arg_count > 0 ) then
-    call get_command_argument( 1, output_dir )
-  else
-    output_dir = "modelOutput"
-  end if
-  if ( cmd_arg_count > 1 ) then
-    call get_command_argument( 2, instantaneousRates_dir )
-  else
-    instantaneousRates_dir = "instantaneousRates"
-  end if
-  if ( cmd_arg_count > 2 ) then
-    call get_command_argument( 3, param_dir )
-  else
-    param_dir = "modelConfiguration"
-  end if
-  if ( cmd_arg_count > 3 ) then
-    call get_command_argument( 4, spec_constraints_dir )
-  else
-    spec_constraints_dir = "speciesConstraints"
-  end if
-  if ( cmd_arg_count > 4 ) then
-    call get_command_argument( 5, env_constraints_dir )
-  else
-    env_constraints_dir = "environmentConstraints"
-  end if
+  call get_and_set_directories_from_command_arguments()
 
-  write (*, '(2A)') ' Output dir is ', trim( output_dir )
-  write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
-  write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
-  !   OPEN FILES FOR OUTPUT
+  ! Open files for output
   open (unit=50, file=trim( output_dir ) // "/concentration.output")
   open (unit=51, file=trim( output_dir ) // "/errors.output")
   open (unit=52, file=trim( output_dir ) // "/envVar.output")

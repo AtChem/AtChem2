@@ -32,19 +32,9 @@ contains
       stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT()'
     end if
 
-    ! CUBIC SPLINE INTERPOLATION
     select case ( interpMethod )
+      ! PIECEWISE CONSTANT INTERPOLATION
       case ( 1 )
-        call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
-        if ( concAtT <= 0 ) then
-          concAtT = 0
-        end if
-        ! CUBIC SPLINE INTERPOLATION (LN)
-      case ( 2 )
-        call cubic_spline( x, y, y2, dataNumberOfPoints, t, ind, concAtT )
-        concAtT = exp( concAtT )
-        ! PIECEWISE CONSTANT INTERPOLATION
-      case ( 3 )
         constant_int_success = .false.
         do i = 1, dataNumberOfPoints
           if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
@@ -59,7 +49,7 @@ contains
           concAtT = y(ind, dataNumberOfPoints)
         end if
         ! PIECEWISE LINEAR INTERPOLATION
-      case ( 4 )
+      case ( 2 )
         ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
         linear_int_success = .false.
         do i = 1, dataNumberOfPoints
@@ -90,52 +80,4 @@ contains
 
     return
   end subroutine getConstrainedQuantAtT
-
-  subroutine cubic_spline( xa, ya, y2a, n, x, ind, y )
-    use types_mod
-    implicit none
-
-    real(kind=DP), intent(in) :: xa(:,:), y2a(:,:), ya(:,:), x
-    integer(kind=NPI), intent(in) :: n, ind
-    real(kind=DP), intent(out) :: y
-    ! This routine returns the value y which is the evaluation at x of the cubic spline through
-    ! points ya(ind,:) at xa(ind,:), with second derivatives there of y2a(ind,:)
-
-    ! n is the maximum number of values in this line of x1, ya, y2a (which may not be the
-    ! length of this line if different species have different constraint times, for example)
-
-    integer(kind=NPI) :: k, khi, klo
-    real(kind=DP) :: a, b, h
-
-    if ( n > size( xa, 2 ) ) then
-      stop 'n > size( xa, 2 ) in cubic_spline()'
-    end if
-
-    klo = 1
-    ! We will find the right place in the table by means of bisection.
-    ! This is optimal if sequential calls to this routine are at random values of
-    ! x. If sequential calls are in order, and closely spaced, one would do better
-    ! to store previous values of klo and khi and test if they remain appropriate
-    ! on the next call.
-    khi = n
-    do while ( khi - klo > 1 )
-      k = ( khi + klo ) / 2
-      if ( xa(ind, k) > x ) then
-        khi = k
-      else
-        klo = k
-      end if
-    end do !klo and khi now bracket the input value of x.
-    h = xa(ind, khi) - xa(ind, klo)
-
-    if ( h == 0. ) then
-      print *, 'Bad input in cubic_spline()! The xa''s must be distinct'!
-      stop
-    end if
-
-    a = ( xa(ind, khi) - x ) / h !Cubic spline polynomial is now evaluated.
-    b = ( x - xa(ind, klo) ) / h
-    y = a * ya(ind, klo) + b * ya(ind, khi) + ( ( a ** 3 - a ) * y2a(ind, klo) + ( b ** 3 - b ) * y2a(ind, khi) ) * ( h ** 2 ) / 6.
-    return
-  end subroutine cubic_spline
 end module interpolationFunctions_mod

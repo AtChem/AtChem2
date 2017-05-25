@@ -16,7 +16,7 @@ contains
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
     integer(kind=NPI) :: i, indexBefore, indexAfter
-    logical :: fac_int_found, lin_int_suc
+    logical :: constant_int_success, linear_int_success
 
     ! Sanity checks on sizes of x, y and y2.
     if ( size( x, 1 ) /= size( y, 1 ) ) then
@@ -45,15 +45,15 @@ contains
         concAtT = exp( concAtT )
         ! PIECEWISE CONSTANT INTERPOLATION
       case ( 3 )
-        fac_int_found = .false.
+        constant_int_success = .false.
         do i = 1, dataNumberOfPoints
           if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
             concAtT = y(ind, i)
-            fac_int_found = .true.
+            constant_int_success = .true.
             exit
           end if
         end do
-        if ( fac_int_found .eqv. .false. ) then
+        if ( constant_int_success .eqv. .false. ) then
           write (*, '(A)') ' error in piecewise constant interpolation'
           write (*,*) t, dataNumberOfPoints, concAtT
           concAtT = y(ind, dataNumberOfPoints)
@@ -61,15 +61,15 @@ contains
         ! PIECEWISE LINEAR INTERPOLATION
       case ( 4 )
         ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
-        lin_int_suc = .false.
+        linear_int_success = .false.
         do i = 1, dataNumberOfPoints
           if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
             indexBefore = i
             indexAfter = i + 1
-            lin_int_suc = .true.
+            linear_int_success = .true.
           end if
         end do
-        if ( lin_int_suc .eqv. .false. ) then
+        if ( linear_int_success .eqv. .false. ) then
           concAtT = y(ind, dataNumberOfPoints)
           write (*, '(A)') ' Failed to lin int'
         else

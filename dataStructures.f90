@@ -71,9 +71,8 @@ contains
     return
   end subroutine calcDateParameters
 end module date
-!    ********************************************************************************************************
-!    ENVIRONMENT VARIABLES MODULE
-!    ********************************************************************************************************
+
+
 module envVars
   use types_mod
   use storage, only : maxEnvVarNameLength, maxEnvVarLength
@@ -92,20 +91,7 @@ module envVars
 
 end module envVars
 
-!    ********************************************************************************************************
-!    CHEMICAL CONSTRAINTS MODULE
-!    ********************************************************************************************************
-module chemicalConstraints
-  use types_mod
-  use storage, only : maxSpecLength
-  implicit none
-  save
 
-  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
-
-end module chemicalConstraints
-
-!    ********************************************************************************************************
 module constraints
   use types_mod
   implicit none
@@ -115,6 +101,7 @@ module constraints
   integer(kind=QI) :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
+  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
@@ -124,7 +111,7 @@ module constraints
   public :: getConstrainedSpecies, setConstrainedSpecies, deallocateConstrainedSpecies, getOneConstrainedSpecies
 contains
 
-  ! METHODS FOR numberOfConstrainedSpecies
+  ! Methods for numberOfConstrainedSpecies
 
   pure function getNumberOfConstrainedSpecies() result ( n )
     implicit none
@@ -140,7 +127,7 @@ contains
     write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
 
-  ! METHODS FOR constrainedConcs
+  ! Methods for constrainedConcs
 
   pure function getConstrainedConcs() result ( r )
     implicit none
@@ -158,6 +145,8 @@ contains
     implicit none
     deallocate (constrainedConcs)
   end subroutine deallocateConstrainedConcs
+
+  ! Methods for constrainedSpecies
 
   pure function getConstrainedSpecies() result ( r )
     implicit none
@@ -183,6 +172,7 @@ contains
     deallocate (constrainedSpecies)
   end subroutine deallocateConstrainedSpecies
 end module constraints
+
 
 module species
   use types_mod

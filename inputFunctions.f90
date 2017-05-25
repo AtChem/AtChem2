@@ -644,8 +644,7 @@ contains
     use species
     use constraints, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                             numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
-                            setConstrainedSpecies, getOneConstrainedSpecies
-    use chemicalConstraints, only : dataX, dataY, dataY2, dataFixedY
+                            setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataY2, dataFixedY
     use directories, only : param_dir, spec_constraints_dir
     use storage, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : getIndexWithinList

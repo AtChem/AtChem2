@@ -15,7 +15,7 @@ contains
     integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
-    integer(kind=NPI) :: i, indexBefore, indexAfter
+    integer(kind=NPI) :: i, indexBefore
     logical :: constant_int_success, linear_int_success
 
     ! Sanity checks on sizes of x, y and y2.
@@ -33,7 +33,7 @@ contains
     end if
 
     select case ( interpMethod )
-      ! PIECEWISE CONSTANT INTERPOLATION
+      ! left-sided piecewise constant interpolation
       case ( 1 )
         constant_int_success = .false.
         do i = 1, dataNumberOfPoints
@@ -48,27 +48,27 @@ contains
           write (*,*) t, dataNumberOfPoints, concAtT
           concAtT = y(ind, dataNumberOfPoints)
         end if
-        ! PIECEWISE LINEAR INTERPOLATION
+        ! piecewise linear interpolation
       case ( 2 )
-        ! FIND THE INDICES OF THE ENCLOSING DATA POINTS
+        ! Find the interval in which t sits
         linear_int_success = .false.
         do i = 1, dataNumberOfPoints
           if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
             indexBefore = i
-            indexAfter = i + 1
             linear_int_success = .true.
+            exit
           end if
         end do
         if ( linear_int_success .eqv. .false. ) then
           concAtT = y(ind, dataNumberOfPoints)
           write (*, '(A)') ' Failed to lin int'
         else
-          ! IDENTIFY COORDINATES OF ENCLOSING DATA POINTS
+          ! Identify coordinates of enclosing data points
           xBefore = x(ind, indexBefore)
           yBefore = y(ind, indexBefore)
-          xAfter = x(ind, indexAfter)
-          yAfter = y(ind, indexAfter)
-          ! DO LINEAR INTERPOLATION (Y = MX + C)
+          xAfter = x(ind, indexBefore + 1)
+          yAfter = y(ind, indexBefore + 1)
+          ! Do linear interpolation (Y = MX + C)
           m = ( yAfter - yBefore ) / ( xAfter - xBefore )
           c = yAfter - ( m * xAfter )
           concAtT = m * t + c

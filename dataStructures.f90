@@ -40,6 +40,7 @@ module directories
   character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
 
 end module directories
+
 !    ********************************************************************************************************
 !    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 !    ********************************************************************************************************

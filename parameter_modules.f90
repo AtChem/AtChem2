@@ -1,3 +1,81 @@
+module solver_params_mod
+  use types_mod
+  implicit none
+  save
+
+  real(kind=DP) :: atol
+  real(kind=DP) :: rtol
+  integer :: JvApprox, lookBack
+  real(kind=DP) :: deltaJv, deltaMain, maxStep
+  integer :: maxNumSteps
+  integer :: solverType, preconBandUpper, preconBandLower
+  character(len=30) :: solverTypeName(3)
+
+contains
+  subroutine set_solver_parameters( input_parameters )
+    use types_mod
+    implicit none
+
+    real(kind=DP) :: input_parameters(*)
+
+    solverTypeName(1) = 'SPGMR'
+    solverTypeName(2) = 'SPGMR + Banded Preconditioner'
+    solverTypeName(3) = 'Dense'
+
+    ! Used in FCVMALLOC(): ATOL is the absolute tolerance (scalar or array).
+    atol = input_parameters(1)
+    ! Used in FCVMALLOC(): RTOL is the relative tolerance (scalar).
+    rtol = input_parameters(2)
+    ! TODO: convert this to boolean?
+    ! If JvApprox==1 and solverType={1,2}, call FCVSPILSSETJAC() below, with non-zero flag.
+    ! This means FCVJTIMES() in solverFunctions.f90 should be used to approximate the Jacobian.
+    JvApprox = input_parameters(3)
+    ! This is never used, but is referenced in a comment in FCVJTIMES().
+    ! TODO: delete?
+    deltaJv = input_parameters(4)
+    ! From CVODE docs: DELT is the linear convergence tolerance factor of the SPGMR. Used in FCVSPGMR().
+    deltaMain = input_parameters(5)
+    ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR().
+    ! TODO: Rename to MAXL?
+    lookBack = input_parameters(6)
+    ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
+    maxStep = input_parameters(7)
+    ! From CVODE docs: Maximum no. of internal steps before tout. Passed via FCVSETIIN().
+    maxNumsteps = input_parameters(8)
+    ! USed to choose which solver to use:
+    ! 1: SPGMR
+    ! 2: SPGMR + Banded preconditioner
+    ! 3: Dense solver
+    ! otherwise: error
+    solverType = input_parameters(9)
+    ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower) are the upper
+    ! and lower half- bandwidths of the band matrix that is retained as an
+    ! approximation of the Jacobian.
+    preconBandUpper = input_parameters(10)
+    preconBandLower = input_parameters(11)
+
+    ! float format
+    100 format (A18, 1P E11.3)
+    ! integer format
+    200 format (A18, I11)
+    write (*, '(A)') ' Solver parameters:'
+    write (*, '(A)') ' ------------------'
+    write (*, 100) 'atol: ', atol
+    write (*, 100) 'rtol: ', rtol
+    write (*, 200) 'JacVApprox: ', JvApprox
+    write (*, 100) 'deltaJv: ', deltaJv
+    write (*, 100) 'deltaMain: ', deltaMain
+    write (*, 200) 'lookBack: ', lookBack
+    write (*, 100) 'maxStep: ', maxStep
+    write (*, 200) 'preconBandUpper: ', preconBandUpper
+    write (*, 200) 'preconBandLower: ', preconBandLower
+    write (*, '(A18, A)') 'solverType: ', adjustl( solverTypeName(solverType) )
+    write (*, '(A)') ' ------------------'
+    write (*,*)
+  end subroutine set_solver_parameters
+end module solver_params_mod
+
+
 module model_params_mod
   use types_mod
   implicit none

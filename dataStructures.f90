@@ -98,11 +98,11 @@ module constraints
   save
 
   integer(kind=NPI) :: numberOfConstrainedSpecies
-  integer(kind=QI) :: maxNumberOfDataPoints
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
+  integer(kind=NPI) :: maxNumberOfDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
   private :: numberOfConstrainedSpecies, constrainedConcs, constrainedSpecies

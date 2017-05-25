@@ -91,25 +91,6 @@ contains
   end subroutine outputPhotoRateCalcParameters
 
 
-  subroutine output_jfy( t, fy )
-    implicit none
-
-    real(kind=DP), intent(in) :: t, fy(:,:)
-    integer(kind=NPI) :: i, j
-
-    if ( size( fy, 1 ) /= size( fy, 2 ) ) then
-      stop "size( fy, 1 ) /= size( fy, 2 ) in output_jfy()."
-    end if
-    ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
-    do i = 1, size( fy, 1)
-      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
-    end do
-    write (55,*) '---------------'
-
-    return
-  end subroutine output_jfy
-
-
   subroutine outputPhotolysisRates( t, photoRateNamesForHeader )
     use photolysisRates_mod, only : nrOfPhotoRates, ck, j
     implicit none

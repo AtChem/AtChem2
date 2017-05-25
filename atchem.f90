@@ -74,7 +74,6 @@ PROGRAM ATCHEM
   real(kind=DP) :: modelStartTime
 
   !   DECLARATIONS FOR JACOBIAN PRODUCTION
-  real(kind=DP), allocatable :: fy(:,:)
   integer :: jacobianOutputStepSize
 
   character(len=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
@@ -166,7 +165,6 @@ PROGRAM ATCHEM
   allocate (speciesConcs(numSpec), speciesNames(numSpec))
   speciesConcs(:) = 0
   allocate (z(numSpec), initialConcentrations(numSpec))
-  allocate (fy(numSpec, numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   allocate (lossRates(numReac), productionRates(numReac), ir(numReac))
 
@@ -338,7 +336,7 @@ PROGRAM ATCHEM
   ratesOutputStepSize = modelParameters(7)
   ! Start time of model. Used to set t initially, and to calculate the elapsed time.
   modelStartTime = modelParameters(8)
-  ! Frequency at which output_jfy is called below.
+  ! Frequency at which jfy is called below.
   jacobianOutputStepSize = modelParameters(9)
   ! Member variables of module SZACalcVars
   latitude = modelParameters(10)
@@ -545,8 +543,7 @@ PROGRAM ATCHEM
 
     ! Output Jacobian matrix (output frequency set in model.parameters)
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
-      call jfy( numReac, speciesConcs, t, fy )
-      call output_jfy( t, fy )
+      call jfy( numReac, speciesConcs, t )
     end if
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
@@ -604,7 +601,7 @@ PROGRAM ATCHEM
   deallocate (speciesConcs, speciesNames, z)
   deallocate (prodIntSpecies, reacIntSpecies)
   deallocate (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
-  deallocate (fy, ir)
+  deallocate (ir)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (prodIntSpeciesLengths)

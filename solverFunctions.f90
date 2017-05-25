@@ -54,7 +54,7 @@ contains!     ---------------------------------------------------------------
     return
   end subroutine resid
 
-  subroutine jfy( nr, y, t, fy )
+  subroutine jfy( nr, y, t )
     ! routine for calculating the Jacobian of the system
     ! nr = number of reactions
     ! for each species calculate the rhs of the rate equation
@@ -80,34 +80,39 @@ contains!     ---------------------------------------------------------------
 
     integer(kind=NPI), intent(in) :: nr
     real(kind=DP), intent(in) :: y(:), t
-    real(kind=DP), intent(out) :: fy(size( y ),*)
-    integer(kind=NPI) :: j
+    real(kind=DP) :: fy(size( y ),size( y ))
+    integer(kind=NPI) :: i, j
     real(kind=DP) :: p(nr), r(nr)
-    integer(kind=NPI) :: is
 
     ! set jacobian matrix to zero
-    fy(1:size( y ), 1:size( y )) = 0.0
+    fy(:,:) = 0.0
 
     ! call routine to get reaction rates in array p. Each element of p corresponds to a single reaction
     call mechanism_rates( t, y, p )
 
     do j = 1, size( y )
       r(1:nr) = 0.0
-      do is = 1, size( clhs, 2 )
-        if ( clhs(2, is) == j ) then
-          r(clhs(1, is)) = p(clhs(1, is))
+      do i = 1, size( clhs, 2 )
+        if ( clhs(2, i) == j ) then
+          r(clhs(1, i)) = p(clhs(1, i))
         end if
       end do
-      do is = 1, size( clhs, 2)
-        if ( clhs(2, is) == j ) then
-          r(clhs(1, is)) = r(clhs(1, is)) * clcoeff(is) * y(clhs(2, is)) ** ( clcoeff(is) - 1 )
+      do i = 1, size( clhs, 2)
+        if ( clhs(2, i) == j ) then
+          r(clhs(1, i)) = r(clhs(1, i)) * clcoeff(i) * y(clhs(2, i)) ** ( clcoeff(i) - 1 )
         else
-          r(clhs(1, is)) = r(clhs(1, is)) * y(clhs(2, is)) ** clcoeff(is)
+          r(clhs(1, i)) = r(clhs(1, i)) * y(clhs(2, i)) ** clcoeff(i)
         end if
       end do
       fy(clhs(2,:), j) = fy(clhs(2,:), j) - clcoeff(:) * r(clhs(1,:))
       fy(crhs(2,:), j) = fy(crhs(2,:), j) + crcoeff(:) * r(crhs(1,:))
     end do
+
+    ! Loop over all elements of fy, and print to jacobian.output, prefixed by t
+    do i = 1, size( fy, 1)
+      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1))
+    end do
+    write (55,*) '---------------'
 
     return
   end subroutine jfy

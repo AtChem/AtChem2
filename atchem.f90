@@ -11,7 +11,6 @@ PROGRAM ATCHEM
   use interpolationMethod
   use reactionStructure
   use photolysisRates_mod
-  use chemicalConstraints
   use zenithData
   use productionAndLossRates
   use envVars
@@ -114,7 +113,6 @@ PROGRAM ATCHEM
       use species
       use constraints
       use reactionStructure
-      use chemicalConstraints
       use interpolationFunctions_mod, only : getConstrainedQuantAtT
       use constraintFunctions_mod
 
@@ -669,11 +667,10 @@ PROGRAM ATCHEM
   !   deallocate arrays from module constraints
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
-  !   deallocate arrays from module species
-  call deallocateSpeciesList
-  !   deallocate arrays from module chemicalConstraints
   deallocate (dataX, dataY, dataY2, dataFixedY)
   deallocate (speciesNumberOfPoints)
+  !   deallocate arrays from module species
+  call deallocateSpeciesList()
   !   deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
   deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
@@ -741,7 +738,6 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use species
   use constraints
   use reactionStructure
-  use chemicalConstraints
   use interpolationMethod, only : getSpeciesInterpMethod
   use interpolationFunctions_mod, only : getConstrainedQuantAtT
   use constraintFunctions_mod

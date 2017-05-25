@@ -1,8 +1,8 @@
 4			  number of steps
 900			step size (seconds)
-4			  Species Interpolation Method (cs = 1, cs ln = 2, pw constant = 3, pw linear = 4)
-4			  Conditions Interpolation Method (cs = 1, cs ln = 2, pw constant = 3, pw linear = 4)
-4			  Dec Interpolation Method (cs = 1, cs ln = 2, pw constant = 3, pw linear = 4)
+2			      Species Interpolation Method (pw constant = 1, pw linear = 2)
+2			      Conditions Interpolation Method (pw constant = 1, pw linear = 2)
+2			      Dec Interpolation Method (pw constant = 1, pw linear = 2)
 50000		Maximum Number of data points in constraint files
 3600		rates output step size
 0			  model start time

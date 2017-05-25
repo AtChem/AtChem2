@@ -84,9 +84,9 @@ PROGRAM ATCHEM
   integer :: irOutStepSize
 
   integer(kind=QI) :: cmd_arg_count
-  !    MISC
+
   character(len=30) :: solverTypeName(3)
-  character(len=20) :: interpolationMethodName(4)
+  character(len=20) :: interpolationMethodName(2)
 
 
   interface
@@ -135,10 +135,8 @@ PROGRAM ATCHEM
   solverTypeName(1) = 'SPGMR'
   solverTypeName(2) = 'SPGMR + Banded Preconditioner'
   solverTypeName(3) = 'Dense'
-  interpolationMethodName(1) = 'cubic spline'
-  interpolationMethodName(2) = 'cubic spline ln'
-  interpolationMethodName(3) = 'piecewise constant'
-  interpolationMethodName(4) = 'piecewise linear'
+  interpolationMethodName(1) = 'piecewise constant'
+  interpolationMethodName(2) = 'piecewise linear'
   !    ********************************************************************************************************
   !    MODEL SETUP AND CONFIGURATION
   !    ********************************************************************************************************
@@ -356,10 +354,8 @@ PROGRAM ATCHEM
   ! the private member of MODULE interpolationMethod.
   ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
   ! Values:
-  ! 1: Cubic spline interpolation
-  ! 2: Cubic spline interpolation (log) TODO: this just outputs the exponential of the value. Is this right?
-  ! 3: Piecewise constant
-  ! 4: Piecewise linear
+  ! 1: Piecewise constant
+  ! 2: Piecewise linear
   ! otherwise: error
   speciesInterpolationMethod = modelParameters(3)
   call setSpeciesInterpMethod( speciesInterpolationMethod )

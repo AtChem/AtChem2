@@ -511,7 +511,7 @@ PROGRAM ATCHEM
   else if ( solverType == 3 ) then
     ! make sure no Jacobian approximation is required
     if ( JVapprox == 1 ) then
-      write (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'!
+      write (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
       write (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
       stop
     end if
@@ -554,7 +554,7 @@ PROGRAM ATCHEM
 
     call outputPhotoRateCalcParameters( t )
 
-    ! GET CONCENTRATIONS FOR SOLVED SPECIES
+    ! Get concentrations for unconstrained species
     call FCVODE( tout, t, z, itask, ier )
     if ( ier /= 0 ) then
       write (*, '(A, I0)') ' ier POST FCVODE()= ', ier
@@ -564,17 +564,17 @@ PROGRAM ATCHEM
     time = int( t )
     write (*, '(A, I0)') ' time = ', time
 
-    ! GET CONCENTRATIONS FOR CONSTRAINED SPECIES AND ADD TO ARRAY FOR OUTPUT
+    ! Get concentrations for constrained species and add to array for output
     call addConstrainedSpeciesToProbSpec( z, getConstrainedConcs(), getConstrainedSpecies(), speciesConcs )
 
-    ! OUTPUT RATES OF PRODUCTION OR LOSS (OUTPUT FREQUENCY SET IN MODEL.PARAMETERS)
+    ! Output rates of production and loss (output frequency set in model.parameters)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1 )
       call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0 )
     end if
 
-    ! OUTPUT JACOBIAN MATRIX (OUTPUT FREQUENCY SET IN MODEL PARAMETERS)
+    ! Output Jacobian matrix (output frequency set in model.parameters)
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numReac, speciesConcs, t, fy )
       call output_jfy( t, fy )
@@ -584,19 +584,19 @@ PROGRAM ATCHEM
     call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( t, photoRateNamesForHeader )
 
-    !OUTPUT INSTANTANEOUS RATES
+    ! Output instantaneous rates
     if ( mod( elapsed, irOutStepSize ) == 0 ) then
       call outputInstantaneousRates( time )
     end if
 
-    ! output for CVODE solver parameters and timestep sizes
+    ! Output CVODE solver parameters and timestep sizes
     call outputSolverParameters( t, rout(3), rout(2), iout, solverType )
 
-    !OUTPUT ENVVAR VALUES
+    ! Output envVar values
     ro2 = ro2sum( speciesConcs )
     call outputEnvVar( t )
 
-    ! ERROR HANDLING
+    ! Error handling
     if ( ier < 0 ) then
       fmt = "(///' SUNDIALS_ERROR: FCVODE() returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
       write (stderr, fmt) ier, iout (15)
@@ -611,19 +611,10 @@ PROGRAM ATCHEM
 
   end do
 
-  call FCVDKY( t, 1, z, ier )
-  if ( ier /= 0 ) then
-    fmt = "(///' SUNDIALS_ERROR: FCVDKY() returned ier = ', I4) "
-    write (stderr, fmt) ier
-    call FCVFREE()
-    stop
-  end if
-
-  !   OUTPUT FINAL MODEL CONCENTRATIONS FOR MODEL RESTART
+  ! Output final model concentrations, in a usable format for model restart
   call outputFinalModelState( speciesNames, speciesConcs )
 
-  !   printing of final statistics desactivated - nobody finds it useful
-  !   FINAL ON SCREEN OUTPUT
+  ! Final on-screen output
   fmt = "(//' Final statistics:'//" // &
         "' No. steps = ', I0, '   No. f-s = ', I0, " // &
         "'   No. J-s = ', I0, '   No. LU-s = ', I0/" // &
@@ -638,10 +629,8 @@ PROGRAM ATCHEM
   runTime = ( runEnd - runStart ) / rate
   write (*, '(A, I0)') ' Runtime = ', runTime
 
-  !   deallocate all
   write (*, '(A)') ' Deallocating memory.'
-  !   deallocate CVODE internal data
-
+  ! deallocate CVODE internal data
   call FCVFREE()
   deallocate (speciesConcs, speciesNames, z)
   deallocate (prodIntSpecies, reacIntSpecies)
@@ -651,18 +640,18 @@ PROGRAM ATCHEM
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (prodIntSpeciesLengths)
   deallocate (reacIntSpeciesLengths)
-  !   deallocate data allocated before in input functions(inputFunctions.f)
-  !   deallocate arrays from module constraints
+  ! deallocate data allocated before in input functions (inputFunctions.f90)
+  ! deallocate arrays from module constraints
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
   deallocate (dataX, dataY, dataY2, dataFixedY)
   deallocate (speciesNumberOfPoints)
-  !   deallocate arrays from module species
+  ! deallocate arrays from module species
   call deallocateSpeciesList()
-  !   deallocate arrays from module envVars
+  ! deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
   deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
-  !   deallocate arrays from module photolysisRates
+  ! deallocate arrays from module photolysisRates
   deallocate (photoX, photoY, photoY2, photoNumberOfPoints)
 
   close (50)

@@ -19,7 +19,7 @@ contains
     logical :: firstTime = .true.
 
     if ( firstTime .eqv. .true. ) then
-      write (*,*) "basePhotoRate: ", trim( jFacSpecies )
+      write (*, '(2A)') ' basePhotoRate: ', trim( jFacSpecies )
       firstTime = .false.
     end if
 
@@ -32,7 +32,7 @@ contains
     end do
 
     if ( basePhotoRateNum == 0 ) then
-      write (*,*) 'Error! Missing constrained photo rate data for the JFAC species provided: ', trim( jFacSpecies )!
+      write (*, '(2A)') ' Error! Missing constrained photo rate data for the JFAC species provided: ', trim( jFacSpecies )!
       stop 2
     end if
 
@@ -48,7 +48,7 @@ contains
         jfac = JspeciesAtT / ( transmissionFactor(jfacSpeciesLine) * cl(jfacSpeciesLine) * &
                ( cosx ** cmm(jfacSpeciesLine) ) * exp( -cnn(jfacSpeciesLine) * secx ) )
       else
-        write (*,*) 'Error! JFAC should not be used, as constant photolysis rates have been provided.'
+        write (*, '(A)') ' Error! JFAC should not be used, as constant photolysis rates have been provided.'
         stop 2
       end if
     end if
@@ -86,7 +86,7 @@ contains
         x(i) = z(zCounter)
         zCounter = zCounter + 1
       else
-        write (*,*) 'Error adding constrained values to measured values'
+        stop 'Error adding constrained values to measured values'
       end if
     end do
     return
@@ -305,12 +305,13 @@ contains
     ! If JFAC is CALC and there's no JFAC species, the program should complain
     if ( envVarTypesNum(envVarNum) == 1 ) then
       if ( '' == trim( jFacSpecies ) ) then
-        write (*,*) 'Error! JFAC was set to CALC, but JFac species was not provided!'!
-        stop 2
+        write (*, '(A)') ' Error! JFAC was set to CALC, but JFac species was not provided!'!
+        stop
       end if
       ! If jfacSpeciesLine = 0 (no line in photolysis rates matches the JFac species), program should complain
       if ( jfacSpeciesLine == 0 ) then
-        write (*,*) 'Error! No match found in photolysis rates file for provided JFAC species ', trim( jFacSpecies )
+        write (*, '(2A)') ' Error! No match found in photolysis rates file for provided JFAC species ', trim( jFacSpecies )
+        stop
       end if
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2 ) then
@@ -320,9 +321,9 @@ contains
       ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
     else
       if ( '' /= trim( jFacSpecies ) ) then
-        write (*,*) 'Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'!
-        write (*,*) 'JFac species: ', trim( jFacSpecies )
-        stop 2
+        write (*, '(A)') ' Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'
+        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
+        stop
       end if
     end if
   end subroutine test_jfac

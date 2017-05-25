@@ -16,7 +16,7 @@ contains
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
     integer(kind=NPI) :: i, indexBefore
-    logical :: constant_int_success, linear_int_success
+    logical :: interp_success
 
     ! Sanity checks on sizes of x, y and y2.
     if ( size( x, 1 ) /= size( y, 1 ) ) then
@@ -32,36 +32,32 @@ contains
       stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT()'
     end if
 
+    ! Find the interval in which t sits
+    interp_success = .false.
+    do i = 1, dataNumberOfPoints
+      if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
+        indexBefore = i
+        interp_success = .true.
+        exit
+      end if
+    end do
+
     select case ( interpMethod )
       ! left-sided piecewise constant interpolation
       case ( 1 )
-        constant_int_success = .false.
-        do i = 1, dataNumberOfPoints
-          if ( (t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
-            concAtT = y(ind, i)
-            constant_int_success = .true.
-            exit
-          end if
-        end do
-        if ( constant_int_success .eqv. .false. ) then
+        if ( interp_success .eqv. .false. ) then
           write (*, '(A)') ' error in piecewise constant interpolation'
-          write (*,*) t, dataNumberOfPoints, concAtT
           concAtT = y(ind, dataNumberOfPoints)
+          write (*, '(1P e15.3, A, I0, 1P e15.3)') t, ' ', dataNumberOfPoints, concAtT
+        else
+          concAtT = y(ind, indexBefore)
         end if
         ! piecewise linear interpolation
       case ( 2 )
-        ! Find the interval in which t sits
-        linear_int_success = .false.
-        do i = 1, dataNumberOfPoints
-          if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
-            indexBefore = i
-            linear_int_success = .true.
-            exit
-          end if
-        end do
-        if ( linear_int_success .eqv. .false. ) then
+        if ( interp_success .eqv. .false. ) then
+          write (*, '(A)') ' error in piecewise linear interpolation'
           concAtT = y(ind, dataNumberOfPoints)
-          write (*, '(A)') ' Failed to lin int'
+          write (*, '(1P e15.3, A, I0, 1P e15.3)') t, ' ', dataNumberOfPoints, concAtT
         else
           ! Identify coordinates of enclosing data points
           xBefore = x(ind, indexBefore)

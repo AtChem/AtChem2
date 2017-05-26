@@ -325,7 +325,7 @@ PROGRAM ATCHEM
     stop
   end if
 
-  call FCVSETIIN( 'MAX_NSTEPS', maxNumSteps, ier )
+  call FCVSETIIN( 'MAX_NSTEPS', maxNumInternalSteps, ier )
   write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
 
   call FCVSETRIN( 'MAX_STEP', maxStep, ier )

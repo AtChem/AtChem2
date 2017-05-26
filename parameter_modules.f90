@@ -8,7 +8,7 @@ module solver_params_mod
   real(kind=DP) :: deltaJv, deltaMain
   integer(kind=NPI) :: lookBack
   real(kind=DP) :: maxStep
-  integer(kind=NPI) :: maxNumSteps
+  integer(kind=NPI) :: maxNumInternalSteps
   integer(kind=SI) :: solverType
   integer(kind=NPI) :: preconBandUpper, preconBandLower
   character(len=30) :: solverTypeName(3)
@@ -43,7 +43,7 @@ contains
     ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
     maxStep = input_parameters(7)
     ! From CVODE docs: Maximum no. of internal steps before tout. Passed via FCVSETIIN().
-    maxNumsteps = nint( input_parameters(8), NPI )
+    maxNumInternalSteps = nint( input_parameters(8), NPI )
     ! USed to choose which solver to use:
     ! 1: SPGMR
     ! 2: SPGMR + Banded preconditioner

@@ -610,7 +610,7 @@ contains
 
     integer(kind=NPI) :: i, k
     integer(kind=IntErr) :: ierr
-    integer :: maxNumberOfDataPoints
+    integer(kind=NPI) :: maxNumberOfDataPoints
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation

@@ -451,7 +451,7 @@ contains
     numValidEntries = 0
     read (10,*) parameterArray(1)
     do while ( parameterArray(numValidEntries+1) /= -9999 )
-      numValidEntries = numValidEntries + 1
+      numValidEntries = numValidEntries + 1_DI
       read (10,*) parameterArray(numValidEntries+1)
     end do
     close (10, status='keep')

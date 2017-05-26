@@ -41,7 +41,7 @@ makefile.local:
 
 include makefile.local
 
-SRCS = dataStructures.f90 interpolationFunctions.f90 configFunctions.f90 inputFunctions.f90 outputFunctions.f90 conversionFunctions.f90 utilityFunctions.f90 constraintFunctions.f90 solverFunctions.f90 atchem.f90
+SRCS = dataStructures.f90 interpolationFunctions.f90 configFunctions.f90 inputFunctions.f90 outputFunctions.f90 conversionFunctions.f90 utilityFunctions.f90 constraintFunctions.f90 solverFunctions.f90 parameter_modules.f90 atchem.f90
 
 LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(LIBDIR) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
@@ -86,4 +86,5 @@ inputFunctions.o : inputFunctions.f90 configFunctions.o dataStructures.o
 interpolationFunctions.o : interpolationFunctions.f90 dataStructures.o
 configFunctions.o : configFunctions.f90
 outputFunctions.o : outputFunctions.f90 dataStructures.o
+parameter_modules.o : parameter_modules.f90 dataStructures.o
 solverFunctions.o : solverFunctions.f90 dataStructures.o

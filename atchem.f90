@@ -18,6 +18,8 @@ PROGRAM ATCHEM
   use date
   use directories, only : output_dir, param_dir
   use storage, only : maxSpecLength, maxPhotoRateNameLength
+  use solver_params_mod
+  use model_params_mod
   use inputFunctions_mod
   use configFunctions_mod
   use outputFunctions_mod
@@ -31,26 +33,18 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
   integer(kind=QI) :: ier
-  integer :: i
-  integer :: meth, itmeth, iatol, itask, currentNumTimestep, maxNumTimesteps
+  integer(kind=NPI) :: i
+  integer :: meth, itmeth, iatol, itask, currentNumTimestep
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
-  real(kind=DP) :: rtol, t, tout
-  real(kind=DP) :: atol, rout(6)
+  real(kind=DP) :: t, tout
+  real(kind=DP) :: rout(6)
   real(kind=DP) :: rpar(1)
   real(kind=DP), allocatable :: speciesConcs(:)
 
-  !   DECLARATIONS FOR CONFIGURABLE SOLVER PARAMETERS
-  real(kind=DP) :: deltaJv, deltaMain, maxStep
-  integer :: JvApprox, lookBack
-  integer(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
-  integer :: preconBandUpper, preconBandLower, solverType
-
   !   DECLARATIONS FOR TIME PARAMETERS
   integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
-  integer :: maxNumSteps
   integer(kind=NPI) :: numSpec, numReac
-  real(kind=DP) :: timestepSize
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
   real(kind=DP), allocatable :: initialConcentrations(:)
@@ -63,7 +57,7 @@ PROGRAM ATCHEM
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
-  integer :: ratesOutputStepSize, time, elapsed
+  integer(kind=QI) :: time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   real(kind=DP), allocatable :: z(:)
@@ -71,20 +65,8 @@ PROGRAM ATCHEM
   real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)
   integer(kind=DI) :: modelParameterSize, solverParameterSize
 
-  real(kind=DP) :: modelStartTime
-
-  !   DECLARATIONS FOR JACOBIAN PRODUCTION
-  integer :: jacobianOutputStepSize
-
   character(len=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
   character(len=400) :: fmt
-
-  !   DECLARATIONS FOR IR OUTPUT
-  integer :: irOutStepSize
-
-  character(len=30) :: solverTypeName(3)
-  character(len=20) :: interpolationMethodName(2)
-
 
   interface
     subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
@@ -129,11 +111,6 @@ PROGRAM ATCHEM
     end subroutine FCVFUN
   end interface
 
-  solverTypeName(1) = 'SPGMR'
-  solverTypeName(2) = 'SPGMR + Banded Preconditioner'
-  solverTypeName(3) = 'Dense'
-  interpolationMethodName(1) = 'piecewise constant'
-  interpolationMethodName(2) = 'piecewise linear'
   !    ********************************************************************************************************
   !    MODEL SETUP AND CONFIGURATION
   !    ********************************************************************************************************
@@ -260,117 +237,10 @@ PROGRAM ATCHEM
   write (*,*)
 
   !   SET SOLVER PARAMETERS
-  ! Used in FCVMALLOC(): ATOL is the absolute tolerance (scalar or array).
-  atol = solverParameters(1)
-  ! Used in FCVMALLOC(): RTOL is the relative tolerance (scalar).
-  rtol = solverParameters(2)
-  ! TODO: convert this to boolean?
-  ! If JvApprox==1 and solverType={1,2}, call FCVSPILSSETJAC() below, with non-zero flag.
-  ! This means FCVJTIMES() in solverFunctions.f90 should be used to approximate the Jacobian.
-  JvApprox = solverParameters(3)
-  ! This is never used, but is referenced in a comment in FCVJTIMES().
-  ! TODO: delete?
-  deltaJv = solverParameters(4)
-  ! From CVODE docs: DELT is the linear convergence tolerance factor of the SPGMR. Used in FCVSPGMR().
-  deltaMain = solverParameters(5)
-  ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR().
-  ! TODO: Rename to MAXL?
-  lookBack = solverParameters(6)
-  ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
-  maxStep = solverParameters(7)
-  ! From CVODE docs: Maximum no. of internal steps before tout. Passed via FCVSETIIN().
-  maxNumsteps = solverParameters(8)
-  ! USed to choose which solver to use:
-  ! 1: SPGMR
-  ! 2: SPGMR + Banded preconditioner
-  ! 3: Dense solver
-  ! otherwise: error
-  solverType = solverParameters(9)
-  ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower) are the upper
-  ! and lower half- bandwidths of the band matrix that is retained as an
-  ! approximation of the Jacobian.
-  preconBandUpper = solverParameters(10)
-  preconBandLower = solverParameters(11)
-
-  ! float format
-  100 format (A18, 1P E11.3)
-  ! integer format
-  200 format (A18, I11)
-  write (*, '(A)') ' Solver parameters:'
-  write (*, '(A)') ' ------------------'
-  write (*, 100) 'atol: ', atol
-  write (*, 100) 'rtol: ', rtol
-  write (*, 200) 'JacVApprox: ', JvApprox
-  write (*, 100) 'deltaJv: ', deltaJv
-  write (*, 100) 'deltaMain: ', deltaMain
-  write (*, 200) 'lookBack: ', lookBack
-  write (*, 100) 'maxStep: ', maxStep
-  write (*, 200) 'preconBandUpper: ', preconBandUpper
-  write (*, 200) 'preconBandLower: ', preconBandLower
-  write (*, '(A18, A)') 'solverType: ', adjustl( solverTypeName(solverType) )
-  write (*, '(A)') ' ------------------'
-  write (*,*)
+  call set_solver_parameters( solverParameters )
 
   !   SET MODEL PARAMETERS
-  ! maxNumTimesteps sets the maximum number of timesteps to calculate.
-  ! Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
-  maxNumTimesteps = modelParameters(1)
-  ! Size of timestep: tout is incremented by this amount on each iteration of the main while loop.
-  timestepSize = modelParameters(2)
-  ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
-  ! the private member of MODULE interpolationMethod.
-  ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
-  ! Values:
-  ! 1: Piecewise constant
-  ! 2: Piecewise linear
-  ! otherwise: error
-  speciesInterpolationMethod = modelParameters(3)
-  call setSpeciesInterpMethod( speciesInterpolationMethod )
-  conditionsInterpolationMethod = modelParameters(4)
-  call setConditionsInterpMethod( conditionsInterpolationMethod )
-  decInterpolationMethod = modelParameters(5)
-  call setDecInterpMethod( decInterpolationMethod )
-  ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT and readEnvVar
-  maxNumberOfDataPoints = modelParameters(6)
-  ! Frequency at which outputRates is called below.
-  ratesOutputStepSize = modelParameters(7)
-  ! Start time of model. Used to set t initially, and to calculate the elapsed time.
-  modelStartTime = modelParameters(8)
-  ! Frequency at which jfy is called below.
-  jacobianOutputStepSize = modelParameters(9)
-  ! Member variables of module SZACalcVars
-  latitude = modelParameters(10)
-  longitude = modelParameters(11)
-  ! Member variables of module date
-  day = modelParameters(12)
-  month = modelParameters(13)
-  year = modelParameters(14)
-  ! Frequency at which to output instantaneous rates
-  irOutStepSize = modelParameters(15)
-
-  ! float format
-  300 format (A52, E11.3)
-  ! integer format
-  400 format (A52, I11)
-  ! string format
-  500 format (A52, A17)
-  write (*, '(A)') ' Model parameters:'
-  write (*, '(A)') ' -----------------'
-  write (*, 400) 'number of steps: ', maxNumTimesteps
-  write (*, 300) 'step size (seconds): ', timestepSize
-  write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
-  write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
-  write (*, 500) 'dec interpolation method: ', adjustl( interpolationMethodName(decInterpolationMethod) )
-  write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
-  write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
-  write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
-  write (*, 300) 'modelStartTime: ', modelStartTime
-  write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
-  write (*, 300) 'latitude: ', latitude
-  write (*, 300) 'longitude: ', longitude
-  write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', day, '/', month, '/', year
-  write (*, '(A)') ' -----------------'
-  write (*,*)
+  call set_model_parameters( modelParameters )
 
   ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year
   call calcDateParameters()
@@ -455,7 +325,7 @@ PROGRAM ATCHEM
     stop
   end if
 
-  call FCVSETIIN( 'MAX_NSTEPS', maxNumSteps, ier )
+  call FCVSETIIN( 'MAX_NSTEPS', maxNumInternalSteps, ier )
   write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
 
   call FCVSETRIN( 'MAX_STEP', maxStep, ier )

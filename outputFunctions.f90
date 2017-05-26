@@ -40,7 +40,7 @@ contains
 
     real(kind=DP), intent(in) :: t, prev, this
     integer(kind=NPI), intent(in) :: array(:)
-    integer, intent(in) :: solver_type
+    integer(kind=NPI), intent(in) :: solver_type
     integer(kind=SI) :: i
     logical :: first_time = .true.
 

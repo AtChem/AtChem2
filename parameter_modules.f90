@@ -5,10 +5,10 @@ module solver_params_mod
 
   real(kind=DP) :: atol
   real(kind=DP) :: rtol
-  integer :: JvApprox, lookBack
+  integer(kind=NPI) :: JvApprox, lookBack
   real(kind=DP) :: deltaJv, deltaMain, maxStep
-  integer :: maxNumSteps
-  integer :: solverType, preconBandUpper, preconBandLower
+  integer(kind=NPI) :: maxNumSteps
+  integer(kind=NPI) :: solverType, preconBandUpper, preconBandLower
   character(len=30) :: solverTypeName(3)
 
 contains

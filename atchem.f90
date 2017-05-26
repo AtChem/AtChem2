@@ -33,7 +33,7 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
   integer(kind=QI) :: ier
-  integer :: i
+  integer(kind=NPI) :: i
   integer :: meth, itmeth, iatol, itask, currentNumTimestep
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq

@@ -434,24 +434,31 @@ contains
   end subroutine readProductsOrReactantsOfInterest
 
 
-  subroutine getParametersFromFile( input_file, parameterArray, numValidEntries )
+  subroutine getParametersFromFile( input_file, parameterArray )
     ! Read in parameters from file at input_file, and save the contents of each
     ! line to an element of the array
     use types_mod
     implicit none
 
     character(len=*), intent(in) :: input_file
-    real(kind=DP), intent(out) :: parameterArray(:)
-    integer(kind=DI), intent(out) :: numValidEntries
+    real(kind=DP), intent(out), allocatable :: parameterArray(:)
+    character(len=100) :: dummy
+    integer(kind=DI) :: numValidEntries, counter
 
     call inquire_or_abort( input_file, 'getParametersFromFile()')
 
     open (10, file=input_file, status='old') ! input file
     numValidEntries = 0
-    read (10,*) parameterArray(1)
-    do while ( parameterArray(numValidEntries+1) /= -9999 )
+    read (10,*) dummy
+    do while ( dummy /= '-9999' )
       numValidEntries = numValidEntries + 1_DI
-      read (10,*) parameterArray(numValidEntries+1)
+      read (10,*) dummy
+    end do
+    close (10, status='keep')
+    allocate (parameterArray(numValidEntries))
+    open (10, file=input_file, status='old') ! input file
+    do counter = 1, numValidEntries
+      read (10,*) parameterArray(counter)
     end do
     close (10, status='keep')
 

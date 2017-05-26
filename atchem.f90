@@ -33,7 +33,6 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR SOLVER PARAMETERS
   integer(kind=QI) :: ier
-  integer(kind=NPI) :: i
   integer :: meth, itmeth, iatol, itask, currentNumTimestep
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
@@ -53,7 +52,6 @@ PROGRAM ATCHEM
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: SORNumber(:)
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
-  integer(kind=NPI) :: numProdIntSpecies, numReacIntSpecies
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
@@ -183,11 +181,11 @@ PROGRAM ATCHEM
 
   ! Read in product species of interest, and set up variables to hold these
   write (*, '(A)') ' Reading products of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName, numProdIntSpecies )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName )
   write (*, '(A)') ' Finished reading products of interest.'
 
-  allocate (prodIntSpecies(numProdIntSpecies, size( crhs, 2 )))
-  allocate (prodIntSpeciesLengths(numProdIntSpecies))
+  allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))
+  allocate (prodIntSpeciesLengths(size( prodIntName )))
   ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, prodIntName, prodIntSpecies(:, 1) )
   ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
@@ -195,16 +193,16 @@ PROGRAM ATCHEM
 
   ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
   call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodIntSpeciesLengths )
-  write (*, '(A, I0)') ' products of interest (number of species found): ', numProdIntSpecies
+  write (*, '(A, I0)') ' products of interest (number of species found): ', size( prodIntName )
   write (*,*)
 
   ! Read in reactant species of interest, and set up variables to hold these
   write (*, '(A)') ' Reading reactants of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName, numReacIntSpecies )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName )
   write (*, '(A)') ' Finished reading reactants of interest.'
 
-  allocate (reacIntSpecies(numReacIntSpecies, size( clhs, 2 )))
-  allocate (reacIntSpeciesLengths(numReacIntSpecies))
+  allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))
+  allocate (reacIntSpeciesLengths(size( reacIntName )))
   ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
   call matchNameToNumber( speciesNames, reacIntName, reacIntSpecies(:, 1) )
   ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
@@ -212,7 +210,7 @@ PROGRAM ATCHEM
 
   ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
   call findReactionsWithProductOrReactant( reacIntSpecies, clhs, reacIntSpeciesLengths )
-  write (*, '(A, I0)') ' reactants of interest (number of species found): ', numReacIntSpecies
+  write (*, '(A, I0)') ' reactants of interest (number of species found): ', size( reacIntName )
   write (*,*)
 
 

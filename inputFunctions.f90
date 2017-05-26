@@ -405,7 +405,7 @@ contains
   end subroutine readJFacSpecies
 
 
-  subroutine readProductsOrReactantsOfInterest( filename, r, length )
+  subroutine readProductsOrReactantsOfInterest( filename, r )
     ! Read in contents of modelConfiguration/production/lossRatesOutput.config, which
     ! contains a list of the species we want to have outputted to mC/production/lossRates.output
     ! Output the contents in r, with i as the length of r.
@@ -415,8 +415,7 @@ contains
 
     character(len=*), intent(in) :: filename
     character(len=maxSpecLength), allocatable, intent(out) :: r(:)
-    integer(kind=NPI), intent(out) :: length
-    integer(kind=NPI) :: j
+    integer(kind=NPI) :: length, j
 
     length = count_lines_in_file ( trim( filename ), .false. )
     allocate (r(length) )

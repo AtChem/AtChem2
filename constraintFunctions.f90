@@ -145,22 +145,26 @@ contains
     character(len=maxEnvVarNameLength) :: this_env_var_name, orderedEnvVarNames(size( envVarNames ))
     logical :: pressure_set, rh_set, temp_set
 
-    ! loop over eavh environment variable, in a defined order, rather than just
-    ! the order of envVarNames, so we can ensure the right ones are calculated before
-    ! each other
-    ! Specifically, handle the fact pressure and temperature _may_ need calculating before M,
-    ! and pressure, temperature and H2O before RH, and DEC before JFAC
-    ! Currently this relies on environmentVariables.config having exactly the lines relating to these 10 variables.
+    ! loop over each environment variable, in a defined order, rather
+    ! than just the order of envVarNames, so we can ensure the right
+    ! ones are calculated before each other.
     !
-    ! To add another environment variable, the user would need to add that line to environmentVariables.config,
-    ! and then add this as element 11 in the orderedEnvVarNames initialisation below.
-    ! Its treatment needs defining in each of cases 1-3 and default below,
+    ! Specifically, handle that some variables need to be set before
+    ! others (e.g., pressure, temperature and RH before H2O, and DEC
+    ! before JFAC). Currently, this relies on environmentVariables.config
+    ! having exactly the lines relating to these 10 variables.
+    !
+    ! To add another environment variable, the user would need to add
+    ! that line to environmentVariables.config, and then add this as
+    ! element 11 in the orderedEnvVarNames initialisation below.  Its
+    ! treatment needs defining in each of cases 1-3 and default below.
+
     if ( size( envVarNames ) /= 10 ) then
       write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
     end if
     orderedEnvVarNames(1) = 'PRESS'
-    orderedEnvVarNames(2) = 'M'
-    orderedEnvVarNames(3) = 'TEMP'
+    orderedEnvVarNames(2) = 'TEMP'
+    orderedEnvVarNames(3) = 'M'
     orderedEnvVarNames(4) = 'RH'
     orderedEnvVarNames(5) = 'H2O'
     orderedEnvVarNames(6) = 'BLHEIGHT'
@@ -181,29 +185,28 @@ contains
 
       ! Find which type it is (calc, constrained, fixed, other)
       select case ( envVarTypesNum(envVarNum) )
-        case ( 1 ) !CALC
+        case ( 1 ) ! CALC
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'BLHEIGHT', 'RH', 'DILUTE', 'ROOFOPEN' )
+            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOFOPEN' )
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
               if ( ( temp_set .eqv. .true. ) .and. ( pressure_set .eqv. .true. ) ) then
-                this_env_val = calcM(currentEnvVarValues(getEnvVarNum( 'PRESS' )), &
-                                     currentEnvVarValues(getEnvVarNum( 'TEMP' )))
+                this_env_val = calcAirDensity( currentEnvVarValues( getEnvVarNum( 'PRESS' ) ), &
+                                               currentEnvVarValues( getEnvVarNum( 'TEMP' ) ) )
               else
-                write (stderr,*) 'getEnvVarsAtT(): calcM() called, but no value was yet given to either TEMP or PRESS.'
+                write (stderr,*) 'getEnvVarsAtT(): calcAirDensity() called, but no value is yet given to either TEMP, or PRESS.'
                 stop
               end if
             case ( 'H2O' )
               if ( ( rh_set .eqv. .true. ) .and. ( temp_set .eqv. .true. ) .and. ( pressure_set .eqv. .true. ) ) then
-                this_env_val = convertRHtoH2O(currentEnvVarValues(getEnvVarNum( 'RH' )), &
-                                              currentEnvVarValues(getEnvVarNum( 'TEMP' )), &
-                                              currentEnvVarValues(getEnvVarNum( 'PRESS' )))
+                this_env_val = convertRHtoH2O( currentEnvVarValues( getEnvVarNum( 'RH' ) ), &
+                                               currentEnvVarValues( getEnvVarNum( 'TEMP' ) ), &
+                                               currentEnvVarValues( getEnvVarNum( 'PRESS' ) ) )
               else
                 write (stderr,*) 'getEnvVarsAtT(): convertRHtoH2O() called, but no value is yet given to either RH, TEMP, or PRESS.'
                 stop
               end if
-
             case ( 'DEC' )
               this_env_val = calcDec( t )
             case ( 'JFAC' )
@@ -228,16 +231,16 @@ contains
           if (this_env_var_name == 'TEMP') temp_set = .true.
           if (this_env_var_name == 'RH') rh_set = .true.
 
-        case default
+        case default ! DEFAULT VALUES
           select case ( this_env_var_name )
-            case ( 'M' )
-              this_env_val = 2.46e+19
             case ( 'TEMP' )
               this_env_val = 298.15
               temp_set = .true.
             case ( 'H2O' )
               this_env_val = 3.91e+17
-            case ( 'PRESS', 'BLHEIGHT', 'RH', 'DILUTE' )
+            case ( 'PRESS' )
+              this_env_val = 1013.25
+            case ( 'BLHEIGHT', 'RH', 'DILUTE', 'M' )
               this_env_val = -1
             case ( 'DEC' )
               this_env_val = 0.41
@@ -249,6 +252,7 @@ contains
           end select
       end select
       currentEnvVarValues(envVarNum) = this_env_val
+
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
         case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN' )
@@ -284,7 +288,7 @@ contains
       end if
     end do
     if ( envVarNum == 0 ) then
-      write (stderr,*) 'The name ' // trim( name ) // 'is not found in getEnvVarNum().'
+      write (stderr,*) 'The name ' // trim( name ) // ' is not found in getEnvVarNum().'
       stop
     end if
     return
@@ -298,7 +302,9 @@ contains
     use photolysisRates_mod
     use envVars
     implicit none
+
     integer(kind=SI) :: envVarNum
+
     ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
     envVarNum = getEnvVarNum( 'JFAC' )
     !IF CALC

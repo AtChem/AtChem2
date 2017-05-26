@@ -472,7 +472,8 @@ contains
     use storage, only : maxFilepathLength, maxEnvVarNameLength
     implicit none
 
-    integer(kind=NPI) :: i, counter, k
+    integer(kind=NPI) :: k
+    integer(kind=SI) :: counter, i
     integer(kind=IntErr) :: ierr
     real(kind=DP) :: input1, input2
     character(len=10) :: dummy
@@ -482,7 +483,7 @@ contains
     write (*, '(A)') ' Reading environment variables...'
 
     ! Count number of environment variables by reading in lines from file
-    counter = count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' )
+    counter = int( count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' ), SI )
 
     numEnvVars = counter
 
@@ -497,19 +498,19 @@ contains
     call inquire_or_abort( fileLocation, 'readEnvVar()')
     open (10, file=fileLocation, status='old') ! input file
     ! Read in environment variables - if
-    do i = 1, numEnvVars
+    do i = 1_SI, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
 
       select case ( trim( envVarTypes(i) ) )
         case ('CALC')
-          envVarTypesNum(i) = 1
+          envVarTypesNum(i) = 1_SI
         case ('CONSTRAINED')
-          envVarTypesNum(i) = 2
+          envVarTypesNum(i) = 2_SI
         case ('NOTUSED')
-          envVarTypesNum(i) = 4
+          envVarTypesNum(i) = 4_SI
         case default
-          envVarTypesNum(i) = 3
+          envVarTypesNum(i) = 3_SI
           ! Copy 3rd column value to envVarFixedValues(i)
           read (envVarTypes(i),*) envVarFixedValues(i)
       end select
@@ -609,7 +610,7 @@ contains
 
     integer(kind=NPI) :: i, k
     integer(kind=IntErr) :: ierr
-    integer :: maxNumberOfDataPoints
+    integer(kind=NPI) :: maxNumberOfDataPoints
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation

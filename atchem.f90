@@ -407,8 +407,8 @@ PROGRAM ATCHEM
     ! Output rates of production and loss (output frequency set in model.parameters)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1 )
-      call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0 )
+      call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1_SI )
+      call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0_SI )
     end if
 
     ! Output Jacobian matrix (output frequency set in model.parameters)

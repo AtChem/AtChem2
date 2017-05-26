@@ -273,8 +273,8 @@ contains
     implicit none
 
     character(len=*), intent(in) :: name
-    integer(kind=NPI) :: envVarNum
-    integer(kind=NPI) :: i
+    integer(kind=SI) :: envVarNum
+    integer(kind=SI) :: i
 
     envVarNum = 0
     do i = 1, numEnvVars
@@ -298,12 +298,12 @@ contains
     use photolysisRates_mod
     use envVars
     implicit none
-    integer(kind=NPI) :: envVarNum
+    integer(kind=SI) :: envVarNum
     ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
     envVarNum = getEnvVarNum( 'JFAC' )
     !IF CALC
     ! If JFAC is CALC and there's no JFAC species, the program should complain
-    if ( envVarTypesNum(envVarNum) == 1 ) then
+    if ( envVarTypesNum(envVarNum) == 1_SI ) then
       if ( '' == trim( jFacSpecies ) ) then
         write (*, '(A)') ' Error! JFAC was set to CALC, but JFac species was not provided!'!
         stop
@@ -314,9 +314,9 @@ contains
         stop
       end if
       !IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2 ) then
+    else if ( envVarTypesNum(envVarNum) == 2_SI ) then
       !IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3 ) then
+    else if ( envVarTypesNum(envVarNum) == 3_SI ) then
       !IF NOTUSED
       ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
     else

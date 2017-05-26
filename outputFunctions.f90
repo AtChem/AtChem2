@@ -178,7 +178,7 @@ contains
 
     integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
     real(kind=DP), intent(in) :: t, p(:)
-    integer, intent(in) :: flag
+    integer(kind=SI), intent(in) :: flag
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     integer(kind=NPI) :: i, j, output_file_number
     character(len=maxReactionStringLength) :: reaction
@@ -198,9 +198,9 @@ contains
 
     ! Flag = 0 for loss, 1 for production
     select case ( flag )
-      case ( 0 )
+      case ( 0_SI )
         output_file_number = 56
-      case ( 1 )
+      case ( 1_SI )
         output_file_number = 60
       case default
         write (stderr,*) "Unexpected flag value to outputRates(). flag = ", flag

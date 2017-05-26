@@ -311,7 +311,7 @@ module photolysisRates_mod
   implicit none
   save
 
-  integer, parameter :: maxNrOfConPhotoRates = 100
+  integer(kind=NPI), parameter :: maxNrOfConPhotoRates = 100
   integer(kind=NPI) :: numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
   integer(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
   integer(kind=NPI) :: nrOfPhotoRates

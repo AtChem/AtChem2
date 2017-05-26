@@ -57,7 +57,7 @@ PROGRAM ATCHEM
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
-  integer :: time, elapsed
+  integer(kind=QI) :: time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   real(kind=DP), allocatable :: z(:)

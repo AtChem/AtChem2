@@ -83,13 +83,13 @@ module model_params_mod
   implicit none
   save
 
-  integer :: maxNumTimesteps
+  integer(kind=NPI) :: maxNumTimesteps
   real(kind=DP) :: timestepSize
   integer(kind=SI) :: speciesInterpolationMethod, conditionsInterpolationMethod, decInterpolationMethod
-  integer :: ratesOutputStepSize
+  integer(kind=QI) :: ratesOutputStepSize
   real(kind=DP) :: modelStartTime
-  integer :: jacobianOutputStepSize
-  integer :: irOutStepSize
+  integer(kind=QI) :: jacobianOutputStepSize
+  integer(kind=QI) :: irOutStepSize
   character(len=20) :: interpolationMethodName(2)
 
 contains
@@ -107,7 +107,7 @@ contains
     interpolationMethodName(2) = 'piecewise linear'
     ! maxNumTimesteps sets the maximum number of timesteps to calculate.
     ! Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
-    maxNumTimesteps = input_parameters(1)
+    maxNumTimesteps = nint( input_parameters(1), NPI )
     ! Size of timestep: tout is incremented by this amount on each iteration of the main while loop.
     timestepSize = input_parameters(2)
     ! Use the local variable speciesInterpolationMethod to set the value speciesInterpMethod,
@@ -117,29 +117,29 @@ contains
     ! 1: Piecewise constant
     ! 2: Piecewise linear
     ! otherwise: error
-    speciesInterpolationMethod = input_parameters(3)
+    speciesInterpolationMethod = nint( input_parameters(3), SI )
     call setSpeciesInterpMethod( speciesInterpolationMethod )
-    conditionsInterpolationMethod = input_parameters(4)
+    conditionsInterpolationMethod = nint( input_parameters(4), SI )
     call setConditionsInterpMethod( conditionsInterpolationMethod )
-    decInterpolationMethod = input_parameters(5)
+    decInterpolationMethod = nint( input_parameters(5), SI )
     call setDecInterpMethod( decInterpolationMethod )
     ! Member variable of MODULE constraints. Used in getConstrainedQuantAtT and readEnvVar
-    maxNumberOfDataPoints = input_parameters(6)
+    maxNumberOfDataPoints = nint( input_parameters(6), NPI )
     ! Frequency at which outputRates is called below.
-    ratesOutputStepSize = input_parameters(7)
+    ratesOutputStepSize = nint( input_parameters(7), QI )
     ! Start time of model. Used to set t initially, and to calculate the elapsed time.
     modelStartTime = input_parameters(8)
     ! Frequency at which output_jfy is called below.
-    jacobianOutputStepSize = input_parameters(9)
+    jacobianOutputStepSize = nint( input_parameters(9), QI )
     ! Member variables of module SZACalcVars
     latitude = input_parameters(10)
     longitude = input_parameters(11)
     ! Member variables of module date
-    day = input_parameters(12)
-    month = input_parameters(13)
-    year = input_parameters(14)
+    day = nint( input_parameters(12), SI )
+    month = nint( input_parameters(13), SI )
+    year = nint( input_parameters(14), DI )
     ! Frequency at which to output instantaneous rates
-    irOutStepSize = input_parameters(15)
+    irOutStepSize = nint( input_parameters(15), QI )
 
     ! float format
     300 format (A52, E11.3)

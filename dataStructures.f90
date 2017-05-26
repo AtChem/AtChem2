@@ -49,24 +49,22 @@ module date
   implicit none
   save
 
-  integer :: day, month, year, dayOfYear
+  integer(kind=SI) :: day, month
+  integer(kind=DI) :: year, dayOfYear
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 
 contains
   subroutine calcDateParameters()
     implicit none
 
-    integer :: i, monthList(12)
+    integer(kind=SI) :: monthList(12)
 
-    monthList = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    monthList = [31_SI, 28_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
     ! calculate which day of the year day/month refers to
-    dayOfYear = 0
-    do i = 1, month - 1
-      dayOfYear = dayOfYear + monthList(i)
-    end do
-    dayOfYear = dayOfYear + day - 1
+    dayOfYear = sum( monthList(1:month - 1_SI) )
+    dayOfYear = dayOfYear + day - 1_SI
     ! This day refers to the following fraction through the year
-    dayAsFractionOfYear = dayOfYear / 365
+    dayAsFractionOfYear = dayOfYear / 365_DI
     ! Set number of seconds per year
     secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
     return

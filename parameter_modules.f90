@@ -3,12 +3,14 @@ module solver_params_mod
   implicit none
   save
 
-  real(kind=DP) :: atol
-  real(kind=DP) :: rtol
-  integer(kind=NPI) :: JvApprox, lookBack
-  real(kind=DP) :: deltaJv, deltaMain, maxStep
+  real(kind=DP) :: atol, rtol
+  integer(kind=SI) :: JvApprox
+  real(kind=DP) :: deltaJv, deltaMain
+  integer(kind=NPI) :: lookBack
+  real(kind=DP) :: maxStep
   integer(kind=NPI) :: maxNumSteps
-  integer(kind=NPI) :: solverType, preconBandUpper, preconBandLower
+  integer(kind=SI) :: solverType
+  integer(kind=NPI) :: preconBandUpper, preconBandLower
   character(len=30) :: solverTypeName(3)
 
 contains
@@ -29,7 +31,7 @@ contains
     ! TODO: convert this to boolean?
     ! If JvApprox==1 and solverType={1,2}, call FCVSPILSSETJAC() below, with non-zero flag.
     ! This means FCVJTIMES() in solverFunctions.f90 should be used to approximate the Jacobian.
-    JvApprox = input_parameters(3)
+    JvApprox = nint( input_parameters(3), SI )
     ! This is never used, but is referenced in a comment in FCVJTIMES().
     ! TODO: delete?
     deltaJv = input_parameters(4)
@@ -37,22 +39,22 @@ contains
     deltaMain = input_parameters(5)
     ! From CVODE docs: MAXL is the maximum Krylov subspace dimension. Used in FCVSPGMR().
     ! TODO: Rename to MAXL?
-    lookBack = input_parameters(6)
+    lookBack = nint( input_parameters(6), NPI )
     ! From CVODE docs: Maximum absolute step size. Passed via FCVSETRIN().
     maxStep = input_parameters(7)
     ! From CVODE docs: Maximum no. of internal steps before tout. Passed via FCVSETIIN().
-    maxNumsteps = input_parameters(8)
+    maxNumsteps = nint( input_parameters(8), NPI )
     ! USed to choose which solver to use:
     ! 1: SPGMR
     ! 2: SPGMR + Banded preconditioner
     ! 3: Dense solver
     ! otherwise: error
-    solverType = input_parameters(9)
+    solverType = nint( input_parameters(9), SI )
     ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower) are the upper
     ! and lower half- bandwidths of the band matrix that is retained as an
     ! approximation of the Jacobian.
-    preconBandUpper = input_parameters(10)
-    preconBandLower = input_parameters(11)
+    preconBandUpper = nint( input_parameters(10), NPI )
+    preconBandLower = nint( input_parameters(11), NPI )
 
     ! float format
     100 format (A18, 1P E11.3)

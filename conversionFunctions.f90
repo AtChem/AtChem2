@@ -3,26 +3,6 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  pure function calcDec( t ) result ( dec )
-    ! calculate the declination of the Sun as seen from Earth.
-    use types_mod
-    use date, only : secondsInYear, dayAsFractionOfYear
-    implicit none
-
-    real(kind=DP), intent(in) :: t
-    real(kind=DP) :: dec, pi, daysInYear, maxDecInRad, currentFYear, temporary
-
-    daysInYear = 365.24
-    pi = 4.0 * atan( 1.0 )
-    maxDecInRad = 23.44 * pi / 180.0
-    currentFYear = dayAsFractionOfYear + ( t / secondsInYear )
-    temporary = 2.0 * 0.0167 * sin( 2 * pi * ( currentFYear - ( 2.0 / daysInYear ) ) )
-    dec = asin( sin( -maxDecInRad ) * cos( ( 2.0 * pi ) * ( currentFYear + ( 10.0 / daysInYear ) ) + temporary ) )
-    return
-  end function calcDec
-
-  ! ----------------------------------------------------------------- !
-
   pure function calcAirDensity( press, temp ) result ( m )
     ! calculate the number density of air (molecule cm-3) from
     ! pressure (mbar) and temperature (K)

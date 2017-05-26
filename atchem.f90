@@ -14,7 +14,6 @@ PROGRAM ATCHEM
   use zenithData
   use productionAndLossRates
   use envVars
-  use SZACalcVars
   use date
   use directories, only : output_dir, param_dir
   use storage, only : maxSpecLength, maxPhotoRateNameLength

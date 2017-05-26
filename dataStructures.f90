@@ -349,14 +349,15 @@ contains
 end module photolysisRates_mod
 
 !    ********************************************************************************************************
-!    PHOTOLYSIS RATES PARAMETERS MODULE
+!    SOLAR ZENITH ANGLE AND PHOTOLYSIS RATES PARAMETERS MODULE
 !    ********************************************************************************************************
 module zenithData
   use types_mod
   implicit none
   save
 
-  real(kind=DP) :: lat, longt, lha, sinld, cosld, cosX, secX
+  real(kind=DP) :: latitude, longitude
+  real(kind=DP) :: lha, sinld, cosld, cosx, secx
 
 end module zenithData
 
@@ -371,17 +372,3 @@ module productionAndLossRates
   real(kind=DP), allocatable :: lossRates(:), productionRates(:), instantaneousRates(:)
 
 end module productionAndLossRates
-
-!    ----------------------------------------------------------------
-!     *******************************************************************************************************
-!    ********************************************************************************************************
-!    SOLAR ZENITH ANGLE CALCULATION VARIABLES MODULE
-!    ********************************************************************************************************
-module SZACalcVars
-  use types_mod
-  implicit none
-  save
-
-  real(kind=DP) :: latitude, longitude
-
-end module SZACalcVars

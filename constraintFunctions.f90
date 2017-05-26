@@ -136,7 +136,7 @@ contains
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
     use conversionFunctions_mod
-    use utilityFunctions_mod, only : zenith
+    use utilityFunctions_mod, only : calcDec, calcZenith
     implicit none
 
     real(kind=DP) :: t
@@ -257,7 +257,7 @@ contains
       select case ( this_env_var_name )
         case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN' )
         case ( 'DEC' )
-          call zenith( t, this_env_val )
+          call calcZenith( t, this_env_val )
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop

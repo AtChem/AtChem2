@@ -606,11 +606,11 @@ contains
                                 constrainedPhotoRates, nrOfPhotoRates, photoRateNames, constrainedPhotoRatesNumbers, ck
     use directories, only : param_dir, env_constraints_dir
     use storage, only : maxPhotoRateNameLength, maxFilepathLength
+    use constraints, only : maxNumberOfDataPoints
     implicit none
 
     integer(kind=NPI) :: i, k
     integer(kind=IntErr) :: ierr
-    integer(kind=NPI) :: maxNumberOfDataPoints
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
@@ -652,7 +652,7 @@ contains
         end if
       end do
     end do
-    ! ALLOCATE ARRAY SIZE FOR STOREAGE OF PHOTOLYSIS CONSTRAINT DATA
+    ! ALLOCATE ARRAY SIZE FOR STORAGE OF PHOTOLYSIS CONSTRAINT DATA
     allocate (photoX (numConPhotoRates, maxNumberOfDataPoints) )
     allocate (photoY (numConPhotoRates, maxNumberOfDataPoints) )
     allocate (photoY2 (numConPhotoRates, maxNumberOfDataPoints) )

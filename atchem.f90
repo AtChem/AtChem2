@@ -59,9 +59,8 @@ PROGRAM ATCHEM
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
   real(kind=DP), allocatable :: z(:)
-  real(kind=DP), allocatable :: tempForSolverParameters(:), tempForModelParameters(:)
+
   real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)
-  integer(kind=DI) :: modelParameterSize, solverParameterSize
 
   character(len=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
   character(len=400) :: fmt
@@ -172,7 +171,6 @@ PROGRAM ATCHEM
   write (*,*)
   !   Set default value for photonames array
   photoRateNamesForHeader(:) = 'na'
-
   photoRateNamesForHeader(ck(1:nrOfPhotoRates)) = photoRateNames(1:nrOfPhotoRates)
 
   !   READ IN JFAC SPECIES
@@ -215,21 +213,13 @@ PROGRAM ATCHEM
 
 
   !    READ IN SOLVER PARAMETERS
-  allocate(tempForSolverParameters(100))
   write (*, '(A)') ' Reading solver parameters from file...'
-  call getParametersFromFile( trim( param_dir ) // "/solver.parameters", tempForSolverParameters, solverParameterSize )
+  call getParametersFromFile( trim( param_dir ) // "/solver.parameters", solverParameters )
   write (*, '(A)') ' Finished reading solver parameters from file.'
-  allocate (solverParameters(solverParameterSize))
-  solverParameters(:) = tempForSolverParameters(1:solverParameterSize)
-  deallocate(tempForSolverParameters)
   !   READ IN MODEL PARAMETERS
-  allocate(tempForModelParameters(100))
   write (*, '(A)') ' Reading model parameters from file...'
-  call getParametersFromFile( trim( param_dir ) //  "/model.parameters", tempForModelParameters, modelParameterSize )
+  call getParametersFromFile( trim( param_dir ) //  "/model.parameters", modelParameters )
   write (*, '(A)') ' Finished reading model parameters from file.'
-  allocate (modelParameters(modelParameterSize))
-  modelParameters(:) = tempForModelParameters(1:modelParameterSize)
-  deallocate (tempForModelParameters)
   write (*,*)
 
   !   SET SOLVER PARAMETERS

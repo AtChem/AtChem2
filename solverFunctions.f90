@@ -128,7 +128,7 @@ contains!     ---------------------------------------------------------------
     use interpolationMethod, only : getConditionsInterpMethod
     use outputFunctions_mod, only : ro2sum
     use constraintFunctions_mod, only : getEnvVarsAtT, getEnvVarNum
-    use utilityFunctions_mod, only : atmosphere
+    use utilityFunctions_mod, only : calcAtmosphere
     implicit none
 
     ! calculates rate constants from arrhenius information
@@ -180,10 +180,7 @@ contains!     ---------------------------------------------------------------
       end select
     end do
 
-    call atmosphere( m, o2, n2 )
-
-    !O2 = 0.2095*m
-    !N2 = 0.7809*m
+    call calcAtmosphere( m, o2, n2 )
 
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then

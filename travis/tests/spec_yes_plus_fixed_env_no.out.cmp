@@ -102,9 +102,9 @@
 -----------------------
  Reading environment variables...
  Number of environment variables: 10
- 1      M                   2.538e+19
+ 1      M                        CALC
  2      TEMP                      293
- 3      PRESS                 NOTUSED
+ 3      PRESS                    1013
  4      RH                    NOTUSED
  5      H2O                 2.538e+17
  6      DEC                     0.414
@@ -192,10 +192,10 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 162   No. f-s = 227   No. J-s = 427   No. LU-s = 54
- No. nonlinear iterations = 226
+ No. steps = 158   No. f-s = 221   No. J-s = 412   No. LU-s = 55
+ No. nonlinear iterations = 220
  No. nonlinear convergence failures = 0
- No. error test failures = 14
+ No. error test failures = 13
 
  Runtime = 0
  Deallocating memory.

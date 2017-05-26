@@ -102,9 +102,9 @@
 -----------------------
  Reading environment variables...
  Number of environment variables: 10
- 1      M                   2.538e+19
+ 1      M                        CALC
  2      TEMP                      293
- 3      PRESS                 NOTUSED
+ 3      PRESS                    1013
  4      RH                    NOTUSED
  5      H2O                 2.538e+17
  6      DEC                     0.414
@@ -190,8 +190,8 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 160   No. f-s = 218   No. J-s = 406   No. LU-s = 58
- No. nonlinear iterations = 215
+ No. steps = 152   No. f-s = 219   No. J-s = 416   No. LU-s = 56
+ No. nonlinear iterations = 216
  No. nonlinear convergence failures = 0
  No. error test failures = 12
 

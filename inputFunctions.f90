@@ -497,10 +497,11 @@ contains
 
 
   subroutine readEnvVar()
-    ! This function reads in data from environmentVariables.config, and sets
-    ! envVarTypesNum for each one. In the case of a constrained variable, this
-    ! also reads in the constraint data from environmentConstraints directory, the
-    ! file named after the environmental variable.
+    ! This function reads in data from environmentVariables.config,
+    ! and sets envVarTypesNum for each one. In the case of a
+    ! constrained variable, this also reads in the constraint data
+    ! from environmentConstraints directory, the file named after the
+    ! environmental variable.
     use types_mod
     use envVars
     use directories, only : param_dir, env_constraints_dir

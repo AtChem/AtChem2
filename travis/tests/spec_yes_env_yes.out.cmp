@@ -102,9 +102,9 @@
 -----------------------
  Reading environment variables...
  Number of environment variables: 10
- 1      M                   2.538e+19
+ 1      M                        CALC
  2      TEMP                      293
- 3      PRESS                 NOTUSED
+ 3      PRESS                    1013
  4      RH                    NOTUSED
  5      H2O                 2.538e+17
  6      DEC                     0.414
@@ -188,79 +188,19 @@
  time = 1800
  time = 2700
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.621E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
+      3.615E+03 15      6.800E+12
  error in piecewise linear interpolation
       3.607E+03 15      6.800E+12
  error in piecewise linear interpolation
@@ -272,52 +212,22 @@
  error in piecewise linear interpolation
       3.607E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.602E+03 15      6.800E+12
+      3.607E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.602E+03 15      6.800E+12
+      3.601E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.602E+03 15      6.800E+12
+      3.601E+03 15      6.800E+12
  error in piecewise linear interpolation
-      3.602E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.602E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.608E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.608E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.608E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.608E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.608E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
+      3.601E+03 15      6.800E+12
  time = 3600
 
 ------------------
  Final statistics
 ------------------
- No. steps = 318   No. f-s = 506   No. J-s = 894   No. LU-s = 137
- No. nonlinear iterations = 503
+ No. steps = 315   No. f-s = 491   No. J-s = 899   No. LU-s = 138
+ No. nonlinear iterations = 488
  No. nonlinear convergence failures = 0
- No. error test failures = 50
+ No. error test failures = 49
 
  Runtime = 0
  Deallocating memory.

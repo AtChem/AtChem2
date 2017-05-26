@@ -1,11 +1,11 @@
 module conversionFunctions_mod
-  use types_mod
 contains
 
   ! ----------------------------------------------------------------- !
 
   pure function calcDec( t ) result ( dec )
     ! calculate the declination of the Sun as seen from Earth.
+    use types_mod
     use date, only : secondsInYear, dayAsFractionOfYear
     implicit none
 
@@ -23,9 +23,10 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  pure function calcM( press, temp ) result ( m )
+  pure function calcAirDensity( press, temp ) result ( m )
     ! calculate the number density of air (molecule cm-3) from
     ! pressure (mbar) and temperature (K)
+    use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: press, temp
@@ -34,7 +35,7 @@ contains
     press_pa = press * 1.0d+02
     m = 1.0d-06 * ( 6.02214129d+23 / 8.3144621 ) * ( press_pa / temp )
     return
-  end function calcM
+  end function calcAirDensity
 
   ! ----------------------------------------------------------------- !
 
@@ -43,6 +44,7 @@ contains
     ! pressure in mbar (1 mbar = 1 hPa), temperature in K
     !
     ! from "Humidity Conversion Formulas" published by Vaisala (2013)
+    use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: rh, temp, press
@@ -59,7 +61,7 @@ contains
     h2o_ppm = 1.0d+06 * wvp / (press - wvp)
 
     ! convert ppm to molecule cm-3
-    h2o = h2o_ppm * calcM(press, temp) * 1.0d-06
+    h2o = h2o_ppm * calcAirDensity(press, temp) * 1.0d-06
 
     return
   end function convertRHtoH2O

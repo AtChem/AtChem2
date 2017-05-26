@@ -38,22 +38,6 @@ contains
 
   ! ----------------------------------------------------------------- !
 
-  pure function calcPressure( m, temp ) result ( press )
-    ! calculate pressure (mbar) from the number density of air
-    ! (molecule cm-3) and temperature (K)
-    implicit none
-
-    real(kind=DP), intent(in) :: m, temp
-    real(kind=DP) :: press
-    real(kind=DP) :: press_pa
-
-    press_pa = ( m * temp ) / ( 6.02214129d+23 / 8.3144621 )
-    press = press_pa/1.0d+2
-    return
-  end function calcPressure
-
-  ! ----------------------------------------------------------------- !
-
   pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
     ! convert relative humidity to water concentration (molecule cm-3)
     ! pressure in mbar, temperature in K

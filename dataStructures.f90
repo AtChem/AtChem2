@@ -17,15 +17,16 @@ module types_mod
 end module types_mod
 
 module storage
+  use types_mod
   implicit none
   save
 
-  integer, parameter :: maxSpecLength=10
-  integer, parameter :: maxPhotoRateNameLength=6
-  integer, parameter :: maxEnvVarNameLength=9
-  integer, parameter :: maxEnvVarLength=15
-  integer, parameter :: maxFilepathLength=100
-  integer, parameter :: maxReactionStringLength=1000
+  integer(kind=DI), parameter :: maxSpecLength=10
+  integer(kind=DI), parameter :: maxPhotoRateNameLength=6
+  integer(kind=DI), parameter :: maxEnvVarNameLength=9
+  integer(kind=DI), parameter :: maxEnvVarLength=15
+  integer(kind=DI), parameter :: maxFilepathLength=100
+  integer(kind=DI), parameter :: maxReactionStringLength=1000
 
 end module storage
 

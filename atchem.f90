@@ -175,9 +175,7 @@ PROGRAM ATCHEM
   !   Set default value for photonames array
   photoRateNamesForHeader(:) = 'na'
 
-  do i = 1, nrOfPhotoRates
-    photoRateNamesForHeader(ck(i)) = photoRateNames(i)
-  end do
+  photoRateNamesForHeader(ck(1:nrOfPhotoRates)) = photoRateNames(1:nrOfPhotoRates)
 
   !   READ IN JFAC SPECIES
   call readJFacSpecies()

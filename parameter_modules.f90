@@ -100,7 +100,7 @@ contains
   subroutine set_model_parameters( input_parameters )
     use types_mod
     use constraints, only : maxNumberOfDataPoints
-    use SZACalcVars, only : latitude, longitude
+    use zenithData, only : latitude, longitude
     use date, only : day, month, year
     use interpolationMethod, only : setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
     implicit none
@@ -136,7 +136,7 @@ contains
     modelStartTime = input_parameters(8)
     ! Frequency at which output_jfy is called below.
     jacobianOutputStepSize = nint( input_parameters(9), QI )
-    ! Member variables of module SZACalcVars
+    ! Member variables of module zenithData
     latitude = input_parameters(10)
     longitude = input_parameters(11)
     ! Member variables of module date

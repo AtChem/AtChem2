@@ -80,10 +80,9 @@ module envVars
 
   character(len=maxEnvVarNameLength), allocatable :: envVarNames(:)
   character(len=maxEnvVarLength), allocatable :: envVarTypes(:)
-  integer, allocatable :: envVarTypesNum(:)
+  integer(kind=SI), allocatable :: envVarTypesNum(:)
   real(kind=DP), allocatable :: envVarFixedValues(:), currentEnvVarValues(:)
-  integer(kind=NPI) :: numEnvVars
-  integer :: tempNum
+  integer(kind=SI) :: numEnvVars
   real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2

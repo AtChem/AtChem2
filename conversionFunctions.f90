@@ -31,8 +31,8 @@ contains
     real(kind=DP), intent(in) :: press, temp
     real(kind=DP) :: m, press_pa
 
-    press_pa = press * 1.0d+2
-    m = ( 6.02214129d+23 / 8.3144621 ) * ( press_pa / temp )
+    press_pa = press * 1.0d+02
+    m = 1.0d-06 * ( 6.02214129d+23 / 8.3144621 ) * ( press_pa / temp )
     return
   end function calcM
 
@@ -40,17 +40,17 @@ contains
 
   pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
     ! convert relative humidity to water concentration (molecule cm-3)
-    ! pressure in mbar, temperature in K
+    ! pressure in mbar (1 mbar = 1 hPa), temperature in K
     implicit none
 
     real(kind=DP), intent(in) :: rh, temp, press
-    real(kind=DP) :: h2o, exponent, e1
+    real(kind=DP) :: h2o, h2o_ppm, temp_c, wvp
 
-    exponent = exp( -1.00d00 * ( 597.30d00 - 0.57d00 * ( temp - 273.16d00 ) ) * &
-                   18.00d00 / 1.986d00 * ( 1.00d00 / temp - 1.00d00 / 273.16d00 ) )
+    temp_c = temp - 273.15
+    wvp = (rh/100) * 6.116441 * 10**( (7.591386 * temp_c) / (temp_c + 240.7263) )
+    h2o_ppm = 1.0d+06 * wvp / (press - wvp)
+    h2o = h2o_ppm * calcM(press,temp) * 1.0d-06
 
-    e1 = 10d0 / ( 1.38d-16 * temp ) * rh
-    h2o = 6.1078d0 * exponent * e1
     return
   end function convertRHtoH2O
 

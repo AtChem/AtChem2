@@ -49,7 +49,7 @@ contains
     temp_c = temp - 273.15
     wvp = (rh/100) * 6.116441 * 10**( (7.591386 * temp_c) / (temp_c + 240.7263) )
     h2o_ppm = 1.0d+06 * wvp / (press - wvp)
-    h2o = h2o_ppm * calcM(press,temp) * 1.0d-06
+    h2o = h2o_ppm * calcM(press, temp) * 1.0d-06
 
     return
   end function convertRHtoH2O

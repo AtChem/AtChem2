@@ -39,14 +39,12 @@ PROGRAM ATCHEM
   real(kind=DP) :: t, tout
   real(kind=DP) :: rout(6)
   real(kind=DP) :: rpar(1)
-  real(kind=DP), allocatable :: speciesConcs(:)
 
   !   DECLARATIONS FOR TIME PARAMETERS
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
   integer(kind=NPI) :: numSpec, numReac
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  real(kind=DP), allocatable :: initialConcentrations(:)
   character(len=maxSpecLength), allocatable :: speciesNames(:), initConcSpeciesNames(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
@@ -58,6 +56,8 @@ PROGRAM ATCHEM
   integer(kind=QI) :: time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
+  real(kind=DP), allocatable :: initialConcentrations(:)
+  real(kind=DP), allocatable :: speciesConcs(:)
   real(kind=DP), allocatable :: z(:)
 
   real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)

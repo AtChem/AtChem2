@@ -133,7 +133,7 @@ PROGRAM ATCHEM
   numReac = getNumberOfReactions()
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  allocate (speciesConcs(numSpec), speciesNames(numSpec))
+  allocate (speciesConcs(numSpec))
 
   allocate (z(numSpec), initialConcentrations(numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
@@ -150,7 +150,7 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
   write (*, '(A)') ' Reading species names from mechanism.species...'
-  call readSpecies( speciesNames )
+  speciesNames = readSpecies()
   write (*, '(A)') ' Finished reading species names.'
   write (*,*)
 
@@ -251,7 +251,7 @@ PROGRAM ATCHEM
   write (*,*)
 
   ! fill speciesOutputRequired with the names of species to output to concentration.output
-  call readSpeciesOutputRequired( speciesOutputRequired )
+  speciesOutputRequired = readSpeciesOutputRequired()
 
   ! Allocate concsOfSpeciesOutputRequired
   allocate ( concsOfSpeciesOfInterest(size( speciesOutputRequired )))

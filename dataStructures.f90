@@ -179,10 +179,10 @@ module species
   implicit none
   save
 
-  integer(kind=NPI) :: numSpecies, numReactions, i
+  integer(kind=NPI) :: numSpecies, numReactions
   character(len=maxSpecLength), allocatable :: speciesList(:)
 
-  private :: numSpecies, numReactions, speciesList, i
+  private :: numSpecies, numReactions, speciesList
   public :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
   public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
@@ -218,9 +218,10 @@ contains
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
-  function getSpeciesList() result ( sl )
+  pure function getSpeciesList() result ( sl )
     implicit none
     character(len=maxSpecLength), allocatable :: sl(:)
+    integer(kind=NPI) :: i
     allocate (sl(numSpecies) )
     do i = 1, numSpecies
       sl(i) = speciesList(i)
@@ -230,6 +231,7 @@ contains
   subroutine setSpeciesList( sl )
     implicit none
     character(len=maxSpecLength) :: sl(:)
+    integer(kind=NPI) :: i
     do i = 1, numSpecies
       speciesList(i) = sl(i)
     end do

@@ -94,21 +94,27 @@ contains
 
   subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
     use types_mod
+    use species, only : getSpeciesList
+    use storage, only : maxSpecLength
+    implicit none
     ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
     ! in the same order as the species are in specInt
     real(kind=DP), intent(in) :: masterConcList(:)
-    integer(kind=NPI), intent(in) :: speciesOfInterest(:)
+    character(len=maxSpecLength), intent(in) :: speciesOfInterest(:)
+    character(len=maxSpecLength), allocatable :: allSpecies(:)
     real(kind=DP), intent(out) :: interestSpeciesConcList(:)
     integer(kind=NPI) :: i, j
     ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
     ! using the elements of specInt as a key
+    allSpecies = getSpeciesList()
     if ( size( interestSpeciesConcList ) /= size( speciesOfInterest ) ) then
       stop 'size(interestSpeciesConcList) /= size(speciesOfInterest) in getConcForSpecInt'
     end if
-    do i = 1, size( masterConcList )
+    do i = 1, size( allSpecies )
       do j = 1, size( speciesOfInterest )
-        if ( speciesOfInterest(j) == i ) then
+        if ( trim( speciesOfInterest(j) ) == trim( allSpecies(i) ) ) then
           interestSpeciesConcList(j) = masterConcList(i)
+          exit
         end if
       end do
     end do

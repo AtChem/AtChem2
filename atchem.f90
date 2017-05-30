@@ -48,7 +48,6 @@ PROGRAM ATCHEM
   character(len=maxSpecLength), allocatable :: speciesNames(:), initConcSpeciesNames(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  integer(kind=NPI), allocatable :: SORNumber(:)
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
@@ -254,9 +253,8 @@ PROGRAM ATCHEM
   ! fill speciesOutputRequired with the names of species to output to concentration.output
   call readSpeciesOutputRequired( speciesOutputRequired )
 
-  ! Allocate SORNumber and fill with the global numbering of the species found in speciesOutputRequired
-  allocate (SORNumber(size( speciesOutputRequired )), concsOfSpeciesOfInterest(size( speciesOutputRequired )))
-  call matchNameToNumber( speciesNames, speciesOutputRequired, SORNumber )
+  ! Allocate concsOfSpeciesOutputRequired
+  allocate ( concsOfSpeciesOfInterest(size( speciesOutputRequired )))
 
   flush(stderr)
   !    ********************************************************************************************************
@@ -270,7 +268,7 @@ PROGRAM ATCHEM
   call readSpeciesConstraints( t, speciesConcs )
 
   write (*,*)
-  call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
+  call getConcForSpecInt( speciesConcs, speciesOutputRequired, concsOfSpeciesOfInterest )
   call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is speciesConcs with all the constrained species removed.
@@ -397,7 +395,7 @@ PROGRAM ATCHEM
       call jfy( numReac, speciesConcs, t )
     end if
 
-    call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
+    call getConcForSpecInt( speciesConcs, speciesOutputRequired, concsOfSpeciesOfInterest )
     call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( t )
 
@@ -451,7 +449,7 @@ PROGRAM ATCHEM
   call FCVFREE()
   deallocate (speciesConcs, speciesNames, z)
   deallocate (prodIntSpecies, reacIntSpecies)
-  deallocate (SORNumber, concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
+  deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   deallocate (ir)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)

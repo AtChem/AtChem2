@@ -134,7 +134,7 @@ PROGRAM ATCHEM
 
   !    SET ARRAY SIZES = NO. OF SPECIES
   allocate (speciesConcs(numSpec), speciesNames(numSpec))
-  speciesConcs(:) = 0
+
   allocate (z(numSpec), initialConcentrations(numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   allocate (lossRates(numReac), productionRates(numReac), ir(numReac))

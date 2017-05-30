@@ -161,19 +161,21 @@ contains
   end subroutine readReactions
 
 
-  subroutine readSpecies( speciesName )
+  function readSpecies() result ( speciesName )
     use types_mod
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
+    use species, only : getNumberOfSpecies
     implicit none
 
-    character(len=maxSpecLength), intent(out) :: speciesName(:)
+    character(len=maxSpecLength), allocatable :: speciesName(:)
     integer(kind=NPI) :: j, dummy
     character(len=maxFilepathLength) :: fileLocation
 
     fileLocation=trim( param_dir ) // '/mechanism.species'
     ! Read in species number and name from mC/mechanism.species to speciesName
     ! and sdummy (to be thrown).
+    allocate(speciesName(getNumberOfSpecies()))
     call inquire_or_abort( fileLocation, 'readSpecies()')
     open (10, file=fileLocation) ! input file
     do j = 1, size ( speciesName )
@@ -182,7 +184,7 @@ contains
     close (10, status='keep')
 
     return
-  end subroutine readSpecies
+  end function readSpecies
 
 
   subroutine readInitialConcentrations( concSpeciesNames, concentration )
@@ -564,14 +566,14 @@ contains
   end subroutine readEnvVar
 
 
-  subroutine readSpeciesOutputRequired( r )
+  function readSpeciesOutputRequired() result ( r )
     use types_mod
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
     implicit none
 
-    character(len=maxSpecLength), allocatable, intent(out) :: r(:)
+    character(len=maxSpecLength), allocatable :: r(:)
     character(len=maxFilepathLength) :: filename
     integer(kind=NPI) :: j, nsp, length
 
@@ -603,7 +605,7 @@ contains
     end if
 
     return
-  end subroutine readSpeciesOutputRequired
+  end function readSpeciesOutputRequired
 
 
   subroutine readPhotoRates()

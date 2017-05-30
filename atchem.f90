@@ -216,15 +216,15 @@ PROGRAM ATCHEM
   write (*, '(A)') ' Reading solver parameters from file...'
   call getParametersFromFile( trim( param_dir ) // "/solver.parameters", solverParameters )
   write (*, '(A)') ' Finished reading solver parameters from file.'
+  write (*,*)
+  !   SET SOLVER PARAMETERS
+  call set_solver_parameters( solverParameters )
+
   !   READ IN MODEL PARAMETERS
   write (*, '(A)') ' Reading model parameters from file...'
   call getParametersFromFile( trim( param_dir ) //  "/model.parameters", modelParameters )
   write (*, '(A)') ' Finished reading model parameters from file.'
   write (*,*)
-
-  !   SET SOLVER PARAMETERS
-  call set_solver_parameters( solverParameters )
-
   !   SET MODEL PARAMETERS
   call set_model_parameters( modelParameters )
 

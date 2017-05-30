@@ -48,8 +48,6 @@
 
  Reading solver parameters from file...
  Finished reading solver parameters from file.
- Reading model parameters from file...
- Finished reading model parameters from file.
 
  Solver parameters:
  ------------------
@@ -64,6 +62,9 @@
  preconBandLower:         750
       solverType: SPGMR + Banded Preconditioner 
  ------------------
+
+ Reading model parameters from file...
+ Finished reading model parameters from file.
 
  Model parameters:
  -----------------

@@ -91,17 +91,16 @@ contains
   end subroutine outputPhotoRateCalcParameters
 
 
-  subroutine outputPhotolysisRates( t, photoRateNamesForHeader )
-    use photolysisRates_mod, only : nrOfPhotoRates, ck, j
+  subroutine outputPhotolysisRates( t )
+    use photolysisRates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
     implicit none
 
     real(kind=DP), intent(in) :: t
-    character(len=*), intent(in) :: photoRateNamesForHeader(:)
     integer(kind=NPI) :: i
     logical :: firstTime = .true.
 
     if ( firstTime .eqv. .true. ) then
-      write (58, '(100A15) ') 't', (trim( photoRateNamesForHeader(ck(i)) ), i = 1, nrOfPhotoRates)
+      write (58, '(100A15) ') 't', (trim( photoRateNames(i) ), i = 1, nrOfPhotoRates)
       firstTime = .false.
     end if
     write (58, '(100 (1P e15.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)

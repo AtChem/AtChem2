@@ -143,6 +143,7 @@ contains
     if ( size( refSpeciesNames ) /= size( outputConcentrations ) ) then
       stop "size(refSpeciesNames) /= size(outputConcentrations) in setConcentrations()."
     end if
+    outputConcentrations(:) = 0.0
     do i = 1, size( concSpeciesNames )
       match = .false.
       k = concSpeciesNames(i)

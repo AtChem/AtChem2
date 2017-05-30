@@ -62,7 +62,6 @@ PROGRAM ATCHEM
 
   real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)
 
-  character(len=maxPhotoRateNameLength) :: photoRateNamesForHeader(200)
   character(len=400) :: fmt
 
   interface
@@ -169,9 +168,6 @@ PROGRAM ATCHEM
   !   READ IN PHOTOLYSIS RATE INFORMATION
   call readPhotolysisConstants()
   write (*,*)
-  !   Set default value for photonames array
-  photoRateNamesForHeader(:) = 'na'
-  photoRateNamesForHeader(ck(1:nrOfPhotoRates)) = photoRateNames(1:nrOfPhotoRates)
 
   !   READ IN JFAC SPECIES
   call readJFacSpecies()
@@ -404,7 +400,7 @@ PROGRAM ATCHEM
 
     call getConcForSpecInt( speciesConcs, SORNumber, concsOfSpeciesOfInterest )
     call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
-    call outputPhotolysisRates( t, photoRateNamesForHeader )
+    call outputPhotolysisRates( t )
 
     ! Output instantaneous rates
     if ( mod( elapsed, irOutStepSize ) == 0 ) then

@@ -42,7 +42,7 @@ PROGRAM ATCHEM
   real(kind=DP), allocatable :: speciesConcs(:)
 
   !   DECLARATIONS FOR TIME PARAMETERS
-  integer(kind=QI) :: runStart, runEnd, runTime, rate, previousSeconds
+  integer(kind=QI) :: runStart, runEnd, runTime, clockRate
   integer(kind=NPI) :: numSpec, numReac
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
@@ -112,7 +112,6 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
 
   call SYSTEM_CLOCK( runStart )
-  previousSeconds = 0
 
   call get_and_set_directories_from_command_arguments()
 
@@ -443,8 +442,8 @@ PROGRAM ATCHEM
   write (*, fmt) iout (3), iout (4), iout (17), iout (8), &
                  iout (7), iout (6), iout (5)
 
-  call SYSTEM_CLOCK( runEnd, rate )
-  runTime = ( runEnd - runStart ) / rate
+  call SYSTEM_CLOCK( runEnd, clockRate )
+  runTime = ( runEnd - runStart ) / clockRate
   write (*, '(A, I0)') ' Runtime = ', runTime
 
   write (*, '(A)') ' Deallocating memory.'

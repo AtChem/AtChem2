@@ -268,7 +268,7 @@ PROGRAM ATCHEM
   call readSpeciesConstraints( t, speciesConcs )
 
   write (*,*)
-  call getConcForSpecInt( speciesConcs, speciesOutputRequired, concsOfSpeciesOfInterest )
+  concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOutputRequired )
   call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is speciesConcs with all the constrained species removed.
@@ -395,7 +395,7 @@ PROGRAM ATCHEM
       call jfy( numReac, speciesConcs, t )
     end if
 
-    call getConcForSpecInt( speciesConcs, speciesOutputRequired, concsOfSpeciesOfInterest )
+    concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOutputRequired )
     call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( t )
 

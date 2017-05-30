@@ -92,7 +92,7 @@ contains
   end subroutine findReactionsWithProductOrReactant
 
 
-  subroutine getConcForSpecInt( masterConcList, speciesOfInterest, interestSpeciesConcList )
+  pure function getConcForSpeciesOfInterest( masterConcList, speciesOfInterest ) result ( interestSpeciesConcList )
     use types_mod
     use species, only : getSpeciesList
     use storage, only : maxSpecLength
@@ -102,14 +102,11 @@ contains
     real(kind=DP), intent(in) :: masterConcList(:)
     character(len=maxSpecLength), intent(in) :: speciesOfInterest(:)
     character(len=maxSpecLength), allocatable :: allSpecies(:)
-    real(kind=DP), intent(out) :: interestSpeciesConcList(:)
+    real(kind=DP) :: interestSpeciesConcList(size( speciesOfInterest ))
     integer(kind=NPI) :: i, j
     ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
     ! using the elements of specInt as a key
     allSpecies = getSpeciesList()
-    if ( size( interestSpeciesConcList ) /= size( speciesOfInterest ) ) then
-      stop 'size(interestSpeciesConcList) /= size(speciesOfInterest) in getConcForSpecInt'
-    end if
     do i = 1, size( allSpecies )
       do j = 1, size( speciesOfInterest )
         if ( trim( speciesOfInterest(j) ) == trim( allSpecies(i) ) ) then
@@ -119,7 +116,7 @@ contains
       end do
     end do
     return
-  end subroutine getConcForSpecInt
+  end function getConcForSpeciesOfInterest
 
 
   subroutine setConcentrations( refSpeciesNames, concSpeciesNames, &

@@ -271,6 +271,7 @@ PROGRAM ATCHEM
   end if
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
+  write (*,*)
   call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
@@ -284,6 +285,7 @@ PROGRAM ATCHEM
 
   call FCVSETRIN( 'MAX_STEP', maxStep, ier )
   write (*, '(A, I0)') ' setting maxstep ier = ', ier
+  write (*,*)
 
   !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   !   SPGMR SOLVER

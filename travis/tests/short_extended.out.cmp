@@ -142,8 +142,10 @@
                         neq = 104
  numberOfConstrainedSpecies = 0
                          t0 =       3.600E+03
+
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
+
  time = 4600
  time = 5600
  time = 6600

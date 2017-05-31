@@ -148,8 +148,10 @@
                         neq = 25
  numberOfConstrainedSpecies = 4
                          t0 =       0.000E+00
+
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
+
  time = 900
  time = 1800
  time = 2700

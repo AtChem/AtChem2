@@ -49,7 +49,7 @@ PROGRAM ATCHEM
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
-  character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
+  character(len=maxSpecLength), allocatable :: speciesOfInterest(:)
   ! simulation output time variables
   integer(kind=QI) :: time, elapsed
   ! species concentrations with and without constrained species
@@ -232,11 +232,11 @@ PROGRAM ATCHEM
   call readEnvVar()
   write (*,*)
 
-  ! fill speciesOutputRequired with the names of species to output to concentration.output
-  speciesOutputRequired = readSpeciesOutputRequired()
+  ! fill speciesOfInterest with the names of species to output to concentration.output
+  speciesOfInterest = readSpeciesOfInterest()
 
-  ! Allocate concsOfSpeciesOutputRequired
-  allocate ( concsOfSpeciesOfInterest(size( speciesOutputRequired )))
+  ! Allocate concsOfSpeciesOfInterest
+  allocate ( concsOfSpeciesOfInterest(size( speciesOfInterest )))
 
   flush(stderr)
   !    ********************************************************************************************************
@@ -250,8 +250,8 @@ PROGRAM ATCHEM
   call readSpeciesConstraints( t, speciesConcs )
 
   write (*,*)
-  concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOutputRequired )
-  call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
+  concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
+  call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
 
   ! This outputs z, which is speciesConcs with all the constrained species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, getConstrainedSpecies(), z )
@@ -377,8 +377,8 @@ PROGRAM ATCHEM
       call jfy( numReac, speciesConcs, t )
     end if
 
-    concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOutputRequired )
-    call outputSpeciesOutputRequired( t, speciesOutputRequired, concsOfSpeciesOfInterest )
+    concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
+    call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
     call outputPhotolysisRates( t )
 
     ! Output instantaneous rates
@@ -431,7 +431,7 @@ PROGRAM ATCHEM
   call FCVFREE()
   deallocate (speciesConcs, z)
   deallocate (prodIntSpecies, reacIntSpecies)
-  deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
+  deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOfInterest)
   deallocate (instantaneousRates)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)

@@ -251,7 +251,7 @@ contains
   end subroutine outputInstantaneousRates
 
 
-  subroutine outputSpeciesOutputRequired( t, specOutReqNames, arrayOfConcs )
+  subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
     ! If any concentration is negative, then set it to zero before printing.
     use storage, only : maxSpecLength
@@ -264,7 +264,7 @@ contains
     logical :: first_time = .true.
 
     if ( size( specOutReqNames ) /= size( arrayOfConcs ) ) then
-      stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOutputRequired()."
+      stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOfInterest()."
     end if
 
     if ( first_time .eqv. .true. ) then
@@ -279,7 +279,7 @@ contains
     end do
     write (50, '(100 (1P e15.5)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
     return
-  end subroutine outputSpeciesOutputRequired
+  end subroutine outputSpeciesOfInterest
 
 
   subroutine outputFinalModelState( names, concentrations )

@@ -162,19 +162,20 @@ contains
   end function readSpecies
 
 
-  subroutine readInitialConcentrations( concSpeciesNames, concentration )
+  subroutine readAndSetInitialConcentrations( speciesConcs )
     ! Reads in concentration per species from mC/initialConcentrations.config
     ! Checks that there aren't more inputs than species.
     ! concSpeciesNames is filled with all species names of initial concentrations,
     ! concentration is filled with corresponding concentration VALUES
     use types_mod
-    use species, only : getNumberOfSpecies
+    use species, only : getNumberOfSpecies, getSpeciesList
     use directories, only : param_dir
     use storage, only : maxSpecLength, maxFilepathLength
     implicit none
 
-    character(len=maxSpecLength), allocatable, intent(out) :: concSpeciesNames(:)
-    real(kind=DP), allocatable, intent(out) :: concentration(:)
+    real(kind=DP), allocatable, intent(out) :: speciesConcs(:)
+    real(kind=DP), allocatable :: concentration(:)
+    character(len=maxSpecLength), allocatable :: concSpeciesNames(:)
     character(len=maxSpecLength) :: k
     character(len=maxFilepathLength) :: filename
     real(kind=DP) :: l
@@ -186,6 +187,7 @@ contains
     ! Count lines in file, allocate appropriately
     numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()
+    allocate (speciesConcs(nsp))
     if ( numLines > nsp ) then
       write (51, '(A)') 'Error:(number of species initial concentrations are set for) > (number of species) '
       write (51, '(A, I0)') '(number of species initial concentrations are set for) = ', numLines
@@ -215,8 +217,59 @@ contains
     end if
     write (*, '(A)') ' Finished reading initial concentrations.'
 
+    call setConcentrations( concSpeciesNames, concentration, getSpeciesList(), speciesConcs )
     return
-  end subroutine readInitialConcentrations
+  end subroutine readAndSetInitialConcentrations
+
+
+  subroutine setConcentrations( concSpeciesNames, inputConcentrations, &
+                                refSpeciesNames, outputConcentrations )
+    ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),
+    ! look through refSpeciesNames (size numSpecies) for the number of this species in that list,
+    ! then transer the value from inputConcentrations to outputConcentrations. If no match is found,
+    ! output this to errors.output, but don't stop, just ignore the input value.
+    ! Print outcome of each search into initialConditionsSetting.output.
+    use types_mod
+    use storage, only : maxSpecLength
+    implicit none
+
+    character(len=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
+    real(kind=DP), intent(in) :: inputConcentrations(:)
+    real(kind=DP), intent(out) :: outputConcentrations(:)
+    character(len=maxSpecLength) :: k, m
+    integer(kind=NPI) :: j, i
+    logical :: match
+
+    if ( size( concSpeciesNames ) /= size( inputConcentrations ) ) then
+      stop "size(concSpeciesNames) /= size(inputConcentrations) in setConcentrations()."
+    end if
+    if ( size( refSpeciesNames ) /= size( outputConcentrations ) ) then
+      stop "size(refSpeciesNames) /= size(outputConcentrations) in setConcentrations()."
+    end if
+    outputConcentrations(:) = 0.0
+    do i = 1, size( concSpeciesNames )
+      match = .false.
+      k = concSpeciesNames(i)
+      do j = 1, size( refSpeciesNames )
+        m = refSpeciesNames(j)
+        if ( m == k ) then
+          match = .true.
+          ! Set concentration in outputConcentrations
+          outputConcentrations(j) = inputConcentrations(i)
+          write (54, '(A, A, A, 1P e15.3)') 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
+          exit
+        else
+          write (54, '(A, A, A, A, A, 1P e15.3)') 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)!
+        end if
+      end do
+      if ( match .eqv. .false. ) then
+        ! If we reach this point, we've failed to find this species
+        write (51,*) "Error in setConcentrations"
+        write (51, '(A, A, A)') "Can't find species: ", k, " in species list"
+      end if
+    end do
+    return
+  end subroutine setConcentrations
 
 
   subroutine readPhotolysisConstants()

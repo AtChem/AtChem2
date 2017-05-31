@@ -594,7 +594,7 @@ contains
   end subroutine readEnvVar
 
 
-  function readSpeciesOutputRequired() result ( r )
+  function readSpeciesOfInterest() result ( r )
     use types_mod
     use species, only : getNumberOfSpecies
     use directories, only : param_dir
@@ -633,7 +633,7 @@ contains
     end if
 
     return
-  end function readSpeciesOutputRequired
+  end function readSpeciesOfInterest
 
 
   subroutine readPhotoRates()

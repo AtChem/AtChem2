@@ -63,10 +63,8 @@ contains
     call setNumberOfSpecies( numSpec )
     call setNumberOfReactions( numReac )
 
-    write (*,*)
     write (*, '(A, I0)') ' Number of Species   = ', numSpec
     write (*, '(A, I0)') ' Number of Reactions = ', numReac
-    write (*,*)
   end subroutine readNumberOfSpeciesAndReactions
 
 
@@ -591,6 +589,7 @@ contains
       end if
     end do
     write (*, '(A)') ' Finished checking for constrained environment variables.'
+    write (*,*)
 
     return
   end subroutine readEnvVar

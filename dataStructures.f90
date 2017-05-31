@@ -368,7 +368,7 @@ module productionAndLossRates
   implicit none
   save
 
-  real(kind=DP), allocatable :: lossRates(:), productionRates(:), ir(:)
+  real(kind=DP), allocatable :: lossRates(:), productionRates(:), instantaneousRates(:)
 
 end module productionAndLossRates
 

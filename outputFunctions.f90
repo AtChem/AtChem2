@@ -227,7 +227,7 @@ contains
   subroutine outputInstantaneousRates( time )
     use reactionStructure
     use directories, only : instantaneousRates_dir
-    use productionAndLossRates, only : ir
+    use productionAndLossRates, only : instantaneousRates
     use storage, only : maxFilepathLength
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
@@ -242,8 +242,8 @@ contains
     irfileLocation = trim( instantaneousRates_dir ) // '/' // adjustl( strTime )
 
     open (10, file=irfileLocation)
-    do i = 1, size( ir )
-      write (10,*) ir(i)
+    do i = 1, size( instantaneousRates )
+      write (10,*) instantaneousRates(i)
     end do
     close (10, status='keep')
 

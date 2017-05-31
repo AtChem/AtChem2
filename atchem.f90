@@ -133,11 +133,9 @@ PROGRAM ATCHEM
   numReac = getNumberOfReactions()
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  allocate (speciesConcs(numSpec))
-
-  allocate (z(numSpec), initialConcentrations(numSpec))
+  allocate (speciesConcs(numSpec), z(numSpec), initialConcentrations(numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
-  allocate (lossRates(numReac), productionRates(numReac), ir(numReac))
+  allocate (lossRates(numReac), productionRates(numReac), instantaneousRates(numReac))
 
   !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
   call getAndAllocateReactantAndProductListSizes()
@@ -450,7 +448,7 @@ PROGRAM ATCHEM
   deallocate (speciesConcs, speciesNames, z)
   deallocate (prodIntSpecies, reacIntSpecies)
   deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
-  deallocate (ir)
+  deallocate (instantaneousRates)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (prodIntSpeciesLengths)

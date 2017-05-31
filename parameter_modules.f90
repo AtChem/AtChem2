@@ -61,6 +61,7 @@ contains
     100 format (A18, 1P E11.3)
     ! integer format
     200 format (A18, I11)
+    write (*, '(A)') ' ------------------'
     write (*, '(A)') ' Solver parameters:'
     write (*, '(A)') ' ------------------'
     write (*, 100) 'atol: ', atol
@@ -151,6 +152,7 @@ contains
     400 format (A52, I11)
     ! string format
     500 format (A52, A17)
+    write (*, '(A)') ' -----------------'
     write (*, '(A)') ' Model parameters:'
     write (*, '(A)') ' -----------------'
     write (*, 400) 'number of steps: ', maxNumTimesteps

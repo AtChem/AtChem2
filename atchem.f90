@@ -107,7 +107,11 @@ PROGRAM ATCHEM
 
   call SYSTEM_CLOCK( runStart )
 
+  write (*, '(A)') '-------------'
+  write (*, '(A)') ' Directories'
+  write (*, '(A)') '-------------'
   call get_and_set_directories_from_command_arguments()
+  write (*,*)
 
   ! Open files for output
   open (unit=50, file=trim( output_dir ) // "/concentration.output")
@@ -123,7 +127,11 @@ PROGRAM ATCHEM
   open (unit=60, file=trim( output_dir ) // "/productionRates.output")
   flush(6)
 
+  write (*, '(A)') '-----------------------'
+  write (*, '(A)') ' Species and reactions'
+  write (*, '(A)') '-----------------------'
   call readNumberOfSpeciesAndReactions()
+  write (*,*)
   numSpec = getNumberOfSpecies()
   numReac = getNumberOfReactions()
 
@@ -147,6 +155,9 @@ PROGRAM ATCHEM
   write (*,*)
 
   ! Read in photolysis rate information
+  write (*, '(A)') '------------'
+  write (*, '(A)') ' Photolysis'
+  write (*, '(A)') '------------'
   call readPhotolysisConstants()
   write (*,*)
 
@@ -154,6 +165,9 @@ PROGRAM ATCHEM
   call readJFacSpecies()
   write (*,*)
 
+  write (*, '(A)') '---------------------'
+  write (*, '(A)') ' Species of interest'
+  write (*, '(A)') '---------------------'
   ! Read in product species of interest, and set up variables to hold these
   write (*, '(A)') ' Reading products of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName )
@@ -222,12 +236,17 @@ PROGRAM ATCHEM
   currentNumTimestep = 0
 
   ! Read in environment variables (FIXED, CONSTRAINED, CALC or NOTUSED, see environmentVariables.config)
+  write (*, '(A)') '-----------------------'
+  write (*, '(A)') ' Environment variables'
+  write (*, '(A)') '-----------------------'
   call readEnvVar()
-  write (*,*)
 
   ! fill speciesOfInterest with the names of species to output to concentration.output
+  write (*, '(A)') '---------------------'
+  write (*, '(A)') ' Species of Interest'
+  write (*, '(A)') '---------------------'
   speciesOfInterest = readSpeciesOfInterest()
-
+  write (*,*)
   ! Allocate concsOfSpeciesOfInterest
   allocate ( concsOfSpeciesOfInterest(size( speciesOfInterest )))
 
@@ -236,13 +255,18 @@ PROGRAM ATCHEM
   !    CONSTRAINTS
   !    ********************************************************************************************************
 
-  write (*,*)
+  write (*, '(A)') '---------------'
+  write (*, '(A)') ' Photolysis (2)'
+  write (*, '(A)') '---------------'
   call readPhotoRates()
   write (*,*)
 
+  write (*, '(A)') '-------------'
+  write (*, '(A)') ' Constraints'
+  write (*, '(A)') '-------------'
   call readSpeciesConstraints( t, speciesConcs )
-
   write (*,*)
+
   concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
   call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
 
@@ -251,6 +275,9 @@ PROGRAM ATCHEM
 
   !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
   neq = numSpec - getNumberOfConstrainedSpecies()
+  write (*, '(A)') '---------------'
+  write (*, '(A)') ' Problem stats'
+  write (*, '(A)') '---------------'
   write (*, '(A30, I0) ') ' neq = ', neq
   write (*, '(A30, I0) ') ' numberOfConstrainedSpecies = ', getNumberOfConstrainedSpecies()
 
@@ -342,7 +369,9 @@ PROGRAM ATCHEM
   !    ********************************************************************************************************
   !    RUN MODEL
   !    ********************************************************************************************************
-
+  write (*, '(A)') '-----------'
+  write (*, '(A)') ' Model run'
+  write (*, '(A)') '-----------'
   do while ( currentNumTimestep < maxNumTimesteps )
 
     call outputPhotoRateCalcParameters( t )
@@ -405,10 +434,13 @@ PROGRAM ATCHEM
 
   ! Output final model concentrations, in a usable format for model restart
   call outputFinalModelState( getSpeciesList(), speciesConcs )
+  write (*,*)
 
+  write (*, '(A)') '------------------'
+  write (*, '(A)') ' Final statistics'
+  write (*, '(A)') '------------------'
   ! Final on-screen output
-  fmt = "(//' Final statistics:'//" // &
-        "' No. steps = ', I0, '   No. f-s = ', I0, " // &
+  fmt = "(' No. steps = ', I0, '   No. f-s = ', I0, " // &
         "'   No. J-s = ', I0, '   No. LU-s = ', I0/" // &
         "' No. nonlinear iterations = ', I0/" // &
         "' No. nonlinear convergence failures = ', I0/" // &

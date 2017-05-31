@@ -1,7 +1,13 @@
+-------------
+ Directories
+-------------
  Output dir is travis/tests/spec_no_env_yes1
  Instantaneous rates dir is travis/tests/spec_no_env_yes1/instantaneousRates
  Parameter dir is travis/tests/spec_no_env_yes1/modelConfiguration
 
+-----------------------
+ Species and reactions
+-----------------------
  Number of Species   = 29
  Number of Reactions = 71
 
@@ -21,6 +27,9 @@
       3 O3               1.320E+12
  Finished reading initial concentrations.
 
+------------
+ Photolysis
+------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -34,6 +43,9 @@
  JFacSpecies = 
  Finished reading JFacSpecies.
 
+---------------------
+ Species of interest
+---------------------
  Reading products of interest...
       1 OH        
       2 HO2       
@@ -47,6 +59,7 @@
  reactants of interest (number of species found): 2
 
  Reading solver parameters from file...
+ ------------------
  Solver parameters:
  ------------------
             atol:   1.000E-03
@@ -64,6 +77,7 @@
  Finished reading solver parameters from file.
 
  Reading model parameters from file...
+ -----------------
  Model parameters:
  -----------------
                                    number of steps:           4
@@ -83,6 +97,9 @@
 
  Finished reading model parameters from file.
 
+-----------------------
+ Environment variables
+-----------------------
  Reading environment variables...
  Number of environment variables: 10
  1      M                   2.538e+19
@@ -102,6 +119,9 @@
  Finished reading constraint data.
  Finished checking for constrained environment variables.
 
+---------------------
+ Species of Interest
+---------------------
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 3 species:
@@ -109,6 +129,9 @@
       2 NO2       
       3 O3        
 
+---------------
+ Photolysis (2)
+---------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -122,6 +145,9 @@
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
 
+-------------
+ Constraints
+-------------
  Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...
  Finished counting the names of variable-concentration constrained species.
  Number of names of variable-concentration constrained species: 0
@@ -140,6 +166,9 @@
  Initialising concentrations of constrained species...
  Finished initialising concentrations of constrained species.
 
+---------------
+ Problem stats
+---------------
                         neq = 29
  numberOfConstrainedSpecies = 0
                          t0 =       0.000E+00
@@ -147,14 +176,17 @@
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
 
+-----------
+ Model run
+-----------
  time = 900
  time = 1800
  time = 2700
  time = 3600
 
-
- Final statistics:
-
+------------------
+ Final statistics
+------------------
  No. steps = 104   No. f-s = 120   No. J-s = 191   No. LU-s = 30
  No. nonlinear iterations = 117
  No. nonlinear convergence failures = 0

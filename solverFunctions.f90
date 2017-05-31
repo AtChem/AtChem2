@@ -3,7 +3,7 @@ contains!     ---------------------------------------------------------------
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     ! calculate rhs of rate eqn dy()
     use types_mod
-    use productionAndLossRates, only : ir, productionRates, lossRates
+    use productionAndLossRates, only : instantaneousRates, productionRates, lossRates
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
@@ -38,7 +38,7 @@ contains!     ---------------------------------------------------------------
 
     do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lcoeff(i)
-      ir(lhs(1, i)) = r(lhs(1, i))
+      instantaneousRates(lhs(1, i)) = r(lhs(1, i))
     end do
 
     do i = 1, size( lhs, 2 )

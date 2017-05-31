@@ -70,7 +70,7 @@ contains
   end subroutine readNumberOfSpeciesAndReactions
 
 
-  subroutine getAndAllocateReactantAndProductListSizes()
+  subroutine readReactions()
     use types_mod
     use directories, only : param_dir
     use reactionStructure
@@ -80,6 +80,9 @@ contains
     ! modelConfiguration/mechanism.(reac/prod), excluding the first line and
     ! last line
     integer(kind=NPI) :: lhs_size, rhs_size
+    integer(kind=NPI) :: k, l, count
+    integer(kind=IntErr) :: ierr
+
     call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
     lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
     call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
@@ -90,34 +93,6 @@ contains
     write (*, '(A, I0)') ' Size of lhs = ', lhs_size
     write (*, '(A, I0)') ' Size of rhs = ', rhs_size
     write (*,*)
-    return
-  end subroutine getAndAllocateReactantAndProductListSizes
-
-
-  subroutine readReactions( lhs, lcoeff, rhs, rcoeff )
-    use types_mod
-    use directories, only : param_dir
-    implicit none
-
-    ! Reads in the data from mC/mechanism.reac and mC/mechanism.prod
-    integer(kind=NPI), intent(out) :: lhs(:,:), rhs(:,:)
-    real(kind=DP), intent(out) :: lcoeff(:), rcoeff(:)
-    integer(kind=NPI) :: k, l, count
-    integer(kind=IntErr) :: ierr
-
-    if ( size( lhs, 1 ) /= 2 ) then
-      stop "size( lhs, 1 ) /= 2 in readReactions()."
-    end if
-    if ( size( rhs, 1 ) /= 2 ) then
-      stop "size( rhs, 1 ) /= 2 in readReactions()."
-    end if
-    if ( size( lcoeff ) /= size( lhs, 2 ) ) then
-      stop "size( lcoeff ) /= size( lhs, 2 ) in readReactions()."
-    end if
-    if ( size( rcoeff ) /= size( rhs, 2 ) ) then
-      stop "size( rcoeff ) /= size( rhs, 2 ) in readReactions()."
-    end if
-
     write (*, '(A)') ' Reading reactants (lhs) from mechanism.reac...'
     call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'readReactions()')
     open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
@@ -130,9 +105,9 @@ contains
     read (10,*, iostat=ierr) k, l
     do while ( ierr == 0 )
       count = count + 1
-      lhs(1, count) = k
-      lhs(2, count) = l
-      lcoeff(count) = 1.0
+      clhs(1, count) = k
+      clhs(2, count) = l
+      clcoeff(count) = 1.0
       read (10,*, iostat=ierr) k, l
     end do
     close (10, status='keep')
@@ -149,9 +124,9 @@ contains
     read (11,*, iostat=ierr) k, l
     do while ( ierr == 0 )
       count = count + 1
-      rhs(1, count) = k
-      rhs(2, count) = l
-      rcoeff(count) = 1.0
+      crhs(1, count) = k
+      crhs(2, count) = l
+      crcoeff(count) = 1.0
       read (11,*, iostat=ierr) k, l
     end do
     close (11, status='keep')

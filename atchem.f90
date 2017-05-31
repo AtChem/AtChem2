@@ -137,12 +137,8 @@ PROGRAM ATCHEM
   !    SET ARRAY SIZES = NO. OF REACTIONS
   allocate (lossRates(numReac), productionRates(numReac), instantaneousRates(numReac))
 
-  !   GET SIZES OF REACTANTS AND PRODUCT INPUT FILES
-  call getAndAllocateReactantAndProductListSizes()
-
-
   !   READ IN CHEMICAL REACTIONS
-  call readReactions( clhs, clcoeff, crhs, crcoeff )
+  call readReactions()
   neq = numSpec
 
   !   READ SPECIES NAMES AND NUMBERS

@@ -45,7 +45,7 @@ PROGRAM ATCHEM
   integer(kind=NPI) :: numSpec, numReac
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
-  character(len=maxSpecLength), allocatable :: speciesNames(:), initConcSpeciesNames(:)
+  character(len=maxSpecLength), allocatable :: speciesNames(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
@@ -55,7 +55,6 @@ PROGRAM ATCHEM
   integer(kind=QI) :: time, elapsed
 
   !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
-  real(kind=DP), allocatable :: initialConcentrations(:)
   real(kind=DP), allocatable :: speciesConcs(:)
   real(kind=DP), allocatable :: z(:)
 
@@ -133,7 +132,7 @@ PROGRAM ATCHEM
   numReac = getNumberOfReactions()
 
   !    SET ARRAY SIZES = NO. OF SPECIES
-  allocate (speciesConcs(numSpec), z(numSpec), initialConcentrations(numSpec))
+  allocate (speciesConcs(numSpec), z(numSpec))
   !    SET ARRAY SIZES = NO. OF REACTIONS
   allocate (lossRates(numReac), productionRates(numReac), instantaneousRates(numReac))
 
@@ -152,9 +151,7 @@ PROGRAM ATCHEM
   call setSpeciesList( speciesNames )
 
   !   SET INITIAL SPECIES CONCENTRATIONS
-  call readInitialConcentrations( initConcSpeciesNames, initialConcentrations )
-  call setConcentrations( initConcSpeciesNames, initialConcentrations, speciesNames, speciesConcs )
-  deallocate (initConcSpeciesNames, initialConcentrations)
+  call readAndSetInitialConcentrations( speciesConcs )
   write (*,*)
 
   !   READ IN PHOTOLYSIS RATE INFORMATION

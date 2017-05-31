@@ -153,7 +153,7 @@ PROGRAM ATCHEM
 
   !   SET INITIAL SPECIES CONCENTRATIONS
   call readInitialConcentrations( initConcSpeciesNames, initialConcentrations )
-  call setConcentrations( speciesNames, initConcSpeciesNames, initialConcentrations, speciesConcs )
+  call setConcentrations( initConcSpeciesNames, initialConcentrations, speciesNames, speciesConcs )
   deallocate (initConcSpeciesNames, initialConcentrations)
   write (*,*)
 

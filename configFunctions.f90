@@ -119,8 +119,8 @@ contains
   end function getConcForSpeciesOfInterest
 
 
-  subroutine setConcentrations( refSpeciesNames, concSpeciesNames, &
-                                inputConcentrations, outputConcentrations )
+  subroutine setConcentrations( concSpeciesNames, inputConcentrations, &
+                                refSpeciesNames, outputConcentrations )
     ! For each input species in concSpeciesNames (size concCounter), and matching value in inputConcentrations (size inputConcentrationsSize),
     ! look through refSpeciesNames (size numSpecies) for the number of this species in that list,
     ! then transer the value from inputConcentrations to outputConcentrations. If no match is found,
@@ -131,9 +131,9 @@ contains
     implicit none
 
     character(len=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
-    character(len=maxSpecLength) :: k, m
     real(kind=DP), intent(in) :: inputConcentrations(:)
     real(kind=DP), intent(out) :: outputConcentrations(:)
+    character(len=maxSpecLength) :: k, m
     integer(kind=NPI) :: j, i
     logical :: match
 

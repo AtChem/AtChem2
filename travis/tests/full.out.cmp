@@ -45,8 +45,6 @@
  reactants of interest (number of species found): 2
 
  Reading solver parameters from file...
- Finished reading solver parameters from file.
-
  Solver parameters:
  ------------------
             atol:   1.000E-03
@@ -61,9 +59,9 @@
       solverType: SPGMR + Banded Preconditioner 
  ------------------
 
- Reading model parameters from file...
- Finished reading model parameters from file.
+ Finished reading solver parameters from file.
 
+ Reading model parameters from file...
  Model parameters:
  -----------------
                                    number of steps:           5
@@ -80,6 +78,8 @@
                                          longitude:   0.000E+00
                                     day/month/year:  19/11/2008
  -----------------
+
+ Finished reading model parameters from file.
 
  Reading environment variables...
  Number of environment variables: 10

@@ -20,6 +20,7 @@ contains
 
     real(kind=DP) :: input_parameters(*)
 
+    write (*, '(A)') ' Reading solver parameters from file...'
     solverTypeName(1) = 'SPGMR'
     solverTypeName(2) = 'SPGMR + Banded Preconditioner'
     solverTypeName(3) = 'Dense'
@@ -74,6 +75,8 @@ contains
     write (*, '(A18, A)') 'solverType: ', adjustl( solverTypeName(solverType) )
     write (*, '(A)') ' ------------------'
     write (*,*)
+    write (*, '(A)') ' Finished reading solver parameters from file.'
+
   end subroutine set_solver_parameters
 end module solver_params_mod
 
@@ -103,6 +106,7 @@ contains
 
     real(kind=DP) :: input_parameters(*)
 
+    write (*, '(A)') ' Reading model parameters from file...'
     interpolationMethodName(1) = 'piecewise constant'
     interpolationMethodName(2) = 'piecewise linear'
     ! maxNumTimesteps sets the maximum number of timesteps to calculate.
@@ -164,5 +168,7 @@ contains
     write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', day, '/', month, '/', year
     write (*, '(A)') ' -----------------'
     write (*,*)
+    write (*, '(A)') ' Finished reading model parameters from file.'
+
   end subroutine set_model_parameters
 end module model_params_mod

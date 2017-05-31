@@ -190,15 +190,11 @@ PROGRAM ATCHEM
 
 
   ! Read in and set solver parameters
-  write (*, '(A)') ' Reading solver parameters from file...'
   call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
-  write (*, '(A)') ' Finished reading solver parameters from file.'
   write (*,*)
 
   ! Read in and set model parameters
-  write (*, '(A)') ' Reading model parameters from file...'
   call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
-  write (*, '(A)') ' Finished reading model parameters from file.'
   write (*,*)
 
   ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year

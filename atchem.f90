@@ -42,11 +42,8 @@ PROGRAM ATCHEM
 
   ! walltime variables
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
-  !
+  ! number of species and reactions
   integer(kind=NPI) :: numSpec, numReac
-
-  !   DECLARATIONS FOR SPECIES PARAMETERS
-  character(len=maxSpecLength), allocatable :: speciesNames(:)
 
   !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
@@ -55,7 +52,6 @@ PROGRAM ATCHEM
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
   ! simulation output time variables
   integer(kind=QI) :: time, elapsed
-
   ! species concentrations with and without constrained species
   real(kind=DP), allocatable :: speciesConcs(:)
   real(kind=DP), allocatable :: z(:)
@@ -143,12 +139,11 @@ PROGRAM ATCHEM
   !   READ SPECIES NAMES AND NUMBERS
   write (*,*)
   write (*, '(A)') ' Reading species names from mechanism.species...'
-  speciesNames = readSpecies()
+  call setSpeciesList( readSpecies() )
   write (*, '(A)') ' Finished reading species names.'
   write (*,*)
 
   !   SET PARAMETERS FOR SPECIES OBJECT
-  call setSpeciesList( speciesNames )
 
   !   SET INITIAL SPECIES CONCENTRATIONS
   call readAndSetInitialConcentrations( speciesConcs )
@@ -169,8 +164,8 @@ PROGRAM ATCHEM
 
   allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))
   allocate (prodIntSpeciesLengths(size( prodIntName )))
-  ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesNames
-  call matchNameToNumber( speciesNames, prodIntName, prodIntSpecies(:, 1) )
+  ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesList
+  call matchNameToNumber( getSpeciesList(), prodIntName, prodIntSpecies(:, 1) )
   ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
 
@@ -186,8 +181,8 @@ PROGRAM ATCHEM
 
   allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))
   allocate (reacIntSpeciesLengths(size( reacIntName )))
-  ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesNames
-  call matchNameToNumber( speciesNames, reacIntName, reacIntSpecies(:, 1) )
+  ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesList
+  call matchNameToNumber( getSpeciesList(), reacIntName, reacIntSpecies(:, 1) )
   ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
   ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
 
@@ -414,7 +409,7 @@ PROGRAM ATCHEM
   end do
 
   ! Output final model concentrations, in a usable format for model restart
-  call outputFinalModelState( speciesNames, speciesConcs )
+  call outputFinalModelState( getSpeciesList(), speciesConcs )
 
   ! Final on-screen output
   fmt = "(//' Final statistics:'//" // &
@@ -434,7 +429,7 @@ PROGRAM ATCHEM
   write (*, '(A)') ' Deallocating memory.'
   ! deallocate CVODE internal data
   call FCVFREE()
-  deallocate (speciesConcs, speciesNames, z)
+  deallocate (speciesConcs, z)
   deallocate (prodIntSpecies, reacIntSpecies)
   deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOutputRequired)
   deallocate (instantaneousRates)

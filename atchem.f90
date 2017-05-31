@@ -127,33 +127,30 @@ PROGRAM ATCHEM
   numSpec = getNumberOfSpecies()
   numReac = getNumberOfReactions()
 
-  !    SET ARRAY SIZES = NO. OF SPECIES
+  ! Set array sizes = number of species
   allocate (speciesConcs(numSpec), z(numSpec))
-  !    SET ARRAY SIZES = NO. OF REACTIONS
+  ! Set array sizes = number of reactions
   allocate (lossRates(numReac), productionRates(numReac), instantaneousRates(numReac))
 
-  !   READ IN CHEMICAL REACTIONS
+  ! Read in reactions
   call readReactions()
+  write (*,*)
   neq = numSpec
 
-  !   READ SPECIES NAMES AND NUMBERS
-  write (*,*)
-  write (*, '(A)') ' Reading species names from mechanism.species...'
+  ! Read species names and numbers
+
   call setSpeciesList( readSpecies() )
-  write (*, '(A)') ' Finished reading species names.'
   write (*,*)
 
-  !   SET PARAMETERS FOR SPECIES OBJECT
-
-  !   SET INITIAL SPECIES CONCENTRATIONS
+  ! Set initial concentrations for all species for which this info is provided, 0.0 for any unspecified.
   call readAndSetInitialConcentrations( speciesConcs )
   write (*,*)
 
-  !   READ IN PHOTOLYSIS RATE INFORMATION
+  ! Read in photolysis rate information
   call readPhotolysisConstants()
   write (*,*)
 
-  !   READ IN JFAC SPECIES
+  ! Read in JFac species, and set jfacSpeciesLine
   call readJFacSpecies()
   write (*,*)
 
@@ -192,13 +189,13 @@ PROGRAM ATCHEM
   write (*,*)
 
 
-  !    READ IN AND SET SOLVER PARAMETERS
+  ! Read in and set solver parameters
   write (*, '(A)') ' Reading solver parameters from file...'
   call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
   write (*, '(A)') ' Finished reading solver parameters from file.'
   write (*,*)
 
-  !   READ IN MODEL PARAMETERS
+  ! Read in and set model parameters
   write (*, '(A)') ' Reading model parameters from file...'
   call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
   write (*, '(A)') ' Finished reading model parameters from file.'

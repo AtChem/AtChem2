@@ -147,6 +147,7 @@ contains
     integer(kind=NPI) :: j, dummy
     character(len=maxFilepathLength) :: fileLocation
 
+    write (*, '(A)') ' Reading species names from mechanism.species...'
     fileLocation=trim( param_dir ) // '/mechanism.species'
     ! Read in species number and name from mC/mechanism.species to speciesName
     ! and sdummy (to be thrown).
@@ -157,6 +158,7 @@ contains
       read (10,*) dummy, speciesName(j)
     end do
     close (10, status='keep')
+    write (*, '(A)') ' Finished reading species names.'
 
     return
   end function readSpecies

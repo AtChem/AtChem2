@@ -40,8 +40,9 @@ PROGRAM ATCHEM
   real(kind=DP) :: rout(6)
   real(kind=DP) :: rpar(1)
 
-  !   DECLARATIONS FOR TIME PARAMETERS
+  ! walltime variables
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
+  !
   integer(kind=NPI) :: numSpec, numReac
 
   !   DECLARATIONS FOR SPECIES PARAMETERS
@@ -52,13 +53,12 @@ PROGRAM ATCHEM
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOutputRequired(:)
+  ! simulation output time variables
   integer(kind=QI) :: time, elapsed
 
-  !   DECLARATIONS FOR CHEMICAL SPECIES CONSTRAINTS
+  ! species concentrations with and without constrained species
   real(kind=DP), allocatable :: speciesConcs(:)
   real(kind=DP), allocatable :: z(:)
-
-  real(kind=DP), allocatable :: solverParameters(:), modelParameters(:)
 
   character(len=400) :: fmt
 
@@ -197,21 +197,17 @@ PROGRAM ATCHEM
   write (*,*)
 
 
-  !    READ IN SOLVER PARAMETERS
+  !    READ IN AND SET SOLVER PARAMETERS
   write (*, '(A)') ' Reading solver parameters from file...'
-  call getParametersFromFile( trim( param_dir ) // "/solver.parameters", solverParameters )
+  call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
   write (*, '(A)') ' Finished reading solver parameters from file.'
   write (*,*)
-  !   SET SOLVER PARAMETERS
-  call set_solver_parameters( solverParameters )
 
   !   READ IN MODEL PARAMETERS
   write (*, '(A)') ' Reading model parameters from file...'
-  call getParametersFromFile( trim( param_dir ) //  "/model.parameters", modelParameters )
+  call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
   write (*, '(A)') ' Finished reading model parameters from file.'
   write (*,*)
-  !   SET MODEL PARAMETERS
-  call set_model_parameters( modelParameters )
 
   ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year
   call calcDateParameters()

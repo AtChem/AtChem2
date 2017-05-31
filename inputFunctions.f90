@@ -464,14 +464,14 @@ contains
   end subroutine readProductsOrReactantsOfInterest
 
 
-  subroutine getParametersFromFile( input_file, parameterArray )
+  function getParametersFromFile( input_file ) result ( parameterArray )
     ! Read in parameters from file at input_file, and save the contents of each
     ! line to an element of the array
     use types_mod
     implicit none
 
     character(len=*), intent(in) :: input_file
-    real(kind=DP), intent(out), allocatable :: parameterArray(:)
+    real(kind=DP), allocatable :: parameterArray(:)
     character(len=100) :: dummy
     integer(kind=DI) :: numValidEntries, counter
 
@@ -493,7 +493,7 @@ contains
     close (10, status='keep')
 
     return
-  end subroutine getParametersFromFile
+  end function getParametersFromFile
 
 
   subroutine readEnvVar()

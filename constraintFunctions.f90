@@ -237,7 +237,7 @@ contains
               this_env_val = 298.15
               temp_set = .true.
             case ( 'H2O' )
-              this_env_val = 3.91e+17
+              this_env_val = 3.91D+17
             case ( 'PRESS' )
               this_env_val = 1013.25
             case ( 'BLHEIGHT', 'RH', 'DILUTE', 'M' )

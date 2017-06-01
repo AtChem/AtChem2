@@ -278,7 +278,7 @@ def convert(input_file, output_dir, mc_dir):
 ! based upon the file tools/mcm_subset.fac. Any manual edits to this file will be overwritten
 ! when calling tools/mech_converter.py
 
-ro2 = 0.00e+00\n""")
+ro2 = 0.00D+00\n""")
 
             for ro2List_i in ro2List:
                 # print 'ro2List_i: ' + ro2List_i
@@ -315,7 +315,7 @@ ro2 = 0.00e+00\n""")
         #			NOYList.append(x)
         #
         # # loop over NOY and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the NOY
-        # mech_rates_file.write('\tNOY = 0.00e+00\n')
+        # mech_rates_file.write('\tNOY = 0.00D+00\n')
         # for NOYList_i in NOYList:
         #	print 'NOYList_i: ' + NOYList_i
         #	for speciesNumber, y in zip(range(1, len(speciesList)+1), speciesList):

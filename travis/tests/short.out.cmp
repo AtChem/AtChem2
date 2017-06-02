@@ -61,13 +61,13 @@
  -----------------
  Model parameters:
  -----------------
-                                   number of steps:           5
+                                   number of steps:           3
                                step size (seconds):   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:       10000
-                               ratesOutputStepSize:         500
+                               ratesOutputStepSize:         600
               instantaneous rates output step size:         300
                                     modelStartTime:   0.432E+05
                             jacobianOutputStepSize:      108000
@@ -163,16 +163,14 @@
  time = 43500
  time = 43800
  time = 44100
- time = 44400
- time = 44700
 
 ------------------
  Final statistics
 ------------------
- No. steps = 135   No. f-s = 170   No. J-s = 266   No. LU-s = 43
- No. nonlinear iterations = 169
+ No. steps = 126   No. f-s = 156   No. J-s = 223   No. LU-s = 40
+ No. nonlinear iterations = 155
  No. nonlinear convergence failures = 0
- No. error test failures = 5
+ No. error test failures = 4
 
  Runtime = 0
  Deallocating memory.

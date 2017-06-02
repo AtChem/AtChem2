@@ -92,7 +92,7 @@
  7      BLHEIGHT              NOTUSED
  8      DILUTE                NOTUSED
  9      JFAC                  NOTUSED
- 10     ROOFOPEN              NOTUSED
+ 10     ROOFOPEN                    0
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -167,10 +167,10 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 126   No. f-s = 156   No. J-s = 223   No. LU-s = 40
- No. nonlinear iterations = 155
+ No. steps = 10   No. f-s = 14   No. J-s = 0   No. LU-s = 2
+ No. nonlinear iterations = 10
  No. nonlinear convergence failures = 0
- No. error test failures = 4
+ No. error test failures = 0
 
  Runtime = 0
  Deallocating memory.

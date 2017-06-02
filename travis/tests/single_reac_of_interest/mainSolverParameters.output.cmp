@@ -1,4 +1,0 @@
-        t  currentStepSize previousStepSize    LENRW    LENIW      NST      NFE     NETF     NCFN      NNI  NSETUPS       QU     QCUR      NOR  LENRWLS  LENIWLS  LS_FLAG    NFELS     NJTV      NPE      NPS      NLI     NCFL
- 4.60E+03  1.000000000E+02  1.000000000E+02     1129       50       11       15        0        0       11        2        1        1        0    21321      105        0        0        0        1        0        0        0
- 5.60E+03  1.000000000E+02  1.000000000E+02     1129       50       21       25        0        0       21        2        1        1        0    21321      105        0        0        0        1        0        0        0
- 6.60E+03  1.000000000E+02  1.000000000E+02     1129       50       31       35        0        0       31        3        1        1        0    21321      105        0        0        0        1        0        0        0

@@ -27,22 +27,6 @@
       5 O3               1.200E+12
  Finished reading initial concentrations.
 
-------------
- Photolysis
-------------
- Looking for photolysis constants file...
- Photolysis constants file not found, trying photolysis rates file...
- Reading photolysis rates from file...
-      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
- ...
-     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
- Finished reading photolysis rates.
- Number of photolysis rates: 35
-
- Reading JFacSpecies...
- JFacSpecies = 
- Finished reading JFacSpecies.
-
 ---------------------
  Species of interest
 ---------------------
@@ -107,7 +91,7 @@
  3      PRESS                    1013
  4      RH                    NOTUSED
  5      H2O                  7.02e+17
- 6      DEC                      0.19
+ 6      DEC                      CALC
  7      BLHEIGHT              NOTUSED
  8      DILUTE                NOTUSED
  9      JFAC                  NOTUSED
@@ -127,9 +111,9 @@
  ...
       6 MEK       
 
----------------
- Photolysis (2)
----------------
+------------
+ Photolysis
+------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -142,6 +126,10 @@
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
+
+ Reading JFacSpecies...
+ JFacSpecies = 
+ Finished reading JFacSpecies.
 
 -------------
  Constraints
@@ -184,8 +172,8 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 146   No. f-s = 172   No. J-s = 325   No. LU-s = 43
- No. nonlinear iterations = 171
+ No. steps = 146   No. f-s = 173   No. J-s = 326   No. LU-s = 43
+ No. nonlinear iterations = 172
  No. nonlinear convergence failures = 0
  No. error test failures = 1
 

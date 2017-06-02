@@ -235,8 +235,8 @@ contains
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
           reaction = getReaction( speciesNames, r(i, j) )
-          write (output_file_number, '(1P e15.7, I14, A12, I15, 1P e15.5, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
-                                                                                   r(i, j), p(r(i, j)), '  ', trim( reaction )
+          write (output_file_number, '(1P e15.7, I14, A12, I15, 1P e15.7, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
+                                                                                  r(i, j), p(r(i, j)), '  ', trim( reaction )
         end if
       end do
     end do

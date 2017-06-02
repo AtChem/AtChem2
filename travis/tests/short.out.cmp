@@ -69,7 +69,7 @@
   maximum number of data points in constraint file:       10000
                                ratesOutputStepSize:         500
               instantaneous rates output step size:         300
-                                    modelStartTime:   0.360E+04
+                                    modelStartTime:   0.432E+05
                             jacobianOutputStepSize:      108000
                                           latitude:   0.529E+02
                                          longitude:   0.000E+00
@@ -152,7 +152,7 @@
 ---------------
                         neq = 104
  numberOfConstrainedSpecies = 0
-                         t0 =       3.600E+03
+                         t0 =       4.320E+04
 
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
@@ -160,19 +160,19 @@
 -----------
  Model run
 -----------
- time = 3900
- time = 4200
- time = 4500
- time = 4800
- time = 5100
+ time = 43500
+ time = 43800
+ time = 44100
+ time = 44400
+ time = 44700
 
 ------------------
  Final statistics
 ------------------
- No. steps = 16   No. f-s = 20   No. J-s = 1   No. LU-s = 2
- No. nonlinear iterations = 16
+ No. steps = 135   No. f-s = 170   No. J-s = 266   No. LU-s = 43
+ No. nonlinear iterations = 169
  No. nonlinear convergence failures = 0
- No. error test failures = 0
+ No. error test failures = 5
 
  Runtime = 0
  Deallocating memory.

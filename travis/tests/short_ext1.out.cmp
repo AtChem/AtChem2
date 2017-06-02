@@ -1,9 +1,9 @@
 -------------
  Directories
 -------------
- Output dir is travis/tests/short_extended
- Instantaneous rates dir is travis/tests/short_extended/instantaneousRates
- Parameter dir is travis/tests/short_extended/modelConfiguration
+ Output dir is travis/tests/short_ext1
+ Instantaneous rates dir is travis/tests/short_ext1/instantaneousRates
+ Parameter dir is travis/tests/short_ext1/modelConfiguration
 
 -----------------------
  Species and reactions
@@ -22,25 +22,41 @@
  Finished reading species names.
 
  Reading initial concentrations...
-      1 H2O2             5.000E+03
+      1 CH3OH            3.100E+09
+ ...
+      5 O3               1.200E+12
  Finished reading initial concentrations.
+
+------------
+ Photolysis
+------------
+ Looking for photolysis constants file...
+ Photolysis constants file not found, trying photolysis rates file...
+ Reading photolysis rates from file...
+      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
+ ...
+     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
+ Finished reading photolysis rates.
+ Number of photolysis rates: 35
+
+ Reading JFacSpecies...
+ JFacSpecies = 
+ Finished reading JFacSpecies.
 
 ---------------------
  Species of interest
 ---------------------
  Reading products of interest...
       1 OH        
- ...
-      6 HOCH2CO3H 
+      2 HO2       
  Finished reading products of interest.
- products of interest (number of species found): 6
+ products of interest (number of species found): 2
 
  Reading reactants of interest...
       1 OH        
- ...
-      5 HOCH2CO3H 
+      2 HO2       
  Finished reading reactants of interest.
- reactants of interest (number of species found): 5
+ reactants of interest (number of species found): 2
 
  Reading solver parameters from file...
  ------------------
@@ -65,18 +81,18 @@
  Model parameters:
  -----------------
                                    number of steps:           3
-                               step size (seconds):   0.100E+04
+                               step size (seconds):   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:       10000
-                               ratesOutputStepSize:        3000
-              instantaneous rates output step size:         900
-                                    modelStartTime:   0.360E+04
+                               ratesOutputStepSize:         600
+              instantaneous rates output step size:         300
+                                    modelStartTime:   0.432E+05
                             jacobianOutputStepSize:      108000
-                                          latitude:   0.529E+02
-                                         longitude:   0.000E+00
-                                    day/month/year:  19/11/2008
+                                          latitude:   0.492E+02
+                                         longitude:  -0.210E+01
+                                    day/month/year:  25/ 8/2010
  -----------------
 
  Finished reading model parameters from file.
@@ -87,13 +103,13 @@
  Reading environment variables...
  Number of environment variables: 10
  1      M                        CALC
- 2      TEMP               281.95e+00
+ 2      TEMP                      300
  3      PRESS                    1013
  4      RH                    NOTUSED
- 5      H2O                  3.06e+17
- 6      DEC            0.28782328e+00
+ 5      H2O                  7.02e+17
+ 6      DEC                      0.19
  7      BLHEIGHT              NOTUSED
- 8      DILUTE                6.77E-6
+ 8      DILUTE                NOTUSED
  9      JFAC                  NOTUSED
  10     ROOFOPEN              NOTUSED
  Finished reading environment variables.
@@ -106,14 +122,14 @@
 ---------------------
  Reading concentration output from file...
  Finished reading concentration output from file.
- Output required for concentration of 4 species:
-      1 NO2       
+ Output required for concentration of 6 species:
+      1 O3        
  ...
-      4 HOCO3C4OOH
+      6 MEK       
 
-------------
- Photolysis
-------------
+---------------
+ Photolysis (2)
+---------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -126,11 +142,6 @@
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
-
- Reading JFacSpecies...
- No JFacSpecies.config file exists, so setting jFacSpecies to ''
- JFacSpecies = 
- Finished reading JFacSpecies.
 
 -------------
  Constraints
@@ -158,7 +169,7 @@
 ---------------
                         neq = 104
  numberOfConstrainedSpecies = 0
-                         t0 =       3.600E+03
+                         t0 =       4.320E+04
 
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
@@ -166,17 +177,17 @@
 -----------
  Model run
 -----------
- time = 4600
- time = 5600
- time = 6600
+ time = 43500
+ time = 43800
+ time = 44100
 
 ------------------
  Final statistics
 ------------------
- No. steps = 31   No. f-s = 35   No. J-s = 0   No. LU-s = 3
- No. nonlinear iterations = 31
+ No. steps = 146   No. f-s = 172   No. J-s = 325   No. LU-s = 43
+ No. nonlinear iterations = 171
  No. nonlinear convergence failures = 0
- No. error test failures = 0
+ No. error test failures = 1
 
  Runtime = 0
  Deallocating memory.

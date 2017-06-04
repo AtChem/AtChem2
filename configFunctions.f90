@@ -1,22 +1,27 @@
 module configFunctions_mod
 contains
+
+  ! ----------------------------------------------------------------- !
+
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage, only : maxSpecLength
     implicit none
-    ! This takes in masterSpeciesList, and checks whether each member of
-    ! testspeciesList is in masterSpeciesList.
-    ! When it finds a match, it adds the number of the line in masterSpeciesList to
-    ! returnArray in the next available space, thus each element of returnArray corresponds to the
-    ! same element in testSpeciesList. If not found, then abort.
+    ! This takes in masterSpeciesList, and checks whether each member
+    ! of testspeciesList is in masterSpeciesList.  When it finds a
+    ! match, it adds the number of the line in masterSpeciesList to
+    ! returnArray in the next available space, thus each element of
+    ! returnArray corresponds to the same element in
+    ! testSpeciesList. If not found, then abort.
     character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:), testSpeciesList(:)
     integer(kind=NPI), intent(out) :: returnArray(:)
     integer(kind=NPI) :: counter, i
 
     counter = 0
-    ! loop over each element of testSpeciesList. If a match is made, then append to
-    ! returnArray the number of the species from testSpeciesList within the masterSpeciesList. Otherwise, abort.
+    ! loop over each element of testSpeciesList. If a match is made,
+    ! then append to returnArray the number of the species from
+    ! testSpeciesList within the masterSpeciesList. Otherwise, abort.
     do i = 1, size( testSpeciesList )
       counter = counter + 1
       if ( counter > size( returnArray ) ) then
@@ -32,9 +37,11 @@ contains
     return
   end subroutine matchNameToNumber
 
+  ! ----------------------------------------------------------------- !
 
   pure function getIndexWithinList( masterList, target ) result ( id )
-    ! Search masterList for target, and return the index id. If not found, return 0.
+    ! Search masterList for target, and return the index id. If not
+    ! found, return 0.
     use types_mod
     implicit none
 
@@ -51,13 +58,14 @@ contains
     end do
   end function getIndexWithinList
 
+  ! ----------------------------------------------------------------- !
 
   subroutine findReactionsWithProductOrReactant( r, chs, arrayLen )
-    ! For each interesting species, held in the first element of each row of r,
-    ! find all reactions in chs which match (i.e. second column of chs matches first element
-    ! of given row from r), and append the number of that reaction (first column of chs)
-    ! to this row of r.
-    ! arrayLen keeps track of how long each row in r is.
+    ! For each interesting species, held in the first element of each
+    ! row of r, find all reactions in chs which match (i.e. second
+    ! column of chs matches first element of given row from r), and
+    ! append the number of that reaction (first column of chs) to this
+    ! row of r.  arrayLen keeps track of how long each row in r is.
     use types_mod
     implicit none
 
@@ -75,9 +83,11 @@ contains
     do i = 1, size( arrayLen )
       ! loop over elements of 2nd index of chs
       do j = 1, size( chs, 2 )
-        ! Is the second element of this row in chs (a species number) equal to the first element of this column in r (the interesting species number)?
-        ! If so, then append the first element of this row in chs (the equation number) to this row in r,
-        ! and update the length counter arrayLen for this row.
+        ! Is the second element of this row in chs (a species number)
+        ! equal to the first element of this column in r (the
+        ! interesting species number)?  If so, then append the first
+        ! element of this row in chs (the equation number) to this row
+        ! in r, and update the length counter arrayLen for this row.
         if ( chs(2, j) == r(i, 1) ) then
           ! Match found
           r(i, rCounter) = chs(1, j)
@@ -91,21 +101,24 @@ contains
     return
   end subroutine findReactionsWithProductOrReactant
 
+  ! ----------------------------------------------------------------- !
 
   pure function getConcForSpeciesOfInterest( masterConcList, speciesOfInterest ) result ( interestSpeciesConcList )
     use types_mod
     use species, only : getSpeciesList
     use storage, only : maxSpecLength
     implicit none
-    ! This subroutine outputs interestSpeciesConcList, the concentration of each species of interest,
-    ! in the same order as the species are in specInt
+    ! This subroutine outputs interestSpeciesConcList, the
+    ! concentration of each species of interest, in the same order as
+    ! the species are in specInt
     real(kind=DP), intent(in) :: masterConcList(:)
     character(len=maxSpecLength), intent(in) :: speciesOfInterest(:)
     character(len=maxSpecLength), allocatable :: allSpecies(:)
     real(kind=DP) :: interestSpeciesConcList(size( speciesOfInterest ))
     integer(kind=NPI) :: i, j
-    ! Set interestSpeciesConcList(j) to the value of the concentration pulled from masterConcList,
-    ! using the elements of specInt as a key
+    ! Set interestSpeciesConcList(j) to the value of the concentration
+    ! pulled from masterConcList, using the elements of specInt as a
+    ! key
     allSpecies = getSpeciesList()
     do i = 1, size( allSpecies )
       do j = 1, size( speciesOfInterest )
@@ -117,4 +130,7 @@ contains
     end do
     return
   end function getConcForSpeciesOfInterest
+
+  ! ----------------------------------------------------------------- !
+
 end module configFunctions_mod

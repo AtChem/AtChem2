@@ -23,7 +23,7 @@ contains
       firstTime = .false.
     end if
 
-    !GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY
+    ! GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY
     basePhotoRateNum = 0
     do i = 1, numConPhotoRates
       if ( trim( constrainedPhotoRates(i) ) == trim( jFacSpecies ) ) then
@@ -36,7 +36,7 @@ contains
       stop 2
     end if
 
-    !GET CURRENT VALUE OF basePhotoRate
+    ! GET CURRENT VALUE OF basePhotoRate
 
     call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), &
                                  getConditionsInterpMethod(), basePhotoRateNum, JSpeciesAtT )
@@ -58,8 +58,9 @@ contains
   ! ----------------------------------------------------------------- !
 
   subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcentrations, constrainedSpecs, x )
-    ! This fills x with the contents of z, plus the contents of constrainedConcentrations, using
-    ! constrainedSpecs as the key to which species are constrained.
+    ! This fills x with the contents of z, plus the contents of
+    ! constrainedConcentrations, using constrainedSpecs as the key to
+    ! which species are constrained.
     use types_mod
     implicit none
 
@@ -115,7 +116,7 @@ contains
           exit
         end if
       end do
-      ! if item is not in constrainedSpecs, then add species to z.
+      ! if item is not in constrainedSpecs, then add species to z
       if ( speciesConstrained .eqv. .false. ) then
         z(zCounter) = y(i)
         zCounter = zCounter + 1
@@ -151,8 +152,9 @@ contains
     !
     ! Specifically, handle that some variables need to be set before
     ! others (e.g., pressure, temperature and RH before H2O, and DEC
-    ! before JFAC). Currently, this relies on environmentVariables.config
-    ! having exactly the lines relating to these 10 variables.
+    ! before JFAC). Currently, this relies on
+    ! environmentVariables.config having exactly the lines relating to
+    ! these 10 variables.
     !
     ! To add another environment variable, the user would need to add
     ! that line to environmentVariables.config, and then add this as
@@ -178,8 +180,8 @@ contains
     temp_set = .false.
 
     do orderedEnvVarNum = 1, size( envVarNames )
-      ! loop over in a defined order, then find which number that is in the unordered list that
-      ! comes from the input file
+      ! loop over in a defined order, then find which number that is
+      ! in the unordered list that comes from the input file
       this_env_var_name = orderedEnvVarNames(orderedEnvVarNum)
       envVarNum = getEnvVarNum( trim( this_env_var_name ) )
 

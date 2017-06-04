@@ -1,7 +1,10 @@
 module outputFunctions_mod
-  use types_mod
 contains
+
+  ! ----------------------------------------------------------------- !
+
   pure function ro2Sum( y ) result ( ro2 )
+    use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: y(*)
@@ -12,8 +15,10 @@ contains
     return
   end function ro2Sum
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputEnvVar( t )
+    use types_mod
     use envVars
     implicit none
 
@@ -33,9 +38,11 @@ contains
     return
   end subroutine outputEnvVar
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: t, prev, this
@@ -72,8 +79,10 @@ contains
     return
   end subroutine outputSolverParameters
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputPhotoRateCalcParameters( t )
+    use types_mod
     use zenithData
     implicit none
 
@@ -90,8 +99,10 @@ contains
     return
   end subroutine outputPhotoRateCalcParameters
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputPhotolysisRates( t )
+    use types_mod
     use photolysisRates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
     implicit none
 
@@ -108,10 +119,13 @@ contains
     return
   end subroutine outputPhotolysisRates
 
+  ! ----------------------------------------------------------------- !
 
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
-    ! Given a list speciesNames, and an integer reactionNumber, return reaction,
-    ! a string containing the string representing that reaction.
+    ! Given a list speciesNames, and an integer reactionNumber, return
+    ! reaction, a string containing the string representing that
+    ! reaction.
+    use types_mod
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
     implicit none
@@ -122,9 +136,10 @@ contains
     integer(kind=NPI), intent(in) :: reactionNumber
     character(len=maxReactionStringLength) :: reactantStr, productStr, reaction
 
-    ! Loop over reactants, and copy the reactant name for any reactant used in
-    ! reaction reactionNumber. use numReactants as a counter of the number of reactants.
-    ! String these together with '+', and append a '='
+    ! Loop over reactants, and copy the reactant name for any reactant
+    ! used in reaction reactionNumber. use numReactants as a counter
+    ! of the number of reactants.  String these together with '+', and
+    ! append a '='
     numReactants = 0
     do i = 1, size( clhs, 2 )
       if ( clhs(1, i) == reactionNumber ) then
@@ -142,10 +157,11 @@ contains
     end do
     reactantStr = trim( reactantStr ) // '='
 
-    ! Loop over products, and copy the product name for any product created in
-    ! reaction reactionNumber. use numProducts as a counter of the number of products.
-    ! String these together with '+', and append this to reactantStr. Save the
-    ! result in reaction, which is returned
+    ! Loop over products, and copy the product name for any product
+    ! created in reaction reactionNumber. use numProducts as a counter
+    ! of the number of products.  String these together with '+', and
+    ! append this to reactantStr. Save the result in reaction, which
+    ! is returned
     numProducts = 0
     do i = 1, size( crhs, 2 )
       if ( crhs(1, i) == reactionNumber ) then
@@ -167,8 +183,10 @@ contains
     return
   end function getReaction
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputRates( r, arrayLen, t, p, flag )
+    use types_mod
     use reactionStructure
     use species, only : getSpeciesList
     use storage, only : maxSpecLength, maxReactionStringLength
@@ -223,8 +241,10 @@ contains
     return
   end subroutine outputRates
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputInstantaneousRates( time )
+    use types_mod
     use reactionStructure
     use directories, only : instantaneousRates_dir
     use productionAndLossRates, only : instantaneousRates
@@ -250,10 +270,13 @@ contains
     return
   end subroutine outputInstantaneousRates
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
     ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
-    ! If any concentration is negative, then set it to zero before printing.
+    ! If any concentration is negative, then set it to zero before
+    ! printing.
+    use types_mod
     use storage, only : maxSpecLength
     implicit none
 
@@ -281,9 +304,11 @@ contains
     return
   end subroutine outputSpeciesOfInterest
 
+  ! ----------------------------------------------------------------- !
 
   subroutine outputFinalModelState( names, concentrations )
-    ! This routine outputs speciesNames and speciesConcs to modelOutput/finalModelState.output
+    ! This routine outputs speciesNames and speciesConcs to
+    ! modelOutput/finalModelState.output
     use types_mod
     implicit none
 
@@ -300,4 +325,7 @@ contains
 
     return
   end subroutine outputFinalModelState
+
+  ! ----------------------------------------------------------------- !
+
 end module outputFunctions_mod

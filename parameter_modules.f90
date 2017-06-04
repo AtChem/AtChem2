@@ -12,8 +12,8 @@ module solver_params_mod
   integer(kind=SI) :: solverType
   integer(kind=NPI) :: preconBandUpper, preconBandLower
   character(len=30) :: solverTypeName(3)
-
 contains
+
   subroutine set_solver_parameters( input_parameters )
     use types_mod
     implicit none
@@ -81,6 +81,7 @@ contains
   end subroutine set_solver_parameters
 end module solver_params_mod
 
+! ----------------------------------------------------------------- !
 
 module model_params_mod
   use types_mod
@@ -95,8 +96,8 @@ module model_params_mod
   integer(kind=QI) :: jacobianOutputStepSize
   integer(kind=QI) :: irOutStepSize
   character(len=20) :: interpolationMethodName(2)
-
 contains
+
   subroutine set_model_parameters( input_parameters )
     use types_mod
     use constraints, only : maxNumberOfDataPoints

@@ -1,3 +1,6 @@
+! ******************************************************************** !
+!
+! ******************************************************************** !
 module types_mod
   use, intrinsic :: iso_fortran_env
   implicit none
@@ -14,8 +17,12 @@ module types_mod
   integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
   integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
+
 end module types_mod
 
+! ******************************************************************** !
+!
+! ******************************************************************** !
 module storage
   use types_mod
   implicit none
@@ -30,9 +37,9 @@ module storage
 
 end module storage
 
-!    ********************************************************************************************************
-!    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
-!    ********************************************************************************************************
+! ******************************************************************** !
+! DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
+! ******************************************************************** !
 module directories
   use storage, only : maxFilepathLength
   implicit none
@@ -42,9 +49,9 @@ module directories
 
 end module directories
 
-!    ********************************************************************************************************
-!    DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
-!    ********************************************************************************************************
+! ******************************************************************** !
+! DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
+! ******************************************************************** !
 module date
   use types_mod
   implicit none
@@ -53,8 +60,8 @@ module date
   integer(kind=SI) :: day, month
   integer(kind=DI) :: year, dayOfYear
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
-
 contains
+
   subroutine calcDateParameters()
     implicit none
 
@@ -70,9 +77,12 @@ contains
     secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
     return
   end subroutine calcDateParameters
+
 end module date
 
-
+! ******************************************************************** !
+!
+! ******************************************************************** !
 module envVars
   use types_mod
   use storage, only : maxEnvVarNameLength, maxEnvVarLength
@@ -90,7 +100,9 @@ module envVars
 
 end module envVars
 
-
+! ******************************************************************** !
+!
+! ******************************************************************** !
 module constraints
   use types_mod
   implicit none
@@ -170,9 +182,12 @@ contains
     implicit none
     deallocate (constrainedSpecies)
   end subroutine deallocateConstrainedSpecies
+
 end module constraints
 
-
+! ******************************************************************** !
+!
+! ******************************************************************** !
 module species
   use types_mod
   use storage, only : maxSpecLength
@@ -185,7 +200,6 @@ module species
   private :: numSpecies, numReactions, speciesList
   public :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
   public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
-
 contains
 
   pure function getNumberOfSpecies() result ( n )
@@ -239,9 +253,9 @@ contains
 
 end module species
 
-!    ********************************************************************************************************
-!    INTERPOLATION METHOD MODULE
-!    ********************************************************************************************************
+! ******************************************************************** !
+! INTERPOLATION METHOD MODULE
+! ******************************************************************** !
 module interpolationMethod
   use types_mod
   implicit none
@@ -250,7 +264,6 @@ module interpolationMethod
   integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   public :: getSpeciesInterpMethod, getConditionsInterpMethod, getDecInterpMethod
   public :: setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
-
 contains
 
   pure function getSpeciesInterpMethod() result ( n )
@@ -291,9 +304,9 @@ contains
 
 end module interpolationMethod
 
-!    ********************************************************************************************************
-!    INTERPOLATION METHOD MODULE
-!    ********************************************************************************************************
+! ******************************************************************** !
+! INTERPOLATION METHOD MODULE
+! ******************************************************************** !
 module reactionStructure
   use types_mod
   implicit none
@@ -304,9 +317,9 @@ module reactionStructure
 
 end module reactionStructure
 
-!    ********************************************************************************************************
-!    PHOTOLYSIS RATES METHOD MODULE
-!    ********************************************************************************************************
+! ******************************************************************** !
+! PHOTOLYSIS RATES METHOD MODULE
+! ******************************************************************** !
 module photolysisRates_mod
   use types_mod
   use storage, only : maxPhotoRateNameLength
@@ -326,8 +339,8 @@ module photolysisRates_mod
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:), photoY2(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
-
 contains
+
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
@@ -346,11 +359,12 @@ contains
 
     allocate (j(size_of_j))
   end subroutine allocate_photolysis_j
+
 end module photolysisRates_mod
 
-!    ********************************************************************************************************
-!    SOLAR ZENITH ANGLE AND PHOTOLYSIS RATES PARAMETERS MODULE
-!    ********************************************************************************************************
+! ******************************************************************** !
+! SOLAR ZENITH ANGLE AND PHOTOLYSIS RATES PARAMETERS MODULE
+! ******************************************************************** !
 module zenithData
   use types_mod
   implicit none
@@ -361,9 +375,9 @@ module zenithData
 
 end module zenithData
 
-!    ********************************************************************************************************
-!    RATES OF PRODUCTION AND LOSS MODULE
-!    ********************************************************************************************************
+! ******************************************************************** !
+! RATES OF PRODUCTION AND LOSS MODULE
+! ******************************************************************** !
 module productionAndLossRates
   use types_mod
   implicit none

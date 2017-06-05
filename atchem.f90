@@ -162,6 +162,7 @@ PROGRAM ATCHEM
   ! Read in JFac species, and set jfacSpeciesLine
   call readJFacSpecies()
   write (*,*)
+
   write (*, '(A)') '---------------------'
   write (*, '(A)') ' Species of interest'
   write (*, '(A)') '---------------------'
@@ -337,7 +338,8 @@ PROGRAM ATCHEM
   write (*, '(A, I0)') ' setting maxstep ier = ', ier
   write (*,*)
 
-  ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT SPGMR SOLVER
+  ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
+  ! SPGMR SOLVER
   if ( solverType == 1 ) then
     call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER

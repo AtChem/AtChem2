@@ -39,13 +39,15 @@ contains
     ! used to approximate the Jacobian.
     JvApprox = nint( input_parameters(3), SI )
     ! This is never used, but is referenced in a comment in
-    ! FCVJTIMES().  TODO: delete?
+    ! FCVJTIMES().
+    ! TODO: delete?
     deltaJv = input_parameters(4)
     ! From CVODE docs: DELT is the linear convergence tolerance factor
     ! of the SPGMR. Used in FCVSPGMR().
     deltaMain = input_parameters(5)
     ! From CVODE docs: MAXL is the maximum Krylov subspace
-    ! dimension. Used in FCVSPGMR().  TODO: Rename to MAXL?
+    ! dimension. Used in FCVSPGMR().
+    ! TODO: Rename to MAXL?
     lookBack = nint( input_parameters(6), NPI )
     ! From CVODE docs: Maximum absolute step size. Passed via
     ! FCVSETRIN().
@@ -53,14 +55,14 @@ contains
     ! From CVODE docs: Maximum no. of internal steps before
     ! tout. Passed via FCVSETIIN().
     maxNumInternalSteps = nint( input_parameters(8), NPI )
-    ! USed to choose which solver to use:
+    ! Used to choose which solver to use:
     ! 1: SPGMR
     ! 2: SPGMR + Banded preconditioner
     ! 3: Dense solver
     ! otherwise: error
     solverType = nint( input_parameters(9), SI )
     ! From CVODE docs: MU (preconBandUpper) and ML (preconBandLower)
-    ! are the upper and lower half- bandwidths of the band matrix that
+    ! are the upper and lower half bandwidths of the band matrix that
     ! is retained as an approximation of the Jacobian.
     preconBandUpper = nint( input_parameters(10), NPI )
     preconBandLower = nint( input_parameters(11), NPI )
@@ -122,7 +124,7 @@ contains
     interpolationMethodName(1) = 'piecewise constant'
     interpolationMethodName(2) = 'piecewise linear'
     ! maxNumTimesteps sets the maximum number of timesteps to
-    ! calculate.  Calculation will terminate when
+    ! calculate. Calculation will terminate when
     ! currentNumTimestep>=maxNumTimesteps.
     maxNumTimesteps = nint( input_parameters(1), NPI )
     ! Size of timestep: tout is incremented by this amount on each
@@ -130,9 +132,12 @@ contains
     timestepSize = input_parameters(2)
     ! Use the local variable speciesInterpolationMethod to set the
     ! value speciesInterpMethod, the private member of MODULE
-    ! interpolationMethod.  getSpeciesInterpMethod() is called by
-    ! getConstrainedQuantAtT.  Values: 1: Piecewise constant 2:
-    ! Piecewise linear otherwise: error
+    ! interpolationMethod.
+    ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
+    ! Values:
+    ! 1: Piecewise constant
+    ! 2: Piecewise linear
+    ! otherwise: Error
     speciesInterpolationMethod = nint( input_parameters(3), SI )
     call setSpeciesInterpMethod( speciesInterpolationMethod )
     conditionsInterpolationMethod = nint( input_parameters(4), SI )

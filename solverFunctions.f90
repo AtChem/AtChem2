@@ -140,8 +140,8 @@ contains
     use utilityFunctions_mod, only : calcAtmosphere
     implicit none
 
-    ! calculates rate constants from arrhenius information output p(:)
-    ! contains the rate of each reaction
+    ! calculates rate constants from arrhenius information output
+    ! p(:) contains the rate of each reaction
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)

@@ -1,9 +1,12 @@
 module interpolationFunctions_mod
 contains
+
+  ! ----------------------------------------------------------------- !
+
   subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, interpMethod, ind, concAtT )
-    ! This routine returns in concAtT the value of the requested quantity (referenced
-    ! by the ind-th line of x, y, y2) based upon the constraint data given and
-    ! interpolation method given
+    ! This routine returns in concAtT the value of the requested
+    ! quantity (referenced by the ind-th line of x, y, y2) based upon
+    ! the constraint data given and interpolation method given
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use interpolationMethod
@@ -73,7 +76,9 @@ contains
         write (stderr,*) 'ERROR: Interpolation method not set, interpMethod = ', interpMethod
         stop
     end select
-
     return
   end subroutine getConstrainedQuantAtT
+
+  ! ----------------------------------------------------------------- !
+
 end module interpolationFunctions_mod

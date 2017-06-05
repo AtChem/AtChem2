@@ -1,6 +1,6 @@
-!     ----------------------------------------------------------------
-!     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT
-!     ----------------------------------------------------------------
+! ****************************************************************** !
+!     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT              !
+! ****************************************************************** !
 
 PROGRAM ATCHEM
 
@@ -26,11 +26,11 @@ PROGRAM ATCHEM
   use solverFunctions_mod
   implicit none
 
-  !    ********************************************************************************************************
-  !    DECLARATIONS
-  !    ********************************************************************************************************
+  ! ****************************************************************** !
+  ! DECLARATIONS
+  ! ****************************************************************** !
 
-  !   DECLARATIONS FOR SOLVER PARAMETERS
+  ! DECLARATIONS FOR SOLVER PARAMETERS
   integer(kind=QI) :: ier
   integer :: meth, itmeth, iatol, itask, currentNumTimestep
   integer(kind=NPI) :: iout(21), ipar(10)
@@ -44,7 +44,7 @@ PROGRAM ATCHEM
   ! number of species and reactions
   integer(kind=NPI) :: numSpec, numReac
 
-  !   DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
+  ! DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
   integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
@@ -83,10 +83,9 @@ PROGRAM ATCHEM
       use reactionStructure
       use interpolationFunctions_mod, only : getConstrainedQuantAtT
       use constraintFunctions_mod
+      implicit none
 
       ! Fortran routine for right-hand side function.
-      implicit none
-      !
       real(kind=DP), intent(in) :: t, y(*)
       real(kind=DP), intent(out) :: ydot(*)
       integer(kind=NPI), intent(in) :: ipar(*)
@@ -100,9 +99,9 @@ PROGRAM ATCHEM
     end subroutine FCVFUN
   end interface
 
-  !    ********************************************************************************************************
-  !    MODEL SETUP AND CONFIGURATION
-  !    ********************************************************************************************************
+  ! ****************************************************************** !
+  ! MODEL SETUP AND CONFIGURATION
+  ! ****************************************************************** !
 
   call SYSTEM_CLOCK( runStart )
 
@@ -145,11 +144,11 @@ PROGRAM ATCHEM
   neq = numSpec
 
   ! Read species names and numbers
-
   call setSpeciesList( readSpecies() )
   write (*,*)
 
-  ! Set initial concentrations for all species for which this info is provided, 0.0 for any unspecified.
+  ! Set initial concentrations for all species for which this info is
+  ! provided, 0.0 for any unspecified.
   call readAndSetInitialConcentrations( speciesConcs )
   write (*,*)
 
@@ -167,19 +166,27 @@ PROGRAM ATCHEM
   write (*, '(A)') '---------------------'
   write (*, '(A)') ' Species of interest'
   write (*, '(A)') '---------------------'
-  ! Read in product species of interest, and set up variables to hold these
+
+  ! Read in product species of interest, and set up variables to hold
+  ! these
   write (*, '(A)') ' Reading products of interest...'
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName )
   write (*, '(A)') ' Finished reading products of interest.'
 
   allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))
   allocate (prodIntSpeciesLengths(size( prodIntName )))
-  ! Fill prodIntSpecies(:,1) with a list of the numbers of the interesting product species, with numbers from their ordering in speciesList
-  call matchNameToNumber( getSpeciesList(), prodIntName, prodIntSpecies(:, 1) )
-  ! prodIntSpecies will eventually hold one row per interesting product species, with the first element being the number
-  ! of that species, and the remaining elements being the numbers of the reactions in which that species is a product
 
-  ! Fill the remaining elements of each row of prodIntSpecies with the numbers of the reactions in which that species is a product
+  ! Fill prodIntSpecies(:,1) with a list of the numbers of the
+  ! interesting product species, with numbers from their ordering in
+  ! speciesList
+  call matchNameToNumber( getSpeciesList(), prodIntName, prodIntSpecies(:, 1) )
+  ! prodIntSpecies will eventually hold one row per interesting
+  ! product species, with the first element being the number of that
+  ! species, and the remaining elements being the numbers of the
+  ! reactions in which that species is a product
+  !
+  ! Fill the remaining elements of each row of prodIntSpecies with the
+  ! numbers of the reactions in which that species is a product
   call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodIntSpeciesLengths )
   write (*, '(A, I0)') ' products of interest (number of species found): ', size( prodIntName )
   write (*,*)
@@ -191,16 +198,21 @@ PROGRAM ATCHEM
 
   allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))
   allocate (reacIntSpeciesLengths(size( reacIntName )))
-  ! Fill reacIntSpecies(:,1) with a list of the numbers of the interesting reaction species, with numbers from their ordering in speciesList
-  call matchNameToNumber( getSpeciesList(), reacIntName, reacIntSpecies(:, 1) )
-  ! reacIntSpecies will eventually hold one row per interesting reactant species, with the first element being the number
-  ! of that species, and the remaining elements being the numbers of the reactions in which that species is a reactant
 
-  ! Fill the remaining elements of each row of reacIntSpecies with the numbers of the reactions in which that species is a reactant
+  ! Fill reacIntSpecies(:,1) with a list of the numbers of the
+  ! interesting reaction species, with numbers from their ordering in
+  ! speciesList
+  call matchNameToNumber( getSpeciesList(), reacIntName, reacIntSpecies(:, 1) )
+  ! reacIntSpecies will eventually hold one row per interesting
+  ! reactant species, with the first element being the number of that
+  ! species, and the remaining elements being the numbers of the
+  ! reactions in which that species is a reactant
+  !
+  ! Fill the remaining elements of each row of reacIntSpecies with the
+  ! numbers of the reactions in which that species is a reactant
   call findReactionsWithProductOrReactant( reacIntSpecies, clhs, reacIntSpeciesLengths )
   write (*, '(A, I0)') ' reactants of interest (number of species found): ', size( reacIntName )
   write (*,*)
-
 
   ! Read in and set solver parameters
   call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
@@ -210,49 +222,60 @@ PROGRAM ATCHEM
   call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
   write (*,*)
 
-  ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of MODULE date to their value based on day, month, year
+  ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of
+  ! MODULE date to their value based on day, month, year
   call calcDateParameters()
 
-  !   HARD CODED SOLVER PARAMETERS
+  ! HARD CODED SOLVER PARAMETERS
   t = modelStartTime
   tout = timestepSize + t
-  ! Parameters for FCVMALLOC(). (Comments from cvode guide)
-  ! meth specifies the basic integration: 1 for Adams (nonstiff) or 2 for BDF stiff)
+  ! Parameters for FCVMALLOC(). (Comments from cvode guide) meth
+  ! specifies the basic integration: 1 for Adams (nonstiff) or 2 for
+  ! BDF stiff)
   meth = 2
-  ! itmeth specifies the nonlinear iteration method: 1 for functional iteration or 2 for Newton iteration.
+  ! itmeth specifies the nonlinear iteration method: 1 for functional
+  ! iteration or 2 for Newton iteration.
   itmeth = 2
-  ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar or 2 for array.
-  ! If IATOL= 3, the arguments RTOL and ATOL are ignored and the user is
-  ! expected to subsequently call FCVEWTSET() and provide the function FCVEWT().
+  ! IATOL specifies the type for absolute tolerance ATOL: 1 for scalar
+  ! or 2 for array.  If IATOL= 3, the arguments RTOL and ATOL are
+  ! ignored and the user is expected to subsequently call FCVEWTSET()
+  ! and provide the function FCVEWT().
   iatol = 1
 
-  ! Parameter for FCVODE(). Comment from cvode guide: ITASK is a task indicator and should be
-  ! set to 1 for normal mode (overshoot TOUT and interpolate),
-  ! or to 2 for one-step mode (return after each internal step taken)
+  ! Parameter for FCVODE(). Comment from cvode guide: ITASK is a task
+  ! indicator and should be set to 1 for normal mode (overshoot TOUT
+  ! and interpolate), or to 2 for one-step mode (return after each
+  ! internal step taken)
   itask = 1
 
-  ! currentNumTimestep counts the number of iterative steps. Set to zero. Calculation will terminate when currentNumTimestep>=maxNumTimesteps.
+  ! currentNumTimestep counts the number of iterative steps. Set to
+  ! zero. Calculation will terminate when
+  ! currentNumTimestep>=maxNumTimesteps.
   currentNumTimestep = 0
 
-  ! Read in environment variables (FIXED, CONSTRAINED, CALC or NOTUSED, see environmentVariables.config)
+  ! Read in environment variables (FIXED, CONSTRAINED, CALC or
+  ! NOTUSED, see environmentVariables.config)
   write (*, '(A)') '-----------------------'
   write (*, '(A)') ' Environment variables'
   write (*, '(A)') '-----------------------'
   call readEnvVar()
 
-  ! fill speciesOfInterest with the names of species to output to concentration.output
+  ! fill speciesOfInterest with the names of species to output to
+  ! concentration.output
   write (*, '(A)') '---------------------'
   write (*, '(A)') ' Species of Interest'
   write (*, '(A)') '---------------------'
   speciesOfInterest = readSpeciesOfInterest()
   write (*,*)
+
   ! Allocate concsOfSpeciesOfInterest
   allocate ( concsOfSpeciesOfInterest(size( speciesOfInterest )))
 
   flush(stderr)
-  !    ********************************************************************************************************
-  !    CONSTRAINTS
-  !    ********************************************************************************************************
+
+  ! ****************************************************************** !
+  ! CONSTRAINTS
+  ! ****************************************************************** !
 
   write (*, '(A)') '---------------'
   write (*, '(A)') ' Photolysis (2)'
@@ -269,10 +292,12 @@ PROGRAM ATCHEM
   concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
   call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
 
-  ! This outputs z, which is speciesConcs with all the constrained species removed.
+  ! This outputs z, which is speciesConcs with all the constrained
+  ! species removed.
   call removeConstrainedSpeciesFromProbSpec( speciesConcs, getConstrainedSpecies(), z )
 
-  !   ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE SOLVED FOR (N - C = M)
+  ! ADJUST PROBLEM SPECIFICATION TO GIVE NUMBER OF SPECIES TO BE
+  ! SOLVED FOR (N - C = M)
   neq = numSpec - getNumberOfConstrainedSpecies()
   write (*, '(A)') '---------------'
   write (*, '(A)') ' Problem stats'
@@ -282,9 +307,9 @@ PROGRAM ATCHEM
 
   flush(stderr)
 
-  !    ********************************************************************************************************
-  !    CONFIGURE SOLVER
-  !    ********************************************************************************************************
+  ! ****************************************************************** !
+  ! CONFIGURE SOLVER
+  ! ****************************************************************** !
 
   ipar(1) = neq
   ipar(2) = numReac
@@ -313,8 +338,8 @@ PROGRAM ATCHEM
   write (*, '(A, I0)') ' setting maxstep ier = ', ier
   write (*,*)
 
-  !   SELECT SOLVER TYPE ACCORDING TO FILE INPUT
-  !   SPGMR SOLVER
+  ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
+  ! SPGMR SOLVER
   if ( solverType == 1 ) then
     call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
@@ -348,9 +373,11 @@ PROGRAM ATCHEM
     stop
   end if
 
-  ! Use Jacobian approximation if required. Calling FCVSPILSSETJAC() with non-zero flag
-  ! specifies that spgmr, spbcg, or sptfqmr should use the supplied FCVJTIMES() (in solverfunctions.f90).
-  ! In our case, solverType={1,2} calls SPGMR above, while solverType=3 errors out if JvApprox=1
+  ! Use Jacobian approximation if required. Calling FCVSPILSSETJAC()
+  ! with non-zero flag specifies that spgmr, spbcg, or sptfqmr should
+  ! use the supplied FCVJTIMES() (in solverfunctions.f90).  In our
+  ! case, solverType={1,2} calls SPGMR above, while solverType=3
+  ! errors out if JvApprox=1
   if ( JVapprox == 1 ) then
     call FCVSPILSSETJAC( 1, ier )
   end if
@@ -365,9 +392,10 @@ PROGRAM ATCHEM
   ! check JFac data consistency:
   call test_jfac()
 
-  !    ********************************************************************************************************
-  !    RUN MODEL
-  !    ********************************************************************************************************
+  ! ****************************************************************** !
+  ! RUN MODEL
+  ! ****************************************************************** !
+
   write (*, '(A)') '-----------'
   write (*, '(A)') ' Model run'
   write (*, '(A)') '-----------'
@@ -385,17 +413,20 @@ PROGRAM ATCHEM
     time = int( t )
     write (*, '(A, I0)') ' time = ', time
 
-    ! Get concentrations for constrained species and add to array for output
+    ! Get concentrations for constrained species and add to array for
+    ! output
     call addConstrainedSpeciesToProbSpec( z, getConstrainedConcs(), getConstrainedSpecies(), speciesConcs )
 
-    ! Output rates of production and loss (output frequency set in model.parameters)
+    ! Output rates of production and loss (output frequency set in
+    ! model.parameters)
     elapsed = int( t-modelStartTime )
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
       call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1_SI )
       call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0_SI )
     end if
 
-    ! Output Jacobian matrix (output frequency set in model.parameters)
+    ! Output Jacobian matrix (output frequency set in
+    ! model.parameters)
     if ( mod( elapsed, jacobianOutputStepSize ) == 0 ) then
       call jfy( numReac, speciesConcs, t )
     end if
@@ -431,13 +462,15 @@ PROGRAM ATCHEM
 
   end do
 
-  ! Output final model concentrations, in a usable format for model restart
+  ! Output final model concentrations, in a usable format for model
+  ! restart
   call outputFinalModelState( getSpeciesList(), speciesConcs )
   write (*,*)
 
   write (*, '(A)') '------------------'
   write (*, '(A)') ' Final statistics'
   write (*, '(A)') '------------------'
+
   ! Final on-screen output
   fmt = "(' No. steps = ', I0, '   No. f-s = ', I0, " // &
         "'   No. J-s = ', I0, '   No. LU-s = ', I0/" // &
@@ -451,8 +484,8 @@ PROGRAM ATCHEM
   call SYSTEM_CLOCK( runEnd, clockRate )
   runTime = ( runEnd - runStart ) / clockRate
   write (*, '(A, I0)') ' Runtime = ', runTime
-
   write (*, '(A)') ' Deallocating memory.'
+
   ! deallocate CVODE internal data
   call FCVFREE()
   deallocate (speciesConcs, z)
@@ -463,20 +496,25 @@ PROGRAM ATCHEM
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (prodIntSpeciesLengths)
   deallocate (reacIntSpeciesLengths)
-  ! deallocate data allocated before in input functions (inputFunctions.f90)
-  ! deallocate arrays from module constraints
+
+  ! deallocate data allocated before in input functions
+  ! (inputFunctions.f90) deallocate arrays from module constraints
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
   deallocate (dataX, dataY, dataY2, dataFixedY)
   deallocate (speciesNumberOfPoints)
+
   ! deallocate arrays from module species
   call deallocateSpeciesList()
+
   ! deallocate arrays from module envVars
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
   deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
+
   ! deallocate arrays from module photolysisRates
   deallocate (photoX, photoY, photoY2, photoNumberOfPoints)
 
+  ! Close output files and end program
   close (50)
   close (51)
   close (52)
@@ -488,9 +526,11 @@ PROGRAM ATCHEM
   close (58)
   close (59)
   close (60)
-
   stop
+
 END PROGRAM ATCHEM
+
+! ****************************************************************** !
 
 subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   use types_mod
@@ -514,7 +554,8 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
 
   neq = ipar(1)
   delta = 1.00d-03
-  ! fake using variables h and work, to avoid a warning (they are required by CVODE code)
+  ! fake using variables h and work, to avoid a warning (they are
+  ! required by CVODE code)
   h = h
   dummy = work(1)
 
@@ -532,7 +573,8 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   return
 end subroutine FCVJTIMES
 
-!     ---------------------------------------------------------------
+! -------------------------------------------------------- !
+
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
   use species
@@ -588,3 +630,5 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 
   return
 end subroutine FCVFUN
+
+! ****************************************************************** !

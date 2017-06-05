@@ -1,16 +1,16 @@
-5		        number of steps
-900.0e+00		step size (seconds)
-2			      Species Interpolation Method (pw constant = 1, pw linear = 2)
-2			      Conditions Interpolation Method (pw constant = 1, pw linear = 2)
-2			      Dec Interpolation Method (pw constant = 1, pw linear = 2)
-10000		    Maximum Number of data points in constraint files
-3600			  rates output step size
-3600.00e+00	model start time
+48			number of steps
+900			step size (seconds)
+2			species interpolation method (pw constant = 1, pw linear = 2)
+2			conditions interpolation method (pw constant = 1, pw linear = 2)
+2			dec interpolation method (pw constant = 1, pw linear = 2)
+10000			maximum number of data points in constraint files
+3600			rates output step size
+0			model start time (seconds)
 108000			jacobian output step size
-52.943e00 	Latitude
-0.00e+00		Longitude
-19			    day
-11			    month
-2008			  year
-900			    Instantaneous Rates Output Step Size
--9999       End of File
+51.51			latitude
+0.13			longitude
+21			day
+06			month
+2010			year
+1800			instantaneous rates output step size
+-9999			end of file

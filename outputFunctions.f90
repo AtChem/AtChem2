@@ -10,7 +10,7 @@ contains
     real(kind=DP), intent(in) :: y(*)
     real(kind=DP) :: ro2
 
-    include 'ro2_rates.f90'
+    include 'ro2-rates.f90'
 
     return
   end function ro2Sum

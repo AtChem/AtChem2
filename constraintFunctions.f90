@@ -5,7 +5,7 @@ module constraintFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine calcJFac( t, jfac )
     use types_mod
     use zenithData
@@ -59,11 +59,8 @@ contains
   end subroutine calcJFac
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcentrations, constrainedSpecs, x )
-    ! This fills x with the contents of z, plus the contents of
-    ! constrainedConcentrations, using constrainedSpecs as the key to
-    ! which species are constrained.
     use types_mod
     implicit none
 
@@ -72,6 +69,9 @@ contains
     real(kind=DP), intent(out) :: x(:)
     integer(kind=NPI) :: zCounter, i, j, speciesConstrained
 
+    ! This fills x with the contents of z, plus the contents of
+    ! constrainedConcentrations, using constrainedSpecs as the key to
+    ! which species are constrained.
     if ( size( constrainedConcentrations ) /= size( constrainedSpecs ) ) then
       stop 'size( constrainedConcentrations ) /= size( constrainedSpecs ) in addConstrainedSpeciesToProbSpec().'
     end if
@@ -97,7 +97,7 @@ contains
   end subroutine addConstrainedSpeciesToProbSpec
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecs, z )
     use types_mod
     implicit none
@@ -129,7 +129,7 @@ contains
   end subroutine removeConstrainedSpeciesFromProbSpec
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine getEnvVarsAtT( t )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -273,9 +273,8 @@ contains
   end subroutine getEnvVarsAtT
 
   ! ----------------------------------------------------------------- !
-
+  ! Set envVarNum to the index of name within enVarNames
   function getEnvVarNum( name ) result ( envVarNum )
-    ! Set envVarNum to the index of name within enVarNames
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use envVars, only : envVarNames, numEnvVars
@@ -296,14 +295,14 @@ contains
       write (stderr,*) 'The name ' // trim( name ) // ' is not found in getEnvVarNum().'
       stop
     end if
+
     return
   end function getEnvVarNum
 
   ! ----------------------------------------------------------------- !
-
+  ! check jfac data consistency
   subroutine test_jfac()
-    ! check jfac data consistency
-    use types_mod
+     use types_mod
     use photolysisRates_mod
     use envVars
     implicit none
@@ -347,8 +346,7 @@ contains
         stop
       end if
     end if
-  end subroutine test_jfac
 
-  ! ----------------------------------------------------------------- !
+  end subroutine test_jfac
 
 end module constraintFunctions_mod

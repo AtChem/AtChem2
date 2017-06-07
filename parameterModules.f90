@@ -17,6 +17,8 @@ module solver_params_mod
   character(len=30) :: solverTypeName(3)
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine set_solver_parameters( input_parameters )
     use types_mod
     implicit none
@@ -110,6 +112,8 @@ module model_params_mod
   character(len=20) :: interpolationMethodName(2)
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine set_model_parameters( input_parameters )
     use types_mod
     use constraints, only : maxNumberOfDataPoints

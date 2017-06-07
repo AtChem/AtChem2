@@ -4,11 +4,10 @@
 module conversionFunctions_mod
 contains
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! calculate the number density of air (molecule cm-3) from pressure
+  ! (mbar) and temperature (K)
   pure function calcAirDensity( press, temp ) result ( m )
-    ! calculate the number density of air (molecule cm-3) from
-    ! pressure (mbar) and temperature (K)
     use types_mod
     implicit none
 
@@ -20,13 +19,11 @@ contains
     return
   end function calcAirDensity
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! convert relative humidity to water concentration (molecule cm-3)
+  ! pressure in mbar (1 mbar = 1 hPa), temperature in K
+  ! equations from "Humidity Conversion Formulas" by Vaisala (2013)
   pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
-    ! convert relative humidity to water concentration (molecule cm-3)
-    ! pressure in mbar (1 mbar = 1 hPa), temperature in K
-    !
-    ! from "Humidity Conversion Formulas" published by Vaisala (2013)
     use types_mod
     implicit none
 
@@ -48,7 +45,5 @@ contains
 
     return
   end function convertRHtoH2O
-
-  ! ----------------------------------------------------------------- !
 
 end module conversionFunctions_mod

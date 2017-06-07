@@ -4,25 +4,9 @@
 module utilityFunctions_mod
 contains
 
-  ! ----------------------------------------------------------------- !
-  ! TODO: this is unused?
-  subroutine temperature( temp, h2o, ttime )
-    use types_mod
-    implicit none
-    ! subroutine to calculate diurnal variations in temperature
-    real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor
-
-    temp = 289.86 + 8.3 * sin( ( 7.2722D-5 * ttime ) - 1.9635 )
-    temp = 298.00
-    rh = 23.0 * sin( ( 7.2722D-5 * ttime ) + 1.1781 ) + 66.5
-    h2o_factor = 10.0 / ( 1.38D-16 * temp ) * rh
-    h2o = 6.1078 * exp( -1.0D+0 * ( 597.3 - 0.57 * ( temp - 273.16 ) ) * 18.0 / 1.986 * ( 1.0 / temp - 1.0 / 273.16 ) ) * h2o_factor
-
-    return
-  end subroutine temperature
-
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! calculate number density of oxygen and nitrogen in the atmosphere
+  ! from M (air density, molecule cm-3)
   subroutine calcAtmosphere( m, o2, n2 )
     use types_mod
     implicit none
@@ -36,10 +20,9 @@ contains
   end subroutine calcAtmosphere
 
   ! ----------------------------------------------------------------- !
-
+  ! calculate the Sun Declination (radians): the sun declination is
+  ! the angle between the Sun and Earth's equatorial plane
   pure function calcDec( t ) result ( dec )
-    ! calculate the Sun Declination (radians): the sun declination is
-    ! the angle between the Sun and Earth's equatorial plane
     use types_mod
     use date, only : secondsInYear, dayAsFractionOfYear
     implicit none
@@ -56,11 +39,10 @@ contains
     return
   end function calcDec
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! calculate the Local Hour Angle (radians) and the Solar Zenith
+  ! Angle (radians)
   subroutine calcZenith( t, dec )
-    ! calculate the Local Hour Angle (radians) and the Solar Zenith
-    ! Angle (radians)
     use types_mod
     use zenithData
     implicit none
@@ -93,5 +75,20 @@ contains
   end subroutine calcZenith
 
   ! ----------------------------------------------------------------- !
+  ! this subroutine is currently unused, but may be useful -> KEEP
+  subroutine temperature( temp, h2o, ttime )
+    use types_mod
+    implicit none
+    ! subroutine to calculate diurnal variations in temperature
+    real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor
+
+    temp = 289.86 + 8.3 * sin( ( 7.2722D-5 * ttime ) - 1.9635 )
+    temp = 298.00
+    rh = 23.0 * sin( ( 7.2722D-5 * ttime ) + 1.1781 ) + 66.5
+    h2o_factor = 10.0 / ( 1.38D-16 * temp ) * rh
+    h2o = 6.1078 * exp( -1.0D+0 * ( 597.3 - 0.57 * ( temp - 273.16 ) ) * 18.0 / 1.986 * ( 1.0 / temp - 1.0 / 273.16 ) ) * h2o_factor
+
+    return
+  end subroutine temperature
 
 end module utilityFunctions_mod

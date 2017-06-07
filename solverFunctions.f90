@@ -5,9 +5,8 @@ module solverFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
-    ! calculate rhs of rate eqn dy()
     use types_mod
     use productionAndLossRates, only : instantaneousRates, productionRates, lossRates
     implicit none
@@ -21,6 +20,7 @@ contains
     real(kind=DP) :: r(nr) ! working array
     integer(kind=NPI) :: i
 
+    ! calculate rhs of rate eqn dy()
     if ( size( lhs, 1 ) /= 2 ) then
       stop 'size( lhs, 1 ) /= 2 in resid()'
     end if
@@ -61,9 +61,18 @@ contains
   end subroutine resid
 
   ! ----------------------------------------------------------------- !
-
+  ! subroutine to calculate the Jacobian matrix of the system
   subroutine jfy( nr, y, t )
-    ! routine for calculating the Jacobian of the system
+    use types_mod
+    use reactionStructure ! access crhs, clhs, clcoeff, crcoeff
+    implicit none
+
+    integer(kind=NPI), intent(in) :: nr
+    real(kind=DP), intent(in) :: y(:), t
+    real(kind=DP) :: fy(size( y ), size( y ))
+    integer(kind=NPI) :: i, j
+    real(kind=DP) :: p(nr), r(nr)
+
     ! nr = number of reactions
     ! for each species calculate the rhs of the rate equation
     ! for the reactants array
@@ -82,15 +91,6 @@ contains
     ! t = current time (s)
     ! p = reaction rates - dimension nr
     ! r = working array - dimension nr
-    use types_mod
-    use reactionStructure ! access crhs, clhs, clcoeff, crcoeff
-    implicit none
-
-    integer(kind=NPI), intent(in) :: nr
-    real(kind=DP), intent(in) :: y(:), t
-    real(kind=DP) :: fy(size( y ), size( y ))
-    integer(kind=NPI) :: i, j
-    real(kind=DP) :: p(nr), r(nr)
 
     ! set jacobian matrix to zero
     fy(:,:) = 0.0
@@ -127,8 +127,9 @@ contains
     return
   end subroutine jfy
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! calculates rate constants from arrhenius information output p(:)
+  ! contains the rate of each reaction
   subroutine mechanism_rates( t, y, p )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -143,8 +144,6 @@ contains
     use utilityFunctions_mod, only : calcAtmosphere
     implicit none
 
-    ! calculates rate constants from arrhenius information output
-    ! p(:) contains the rate of each reaction
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
@@ -213,9 +212,8 @@ contains
     end do
 
     include 'mechanism-rate-coefficients.f90'
+
     return
   end subroutine mechanism_rates
-
-  ! ----------------------------------------------------------------- !
 
 end module solverFunctions_mod

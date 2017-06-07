@@ -16,6 +16,7 @@ contains
 
     o2 = 0.2095_DP * m
     n2 = 0.7809_DP * m
+
     return
   end subroutine calcAtmosphere
 
@@ -36,6 +37,7 @@ contains
     currentFYear = dayAsFractionOfYear + ( t / secondsInYear )
     temporary = 2.0_DP * 0.0167_DP * sin( 2.0_DP * pi * ( currentFYear - ( 2.0_DP / daysInYear ) ) )
     dec = asin( sin( -maxDecInRad ) * cos( ( 2.0_DP * pi ) * ( currentFYear + ( 10.0_DP / daysInYear ) ) + temporary ) )
+
     return
   end function calcDec
 
@@ -74,12 +76,13 @@ contains
     return
   end subroutine calcZenith
 
-  ! ----------------------------------------------------------------- !
-  ! this subroutine is currently unused, but may be useful -> KEEP
-  subroutine temperature( temp, h2o, ttime )
+  ! -----------------------------------------------------------------
+  ! subroutine to calculate diurnal variations in temperature
+  ! currently unused, but it may be useful -> KEEP
+subroutine temperature( temp, h2o, ttime )
     use types_mod
     implicit none
-    ! subroutine to calculate diurnal variations in temperature
+
     real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor
 
     temp = 289.86 + 8.3 * sin( ( 7.2722D-5 * ttime ) - 1.9635 )

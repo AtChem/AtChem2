@@ -5,7 +5,7 @@ module outputFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   pure function ro2Sum( y ) result ( ro2 )
     use types_mod
     implicit none
@@ -19,7 +19,7 @@ contains
   end function ro2Sum
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputEnvVar( t )
     use types_mod
     use envVars
@@ -42,7 +42,7 @@ contains
   end subroutine outputEnvVar
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -79,11 +79,12 @@ contains
       write (stderr,*) 'Available options are 1, 2, 3.'
       stop
     end if
+
     return
   end subroutine outputSolverParameters
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
     use zenithData
@@ -103,7 +104,7 @@ contains
   end subroutine outputPhotoRateCalcParameters
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputPhotolysisRates( t )
     use types_mod
     use photolysisRates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
@@ -122,12 +123,11 @@ contains
     return
   end subroutine outputPhotolysisRates
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! Given a list speciesNames, and an integer reactionNumber, return
+  ! reaction, a string containing the string representing that
+  ! reaction.
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
-    ! Given a list speciesNames, and an integer reactionNumber, return
-    ! reaction, a string containing the string representing that
-    ! reaction.
     use types_mod
     use reactionStructure
     use storage, only : maxSpecLength, maxReactionStringLength
@@ -187,7 +187,7 @@ contains
   end function getReaction
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputRates( r, arrayLen, t, p, flag )
     use types_mod
     use reactionStructure
@@ -245,7 +245,7 @@ contains
   end subroutine outputRates
 
   ! ----------------------------------------------------------------- !
-
+  ! ???
   subroutine outputInstantaneousRates( time )
     use types_mod
     use reactionStructure
@@ -273,12 +273,12 @@ contains
     return
   end subroutine outputInstantaneousRates
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
+  ! If any concentration is negative, then set it to zero before
+  ! printing.
   subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
-    ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
-    ! If any concentration is negative, then set it to zero before
-    ! printing.
+
     use types_mod
     use storage, only : maxSpecLength
     implicit none
@@ -304,14 +304,14 @@ contains
       end if
     end do
     write (50, '(100 (1P e15.5)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+
     return
   end subroutine outputSpeciesOfInterest
 
-  ! ----------------------------------------------------------------- !
-
+  ! -----------------------------------------------------------------
+  ! This routine outputs speciesNames and speciesConcs to
+  ! modelOutput/finalModelState.output
   subroutine outputFinalModelState( names, concentrations )
-    ! This routine outputs speciesNames and speciesConcs to
-    ! modelOutput/finalModelState.output
     use types_mod
     implicit none
 
@@ -328,7 +328,5 @@ contains
 
     return
   end subroutine outputFinalModelState
-
-  ! ----------------------------------------------------------------- !
 
 end module outputFunctions_mod

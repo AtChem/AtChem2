@@ -302,7 +302,7 @@ contains
   ! ----------------------------------------------------------------- !
   ! check jfac data consistency
   subroutine test_jfac()
-     use types_mod
+    use types_mod
     use photolysisRates_mod
     use envVars
     implicit none

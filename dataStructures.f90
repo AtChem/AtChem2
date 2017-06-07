@@ -62,6 +62,8 @@ module date
   real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine calcDateParameters()
     implicit none
 
@@ -75,6 +77,7 @@ contains
     dayAsFractionOfYear = dayOfYear / 365_DI
     ! Set number of seconds per year
     secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
+
     return
   end subroutine calcDateParameters
 

@@ -2,10 +2,10 @@
 *.o
 *.mod
 atchem
+makefile.*
 mechanism-rate-coefficients.f90
 mechanism-rate-declarations.f90
-makefile.*
 mechanism.prod
 mechanism.reac
 mechanism.species
-ro2_rates.f90
+ro2-rates.f90

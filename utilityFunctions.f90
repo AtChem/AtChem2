@@ -79,7 +79,7 @@ contains
   ! -----------------------------------------------------------------
   ! subroutine to calculate diurnal variations in temperature
   ! currently unused, but it may be useful -> KEEP
-subroutine temperature( temp, h2o, ttime )
+  subroutine temperature( temp, h2o, ttime )
     use types_mod
     implicit none
 

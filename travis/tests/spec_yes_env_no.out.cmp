@@ -46,7 +46,7 @@
  ------------------
  Solver parameters:
  ------------------
-            atol:   1.000E-04
+            atol:   1.000E-03
             rtol:   1.000E-04
       JacVApprox:           0
          deltaJv:   1.000E-03
@@ -178,10 +178,10 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 367   No. f-s = 485   No. J-s = 1159   No. LU-s = 111
- No. nonlinear iterations = 484
+ No. steps = 355   No. f-s = 459   No. J-s = 1168   No. LU-s = 107
+ No. nonlinear iterations = 458
  No. nonlinear convergence failures = 0
- No. error test failures = 27
+ No. error test failures = 23
 
  Runtime = 0
  Deallocating memory.

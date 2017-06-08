@@ -204,7 +204,7 @@ contains
         j(ck(i)) = cl(i)
       end if
     end do
-
+    write (*,'(1000 (e25.17))') j(:)
     do i = 1, numConPhotoRates
       call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints(i), &
                                    getConditionsInterpMethod(), i, photoRateAtT )

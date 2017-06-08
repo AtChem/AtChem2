@@ -22,7 +22,7 @@ CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
 endif
 
 # gfortran flags
-FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -O0
+FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
 LIBDIR   =  /usr/lib/:$(CVODELIB)
 # Intel Fortran flags
 #F77 = ifort

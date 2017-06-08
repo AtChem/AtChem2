@@ -199,7 +199,8 @@ contains
           j(ck(i)) = 1.0d-30
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
-          write (*, '(1000 (e25.17))') j(ck(i)), cl(i), cosx, cmm(i), exp( -cnn(i) * secx ), transmissionFactor(i), roofOpen, jfac
+          write (*, '(1000 (e25.17))') j(ck(i)), cl(i), cosx, cmm(i), exp( -cnn(i) * secx ), -cnn(i), secx, &
+                                       transmissionFactor(i), roofOpen, jfac
         end if
       else
         j(ck(i)) = cl(i)

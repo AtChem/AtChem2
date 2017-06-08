@@ -199,13 +199,13 @@ contains
           j(ck(i)) = 1.0d-30
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
-          write (*,'(1000 (e25.17))') j(ck(i)), cl(i), cosx, cmm(i), exp( -cnn(i) * secx ), transmissionFactor(i), roofOpen, jfac
+          write (*, '(1000 (e25.17))') j(ck(i)), cl(i), cosx, cmm(i), exp( -cnn(i) * secx ), transmissionFactor(i), roofOpen, jfac
         end if
       else
         j(ck(i)) = cl(i)
       end if
     end do
-    write (*,'(1000 (e25.17))') j(:)
+    write (*, '(1000 (e25.17))') j(:)
     do i = 1, numConPhotoRates
       call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints(i), &
                                    getConditionsInterpMethod(), i, photoRateAtT )

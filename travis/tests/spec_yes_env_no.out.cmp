@@ -27,22 +27,6 @@
       3 O3               1.320E+12
  Finished reading initial concentrations.
 
-------------
- Photolysis
-------------
- Looking for photolysis constants file...
- Photolysis constants file not found, trying photolysis rates file...
- Reading photolysis rates from file...
-      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
- ...
-     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
- Finished reading photolysis rates.
- Number of photolysis rates: 35
-
- Reading JFacSpecies...
- JFacSpecies = 
- Finished reading JFacSpecies.
-
 ---------------------
  Species of interest
 ---------------------
@@ -127,9 +111,9 @@
       2 NO2       
       3 O3        
 
----------------
- Photolysis (2)
----------------
+------------
+ Photolysis
+------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -142,6 +126,10 @@
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
+
+ Reading JFacSpecies...
+ JFacSpecies = 
+ Finished reading JFacSpecies.
 
 -------------
  Constraints
@@ -167,6 +155,10 @@
  Finished reading in the names and concentration of fixed-concentration species.
  Finished reading constrained species.
  Initialising concentrations of constrained species...
+ error in piecewise linear interpolation
+      0.000E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      0.000E+00 9      1.320E+12
  Finished initialising concentrations of constrained species.
 
 ---------------
@@ -182,18 +174,1442 @@
 -----------
  Model run
 -----------
+ error in piecewise linear interpolation
+      0.000E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      0.000E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      4.333E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      4.333E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      6.379E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      6.379E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-11 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-11 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-07 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-07 9      1.320E+12
+ error in piecewise linear interpolation
+      3.190E-07 6      4.920E+13
+ error in piecewise linear interpolation
+      3.190E-07 9      1.320E+12
+ error in piecewise linear interpolation
+      3.509E-06 6      4.920E+13
+ error in piecewise linear interpolation
+      3.509E-06 9      1.320E+12
+ error in piecewise linear interpolation
+      3.509E-06 6      4.920E+13
+ error in piecewise linear interpolation
+      3.509E-06 9      1.320E+12
+ error in piecewise linear interpolation
+      1.915E-05 6      4.920E+13
+ error in piecewise linear interpolation
+      1.915E-05 9      1.320E+12
+ error in piecewise linear interpolation
+      1.915E-05 6      4.920E+13
+ error in piecewise linear interpolation
+      1.915E-05 9      1.320E+12
+ error in piecewise linear interpolation
+      6.035E-05 6      4.920E+13
+ error in piecewise linear interpolation
+      6.035E-05 9      1.320E+12
+ error in piecewise linear interpolation
+      6.035E-05 6      4.920E+13
+ error in piecewise linear interpolation
+      6.035E-05 9      1.320E+12
+ error in piecewise linear interpolation
+      1.436E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      1.436E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      1.436E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      1.436E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      2.962E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      2.962E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      2.962E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      2.962E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      5.667E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      5.667E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      5.667E-04 6      4.920E+13
+ error in piecewise linear interpolation
+      5.667E-04 9      1.320E+12
+ error in piecewise linear interpolation
+      1.044E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.044E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.044E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.044E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.917E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.917E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.917E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.917E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      4.081E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      4.081E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      4.081E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      4.081E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      4.081E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      4.081E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      6.245E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      6.245E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      6.245E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      6.245E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      8.410E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      8.410E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      8.410E-03 6      4.920E+13
+ error in piecewise linear interpolation
+      8.410E-03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.289E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.289E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.289E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.289E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.289E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.289E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.738E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.738E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.738E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.738E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.186E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.186E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.186E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.186E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.072E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.072E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.072E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.072E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.996E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.996E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.996E-02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.996E-02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.246E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.246E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.246E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.246E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.246E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.246E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.246E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.246E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.992E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.992E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.992E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.992E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.992E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.992E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.992E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.992E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.738E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.738E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.738E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.738E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.738E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.738E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.484E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.484E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.484E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.484E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.484E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.484E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.229E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.229E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.229E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.229E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.229E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.229E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.470E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.470E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.470E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.470E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.470E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.470E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.470E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.470E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.711E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.711E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.711E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.711E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.711E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.711E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.952E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.952E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.952E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.952E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.952E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.952E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      9.193E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      9.193E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      9.193E-01 6      4.920E+13
+ error in piecewise linear interpolation
+      9.193E-01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.127E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.127E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.127E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.127E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.127E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.127E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.335E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.335E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.335E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.335E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.335E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.335E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.543E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.543E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.543E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.543E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.543E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.543E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.891E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.891E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.891E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.891E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.891E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      1.891E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.239E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.239E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.239E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.239E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.239E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.239E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.587E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.587E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.587E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.587E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.587E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.587E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.936E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.936E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.936E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.936E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      2.936E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      2.936E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      3.464E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      3.464E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      3.464E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      3.464E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      3.464E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      3.464E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      4.310E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      4.310E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      4.310E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      4.310E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      4.310E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      4.310E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      4.310E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      4.310E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      5.156E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      5.156E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      5.156E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      5.156E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      5.156E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      5.156E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.002E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.002E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.002E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.002E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.002E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.002E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.848E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.848E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.848E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.848E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      6.848E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      6.848E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      7.694E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      7.694E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      7.694E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      7.694E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      7.694E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      7.694E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      8.540E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      8.540E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      8.540E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      8.540E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      8.540E+00 6      4.920E+13
+ error in piecewise linear interpolation
+      8.540E+00 9      1.320E+12
+ error in piecewise linear interpolation
+      1.006E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.006E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.006E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.006E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.006E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.006E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.158E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.158E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.158E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.158E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.158E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.158E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.158E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.158E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.158E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.158E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.310E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.310E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.310E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.310E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.310E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.310E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.310E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.310E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.310E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.310E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.463E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.463E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.463E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.463E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.463E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.463E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.615E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.615E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.615E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.615E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.615E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.615E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.767E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.767E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.767E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.767E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.767E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.767E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.919E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.919E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.919E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.919E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.919E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      1.919E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.154E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.154E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.154E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.154E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.154E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.154E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.154E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.154E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.154E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.154E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.390E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.390E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.390E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.390E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.390E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.390E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.390E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.390E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.625E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.625E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.625E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.625E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.625E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.625E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.625E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.625E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.860E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.860E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.860E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.860E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      2.860E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      2.860E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.248E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.248E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.637E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.637E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.637E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.637E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      3.637E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      3.637E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.025E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.025E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.025E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.025E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.025E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.025E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.413E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.413E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      4.413E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      4.413E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.340E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.340E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.340E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.340E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.340E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.340E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      5.340E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      5.340E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.268E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.268E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.268E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.268E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.268E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.268E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      6.268E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      6.268E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.195E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.195E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.195E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.195E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      7.195E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      7.195E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      8.122E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      8.122E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      8.122E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      8.122E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      8.122E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      8.122E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      9.050E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      9.050E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      9.050E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      9.050E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      9.050E+01 6      4.920E+13
+ error in piecewise linear interpolation
+      9.050E+01 9      1.320E+12
+ error in piecewise linear interpolation
+      1.064E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.064E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.064E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.064E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.064E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.064E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.223E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.223E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.223E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.223E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.223E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.223E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.382E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.382E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.382E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.382E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.382E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.382E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.541E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.541E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.541E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.541E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.541E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.541E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.816E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.816E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.816E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.816E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      1.816E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      1.816E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.092E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.092E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.092E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.092E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.092E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.092E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.367E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.367E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.367E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.367E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.367E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.367E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.958E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.958E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.958E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.958E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      2.958E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      2.958E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.548E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.548E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.548E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.548E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.548E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.548E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      3.548E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      3.548E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.139E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.139E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.139E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.139E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.139E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.139E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.730E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.730E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.730E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.730E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      4.730E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      4.730E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      5.320E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      5.320E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      5.320E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      5.320E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      5.320E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      5.320E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      5.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      5.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      5.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      5.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      6.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      6.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      6.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      6.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      6.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      6.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      7.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      7.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      7.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      7.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      7.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      7.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      8.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      8.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      8.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      8.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      8.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      8.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      9.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      9.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      9.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      9.911E+02 9      1.320E+12
+ error in piecewise linear interpolation
+      9.911E+02 6      4.920E+13
+ error in piecewise linear interpolation
+      9.911E+02 9      1.320E+12
  time = 900
+ error in piecewise linear interpolation
+      1.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.791E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.791E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.791E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.891E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.891E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.891E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.891E+03 9      1.320E+12
  time = 1800
+ error in piecewise linear interpolation
+      1.991E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.991E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      1.991E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      1.991E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.791E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.791E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.791E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.791E+03 9      1.320E+12
  time = 2700
+ error in piecewise linear interpolation
+      2.891E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.891E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.891E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.891E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.891E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.891E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.991E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.991E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.991E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.991E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      2.991E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      2.991E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.091E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.091E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.191E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.191E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.291E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.291E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.391E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.391E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.491E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.491E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.591E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.591E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.691E+03 9      1.320E+12
+ error in piecewise linear interpolation
+      3.691E+03 6      4.920E+13
+ error in piecewise linear interpolation
+      3.691E+03 9      1.320E+12
  time = 3600
 
 ------------------
  Final statistics
 ------------------
- No. steps = 152   No. f-s = 219   No. J-s = 416   No. LU-s = 56
- No. nonlinear iterations = 216
+ No. steps = 105   No. f-s = 121   No. J-s = 181   No. LU-s = 29
+ No. nonlinear iterations = 118
  No. nonlinear convergence failures = 0
- No. error test failures = 12
+ No. error test failures = 0
 
  Runtime = 0
  Deallocating memory.

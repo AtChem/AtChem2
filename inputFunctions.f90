@@ -730,10 +730,14 @@ contains
       do i = 1, numConPhotoRates
         string = constrainedPhotoRates(i)
         write (*,*) string, '...'
-        fileLocation = fileLocationPrefix // string
+        fileLocation = trim( fileLocationPrefix ) // trim( string )
         call inquire_or_abort( fileLocation, 'readPhotoRates()')
+        photoNumberOfPoints(i) = count_lines_in_file( fileLocation )
+        if ( photoNumberOfPoints(i) > maxNumberOfDataPoints ) then
+          photoNumberOfPoints(i) = maxNumberOfDataPoints
+          write (*, '(A, I0, A)') ' Warning! Truncated constraint data to ', photoNumberOfPoints(i), ' points.'!
+        end if
         open (11, file=fileLocation, status='old')
-        read (11,*) photoNumberOfPoints(i)
         do k = 1, photoNumberOfPoints(i)
           read (11,*) photoX(i, k), photoY(i, k) !, photoY2 (i, k)
         end do
@@ -797,7 +801,8 @@ contains
         if ( id /= 0 ) then
           call setConstrainedSpecies( i, id )
         else
-          write (stderr, '(A, I0, A)') 'Supplied constrained species ', constrainedNames(i), ' is not a species in the problem.'
+          write (stderr, '(A, A, A)') 'Supplied constrained species ', &
+                                      trim( constrainedNames(i) ), ' is not a species in the problem.'
           stop
         end if
       end do

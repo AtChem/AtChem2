@@ -25,23 +25,6 @@
       1 H2O2             5.000E+03
  Finished reading initial concentrations.
 
-------------
- Photolysis
-------------
- Looking for photolysis constants file...
- Photolysis constants file not found, trying photolysis rates file...
- Reading photolysis rates from file...
-      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
- ...
-     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
- Finished reading photolysis rates.
- Number of photolysis rates: 35
-
- Reading JFacSpecies...
- No JFacSpecies.config file exists, so setting jFacSpecies to ''
- JFacSpecies = 
- Finished reading JFacSpecies.
-
 ---------------------
  Species of interest
 ---------------------
@@ -124,9 +107,9 @@
  ...
       4 HOCO3C4OOH
 
----------------
- Photolysis (2)
----------------
+------------
+ Photolysis
+------------
  Looking for photolysis constants file...
  Photolysis constants file not found, trying photolysis rates file...
  Reading photolysis rates from file...
@@ -139,6 +122,11 @@
  Reading names of constrained photolysis rates from file...
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
+
+ Reading JFacSpecies...
+ No JFacSpecies.config file exists, so setting jFacSpecies to ''
+ JFacSpecies = 
+ Finished reading JFacSpecies.
 
 -------------
  Constraints

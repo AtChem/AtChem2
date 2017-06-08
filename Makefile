@@ -50,7 +50,7 @@ $(AOUT): $(SRCS)
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
-TESTS := short single_reac_of_interest short_extended spec_yes_plus_fixed_env_no spec_no_env_yes1 spec_yes_env_no spec_yes_env_yes full
+TESTS := spec_yes_env_no
 
 test:
 	@echo "Make: performing 'make clean'."

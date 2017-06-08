@@ -323,6 +323,7 @@ PROGRAM ATCHEM
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   write (*,*)
+  !write (*,*) rtol
   call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
                   iout, rout, ipar, rpar, ier )
   if ( ier /= 0 ) then
@@ -598,11 +599,13 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   real(kind=DP) :: dummy
   real(kind=DP), allocatable :: dy(:), z(:), constrainedConcs(:)
   integer(kind=NPI) :: i
+  !write (*, '(1P e25.18)') t
 
   numConSpec = getNumberOfConstrainedSpecies()
   np = ipar(1) + numConSpec
   numReac = ipar(2)
   dummy = rpar(1)
+  !write (*, '(1000 (1P e20.12))') y(1:ipar(1))
 
   allocate (dy(np), z(np), constrainedConcs(numConSpec))
 
@@ -620,10 +623,12 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   call setConstrainedConcs( constrainedConcs )
 
   call addConstrainedSpeciesToProbSpec( y, constrainedConcs, getConstrainedSpecies(), z )
+  !write (*, '(1000 (1P e20.12))') z(1:np)
 
   call resid( numReac, t, z, dy, clhs, clcoeff, crhs, crcoeff )
 
   call removeConstrainedSpeciesFromProbSpec( dy, getConstrainedSpecies(), ydot )
+  !write (*, '(1000 (1P e20.12))') ydot(1:ipar(1))
 
   deallocate (dy, z)
   ier = 0

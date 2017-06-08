@@ -140,7 +140,7 @@ contains
     use utilityFunctions_mod, only : calcDec, calcZenith
     implicit none
 
-    real(kind=DP) :: t
+    real(kind=DP), intent(in) :: t
     real(kind=DP) :: this_env_val
     integer(kind=NPI) :: envVarNum, orderedEnvVarNum
     character(len=maxEnvVarNameLength) :: this_env_var_name, orderedEnvVarNames(size( envVarNames ))
@@ -307,7 +307,7 @@ contains
 
     integer(kind=SI) :: envVarNum
 
-    ! If JFAC species is provided (e.g. JNO2) and constraint file is not provided, then the program should complain.
+    ! If JFAC species is provided (e.g. J4) and constraint file is not provided, then the program should complain.
     envVarNum = getEnvVarNum( 'JFAC' )
     !IF CALC
     ! If JFAC is CALC and there's no JFAC species, the program should complain
@@ -323,8 +323,18 @@ contains
       end if
       !IF CONSTRAINED
     else if ( envVarTypesNum(envVarNum) == 2_SI ) then
+      if ( '' /= trim( jFacSpecies ) ) then
+        write (*, '(A)') ' Error! JFAC was set to be CONSTRAINED, but at the same time JFac species was provided!'
+        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
+        stop
+      end if
       !IF FIXED
     else if ( envVarTypesNum(envVarNum) == 3_SI ) then
+      if ( '' /= trim( jFacSpecies ) ) then
+        write (*, '(A)') ' Error! JFAC was set to a fixed value, but at the same time JFac species was provided!'
+        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
+        stop
+      end if
       !IF NOTUSED
       ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
     else

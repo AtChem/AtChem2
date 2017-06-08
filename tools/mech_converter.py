@@ -350,12 +350,29 @@ ro2 = 0.00D+00\n""")
             # then matches - and any combination of digits and decimal points. This replaces the negative number by its
             # bracketed version.
             # It also then converts all @ to ** etc.
+            line2 = re.sub('(?<=@)-[0-9.]*',
+                           '(\g<0>)',
+                           line.replace(';', '').strip()
+                           ).replace('@', '**')
+            # Append _DP to the end of all digits that aren't followed by more digits or letters (targets a few too many)
+            line2 = re.sub('[0-9]+(?![a-zA-Z0-9\.])',
+                           '\g<0>_DP',
+                           line2)
+            # Undo the suffix _DP for any species names and for LOG10
+            line2 = re.sub(r'\b(?P<speciesnames>[a-zA-Z][a-zA-Z0-9]*)_DP',
+                           '\g<speciesnames>',
+                           line2)
+            # Undo the suffix _DP for any numbers like 1D7 or 2.3D-8
+            line2 = re.sub(r'\b(?P<doubles>[0-9][0-9\.]*[dDeE][+-]*[0-9]+)_DP',
+                           '\g<doubles>',
+                           line2)
+            # Add .0 to any literals that don't have a decimal place - this is necessary as it seems you can't use extended
+            # precision on such a number - gfortran complains about an unknown integer kind, when it should really be a real kind
+            line2 = re.sub(r'(?<![\.0-9])(?P<doubles>[0-9]+)_DP',
+                           '\g<doubles>.0_DP',
+                           line2)
             # Save the resulting string to mechanism_rates_coeff_list
-            mechanism_rates_coeff_list.append(re.sub('(?<=@)-[0-9.]*',
-                                                     '(\g<0>)',
-                                                     line.replace(';', '').strip()
-                                                     ).replace('@', '**')
-                                              + '\n')
+            mechanism_rates_coeff_list.append(line2 + '\n')
 
             # Now we need to find the list of all species that are used in these equations, so we can declare them
             # at the top of the Fortran source file.

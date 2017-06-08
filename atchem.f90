@@ -36,8 +36,7 @@ PROGRAM ATCHEM
   integer(kind=NPI) :: iout(21), ipar(10)
   integer(kind=NPI) :: neq
   real(kind=DP) :: t, tout
-  real(kind=DP) :: rout(6)
-  real(kind=DP) :: rpar(1)
+  real(kind=DP) :: rout(6), rpar(1)
 
   ! walltime variables
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
@@ -105,6 +104,12 @@ PROGRAM ATCHEM
 
   call SYSTEM_CLOCK( runStart )
 
+  ! Initialise some variables used by CVODE functions to invalid values
+  iout(:) = -1_NPI
+  ipar(:) = -1_NPI
+  rout(:) = -1.0_DP
+  rpar(:) = -1.0_DP
+
   write (*, '(A)') '-------------'
   write (*, '(A)') ' Directories'
   write (*, '(A)') '-------------'
@@ -152,17 +157,6 @@ PROGRAM ATCHEM
   call readAndSetInitialConcentrations( speciesConcs )
   write (*,*)
 
-  ! Read in photolysis rate information
-  write (*, '(A)') '------------'
-  write (*, '(A)') ' Photolysis'
-  write (*, '(A)') '------------'
-  call readPhotolysisConstants()
-  write (*,*)
-
-  ! Read in JFac species, and set jfacSpeciesLine
-  call readJFacSpecies()
-  write (*,*)
-
   write (*, '(A)') '---------------------'
   write (*, '(A)') ' Species of interest'
   write (*, '(A)') '---------------------'
@@ -174,6 +168,7 @@ PROGRAM ATCHEM
   write (*, '(A)') ' Finished reading products of interest.'
 
   allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))
+  prodIntSpecies(:,:) = -1_NPI
   allocate (prodIntSpeciesLengths(size( prodIntName )))
 
   ! Fill prodIntSpecies(:,1) with a list of the numbers of the
@@ -197,6 +192,7 @@ PROGRAM ATCHEM
   write (*, '(A)') ' Finished reading reactants of interest.'
 
   allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))
+  reacIntSpecies(:,:) = -1_NPI
   allocate (reacIntSpeciesLengths(size( reacIntName )))
 
   ! Fill reacIntSpecies(:,1) with a list of the numbers of the
@@ -277,10 +273,14 @@ PROGRAM ATCHEM
   ! CONSTRAINTS
   ! ****************************************************************** !
 
-  write (*, '(A)') '---------------'
-  write (*, '(A)') ' Photolysis (2)'
-  write (*, '(A)') '---------------'
+  write (*, '(A)') '------------'
+  write (*, '(A)') ' Photolysis'
+  write (*, '(A)') '------------'
   call readPhotoRates()
+  write (*,*)
+
+  ! Read in JFac species, and set jfacSpeciesLine
+  call readJFacSpecies()
   write (*,*)
 
   write (*, '(A)') '-------------'

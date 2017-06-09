@@ -148,7 +148,7 @@ contains
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
 
-    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
+    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT, test
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
@@ -192,6 +192,9 @@ contains
     end do
 
     call calcAtmosphere( m, o2, n2 )
+
+    test = -0.39076809909199173_DP
+    write (*, '(2 (e25.17))') test, exp(test), transfer(test, t)
 
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then

@@ -148,7 +148,7 @@ contains
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
 
-    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
+    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT, test
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
@@ -193,18 +193,29 @@ contains
 
     call calcAtmosphere( m, o2, n2 )
 
+    test = -0.39076809909199173_DP
+    write (*, '(2 (e25.17), A, b64)') test, exp(test), ' ', transfer(test, t)
+
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx < 1.00d-10 ) then
           j(ck(i)) = 1.0d-30
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
+          write (*, '(1000 (e25.17, A))') j(ck(i)), ' ', cl(i), ' ', cosx, ' ', cmm(i), ' E ', exp( -cnn(i) * secx ), ' ', &
+                                          -cnn(i) * secx, ' ', -cnn(i), ' ', secx, ' ', transmissionFactor(i), ' ro ', &
+                                          roofOpen, ' ', jfac, ' ', t
+          write (*, '(100 (b64, A))') transfer(j(ck(i)), t), ' ', transfer(cl(i), t), ' ', transfer(cosx, t), ' ', &
+                                      transfer(cmm(i), t), ' E ', transfer(exp( -cnn(i) * secx ), t), ' ', &
+                                      transfer(-cnn(i) * secx, t), ' ', transfer(-cnn(i), t), &
+                                      ' ', transfer(secx, t), ' ', transfer(transmissionFactor(i), t), ' ro ', &
+                                      transfer(roofOpen, t), ' ', transfer(jfac, t), ' ', transfer(t, t)
         end if
       else
         j(ck(i)) = cl(i)
       end if
     end do
-
+    write (*, '(1000 (e25.17))') j(:)
     do i = 1, numConPhotoRates
       call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints(i), &
                                    getConditionsInterpMethod(), i, photoRateAtT )

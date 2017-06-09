@@ -5,6 +5,6 @@ PROGRAM test_double_exponential
   real(kind=DP) :: a
 
   a = -0.39076809909199173_DP
-  write (*, '(2 (e25.17), A, b64)') a, exp(a), ' ', transfer(a, a)
+  write (*, '(2 (e25.17, A, b64, A))') a, ' ', transfer(a,a), ' ', exp(a), ' ', transfer(exp(a), a)
 
 END PROGRAM

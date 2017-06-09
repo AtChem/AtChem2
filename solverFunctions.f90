@@ -194,7 +194,7 @@ contains
     call calcAtmosphere( m, o2, n2 )
 
     test = -0.39076809909199173_DP
-    write (*, '(2 (e25.17))') test, exp(test), transfer(test, t)
+    write (*, '(2 (e25.17), A, b64)') test, exp(test), ' ', transfer(test, t)
 
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then

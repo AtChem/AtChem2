@@ -200,9 +200,11 @@ contains
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
           write (*, '(1000 (e25.17, A))') j(ck(i)), ' ', cl(i), ' ', cosx, ' ', cmm(i), ' E ', exp( -cnn(i) * secx ), ' ', &
-                                          -cnn(i), ' ', secx, ' ', transmissionFactor(i), ' ro ', roofOpen, ' ', jfac, ' ', t
+                                          -cnn(i) * secx, ' ', -cnn(i), ' ', secx, ' ', transmissionFactor(i), ' ro ', &
+                                          roofOpen, ' ', jfac, ' ', t
           write (*, '(100 (b64, A))') transfer(j(ck(i)), t), ' ', transfer(cl(i), t), ' ', transfer(cosx, t), ' ', &
-                                      transfer(cmm(i), t), ' E ', transfer(exp( -cnn(i) * secx ), t), ' ', transfer(-cnn(i), t), &
+                                      transfer(cmm(i), t), ' E ', transfer(exp( -cnn(i) * secx ), t), ' ', &
+                                      transfer(-cnn(i) * secx, t), ' ', transfer(-cnn(i), t), &
                                       ' ', transfer(secx, t), ' ', transfer(transmissionFactor(i), t), ' ro ', &
                                       transfer(roofOpen, t), ' ', transfer(jfac, t), ' ', transfer(t, t)
         end if

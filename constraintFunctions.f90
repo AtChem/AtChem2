@@ -140,7 +140,7 @@ contains
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
     use atmosphereFunctions_mod
-    use solarFunctions_mod, only : calcDec, calcZenith
+    use solarFunctions_mod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -163,6 +163,9 @@ contains
     ! that line to environmentVariables.config, and then add this as
     ! element 11 in the orderedEnvVarNames initialisation below.  Its
     ! treatment needs defining in each of cases 1-3 and default below.
+
+    ! calculate the Day Angle
+    call calcTheta( t )
 
     if ( size( envVarNames ) /= 10 ) then
       write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
@@ -213,7 +216,7 @@ contains
                 stop
               end if
             case ( 'DEC' )
-              this_env_val = calcDec( t )
+              this_env_val = calcDec()
             case ( 'JFAC' )
               call calcJFac( t, this_env_val )
             case default

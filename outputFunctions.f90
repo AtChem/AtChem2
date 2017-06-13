@@ -94,11 +94,11 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (59, '(100A15) ') 't', 'latitude', 'longitude', 'secx', 'cosx', 'lha', 'sinld', 'cosld'
+      write (59, '(100A15) ') 't', 'latitude', 'longitude', 'secx', 'cosx', 'lha', 'sinld', 'cosld', 'theta', 'eqtime'
       first_time = .false.
     end if
 
-    write (59, '(100(1P e15.5)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld
+    write (59, '(100(1P e15.5)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
 
     return
   end subroutine outputPhotoRateCalcParameters

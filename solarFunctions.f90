@@ -1,7 +1,7 @@
 ! ******************************************************************** !
 !
 ! ******************************************************************** !
-module utilityFunctions_mod
+module solarFunctions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -94,4 +94,4 @@ contains
     return
   end subroutine temperature
 
-end module utilityFunctions_mod
+end module solarFunctions_mod

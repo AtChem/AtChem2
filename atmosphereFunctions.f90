@@ -1,7 +1,7 @@
 ! ******************************************************************** !
 !
 ! ******************************************************************** !
-module conversionFunctions_mod
+module atmosphereFunctions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -47,4 +47,4 @@ contains
     return
   end function convertRHtoH2O
 
-end module conversionFunctions_mod
+end module atmosphereFunctions_mod

@@ -139,8 +139,8 @@ contains
     use zenithData
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolationMethod, only : getConditionsInterpMethod
-    use conversionFunctions_mod
-    use utilityFunctions_mod, only : calcDec, calcZenith
+    use atmosphereFunctions_mod
+    use solarFunctions_mod, only : calcDec, calcZenith
     implicit none
 
     real(kind=DP), intent(in) :: t

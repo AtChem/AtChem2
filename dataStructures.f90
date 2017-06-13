@@ -59,7 +59,6 @@ module date_mod
 
   integer(kind=SI) :: day, month
   integer(kind=DI) :: year, dayOfYear
-  real(kind=DP) :: dayAsFractionOfYear, secondsInYear
 contains
 
   ! -----------------------------------------------------------------
@@ -67,16 +66,26 @@ contains
   subroutine calcDateParameters()
     implicit none
 
-    integer(kind=SI) :: monthList(12)
+    integer(kind=SI) :: monthList(12), i
 
-    monthList = [31_SI, 28_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
-    ! calculate which day of the year day/month refers to
-    dayOfYear = sum( monthList(1:month - 1_SI) )
+    ! Number of days in each month; year is set in model.parameters.
+    if ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) ) then
+      ! leap year
+      monthList = [31_SI, 28_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
+    else
+      ! not a leap year
+      monthList = [31_SI, 29_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
+    end if
+
+    ! Day of year; day and month are set in model.parameters.
+    ! January 1 = 0, January 2 = 1, etc...
+    dayOfYear = 0
+    do i=1, (month - 1_SI)
+      dayOfYear = dayOfYear + monthList(i)
+    end do
+    !dayOfYear = sum( monthList(1:month - 1_SI) )  ! it does not work if implemented like this !
+    !write(*,*) "=======================>", dayOfYear
     dayOfYear = dayOfYear + day - 1_SI
-    ! This day refers to the following fraction through the year
-    dayAsFractionOfYear = dayOfYear / 365_DI
-    ! Set number of seconds per year
-    secondsInYear = 3.6525d+02 * 2.40d+01 * 3.60d+03
 
     return
   end subroutine calcDateParameters
@@ -375,6 +384,7 @@ module zenithData
 
   real(kind=DP) :: latitude, longitude
   real(kind=DP) :: lha, sinld, cosld, cosx, secx
+  real(kind=DP) :: theta, eqtime
 
 end module zenithData
 

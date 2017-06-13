@@ -1,12 +1,14 @@
 ! ******************************************************************** !
+! AtChem -- module atmosphereFunctions
+!
 !
 ! ******************************************************************** !
 module atmosphereFunctions_mod
 contains
 
   ! -----------------------------------------------------------------
-  ! calculate the number density of air (molecule cm-3) from pressure
-  ! (mbar) and temperature (K)
+  ! Calculate the number density of air (molecule cm-3) from pressure
+  ! (mbar) and temperature (K).
   pure function calcAirDensity( press, temp ) result ( m )
     use types_mod
     implicit none
@@ -21,14 +23,14 @@ contains
   end function calcAirDensity
 
   ! -----------------------------------------------------------------
-  ! calculate number density of oxygen and nitrogen in the atmosphere
-  ! from M (air density, molecule cm-3)
+  ! Calculate the number density of oxygen and nitrogen in the atmosphere
+  ! from number density of air (molecule cm-3).
   subroutine calcAtmosphere( m, o2, n2 )
     use types_mod
     implicit none
 
     real(kind=DP), intent(in) :: m
-    real(kind=DP) :: o2, n2
+    real(kind=DP), intent(out) :: o2, n2
 
     o2 = 0.2095_DP * m
     n2 = 0.7809_DP * m
@@ -37,9 +39,9 @@ contains
   end subroutine calcAtmosphere
 
   ! -----------------------------------------------------------------
-  ! convert relative humidity to water concentration (molecule cm-3)
-  ! pressure in mbar (1 mbar = 1 hPa), temperature in K
-  ! equations from "Humidity Conversion Formulas" by Vaisala (2013)
+  ! Convert relative humidity to water concentration (molecule cm-3).
+  ! Pressure in mbar (1 mbar = 1 hPa), temperature in K. Equations
+  ! from "Humidity Conversion Formulas" by Vaisala (2013).
   pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
     use types_mod
     implicit none
@@ -47,14 +49,14 @@ contains
     real(kind=DP), intent(in) :: rh, temp, press
     real(kind=DP) :: h2o, h2o_ppm, temp_c, wvp
 
-    ! convert temperature to celsius; use eq.6 to calculate the water
-    ! vapour saturation pressure; use eq.1 to calculate the water
-    ! vapour pressure from relative humidity (see Vaisala paper)
+    ! Use Eq.6 to calculate the water vapour saturation pressure and
+    ! Eq.1 to calculate the water vapour pressure from relative
+    ! humidity (see Vaisala paper).
     temp_c = temp - 273.15
     wvp = ( rh/100 ) * ( 6.116441 * 10**((7.591386 * temp_c)/(temp_c + 240.7263)) )
 
-    ! calculate volume of water vapour per volume of dry air using
-    ! eq.18 (see Vaisala paper)
+    ! Calculate volume of water vapour per volume of dry air using
+    ! Eq.18 (see Vaisala paper).
     h2o_ppm = 1.0d+06 * wvp / (press - wvp)
 
     ! convert ppm to molecule cm-3
@@ -65,7 +67,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! subroutine to calculate diurnal variations in temperature
-  ! currently unused, but it may be useful -> KEEP
+  ! --> CURRENTLY UNUSED, BUT IT MAY BE USEFUL <--
   subroutine temperature( temp, h2o, ttime )
     use types_mod
     implicit none

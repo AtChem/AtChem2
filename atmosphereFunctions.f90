@@ -47,4 +47,22 @@ contains
     return
   end function convertRHtoH2O
 
+  ! -----------------------------------------------------------------
+  ! subroutine to calculate diurnal variations in temperature
+  ! currently unused, but it may be useful -> KEEP
+  subroutine temperature( temp, h2o, ttime )
+    use types_mod
+    implicit none
+
+    real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor
+
+    temp = 289.86 + 8.3 * sin( ( 7.2722D-5 * ttime ) - 1.9635 )
+    temp = 298.00
+    rh = 23.0 * sin( ( 7.2722D-5 * ttime ) + 1.1781 ) + 66.5
+    h2o_factor = 10.0 / ( 1.38D-16 * temp ) * rh
+    h2o = 6.1078 * exp( -1.0D+0 * ( 597.3 - 0.57 * ( temp - 273.16 ) ) * 18.0 / 1.986 * ( 1.0 / temp - 1.0 / 273.16 ) ) * h2o_factor
+
+    return
+  end subroutine temperature
+
 end module atmosphereFunctions_mod

@@ -118,7 +118,7 @@ contains
     use types_mod
     use constraints, only : maxNumberOfDataPoints
     use zenithData, only : latitude, longitude
-    use date, only : day, month, year
+    use date_mod, only : day, month, year
     use interpolationMethod, only : setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
     implicit none
 

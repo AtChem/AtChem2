@@ -52,7 +52,7 @@ end module directories
 ! ******************************************************************** !
 ! DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
 ! ******************************************************************** !
-module date
+module date_mod
   use types_mod
   implicit none
   save
@@ -81,7 +81,7 @@ contains
     return
   end subroutine calcDateParameters
 
-end module date
+end module date_mod
 
 ! ******************************************************************** !
 !

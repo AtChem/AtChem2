@@ -25,7 +25,7 @@ contains
   ! the angle between the Sun and Earth's equatorial plane
   pure function calcDec( t ) result ( dec )
     use types_mod
-    use date, only : secondsInYear, dayAsFractionOfYear
+    use date_mod, only : secondsInYear, dayAsFractionOfYear
     implicit none
 
     real(kind=DP), intent(in) :: t

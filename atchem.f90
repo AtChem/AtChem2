@@ -14,7 +14,7 @@ PROGRAM ATCHEM
   use zenithData
   use productionAndLossRates
   use envVars
-  use date
+  use date_mod
   use directories, only : output_dir, param_dir
   use storage, only : maxSpecLength, maxPhotoRateNameLength
   use solver_params_mod
@@ -218,8 +218,8 @@ PROGRAM ATCHEM
   call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
   write (*,*)
 
-  ! Set the members dayOfYear, dayAsFractionOfYear, secondsInYear of
-  ! MODULE date to their value based on day, month, year
+  ! Set the parameters of MODULE date_mod to their value based on day,
+  ! month, year
   call calcDateParameters()
 
   ! HARD CODED SOLVER PARAMETERS

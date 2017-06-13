@@ -141,7 +141,7 @@ contains
     use interpolationMethod, only : getConditionsInterpMethod
     use outputFunctions_mod, only : ro2sum
     use constraintFunctions_mod, only : getEnvVarsAtT, getEnvVarNum
-    use utilityFunctions_mod, only : calcAtmosphere
+    use solarFunctions_mod, only : calcAtmosphere
     implicit none
 
     real(kind=DP), intent(in) :: t

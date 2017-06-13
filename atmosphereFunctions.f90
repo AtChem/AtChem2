@@ -21,6 +21,22 @@ contains
   end function calcAirDensity
 
   ! -----------------------------------------------------------------
+  ! calculate number density of oxygen and nitrogen in the atmosphere
+  ! from M (air density, molecule cm-3)
+  subroutine calcAtmosphere( m, o2, n2 )
+    use types_mod
+    implicit none
+
+    real(kind=DP), intent(in) :: m
+    real(kind=DP) :: o2, n2
+
+    o2 = 0.2095_DP * m
+    n2 = 0.7809_DP * m
+
+    return
+  end subroutine calcAtmosphere
+
+  ! -----------------------------------------------------------------
   ! convert relative humidity to water concentration (molecule cm-3)
   ! pressure in mbar (1 mbar = 1 hPa), temperature in K
   ! equations from "Humidity Conversion Formulas" by Vaisala (2013)

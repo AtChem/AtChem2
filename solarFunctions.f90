@@ -4,22 +4,6 @@
 module solarFunctions_mod
 contains
 
-  ! -----------------------------------------------------------------
-  ! calculate number density of oxygen and nitrogen in the atmosphere
-  ! from M (air density, molecule cm-3)
-  subroutine calcAtmosphere( m, o2, n2 )
-    use types_mod
-    implicit none
-
-    real(kind=DP), intent(in) :: m
-    real(kind=DP) :: o2, n2
-
-    o2 = 0.2095_DP * m
-    n2 = 0.7809_DP * m
-
-    return
-  end subroutine calcAtmosphere
-
   ! ----------------------------------------------------------------- !
   ! calculate the Sun Declination (radians): the sun declination is
   ! the angle between the Sun and Earth's equatorial plane

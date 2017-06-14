@@ -18,7 +18,6 @@ contains
     real(kind=DP), contiguous, intent(out) :: dy(:) ! array to hold value of rate equations
     integer(kind=NPI), intent(in) :: lhs(:,:), rhs(:,:)
     real(kind=DP), intent(in) :: lcoeff(:), rcoeff(:) ! coeff term of rhs
-
     real(kind=DP) :: r(nr) ! working array
     integer(kind=NPI) :: i
 

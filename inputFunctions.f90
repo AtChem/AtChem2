@@ -362,12 +362,13 @@ contains
   ! reads ck, cl, cmm, cnn, str, and tf from
   ! modelConfiguration/photolysisRates.config.
   subroutine readPhotolysisRates()
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysisRates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
-                                    allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
+    use photolysisRates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
+                                    transmissionFactor, allocate_photolysis_rates_variables, &
+                                    size_of_j, allocate_photolysis_j
     use directories, only : param_dir
     use storage, only : maxFilepathLength
-    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=NPI) :: i
@@ -528,7 +529,6 @@ contains
   ! variable, this also reads in the constraint data from
   ! environmentConstraints directory, the file named after the
   ! environmental variable.
-
   subroutine readEnvVar()
     use types_mod
     use envVars

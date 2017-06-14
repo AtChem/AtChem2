@@ -370,6 +370,7 @@ contains
     implicit none
 
     allocate (j(size_of_j))
+    j(:) = 0.0_DP
   end subroutine allocate_photolysis_j
 
 end module photolysisRates_mod

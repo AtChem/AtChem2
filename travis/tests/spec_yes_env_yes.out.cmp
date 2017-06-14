@@ -46,8 +46,8 @@
  ------------------
  Solver parameters:
  ------------------
-            atol:   1.000E-03
-            rtol:   1.000E-04
+            atol:   1.000E-04
+            rtol:   1.000E-07
       JacVApprox:           0
          deltaJv:   1.000E-03
        deltaMain:   1.000E-04
@@ -64,15 +64,15 @@
  -----------------
  Model parameters:
  -----------------
-                                   number of steps:           4
-                               step size (seconds):   0.900E+03
+                                   number of steps:           1
+                               step size (seconds):   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:       50000
                                ratesOutputStepSize:        3600
               instantaneous rates output step size:        3600
-                                    modelStartTime:   0.000E+00
+                                    modelStartTime:   0.120E+04
                             jacobianOutputStepSize:      108000
                                           latitude:   0.530E+02
                                          longitude:  -0.100E+01
@@ -164,7 +164,7 @@
 ---------------
                         neq = 27
  numberOfConstrainedSpecies = 2
-                         t0 =       0.000E+00
+                         t0 =       1.200E+03
 
  setting maxnumsteps ier = 0
  setting maxstep ier = 0
@@ -172,36 +172,15 @@
 -----------
  Model run
 -----------
- time = 900
- time = 1800
- time = 2700
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.603E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- error in piecewise linear interpolation
-      3.600E+03 15      6.800E+12
- time = 3600
+ time = 1500
 
 ------------------
  Final statistics
 ------------------
- No. steps = 325   No. f-s = 507   No. J-s = 923   No. LU-s = 147
- No. nonlinear iterations = 504
+ No. steps = 174   No. f-s = 212   No. J-s = 237   No. LU-s = 42
+ No. nonlinear iterations = 211
  No. nonlinear convergence failures = 0
- No. error test failures = 51
+ No. error test failures = 6
 
  Runtime = 0
  Deallocating memory.

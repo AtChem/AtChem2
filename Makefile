@@ -10,15 +10,31 @@ ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass apt-get install location for cvode
 F77      =  gfortran
 CVODELIB=/home/travis/build/AtChem/AtChem/cvode/lib
+OPENLIBMLIB=/home/travis/build/AtChem/AtChem/openlibm-0.4.1
+RPATH_OPTION=-R
 else
 # if osx, then pass self-built cvode and homebrew gfortran
 CVODELIB=/Users/travis/build/AtChem/AtChem/cvode/lib
 F77=/usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
+OPENLIBMLIB=/Users/travis/build/AtChem/AtChem/openlibm-0.4.1
+RPATH_OPTION=-rpath
 endif
-# else it's not on Travis, so pass local path to cvode.
+# else it's not on Travis, so check OS, and then pass local path to cvode and openlibm
 else
+OS := $(shell uname -s)
+ifeq ($(OS),Linux)
+testing=Linux
+F77      =  gfortran
+CVODELIB=/home/s/sc676/Sommariva/gcc/cvode/lib
+OPENLIBMLIB=/home/s/sc676/Sommariva/AtChem/openlibm-0.4.1
+RPATH_OPTION=-R
+else
+testing=OSX
 F77      =  gfortran
 CVODELIB=/Users/sam/ReSET/Sommariva/cvode/lib
+OPENLIBMLIB=/Users/sam/git/atchem/openlibm-0.4.1
+RPATH_OPTION=-rpath
+endif
 endif
 
 # gfortran flags
@@ -43,7 +59,7 @@ include makefile.local
 
 SRCS = dataStructures.f90 interpolationFunctions.f90 configFunctions.f90 inputFunctions.f90 outputFunctions.f90 atmosphereFunctions.f90 solarFunctions.f90 constraintFunctions.f90 solverFunctions.f90 parameterModules.f90 atchem.f90
 
-LDFLAGS = -L$(CVODELIB) -Wl,-rpath,$(LIBDIR) -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMLIB) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMLIB) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
@@ -57,7 +73,7 @@ test:
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB)"
+	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
 
 .f90.o:
 	$(F77) -c $(FFLAGS) $<

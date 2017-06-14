@@ -10,7 +10,7 @@ contains
   ! ???
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
-    use productionAndLossRates, only : instantaneousRates, productionRates, lossRates
+    use reaction_rates_mod
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
@@ -65,7 +65,7 @@ contains
   ! subroutine to calculate the Jacobian matrix of the system
   subroutine jfy( nr, y, t )
     use types_mod
-    use reactionStructure ! access crhs, clhs, clcoeff, crcoeff
+    use reaction_structure_mod ! access crhs, clhs, clcoeff, crcoeff
     implicit none
 
     integer(kind=NPI), intent(in) :: nr
@@ -134,12 +134,12 @@ contains
   subroutine mechanism_rates( t, y, p )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use storage, only : maxEnvVarNameLength
-    use photolysisRates_mod
-    use zenithData, only : cosx, secx
-    use envVars, only : ro2, envVarNames, currentEnvVarValues
+    use storage_mod, only : maxEnvVarNameLength
+    use photolysis_rates_mod
+    use zenith_data_mod, only : cosx, secx
+    use env_vars_mod, only : ro2, envVarNames, currentEnvVarValues
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
-    use interpolationMethod, only : getConditionsInterpMethod
+    use interpolation_method_mod, only : getConditionsInterpMethod
     use outputFunctions_mod, only : ro2sum
     use constraintFunctions_mod, only : getEnvVarsAtT, getEnvVarNum
     use atmosphereFunctions_mod, only : calcAtmosphere

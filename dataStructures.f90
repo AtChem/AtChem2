@@ -29,10 +29,10 @@ module types_mod
 end module types_mod
 
 ! ******************************************************************** !
-! MODULE storage
+! MODULE storage_mod
 ! ???
 ! ******************************************************************** !
-module storage
+module storage_mod
   use types_mod
   implicit none
   save
@@ -44,21 +44,21 @@ module storage
   integer(kind=DI), parameter :: maxFilepathLength=100
   integer(kind=DI), parameter :: maxReactionStringLength=1000
 
-end module storage
+end module storage_mod
 
 ! ******************************************************************** !
-! MODULE directories
+! MODULE directories_mod
 ! ???
 ! ******************************************************************** !
-module directories
-  use storage, only : maxFilepathLength
+module directories_mod
+  use storage_mod, only : maxFilepathLength
   implicit none
   save
 
   character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir
   character(len=maxFilepathLength) :: spec_constraints_dir, env_constraints_dir
 
-end module directories
+end module directories_mod
 
 ! ******************************************************************** !
 ! MODULE date_mod
@@ -106,12 +106,12 @@ contains
 end module date_mod
 
 ! ******************************************************************** !
-! MODULE envVars
+! MODULE env_vars_mod
 ! ???
 ! ******************************************************************** !
-module envVars
+module env_vars_mod
   use types_mod
-  use storage, only : maxEnvVarNameLength, maxEnvVarLength
+  use storage_mod, only : maxEnvVarNameLength, maxEnvVarLength
   implicit none
   save
 
@@ -124,13 +124,13 @@ module envVars
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
 
-end module envVars
+end module env_vars_mod
 
 ! ******************************************************************** !
-! MODULE constraints
+! MODULE constraints_mod
 ! ???
 ! ******************************************************************** !
-module constraints
+module constraints_mod
   use types_mod
   implicit none
   save
@@ -230,20 +230,20 @@ contains
     deallocate (constrainedSpecies)
   end subroutine deallocateConstrainedSpecies
 
-end module constraints
+end module constraints_mod
 
 ! ******************************************************************** !
-! MODULE species
+! MODULE species_mod
 ! ???
 ! ******************************************************************** !
-module species
+module species_mod
   use types_mod
-  use storage, only : maxSpecLength
+  use storage_mod, only : maxSpecLength
   implicit none
   save
 
   private :: numSpecies, numReactions, speciesList
-  public :: getNumberOfSpecies, setNumberOfSpecies,
+  public :: getNumberOfSpecies, setNumberOfSpecies
   public :: getNumberOfReactions, setNumberOfReactions
   public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
@@ -315,13 +315,13 @@ contains
     end do
   end subroutine setSpeciesList
 
-end module species
+end module species_mod
 
 ! ******************************************************************** !
-! MODULE interpolationMethod
+! MODULE interpolation_method_mod
 ! interpolation methods
 ! ******************************************************************** !
-module interpolationMethod
+module interpolation_method_mod
   use types_mod
   implicit none
   save
@@ -381,13 +381,13 @@ contains
     decInterpMethod = n
   end subroutine setDecInterpMethod
 
-end module interpolationMethod
+end module interpolation_method_mod
 
 ! ******************************************************************** !
-! MODULE reactionStructure
+! MODULE reaction_structure_mod
 ! ???
 ! ******************************************************************** !
-module reactionStructure
+module reaction_structure_mod
   use types_mod
   implicit none
   save
@@ -395,15 +395,15 @@ module reactionStructure
   integer(kind=NPI), allocatable :: clhs(:,:), crhs(:,:)
   real(kind=DP), allocatable :: clcoeff(:), crcoeff(:)
 
-end module reactionStructure
+end module reaction_structure_mod
 
 ! ******************************************************************** !
-! MODULE photolysisRates
+! MODULE photolysis_rates_mod
 ! photolysis rates method
 ! ******************************************************************** !
-module photolysisRates_mod
+module photolysis_rates_mod
   use types_mod
-  use storage, only : maxPhotoRateNameLength
+  use storage_mod, only : maxPhotoRateNameLength
   implicit none
   save
 
@@ -449,13 +449,13 @@ contains
     j(:) = 0.0_DP
   end subroutine allocate_photolysis_j
 
-end module photolysisRates_mod
+end module photolysis_rates_mod
 
 ! ******************************************************************** !
-! MODULE zenithData
+! MODULE zenith_data_mod
 ! solar zenith angle and photolysis rates parameters
 ! ******************************************************************** !
-module zenithData
+module zenith_data_mod
   use types_mod
   implicit none
   save
@@ -464,17 +464,18 @@ module zenithData
   real(kind=DP) :: lha, sinld, cosld, cosx, secx
   real(kind=DP) :: theta, eqtime
 
-end module zenithData
+end module zenith_data_mod
 
 ! ******************************************************************** !
-! MODULE productionAndLossRates
+! MODULE reaction_rates_mod
 ! rates of production and loss
 ! ******************************************************************** !
-module productionAndLossRates
+module reaction_rates_mod
   use types_mod
   implicit none
   save
 
-  real(kind=DP), allocatable :: lossRates(:), productionRates(:), instantaneousRates(:)
+  real(kind=DP), allocatable :: lossRates(:), productionRates(:)
+  real(kind=DP), allocatable :: instantaneousRates(:)
 
-end module productionAndLossRates
+end module reaction_rates_mod

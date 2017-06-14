@@ -16,7 +16,7 @@ contains
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use storage, only : maxSpecLength
+    use storage_mod, only : maxSpecLength
     implicit none
 
     character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:), testSpeciesList(:)
@@ -113,8 +113,8 @@ contains
   ! in specInt
   pure function getConcForSpeciesOfInterest( masterConcList, speciesOfInterest ) result ( interestSpeciesConcList )
     use types_mod
-    use species, only : getSpeciesList
-    use storage, only : maxSpecLength
+    use species_mod, only : getSpeciesList
+    use storage_mod, only : maxSpecLength
     implicit none
 
     real(kind=DP), intent(in) :: masterConcList(:)

@@ -24,7 +24,7 @@ contains
   ! ???
   subroutine outputEnvVar( t )
     use types_mod
-    use envVars
+    use env_vars_mod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -89,7 +89,7 @@ contains
   ! ???
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
-    use zenithData
+    use zenith_data_mod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -109,7 +109,7 @@ contains
   ! ???
   subroutine outputPhotolysisRates( t )
     use types_mod
-    use photolysisRates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
+    use photolysis_rates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -131,8 +131,8 @@ contains
   ! reaction.
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     use types_mod
-    use reactionStructure
-    use storage, only : maxSpecLength, maxReactionStringLength
+    use reaction_structure_mod
+    use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
 
     character(len=maxSpecLength) :: reactants(10), products(10)
@@ -193,9 +193,9 @@ contains
   subroutine outputRates( r, arrayLen, t, p, flag )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use reactionStructure
-    use species, only : getSpeciesList
-    use storage, only : maxSpecLength, maxReactionStringLength
+    use reaction_structure_mod
+    use species_mod, only : getSpeciesList
+    use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
 
     integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
@@ -251,10 +251,10 @@ contains
   subroutine outputInstantaneousRates( time )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use reactionStructure
-    use directories, only : instantaneousRates_dir
-    use productionAndLossRates, only : instantaneousRates
-    use storage, only : maxFilepathLength
+    use reaction_structure_mod
+    use directories_mod, only : instantaneousRates_dir
+    use reaction_rates_mod, only : instantaneousRates
+    use storage_mod, only : maxFilepathLength
     implicit none
 
     integer(kind=QI), intent(in) :: time
@@ -281,7 +281,7 @@ contains
   ! printing.
   subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
     use types_mod
-    use storage, only : maxSpecLength
+    use storage_mod, only : maxSpecLength
     implicit none
 
     real(kind=DP), intent(in) :: t

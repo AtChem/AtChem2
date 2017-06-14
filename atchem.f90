@@ -1,22 +1,24 @@
-! ****************************************************************** !
-!     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT              !
-! ****************************************************************** !
+! ******************************************************************** !
+!
+!     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT
+!
+! ******************************************************************** !
 
 PROGRAM ATCHEM
 
   use, intrinsic :: iso_fortran_env, only : stderr => error_unit
   use types_mod
-  use species
-  use constraints
-  use interpolationMethod
-  use reactionStructure
-  use photolysisRates_mod
-  use zenithData
-  use productionAndLossRates
-  use envVars
+  use species_mod
+  use constraints_mod
+  use interpolation_method_mod
+  use reaction_structure_mod
+  use photolysis_rates_mod
+  use zenith_data_mod
+  use reaction_rates_mod
+  use env_vars_mod
   use date_mod
-  use directories, only : output_dir, param_dir
-  use storage, only : maxSpecLength, maxPhotoRateNameLength
+  use directories_mod, only : output_dir, param_dir
+  use storage_mod, only : maxSpecLength, maxPhotoRateNameLength
   use solver_params_mod
   use model_params_mod
   use inputFunctions_mod
@@ -59,7 +61,7 @@ PROGRAM ATCHEM
   interface
     subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
       use types_mod
-      use species
+      use species_mod
       implicit none
 
       real(kind=DP), intent(in) :: v(*)
@@ -77,9 +79,9 @@ PROGRAM ATCHEM
 
     subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
-      use species
-      use constraints
-      use reactionStructure
+      use species_mod
+      use constraints_mod
+      use reaction_structure_mod
       use interpolationFunctions_mod, only : getConstrainedQuantAtT
       use constraintFunctions_mod
       implicit none
@@ -498,20 +500,20 @@ PROGRAM ATCHEM
   deallocate (reacIntSpeciesLengths)
 
   ! deallocate data allocated before in input functions
-  ! (inputFunctions.f90) deallocate arrays from module constraints
+  ! (inputFunctions.f90) deallocate arrays from module constraints_mod
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
   deallocate (dataX, dataY, dataY2, dataFixedY)
   deallocate (speciesNumberOfPoints)
 
-  ! deallocate arrays from module species
+  ! deallocate arrays from module species_mod
   call deallocateSpeciesList()
 
-  ! deallocate arrays from module envVars
+  ! deallocate arrays from module env_vars_mod
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
   deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
 
-  ! deallocate arrays from module photolysisRates
+  ! deallocate arrays from module photolysis_rates_mod
   deallocate (photoX, photoY, photoY2, photoNumberOfPoints)
 
   ! Close output files and end program
@@ -530,11 +532,13 @@ PROGRAM ATCHEM
 
 END PROGRAM ATCHEM
 
-! ****************************************************************** !
+! ******************************************************************** !
 
+! -----------------------------------------------------------------
+! ???
 subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   use types_mod
-  use species
+  use species_mod
   implicit none
 
   real(kind=DP), intent(in) :: v(*)
@@ -574,13 +578,13 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
 end subroutine FCVJTIMES
 
 ! -------------------------------------------------------- !
-
+! ???
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
-  use species
-  use constraints
-  use reactionStructure
-  use interpolationMethod, only : getSpeciesInterpMethod
+  use species_mod
+  use constraints_mod
+  use reaction_structure_mod
+  use interpolation_method_mod, only : getSpeciesInterpMethod
   use interpolationFunctions_mod, only : getConstrainedQuantAtT
   use constraintFunctions_mod
   use solverFunctions_mod, only : resid
@@ -631,4 +635,4 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   return
 end subroutine FCVFUN
 
-! ****************************************************************** !
+! ******************************************************************** !

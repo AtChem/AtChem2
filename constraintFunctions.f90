@@ -10,11 +10,11 @@ contains
   ! ???
   subroutine calcJFac( t, jfac )
     use types_mod
-    use zenithData
-    use photolysisRates_mod
-    use constraints
+    use zenith_data_mod
+    use photolysis_rates_mod
+    use constraints_mod
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
-    use interpolationMethod, only : getConditionsInterpMethod
+    use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -135,12 +135,12 @@ contains
   subroutine getEnvVarsAtT( t )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use storage, only : maxEnvVarNameLength
-    use envVars
-    use constraints
-    use zenithData
+    use storage_mod, only : maxEnvVarNameLength
+    use env_vars_mod
+    use constraints_mod
+    use zenith_data_mod
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
-    use interpolationMethod, only : getConditionsInterpMethod
+    use interpolation_method_mod, only : getConditionsInterpMethod
     use atmosphereFunctions_mod
     use solarFunctions_mod
     implicit none
@@ -282,7 +282,7 @@ contains
   function getEnvVarNum( name ) result ( envVarNum )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use envVars, only : envVarNames, numEnvVars
+    use env_vars_mod, only : envVarNames, numEnvVars
     implicit none
 
     character(len=*), intent(in) :: name
@@ -308,8 +308,8 @@ contains
   ! check jfac data consistency
   subroutine test_jfac()
     use types_mod
-    use photolysisRates_mod
-    use envVars
+    use photolysis_rates_mod
+    use env_vars_mod
     implicit none
 
     integer(kind=SI) :: envVarNum

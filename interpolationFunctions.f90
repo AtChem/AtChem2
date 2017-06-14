@@ -13,13 +13,12 @@ contains
   subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, interpMethod, ind, concAtT )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use interpolationMethod
+    use interpolation_method_mod
     implicit none
 
     real(kind=DP), intent(in) :: t, x(:,:), y(:,:), y2(:,:)
-    integer(kind=NPI), intent(in) :: dataNumberOfPoints
+    integer(kind=NPI), intent(in) :: dataNumberOfPoints, ind
     integer(kind=SI), intent(in) :: interpMethod
-    integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
     integer(kind=NPI) :: i, indexBefore

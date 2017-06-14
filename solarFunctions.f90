@@ -13,7 +13,7 @@ contains
   subroutine calcTheta( t )
     use types_mod
     use date_mod, only : year, dayOfYear
-    use zenithData
+    use zenith_data_mod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -42,7 +42,7 @@ contains
   ! (Environmental UV Photobiology, 1993).
   pure function calcDec() result ( dec )
     use types_mod
-    use zenithData
+    use zenith_data_mod
     implicit none
 
     real(kind=DP) :: dec, b0, b1, b2, b3, b4, b5, b6
@@ -70,7 +70,7 @@ contains
   subroutine calcZenith( t, dec )
     use types_mod
     use date_mod, only : dayOfYear
-    use zenithData
+    use zenith_data_mod
     implicit none
 
     real(kind=DP), intent(in) :: t, dec

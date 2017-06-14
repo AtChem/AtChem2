@@ -1,6 +1,11 @@
 ! ******************************************************************** !
-! AtChem -- 
+! AtChem -- dataStructures
 !
+!
+! ******************************************************************** !
+
+
+! ******************************************************************** !
 !
 ! ******************************************************************** !
 module types_mod
@@ -47,7 +52,8 @@ module directories
   implicit none
   save
 
-  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, spec_constraints_dir, env_constraints_dir
+  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir
+  character(len=maxFilepathLength) :: spec_constraints_dir, env_constraints_dir
 
 end module directories
 
@@ -61,6 +67,7 @@ module date_mod
 
   integer(kind=SI) :: day, month
   integer(kind=DI) :: year, dayOfYear
+
 contains
 
   ! -----------------------------------------------------------------
@@ -122,6 +129,12 @@ module constraints
   implicit none
   save
 
+  private :: numberOfConstrainedSpecies, constrainedConcs, constrainedSpecies
+  public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies
+  public :: getConstrainedConcs, setConstrainedConcs, deallocateConstrainedConcs
+  public :: getConstrainedSpecies, setConstrainedSpecies
+  public :: deallocateConstrainedSpecies, getOneConstrainedSpecies
+
   integer(kind=NPI) :: numberOfConstrainedSpecies
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
@@ -130,20 +143,20 @@ module constraints
   integer(kind=NPI) :: maxNumberOfDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
-  private :: numberOfConstrainedSpecies, constrainedConcs, constrainedSpecies
-  public :: getNumberOfConstrainedSpecies, setNumberOfConstrainedSpecies
-  public :: getConstrainedConcs, setConstrainedConcs, deallocateConstrainedConcs
-  public :: getConstrainedSpecies, setConstrainedSpecies, deallocateConstrainedSpecies, getOneConstrainedSpecies
 contains
 
   ! Methods for numberOfConstrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getNumberOfConstrainedSpecies() result ( n )
     implicit none
     integer(kind=NPI) :: n
     n = numberOfConstrainedSpecies
   end function getNumberOfConstrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setNumberOfConstrainedSpecies( n )
     implicit none
     integer(kind=NPI) :: n
@@ -154,18 +167,24 @@ contains
 
   ! Methods for constrainedConcs
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getConstrainedConcs() result ( r )
     implicit none
     real(kind=DP) :: r(numberOfConstrainedSpecies)
     r = constrainedConcs(:)
   end function getConstrainedConcs
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setConstrainedConcs( r )
     implicit none
     real(kind=DP) :: r(:)
     constrainedConcs(:) = r(:)
   end subroutine setConstrainedConcs
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine deallocateConstrainedConcs()
     implicit none
     deallocate (constrainedConcs)
@@ -173,12 +192,16 @@ contains
 
   ! Methods for constrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getConstrainedSpecies() result ( r )
     implicit none
     integer(kind=NPI) :: r(numberOfConstrainedSpecies)
     r = constrainedSpecies(:)
   end function getConstrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getOneConstrainedSpecies( i ) result ( r )
     implicit none
     integer(kind=NPI), intent(in) :: i
@@ -186,12 +209,16 @@ contains
     r = constrainedSpecies(i)
   end function getOneConstrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setConstrainedSpecies( n, r )
     implicit none
     integer(kind=NPI) :: n, r
     constrainedSpecies(n) = r
   end subroutine setConstrainedSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine deallocateConstrainedSpecies()
     implicit none
     deallocate (constrainedSpecies)
@@ -208,20 +235,26 @@ module species
   implicit none
   save
 
+  private :: numSpecies, numReactions, speciesList
+  public :: getNumberOfSpecies, setNumberOfSpecies,
+  public :: getNumberOfReactions, setNumberOfReactions
+  public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
+
   integer(kind=NPI) :: numSpecies, numReactions
   character(len=maxSpecLength), allocatable :: speciesList(:)
 
-  private :: numSpecies, numReactions, speciesList
-  public :: getNumberOfSpecies, setNumberOfSpecies, getNumberOfReactions, setNumberOfReactions
-  public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getNumberOfSpecies() result ( n )
     implicit none
     integer(kind=NPI) :: n
     n = numSpecies
   end function getNumberOfSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setNumberOfSpecies( n )
     implicit none
     integer(kind=NPI) :: n
@@ -229,23 +262,31 @@ contains
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getNumberOfReactions() result ( n )
     implicit none
     integer(kind=NPI) :: n
     n = numReactions
   end function getNumberOfReactions
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setNumberOfReactions( n )
     implicit none
     integer(kind=NPI) :: n
     numReactions = n
   end subroutine setNumberOfReactions
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine deallocateSpeciesList
     implicit none
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getSpeciesList() result ( sl )
     implicit none
     character(len=maxSpecLength), allocatable :: sl(:)
@@ -256,6 +297,8 @@ contains
     end do
   end function getSpeciesList
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setSpeciesList( sl )
     implicit none
     character(len=maxSpecLength) :: sl(:)
@@ -275,41 +318,55 @@ module interpolationMethod
   implicit none
   save
 
-  integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
   public :: getSpeciesInterpMethod, getConditionsInterpMethod, getDecInterpMethod
   public :: setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
+
+  integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getSpeciesInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = speciesInterpMethod
   end function getSpeciesInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setSpeciesInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getConditionsInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = conditionsInterpMethod
   end function getConditionsInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setConditionsInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! ???
   pure function getDecInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = decInterpMethod
   end function getDecInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine setDecInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
@@ -353,14 +410,19 @@ module photolysisRates_mod
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:), photoY2(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
+
 contains
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
     allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine allocate_photolysis_rates_variables()
     implicit none
 
@@ -368,6 +430,8 @@ contains
     allocate (cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates))
   end subroutine allocate_photolysis_rates_variables
 
+  ! -----------------------------------------------------------------
+  ! ???
   subroutine allocate_photolysis_j()
     implicit none
 

@@ -191,11 +191,11 @@ contains
   ! ----------------------------------------------------------------- !
   ! ???
   subroutine outputRates( r, arrayLen, t, p, flag )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use reactionStructure
     use species, only : getSpeciesList
     use storage, only : maxSpecLength, maxReactionStringLength
-    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
@@ -249,12 +249,12 @@ contains
   ! ----------------------------------------------------------------- !
   ! ???
   subroutine outputInstantaneousRates( time )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use reactionStructure
     use directories, only : instantaneousRates_dir
     use productionAndLossRates, only : instantaneousRates
     use storage, only : maxFilepathLength
-    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     implicit none
 
     integer(kind=QI), intent(in) :: time
@@ -280,7 +280,6 @@ contains
   ! If any concentration is negative, then set it to zero before
   ! printing.
   subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
-
     use types_mod
     use storage, only : maxSpecLength
     implicit none

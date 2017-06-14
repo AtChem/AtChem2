@@ -1,6 +1,11 @@
 ! ******************************************************************** !
-! AtChem -- 
+! AtChem -- parameterModules
 !
+!
+! ******************************************************************** !
+
+
+! ******************************************************************** !
 !
 ! ******************************************************************** !
 module solver_params_mod
@@ -17,6 +22,7 @@ module solver_params_mod
   integer(kind=SI) :: solverType
   integer(kind=NPI) :: preconBandUpper, preconBandLower
   character(len=30) :: solverTypeName(3)
+
 contains
 
   ! -----------------------------------------------------------------
@@ -112,6 +118,7 @@ module model_params_mod
   integer(kind=QI) :: jacobianOutputStepSize
   integer(kind=QI) :: irOutStepSize
   character(len=20) :: interpolationMethodName(2)
+
 contains
 
   ! -----------------------------------------------------------------

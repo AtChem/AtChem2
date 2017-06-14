@@ -23,10 +23,10 @@ contains
     integer(kind=NPI), intent(out) :: returnArray(:)
     integer(kind=NPI) :: counter, i
 
-    counter = 0
     ! loop over each element of testSpeciesList. If a match is made,
     ! then append to returnArray the number of the species from
     ! testSpeciesList within the masterSpeciesList. Otherwise, abort.
+    counter = 0
     do i = 1, size( testSpeciesList )
       counter = counter + 1
       if ( counter > size( returnArray ) ) then

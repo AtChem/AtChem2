@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module interpolationFunctions
+! ATCHEM -- MODULE interpolationFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module interpolationFunctions_mod
 contains

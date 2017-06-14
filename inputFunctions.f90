@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module inputFunctions
+! ATCHEM -- MODULE inputFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module inputFunctions_mod
 contains

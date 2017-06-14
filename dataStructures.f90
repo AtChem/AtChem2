@@ -1,12 +1,13 @@
 ! ******************************************************************** !
-! AtChem -- dataStructures
+! ATCHEM -- MODULE dataStructures file
 !
-!
+! ??? Text describing the content of the module ???
 ! ******************************************************************** !
 
 
 ! ******************************************************************** !
-!
+! MODULE types_mod
+! ???
 ! ******************************************************************** !
 module types_mod
   use, intrinsic :: iso_fortran_env
@@ -28,7 +29,8 @@ module types_mod
 end module types_mod
 
 ! ******************************************************************** !
-!
+! MODULE storage
+! ???
 ! ******************************************************************** !
 module storage
   use types_mod
@@ -45,7 +47,8 @@ module storage
 end module storage
 
 ! ******************************************************************** !
-! DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
+! MODULE directories
+! ???
 ! ******************************************************************** !
 module directories
   use storage, only : maxFilepathLength
@@ -58,7 +61,8 @@ module directories
 end module directories
 
 ! ******************************************************************** !
-! DATE VARIABLES MODULE - DATE USED FOR CALCULATION OF DEC
+! MODULE date_mod
+! date variables - date used for calculation of DEC
 ! ******************************************************************** !
 module date_mod
   use types_mod
@@ -102,7 +106,8 @@ contains
 end module date_mod
 
 ! ******************************************************************** !
-!
+! MODULE envVars
+! ???
 ! ******************************************************************** !
 module envVars
   use types_mod
@@ -122,7 +127,8 @@ module envVars
 end module envVars
 
 ! ******************************************************************** !
-!
+! MODULE constraints
+! ???
 ! ******************************************************************** !
 module constraints
   use types_mod
@@ -227,7 +233,8 @@ contains
 end module constraints
 
 ! ******************************************************************** !
-!
+! MODULE species
+! ???
 ! ******************************************************************** !
 module species
   use types_mod
@@ -311,7 +318,8 @@ contains
 end module species
 
 ! ******************************************************************** !
-! INTERPOLATION METHOD MODULE
+! MODULE interpolationMethod
+! interpolation methods
 ! ******************************************************************** !
 module interpolationMethod
   use types_mod
@@ -376,7 +384,8 @@ contains
 end module interpolationMethod
 
 ! ******************************************************************** !
-! INTERPOLATION METHOD MODULE
+! MODULE reactionStructure
+! ???
 ! ******************************************************************** !
 module reactionStructure
   use types_mod
@@ -389,7 +398,8 @@ module reactionStructure
 end module reactionStructure
 
 ! ******************************************************************** !
-! PHOTOLYSIS RATES METHOD MODULE
+! MODULE photolysisRates
+! photolysis rates method
 ! ******************************************************************** !
 module photolysisRates_mod
   use types_mod
@@ -442,7 +452,8 @@ contains
 end module photolysisRates_mod
 
 ! ******************************************************************** !
-! SOLAR ZENITH ANGLE AND PHOTOLYSIS RATES PARAMETERS MODULE
+! MODULE zenithData
+! solar zenith angle and photolysis rates parameters
 ! ******************************************************************** !
 module zenithData
   use types_mod
@@ -456,7 +467,8 @@ module zenithData
 end module zenithData
 
 ! ******************************************************************** !
-! RATES OF PRODUCTION AND LOSS MODULE
+! MODULE productionAndLossRates
+! rates of production and loss
 ! ******************************************************************** !
 module productionAndLossRates
   use types_mod

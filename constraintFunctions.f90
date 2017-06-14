@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module constraintFunctions
+! ATCHEM -- MODULE constraintFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module constraintFunctions_mod
 contains

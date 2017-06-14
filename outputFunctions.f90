@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module outputFunctions
+! ATCHEM -- MODULE outputFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module outputFunctions_mod
 contains

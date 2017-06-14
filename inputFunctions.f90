@@ -11,7 +11,7 @@ contains
   ! directory
   subroutine get_and_set_directories_from_command_arguments()
     use types_mod
-    use directories
+    use directories_mod
     implicit none
 
     integer(kind=QI) :: cmd_arg_count
@@ -53,9 +53,9 @@ contains
   ! ???
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
-    use directories, only : param_dir
-    use species, only : setNumberOfSpecies, setNumberOfReactions
-    use storage, only : maxFilepathLength
+    use directories_mod, only : param_dir
+    use species_mod, only : setNumberOfSpecies, setNumberOfReactions
+    use storage_mod, only : maxFilepathLength
     implicit none
 
     integer(kind=NPI) :: numSpec, numReac
@@ -83,8 +83,8 @@ contains
   ! and last line
   subroutine readReactions()
     use types_mod
-    use directories, only : param_dir
-    use reactionStructure
+    use directories_mod, only : param_dir
+    use reaction_structure_mod
     implicit none
 
     integer(kind=NPI) :: lhs_size, rhs_size
@@ -148,9 +148,9 @@ contains
   ! ???
   function readSpecies() result ( speciesName )
     use types_mod
-    use directories, only : param_dir
-    use storage, only : maxSpecLength, maxFilepathLength
-    use species, only : getNumberOfSpecies
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxSpecLength, maxFilepathLength
+    use species_mod, only : getNumberOfSpecies
     implicit none
 
     character(len=maxSpecLength), allocatable :: speciesName(:)
@@ -181,9 +181,9 @@ contains
   ! corresponding concentration VALUES
   subroutine readAndSetInitialConcentrations( speciesConcs )
     use types_mod
-    use species, only : getNumberOfSpecies, getSpeciesList
-    use directories, only : param_dir
-    use storage, only : maxSpecLength, maxFilepathLength
+    use species_mod, only : getNumberOfSpecies, getSpeciesList
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxSpecLength, maxFilepathLength
     implicit none
 
     real(kind=DP), allocatable, intent(out) :: speciesConcs(:)
@@ -239,7 +239,7 @@ contains
   ! ???
   subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputConcentrations )
     use types_mod
-    use storage, only : maxSpecLength
+    use storage_mod, only : maxSpecLength
     implicit none
 
     character(len=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
@@ -296,10 +296,10 @@ contains
   ! ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
   subroutine readPhotolysisConstants()
     use types_mod
-    use photolysisRates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
+    use photolysis_rates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
                                     allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
-    use directories, only : param_dir
-    use storage, only : maxFilepathLength
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxFilepathLength
     implicit none
 
     integer(kind=NPI) :: i
@@ -364,11 +364,11 @@ contains
   subroutine readPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysisRates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
+    use photolysis_rates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
                                     transmissionFactor, allocate_photolysis_rates_variables, &
                                     size_of_j, allocate_photolysis_j
-    use directories, only : param_dir
-    use storage, only : maxFilepathLength
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxFilepathLength
     implicit none
 
     integer(kind=NPI) :: i
@@ -423,8 +423,8 @@ contains
   ! then set jfacSpeciesLine to that line number in photoRateNames
   subroutine readJFacSpecies()
     use types_mod
-    use photolysisRates_mod
-    use directories, only : param_dir
+    use photolysis_rates_mod
+    use directories_mod, only : param_dir
     implicit none
 
     integer(kind=NPI) :: i
@@ -467,7 +467,7 @@ contains
   ! the length of r.
   subroutine readProductsOrReactantsOfInterest( filename, r )
     use types_mod
-    use storage, only : maxSpecLength
+    use storage_mod, only : maxSpecLength
     implicit none
 
     character(len=*), intent(in) :: filename
@@ -531,10 +531,10 @@ contains
   ! environmental variable.
   subroutine readEnvVar()
     use types_mod
-    use envVars
-    use directories, only : param_dir, env_constraints_dir
-    use constraints, only : maxNumberOfDataPoints
-    use storage, only : maxFilepathLength, maxEnvVarNameLength
+    use env_vars_mod
+    use directories_mod, only : param_dir, env_constraints_dir
+    use constraints_mod, only : maxNumberOfDataPoints
+    use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     implicit none
 
     integer(kind=NPI) :: k
@@ -628,9 +628,9 @@ contains
   ! ???
   function readSpeciesOfInterest() result ( r )
     use types_mod
-    use species, only : getNumberOfSpecies
-    use directories, only : param_dir
-    use storage, only : maxSpecLength, maxFilepathLength
+    use species_mod, only : getNumberOfSpecies
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxSpecLength, maxFilepathLength
     implicit none
 
     character(len=maxSpecLength), allocatable :: r(:)
@@ -671,11 +671,10 @@ contains
   ! ???
   subroutine readPhotoRates()
     use types_mod
-    use photolysisRates_mod, only : photoX, photoY, photoY2, numConPhotoRates, maxNrOfConPhotoRates, photoNumberOfPoints, &
-                                constrainedPhotoRates, nrOfPhotoRates, photoRateNames, constrainedPhotoRatesNumbers, ck
-    use directories, only : param_dir, env_constraints_dir
-    use storage, only : maxPhotoRateNameLength, maxFilepathLength
-    use constraints, only : maxNumberOfDataPoints
+    use photolysis_rates_mod
+    use directories_mod, only : param_dir, env_constraints_dir
+    use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
+    use constraints_mod, only : maxNumberOfDataPoints
     implicit none
 
     integer(kind=NPI) :: i, k
@@ -759,15 +758,15 @@ contains
   subroutine readSpeciesConstraints( t, y )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use species
-    use constraints, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
+    use species_mod
+    use constraints_mod, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                             numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
                             setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataY2, dataFixedY
-    use directories, only : param_dir, spec_constraints_dir
-    use storage, only : maxSpecLength, maxFilepathLength
+    use directories_mod, only : param_dir, spec_constraints_dir
+    use storage_mod, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : getIndexWithinList
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
-    use interpolationMethod , only : getSpeciesInterpMethod
+    use interpolation_method_mod , only : getSpeciesInterpMethod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -972,7 +971,7 @@ contains
   ! ???
   subroutine read_in_single_column_string_file( filename, output_vector, skip_first_line_in )
     use types_mod
-    use storage, only : maxSpecLength
+    use storage_mod, only : maxSpecLength
     implicit none
 
     character(len=*), intent(in) :: filename

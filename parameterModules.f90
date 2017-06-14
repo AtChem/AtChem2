@@ -127,10 +127,10 @@ contains
   ! ???
   subroutine set_model_parameters( input_parameters )
     use types_mod
-    use constraints, only : maxNumberOfDataPoints
-    use zenithData, only : latitude, longitude
+    use constraints_mod, only : maxNumberOfDataPoints
+    use zenith_data_mod, only : latitude, longitude
     use date_mod, only : day, month, year
-    use interpolationMethod, only : setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
+    use interpolation_method_mod, only : setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
     implicit none
 
     real(kind=DP) :: input_parameters(*)
@@ -147,7 +147,7 @@ contains
     timestepSize = input_parameters(2)
     ! Use the local variable speciesInterpolationMethod to set the
     ! value speciesInterpMethod, the private member of MODULE
-    ! interpolationMethod.
+    ! interpolation_method_mod.
     ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
     ! Values:
     ! 1: Piecewise constant
@@ -169,10 +169,10 @@ contains
     modelStartTime = input_parameters(8)
     ! Frequency at which output_jfy is called below.
     jacobianOutputStepSize = nint( input_parameters(9), QI )
-    ! Member variables of module zenithData
+    ! Member variables of module zenith_data_mod
     latitude = input_parameters(10)
     longitude = input_parameters(11)
-    ! Member variables of module date
+    ! Member variables of module date_mod
     day = nint( input_parameters(12), SI )
     month = nint( input_parameters(13), SI )
     year = nint( input_parameters(14), DI )

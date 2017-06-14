@@ -36,7 +36,7 @@ contains
 
     if ( ro2 < 0 ) ro2 = 0.0
 
-    write (52, '(100 (1P e15.5)) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
+    write (52, '(100 (1P e15.7)) ') t, (currentEnvVarValues(i), i = 1, numEnvVars), ro2
 
     return
   end subroutine outputEnvVar
@@ -62,7 +62,7 @@ contains
                                         'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
         first_time = .false.
       end if
-      write (57, '(1P e9.3, 2 (1P e17.3), 20I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 21)
+      write (57, '(1P e9.2, 2 (1P e17.9), 20I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 21)
 
     else if ( solver_type == 3 ) then
       ! CVDLS type solver
@@ -72,7 +72,7 @@ contains
                                         'LS_FLAG', 'NFELS', 'NJE'
         first_time = .false.
       end if
-      write (57, '(1P e9.3, 2 (1P e17.3), 16I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 17)
+      write (57, '(1P e9.2, 2 (1P e17.9), 16I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 17)
 
     else
       write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
@@ -98,7 +98,7 @@ contains
       first_time = .false.
     end if
 
-    write (59, '(100(1P e15.5)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
+    write (59, '(100(1P e15.7)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
 
     return
   end subroutine outputPhotoRateCalcParameters
@@ -118,7 +118,7 @@ contains
       write (58, '(100A15) ') 't', (trim( photoRateNames(i) ), i = 1, nrOfPhotoRates)
       firstTime = .false.
     end if
-    write (58, '(100 (1P e15.5)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    write (58, '(100 (1P e15.7)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
 
     return
   end subroutine outputPhotolysisRates
@@ -235,7 +235,7 @@ contains
       do j = 2, arrayLen(i)
         if ( r(i, j) /= -1 ) then
           reaction = getReaction( speciesNames, r(i, j) )
-          write (output_file_number, '(1P e15.5, I14, A12, I15, 1P e15.5, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
+          write (output_file_number, '(1P e15.7, I14, A12, I15, 1P e15.5, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
                                                                                    r(i, j), p(r(i, j)), '  ', trim( reaction )
         end if
       end do
@@ -303,7 +303,7 @@ contains
         arrayOfConcs(i) = 0d0
       end if
     end do
-    write (50, '(100 (1P e15.5)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+    write (50, '(100 (1P e15.7)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
 
     return
   end subroutine outputSpeciesOfInterest

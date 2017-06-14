@@ -53,7 +53,7 @@ contains
         if ( interp_success .eqv. .false. ) then
           write (*, '(A)') ' error in piecewise constant interpolation'
           concAtT = y(ind, dataNumberOfPoints)
-          write (*, '(1P e15.3, A, I0, 1P e15.3)') t, ' ', dataNumberOfPoints, concAtT
+          write (*, '(1P e15.7, A, I0, 1P e15.7)') t, ' ', dataNumberOfPoints, concAtT
         else
           concAtT = y(ind, indexBefore)
         end if
@@ -62,7 +62,7 @@ contains
         if ( interp_success .eqv. .false. ) then
           write (*, '(A)') ' error in piecewise linear interpolation'
           concAtT = y(ind, dataNumberOfPoints)
-          write (*, '(1P e15.3, A, I0, 1P e15.3)') t, ' ', dataNumberOfPoints, concAtT
+          write (*, '(1P e15.7, A, I0, 1P e15.7)') t, ' ', dataNumberOfPoints, concAtT
         else
           ! Identify coordinates of enclosing data points
           xBefore = x(ind, indexBefore)

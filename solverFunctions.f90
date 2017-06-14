@@ -120,7 +120,7 @@ contains
     ! Loop over all elements of fy, and print to jacobian.output,
     ! prefixed by t
     do i = 1, size( fy, 1 )
-      write (55, '(100 (1P e12.5)) ') t, (fy(i, j), j = 1, size( fy, 1 ))
+      write (55, '(100 (1P e15.7)) ') t, (fy(i, j), j = 1, size( fy, 1 ))
     end do
     write (55,*) '---------------'
 

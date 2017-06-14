@@ -46,8 +46,8 @@
  ------------------
  Solver parameters:
  ------------------
-            atol:   1.000E-03
-            rtol:   1.000E-04
+            atol:   1.000E-04
+            rtol:   1.000E-06
       JacVApprox:           0
          deltaJv:   1.000E-03
        deltaMain:   1.000E-04
@@ -64,8 +64,8 @@
  -----------------
  Model parameters:
  -----------------
-                                   number of steps:           4
-                               step size (seconds):   0.900E+03
+                                   number of steps:           2
+                               step size (seconds):   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
@@ -172,18 +172,16 @@
 -----------
  Model run
 -----------
- time = 900
- time = 1800
- time = 2700
- time = 3600
+ time = 300
+ time = 600
 
 ------------------
  Final statistics
 ------------------
- No. steps = 158   No. f-s = 222   No. J-s = 415   No. LU-s = 56
- No. nonlinear iterations = 221
+ No. steps = 140   No. f-s = 170   No. J-s = 234   No. LU-s = 39
+ No. nonlinear iterations = 169
  No. nonlinear convergence failures = 0
- No. error test failures = 13
+ No. error test failures = 6
 
  Runtime = 0
  Deallocating memory.

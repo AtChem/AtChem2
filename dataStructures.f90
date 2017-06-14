@@ -151,6 +151,7 @@ module constraints_mod
 
 contains
 
+  ! *****************************************************************
   ! Methods for numberOfConstrainedSpecies
 
   ! -----------------------------------------------------------------
@@ -171,6 +172,7 @@ contains
     write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
 
+  ! *****************************************************************
   ! Methods for constrainedConcs
 
   ! -----------------------------------------------------------------
@@ -196,6 +198,7 @@ contains
     deallocate (constrainedConcs)
   end subroutine deallocateConstrainedConcs
 
+  ! *****************************************************************
   ! Methods for constrainedSpecies
 
   ! -----------------------------------------------------------------

@@ -1,6 +1,6 @@
 ! ******************************************************************** !
 !
-!     MAIN PROGRAM FOR THE ATMOSPHERE CHEMISTRY PROJECT
+!                        ATCHEM -- MAIN PROGRAM                        !
 !
 ! ******************************************************************** !
 
@@ -28,11 +28,11 @@ PROGRAM ATCHEM
   use solverFunctions_mod
   implicit none
 
-  ! ****************************************************************** !
+  ! *****************************************************************
   ! DECLARATIONS
-  ! ****************************************************************** !
+  ! *****************************************************************
 
-  ! DECLARATIONS FOR SOLVER PARAMETERS
+  ! Declarations for solver parameters
   integer(kind=QI) :: ier
   integer :: meth, itmeth, iatol, itask, currentNumTimestep
   integer(kind=NPI) :: iout(21), ipar(10)
@@ -40,13 +40,14 @@ PROGRAM ATCHEM
   real(kind=DP) :: t, tout
   real(kind=DP) :: rout(6), rpar(1)
 
-  ! walltime variables
+  ! Walltime variables
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
-  ! number of species and reactions
+  ! Number of species and reactions
   integer(kind=NPI) :: numSpec, numReac
 
-  ! DECLARATIONS FOR RATES OF PRODUCTION AND LOSS
-  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:), prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
+  ! Declarations for rates of production and loss
+  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:)
+  integer(kind=NPI), allocatable :: prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOfInterest(:)
@@ -58,7 +59,12 @@ PROGRAM ATCHEM
 
   character(len=400) :: fmt
 
+  ! *****************************************************************
+  ! ???
   interface
+
+    ! -----------------------------------------------------------------
+    ! ???
     subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
       use types_mod
       use species_mod
@@ -77,6 +83,8 @@ PROGRAM ATCHEM
       real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
     end subroutine FCVJTIMES
 
+    ! -----------------------------------------------------------------
+    ! ???
     subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species_mod
@@ -98,11 +106,12 @@ PROGRAM ATCHEM
       real(kind=DP), allocatable :: dy(:), z(:)
       integer(kind=NPI) :: i
     end subroutine FCVFUN
+
   end interface
 
-  ! ****************************************************************** !
+  ! *****************************************************************
   ! MODEL SETUP AND CONFIGURATION
-  ! ****************************************************************** !
+  ! *****************************************************************
 
   call SYSTEM_CLOCK( runStart )
 
@@ -224,7 +233,7 @@ PROGRAM ATCHEM
   ! month, year
   call calcDateParameters()
 
-  ! HARD CODED SOLVER PARAMETERS
+  ! Hard coded solver parameters
   t = modelStartTime
   tout = timestepSize + t
   ! Parameters for FCVMALLOC(). (Comments from cvode guide) meth
@@ -271,9 +280,9 @@ PROGRAM ATCHEM
 
   flush(stderr)
 
-  ! ****************************************************************** !
-  ! CONSTRAINTS
-  ! ****************************************************************** !
+  ! *****************************************************************
+  ! SET CONSTRAINTS
+  ! *****************************************************************
 
   write (*, '(A)') '------------'
   write (*, '(A)') ' Photolysis'
@@ -309,9 +318,9 @@ PROGRAM ATCHEM
 
   flush(stderr)
 
-  ! ****************************************************************** !
+  ! *****************************************************************
   ! CONFIGURE SOLVER
-  ! ****************************************************************** !
+  ! *****************************************************************
 
   ipar(1) = neq
   ipar(2) = numReac
@@ -394,9 +403,9 @@ PROGRAM ATCHEM
   ! check JFac data consistency:
   call test_jfac()
 
-  ! ****************************************************************** !
+  ! *****************************************************************
   ! RUN MODEL
-  ! ****************************************************************** !
+  ! *****************************************************************
 
   write (*, '(A)') '-----------'
   write (*, '(A)') ' Model run'
@@ -488,6 +497,10 @@ PROGRAM ATCHEM
   write (*, '(A, I0)') ' Runtime = ', runTime
   write (*, '(A)') ' Deallocating memory.'
 
+  ! *****************************************************************
+  ! STOP MODEL
+  ! *****************************************************************
+
   ! deallocate CVODE internal data
   call FCVFREE()
   deallocate (speciesConcs, z)
@@ -499,8 +512,8 @@ PROGRAM ATCHEM
   deallocate (prodIntSpeciesLengths)
   deallocate (reacIntSpeciesLengths)
 
-  ! deallocate data allocated before in input functions
-  ! (inputFunctions.f90) deallocate arrays from module constraints_mod
+  ! deallocate data allocated in inputFunctions.f90
+  ! deallocate arrays from module constraints_mod
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
   deallocate (dataX, dataY, dataY2, dataFixedY)
@@ -532,7 +545,11 @@ PROGRAM ATCHEM
 
 END PROGRAM ATCHEM
 
+
 ! ******************************************************************** !
+! ???
+! ******************************************************************** !
+
 
 ! -----------------------------------------------------------------
 ! ???
@@ -541,14 +558,10 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   use species_mod
   implicit none
 
-  real(kind=DP), intent(in) :: v(*)
-  real(kind=DP), intent(out) :: fjv(*)
-  real(kind=DP), intent(in) :: t, y(*), fy(*)
-  real(kind=DP), intent(out) :: h
+  real(kind=DP), intent(in) :: t, y(*), fy(*), v(*), rpar(*), work(*)
   integer(kind=NPI), intent(in) :: ipar (*)
-  real(kind=DP), intent(in) :: rpar(*), work(*)
   integer(kind=NPI), intent(out) :: ier
-
+  real(kind=DP), intent(out) :: fjv(*), h
   integer(kind=NPI) :: neq, np
   real(kind=DP) :: delta, dummy
   real(kind=DP), allocatable :: yPlusV(:), fyPlusV(:)
@@ -578,7 +591,7 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
 end subroutine FCVJTIMES
 
 ! -------------------------------------------------------- !
-! ???
+!  Fortran routine for right-hand side function.
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
   use species_mod
@@ -588,20 +601,15 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use interpolationFunctions_mod, only : getConstrainedQuantAtT
   use constraintFunctions_mod
   use solverFunctions_mod, only : resid
-
-  ! Fortran routine for right-hand side function.
   implicit none
-  !
-  real(kind=DP), intent(in) :: t, y(*)
-  real(kind=DP), intent(out) :: ydot(*)
-  integer(kind=NPI), intent(in) :: ipar(*)
-  real(kind=DP), intent(in) :: rpar(*)
-  integer(kind=NPI), intent(out) :: ier
 
-  integer(kind=NPI) :: numConSpec, np, numReac
+  real(kind=DP), intent(in) :: t, y(*), rpar(*)
+  integer(kind=NPI), intent(in) :: ipar(*)
+  real(kind=DP), intent(out) :: ydot(*)
+  integer(kind=NPI), intent(out) :: ier
+  integer(kind=NPI) :: numConSpec, np, numReac, i
   real(kind=DP) :: dummy
   real(kind=DP), allocatable :: dy(:), z(:), constrainedConcs(:)
-  integer(kind=NPI) :: i
 
   numConSpec = getNumberOfConstrainedSpecies()
   np = ipar(1) + numConSpec

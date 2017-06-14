@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module solarFunctions
+! ATCHEM -- MODULE solarFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module solarFunctions_mod
 contains

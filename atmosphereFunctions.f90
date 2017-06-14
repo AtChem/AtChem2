@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module atmosphereFunctions
+! ATCHEM -- MODULE atmosphereFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module atmosphereFunctions_mod
 contains

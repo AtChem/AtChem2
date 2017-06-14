@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module configFunctions
+! ATCHEM -- MODULE configFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module configFunctions_mod
 contains

@@ -1,7 +1,7 @@
 ! ******************************************************************** !
-! AtChem -- module solverFunctions
+! ATCHEM -- MODULE solverFunctions
 !
-!
+! ??? Text describing the module ???
 ! ******************************************************************** !
 module solverFunctions_mod
 contains

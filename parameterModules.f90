@@ -1,12 +1,13 @@
 ! ******************************************************************** !
-! AtChem -- parameterModules
+! ATCHEM -- MODULE parameterModules
 !
-!
+! ??? Text describing the content of the module ???
 ! ******************************************************************** !
 
 
 ! ******************************************************************** !
-!
+! MODULE solver_params
+! ???
 ! ******************************************************************** !
 module solver_params_mod
   use types_mod
@@ -103,7 +104,8 @@ contains
 end module solver_params_mod
 
 ! ******************************************************************** !
-!
+! MODULE model_params
+! ???
 ! ******************************************************************** !
 module model_params_mod
   use types_mod

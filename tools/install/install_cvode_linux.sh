@@ -11,6 +11,10 @@
 #   ./install_cvode_linux.sh /path/to/install/directory
 FORT_COMP=/usr/bin/gfortran
 
+if [ -z "$1" ] ; then
+  echo "Please provide an argument to tools/install/install_cvode_linux.sh"
+  exit 1
+fi
 cd $1
 wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
 

@@ -13,6 +13,7 @@ cmake -DCMAKE_INSTALL_PREFIX=/Users/travis/build/AtChem/AtChem/cvode \
     -DCMAKE_Fortran_COMPILER=/usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8 \
     -DLAPACK_ENABLE:BOOL=ON \
     -DFCMIX_ENABLE:BOOL=ON \
+    -DEXAMPLES_ENABLE:BOOL=OFF \
     -DCMAKE_MACOSX_RPATH:BOOL=ON \
     ..
 make -j8

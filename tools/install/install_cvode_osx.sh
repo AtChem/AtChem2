@@ -24,6 +24,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$1/cvode \
     -DLAPACK_ENABLE:BOOL=ON \
     -DLAPACK_LIBRARIES=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib \
     -DFCMIX_ENABLE:BOOL=ON \
+    -DEXAMPLES_ENABLE:BOOL=OFF \
     -DCMAKE_MACOSX_RPATH:BOOL=ON \
     ..
 make -j8

@@ -558,10 +558,13 @@ subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
   use species_mod
   implicit none
 
-  real(kind=DP), intent(in) :: t, y(*), fy(*), v(*), rpar(*), work(*)
+  real(kind=DP), intent(in) :: v(*)
+  real(kind=DP), intent(out) :: fjv(*)
+  real(kind=DP), intent(in) :: t, y(*), fy(*)
+  real(kind=DP), intent(out) :: h
   integer(kind=NPI), intent(in) :: ipar (*)
+  real(kind=DP), intent(in) :: rpar(*), work(*)
   integer(kind=NPI), intent(out) :: ier
-  real(kind=DP), intent(out) :: fjv(*), h
   integer(kind=NPI) :: neq, np
   real(kind=DP) :: delta, dummy
   real(kind=DP), allocatable :: yPlusV(:), fyPlusV(:)
@@ -603,9 +606,10 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use solverFunctions_mod, only : resid
   implicit none
 
-  real(kind=DP), intent(in) :: t, y(*), rpar(*)
-  integer(kind=NPI), intent(in) :: ipar(*)
+  real(kind=DP), intent(in) :: t, y(*)
   real(kind=DP), intent(out) :: ydot(*)
+  integer(kind=NPI), intent(in) :: ipar(*)
+  real(kind=DP), intent(in) :: rpar(*)
   integer(kind=NPI), intent(out) :: ier
   integer(kind=NPI) :: numConSpec, np, numReac, i
   real(kind=DP) :: dummy

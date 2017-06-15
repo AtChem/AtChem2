@@ -17,8 +17,9 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: t, x(:,:), y(:,:), y2(:,:)
-    integer(kind=NPI), intent(in) :: dataNumberOfPoints, ind
+    integer(kind=NPI), intent(in) :: dataNumberOfPoints
     integer(kind=SI), intent(in) :: interpMethod
+    integer(kind=NPI), intent(in) :: ind
     real(kind=DP), intent(out) :: concAtT
     real(kind=DP) :: xBefore, xAfter, yBefore, yAfter, m, c
     integer(kind=NPI) :: i, indexBefore

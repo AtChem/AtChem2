@@ -365,8 +365,8 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use photolysis_rates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
-                                    transmissionFactor, allocate_photolysis_rates_variables, &
-                                    size_of_j, allocate_photolysis_j
+                                     transmissionFactor, allocate_photolysis_rates_variables, &
+                                     size_of_j, allocate_photolysis_j
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -760,8 +760,8 @@ contains
     use types_mod
     use species_mod
     use constraints_mod, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
-                            numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
-                            setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataY2, dataFixedY
+                                numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
+                                setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataY2, dataFixedY
     use directories_mod, only : param_dir, spec_constraints_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : getIndexWithinList

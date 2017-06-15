@@ -1,9 +1,9 @@
 -------------
  Directories
 -------------
- Output dir is travis/tests/spec_yes_env_no
- Instantaneous rates dir is travis/tests/spec_yes_env_no/instantaneousRates
- Parameter dir is travis/tests/spec_yes_env_no/modelConfiguration
+ Output dir is travis/tests/spec_yes_env_no_with_jfac
+ Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac/instantaneousRates
+ Parameter dir is travis/tests/spec_yes_env_no_with_jfac/modelConfiguration
 
 -----------------------
  Species and reactions
@@ -69,7 +69,7 @@
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
-  maximum number of data points in constraint file:       50000
+  maximum number of data points in constraint file:          50
                                ratesOutputStepSize:        3600
               instantaneous rates output step size:        3600
                                     modelStartTime:   0.360E+05
@@ -94,7 +94,7 @@
  6      DEC                     0.414
  7      BLHEIGHT              NOTUSED
  8      DILUTE                NOTUSED
- 9      JFAC                  NOTUSED
+ 9      JFAC                     CALC
  10     ROOFOPEN              NOTUSED
  Finished reading environment variables.
 
@@ -124,11 +124,15 @@
  Number of photolysis rates: 35
 
  Reading names of constrained photolysis rates from file...
+ J4    
  Finished reading names of constrained photolysis rates.
- Number of constrained photorates: 0
+ Number of constrained photorates: 1
+ Reading in constraint data for photolysis rates...
+ J4    ...
+ Finished reading constraint data for photolysis rates.
 
  Reading JFacSpecies...
- JFacSpecies = 
+ JFacSpecies = J4
  Finished reading JFacSpecies.
 
 -------------
@@ -143,7 +147,7 @@
  Setting size of constraint arrays, n = 2
  Reading in the names of variable-concentration constrained species...
  Finished reading the names of variable-concentration constrained species
- maxNumberOfDataPoints: 50000
+ maxNumberOfDataPoints: 50
  Allocating storage for variable-concentration constrained species...
  Finished allocating storage for variable-concentration constrained species.
       1 CH4       
@@ -170,16 +174,17 @@
 -----------
  Model run
 -----------
+ basePhotoRate: J4
  time = 36200
  time = 36400
 
 ------------------
  Final statistics
 ------------------
- No. steps = 230   No. f-s = 276   No. J-s = 472   No. LU-s = 51
- No. nonlinear iterations = 275
+ No. steps = 248   No. f-s = 299   No. J-s = 512   No. LU-s = 58
+ No. nonlinear iterations = 298
  No. nonlinear convergence failures = 0
- No. error test failures = 3
+ No. error test failures = 5
 
  Runtime = 0
  Deallocating memory.

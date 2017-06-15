@@ -12,7 +12,7 @@
 FORT_COMP=/usr/bin/gfortran
 
 cd $1
-wget http://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
+wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
 
 tar -zxf cvode-2.9.0.tar.gz
 cd cvode-2.9.0/

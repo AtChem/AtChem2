@@ -69,7 +69,7 @@ module date_mod
   implicit none
   save
 
-  integer(kind=SI) :: day, month
+  integer(kind=DI) :: day, month
   integer(kind=DI) :: year, dayOfYear
 
 contains
@@ -79,26 +79,18 @@ contains
   subroutine calcDateParameters()
     implicit none
 
-    integer(kind=SI) :: monthList(12), i
+    integer(kind=DI) :: monthList(12)
 
     ! Number of days in each month; year is set in model.parameters.
+    monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+    ! Alter February length if a leap year
     if ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) ) then
-      ! leap year
-      monthList = [31_SI, 28_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
-    else
-      ! not a leap year
-      monthList = [31_SI, 29_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI, 31_SI, 30_SI, 31_SI, 30_SI, 31_SI]
+      monthList(2) = 28_DI
     end if
 
     ! Day of year; day and month are set in model.parameters.
     ! January 1 = 0, January 2 = 1, etc...
-    dayOfYear = 0
-    do i=1, (month - 1_SI)
-      dayOfYear = dayOfYear + monthList(i)
-    end do
-    !dayOfYear = sum( monthList(1:month - 1_SI) )  ! it does not work if implemented like this !
-    !write(*,*) "=======================>", dayOfYear
-    dayOfYear = dayOfYear + day - 1_SI
+    dayOfYear = sum( monthList(1:month - 1_DI) ) + day - 1_DI
 
     return
   end subroutine calcDateParameters

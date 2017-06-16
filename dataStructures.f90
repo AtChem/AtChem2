@@ -466,6 +466,8 @@ module zenith_data_mod
   real(kind=DP) :: latitude, longitude
   real(kind=DP) :: lha, sinld, cosld, cosx, secx
   real(kind=DP) :: theta, eqtime
+  real(kind=DP), parameter :: cosx_limit = 1.0d-30
+  logical :: infty_secx = .false.
 
 end module zenith_data_mod
 

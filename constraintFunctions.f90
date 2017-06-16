@@ -50,8 +50,12 @@ contains
       jfac = 0
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
-        jfac = JspeciesAtT / ( transmissionFactor(jfacSpeciesLine) * cl(jfacSpeciesLine) * &
-               ( cosx ** cmm(jfacSpeciesLine) ) * exp( -cnn(jfacSpeciesLine) * secx ) )
+        if ( infty_secx .eqv. .false. ) then
+          jfac = JspeciesAtT / ( transmissionFactor(jfacSpeciesLine) * cl(jfacSpeciesLine) * &
+                 ( cosx ** cmm(jfacSpeciesLine) ) * exp( -cnn(jfacSpeciesLine) * secx ) )
+        else
+          jfac = 0
+        end if
       else
         write (*, '(A)') ' Error! JFAC should not be used, as constant photolysis rates have been provided.'
         stop 2

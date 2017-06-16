@@ -14,7 +14,7 @@ def setup_files_for_atchem(in_file, output_dir, mc_dir):
 
 
 def main():
-    assert len(sys.argv) > 1, 'Please enter a filename as argument, pointing to the mcm subset file.'
+    assert len(sys.argv) > 1, 'Please enter a filename as argument, pointing to the mcm mechanism file.'
     input_filename = sys.argv[1]
     # output_dir defaults to '.' if not given
     if len(sys.argv) <= 2:

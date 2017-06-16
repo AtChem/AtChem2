@@ -27,7 +27,7 @@
     - ./tools/install/install_openlibm.sh $PWD
 
   install:
-    - ./tools/build.sh ./mcm_subset.fac
+    - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
     - ./atchem

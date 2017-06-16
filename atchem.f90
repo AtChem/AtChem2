@@ -65,26 +65,6 @@ PROGRAM ATCHEM
 
     ! -----------------------------------------------------------------
     ! ???
-    subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
-      use types_mod
-      use species_mod
-      implicit none
-
-      real(kind=DP), intent(in) :: v(*)
-      real(kind=DP), intent(out) :: fjv(*)
-      real(kind=DP), intent(in) :: t, y(*), fy(*)
-      real(kind=DP), intent(out) :: h
-      integer(kind=NPI), intent(in) :: ipar (*)
-      real(kind=DP), intent(in) :: rpar(*), work(*)
-      integer(kind=NPI), intent(out) :: ier
-
-      integer(kind=NPI) :: neq, i, np
-      real(kind=DP) :: delta, dummy
-      real(kind=DP), allocatable :: yPlusV(:), yPlusVi(:)
-    end subroutine FCVJTIMES
-
-    ! -----------------------------------------------------------------
-    ! ???
     subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species_mod
@@ -364,12 +344,6 @@ PROGRAM ATCHEM
     end if
     ! DENSE SOLVER
   else if ( solverType == 3 ) then
-    ! make sure no Jacobian approximation is required
-    if ( JVapprox == 1 ) then
-      write (stderr,*) 'Solver parameter conflict! Jv approximation cannot be used for dense solver.'
-      write (stderr,*) 'Fix parameters in "modelConfiguration/solver.parameters" file.'
-      stop
-    end if
     call FCVDENSE( neq, ier )
     ! UNEXPECTED SOLVER TYPE
   else
@@ -382,15 +356,6 @@ PROGRAM ATCHEM
     write (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
     call FCVFREE()
     stop
-  end if
-
-  ! Use Jacobian approximation if required. Calling FCVSPILSSETJAC()
-  ! with non-zero flag specifies that spgmr, spbcg, or sptfqmr should
-  ! use the supplied FCVJTIMES() (in solverfunctions.f90).  In our
-  ! case, solverType={1,2} calls SPGMR above, while solverType=3
-  ! errors out if JvApprox=1
-  if ( JVapprox == 1 ) then
-    call FCVSPILSSETJAC( 1, ier )
   end if
 
   if ( ier /= 0 ) then
@@ -547,51 +512,8 @@ END PROGRAM ATCHEM
 
 
 ! ******************************************************************** !
-! ???
+! CVODE function implementations
 ! ******************************************************************** !
-
-
-! -----------------------------------------------------------------
-! ???
-subroutine FCVJTIMES( v, fjv, t, y, fy, h, ipar, rpar, work, ier )
-  use types_mod
-  use species_mod
-  implicit none
-
-  real(kind=DP), intent(in) :: v(*)
-  real(kind=DP), intent(out) :: fjv(*)
-  real(kind=DP), intent(in) :: t, y(*), fy(*)
-  real(kind=DP), intent(out) :: h
-  integer(kind=NPI), intent(in) :: ipar (*)
-  real(kind=DP), intent(in) :: rpar(*), work(*)
-  integer(kind=NPI), intent(out) :: ier
-  integer(kind=NPI) :: neq, np
-  real(kind=DP) :: delta, dummy
-  real(kind=DP), allocatable :: yPlusV(:), fyPlusV(:)
-
-  np = getNumberOfSpecies()
-  allocate (yPlusV(np), fyPlusV(np))
-
-  neq = ipar(1)
-  delta = 1.00d-03
-  ! fake using variables h and work, to avoid a warning (they are
-  ! required by CVODE code)
-  h = h
-  dummy = work(1)
-
-  ! calculate y + delta v
-  yPlusV(1:neq) = y(1:neq) + delta * v(1:neq)
-
-  ! get f(y + delta v) into fyPlusVi
-  call FCVFUN( t, yPlusV, fyPlusV, ipar, rpar, ier )
-
-  ! JVminus1 + deltaJV
-  fjv(1:neq) = ( fyPlusV(1:neq) - fy(1:neq) ) / delta
-
-  deallocate (yPlusV, fyPlusV)
-
-  return
-end subroutine FCVJTIMES
 
 ! -------------------------------------------------------- !
 !  Fortran routine for right-hand side function.

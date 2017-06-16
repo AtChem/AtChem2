@@ -45,8 +45,6 @@
  ------------------
             atol:   1.000E-03
             rtol:   1.000E-04
-      JacVApprox:           0
-         deltaJv:   1.000E-03
        deltaMain:   1.000E-04
         lookBack:         100
          maxStep:   1.000E+02

@@ -1,7 +1,5 @@
 1.0e-03			atol
 1.0e-04			rtol
-0			Jv approximation (1 = Yes, 0 = No)
-1.0e-03			Delta Jv
 1.0e-04			Delta main
 100			Lookback
 100			maximum solver step size (seconds)

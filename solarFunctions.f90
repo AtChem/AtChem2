@@ -24,7 +24,7 @@ contains
     ! Time as day of year and fractional seconds of day
     currentFracDay = dayOfYear + ( t / 86400.0_DP )
 
-    ! The day angle is 
+    ! The day angle is
     if ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) ) then
       ! leap year
       theta = 2.0_DP * pi * floor(currentFracDay) / 366.0_DP
@@ -80,7 +80,7 @@ contains
 
     pi = 4.0_DP * atan( 1.0_DP )
 
-    ! The equation of time is 
+    ! The equation of time is
     c0 = 0.000075
     c1 = 0.001868
     c2 = -0.032077
@@ -107,8 +107,14 @@ contains
     ! (secx=1/cosx). The MCM photolysis parameterisation
     ! (http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt)
     ! requires cosx and secx to calculate the photolysis rates.
-    ramp_cosx = max(0.0_DP, cosx )
-    secx = 1.0_DP / ( ramp_cosx + 1.00d-30 )
+    if ( cosx <= cosx_limit ) then
+      cosx = 0.0_DP
+      secx = 1.0d+50
+      infty_secx = .true.
+    else
+      secx = 1.0_DP / cosx
+      infty_secx = .false.
+    end if
 
     return
   end subroutine calcZenith

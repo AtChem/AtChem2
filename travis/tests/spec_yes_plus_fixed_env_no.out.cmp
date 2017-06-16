@@ -64,7 +64,7 @@
  -----------------
  Model parameters:
  -----------------
-                                   number of steps:           2
+                                   number of steps:           3
                                step size (seconds):   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
@@ -174,12 +174,13 @@
 -----------
  time = 300
  time = 600
+ time = 900
 
 ------------------
  Final statistics
 ------------------
- No. steps = 140   No. f-s = 170   No. J-s = 234   No. LU-s = 39
- No. nonlinear iterations = 169
+ No. steps = 153   No. f-s = 185   No. J-s = 249   No. LU-s = 43
+ No. nonlinear iterations = 184
  No. nonlinear convergence failures = 0
  No. error test failures = 6
 

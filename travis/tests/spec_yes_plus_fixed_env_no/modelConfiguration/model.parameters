@@ -1,4 +1,4 @@
-2			  number of steps
+3			  number of steps
 300			step size (seconds)
 2			      Species Interpolation Method (pw constant = 1, pw linear = 2)
 2			      Conditions Interpolation Method (pw constant = 1, pw linear = 2)

@@ -418,47 +418,6 @@ contains
   end subroutine readPhotolysisRates
 
   ! -----------------------------------------------------------------
-  ! Read modelConfiguration/JFacSpecies.config, and store this in
-  ! jFacSpecies.  Test this against known species, and if it is known
-  ! then set jfacSpeciesLine to that line number in photoRateNames
-  subroutine readJFacSpecies()
-    use types_mod
-    use photolysis_rates_mod
-    use directories_mod, only : param_dir
-    implicit none
-
-    integer(kind=NPI) :: i
-    integer(kind=IntErr) :: ierr
-    logical :: file_exists
-
-    jfacSpeciesLine = 0
-    write (*, '(A)') ' Reading JFacSpecies...'
-    inquire(file=trim( param_dir ) // '/JFacSpecies.config', exist=file_exists)
-    if ( file_exists .eqv. .false. ) then
-      write (*, '(A)') " No JFacSpecies.config file exists, so setting jFacSpecies to ''"
-      jFacSpecies = ''
-    else
-      open (10, file=trim( param_dir ) // '/JFacSpecies.config', status='old', iostat=ierr)
-      read (10,*, iostat=ierr) jFacSpecies
-      close (10, status='keep')
-      ! Catch the case where the file is empty
-      if ( ierr /= 0 ) then
-        jFacSpecies = ''
-      end if
-    end if
-    write (*, '(2A)') ' JFacSpecies = ', trim( jFacSpecies )
-    write (*, '(A)') ' Finished reading JFacSpecies.'
-    ! get line number for the JFac base species:
-    do i = 1, nrOfPhotoRates
-      if ( trim( photoRateNames(i) ) == trim( jFacSpecies ) ) then
-        jfacSpeciesLine = i
-      end if
-    end do
-
-    return
-  end subroutine readJFacSpecies
-
-  ! -----------------------------------------------------------------
   ! Read in contents of
   ! modelConfiguration/productionRatesOutput.config and
   ! modelConfiguration/lossRatesOutput.config, which contains a list
@@ -522,14 +481,16 @@ contains
   ! environmentConstraints directory, the file named after the
   ! environmental variable.
   subroutine readEnvVar()
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, nrOfPhotoRates, photoRateNames
     implicit none
 
-    integer(kind=NPI) :: k
+    integer(kind=NPI) :: k, j
     integer(kind=SI) :: counter, i
     integer(kind=IntErr) :: ierr
     real(kind=DP) :: input1, input2
@@ -560,18 +521,49 @@ contains
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
 
-      select case ( trim( envVarTypes(i) ) )
-        case ('CALC')
-          envVarTypesNum(i) = 1_SI
-        case ('CONSTRAINED')
-          envVarTypesNum(i) = 2_SI
-        case ('NOTUSED')
-          envVarTypesNum(i) = 4_SI
-        case default
-          envVarTypesNum(i) = 3_SI
-          ! Copy 3rd column value to envVarFixedValues(i)
-          read (envVarTypes(i),*) envVarFixedValues(i)
-      end select
+      if ( trim( envVarNames(i) ) /= 'JFAC' ) then
+        select case ( trim( envVarTypes(i) ) )
+          case ('CALC')
+            envVarTypesNum(i) = 1_SI
+          case ('CONSTRAINED')
+            envVarTypesNum(i) = 2_SI
+          case ('NOTUSED')
+            envVarTypesNum(i) = 4_SI
+          case default
+            envVarTypesNum(i) = 3_SI
+            ! Copy 3rd column value to envVarFixedValues(i)
+            read (envVarTypes(i),*) envVarFixedValues(i)
+        end select
+      else
+        ! JFAC gets special treatment so that we can pass in the name
+        ! of the JFAC species to environmentVariables.config if we're
+        ! calculating JFAC on the fly.
+        select case ( trim( envVarTypes(i) ) )
+          case ('CONSTRAINED')
+            envVarTypesNum(i) = 2_SI
+          case ('NOTUSED')
+            envVarTypesNum(i) = 4_SI
+          case default
+            ! Firstly treat as a species: 'CALC' equivalent.
+            ! Set to the value given, and then check that the
+            ! relevant line exists in the photolysis rate file.
+            envVarTypesNum(i) = 1_SI
+            jFacSpecies = trim( envVarTypes(i) )
+            ! Get line number for the JFac base species:
+            jFacSpeciesLine = 0_NPI
+            do j = 1, nrOfPhotoRates
+              if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
+                jFacSpeciesLine = j
+              end if
+            end do
+            ! If it's not a valid photolysis rate then treat as a fixed number
+            if ( jFacSpeciesLine == 0_NPI ) then
+              jFacSpecies = ''
+              envVarTypesNum(i) = 3_SI
+              read (envVarTypes(i),*) envVarFixedValues(i)
+            end if
+        end select
+      end if
     end do
     close (10, status='keep')
 

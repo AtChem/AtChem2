@@ -51,8 +51,8 @@ contains
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( infty_secx .eqv. .false. ) then
-          jfac = JspeciesAtT / ( transmissionFactor(jfacSpeciesLine) * cl(jfacSpeciesLine) * &
-                 ( cosx ** cmm(jfacSpeciesLine) ) * exp( -cnn(jfacSpeciesLine) * secx ) )
+          jfac = JspeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
+                 ( cosx ** cmm(jFacSpeciesLine) ) * exp( -cnn(jFacSpeciesLine) * secx ) )
         else
           jfac = 0
         end if
@@ -307,55 +307,5 @@ contains
 
     return
   end function getEnvVarNum
-
-  ! ----------------------------------------------------------------- !
-  ! check jfac data consistency
-  subroutine test_jfac()
-    use types_mod
-    use photolysis_rates_mod
-    use env_vars_mod
-    implicit none
-
-    integer(kind=SI) :: envVarNum
-
-    ! If JFAC species is provided (e.g. J4) and constraint file is not provided, then the program should complain.
-    envVarNum = getEnvVarNum( 'JFAC' )
-    !IF CALC
-    ! If JFAC is CALC and there's no JFAC species, the program should complain
-    if ( envVarTypesNum(envVarNum) == 1_SI ) then
-      if ( '' == trim( jFacSpecies ) ) then
-        write (*, '(A)') ' Error! JFAC was set to CALC, but JFac species was not provided!'!
-        stop
-      end if
-      ! If jfacSpeciesLine = 0 (no line in photolysis rates matches the JFac species), program should complain
-      if ( jfacSpeciesLine == 0 ) then
-        write (*, '(2A)') ' Error! No match found in photolysis rates file for provided JFAC species ', trim( jFacSpecies )
-        stop
-      end if
-      !IF CONSTRAINED
-    else if ( envVarTypesNum(envVarNum) == 2_SI ) then
-      if ( '' /= trim( jFacSpecies ) ) then
-        write (*, '(A)') ' Error! JFAC was set to be CONSTRAINED, but at the same time JFac species was provided!'
-        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
-        stop
-      end if
-      !IF FIXED
-    else if ( envVarTypesNum(envVarNum) == 3_SI ) then
-      if ( '' /= trim( jFacSpecies ) ) then
-        write (*, '(A)') ' Error! JFAC was set to a fixed value, but at the same time JFac species was provided!'
-        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
-        stop
-      end if
-      !IF NOTUSED
-      ! if JFAC is NOTUSED: and JFAC species has anything in, the program should complain.
-    else
-      if ( '' /= trim( jFacSpecies ) ) then
-        write (*, '(A)') ' Error! JFAC was set to NOTUSED, but at the same time JFac species was provided!'
-        write (*, '(2A)') ' JFac species: ', trim( jFacSpecies )
-        stop
-      end if
-    end if
-
-  end subroutine test_jfac
 
 end module constraintFunctions_mod

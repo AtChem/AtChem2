@@ -404,7 +404,7 @@ module photolysis_rates_mod
 
   integer(kind=NPI), parameter :: maxNrOfConPhotoRates = 100
   integer(kind=NPI) :: numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
-  integer(kind=NPI) :: jfacSpeciesLine ! number of line in photolysis rates file corresponding to Jfac species
+  integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
   integer(kind=NPI) :: nrOfPhotoRates
   integer(kind=NPI), allocatable :: ck(:)
   logical :: usePhotolysisConstants

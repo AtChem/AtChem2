@@ -76,26 +76,6 @@
 
  Finished reading model parameters from file.
 
------------------------
- Environment variables
------------------------
- Reading environment variables...
- Number of environment variables: 10
- 1      M                        CALC
- 2      TEMP                   281.95
- 3      PRESS                 1013.25
- 4      RH                    NOTUSED
- 5      H2O                  3.06e+17
- 6      DEC                     -0.34
- 7      BLHEIGHT              NOTUSED
- 8      DILUTE                NOTUSED
- 9      JFAC                  NOTUSED
- 10     ROOFOPEN                    0
- Finished reading environment variables.
-
- Checking for constrained environment variables...
- Finished checking for constrained environment variables.
-
 ---------------------
  Species of Interest
 ---------------------
@@ -120,9 +100,26 @@
  Finished reading names of constrained photolysis rates.
  Number of constrained photorates: 0
 
- Reading JFacSpecies...
- JFacSpecies = 
- Finished reading JFacSpecies.
+-----------------------
+ Environment variables
+-----------------------
+ Reading environment variables...
+ Number of environment variables: 10
+ 1      M                        CALC
+ 2      TEMP                   281.95
+ 3      PRESS                 1013.25
+ 4      RH                    NOTUSED
+ 5      H2O                  3.06e+17
+ 6      DEC                     -0.34
+ 7      BLHEIGHT              NOTUSED
+ 8      DILUTE                NOTUSED
+ 9      JFAC                  NOTUSED
+ 10     ROOFOPEN                    0
+ Finished reading environment variables.
+
+ Checking for constrained environment variables...
+ Finished checking for constrained environment variables.
+
 
 -------------
  Constraints

@@ -240,13 +240,6 @@ PROGRAM ATCHEM
   ! currentNumTimestep>=maxNumTimesteps.
   currentNumTimestep = 0
 
-  ! Read in environment variables (FIXED, CONSTRAINED, CALC or
-  ! NOTUSED, see environmentVariables.config)
-  write (*, '(A)') '-----------------------'
-  write (*, '(A)') ' Environment variables'
-  write (*, '(A)') '-----------------------'
-  call readEnvVar()
-
   ! fill speciesOfInterest with the names of species to output to
   ! concentration.output
   write (*, '(A)') '---------------------'
@@ -261,7 +254,7 @@ PROGRAM ATCHEM
   flush(stderr)
 
   ! *****************************************************************
-  ! SET CONSTRAINTS
+  ! SET PHOTOLYSIS RATES
   ! *****************************************************************
 
   write (*, '(A)') '------------'
@@ -270,9 +263,17 @@ PROGRAM ATCHEM
   call readPhotoRates()
   write (*,*)
 
-  ! Read in JFac species, and set jfacSpeciesLine
-  call readJFacSpecies()
+  ! Read in environment variables (FIXED, CONSTRAINED, CALC or
+  ! NOTUSED, see environmentVariables.config)
+  write (*, '(A)') '-----------------------'
+  write (*, '(A)') ' Environment variables'
+  write (*, '(A)') '-----------------------'
+  call readEnvVar()
   write (*,*)
+
+  ! *****************************************************************
+  ! SET CONSTRAINTS
+  ! *****************************************************************
 
   write (*, '(A)') '-------------'
   write (*, '(A)') ' Constraints'
@@ -364,9 +365,6 @@ PROGRAM ATCHEM
     call FCVFREE()
     stop
   end if
-
-  ! check JFac data consistency:
-  call test_jfac()
 
   ! *****************************************************************
   ! RUN MODEL

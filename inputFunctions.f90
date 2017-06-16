@@ -493,29 +493,21 @@ contains
 
   ! -----------------------------------------------------------------
   ! Read in parameters from file at input_file, and save the contents
-  ! of each line to an element of the array
+  ! of each line to an element of parameterArray
   function getParametersFromFile( input_file ) result ( parameterArray )
     use types_mod
     implicit none
 
     character(len=*), intent(in) :: input_file
     real(kind=DP), allocatable :: parameterArray(:)
-    character(len=100) :: dummy
-    integer(kind=DI) :: numValidEntries, counter
+    integer(kind=NPI) :: num_lines, counter
 
     call inquire_or_abort( input_file, 'getParametersFromFile()')
+    num_lines = count_lines_in_file( input_file, skip_first_line_in=.false. )
+    allocate (parameterArray(num_lines))
 
     open (10, file=input_file, status='old') ! input file
-    numValidEntries = 0
-    read (10,*) dummy
-    do while ( dummy /= '-9999' )
-      numValidEntries = numValidEntries + 1_DI
-      read (10,*) dummy
-    end do
-    close (10, status='keep')
-    allocate (parameterArray(numValidEntries))
-    open (10, file=input_file, status='old') ! input file
-    do counter = 1, numValidEntries
+    do counter = 1_NPI, num_lines
       read (10,*) parameterArray(counter)
     end do
     close (10, status='keep')

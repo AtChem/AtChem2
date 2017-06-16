@@ -300,8 +300,8 @@ contains
     end if
 
     do i = 1, size( arrayOfConcs )
-      if ( arrayOfConcs(i) < 0.0 ) then
-        arrayOfConcs(i) = 0d0
+      if ( arrayOfConcs(i) < 0.0_DP ) then
+        arrayOfConcs(i) = 0.0_DP
       end if
     end do
     write (50, '(100 (1P e15.7)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))

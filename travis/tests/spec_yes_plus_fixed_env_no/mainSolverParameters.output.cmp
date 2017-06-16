@@ -1,3 +1,4 @@
         t  currentStepSize previousStepSize    LENRW    LENIW      NST      NFE     NETF     NCFN      NNI  NSETUPS       QU     QCUR      NOR  LENRWLS  LENIWLS  LS_FLAG    NFELS     NJTV      NPE      NPS      NLI     NCFL
  3.00E+02  2.436563905E+01  2.436563905E+01      339       50      110      130        3        0      129       32        5        5        0    13026      105        0      178      178        2      289      178        0
  6.00E+02  1.059274005E+01  1.059274005E+01      339       50      140      170        6        0      169       39        3        3        0    13026      105        0      234      234        3      381      234        0
+ 9.00E+02  6.566868933E+01  6.566868933E+01      339       50      153      185        6        0      184       43        4        4        0    13026      105        0      249      249        3      409      249        0

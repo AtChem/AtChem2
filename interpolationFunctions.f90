@@ -8,15 +8,15 @@ contains
 
   ! -----------------------------------------------------------------
   ! This routine returns in concAtT the value of the requested
-  ! quantity (referenced by the ind-th line of x, y, y2) based upon
+  ! quantity (referenced by the ind-th line of x, y) based upon
   ! the constraint data given and interpolation method given
-  subroutine getConstrainedQuantAtT( t, x, y, y2, dataNumberOfPoints, interpMethod, ind, concAtT )
+  subroutine getConstrainedQuantAtT( t, x, y, dataNumberOfPoints, interpMethod, ind, concAtT )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use interpolation_method_mod
     implicit none
 
-    real(kind=DP), intent(in) :: t, x(:,:), y(:,:), y2(:,:)
+    real(kind=DP), intent(in) :: t, x(:,:), y(:,:)
     integer(kind=NPI), intent(in) :: dataNumberOfPoints
     integer(kind=SI), intent(in) :: interpMethod
     integer(kind=NPI), intent(in) :: ind
@@ -25,18 +25,12 @@ contains
     integer(kind=NPI) :: i, indexBefore
     logical :: interp_success
 
-    ! Sanity checks on sizes of x, y and y2.
+    ! Sanity checks on sizes of x and y.
     if ( size( x, 1 ) /= size( y, 1 ) ) then
       stop 'size( x, 1 ) /= size( y, 1 ) in getConstrainedQuantAtT()'
     end if
-    if ( size( x, 1 ) /= size( y2, 1 ) ) then
-      stop 'size( x, 1 ) /= size( y2, 1 ) in getConstrainedQuantAtT()'
-    end if
     if ( size( x, 2 ) /= size( y, 2 ) ) then
       stop 'size( x, 2 ) /= size( y, 2 ) in getConstrainedQuantAtT()'
-    end if
-    if ( size( x, 2 ) /= size( y2, 2 ) ) then
-      stop 'size( x, 2 ) /= size( y2, 2 ) in getConstrainedQuantAtT()'
     end if
 
     ! Find the interval in which t sits

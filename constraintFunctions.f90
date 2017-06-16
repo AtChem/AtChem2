@@ -43,7 +43,7 @@ contains
 
     ! GET CURRENT VALUE OF basePhotoRate
 
-    call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints (basePhotoRateNum), &
+    call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints (basePhotoRateNum), &
                                  getConditionsInterpMethod(), basePhotoRateNum, JSpeciesAtT )
 
     if ( JSpeciesAtT == 0 ) then
@@ -227,7 +227,7 @@ contains
           end select
 
         case ( 2 ) ! CONSTRAINED
-          call getConstrainedQuantAtT( t, envVarX, envVarY, envVarY2, envVarNumberOfPoints(envVarNum), &
+          call getConstrainedQuantAtT( t, envVarX, envVarY, envVarNumberOfPoints(envVarNum), &
                                        getConditionsInterpMethod(), envVarNum, this_env_val )
 
           if (this_env_var_name == 'PRESS') pressure_set = .true.

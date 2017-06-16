@@ -516,7 +516,7 @@ PROGRAM ATCHEM
   ! deallocate arrays from module constraints_mod
   call deallocateConstrainedConcs()
   call deallocateConstrainedSpecies()
-  deallocate (dataX, dataY, dataY2, dataFixedY)
+  deallocate (dataX, dataY, dataFixedY)
   deallocate (speciesNumberOfPoints)
 
   ! deallocate arrays from module species_mod
@@ -524,10 +524,10 @@ PROGRAM ATCHEM
 
   ! deallocate arrays from module env_vars_mod
   deallocate (envVarTypesNum, envVarNames, envVarTypes, envVarFixedValues)
-  deallocate (envVarX, envVarY, envVarY2, envVarNumberOfPoints)
+  deallocate (envVarX, envVarY, envVarNumberOfPoints)
 
   ! deallocate arrays from module photolysis_rates_mod
-  deallocate (photoX, photoY, photoY2, photoNumberOfPoints)
+  deallocate (photoX, photoY, photoNumberOfPoints)
 
   ! Close output files and end program
   close (50)
@@ -626,7 +626,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   do i = 1, numConSpec
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), &
+      call getConstrainedQuantAtT( t, datax, datay, speciesNumberOfPoints(i), &
                                    getSpeciesInterpMethod(), i, constrainedConcs(i) )
     else
       constrainedConcs(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)

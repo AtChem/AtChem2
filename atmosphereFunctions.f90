@@ -52,8 +52,8 @@ contains
     ! Use Eq.6 to calculate the water vapour saturation pressure and
     ! Eq.1 to calculate the water vapour pressure from relative
     ! humidity (see Vaisala paper).
-    temp_c = temp - 273.15
-    wvp = ( rh/100 ) * ( 6.116441 * 10**((7.591386 * temp_c)/(temp_c + 240.7263)) )
+    temp_c = temp - 273.15_DP
+    wvp = ( rh/100.0_DP ) * ( 6.116441_DP * 10.0_DP**((7.591386_DP * temp_c)/(temp_c + 240.7263_DP)) )
 
     ! Calculate volume of water vapour per volume of dry air using
     ! Eq.18 (see Vaisala paper).
@@ -72,13 +72,14 @@ contains
     use types_mod
     implicit none
 
-    real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor
+    real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor, exponent
 
-    temp = 289.86 + 8.3 * sin( ( 7.2722D-5 * ttime ) - 1.9635 )
-    temp = 298.00
-    rh = 23.0 * sin( ( 7.2722D-5 * ttime ) + 1.1781 ) + 66.5
-    h2o_factor = 10.0 / ( 1.38D-16 * temp ) * rh
-    h2o = 6.1078 * exp( -1.0D+0 * ( 597.3 - 0.57 * ( temp - 273.16 ) ) * 18.0 / 1.986 * ( 1.0 / temp - 1.0 / 273.16 ) ) * h2o_factor
+    temp = 289.86_DP + 8.3_DP * sin( ( 7.2722d-5 * ttime ) - 1.9635_DP )
+    temp = 298.00_DP
+    rh = 23.0_DP * sin( ( 7.2722d-5 * ttime ) + 1.1781_DP ) + 66.5_DP
+    h2o_factor = 10.0_DP / ( 1.38d-16 * temp ) * rh
+    exponent = -1.0_DP * ( 597.3_DP - 0.57_DP * ( temp - 273.16_DP ) ) * 18.0_DP / 1.986_DP * ( 1.0_DP / temp - 1.0_DP / 273.16_DP )
+    h2o = 6.1078_DP * exp( exponent ) * h2o_factor
 
     return
   end subroutine temperature

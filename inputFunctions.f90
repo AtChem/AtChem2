@@ -115,7 +115,7 @@ contains
       count = count + 1
       clhs(1, count) = k
       clhs(2, count) = l
-      clcoeff(count) = 1.0
+      clcoeff(count) = 1.0_DP
       read (10,*, iostat=ierr) k, l
     end do
     close (10, status='keep')
@@ -134,7 +134,7 @@ contains
       count = count + 1
       crhs(1, count) = k
       crhs(2, count) = l
-      crcoeff(count) = 1.0
+      crcoeff(count) = 1.0_DP
       read (11,*, iostat=ierr) k, l
     end do
     close (11, status='keep')
@@ -264,7 +264,7 @@ contains
     if ( size( refSpeciesNames ) /= size( outputConcentrations ) ) then
       stop "size(refSpeciesNames) /= size(outputConcentrations) in setConcentrations()."
     end if
-    outputConcentrations(:) = 0.0
+    outputConcentrations(:) = 0.0_DP
     do i = 1, size( concSpeciesNames )
       match = .false.
       k = concSpeciesNames(i)
@@ -874,7 +874,7 @@ contains
       read (14,*) name, value
       id = getIndexWithinList( speciesNames, name )
       if (id/=0) then
-        j = j+1
+        j = j + 1
         constrainedNames(j + numberOfVariableConstrainedSpecies) = name
         dataFixedY(j) = value
         call setConstrainedSpecies( j + numberOfVariableConstrainedSpecies, id )

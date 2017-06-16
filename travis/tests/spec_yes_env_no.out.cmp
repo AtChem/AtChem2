@@ -174,7 +174,7 @@
 ------------------
  Final statistics
 ------------------
- No. steps = 230   No. f-s = 276   No. J-s = 472   No. LU-s = 51
+ No. steps = 230   No. f-s = 276   No. J-s = 484   No. LU-s = 51
  No. nonlinear iterations = 275
  No. nonlinear convergence failures = 0
  No. error test failures = 3

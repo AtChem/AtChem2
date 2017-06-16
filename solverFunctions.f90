@@ -94,14 +94,14 @@ contains
     ! r = working array - dimension nr
 
     ! set jacobian matrix to zero
-    fy(:,:) = 0.0
+    fy(:,:) = 0.0_DP
 
     ! call routine to get reaction rates in array p. Each element of p
     ! corresponds to a single reaction
     call mechanism_rates( t, y, p )
 
     do j = 1, size( y )
-      r(1:nr) = 0.0
+      r(1:nr) = 0.0_DP
       do i = 1, size( clhs, 2 )
         if ( clhs(2, i) == j ) then
           r(clhs(1, i)) = p(clhs(1, i))

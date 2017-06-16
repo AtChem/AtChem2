@@ -197,7 +197,7 @@ contains
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( infty_secx .eqv. .true. ) then
-          j(ck(i)) = 0.0d0
+          j(ck(i)) = 0.0_DP
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
         end if

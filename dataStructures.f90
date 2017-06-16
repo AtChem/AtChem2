@@ -120,7 +120,7 @@ module env_vars_mod
   integer(kind=SI), allocatable :: envVarTypesNum(:)
   real(kind=DP), allocatable :: envVarFixedValues(:), currentEnvVarValues(:)
   integer(kind=SI) :: numEnvVars
-  real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:), envVarY2 (:,:)
+  real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:)
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
 
@@ -144,7 +144,7 @@ module constraints_mod
   integer(kind=NPI) :: numberOfConstrainedSpecies
   integer(kind=NPI) :: numberOfFixedConstrainedSpecies, numberOfVariableConstrainedSpecies
   real(kind=DP), allocatable :: constrainedConcs(:)
-  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataY2(:,:), dataFixedY(:)
+  real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
   integer(kind=NPI) :: maxNumberOfDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
@@ -420,7 +420,7 @@ module photolysis_rates_mod
   real(kind=DP), allocatable :: j(:)
   character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:)
   character(len=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
-  real(kind=DP), allocatable :: photoX(:,:), photoY(:,:), photoY2(:,:)
+  real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
 

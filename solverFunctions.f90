@@ -207,7 +207,7 @@ contains
     end do
 
     do i = 1, numConPhotoRates
-      call getConstrainedQuantAtT( t, photoX, photoY, photoY2, photoNumberOfPoints(i), &
+      call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(i), &
                                    getConditionsInterpMethod(), i, photoRateAtT )
       j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
     end do

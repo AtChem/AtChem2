@@ -589,7 +589,6 @@ contains
     ! Allocate variables for next section
     allocate (envVarX(numEnvVars, maxNumberOfDataPoints))
     allocate (envVarY(numEnvVars, maxNumberOfDataPoints))
-    allocate (envVarY2(numEnvVars, maxNumberOfDataPoints))
     allocate (envVarNumberOfPoints(numEnvVars))
 
     ! TODO: convert this to a command line input argument
@@ -723,7 +722,6 @@ contains
     ! Allocate array size for storage of photolysis constraint data
     allocate (photoX (numConPhotoRates, maxNumberOfDataPoints) )
     allocate (photoY (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate (photoY2 (numConPhotoRates, maxNumberOfDataPoints) )
     allocate (photoNumberOfPoints(numConPhotoRates) )
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
@@ -743,7 +741,7 @@ contains
         end if
         open (11, file=fileLocation, status='old')
         do k = 1, photoNumberOfPoints(i)
-          read (11,*) photoX(i, k), photoY(i, k) !, photoY2 (i, k)
+          read (11,*) photoX(i, k), photoY(i, k)
         end do
         close (11, status='keep')
       end do
@@ -761,7 +759,7 @@ contains
     use species_mod
     use constraints_mod, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                                 numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
-                                setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataY2, dataFixedY
+                                setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataFixedY
     use directories_mod, only : param_dir, spec_constraints_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use configFunctions_mod, only : getIndexWithinList
@@ -820,7 +818,6 @@ contains
     write (*, '(A)') ' Allocating storage for variable-concentration constrained species...'
     allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
-    allocate (dataY2(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
     write (*, '(A)') ' Finished allocating storage for variable-concentration constrained species.'
 
     if ( numberOfVariableConstrainedSpecies > 0 ) then
@@ -858,7 +855,7 @@ contains
         call inquire_or_abort( fileLocation, 'readSpeciesConstraints()')
         open (13, file=fileLocation, status='old')
         do k = 1, dataNumberOfPoints
-          read (13,*) dataX(i, k), dataY(i, k) !, dataY2(i, k)
+          read (13,*) dataX(i, k), dataY(i, k)
         end do
         close (13, status='keep')
       end do
@@ -918,7 +915,7 @@ contains
     allocate (concAtT(numberOfConstrainedSpecies))
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT( t, datax, datay, datay2, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
+        call getConstrainedQuantAtT( t, datax, datay, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
       else
         concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if

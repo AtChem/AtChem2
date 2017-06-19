@@ -540,8 +540,10 @@ contains
         ! calculating JFAC on the fly.
         select case ( trim( envVarTypes(i) ) )
           case ('CONSTRAINED')
+            ! We now expect a file JFAC in environmentConstraints directory
             envVarTypesNum(i) = 2_SI
           case ('NOTUSED')
+            ! JFAC should be set to its default value of 1 everywhere
             envVarTypesNum(i) = 4_SI
           case default
             ! Firstly treat as a species: 'CALC' equivalent.
@@ -551,7 +553,7 @@ contains
             jFacSpecies = trim( envVarTypes(i) )
             ! Get line number for the JFac base species:
             jFacSpeciesLine = 0_NPI
-            do j = 1, nrOfPhotoRates
+            do j = 1_NPI, nrOfPhotoRates
               if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
                 jFacSpeciesLine = j
               end if

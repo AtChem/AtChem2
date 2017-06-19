@@ -19,7 +19,7 @@ contains
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(out) :: jfac
-    real(kind=DP) :: JSpeciesAtT
+    real(kind=DP) :: JFacSpeciesAtT
     integer(kind=NPI) :: basePhotoRateNum, i
     logical :: firstTime = .true.
 
@@ -44,14 +44,14 @@ contains
     ! GET CURRENT VALUE OF basePhotoRate
 
     call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints (basePhotoRateNum), &
-                                 getConditionsInterpMethod(), basePhotoRateNum, JSpeciesAtT )
+                                 getConditionsInterpMethod(), basePhotoRateNum, JFacSpeciesAtT )
 
-    if ( JSpeciesAtT == 0 ) then
+    if ( JFacSpeciesAtT == 0 ) then
       jfac = 0
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( infty_secx .eqv. .false. ) then
-          jfac = JspeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
+          jfac = JFacSpeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
                  ( cosx ** cmm(jFacSpeciesLine) ) * exp( -cnn(jFacSpeciesLine) * secx ) )
         else
           jfac = 0

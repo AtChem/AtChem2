@@ -1,14 +1,21 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE constraintFunctions
 !
-! ??? Text describing the module ???
+! This module handles the addition and removal of constrained species
+! from vectors of concentrations, and calculation of jFac. It also
+! handles calculation of environment variabe values at a given time t.
+! Also implements getEnvVarNum() as a helper function to return the
+! number of the environment variable using the name as a key.
 ! ******************************************************************** !
 module constraintFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-  ! ???
-  subroutine calcJFac( t, jfac )
+  ! Calculate the value of jFac by comparing the constrained value of
+  ! jFacSpecies to the value calculated from the photolysis equations.
+  ! If the constrained rate is zero, or the value of cosx is below the
+  ! threshold (represented by infty_secx==.true.) then set jFac to zero.
+  subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
     use photolysis_rates_mod
@@ -18,7 +25,7 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: t
-    real(kind=DP), intent(out) :: jfac
+    real(kind=DP), intent(out) :: jFac
     real(kind=DP) :: JFacSpeciesAtT
     integer(kind=NPI) :: basePhotoRateNum, i
     logical :: firstTime = .true.
@@ -47,14 +54,14 @@ contains
                                  getConditionsInterpMethod(), basePhotoRateNum, JFacSpeciesAtT )
 
     if ( JFacSpeciesAtT == 0 ) then
-      jfac = 0
+      jFac = 0
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( infty_secx .eqv. .false. ) then
-          jfac = JFacSpeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
+          jFac = JFacSpeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
                  ( cosx ** cmm(jFacSpeciesLine) ) * exp( -cnn(jFacSpeciesLine) * secx ) )
         else
-          jfac = 0
+          jFac = 0
         end if
       else
         write (*, '(A)') ' Error! JFAC should not be used, as constant photolysis rates have been provided.'
@@ -65,7 +72,9 @@ contains
   end subroutine calcJFac
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Take in z, the vector of concentrations of unconstrained species,
+  ! and add the concentrations of the constrained species. Return this
+  ! in vector x.
   subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcentrations, constrainedSpecs, x )
     use types_mod
     implicit none
@@ -103,20 +112,22 @@ contains
   end subroutine addConstrainedSpeciesToProbSpec
 
   ! ----------------------------------------------------------------- !
-  ! ???
-  subroutine removeConstrainedSpeciesFromProbSpec( y, constrainedSpecs, z )
+  ! Take in x, the vector of concentrations of all species, and remove
+  ! the concentrations of the constrained species. Return the remainder
+  ! in vector z.
+  subroutine removeConstrainedSpeciesFromProbSpec( x, constrainedSpecs, z )
     use types_mod
     implicit none
 
-    real(kind=DP), intent(in) :: y(:)
+    real(kind=DP), intent(in) :: x(:)
     integer(kind=NPI), intent(in) :: constrainedSpecs(:)
     real(kind=DP), intent(inout) :: z(*)
     integer(kind=NPI) :: zCounter, i, k
     logical :: speciesConstrained
 
     zCounter = 1
-    ! loop through y(), check if its items are in constrainedSpecs
-    do i = 1, size( y )
+    ! loop through x(), check if its items are in constrainedSpecs
+    do i = 1, size( x )
       speciesConstrained = .false.
       do k = 1, size( constrainedSpecs )
         if ( i == constrainedSpecs(k) ) then
@@ -127,7 +138,7 @@ contains
       end do
       ! if item is not in constrainedSpecs, then add species to z
       if ( speciesConstrained .eqv. .false. ) then
-        z(zCounter) = y(i)
+        z(zCounter) = x(i)
         zCounter = zCounter + 1
       end if
     end do
@@ -135,7 +146,11 @@ contains
   end subroutine removeConstrainedSpeciesFromProbSpec
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Return the values of all environment variables at time t, taking
+  ! into account whether each variable is constrained, fixed value,
+  ! calculated from a formula, or given a default value. Also take
+  ! into account that some quantities are dependent on others, so
+  ! enforce an order to the calculations.
   subroutine getEnvVarsAtT( t )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod

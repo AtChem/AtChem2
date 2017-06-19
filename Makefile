@@ -66,7 +66,7 @@ $(AOUT): $(SRCS)
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
-TESTS := short short_ext1 short_ext2 short_ext3 short_ext4 spec_yes_plus_fixed_env_no spec_no_env_yes1 spec_no_env_yes2 spec_yes_env_no spec_yes_env_no_with_photo spec_yes_env_no_with_jfac spec_yes_env_no_with_jfac_fail1 spec_yes_env_yes full
+TESTS := short short_ext1 short_ext2 short_ext3 short_ext4 spec_yes_plus_fixed_env_no spec_no_env_yes1 spec_no_env_yes2 spec_yes_env_no spec_yes_env_no_with_photo spec_yes_env_no_with_jfac spec_yes_env_no_with_jfac_fail1 spec_yes_env_no_with_jfac_fixed spec_yes_env_yes full
 
 test:
 	@echo "Make: performing 'make clean'."

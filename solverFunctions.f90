@@ -158,8 +158,6 @@ contains
     ro2 = ro2sum( y )
     dummy = y(1)
 
-    dec = -1e16
-
     call getEnvVarsAtT( t )
 
     do i = 1, size( envVarNames )

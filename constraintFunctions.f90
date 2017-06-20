@@ -246,6 +246,10 @@ contains
           end select
 
         case ( 2 ) ! CONSTRAINED
+          if ( this_env_var_name == 'ROOFOPEN') then
+            write (stderr,*) 'ROOFOPEN should not be constrained.'
+            stop
+          end if
           call getConstrainedQuantAtT( t, envVarX, envVarY, envVarNumberOfPoints(envVarNum), &
                                        getConditionsInterpMethod(), envVarNum, this_env_val )
 
@@ -273,8 +277,13 @@ contains
               this_env_val = -1.0_DP
             case ( 'DEC' )
               this_env_val = 0.41_DP
-            case ( 'JFAC', 'ROOFOPEN' )
+            case ( 'JFAC')
               this_env_val = 1.0_DP
+            case ( 'ROOFOPEN' )
+              if ( this_env_var_name == 'ROOFOPEN') then
+                write (stderr,*) 'ROOFOPEN should not be a default value.'
+                stop
+              end if
             case default
               write (stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
               stop

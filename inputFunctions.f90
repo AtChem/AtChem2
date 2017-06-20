@@ -693,10 +693,11 @@ contains
     use photolysis_rates_mod
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
-    use constraints_mod, only : maxNumberOfDataPoints
+    use constraints_mod, only : maxNumberOfPhotoDataPoints
     implicit none
 
     integer(kind=NPI) :: i, k
+    real(kind=DP) :: input1, input2
     integer(kind=IntErr) :: ierr
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
@@ -739,29 +740,38 @@ contains
         end if
       end do
     end do
-    ! Allocate array size for storage of photolysis constraint data
-    allocate (photoX (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate (photoY (numConPhotoRates, maxNumberOfDataPoints) )
-    allocate (photoNumberOfPoints(numConPhotoRates) )
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
 
     ! Read in photolysis data
+    maxNumberOfPhotoDataPoints = 0_NPI
     if ( numConPhotoRates > 0 ) then
       write (*, '(A)') ' Reading in constraint data for photolysis rates...'
       do i = 1, numConPhotoRates
         string = constrainedPhotoRates(i)
         write (*,*) string, '...'
         fileLocation = trim( fileLocationPrefix ) // trim( string )
+        maxNumberOfPhotoDataPoints = max( maxNumberOfPhotoDataPoints, count_lines_in_file( fileLocation ) )
+      end do
+    end if
+    ! Allocate array size for storage of photolysis constraint data
+    allocate (photoX (numConPhotoRates, maxNumberOfPhotoDataPoints) )
+    allocate (photoY (numConPhotoRates, maxNumberOfPhotoDataPoints) )
+    allocate (photoNumberOfPoints(numConPhotoRates) )
+    if ( numConPhotoRates > 0 ) then
+      do i = 1, numConPhotoRates
+        string = constrainedPhotoRates(i)
+        fileLocation = trim( fileLocationPrefix ) // trim( string )
         call inquire_or_abort( fileLocation, 'readPhotoRates()')
         photoNumberOfPoints(i) = count_lines_in_file( fileLocation )
-        if ( photoNumberOfPoints(i) > maxNumberOfDataPoints ) then
-          photoNumberOfPoints(i) = maxNumberOfDataPoints
-          write (*, '(A, I0, A)') ' Warning! Truncated constraint data to ', photoNumberOfPoints(i), ' points.'!
-        end if
         open (11, file=fileLocation, status='old')
-        do k = 1, photoNumberOfPoints(i)
-          read (11,*) photoX(i, k), photoY(i, k)
+        k = 0
+        read (11,*, iostat=ierr) input1, input2
+        do while ( ierr == 0 )
+          k = k + 1
+          photoX(i, k) = input1
+          photoY(i, k) = input2
+          read (11,*, iostat=ierr) input1, input2
         end do
         close (11, status='keep')
       end do

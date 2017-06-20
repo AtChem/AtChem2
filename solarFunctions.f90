@@ -1,7 +1,8 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE solarFunctions
 !
-! ??? Text describing the module ???
+! This module contains functions that calculate quantities related to
+! relative positions of the Earth and Sun.
 ! ******************************************************************** !
 module solarFunctions_mod
 contains

@@ -607,7 +607,7 @@ contains
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
 
-        write (*, '(2A)') ' Reading constraint data for', trim( envVarNames(i) )
+        write (*, '(2A)') ' Reading constraint data for ', trim( envVarNames(i) )
 
         fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
         call inquire_or_abort( fileLocation, 'readEnvVar()')

@@ -122,9 +122,9 @@
  Finished reading environment variables.
 
  Checking for constrained environment variables...
- Reading constraint data forTEMP
+ Reading constraint data for TEMP
  Finished reading constraint data.
- Reading constraint data forPRESS
+ Reading constraint data for PRESS
  Finished reading constraint data.
  Finished checking for constrained environment variables.
 

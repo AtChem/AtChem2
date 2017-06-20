@@ -1,7 +1,7 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE interpolationFunctions
 !
-! ??? Text describing the module ???
+! This module contains just the getConstrainedQuantAtT() method.
 ! ******************************************************************** !
 module interpolationFunctions_mod
 contains

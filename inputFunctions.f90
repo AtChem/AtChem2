@@ -491,7 +491,7 @@ contains
     implicit none
 
     integer(kind=NPI) :: k, j
-    integer(kind=SI) :: counter, i
+    integer(kind=SI) :: i
     integer(kind=IntErr) :: ierr
     real(kind=DP) :: input1, input2
     character(len=10) :: dummy
@@ -501,10 +501,10 @@ contains
     write (*, '(A)') ' Reading environment variables...'
 
     ! Count number of environment variables by reading in lines from
-    ! file
-    counter = int( count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' ), SI )
-
-    numEnvVars = counter
+    ! file, and then adding 1 to account for M, which should be omitted
+    ! from the config file since it is always calculated from temperature
+    ! and pressure
+    numEnvVars = int( count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
 
     ! Allocate storage for current values of env vars used for output
     allocate (currentEnvVarValues(numEnvVars) )
@@ -513,11 +513,15 @@ contains
     allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
     allocate (envVarFixedValues(numEnvVars) )
 
+    envVarNames(1) = 'M'
+    envVarTypes(1) = 'CALC'
+    envVarTypesNum(1) = 1_SI
+
     fileLocation = trim( param_dir ) // '/environmentVariables.config'
     call inquire_or_abort( fileLocation, 'readEnvVar()')
     open (10, file=fileLocation, status='old') ! input file
-    ! Read in environment variables - if
-    do i = 1_SI, numEnvVars
+    ! Read in environment variables
+    do i = 2_SI, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
 
@@ -564,7 +568,7 @@ contains
             write (stderr,*) 'readEnvVar(): Invalid option given to ROOFOPEN in environmentVariables.config.'
             stop
           end if
-        case ('TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'DEC')
+        case ('TEMP', 'RH', 'H2O', 'PRESS', 'BLHEIGHT', 'DILUTE', 'DEC')
           select case ( trim( envVarTypes(i) ) )
             case ('CALC')
               envVarTypesNum(i) = 1_SI

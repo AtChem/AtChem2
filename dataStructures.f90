@@ -359,10 +359,10 @@ module interpolation_method_mod
   implicit none
   save
 
-  public :: getSpeciesInterpMethod, getConditionsInterpMethod, getDecInterpMethod
-  public :: setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
+  public :: getSpeciesInterpMethod, getConditionsInterpMethod
+  public :: setSpeciesInterpMethod, setConditionsInterpMethod
 
-  integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod, decInterpMethod
+  integer(kind=SI), private :: speciesInterpMethod, conditionsInterpMethod
 
 contains
 
@@ -389,18 +389,6 @@ contains
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
-
-  pure function getDecInterpMethod() result ( n )
-    implicit none
-    integer(kind=SI) :: n
-    n = decInterpMethod
-  end function getDecInterpMethod
-
-  subroutine setDecInterpMethod( n )
-    implicit none
-    integer(kind=SI) :: n
-    decInterpMethod = n
-  end subroutine setDecInterpMethod
 
 end module interpolation_method_mod
 

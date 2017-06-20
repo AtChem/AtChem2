@@ -1,7 +1,8 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE inputFunctions
 !
-! ??? Text describing the module ???
+! This module contains functions controlling the reading of data from
+! external files, apart from model.parameters and solver.parameters
 ! ******************************************************************** !
 module inputFunctions_mod
 contains
@@ -50,7 +51,8 @@ contains
   end subroutine get_and_set_directories_from_command_arguments
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Read the top line of mechanism.reac to get the number of species
+  ! and number of reactions in the system
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
     use directories_mod, only : param_dir
@@ -145,7 +147,7 @@ contains
   end subroutine readReactions
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Read in all species names and numbers from mechanism.species
   function readSpecies() result ( speciesName )
     use types_mod
     use directories_mod, only : param_dir
@@ -236,7 +238,8 @@ contains
   end subroutine readAndSetInitialConcentrations
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Set the concentrations of all species - default to 0.0_DP.
+  ! Called in readAndSetInitialConcentrations()
   subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputConcentrations )
     use types_mod
     use storage_mod, only : maxSpecLength
@@ -626,7 +629,7 @@ contains
   end subroutine readEnvVar
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Read concentrationOutput.config to get species of interest
   function readSpeciesOfInterest() result ( r )
     use types_mod
     use species_mod, only : getNumberOfSpecies
@@ -669,7 +672,8 @@ contains
   end function readSpeciesOfInterest
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Read photolysis rates from file, either by (a) constant values,
+  ! (b) non-constant fixed values, or (c) calculation from equation.
   subroutine readPhotoRates()
     use types_mod
     use photolysis_rates_mod
@@ -754,7 +758,8 @@ contains
   end subroutine readPhotoRates
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Read constraint data for all constrained species from file, either
+  ! (a) constant values, or (b) non-constant fixed values.
   subroutine readSpeciesConstraints( t, y )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -930,7 +935,8 @@ contains
   end subroutine readSpeciesConstraints
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Given a filename, count the number of lines. Optional argument
+  ! skip_first_line_in ignores the first line if it exists.
   function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
     use types_mod
     implicit none
@@ -967,7 +973,9 @@ contains
   end function count_lines_in_file
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! REad in from filename and fille output_vector with the contents of
+  ! the first column of the input. Optional argument skip_first_line_in
+  ! ignores the first line if it exists.
   subroutine read_in_single_column_string_file( filename, output_vector, skip_first_line_in )
     use types_mod
     use storage_mod, only : maxSpecLength
@@ -1005,7 +1013,8 @@ contains
   end subroutine read_in_single_column_string_file
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Inquire whether the file exists. If it doesn't abort, and print a
+  ! message showing the calling subroutine's name.
   subroutine inquire_or_abort( filename, calling_subroutine )
     implicit none
 

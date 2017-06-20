@@ -24,7 +24,7 @@ function test_output_text {
 
 function test_output_file {
   # numdiff with relative tolerance given by -r argument
-  numdiff -a 1.e-20 -r 5.0e-06 $1 $2
+  numdiff -a 1.e-12 -r 5.0e-06 $1 $2
 }
 
 function find_string {
@@ -177,9 +177,9 @@ $this_file_failures"
 
   # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/*.output; do
+  for filename in $TESTS_DIR/$test/*.output.cmp; do
     echo 'Checking' $filename
-    this_file_failures=$(test_output_file $filename $filename.cmp)
+    this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
     exitcode=$?
     if [ $exitcode -eq 0 ]; then
       continue
@@ -197,9 +197,11 @@ $this_file_failures"
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/instantaneousRates/* ; do
-    if [ ${filename: -4} != ".cmp" ] ; then
+    # guard against empty filelist
+    #[ -e "$filename" ] || continue
+    if [ ${filename: -4} == ".cmp" ] ; then
       echo 'Checking' $filename
-      this_file_failures=$(test_output_file $filename $filename.cmp)
+      this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then
         continue

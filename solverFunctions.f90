@@ -1,13 +1,14 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE solverFunctions
 !
-! ??? Text describing the module ???
+! This module contains functions that are used in the main solver,
+! and manipulate the rate information towards solving the system.
 ! ******************************************************************** !
 module solverFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Calculates the system residual
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
     use reaction_rates_mod

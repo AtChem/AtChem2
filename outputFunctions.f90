@@ -1,13 +1,13 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE outputFunctions
 !
-! ??? Text describing the module ???
+! This module contains functions that control output to file.
 ! ******************************************************************** !
 module outputFunctions_mod
 contains
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Returns the sum of all ro2 species' concentrations
   pure function ro2Sum( y ) result ( ro2 )
     use types_mod
     implicit none
@@ -21,7 +21,7 @@ contains
   end function ro2Sum
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write each environment variable to file
   subroutine outputEnvVar( t )
     use types_mod
     use env_vars_mod
@@ -44,7 +44,7 @@ contains
   end subroutine outputEnvVar
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write parameters output by CVODE solver to file
   subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -86,7 +86,7 @@ contains
   end subroutine outputSolverParameters
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write parameters used in calculation of photolysis rates to file.
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
     use zenith_data_mod
@@ -106,7 +106,7 @@ contains
   end subroutine outputPhotoRateCalcParameters
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
     use photolysis_rates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
@@ -189,7 +189,7 @@ contains
   end function getReaction
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write production and loss rates to file.
   subroutine outputRates( r, arrayLen, t, p, flag )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -247,7 +247,7 @@ contains
   end subroutine outputRates
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Write instantaneous rates to file.
   subroutine outputInstantaneousRates( time )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod

@@ -6,7 +6,7 @@
 10000			maximum number of data points in constraint files
 3600			rates output step size
 0			model start time (seconds)
-108000			jacobian output step size
+0			jacobian output step size
 51.51			latitude
 0.13			longitude
 21			day

@@ -68,10 +68,10 @@
                    conditions interpolation method: piecewise linear 
                           dec interpolation method: piecewise linear 
   maximum number of data points in constraint file:          50
-                               ratesOutputStepSize:        3600
-              instantaneous rates output step size:        3600
+                               ratesOutputStepSize:         400
+              instantaneous rates output step size:         400
                                     modelStartTime:       36000
-                            jacobianOutputStepSize:      108000
+                            jacobianOutputStepSize:           0
                                           latitude:   0.530E+02
                                          longitude:  -0.100E+01
                                     day/month/year:   1/ 7/2007

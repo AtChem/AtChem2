@@ -71,7 +71,7 @@
                                ratesOutputStepSize:         600
               instantaneous rates output step size:         300
                                     modelStartTime:       43200
-                            jacobianOutputStepSize:      108000
+                            jacobianOutputStepSize:           0
                                           latitude:   0.492E+02
                                          longitude:  -0.210E+01
                                     day/month/year:  25/ 2/2010

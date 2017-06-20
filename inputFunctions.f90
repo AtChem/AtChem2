@@ -521,51 +521,67 @@ contains
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
 
-      if ( trim( envVarNames(i) ) /= 'JFAC' ) then
-        select case ( trim( envVarTypes(i) ) )
-          case ('CALC')
-            envVarTypesNum(i) = 1_SI
-          case ('CONSTRAINED')
-            envVarTypesNum(i) = 2_SI
-          case ('NOTUSED')
-            envVarTypesNum(i) = 4_SI
-          case default
-            envVarTypesNum(i) = 3_SI
-            ! Copy 3rd column value to envVarFixedValues(i)
-            read (envVarTypes(i),*) envVarFixedValues(i)
-        end select
-      else
-        ! JFAC gets special treatment so that we can pass in the name
-        ! of the JFAC species to environmentVariables.config if we're
-        ! calculating JFAC on the fly.
-        select case ( trim( envVarTypes(i) ) )
-          case ('CONSTRAINED')
-            ! We now expect a file JFAC in environmentConstraints directory
-            envVarTypesNum(i) = 2_SI
-          case ('NOTUSED')
-            ! JFAC should be set to its default value of 1 everywhere
-            envVarTypesNum(i) = 4_SI
-          case default
-            ! Firstly treat as a species: 'CALC' equivalent.
-            ! Set to the value given, and then check that the
-            ! relevant line exists in the photolysis rate file.
-            envVarTypesNum(i) = 1_SI
-            jFacSpecies = trim( envVarTypes(i) )
-            ! Get line number for the JFac base species:
-            jFacSpeciesLine = 0_NPI
-            do j = 1_NPI, nrOfPhotoRates
-              if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
-                jFacSpeciesLine = j
+      select case ( trim( envVarNames(i) ) )
+        case ('JFAC')
+          ! JFAC gets special treatment so that we can pass in the name
+          ! of the JFAC species to environmentVariables.config if we're
+          ! calculating JFAC on the fly.
+          select case ( trim( envVarTypes(i) ) )
+            case ('CONSTRAINED')
+              ! We now expect a file JFAC in environmentConstraints directory
+              envVarTypesNum(i) = 2_SI
+            case ('NOTUSED')
+              ! JFAC should be set to its default value of 1 everywhere
+              envVarTypesNum(i) = 4_SI
+            case default
+              ! Firstly treat as a species: 'CALC' equivalent.
+              ! Set to the value given, and then check that the
+              ! relevant line exists in the photolysis rate file.
+              envVarTypesNum(i) = 1_SI
+              jFacSpecies = trim( envVarTypes(i) )
+              ! Get line number for the JFac base species:
+              jFacSpeciesLine = 0_NPI
+              do j = 1_NPI, nrOfPhotoRates
+                if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
+                  jFacSpeciesLine = j
+                end if
+              end do
+              ! If it's not a valid photolysis rate then treat as a fixed number
+              if ( jFacSpeciesLine == 0_NPI ) then
+                jFacSpecies = ''
+                envVarTypesNum(i) = 3_SI
+                read (envVarTypes(i),*) envVarFixedValues(i)
               end if
-            end do
-            ! If it's not a valid photolysis rate then treat as a fixed number
-            if ( jFacSpeciesLine == 0_NPI ) then
-              jFacSpecies = ''
+          end select
+        case ('ROOFOPEN')
+          if ( trim( envVarTypes(i) ) == 'ON' ) then
+            envVarTypesNum(i) = 3_SI
+            envVarFixedValues(i) = 1.0_DP
+          else if ( trim( envVarTypes(i) ) == 'OFF' ) then
+            envVarTypesNum(i) = 3_SI
+            envVarFixedValues(i) = 0.0_DP
+          else
+            write (stderr,*) 'readEnvVar(): Invalid option given to ROOFOPEN in environmentVariables.config.'
+            stop
+          end if
+        case ('TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'DEC')
+          select case ( trim( envVarTypes(i) ) )
+            case ('CALC')
+              envVarTypesNum(i) = 1_SI
+            case ('CONSTRAINED')
+              envVarTypesNum(i) = 2_SI
+            case ('NOTUSED')
+              envVarTypesNum(i) = 4_SI
+            case default
               envVarTypesNum(i) = 3_SI
+              ! Copy 3rd column value to envVarFixedValues(i)
               read (envVarTypes(i),*) envVarFixedValues(i)
-            end if
-        end select
-      end if
+          end select
+        case default
+          write (stderr,*) 'readEnvVar(): Invalid environment variable ', trim( envVarNames(i) ), &
+                           ' given in environmentVariables.config.'
+          stop
+      end select
     end do
     close (10, status='keep')
 

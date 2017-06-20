@@ -114,7 +114,7 @@
  7      BLHEIGHT              NOTUSED
  8      DILUTE                NOTUSED
  9      JFAC                  NOTUSED
- 10     ROOFOPEN                    0
+ 10     ROOFOPEN                  OFF
  Finished reading environment variables.
 
  Checking for constrained environment variables...

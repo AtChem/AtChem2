@@ -1,7 +1,8 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE configFunctions
 !
-! ??? Text describing the module ???
+! This module contains helper functions that query lists in various ways
+! in order to extract the required species etc based on some criterion.
 ! ******************************************************************** !
 module configFunctions_mod
 contains
@@ -65,14 +66,16 @@ contains
   end function getIndexWithinList
 
   ! ----------------------------------------------------------------- !
-  ! ???
+  ! Fill the second (and later) column(s) of each row of r with the
+  ! numbers of the reactions in which it is present in chs. Used
+  ! arrayLen to keep track of how many are present in each row.
   subroutine findReactionsWithProductOrReactant( r, chs, arrayLen )
     use types_mod
     implicit none
 
+    integer(kind=NPI), intent(inout) :: r(:,:)
     integer(kind=NPI), intent(in) :: chs(:,:)
     integer(kind=NPI), intent(out) :: arrayLen(:)
-    integer(kind=NPI), intent(inout) :: r(:,:)
     integer(kind=NPI) :: rCounter, i, j
 
     ! For each interesting species, held in the first element of each

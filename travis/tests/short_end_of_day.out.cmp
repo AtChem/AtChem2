@@ -30,12 +30,12 @@
  Species of interest
 ---------------------
  Reading products of interest...
-      1 OH        
+      1 OH
  Finished reading products of interest.
  products of interest (number of species found): 1
 
  Reading reactants of interest...
-      1 HO2       
+      1 HO2
  Finished reading reactants of interest.
  reactants of interest (number of species found): 1
 
@@ -50,7 +50,7 @@
          maxStep:   1.000E+02
  preconBandUpper:         750
  preconBandLower:         750
-      solverType: SPGMR + Banded Preconditioner 
+      solverType: SPGMR + Banded Preconditioner
  ------------------
 
  Finished reading solver parameters from file.
@@ -61,9 +61,8 @@
  -----------------
                                    number of steps:          10
                                step size (seconds):   0.300E+03
-                      species interpolation method: piecewise linear 
-                   conditions interpolation method: piecewise linear 
-                          dec interpolation method: piecewise linear 
+                      species interpolation method: piecewise linear
+                   conditions interpolation method: piecewise linear
   maximum number of data points in constraint file:       10000
                                ratesOutputStepSize:         600
               instantaneous rates output step size:         300
@@ -82,7 +81,7 @@
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 1 species:
-      1 O3        
+      1 O3
 
 ------------
  Photolysis

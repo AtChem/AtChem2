@@ -1,7 +1,9 @@
 ! ******************************************************************** !
 ! ATCHEM -- MODULE atmosphereFunctions
 !
-! ??? Text describing the module ???
+! This module contains functions responsible for calculating quantities
+! relevant to the atmosphere: specifically, the air density, O2 and N2
+! density, and convert from RH to H2O.
 ! ******************************************************************** !
 module atmosphereFunctions_mod
 contains

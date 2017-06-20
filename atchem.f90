@@ -60,11 +60,10 @@ PROGRAM ATCHEM
   character(len=400) :: fmt
 
   ! *****************************************************************
-  ! ???
+  ! Explicit declaration of FCVFUN() interface, which is a
+  ! user-supplied function to CVODE.
   interface
 
-    ! -----------------------------------------------------------------
-    ! ???
     subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species_mod

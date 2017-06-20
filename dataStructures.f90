@@ -201,7 +201,7 @@ module constraints_mod
   real(kind=DP), allocatable :: constrainedConcs(:)
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
-  integer(kind=NPI) :: maxNumberOfDataPoints
+  integer(kind=NPI) :: maxNumberOfDataPoints, maxNumberOfEnvVarDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
 contains

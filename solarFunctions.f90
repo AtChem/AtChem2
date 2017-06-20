@@ -12,7 +12,7 @@ contains
   ! (Environmental UV Photobiology, 1993).
   subroutine calcTheta( t )
     use types_mod
-    use date_mod, only : year, dayOfYear
+    use date_mod, only : currentYear, currentDayOfYear
     use zenith_data_mod
     implicit none
 
@@ -22,10 +22,10 @@ contains
     pi = 4.0_DP * atan( 1.0_DP )
 
     ! Time as day of year and fractional seconds of day
-    currentFracDay = dayOfYear + ( t / 86400.0_DP )
+    currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
 
     ! The day angle is
-    if ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) ) then
+    if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
       ! leap year
       theta = 2.0_DP * pi * floor(currentFracDay) / 366.0_DP
     else
@@ -69,7 +69,7 @@ contains
   ! Photobiology, 1993).
   subroutine calcZenith( t, dec )
     use types_mod
-    use date_mod, only : dayOfYear
+    use date_mod, only : currentDayOfYear
     use zenith_data_mod
     implicit none
 
@@ -91,7 +91,7 @@ contains
 
     ! The local hour angle is the angle between the observer's meridian
     ! and the Sun's meridian. Time must be in GMT/UTC and longitude in degrees.
-    currentFracDay = dayOfYear + ( t / 86400.0_DP )
+    currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
     currentFracHour =  (currentFracDay - floor(currentFracDay)) * 24.0_DP
     lha = pi * ((currentFracHour / 12.0_DP) - (1.0_DP + longitude / 180.0_DP)) + eqtime
 

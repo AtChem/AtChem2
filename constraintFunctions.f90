@@ -273,7 +273,7 @@ contains
               this_env_val = 3.91d+17
             case ( 'PRESS' )
               this_env_val = 1013.25_DP
-            case ( 'BLHEIGHT', 'RH', 'DILUTE', 'M' )
+            case ( 'BLHEIGHT', 'RH', 'DILUTE' )
               this_env_val = -1.0_DP
             case ( 'DEC' )
               this_env_val = 0.41_DP

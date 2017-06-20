@@ -107,16 +107,15 @@
 -----------------------
  Reading environment variables...
  Number of environment variables: 10
- 1      M                        CALC
- 2      TEMP               281.95e+00
- 3      PRESS                    1013
- 4      RH                    NOTUSED
+ 1      TEMP               281.95e+00
+ 2      PRESS                    1013
+ 3      RH                    NOTUSED
  5      H2O                  3.06e+17
- 6      DEC            0.28782328e+00
- 7      BLHEIGHT              NOTUSED
- 8      DILUTE                6.77E-6
- 9      JFAC                  NOTUSED
- 10     ROOFOPEN                   ON
+ 5      DEC            0.28782328e+00
+ 6      BLHEIGHT              NOTUSED
+ 7      DILUTE                6.77E-6
+ 8      JFAC                  NOTUSED
+ 9      ROOFOPEN                   ON
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -171,5 +170,5 @@
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 8
+ Runtime = 7
  Deallocating memory.

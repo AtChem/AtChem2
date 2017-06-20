@@ -488,7 +488,7 @@ contains
     use types_mod
     use env_vars_mod
     use directories_mod, only : param_dir, env_constraints_dir
-    use constraints_mod, only : maxNumberOfDataPoints
+    use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, nrOfPhotoRates, photoRateNames
     implicit none
@@ -595,15 +595,25 @@ contains
     write (*, '(A)') ' Finished reading environment variables.'
     write (*,*)
 
-    ! Allocate variables for next section
-    allocate (envVarX(numEnvVars, maxNumberOfDataPoints))
-    allocate (envVarY(numEnvVars, maxNumberOfDataPoints))
-    allocate (envVarNumberOfPoints(numEnvVars))
-
     ! TODO: convert this to a command line input argument
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
     ! If environment variable is constrained, read in constraint data
     write (*, '(A)') ' Checking for constrained environment variables...'
+    maxNumberOfEnvVarDataPoints = 0_NPI
+    do i = 1, numEnvVars
+      if ( envVarTypes(i) == 'CONSTRAINED' ) then
+
+        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        call inquire_or_abort( fileLocation, 'readEnvVar()')
+        maxNumberOfEnvVarDataPoints = max( maxNumberOfEnvVarDataPoints, count_lines_in_file( fileLocation ) )
+      end if
+    end do
+
+    ! Allocate variables for next section
+    allocate (envVarX(numEnvVars, maxNumberOfEnvVarDataPoints))
+    allocate (envVarY(numEnvVars, maxNumberOfEnvVarDataPoints))
+    allocate (envVarNumberOfPoints(numEnvVars))
+
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
 

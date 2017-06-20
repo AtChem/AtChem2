@@ -1,13 +1,14 @@
 ! ******************************************************************** !
-! ATCHEM -- MODULE dataStructures file
+! ATCHEM -- dataStructures file
 !
-! ??? Text describing the content of the module ???
+! This file contains numerous modules that hold logically separate
+! variables and functions
 ! ******************************************************************** !
 
 
 ! ******************************************************************** !
 ! MODULE types_mod
-! ???
+! Defines the integer and real data types available to the progrem.
 ! ******************************************************************** !
 module types_mod
   use, intrinsic :: iso_fortran_env
@@ -30,7 +31,7 @@ end module types_mod
 
 ! ******************************************************************** !
 ! MODULE storage_mod
-! ???
+! Defines the maximum length of different string types
 ! ******************************************************************** !
 module storage_mod
   use types_mod
@@ -48,7 +49,7 @@ end module storage_mod
 
 ! ******************************************************************** !
 ! MODULE directories_mod
-! ???
+! Holds the locations of relevant input and output directories
 ! ******************************************************************** !
 module directories_mod
   use storage_mod, only : maxFilepathLength
@@ -62,7 +63,11 @@ end module directories_mod
 
 ! ******************************************************************** !
 ! MODULE date_mod
-! date variables - date used for calculation of DEC
+! Holds variables defining the start time and date of the simulation
+! and the current time and date in the simulation -  used for
+! calculation of solar functions and photolysis rates.
+! Also contains functions to set the initial time and date parameters
+! and convert the current time into a date/time format.
 ! ******************************************************************** !
 module date_mod
   use types_mod
@@ -79,7 +84,7 @@ module date_mod
 contains
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! Set startDayOfYear from startDay, startMonth, and startYear
   subroutine calcInitialDateParameters()
     implicit none
 
@@ -99,6 +104,9 @@ contains
     return
   end subroutine calcInitialDateParameters
 
+  ! -----------------------------------------------------------------
+  ! Set currentMonth, currentDayOfMonth, currentYear and
+  ! currentDayOfYear from the start date/time and the current time
   subroutine calcCurrentDateParameters( t )
     implicit none
 
@@ -154,7 +162,7 @@ end module date_mod
 
 ! ******************************************************************** !
 ! MODULE env_vars_mod
-! ???
+! Holds variable controlling the environment variables and related data
 ! ******************************************************************** !
 module env_vars_mod
   use types_mod
@@ -175,7 +183,7 @@ end module env_vars_mod
 
 ! ******************************************************************** !
 ! MODULE constraints_mod
-! ???
+! Holds variable controlling the species constraints and related data
 ! ******************************************************************** !
 module constraints_mod
   use types_mod
@@ -201,8 +209,6 @@ contains
   ! *****************************************************************
   ! Methods for numberOfConstrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getNumberOfConstrainedSpecies() result ( n )
     implicit none
     integer(kind=NPI) :: n
@@ -210,7 +216,7 @@ contains
   end function getNumberOfConstrainedSpecies
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! Also allocate constrainedConcs and constrainedSpecies.
   subroutine setNumberOfConstrainedSpecies( n )
     implicit none
     integer(kind=NPI) :: n
@@ -222,24 +228,18 @@ contains
   ! *****************************************************************
   ! Methods for constrainedConcs
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getConstrainedConcs() result ( r )
     implicit none
     real(kind=DP) :: r(numberOfConstrainedSpecies)
     r = constrainedConcs(:)
   end function getConstrainedConcs
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setConstrainedConcs( r )
     implicit none
     real(kind=DP) :: r(:)
     constrainedConcs(:) = r(:)
   end subroutine setConstrainedConcs
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine deallocateConstrainedConcs()
     implicit none
     deallocate (constrainedConcs)
@@ -248,8 +248,6 @@ contains
   ! *****************************************************************
   ! Methods for constrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getConstrainedSpecies() result ( r )
     implicit none
     integer(kind=NPI) :: r(numberOfConstrainedSpecies)
@@ -257,7 +255,7 @@ contains
   end function getConstrainedSpecies
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! Query the contrained species list for the given index
   pure function getOneConstrainedSpecies( i ) result ( r )
     implicit none
     integer(kind=NPI), intent(in) :: i
@@ -265,16 +263,12 @@ contains
     r = constrainedSpecies(i)
   end function getOneConstrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setConstrainedSpecies( n, r )
     implicit none
     integer(kind=NPI) :: n, r
     constrainedSpecies(n) = r
   end subroutine setConstrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine deallocateConstrainedSpecies()
     implicit none
     deallocate (constrainedSpecies)
@@ -284,7 +278,8 @@ end module constraints_mod
 
 ! ******************************************************************** !
 ! MODULE species_mod
-! ???
+! Holds variables and functions to control the the problem in terms of
+! the names/numbers of species and reactions
 ! ******************************************************************** !
 module species_mod
   use types_mod
@@ -302,8 +297,6 @@ module species_mod
 
 contains
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getNumberOfSpecies() result ( n )
     implicit none
     integer(kind=NPI) :: n
@@ -311,7 +304,7 @@ contains
   end function getNumberOfSpecies
 
   ! -----------------------------------------------------------------
-  ! ???
+  ! Also allocate speciesList
   subroutine setNumberOfSpecies( n )
     implicit none
     integer(kind=NPI) :: n
@@ -319,31 +312,23 @@ contains
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getNumberOfReactions() result ( n )
     implicit none
     integer(kind=NPI) :: n
     n = numReactions
   end function getNumberOfReactions
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setNumberOfReactions( n )
     implicit none
     integer(kind=NPI) :: n
     numReactions = n
   end subroutine setNumberOfReactions
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine deallocateSpeciesList
     implicit none
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getSpeciesList() result ( sl )
     implicit none
     character(len=maxSpecLength), allocatable :: sl(:)
@@ -354,8 +339,6 @@ contains
     end do
   end function getSpeciesList
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setSpeciesList( sl )
     implicit none
     character(len=maxSpecLength) :: sl(:)
@@ -369,7 +352,7 @@ end module species_mod
 
 ! ******************************************************************** !
 ! MODULE interpolation_method_mod
-! interpolation methods
+! get and set interpolation methods
 ! ******************************************************************** !
 module interpolation_method_mod
   use types_mod
@@ -383,48 +366,36 @@ module interpolation_method_mod
 
 contains
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getSpeciesInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = speciesInterpMethod
   end function getSpeciesInterpMethod
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setSpeciesInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getConditionsInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = conditionsInterpMethod
   end function getConditionsInterpMethod
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setConditionsInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
 
-  ! -----------------------------------------------------------------
-  ! ???
   pure function getDecInterpMethod() result ( n )
     implicit none
     integer(kind=SI) :: n
     n = decInterpMethod
   end function getDecInterpMethod
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine setDecInterpMethod( n )
     implicit none
     integer(kind=SI) :: n
@@ -435,7 +406,7 @@ end module interpolation_method_mod
 
 ! ******************************************************************** !
 ! MODULE reaction_structure_mod
-! ???
+! Arrays containing the encoded reactions
 ! ******************************************************************** !
 module reaction_structure_mod
   use types_mod
@@ -449,7 +420,7 @@ end module reaction_structure_mod
 
 ! ******************************************************************** !
 ! MODULE photolysis_rates_mod
-! photolysis rates method
+! Controls many aspects of the photolysis rates.
 ! ******************************************************************** !
 module photolysis_rates_mod
   use types_mod
@@ -473,16 +444,12 @@ module photolysis_rates_mod
 
 contains
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
     allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine allocate_photolysis_rates_variables()
     implicit none
 
@@ -490,8 +457,6 @@ contains
     allocate (cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates))
   end subroutine allocate_photolysis_rates_variables
 
-  ! -----------------------------------------------------------------
-  ! ???
   subroutine allocate_photolysis_j()
     implicit none
 
@@ -514,6 +479,7 @@ module zenith_data_mod
   real(kind=DP) :: lha, sinld, cosld, cosx, secx
   real(kind=DP) :: theta, eqtime
   real(kind=DP), parameter :: cosx_limit = 1.0d-30
+  ! infty_secx contains whether or not cosx is currently below cosx_limit
   logical :: infty_secx = .false.
 
 end module zenith_data_mod

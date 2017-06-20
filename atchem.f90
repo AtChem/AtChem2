@@ -209,12 +209,13 @@ PROGRAM ATCHEM
   call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
   write (*,*)
 
-  ! Set the parameters of MODULE date_mod to their value based on day,
-  ! month, year
-  call calcDateParameters()
+  ! Set the parameters of MODULE date_mod to their value based on
+  ! startDay, startMonth, startYear
+  call calcInitialDateParameters()
 
   ! Hard coded solver parameters
   t = modelStartTime
+  call calcCurrentDateParameters( t )
   tout = timestepSize + t
   ! Parameters for FCVMALLOC(). (Comments from cvode guide) meth
   ! specifies the basic integration: 1 for Adams (nonstiff) or 2 for
@@ -377,6 +378,8 @@ PROGRAM ATCHEM
   elapsed = int( t - modelStartTime )
 
   do while ( currentNumTimestep < maxNumTimesteps )
+
+    call calcCurrentDateParameters( t )
 
     call outputPhotoRateCalcParameters( t )
 

@@ -121,7 +121,7 @@ contains
     use types_mod
     use constraints_mod, only : maxNumberOfDataPoints
     use zenith_data_mod, only : latitude, longitude
-    use date_mod, only : day, month, year
+    use date_mod, only : startDay, startMonth, startYear
     use interpolation_method_mod, only : setSpeciesInterpMethod, setConditionsInterpMethod, setDecInterpMethod
     implicit none
 
@@ -170,9 +170,9 @@ contains
     latitude = input_parameters(10)
     longitude = input_parameters(11)
     ! Member variables of module date_mod
-    day = nint( input_parameters(12), SI )
-    month = nint( input_parameters(13), SI )
-    year = nint( input_parameters(14), DI )
+    startDay = nint( input_parameters(12), SI )
+    startMonth = nint( input_parameters(13), SI )
+    startYear = nint( input_parameters(14), DI )
     ! Frequency at which to output instantaneous rates
     irOutStepSize = nint( input_parameters(15), QI )
 
@@ -197,7 +197,7 @@ contains
     write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
     write (*, 300) 'latitude: ', latitude
     write (*, 300) 'longitude: ', longitude
-    write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', day, '/', month, '/', year
+    write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', startDay, '/', startMonth, '/', startYear
     write (*, '(A)') ' -----------------'
     write (*,*)
     write (*, '(A)') ' Finished reading model parameters from file.'

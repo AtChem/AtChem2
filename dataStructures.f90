@@ -69,14 +69,18 @@ module date_mod
   implicit none
   save
 
-  integer(kind=DI) :: day, month
-  integer(kind=DI) :: year, dayOfYear
+  integer(kind=DI) :: startDay, startMonth
+  integer(kind=DI) :: startYear, startDayOfYear
+  integer(kind=QI) :: secondsToEndOfStartDay
+
+  integer(kind=DI) :: currentMonth, currentDayOfMonth
+  integer(kind=DI) :: currentYear, currentDayOfYear
 
 contains
 
   ! -----------------------------------------------------------------
   ! ???
-  subroutine calcDateParameters()
+  subroutine calcInitialDateParameters()
     implicit none
 
     integer(kind=DI) :: monthList(12)
@@ -84,16 +88,67 @@ contains
     ! Number of days in each month; year is set in model.parameters.
     monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
     ! Alter February length if a leap year
-    if ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) ) then
+    if ( (mod(startYear, 4_DI)==0 .and. .not. mod(startYear, 100_DI)==0) .or. (mod(startYear, 400_DI)==0) ) then
       monthList(2) = 28_DI
     end if
 
     ! Day of year; day and month are set in model.parameters.
     ! January 1 = 0, January 2 = 1, etc...
-    dayOfYear = sum( monthList(1:month - 1_DI) ) + day - 1_DI
+    startDayOfYear = sum( monthList(1:startMonth - 1_DI) ) + startDay - 1_DI
 
     return
-  end subroutine calcDateParameters
+  end subroutine calcInitialDateParameters
+
+  subroutine calcCurrentDateParameters( t )
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    integer(kind=DI) :: monthList(12)
+    integer(kind=QI) :: completedDays, countingDays
+
+    ! Calculate how many days have elapsed since the beginning of startDay
+    completedDays = int( t / ( 24 * 60 * 60 ) )
+    currentMonth = startMonth
+    currentDayOfMonth = startDay
+    currentYear = startYear
+    monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+    ! Alter February length if a leap year
+    if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
+      monthList(2) = 28_DI
+    end if
+    ! Count through the days - tick over into next month and year as appropriate
+    if ( completedDays > 0 ) then
+      countingDays = completedDays
+
+      do while ( countingDays > 0 )
+        ! Check whether this year is a leap year, and reset current month list as appropriate
+        monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+        ! Alter February length if a leap year
+        if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
+          monthList(2) = 28_DI
+        end if
+        ! Increment day of the month
+        currentDayOfMonth = currentDayOfMonth + 1_DI
+        ! If incrementing causes us to tick over into the next month, then update
+        ! the month and reset the currentDayOfMonth counter
+        if ( currentDayOfMonth > monthList(currentMonth) ) then
+          currentMonth = currentMonth + 1_DI
+          currentDayOfMonth = 1_DI
+          ! If incrementing the month causes us to tick into the next year, then
+          ! update the year and reset the currentMonth counter
+          if ( currentMonth > 12_DI ) then
+            currentYear = currentYear + 1_DI
+            currentMonth = 1_DI
+          end if
+        end if
+
+        ! decrease countingDays by one
+        countingDays = countingDays - 1_QI
+      end do
+    end if
+    currentDayOfYear = sum( monthList(1:currentMonth - 1_DI) ) + currentDayOfMonth - 1_DI
+    return
+  end subroutine calcCurrentDateParameters
 
 end module date_mod
 

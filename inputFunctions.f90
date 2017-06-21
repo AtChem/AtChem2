@@ -716,13 +716,14 @@ contains
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
     call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoRates()')
+    numConPhotoRates = count_lines_in_file( trim( param_dir ) // '/constrainedPhotoRates.config' )
+    allocate ( constrainedPhotoRates(numConPhotoRates), constrainedPhotoRatesNumbers(numConPhotoRates) )
     open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
-    do i = 1, maxNrOfConPhotoRates
+    do i = 1, numConPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoRates(i)
       if ( ierr /= 0 ) then
         exit
       end if
-      numConPhotoRates = i
     end do
     close (10, status='keep')
     if ( numConPhotoRates > 3 ) then
@@ -761,9 +762,9 @@ contains
       write (*, '(A, I0)') ' maximum number of photolysis constraint data points: ', maxNumberOfPhotoDataPoints
     end if
     ! Allocate array size for storage of photolysis constraint data
-    allocate (photoX (numConPhotoRates, maxNumberOfPhotoDataPoints) )
-    allocate (photoY (numConPhotoRates, maxNumberOfPhotoDataPoints) )
-    allocate (photoNumberOfPoints(numConPhotoRates) )
+    allocate ( photoX(numConPhotoRates, maxNumberOfPhotoDataPoints) )
+    allocate ( photoY(numConPhotoRates, maxNumberOfPhotoDataPoints) )
+    allocate ( photoNumberOfPoints(numConPhotoRates) )
     if ( numConPhotoRates > 0 ) then
       do i = 1, numConPhotoRates
         string = constrainedPhotoRates(i)
@@ -828,7 +829,7 @@ contains
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    allocate (constrainedNames(numberOfConstrainedSpecies) )
+    allocate ( constrainedNames(numberOfConstrainedSpecies) )
     call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     ! fill constrainedNames and constrainedSpecies with the names and
@@ -873,8 +874,8 @@ contains
       write (*, '(A, I0)') ' maximum number of species constraint data points: ', maxNumberOfConstraintDataPoints
     end if
 
-    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
-    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate ( dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate ( dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
 
     ! Read concentration data for variable constrained species
     write (*, '(A)') ' Reading concentration data for variable-concentration constrained species...'

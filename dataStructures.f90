@@ -416,16 +416,16 @@ module photolysis_rates_mod
   implicit none
   save
 
-  integer(kind=NPI), parameter :: maxNrOfConPhotoRates = 100
-  integer(kind=NPI) :: numConPhotoRates, constrainedPhotoRatesNumbers(maxNrOfConPhotoRates)
+  integer(kind=NPI) :: numConPhotoRates
+  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:)
   integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
   integer(kind=NPI) :: nrOfPhotoRates
   integer(kind=NPI), allocatable :: ck(:)
   logical :: usePhotolysisConstants
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:)
-  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:)
-  character(len=maxPhotoRateNameLength) :: constrainedPhotoRates(maxNrOfConPhotoRates), jFacSpecies
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoRates(:)
+  character(len=maxPhotoRateNameLength) :: jFacSpecies
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j

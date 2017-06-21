@@ -38,6 +38,7 @@ else
   fi
 fi
 cd $1
+ls -al /usr/bin
 wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
 
 tar -zxf cvode-2.9.0.tar.gz

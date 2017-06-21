@@ -246,17 +246,10 @@ def convert(input_file, output_dir, mc_dir):
 ! calling tools/mech_converter.py
 
 """)
-        for ro2List_i in ro2List:
-            for ro2List_input_j in RO2List_input:
-                if ro2List_i.strip() == ro2List_input_j.strip():
-                    # print ro2List_i.strip() + ' found in RO2List'
-                    break
-            # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the species
-            # being found in the RO2 list
-            else:
-                print ' ****** Warning: ' + ro2List_i.strip() + ' NOT found in RO2List ****** '
-                mech_rates_file.write('! ' + ro2List_i.strip() +
-                                      ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
+        for ro2_species in [element for  element in ro2List if element not in RO2List_input]:
+            print ' ****** Warning: ' + ro2_species + ' NOT found in RO2List ****** '
+            mech_rates_file.write('! ' + ro2_species +
+                                  ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
 
         # loop over RO2 and write the necessary line to mechanism-rate-coefficients.f90, using the species number of the RO2
         print 'adding RO2 to ro2-rates.f90'

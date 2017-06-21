@@ -27,7 +27,7 @@ elif [ ! -d "$1" ]; then
   exit 1
 fi
 if [ -z "$2" ] ; then
-  if [ -f /usr/local/bin/gfortran ] ; then
+  if [ -f /usr/bin/gfortran ] ; then
     echo "Default fortran compiler executable selected. To choose another compiler, provide this as a second argument."
     echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
   else
@@ -35,7 +35,7 @@ if [ -z "$2" ] ; then
     echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
     exit 1
   fi
-  FORT_COMP=/usr/local/bin/gfortran
+  FORT_COMP=/usr/bin/gfortran
 else
   FORT_COMP=$2
   if [ ! -f "$2" ] ; then

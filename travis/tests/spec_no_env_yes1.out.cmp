@@ -120,6 +120,7 @@
  Finished reading environment variables.
 
  Checking for constrained environment variables...
+ maximum number of environment variable constraint data points: 9
  Reading constraint data for BLHEIGHT
  Finished reading constraint data.
  Finished checking for constrained environment variables.
@@ -136,9 +137,6 @@
  Number of names of fixed-concentration constrained species: 0
  Setting size of constraint arrays, n = 0
  Skipped reading the names of variable-concentration constrained species
- maxNumberOfDataPoints: 0
- Allocating storage for variable-concentration constrained species...
- Finished allocating storage for variable-concentration constrained species.
  Reading concentration data for variable-concentration constrained species...
  Reading in the names and concentration of the fixed constrained species (in file constrainedFixedSpecies.config)...
  Finished reading in the names and concentration of fixed-concentration species.

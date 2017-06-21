@@ -18,25 +18,25 @@ elif [! -d "$1" ]; then
   echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
 fi
-# if [ -z "$2" ] ; then
-#   if [ -f gfortran ] ; then
-#     echo "Default fortran compiler executable selected. To choose another compiler, provide this as a second argument."
-#     echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
-#   else
-#     echo "Default fortran compiler 'gfortran' executable selected, but this is not a valid filename."
-#     echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
-#     exit 1
-#   fi
-#   FORT_COMP=gfortran
-# else
-#   FORT_COMP=$2
-#   if [ -f "$2" ] ; then
-#   else
-#     echo $2 " selected as fortran compiler, but this is not a valid filename."
-#     echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
-#     exit 1
-#   fi
-# fi
+if [ -z "$2" ] ; then
+  if [ -f gfortran ] ; then
+    echo "Default fortran compiler executable selected. To choose another compiler, provide this as a second argument."
+    echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
+  else
+    echo "Default fortran compiler 'gfortran' executable selected, but this is not a valid filename."
+    echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
+    exit 1
+  fi
+  FORT_COMP=gfortran
+else
+  FORT_COMP=$2
+  if [ -f "$2" ] ; then
+  else
+    echo $2 " selected as fortran compiler, but this is not a valid filename."
+    echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
+    exit 1
+  fi
+fi
 cd $1
 wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
 

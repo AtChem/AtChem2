@@ -8,7 +8,7 @@
 */*/mechanism.species
 results
 
-# Except configurationa and reference files
+# Except configuration and reference files
 
 !*.cmp
 !*.config

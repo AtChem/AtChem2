@@ -87,7 +87,7 @@ clean:
 	rm -f $(AOUT)
 	rm -f fort.*
 	rm -f *.mod
-	rm -f travis/tests/*.out travis/tests/*.output travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
+	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 
 webapp:
 	bash ./make_webapp.sh

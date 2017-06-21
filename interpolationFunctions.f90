@@ -3,7 +3,7 @@
 !
 ! This module contains just the getConstrainedQuantAtT() method.
 ! ******************************************************************** !
-module interpolationFunctions_mod
+module interpolation_functions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -78,4 +78,4 @@ contains
     return
   end subroutine getConstrainedQuantAtT
 
-end module interpolationFunctions_mod
+end module interpolation_functions_mod

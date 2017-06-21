@@ -4,7 +4,7 @@
 ! This module contains functions that are used in the main solver,
 ! and manipulate the rate information towards solving the system.
 ! ******************************************************************** !
-module solverFunctions_mod
+module solver_functions_mod
 contains
 
   ! ----------------------------------------------------------------- !
@@ -139,11 +139,11 @@ contains
     use photolysis_rates_mod
     use zenith_data_mod, only : cosx, secx, cosx_below_threshold
     use env_vars_mod, only : ro2, envVarNames, currentEnvVarValues
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
-    use outputFunctions_mod, only : ro2sum
-    use constraintFunctions_mod, only : getEnvVarsAtT, getEnvVarNum
-    use atmosphereFunctions_mod, only : calcAtmosphere
+    use output_functions_mod, only : ro2sum
+    use constraint_functions_mod, only : getEnvVarsAtT, getEnvVarNum
+    use atmosphere_functions_mod, only : calcAtmosphere
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -216,4 +216,4 @@ contains
     return
   end subroutine mechanism_rates
 
-end module solverFunctions_mod
+end module solver_functions_mod

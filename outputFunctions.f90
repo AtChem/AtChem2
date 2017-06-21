@@ -3,7 +3,7 @@
 !
 ! This module contains functions that control output to file.
 ! ******************************************************************** !
-module outputFunctions_mod
+module output_functions_mod
 contains
 
   ! ----------------------------------------------------------------- !
@@ -330,4 +330,4 @@ contains
     return
   end subroutine outputFinalModelState
 
-end module outputFunctions_mod
+end module output_functions_mod

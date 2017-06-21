@@ -49,7 +49,7 @@ mkdir build
 cd build
 cmake -DCMAKE_INSTALL_PREFIX=$1/cvode \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
-    -DCMAKE_Fortran_COMPILER=gfortran \
+    -DCMAKE_Fortran_COMPILER=$FORT_COMP \
     -DLAPACK_ENABLE:BOOL=ON \
     -DLAPACK_LIBRARIES=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib \
     -DFCMIX_ENABLE:BOOL=ON \

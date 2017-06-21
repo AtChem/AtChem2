@@ -119,7 +119,6 @@ contains
   ! model.parameters file
   subroutine set_model_parameters( input_parameters )
     use types_mod
-    use constraints_mod, only : maxNumberOfDataPoints
     use zenith_data_mod, only : latitude, longitude
     use date_mod, only : startDay, startMonth, startYear
     use interpolation_method_mod, only : setSpeciesInterpMethod, setConditionsInterpMethod
@@ -149,30 +148,27 @@ contains
     call setSpeciesInterpMethod( speciesInterpolationMethod )
     conditionsInterpolationMethod = nint( input_parameters(4), SI )
     call setConditionsInterpMethod( conditionsInterpolationMethod )
-    ! Member variable of MODULE constraints. Used in
-    ! getConstrainedQuantAtT and readEnvVar
-    maxNumberOfDataPoints = nint( input_parameters(5), NPI )
     ! Frequency at which outputRates is called.
-    ratesOutputStepSize = nint( input_parameters(6), QI )
+    ratesOutputStepSize = nint( input_parameters(5), QI )
     ! Start time of model. Used to set t initially, and to calculate
     ! the elapsed time.
-    modelStartTime = nint( input_parameters(7) )
+    modelStartTime = nint( input_parameters(6) )
     ! Frequency at which jfy() is called below.
-    jacobianOutputStepSize = nint( input_parameters(8), QI )
+    jacobianOutputStepSize = nint( input_parameters(7), QI )
     if (jacobianOutputStepSize==0) then
       outputJacobian = .false.
     else
       outputJacobian = .true.
     end if
     ! Member variables of module zenith_data_mod
-    latitude = input_parameters(9)
-    longitude = input_parameters(10)
+    latitude = input_parameters(8)
+    longitude = input_parameters(9)
     ! Member variables of module date_mod
-    startDay = nint( input_parameters(11), SI )
-    startMonth = nint( input_parameters(12), SI )
-    startYear = nint( input_parameters(13), DI )
+    startDay = nint( input_parameters(10), SI )
+    startMonth = nint( input_parameters(11), SI )
+    startYear = nint( input_parameters(12), DI )
     ! Frequency at which to output instantaneous rates
-    irOutStepSize = nint( input_parameters(14), QI )
+    irOutStepSize = nint( input_parameters(13), QI )
 
     ! float format
     300 format (A52, E11.3)
@@ -187,7 +183,6 @@ contains
     write (*, 300) 'step size (seconds): ', timestepSize
     write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
     write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
-    write (*, 400) 'maximum number of data points in constraint file: ', maxNumberOfDataPoints
     write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
     write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
     write (*, 400) 'modelStartTime: ', modelStartTime

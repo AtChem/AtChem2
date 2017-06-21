@@ -2,7 +2,6 @@
 900			step size (seconds)
 2			species interpolation method (pw constant = 1, pw linear = 2)
 2			conditions interpolation method (pw constant = 1, pw linear = 2)
-10000			maximum number of data points in constraint files
 3600			rates output step size
 0			model start time (seconds)
 0			jacobian output step size

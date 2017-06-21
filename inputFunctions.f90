@@ -788,7 +788,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use species_mod
-    use constraints_mod, only : maxNumberOfDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
+    use constraints_mod, only : maxNumberOfConstraintDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                                 numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
                                 setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataFixedY
     use directories_mod, only : param_dir, spec_constraints_dir
@@ -845,10 +845,19 @@ contains
       write (*, '(A)') ' Skipped reading the names of variable-concentration constrained species'
     end if
 
-    write (*, '(A, I0)') ' maxNumberOfDataPoints: ', maxNumberOfDataPoints
+    maxNumberOfConstraintDataPoints = 0_NPI
+    if ( numberOfVariableConstrainedSpecies > 0 ) then
+      do i = 1, numberOfVariableConstrainedSpecies
+        fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
+        ! Count lines in file
+        maxNumberOfConstraintDataPoints = max( count_lines_in_file( fileLocation ), maxNumberOfConstraintDataPoints )
+      end do
+    end if
+
+    write (*, '(A, I0)') ' maxNumberOfDataPoints: ', maxNumberOfConstraintDataPoints
     write (*, '(A)') ' Allocating storage for variable-concentration constrained species...'
-    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
-    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfDataPoints) )
+    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
     write (*, '(A)') ' Finished allocating storage for variable-concentration constrained species.'
 
     if ( numberOfVariableConstrainedSpecies > 0 ) then
@@ -877,8 +886,8 @@ contains
         fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
         ! Count lines in file
         dataNumberOfPoints = count_lines_in_file( fileLocation )
-        if ( dataNumberOfPoints > maxNumberOfDataPoints ) then
-          dataNumberOfPoints = maxNumberOfDataPoints
+        if ( dataNumberOfPoints > maxNumberOfConstraintDataPoints ) then
+          dataNumberOfPoints = maxNumberOfConstraintDataPoints
           write (*, '(A, I0, A)') ' Warning! Truncated constraint data to ', dataNumberOfPoints, ' points.'!
         end if
         speciesNumberOfPoints(i) = dataNumberOfPoints

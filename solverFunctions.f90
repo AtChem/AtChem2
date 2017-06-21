@@ -137,7 +137,7 @@ contains
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
     use photolysis_rates_mod
-    use zenith_data_mod, only : cosx, secx, infty_secx
+    use zenith_data_mod, only : cosx, secx, cosx_below_threshold
     use env_vars_mod, only : ro2, envVarNames, currentEnvVarValues
     use interpolationFunctions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
@@ -195,7 +195,7 @@ contains
 
     do i = 1, nrOfPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then
-        if ( infty_secx .eqv. .true. ) then
+        if ( cosx_below_threshold .eqv. .true. ) then
           j(ck(i)) = 0.0_DP
         else
           j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac

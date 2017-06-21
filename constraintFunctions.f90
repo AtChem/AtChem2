@@ -14,7 +14,8 @@ contains
   ! Calculate the value of jFac by comparing the constrained value of
   ! jFacSpecies to the value calculated from the photolysis equations.
   ! If the constrained rate is zero, or the value of cosx is below the
-  ! threshold (represented by infty_secx==.true.) then set jFac to zero.
+  ! threshold (represented by cosx_below_threshold==.true.) then set
+  ! jFac to zero.
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
@@ -57,7 +58,7 @@ contains
       jFac = 0
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
-        if ( infty_secx .eqv. .false. ) then
+        if ( cosx_below_threshold .eqv. .false. ) then
           jFac = JFacSpeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
                  ( cosx ** cmm(jFacSpeciesLine) ) * exp( -cnn(jFacSpeciesLine) * secx ) )
         else

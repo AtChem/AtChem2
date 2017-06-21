@@ -122,18 +122,11 @@ def convert(input_file, output_dir, mc_dir):
                     # Compare each reactant against known species.
                     reactantNums = []
                     for x in reactants:
-                        j = 0
-                        for y in speciesList:
-                            # Check for equality: if equality, then the reactant is a known species and its number should be
-                            # added to the reactantNums variable
-                            if x == y:
-                                reactantNums.append(j + 1)
-                                # print 'found:', y + ', j =', j
-                                break
-                            j += 1
-                        # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
-                        # the reactant being found in the known species
+                        # If the reactant is a known species then add its number to reactantNums
+                        if x in speciesList:
+                            reactantNums.append(speciesList.index(x)+1)
                         else:
+                            # Reactant x is not a known species.
                             # Add reactant to speciesList, and add this number to
                             # reactantNums to record this reaction.
                             speciesList.append(x)
@@ -148,18 +141,11 @@ def convert(input_file, output_dir, mc_dir):
                     # Compare each product against known species.
                     productNums = []
                     for x in products:
-                        j = 0
-                        for y in speciesList:
-                            # Check for equality: if equality, then the product is a known species and its number should be
-                            # added to the productNums variable
-                            if x == y:
-                                productNums.append(j + 1)
-                                # print 'found:', y + ', j =', j
-                                break
-                            j += 1
-                        # This code only executes if the break is NOT called, i.e. if the loop runs to completion without
-                        # the product being found in the known species
+                        # If the reactant is a known species then add its number to reactantNums
+                        if x in speciesList:
+                            productNums.append(speciesList.index(x)+1)
                         else:
+                            # Product x is not a known species.
                             # Add product to speciesList, add this number to
                             # productNums to record this reaction.
                             speciesList.append(x)

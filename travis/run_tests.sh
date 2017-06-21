@@ -117,7 +117,7 @@ fi
 echo "Indent script finished"
 echo ""
 
-echo "travis/test_runner.sh: Tests to be run:" $1
+echo "travis/run_tests.sh: Tests to be run:" $1
 
 # initialise counters
 test_counter=0
@@ -133,11 +133,11 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test.fac . $TESTS_DIR/$test/modelConfiguration &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/$test.fac . $TESTS_DIR/$test/modelConfiguration &> /dev/null
 
   # Run atchem with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test.out
+  ./atchem $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...
@@ -146,11 +146,11 @@ for test in $1; do
   skip_text="Runtime"
   # Generate a table of line numbers to omit based on skip_text
   for item in $skip_text; do
-    skip_line_number=$(find_string $item $TESTS_DIR/$test.out)
+    skip_line_number=$(find_string $item $TESTS_DIR/$test/$test.out)
     list_of_skip_line_numbers="$list_of_skip_line_numbers $skip_line_number"
   done
   # Add one past the last line number
-  list_of_skip_line_numbers="$list_of_skip_line_numbers $(($(grep -c '' $TESTS_DIR/$test.out)+1))"
+  list_of_skip_line_numbers="$list_of_skip_line_numbers $(($(grep -c '' $TESTS_DIR/$test/$test.out)+1))"
   # Sort the list in numerical order
   sorted_list_of_skip_line_numbers=$(echo $list_of_skip_line_numbers | tr " " "\n" | sort -n)
 
@@ -160,13 +160,13 @@ for test in $1; do
   # $old_skip_line_number keeps track of the previously skipped line
   old_skip_line_number=0
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
-    this_file_failures=$(test_output_text $TESTS_DIR/$test.out $TESTS_DIR/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
+    this_file_failures=$(test_output_text $TESTS_DIR/$test/$test.out $TESTS_DIR/$test/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
     exitcode=$?
-    echo 'Checking' $TESTS_DIR/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
+    echo 'Checking' $TESTS_DIR/$test/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
     if [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
-Differences found in $TESTS_DIR/$test.out. Add $old_skip_line_number to the line numbers shown:
+Differences found in $TESTS_DIR/$test/$test.out. Add $old_skip_line_number to the line numbers shown:
 $this_file_failures"
     elif [ $exitcode -eq -1 ]; then
       echo 'Numdiff gave an error. Aborting.'

@@ -66,14 +66,15 @@ $(AOUT): $(SRCS)
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
 
-TESTS := short short_end_of_day short_ext1 short_ext2 short_ext3 short_ext4 spec_yes_plus_fixed_env_no spec_no_env_yes1 spec_no_env_yes2 spec_yes_env_no spec_yes_env_no_with_photo spec_yes_env_no_with_jfac spec_yes_env_no_with_jfac_fail1 spec_yes_env_no_with_jfac_fixed spec_yes_env_yes full
+# Search travis/tests/ for all subdirectories, which should reflect the full list of tests
+TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
 test:
 	@echo "Make: performing 'make clean'."
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
+	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
 
 .f90.o:
 	$(F77) -c $(FFLAGS) $<
@@ -86,7 +87,7 @@ clean:
 	rm -f $(AOUT)
 	rm -f fort.*
 	rm -f *.mod
-	rm -f travis/tests/*.out travis/tests/*.output travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
+	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 
 webapp:
 	bash ./make_webapp.sh

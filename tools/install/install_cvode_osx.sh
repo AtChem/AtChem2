@@ -44,7 +44,6 @@ else
     exit 1
   fi
 fi
-exit 1
 cd $1
 ls -al /usr/bin
 wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz

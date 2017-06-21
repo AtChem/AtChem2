@@ -5,7 +5,7 @@
 ! relevant to the atmosphere: specifically, the air density, O2 and N2
 ! density, and convert from RH to H2O.
 ! ******************************************************************** !
-module atmosphereFunctions_mod
+module atmosphere_functions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -86,4 +86,4 @@ contains
     return
   end subroutine temperature
 
-end module atmosphereFunctions_mod
+end module atmosphere_functions_mod

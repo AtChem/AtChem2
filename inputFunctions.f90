@@ -4,7 +4,7 @@
 ! This module contains functions controlling the reading of data from
 ! external files, apart from model.parameters and solver.parameters
 ! ******************************************************************** !
-module inputFunctions_mod
+module input_functions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -800,8 +800,8 @@ contains
                                 setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataFixedY
     use directories_mod, only : param_dir, spec_constraints_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
-    use configFunctions_mod, only : getIndexWithinList
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use config_functions_mod, only : getIndexWithinList
+    use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod , only : getSpeciesInterpMethod
     implicit none
 
@@ -1067,4 +1067,4 @@ contains
 
   end subroutine inquire_or_abort
 
-end module inputFunctions_mod
+end module input_functions_mod

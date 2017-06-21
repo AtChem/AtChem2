@@ -4,7 +4,7 @@
 ! This module contains helper functions that query lists in various ways
 ! in order to extract the required species etc based on some criterion.
 ! ******************************************************************** !
-module configFunctions_mod
+module config_functions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -141,4 +141,4 @@ contains
     return
   end function getConcForSpeciesOfInterest
 
-end module configFunctions_mod
+end module config_functions_mod

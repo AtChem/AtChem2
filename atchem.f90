@@ -21,11 +21,11 @@ PROGRAM ATCHEM
   use storage_mod, only : maxSpecLength, maxPhotoRateNameLength
   use solver_params_mod
   use model_params_mod
-  use inputFunctions_mod
-  use configFunctions_mod
-  use outputFunctions_mod
-  use constraintFunctions_mod
-  use solverFunctions_mod
+  use input_functions_mod
+  use config_functions_mod
+  use output_functions_mod
+  use constraint_functions_mod
+  use solver_functions_mod
   implicit none
 
   ! *****************************************************************
@@ -69,8 +69,8 @@ PROGRAM ATCHEM
       use species_mod
       use constraints_mod
       use reaction_structure_mod
-      use interpolationFunctions_mod, only : getConstrainedQuantAtT
-      use constraintFunctions_mod
+      use interpolation_functions_mod, only : getConstrainedQuantAtT
+      use constraint_functions_mod
       implicit none
 
       ! Fortran routine for right-hand side function.
@@ -529,9 +529,9 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use constraints_mod
   use reaction_structure_mod
   use interpolation_method_mod, only : getSpeciesInterpMethod
-  use interpolationFunctions_mod, only : getConstrainedQuantAtT
-  use constraintFunctions_mod
-  use solverFunctions_mod, only : resid
+  use interpolation_functions_mod, only : getConstrainedQuantAtT
+  use constraint_functions_mod
+  use solver_functions_mod, only : resid
   implicit none
 
   real(kind=DP), intent(in) :: t, y(*)

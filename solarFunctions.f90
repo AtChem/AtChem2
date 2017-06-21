@@ -4,7 +4,7 @@
 ! This module contains functions that calculate quantities related to
 ! relative positions of the Earth and Sun.
 ! ******************************************************************** !
-module solarFunctions_mod
+module solar_functions_mod
 contains
 
   ! -----------------------------------------------------------------
@@ -120,4 +120,4 @@ contains
     return
   end subroutine calcZenith
 
-end module solarFunctions_mod
+end module solar_functions_mod

@@ -7,7 +7,7 @@
 ! Also implements getEnvVarNum() as a helper function to return the
 ! number of the environment variable using the name as a key.
 ! ******************************************************************** !
-module constraintFunctions_mod
+module constraint_functions_mod
 contains
 
   ! ----------------------------------------------------------------- !
@@ -21,7 +21,7 @@ contains
     use zenith_data_mod
     use photolysis_rates_mod
     use constraints_mod
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
 
@@ -159,10 +159,10 @@ contains
     use env_vars_mod
     use constraints_mod
     use zenith_data_mod
-    use interpolationFunctions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
-    use atmosphereFunctions_mod
-    use solarFunctions_mod
+    use atmosphere_functions_mod
+    use solar_functions_mod
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -333,4 +333,4 @@ contains
     return
   end function getEnvVarNum
 
-end module constraintFunctions_mod
+end module constraint_functions_mod

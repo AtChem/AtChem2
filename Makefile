@@ -74,7 +74,7 @@ test:
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/test_runner.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
+	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
 
 .f90.o:
 	$(F77) -c $(FFLAGS) $<

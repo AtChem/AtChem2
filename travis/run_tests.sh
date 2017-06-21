@@ -117,7 +117,7 @@ fi
 echo "Indent script finished"
 echo ""
 
-echo "travis/test_runner.sh: Tests to be run:" $1
+echo "travis/run_tests.sh: Tests to be run:" $1
 
 # initialise counters
 test_counter=0

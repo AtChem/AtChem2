@@ -108,13 +108,13 @@ contains
     ! (secx=1/cosx). The MCM photolysis parameterisation
     ! (http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt)
     ! requires cosx and secx to calculate the photolysis rates.
-    if ( cosx <= cosx_limit ) then
+    if ( cosx <= cosx_threshold ) then
       cosx = 0.0_DP
       secx = 1.0d+50
-      infty_secx = .true.
+      cosx_below_threshold = .true.
     else
       secx = 1.0_DP / cosx
-      infty_secx = .false.
+      cosx_below_threshold = .false.
     end if
 
     return

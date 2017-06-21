@@ -30,8 +30,7 @@ if [ -z "$2" ] ; then
   FORT_COMP=gfortran
 else
   FORT_COMP=$2
-  if [ -f "$2" ] ; then
-  else
+  if [ ! -f "$2" ] ; then
     echo $2 " selected as fortran compiler, but this is not a valid filename."
     echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
     exit 1

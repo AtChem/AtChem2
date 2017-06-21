@@ -174,7 +174,7 @@ module env_vars_mod
   character(len=maxEnvVarLength), allocatable :: envVarTypes(:)
   integer(kind=SI), allocatable :: envVarTypesNum(:)
   real(kind=DP), allocatable :: envVarFixedValues(:), currentEnvVarValues(:)
-  integer(kind=SI) :: numEnvVars
+  integer(kind=SI) :: numEnvVars, numConEnvVarRates
   real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:)
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2

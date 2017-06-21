@@ -600,15 +600,20 @@ contains
     ! If environment variable is constrained, read in constraint data
     write (*, '(A)') ' Checking for constrained environment variables...'
     maxNumberOfEnvVarDataPoints = 0_NPI
+    numConEnvVarRates = 0_SI
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
 
         fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         maxNumberOfEnvVarDataPoints = max( maxNumberOfEnvVarDataPoints, count_lines_in_file( fileLocation ) )
+        numConEnvVarRates = numConEnvVarRates + 1_SI
       end if
     end do
 
+    if ( numConEnvVarRates > 0_SI ) then
+      write (*, '(A, I0)') ' maximum number of environment variable constraint data points: ', maxNumberOfEnvVarDataPoints
+    end if
     ! Allocate variables for next section
     allocate (envVarX(numEnvVars, maxNumberOfEnvVarDataPoints))
     allocate (envVarY(numEnvVars, maxNumberOfEnvVarDataPoints))
@@ -753,6 +758,7 @@ contains
         fileLocation = trim( fileLocationPrefix ) // trim( string )
         maxNumberOfPhotoDataPoints = max( maxNumberOfPhotoDataPoints, count_lines_in_file( fileLocation ) )
       end do
+      write (*, '(A, I0)') ' maximum number of photolysis constraint data points: ', maxNumberOfPhotoDataPoints
     end if
     ! Allocate array size for storage of photolysis constraint data
     allocate (photoX (numConPhotoRates, maxNumberOfPhotoDataPoints) )
@@ -845,21 +851,6 @@ contains
       write (*, '(A)') ' Skipped reading the names of variable-concentration constrained species'
     end if
 
-    maxNumberOfConstraintDataPoints = 0_NPI
-    if ( numberOfVariableConstrainedSpecies > 0 ) then
-      do i = 1, numberOfVariableConstrainedSpecies
-        fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
-        ! Count lines in file
-        maxNumberOfConstraintDataPoints = max( count_lines_in_file( fileLocation ), maxNumberOfConstraintDataPoints )
-      end do
-    end if
-
-    write (*, '(A, I0)') ' maxNumberOfDataPoints: ', maxNumberOfConstraintDataPoints
-    write (*, '(A)') ' Allocating storage for variable-concentration constrained species...'
-    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
-    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
-    write (*, '(A)') ' Finished allocating storage for variable-concentration constrained species.'
-
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       if ( numberOfVariableConstrainedSpecies > 3 ) then
         write (*, '(I7, A, A)') 1, ' ', constrainedNames(1)
@@ -871,6 +862,19 @@ contains
         end do
       end if
     end if
+
+    maxNumberOfConstraintDataPoints = 0_NPI
+    if ( numberOfVariableConstrainedSpecies > 0 ) then
+      do i = 1, numberOfVariableConstrainedSpecies
+        fileLocation = trim( spec_constraints_dir ) // '/' // trim( constrainedNames(i) )
+        ! Count lines in file
+        maxNumberOfConstraintDataPoints = max( count_lines_in_file( fileLocation ), maxNumberOfConstraintDataPoints )
+      end do
+      write (*, '(A, I0)') ' maximum number of species constraint data points: ', maxNumberOfConstraintDataPoints
+    end if
+
+    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
 
     ! Read concentration data for variable constrained species
     write (*, '(A)') ' Reading concentration data for variable-concentration constrained species...'

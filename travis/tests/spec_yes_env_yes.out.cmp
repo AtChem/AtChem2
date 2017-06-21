@@ -120,6 +120,7 @@
  Finished reading environment variables.
 
  Checking for constrained environment variables...
+ maximum number of environment variable constraint data points: 9
  Reading constraint data for BLHEIGHT
  Finished reading constraint data.
  Finished checking for constrained environment variables.
@@ -137,11 +138,9 @@
  Setting size of constraint arrays, n = 2
  Reading in the names of variable-concentration constrained species...
  Finished reading the names of variable-concentration constrained species
- maxNumberOfDataPoints: 15
- Allocating storage for variable-concentration constrained species...
- Finished allocating storage for variable-concentration constrained species.
       1 O3        
       2 NO2       
+ maximum number of species constraint data points: 15
  Reading concentration data for variable-concentration constrained species...
  O3        ...
  NO2       ...

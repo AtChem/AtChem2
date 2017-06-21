@@ -13,7 +13,7 @@ if [ -z "$1" ] ; then
   echo "Please provide an argument to tools/install/install_cvode_osx.sh"
   echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
-elif [! -d "$1" ]; then
+elif [ ! -d "$1" ]; then
   echo "$1 is not a directory"
   echo "Example usage: ./install_cvode_linux.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1

@@ -1,8 +1,11 @@
 #!/bin/sh
 #
-# Script to ....
+# Script to process the mechanism file (*.fac) and convert it to the
+# correct format for AtChem.
 #
-# $1 is the mechanism input file (*.fac)
+# N.B.: the script MUST be run from the base directory of AtChem.
+#
+# $1 is the mechanism input file
 #
 # $2 is the directory in which to place the output files:
 #    - mechanism-rate-coefficients.f90
@@ -17,13 +20,13 @@
 
 set -e
 echo ''
-echo "input file:" $1
-echo "output directory:" $2
-echo "output directory:" $3
+echo "input mechanism file:" $1
+echo "fortran output directory:" $2
+echo "mechanism output directory:" $3
 
 echo ''
 echo "call setup_atchem.py"
-python ${BASH_SOURCE%/*}/setup_atchem.py $1 $2 $3
+python ./tools/atchem.py $1 $2 $3
 
 echo ''
 echo "make" $1

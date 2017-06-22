@@ -1,29 +1,25 @@
-This directory contains sources of the AtChem application. The tools directory contains scripts for building the AtChem executable for a given input, while the travis directory contains the testsuite files.
+This directory contains sources of the AtChem application. The tools directory contains scripts for building the AtChem executable for a given input, while the travis directory contains the testsuite files. The remaining subdirectories are empty, but provide a default location for input and output files.
 
-*******************************
+**********************************
 * Dependencies
-*******************************
+**********************************
 
-AtChem requires a working Fortran compiler, BLAS and LAPACK libraries, CVODE library, and a Python 2 installation. Running the testsuite additionally requires a numdiff installation.
+AtChem requires a working Fortran compiler, BLAS and LAPACK libraries, CVODE library, openlibm library, and a Python 2 installation. Running the testsuite additionally requires a numdiff installation.
 
-Please refer to https://github.com/AtChem/AtChem/wiki/Dependencies for installation instructions of these dependencies.
+Please refer to https://github.com/AtChem/AtChem/wiki/1.1-Dependencies for installation instructions of these dependencies.
 
-******************************
+**********************************
 * Building AtChem
-******************************
+**********************************
 
-Please refer to https://github.com/AtChem/AtChem/wiki/Installation for installation instructions. Very briefly:
+Please refer to https://github.com/AtChem/AtChem/wiki/1.-Installation for installation instructions. Very briefly:
 
-Run make makefile.local and set the variable CVODELIB to the location of the CVODE libraries. Type "./tools/build.sh mcm_subset.fac" in the top-level directory and this should create an executable atchem file. This is for a default configuration. Run by typing "./atchem".
+After having installed all dependencies, please note that at present AtChem requires recompilation for each new .fac file. This is all handled by the script "./tools/build.sh", which converts the .fac file into a format usable by AtChem (namely, it generates two Fortran files and several data files).
 
-******************************
-* Converting FACSMILE to AtChem
-******************************
+Firstly, run make makefile.local and set the variable CVODELIB inside makefile.local to the location of the CVODE libraries. Type "./tools/build.sh tools/mcm_example.fac" in the top-level directory and this should create an executable name "atchem". This is for a default configuration. Run by typing "./atchem".
 
-The build.sh script in the tools directory is sufficient to convert a .fac file to a format usable by AtChem. This makes use of the underlying scripts setup_atchem.py, fix_mechanism_fac.py, and mech_converter.py
+**********************************
+* Configuring and running AtChem
+**********************************
 
-******************************
-* Running AtChem
-******************************
-
-After making placing your configuration files in modelConfiguration, run "tools/build.sh" in the top-level directory of AtChem sources, with argument pointing to a the input .fac file, and then run "./atchem". Output files should appear in modelOutput and instantaneousRates, although these are also configurable.
+AtChem accepts several command line arguments to configure the location of output and input files, with defaults also defined if not provided. After following the build step above, run "./atchem".

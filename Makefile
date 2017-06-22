@@ -3,7 +3,7 @@
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
-.PHONY: all setup_var test
+.PHONY: all test
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
@@ -80,17 +80,10 @@ test:
 	$(F77) -c $(FFLAGS) $<
 
 clean:
-	rm -rf .libs
-	rm -f *.lo
 	rm -f *.o
-	rm -f fortran_update.sh
 	rm -f $(AOUT)
-	rm -f fort.*
 	rm -f *.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
-
-webapp:
-	bash ./make_webapp.sh
 
 
 # dependencies:

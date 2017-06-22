@@ -107,9 +107,8 @@ def convert(input_file, output_dir, mc_dir):
                             reactantNums.append(len(speciesList))
                             # print 'adding', x, 'to speciesList'
 
-                    # Write the reactants to mechanism.reactemp
-                    for z in reactantNums:
-                        mech_reac_list.append(str(reactionNumber) + ' ' + str(z) + '\n')
+                    # Write the reactants to mech_reac_list
+                    mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in reactantNums])
 
                 if not productsList == '':
                     # Compare each product against known species.
@@ -299,11 +298,11 @@ ro2 = 0.00D+00\n""")
                 # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESS
                 # - otherwise, be a species
                 RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
-                for x in RHSList_sub:
-                    # Filter out nunbers, and spaces, and any reserved words, and any known species
-                    if (not re.match('[0-9]', x)) and (not x == '') and (not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList):
-                        coeffSpeciesList.append(x)
-                        # print 'adding', x, 'to coeffSpeciesList'
+                # Filter out nunbers, and spaces, and any reserved words, and any known species
+                coeffSpeciesList.extend([x for x in RHSList_sub if (not re.match('[0-9]', x))
+                                            and (not x == '')
+                                            and (not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T']))
+                                            and (not x in coeffSpeciesList)])
 
     # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
     # Begin the first line as necessary

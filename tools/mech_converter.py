@@ -415,12 +415,10 @@ ro2 = 0.00D+00\n""")
                 # print RHSList_sub
                 RHSList_sub = [item.upper() for item in RHSList_sub]
                 for x in RHSList_sub:
-                    # Filter out spaces, numbers, and maths symbols
-                    if (not re.match('[0-9]', x)) and (not x == ''):
-                        # Filter out our 'reserved words'
-                        if ((not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList)):
-                                coeffSpeciesList.append(x)
-                                print 'adding', x, 'to coeffSpeciesList'
+                    # Filter out nunbers, and spaces, and any reserved words, and any known species
+                    if (not re.match('[0-9]', x)) and (not x == '') and (not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList):
+                        coeffSpeciesList.append(x)
+                        print 'adding', x, 'to coeffSpeciesList'
 
     # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
     # Begin wthe first line as necessary

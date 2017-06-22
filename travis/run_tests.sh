@@ -197,6 +197,27 @@ $this_file_failures"
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/instantaneousRates/* ; do
+    if [ ${filename: -4} == ".cmp" ] ; then
+      echo 'Checking' $filename
+      this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
+      exitcode=$?
+      if [ $exitcode -eq 0 ]; then
+        continue
+      elif [ $exitcode -eq 1 ]; then
+        this_test_failures="$this_test_failures
+
+$this_file_failures"
+      else
+        echo 'Numdiff gave an error. Aborting.'
+        exit 1
+      fi
+    fi
+  done
+
+  # Loop over all files (that fit mechanism.*.cmp) in the modelConfiguration
+  # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
+  # then add the numdiff output to $this_test_failures via $this_file_failures,.
+  for filename in $TESTS_DIR/$test/modelConfiguration/mechanism.* ; do
     # guard against empty filelist
     #[ -e "$filename" ] || continue
     if [ ${filename: -4} == ".cmp" ] ; then

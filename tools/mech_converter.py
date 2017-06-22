@@ -88,8 +88,8 @@ def convert(input_file, output_dir, mc_dir):
                 # strip whitespace, ; and %
                 line = line.strip().strip('%').strip(';').strip()
 
-                print ''
-                print 'line =', line
+                #print ''
+                #print 'line =', line
                 # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
                 a = re.split(':', line)
                 # print 'a = ', a
@@ -198,33 +198,22 @@ def convert(input_file, output_dir, mc_dir):
     in_RO2_lines = False
     ro2_input = []
     for item in peroxy_radicals:
-        if not in_RO2_lines:
-            # Check to see whether we are entering the 'Reaction definitions' section
-            if 'RO2 = ' in item:
-                in_RO2_lines = True
-        if in_RO2_lines:
-            if not re.match('\*', item):
-                ro2_input.append(item)
-            else:
-                in_RO2_lines = False
-
+        if not re.match('\*', item):
+            # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
+            # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
+            # Then split by +. Append each item to ro2_input: multiple appends use 'extend'
+            ro2_input.extend(item.split('=')[-1].split('+'))
+    # For each element, remove any semi-colons, strip, and then append if non-empty.
     ro2List = []
-    for l in ro2_input:
-        # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
-        # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
-        # Then split by +.
-        strArray = l.split('=')[-1].split('+')
+    for x in ro2_input:
+        x = x.replace(';', '').strip()
+        if x == '':
+            pass
+            # print 'doing nothing'
+        else:
+            # print x
+            ro2List.append(x)
 
-        # print strArray
-        # For each element, remove any semi-colons, strip, and then append if non-empty.
-        for x in strArray:
-            x = x.replace(';', '').strip()
-            if x == '':
-                pass
-                # print 'doing nothing'
-            else:
-                # print x
-                ro2List.append(x)
 
     # check RO2s are in RO2 list
     with open(os.path.join(script_directory, 'RO2listv3.3.1')) as RO2List_file:

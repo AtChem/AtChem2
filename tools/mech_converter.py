@@ -20,7 +20,6 @@ def convert(input_file, output_dir, mc_dir):
     print 'Reading input file'
     with open(os.path.join(input_directory, input_filename), 'r') as input_file:
         s = input_file.readlines()
-        # print s
 
     # split the lines into the following sections:
     # - Ignore everything up to Generic Rate Coefficients
@@ -41,29 +40,16 @@ def convert(input_file, output_dir, mc_dir):
             if section_headers[header_index] in line:
                 section += 1
         if section == 1:
-            # print line
             generic_rate_coefficients.append(line)
         elif section == 2:
-            # print line
             complex_reactions.append(line)
         elif section == 3:
-            # print line
             peroxy_radicals.append(line)
         elif section == 4:
-            # print line
             reaction_definitions.append(line)
         else:
             assert section == 0, "Error, section is not in [0,4]"
-            # print line
 
-    # print 'generic_rate_coefficients'
-    # print generic_rate_coefficients
-    # print 'complex_reactions'
-    # print complex_reactions
-    # print 'peroxy_radicals'
-    # print peroxy_radicals
-    # print 'reaction_definitions'
-    # print reaction_definitions
     # Initialise a few variables
     speciesList = []
     rateConstants = []
@@ -84,38 +70,25 @@ def convert(input_file, output_dir, mc_dir):
             else:
                 # reactionNumber keeps track of the line we are processing
                 reactionNumber += 1
-                # print 'line =', line
+
                 # strip whitespace, ; and %
                 line = line.strip().strip('%;').strip()
 
-                #print ''
-                #print 'line =', line
                 # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
                 a = re.split(':', line)
-                # print 'a = ', a
 
                 # Add reaction rate to rateConstants
                 rateConstants.append(a[0])
-                # print 'rate =', a[0]
 
                 # Process the reaction: split by = into reactants and products
-                # print 'reaction = ', a[1]
-
                 reaction_parts = re.split('=', a[1])
-                # print reaction_parts
 
                 reactantsList = reaction_parts[0]
                 productsList = reaction_parts[1]
 
-                # print 'reactantlist = ', reactantsList
-                # print 'productlist = ', productsList
-
                 # Process each of reactants and products by splitting by +. Strip each at this stage.
                 reactants = [item.strip() for item in re.split('[+]', reactantsList)]
                 products = [item.strip() for item in re.split('[+]', productsList)]
-
-                # print 'reactants =', reactants
-                # print 'products =', products
 
                 # Ignore empty reactantsList
                 if not reactantsList == '':
@@ -239,7 +212,6 @@ def convert(input_file, output_dir, mc_dir):
 ro2 = 0.00D+00\n""")
 
             for ro2List_i in ro2List:
-                # print 'ro2List_i: ' + ro2List_i
                 for speciesNumber, y in zip(range(1, len(speciesList) + 1), speciesList):
                     if ro2List_i.strip() == y.strip():
                         ro2_file.write('ro2 = ro2 + y(' + str(speciesNumber) + ')!' + ro2List_i.strip() + '\n')
@@ -258,7 +230,6 @@ ro2 = 0.00D+00\n""")
     coeffSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
     reactionNumber = 0
     mechanism_rates_coeff_list = []
-    # P
     for line in generic_rate_coefficients + complex_reactions:
         # Check for comments (beginning with a !), or blank lines
         if (re.match('!', line) is not None) | (line.isspace()):
@@ -301,43 +272,25 @@ ro2 = 0.00D+00\n""")
 
             # reactionNumber keeps track of the line we are processing
             reactionNumber += 1
-            # print 'line =', line
+
             # strip whitespace, ; and %
             line = line.strip().strip('%;').strip()
             print 'line =', line
             # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
             a = line
-            # print 'a = ', a
-
-            # Add reaction rate to rateConstants
-            # rateConstant = a[0]
-            # rateConstants.append(rateConstant)
-            # print rateConstant
 
             # Process the reaction: split by = into reactants and products
-            # print 'reaction =', a
-
             reaction_parts = re.split('=', a)
-            # print reaction_parts
 
             LHSList = reaction_parts[0]
             RHSList = reaction_parts[1]
-
-            # print 'reactantlist = ', LHSList
-            # print 'productlist = ', RHSList
 
             # Process each of reactants and products by splitting by +. Strip each at this stage.
             reactant = LHSList.strip()  # [item.strip() for item in re.split('[+]', LHSList)]
             products = RHSList.strip()  # [item.strip() for item in re.split('[+]', RHSList)]
 
-            # print 'reactants = ', reactants
-            # print 'products = ', products
-
             # Compare reactant against known species.
-            if reactant in coeffSpeciesList:
-                pass
-                # print 'found:', reactant
-            else:
+            if reactant not in coeffSpeciesList:
                 # Add reactant to coeffSpeciesList, and add this number to
                 # reactantNums to record this reaction.
                 coeffSpeciesList.append(reactant)
@@ -346,15 +299,12 @@ ro2 = 0.00D+00\n""")
             if not RHSList.isspace():
                 # Compare each product against known species.
                 productNums = []
-                # print RHSList
                 # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
                 # Now, each string in the sublist will:
                 # - start with a digit
                 # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESS
                 # - otherwise, be a species
-                RHSList_sub = re.sub('[()\-+*@/]', ' ', RHSList).split(' ')
-                # print RHSList_sub
-                RHSList_sub = [item.upper() for item in RHSList_sub]
+                RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
                 for x in RHSList_sub:
                     # Filter out nunbers, and spaces, and any reserved words, and any known species
                     if (not re.match('[0-9]', x)) and (not x == '') and (not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList):
@@ -381,7 +331,6 @@ ro2 = 0.00D+00\n""")
             # If not, add a spacer
             newline += ','
 
-    # print mechanism_rates_decl
     with open(os.path.join(output_dir, 'mechanism-rate-declarations.f90'), 'w') as mr3_file:
         mr3_file.write("""! Note that this file is generated by tools/mech_converter.py
 ! based upon the file tools/mcm_example.fac
@@ -395,7 +344,6 @@ ro2 = 0.00D+00\n""")
     # # Combine mechanism rates and RO2 / NOY sum files
     with open(os.path.join(input_directory, 'mechanism-rate-coefficients.ftemp'), 'r') as mech_rates_temp_file, \
         open(os.path.join(output_dir, 'mechanism-rate-coefficients.f90'), 'a') as mech_rates_coeff_file:
-        # print mechanism_rates_coeff_list
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # copy .ftemp to .f90

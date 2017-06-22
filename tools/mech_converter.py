@@ -201,22 +201,14 @@ def convert(input_file, output_dir, mc_dir):
         if not re.match('\*', item):
             # We have an equals sign on the first line. Handle this by splitting against =, then taking the last element of the
             # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
+            # Similarly, the final line will end with a colon. Handle in a similar way.
             # Then split by +. Append each item to ro2_input: multiple appends use 'extend'
             ro2List.extend([elem.strip() for elem in item.strip().split('=')[-1].split(';')[0].strip().split('+')])
+    # Remove empty strings
     ro2List = filter(None, ro2List)
-    # For each element, remove any semi-colons, strip, and then append if non-empty.
-    # ro2List = []
-    # for x in ro2_input:
-    #     x = x.replace(';', '').strip()
-    #     if x == '':
-    #         pass
-    #         # print 'doing nothing'
-    #     else:
-    #         # print x
-    #         ro2List.append(x)
-
 
     # check RO2s are in RO2 list
+    # Read in RO2 list, and strip off newlines
     with open(os.path.join(script_directory, 'RO2listv3.3.1')) as RO2List_file:
         RO2List_input = [r.rstrip() for r in RO2List_file.readlines()]
 

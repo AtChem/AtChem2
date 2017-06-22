@@ -203,7 +203,7 @@ def convert(input_file, output_dir, mc_dir):
             # resulting list, which will either be the right-hand side of the first line, or the whole of any other line.
             # Similarly, the final line will end with a colon. Handle in a similar way.
             # Then split by +. Append each item to ro2_input: multiple appends use 'extend'
-            ro2List.extend([elem.strip() for elem in item.strip().split('=')[-1].split(';')[0].strip().split('+')])
+            ro2List.extend([elem.strip() for elem in item.split('=')[-1].split(';')[0].strip().split('+')])
     # Remove empty strings
     ro2List = filter(None, ro2List)
 
@@ -303,7 +303,7 @@ ro2 = 0.00D+00\n""")
             reactionNumber += 1
             # print 'line =', line
             # strip whitespace, ; and %
-            line = line.strip().strip('%').strip(';').strip()
+            line = line.strip().strip('%;').strip()
             print 'line =', line
             # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
             a = line

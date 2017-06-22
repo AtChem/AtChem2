@@ -193,6 +193,24 @@ $this_file_failures"
     fi
   done
 
+  # Apply numdiff to ro2-rates.f90.cmp, a special case. If the numdiff gives differences,
+  # then add the numdiff output to $this_test_failures via $this_file_failures,.
+  for filename in $TESTS_DIR/$test/ro2-rates.f90.cmp; do
+    echo 'Checking' $filename
+    this_file_failures=$(test_output_file ro2-rates.f90 $filename)
+    exitcode=$?
+    if [ $exitcode -eq 0 ]; then
+      continue
+    elif [ $exitcode -eq 1 ]; then
+      this_test_failures="$this_test_failures
+
+$this_file_failures"
+    else
+      echo 'Numdiff gave an error. Aborting.'
+      exit 1
+    fi
+  done
+
   # Loop over all files (that don't end in .cmp) in the instantaneousRates
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.

@@ -86,7 +86,7 @@ def convert(input_file, output_dir, mc_dir):
                 reactionNumber += 1
                 # print 'line =', line
                 # strip whitespace, ; and %
-                line = line.strip().strip('%').strip(';').strip()
+                line = line.strip().strip('%;').strip()
 
                 #print ''
                 #print 'line =', line

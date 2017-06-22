@@ -55,8 +55,9 @@ def convert(input_file, output_dir, mc_dir):
     rateConstants = []
     reactionNumber = 0
 
-    with open(os.path.join(input_directory, 'mechanism.reactemp'), 'w') as reac_temp_file, open(
+    with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, open(
             os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
+        mech_reac_list = []
         # Loop over all lines in the reaction_definitions section of the input file
         for line in reaction_definitions:
 
@@ -104,11 +105,11 @@ def convert(input_file, output_dir, mc_dir):
                             # reactantNums to record this reaction.
                             speciesList.append(x)
                             reactantNums.append(len(speciesList))
-                            print 'adding', x, 'to speciesList'
+                            # print 'adding', x, 'to speciesList'
 
                     # Write the reactants to mechanism.reactemp
                     for z in reactantNums:
-                        reac_temp_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
+                        mech_reac_list.append(str(reactionNumber) + ' ' + str(z) + '\n')
 
                 if not productsList == '':
                     # Compare each product against known species.
@@ -123,25 +124,18 @@ def convert(input_file, output_dir, mc_dir):
                             # productNums to record this reaction.
                             speciesList.append(x)
                             productNums.append(len(speciesList))
-                            print 'adding', x, 'to speciesList'
+                            # print 'adding', x, 'to speciesList'
 
                     # Write the products to mechanism.prod
                     for z in productNums:
                         prod_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
 
         # Output number of species and number of reactions
-        reac_temp_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
-
-    # Copy mechanism.reactemp to mechanism.reac in a different order to make it readable by the model (move the last line to
-    # the first line).
-    with open(os.path.join(input_directory, 'mechanism.reactemp')) as reac_temp_file, open(
-            os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file:
-        st = reac_temp_file.readlines()
-        # Write last line
-        reac_file.write(st[len(st) - 1])
+        reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
         # Write all other lines
-        for line in st[:-1]:
+        for line in mech_reac_list:
             reac_file.write(line)
+
 
     # Write speciesList to mechanism.species, indexed by (1 to len(speciesList))
     with open(os.path.join(mc_dir, 'mechanism.species'), 'w') as species_file:
@@ -150,22 +144,25 @@ def convert(input_file, output_dir, mc_dir):
 
     # Write out rate coefficients
     i = 1
-    with open(os.path.join(input_directory, 'mechanism-rate-coefficients.ftemp'), 'w') as mech_rates_temp_file:
-        for rate_counter, x in zip(range(len(s)), rateConstants):
-            if (re.match('!', x) is not None) | (x.isspace()):
-                mech_rates_temp_file.write(str(x))
-            else:
-                # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
-                # then matches - and any combination of digits and decimal points. This replaces the negative number by its
-                # bracketed version.
-                string = re.sub('(?<=@)-[0-9.]*', '(\g<0>)', x)
-                # Now convert all @ to ** etc.
-                string = string.replace('@', '**')
-                string = string.replace('<', '(')
-                string = string.replace('>', ')')
-                mech_rates_temp_file.write(
-                    'p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
-                i += 1
+    mech_rates_list = []
+    for rate_counter, x in zip(range(len(s)), rateConstants):
+        if (re.match('!', x) is not None) | (x.isspace()):
+            mech_rates_list.append(str(x))
+        else:
+            # This matches anything like @-dd.d and replaces with **(-dd.d). This uses (?<=@) as a lookbehind assertion,
+            # then matches - and any combination of digits and decimal points. This replaces the negative number by its
+            # bracketed version.
+            string = re.sub('(?<=@)-[0-9.]*', '(\g<0>)', x)
+            # Now convert all @ to ** etc.
+            string = string.replace('@', '**')
+            string = string.replace('<', '(')
+            string = string.replace('>', ')')
+            string = re.sub(r'(?P<single>[0-9]+\.[0-9]+)[eE]',
+                           '\g<single>D',
+                           string)
+            mech_rates_list.append(
+                'p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
+            i += 1
 
     # Write RO2 data to file
     in_RO2_lines = False
@@ -225,8 +222,6 @@ ro2 = 0.00D+00\n""")
         mech_rates_file.write('ro2 = ro2sum( y ) \n\n')
 
 
-    os.remove(os.path.join(input_directory, 'mechanism.reactemp'))
-
     coeffSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
     reactionNumber = 0
     mechanism_rates_coeff_list = []
@@ -275,7 +270,7 @@ ro2 = 0.00D+00\n""")
 
             # strip whitespace, ; and %
             line = line.strip().strip('%;').strip()
-            print 'line =', line
+
             # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
             a = line
 
@@ -294,11 +289,10 @@ ro2 = 0.00D+00\n""")
                 # Add reactant to coeffSpeciesList, and add this number to
                 # reactantNums to record this reaction.
                 coeffSpeciesList.append(reactant)
-                print 'adding', reactant, 'to coeffSpeciesList'
+                # print 'adding', reactant, 'to coeffSpeciesList'
 
             if not RHSList.isspace():
                 # Compare each product against known species.
-                productNums = []
                 # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
                 # Now, each string in the sublist will:
                 # - start with a digit
@@ -309,10 +303,10 @@ ro2 = 0.00D+00\n""")
                     # Filter out nunbers, and spaces, and any reserved words, and any known species
                     if (not re.match('[0-9]', x)) and (not x == '') and (not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList):
                         coeffSpeciesList.append(x)
-                        print 'adding', x, 'to coeffSpeciesList'
+                        # print 'adding', x, 'to coeffSpeciesList'
 
     # Recombine the species found into lines of 10 in the right format to declare them as Fortran variables.
-    # Begin wthe first line as necessary
+    # Begin the first line as necessary
     newline = 'real(kind=DP) ::'
     mechanism_rates_decl = []
     # Loop over all species
@@ -342,16 +336,15 @@ ro2 = 0.00D+00\n""")
             mr3_file.write(item)
 
     # # Combine mechanism rates and RO2 / NOY sum files
-    with open(os.path.join(input_directory, 'mechanism-rate-coefficients.ftemp'), 'r') as mech_rates_temp_file, \
-        open(os.path.join(output_dir, 'mechanism-rate-coefficients.f90'), 'a') as mech_rates_coeff_file:
+    with open(os.path.join(output_dir, 'mechanism-rate-coefficients.f90'), 'a') as mech_rates_coeff_file:
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # copy .ftemp to .f90
-        rs = mech_rates_temp_file.readlines()
-        for r in rs:
+        # rs = mech_rates_list.readlines()
+        for r in mech_rates_list:
             mech_rates_coeff_file.write(r)
 
-    os.remove(os.path.join(input_directory, 'mechanism-rate-coefficients.ftemp'))
+    # os.remove(os.path.join(input_directory, 'mechanism-rate-coefficients.ftemp'))
 
 
 def main():

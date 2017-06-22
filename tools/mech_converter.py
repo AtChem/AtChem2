@@ -418,12 +418,7 @@ ro2 = 0.00D+00\n""")
                     # Filter out spaces, numbers, and maths symbols
                     if (not re.match('[0-9]', x)) and (not x == ''):
                         # Filter out our 'reserved words'
-                        if not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T']):
-                            # print x
-                            if x in coeffSpeciesList:
-                                pass
-                                # print 'found: ', x
-                            else:
+                        if ((not any(x == reserved for reserved in ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T'])) and (not x in coeffSpeciesList)):
                                 coeffSpeciesList.append(x)
                                 print 'adding', x, 'to coeffSpeciesList'
 

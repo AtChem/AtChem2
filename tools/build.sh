@@ -26,7 +26,7 @@ echo "mechanism output directory:" $3
 
 echo ''
 echo "call setup_atchem.py"
-python ./tools/atchem.py $1 $2 $3
+python ./tools/setup_atchem.py $1 $2 $3
 
 echo ''
 echo "make" $1

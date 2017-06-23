@@ -5,6 +5,14 @@
 
   language: fortran
 
+  #cache:
+  #  directories:
+  #    - /usr/local/Cellar/isl@0.12
+  #    - /usr/local/Cellar/cloog
+  #    - /usr/local/Cellar/gcc@4.8
+  #    - /usr/local/Cellar/gettext
+  #    - /usr/local/Cellar/numdiff
+
   os:
     - osx
     - linux
@@ -22,6 +30,7 @@
   before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$PWD/cvode/lib:$PWD/openlibm-0.4.1 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; brew install gcc@4.8 homebrew/science/numdiff ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./travis/cache_homebrew ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD

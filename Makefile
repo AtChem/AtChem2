@@ -57,14 +57,14 @@ makefile.local:
 
 include makefile.local
 
-SRCS = dataStructures.f90 interpolationFunctions.f90 configFunctions.f90 inputFunctions.f90 outputFunctions.f90 atmosphereFunctions.f90 solarFunctions.f90 constraintFunctions.f90 solverFunctions.f90 parameterModules.f90 atchem.f90
+SRCS = src/dataStructures.f90 src/interpolationFunctions.f90 src/configFunctions.f90 src/inputFunctions.f90 src/outputFunctions.f90 src/atmosphereFunctions.f90 src/solarFunctions.f90 src/constraintFunctions.f90 src/solverFunctions.f90 src/parameterModules.f90 src/atchem.f90
 
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMLIB) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMLIB) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
 	$(F77) -o $(AOUT) $(SRCS) $(FFLAGS) $(LDFLAGS)
-	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' *.f90
+	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' src/*.f90
 
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
@@ -76,9 +76,6 @@ test:
 	@rm -f travis/tests/results
 	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
 
-.f90.o:
-	$(F77) -c $(FFLAGS) $<
-
 clean:
 	rm -f *.o
 	rm -f $(AOUT)
@@ -88,13 +85,13 @@ clean:
 
 # dependencies:
 
-atchem.o : atchem.f90 inputFunctions.o configFunctions.o dataStructures.o
-constraintFunctions.o : constraintFunctions.f90 dataStructures.o
-atmosphereFunctions.o : atmosphereFunctions.f90
-dataStructures.o : dataStructures.f90
-inputFunctions.o : inputFunctions.f90 configFunctions.o dataStructures.o
-interpolationFunctions.o : interpolationFunctions.f90 dataStructures.o
-configFunctions.o : configFunctions.f90
-outputFunctions.o : outputFunctions.f90 dataStructures.o
-parameterModules.o : parameterModules.f90 dataStructures.o
-solverFunctions.o : solverFunctions.f90 dataStructures.o
+src/atchem.o : src/atchem.f90 src/inputFunctions.o src/configFunctions.o src/dataStructures.o
+src/constraintFunctions.o : src/constraintFunctions.f90 src/dataStructures.o
+src/atmosphereFunctions.o : src/atmosphereFunctions.f90
+src/dataStructures.o : src/dataStructures.f90
+src/inputFunctions.o : src/inputFunctions.f90 src/configFunctions.o src/dataStructures.o
+src/interpolationFunctions.o : src/interpolationFunctions.f90 src/dataStructures.o
+src/configFunctions.o : src/configFunctions.f90
+src/outputFunctions.o : src/outputFunctions.f90 src/dataStructures.o
+src/parameterModules.o : src/parameterModules.f90 src/dataStructures.o
+src/solverFunctions.o : src/solverFunctions.f90 src/dataStructures.o

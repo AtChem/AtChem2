@@ -4,6 +4,8 @@
  Output dir is travis/tests/spec_yes_env_no_with_jfac
  Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac/instantaneousRates
  Parameter dir is travis/tests/spec_yes_env_no_with_jfac/modelConfiguration
+ Species constraints dir is travis/tests/spec_yes_env_no_with_jfac/speciesConstraints
+ Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac/environmentConstraints
 
 -----------------------
  Species and reactions

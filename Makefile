@@ -13,11 +13,11 @@ ifeq ($(TRAVIS_OS_NAME),linux)
 FORT_COMP    = gfortran
 CVODELIB     = /home/travis/build/AtChem/AtChem/cvode/lib
 else
-# if osx, then pass self-built cvode and homebrew gfortran
-CVODELIB     = /Users/travis/build/AtChem/AtChem/cvode/lib
+# if macOS, then pass self-built cvode and homebrew gfortran
 FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
+CVODELIB     = /Users/travis/build/AtChem/AtChem/cvode/lib
 endif
-# else it's not on Travis, so check OS, and then pass local path to cvode and openlibm
+# else it's not on Travis, so check OS, and then pass local path to cvode
 else
 ifeq ($(OS),Linux)
 FORT_COMP    = gfortran

@@ -8,32 +8,30 @@
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass apt-get install location for cvode
-FORT_COMP = gfortran
-CVODELIB = /home/travis/build/AtChem/AtChem/cvode/lib
-OPENLIBMLIB = /home/travis/build/AtChem/AtChem/openlibm-0.4.1
+FORT_COMP    = gfortran
+CVODELIB     = /home/travis/build/AtChem/AtChem/cvode/lib
 RPATH_OPTION = -R
 else
 # if osx, then pass self-built cvode and homebrew gfortran
-CVODELIB = /Users/travis/build/AtChem/AtChem/cvode/lib
-FORT_COMP = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
-OPENLIBMLIB = /Users/travis/build/AtChem/AtChem/openlibm-0.4.1
+CVODELIB     = /Users/travis/build/AtChem/AtChem/cvode/lib
+FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
 RPATH_OPTION = -rpath
 endif
 # else it's not on Travis, so check OS, and then pass local path to cvode and openlibm
 else
 OS := $(shell uname -s)
 ifeq ($(OS),Linux)
-FORT_COMP = gfortran
-CVODELIB = /home/s/sc676/Sommariva/gcc/cvode/lib
-OPENLIBMLIB = /home/s/sc676/Sommariva/AtChem/openlibm-0.4.1
+FORT_COMP    = gfortran
+CVODELIB     = /home/s/sc676/Sommariva/gcc/cvode/lib
 RPATH_OPTION = -R
 else
-FORT_COMP = gfortran
-CVODELIB = /Users/sam/ReSET/Sommariva/cvode/lib
-OPENLIBMLIB = /Users/sam/git/atchem/openlibm-0.4.1
+FORT_COMP    = gfortran
+CVODELIB     = /Users/sam/ReSET/Sommariva/cvode/lib
 RPATH_OPTION = -rpath
 endif
 endif
+
+OPENLIBMDIR  = openlibm-0.4.1
 
 # gfortran flags
 FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
@@ -60,7 +58,7 @@ include makefile.local
 
 SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/atchem.f90
 
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMLIB) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMLIB) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
@@ -75,7 +73,7 @@ test:
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMLIB)"
+	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMDIR)"
 
 clean:
 	rm -f *.o

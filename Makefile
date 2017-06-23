@@ -5,30 +5,33 @@
 .SUFFIXES: .f90 .o
 .PHONY: all test
 
+OS := $(shell uname -s)
+
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass apt-get install location for cvode
 FORT_COMP    = gfortran
 CVODELIB     = /home/travis/build/AtChem/AtChem/cvode/lib
-RPATH_OPTION = -R
 else
 # if osx, then pass self-built cvode and homebrew gfortran
 CVODELIB     = /Users/travis/build/AtChem/AtChem/cvode/lib
 FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
-RPATH_OPTION = -rpath
 endif
 # else it's not on Travis, so check OS, and then pass local path to cvode and openlibm
 else
-OS := $(shell uname -s)
 ifeq ($(OS),Linux)
 FORT_COMP    = gfortran
 CVODELIB     = /home/s/sc676/Sommariva/gcc/cvode/lib
-RPATH_OPTION = -R
 else
 FORT_COMP    = gfortran
 CVODELIB     = /Users/sam/ReSET/Sommariva/cvode/lib
-RPATH_OPTION = -rpath
 endif
+endif
+
+ifeq ($(OS),Linux)
+RPATH_OPTION = -R
+else
+RPATH_OPTION = -rpath
 endif
 
 OPENLIBMDIR  = openlibm-0.4.1

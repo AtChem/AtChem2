@@ -8,7 +8,7 @@ import shutil
 def setup_files_for_atchem(in_file, output_dir, mc_dir):
     assert os.path.isfile(in_file), 'Failed find file ' + in_file
     script_directory = os.path.dirname(os.path.abspath(__file__))
-    assert os.path.exists(os.path.join(script_directory, output_dir)), 'Failed to find directory ' + output_dir + ' (looking for ' + os.path.join(script_directory, output_dir) + ' )'
+    assert os.path.exists(output_dir), 'Failed to find directory ' + output_dir
     # Convert MCM input file to generated files
     mc.convert(in_file, output_dir, mc_dir)
 
@@ -18,7 +18,7 @@ def main():
     input_filename = sys.argv[1]
     # output_dir defaults to '.' if not given
     if len(sys.argv) <= 2:
-        output_dir = '.'
+        output_dir = './src/'
     else:
         output_dir = sys.argv[2]
     if len(sys.argv) <= 3:

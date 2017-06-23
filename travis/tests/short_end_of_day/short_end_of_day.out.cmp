@@ -4,6 +4,8 @@
  Output dir is travis/tests/short_end_of_day
  Instantaneous rates dir is travis/tests/short_end_of_day/instantaneousRates
  Parameter dir is travis/tests/short_end_of_day/modelConfiguration
+ Species constraints dir is travis/tests/short_end_of_day/speciesConstraints
+ Environment constraints dir is travis/tests/short_end_of_day/environmentConstraints
 
 -----------------------
  Species and reactions

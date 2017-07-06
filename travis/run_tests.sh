@@ -1,3 +1,6 @@
+#!/bin/sh
+#set -e
+
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -9,8 +12,6 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/bash
-#set -e
 function test_output_text {
   # This file creates 2 temporary files, which hold the section of
   # each of the input files (arg 1 and 2) defined by the args 3 and 4 for beginning

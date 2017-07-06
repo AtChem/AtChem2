@@ -1,4 +1,13 @@
-# This file was written by Sam Cox, University of Leicester, 2017
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem distribution.
+#
+# -----------------------------------------------------------------------------
 
 # This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
 # Call with a single parameter containing the file to fix.

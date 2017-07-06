@@ -1,8 +1,19 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Roberto Sommariva
+#
+# This file is part of the AtChem software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem distribution.
+#
+# -----------------------------------------------------------------------------
+
 from math import ceil
 
 pylab_ok=False
 import os
-	
+
 try:
 	os.environ['MPLCONFIGDIR'] = '/tmp'
 	import matplotlib
@@ -20,9 +31,9 @@ def table_of_plots(datafile, outputfile, maxrows=10, ncols=2):
 	# and up to <maxrows> rows of plots.
 	# The result is saved as one large png file in <outputfile>.
 	# maxrows<=0 means that all data should be plotted (not tested!)
-	if not pylab_ok:	
+	if not pylab_ok:
 		return ()
-	
+
 	if ncols<1 :
 		ncols=1
 	try:
@@ -66,8 +77,6 @@ def table_of_plots(datafile, outputfile, maxrows=10, ncols=2):
 		plot(timecol, y)
 
 	savefig(outputfile)
-	
+
 	im = Image.open(outputfile)
 	return im.size
-
-	

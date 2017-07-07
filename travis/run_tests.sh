@@ -1,3 +1,5 @@
+#!/bin/bash
+#set -e
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -8,9 +10,6 @@
 # LICENSE.md at the top level of the AtChem distribution.
 #
 # -----------------------------------------------------------------------------
-
-#!/bin/bash
-#set -e
 
 function test_output_text {
   # This file creates 2 temporary files, which hold the section of

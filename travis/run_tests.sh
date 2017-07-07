@@ -1,7 +1,7 @@
 #!/bin/sh
 #set -e
 
-function test_output_text {
+test_output_text() {
   # This file creates 2 temporary files, which hold the section of
   # each of the input files (arg 1 and 2) defined by the args 3 and 4 for beginning
   # and end line numbers. It then numdiffs these using test_output_file
@@ -23,12 +23,12 @@ function test_output_text {
   return $exitcode
 }
 
-function test_output_file {
+test_output_file() {
   # numdiff with relative tolerance given by -r argument
   numdiff -a 1.e-12 -r 5.0e-06 $1 $2
 }
 
-function find_string {
+find_string() {
   # This function finds the line number of the first occurence of the string
   # $1 in file $2
   grep -n $1 $2 | grep -Eo '^[^:]+'

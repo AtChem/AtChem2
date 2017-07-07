@@ -30,5 +30,5 @@
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
-    - ./atchem
+    - ./atchem2
     - make test

@@ -5,10 +5,10 @@
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
-# This file is part of the AtChem software package.
+# This file is part of the AtChem2 software package.
 #
 # This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem distribution.
+# LICENSE.md at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -363,7 +363,7 @@ ro2 = 0.00D+00\n""")
 def main():
     assert len(sys.argv) > 1, 'Please enter a filename as first argument, pointing to the mcm mechanism file.'
     input_filename = sys.argv[1]
-    assert len(sys.argv) > 2, 'Please enter a directory as second argument, pointing to the directory containing source files of AtChem.'
+    assert len(sys.argv) > 2, 'Please enter a directory as second argument, pointing to the directory containing source files of AtChem2.'
     output_directory = sys.argv[2]
     assert len(sys.argv) > 3, 'Please enter a directory as third argument, pointing to the directory for mechanism.species etc.'
     param_directory = sys.argv[3]

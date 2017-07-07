@@ -5,15 +5,15 @@
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
-# This file is part of the AtChem software package.
+# This file is part of the AtChem2 software package.
 #
 # This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem distribution.
+# LICENSE.md at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
 #!/bin/sh
-# Makefile for AtChem project
+# Makefile for AtChem2 project
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
@@ -25,11 +25,11 @@ ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran and apt-get install location for cvode
 FORT_COMP    = gfortran
-CVODELIB     = /home/travis/build/AtChem/AtChem/cvode/lib
+CVODELIB     = /home/travis/build/AtChem2/AtChem2/cvode/lib
 else
 # if macOS, then pass homebrew gfortran and self-built cvode
 FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
-CVODELIB     = /Users/travis/build/AtChem/AtChem/cvode/lib
+CVODELIB     = /Users/travis/build/AtChem2/AtChem2/cvode/lib
 endif
 # else it's not on Travis, so check the OS, and then pass local path to cvode
 else
@@ -61,7 +61,7 @@ LIBDIR   =  /usr/lib/:$(CVODELIB)
 OBJ = obj
 SRC = src
 
-AOUT = atchem
+AOUT = atchem2
 
 all: $(AOUT)
 
@@ -73,7 +73,7 @@ makefile.local:
 
 include makefile.local
 
-SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/atchem.f90
+SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/atchem2.f90
 
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
 
@@ -101,7 +101,7 @@ clean:
 
 # dependencies:
 
-atchem.o : atchem.f90 inputFunctions.o configFunctions.o dataStructures.o
+atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o
 constraintFunctions.o : constraintFunctions.f90 dataStructures.o
 atmosphereFunctions.o : atmosphereFunctions.f90
 dataStructures.o : dataStructures.f90

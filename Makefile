@@ -38,7 +38,7 @@ FORT_COMP    = gfortran
 CVODELIB     = /path/to/cvode/lib
 else
 FORT_COMP    = gfortran
-CVODELIB     = /Users/sam/ReSET/Sommariva/cvode/lib
+CVODELIB     = /path/to/cvode/lib
 endif
 endif
 

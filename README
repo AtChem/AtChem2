@@ -6,13 +6,13 @@ This directory contains sources of the AtChem2 application. The tools directory 
 
 AtChem2 requires a working Fortran compiler, BLAS and LAPACK libraries, CVODE library, openlibm library, and a Python 2 installation. Running the testsuite additionally requires a numdiff installation.
 
-Please refer to https://github.com/AtChem2/AtChem2/wiki/1.1-Dependencies for installation instructions of these dependencies.
+Please refer to https://github.com/AtChem/AtChem2/wiki/1.1-Dependencies for installation instructions of these dependencies.
 
 **********************************
 * Building AtChem2
 **********************************
 
-Please refer to https://github.com/AtChem2/AtChem2/wiki/1.-Installation for installation instructions. Very briefly:
+Please refer to https://github.com/AtChem/AtChem2/wiki/1.-Installation for installation instructions. Very briefly:
 
 After having installed all dependencies, please note that at present AtChem2 requires recompilation for each new .fac file. This is all handled by the script "./tools/build.sh", which converts the .fac file into a format usable by AtChem2 (namely, it generates two Fortran files and several data files).
 

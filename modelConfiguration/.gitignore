@@ -1,7 +1,7 @@
 # Ignore everything in this directory
 *
+
 # Except the following
 !*.config
 !*.parameters
 !.gitignore
-!extraOutputSubroutines.f90

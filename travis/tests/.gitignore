@@ -1,5 +1,4 @@
 # Ignore output files from test runs
-
 *.output
 *.out
 */instantaneousRates/*
@@ -9,7 +8,6 @@
 results
 
 # Except configuration and reference files
-
 !*.cmp
 !*.config
 !*.parameters

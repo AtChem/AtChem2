@@ -39,7 +39,8 @@ contains
     ! Time as day of year and fractional seconds of day
     currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
 
-    ! The day angle is
+    ! The day angle accounts for the variation in the Sun-Earth
+    ! distance caused by the ellipticity of the Earth's orbit.
     if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
       ! leap year
       theta = 2.0_DP * pi * floor(currentFracDay) / 366.0_DP
@@ -95,7 +96,8 @@ contains
 
     pi = 4.0_DP * atan( 1.0_DP )
 
-    ! The equation of time is
+    ! The equation of time accounts for the discrepancy between the
+    ! apparent and the mean solar time at a given location.
     c0 = 0.000075_DP
     c1 = 0.001868_DP
     c2 = -0.032077_DP
@@ -104,14 +106,15 @@ contains
     eqtime = c0 + c1 * cos(theta) + c2 * sin(theta) + c3 * cos(2.0_DP * theta) + &
              c4 * sin(2.0_DP * theta)
 
-    ! The local hour angle is the angle between the observer's meridian
-    ! and the Sun's meridian. Time must be in GMT/UTC and longitude in degrees.
+    ! The local hour angle is the angle between the observer's
+    ! meridian and the Sun's meridian. Time must be in GMT/UTC and
+    ! longitude in degrees.
     currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
     currentFracHour =  (currentFracDay - floor(currentFracDay)) * 24.0_DP
     lha = pi * ((currentFracHour / 12.0_DP) - (1.0_DP + longitude / 180.0_DP)) + eqtime
 
-    ! The solar zenith angle is the angle between the local vertical and
-    ! the center of the Sun. Latitude must be in radians.
+    ! The solar zenith angle is the angle between the local vertical
+    ! and the center of the Sun. Latitude must be in radians.
     lat = latitude * pi / 180.0_DP
     sinld = sin( lat ) * sin( dec )
     cosld = cos( lat ) * cos( dec )

@@ -1,5 +1,14 @@
-# Written by Sam Cox, University of Leicester, 2017
+# -----------------------------------------------------------------------------
 #
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem distribution.
+#
+# -----------------------------------------------------------------------------
+
 # This script indents the source file provided as an argument, replacing it with a copy that better fits the
 # expected style. If two arguments are given, the output wil be written to the second, leaving the first untouched.
 #

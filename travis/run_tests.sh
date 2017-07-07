@@ -1,5 +1,16 @@
 #!/bin/bash
 #set -e
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem distribution.
+#
+# -----------------------------------------------------------------------------
+
 function test_output_text {
   # This file creates 2 temporary files, which hold the section of
   # each of the input files (arg 1 and 2) defined by the args 3 and 4 for beginning

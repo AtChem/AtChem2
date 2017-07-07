@@ -1,3 +1,17 @@
+! -----------------------------------------------------------------------------
+!
+! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+! Peter Jimack, Mike Pilling
+!
+! Copyright (c) 2017 Sam Cox, Roberto Sommariva
+!
+! This file is part of the AtChem software package.
+!
+! This file is covered by the MIT license which can be found in the file
+! LICENSE.md at the top level of the AtChem distribution.
+!
+! -----------------------------------------------------------------------------
+
 ! ******************************************************************** !
 ! ATCHEM -- MODULE configFunctions
 !

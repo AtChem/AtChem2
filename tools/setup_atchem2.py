@@ -2,10 +2,10 @@
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
-# This file is part of the AtChem software package.
+# This file is part of the AtChem2 software package.
 #
 # This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem distribution.
+# LICENSE.md at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -13,10 +13,10 @@ import os
 import sys
 import mech_converter as mc
 import shutil
-"""This script builds the program atchem"""
+"""This script builds the program atchem2"""
 
 
-def setup_files_for_atchem(in_file, output_dir, mc_dir):
+def setup_files_for_atchem2(in_file, output_dir, mc_dir):
     assert os.path.isfile(in_file), 'Failed find file ' + in_file
     script_directory = os.path.dirname(os.path.abspath(__file__))
     assert os.path.exists(output_dir), 'Failed to find directory ' + output_dir
@@ -36,7 +36,7 @@ def main():
         param_dir = './modelConfiguration/'
     else:
         param_dir = sys.argv[3]
-    setup_files_for_atchem(input_filename, output_dir, param_dir)
+    setup_files_for_atchem2(input_filename, output_dir, param_dir)
 
 if __name__ == '__main__':
     main()

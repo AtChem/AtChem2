@@ -5,15 +5,15 @@
 !
 ! Copyright (c) 2017 Sam Cox, Roberto Sommariva
 !
-! This file is part of the AtChem software package.
+! This file is part of the AtChem2 software package.
 !
 ! This file is covered by the MIT license which can be found in the file
-! LICENSE.md at the top level of the AtChem distribution.
+! LICENSE.md at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
 
 ! ******************************************************************** !
-! ATCHEM -- dataStructures file
+! ATCHEM2 -- dataStructures file
 !
 ! This file contains numerous modules that hold logically separate
 ! variables and functions

@@ -1,24 +1,24 @@
 ! -----------------------------------------------------------------------------
 !
-! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young, 
+! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
 ! Peter Jimack, Mike Pilling
 !
 ! Copyright (c) 2017 Sam Cox, Roberto Sommariva
 !
-! This file is part of the AtChem software package.
+! This file is part of the AtChem2 software package.
 !
 ! This file is covered by the MIT license which can be found in the file
-! LICENSE.md at the top level of the AtChem distribution.
+! LICENSE.md at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
 
 ! ******************************************************************** !
 !
-!                        ATCHEM -- MAIN PROGRAM                        !
+!                        ATCHEM2 -- MAIN PROGRAM                        !
 !
 ! ******************************************************************** !
 
-PROGRAM ATCHEM
+PROGRAM ATCHEM2
 
   use, intrinsic :: iso_fortran_env, only : stderr => error_unit
   use types_mod
@@ -528,7 +528,7 @@ PROGRAM ATCHEM
   close (60)
   stop
 
-END PROGRAM ATCHEM
+END PROGRAM ATCHEM2
 
 
 ! ******************************************************************** !

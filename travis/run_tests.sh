@@ -4,10 +4,10 @@
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
-# This file is part of the AtChem software package.
+# This file is part of the AtChem2 software package.
 #
 # This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem distribution.
+# LICENSE.md at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -146,9 +146,9 @@ for test in $1; do
   echo "set up and make" $TESTS_DIR/$test
   ./tools/build.sh $TESTS_DIR/$test/$test.fac src $TESTS_DIR/$test/modelConfiguration &> /dev/null
 
-  # Run atchem with the argument pointing to the output directory
+  # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test/$test.out
+  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...

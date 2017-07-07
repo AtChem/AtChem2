@@ -25,11 +25,11 @@ ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran and apt-get install location for cvode
 FORT_COMP    = gfortran
-CVODELIB     = /home/travis/build/AtChem2/AtChem2/cvode/lib
+CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode/lib
 else
 # if macOS, then pass homebrew gfortran and self-built cvode
 FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
-CVODELIB     = /Users/travis/build/AtChem2/AtChem2/cvode/lib
+CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode/lib
 endif
 # else it's not on Travis, so check the OS, and then pass local path to cvode
 else

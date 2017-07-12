@@ -3,7 +3,7 @@ AtChem2
 
 AtChem2 is an atmospheric chemistry numerical integrator, primarily designed for use with the Master Chemical Mechanism (MCM, http://mcm.leeds.ac.uk/MCM/). For more information and instructions, see the [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki).
 
-AtChem2 is open source, 
+AtChem2 is open source, released under the [MIT license](https://opensource.org/licenses/MIT).
 
 Directory structure
 -------------------

@@ -46,7 +46,7 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (52, '(100A15) ') 'time', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
+      write (52, '(100A15) ') 't', (trim( envVarNames(i) ), i = 1, numEnvVars), 'RO2'
       first_time = .false.
     end if
 

@@ -59,10 +59,10 @@ fi
 # Move to provided directory
 cd $1
 
-wget https://computation.llnl.gov/projects/sundials/download/cvode-2.9.0.tar.gz
-tar -zxf cvode-2.9.0.tar.gz
-rm cvode-2.9.0.tar.gz
-cd cvode-2.9.0/
+wget https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
+tar -zxf sundials-2.7.0.tar.gz
+rm sundials-2.7.0.tar.gz
+cd sundials-2.7.0/
 
 mkdir build
 cd build
@@ -70,6 +70,12 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX=$1/cvode \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=$FORT_COMP \
+    -DBUILD_ARKODE:BOOL=OFF \
+    -DBUILD_CVODE:BOOL=ON \
+    -DBUILD_CVODES:BOOL=OFF \
+    -DBUILD_IDA:BOOL=OFF \
+    -DBUILD_IDAS:BOOL=OFF \
+    -DBUILD_KINSOL:BOOL=OFF \
     -DLAPACK_ENABLE:BOOL=ON \
     -DLAPACK_LIBRARIES=$LAPACK_LIBS \
     -DFCMIX_ENABLE:BOOL=ON \

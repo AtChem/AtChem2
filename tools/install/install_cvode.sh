@@ -31,19 +31,20 @@ if [ -z "$1" ] ; then
   echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
 elif [ ! -d "$1" ]; then
-  echo "$1 is not a directory"
+  echo "$1 is not a directory - please create it if you want to install CVODE there."
   echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
 fi
+cvode_dir="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
 # If a second argument is provided, check that it is an existing file.
 # If it's not provided, then give it a default, so long as that also
 # exists.
 if [ -z "$2" ] ; then
   if [ -f /usr/bin/gfortran ] ; then
-    echo "Default fortran compiler executable selected. To choose another compiler, provide this as a second argument."
+    echo "Default fortran compiler executable (/usr/bin/gfortran) selected. To choose another compiler, provide this as a second argument."
     echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
   else
-    echo "Default fortran compiler 'gfortran' executable selected, but this is not a valid filename."
+    echo "Default fortran compiler '/usr/bin/gfortran' executable selected, but this does not exist on this system."
     echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
     exit 1
   fi
@@ -57,7 +58,7 @@ else
   fi
 fi
 # Move to provided directory
-cd $1
+cd $cvode_dir
 
 wget https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
 tar -zxf sundials-2.7.0.tar.gz
@@ -67,7 +68,7 @@ cd sundials-2.7.0/
 mkdir build
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX=$1/cvode \
+cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=$FORT_COMP \
     -DBUILD_ARKODE:BOOL=OFF \

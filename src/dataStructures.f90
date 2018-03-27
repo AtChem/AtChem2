@@ -547,9 +547,8 @@ module zenith_data_mod
   save
 
   real(kind=DP) :: latitude, longitude
-  real(kind=DP) :: lha, sinld, cosld, cosx, secx
-  real(kind=DP) :: theta, eqtime
-  real(kind=DP), parameter :: cosx_threshold = 1.0e-30_DP
+  real(kind=DP) :: lha, sinld, cosld, cosx, secx, eqtime
+  real(kind=DP), parameter :: cosx_threshold = 1.0d-30
   ! cosx_below_threshold contains whether or not cosx is currently
   ! below cosx_threshold
   logical :: cosx_below_threshold = .false.

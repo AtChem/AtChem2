@@ -227,9 +227,6 @@ contains
     ! element 11 in the orderedEnvVarNames initialisation below.  Its
     ! treatment needs defining in each of cases 1-3 and default below.
 
-    ! calculate the Day Angle
-    call calcTheta( t )
-
     if ( size( envVarNames ) /= 10 ) then
       write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
     end if

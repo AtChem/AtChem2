@@ -28,7 +28,7 @@ FORT_COMP    = gfortran
 CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode/lib
 else
 # if macOS, then pass homebrew gfortran and self-built cvode
-FORT_COMP    = /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8
+FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
 CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode/lib
 endif
 # else it's not on Travis, so check the OS, and then pass local path to cvode

@@ -21,8 +21,8 @@
 
   before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$PWD/cvode/lib:$PWD/openlibm-0.4.1 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/include/c++' ; brew update ; brew install gcc@4.8 libffi gettext ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.8/4.8.5/bin/gfortran-4.8 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/include/c++' ; brew update ; brew install gcc@4.9 libffi gettext ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.9/4.9.4/bin/gfortran-4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi

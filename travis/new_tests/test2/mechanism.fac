@@ -1,0 +1,12 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 = CH3O2 ;
+
+* Reaction definitions. ;
+*;
+* temperature dependence (one reactant constant: 4.4e13 molecule cm-3) ;
+% 1.85D-12*EXP(-1690/TEMP)*4.4e13 : OH = CH3O2 ;

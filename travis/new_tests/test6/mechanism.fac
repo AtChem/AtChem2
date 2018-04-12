@@ -1,0 +1,12 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 =  ;
+
+* Reaction definitions. ;
+*;
+* water dependence ;
+% 1.20D-15*H2O : SO3 = SA ;

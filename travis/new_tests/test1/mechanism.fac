@@ -1,0 +1,12 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 =  ;
+
+* Reaction definitions. ;
+*;
+* unimolecular reaction ;
+% 6.00D-06 : HNO3 = NA ;

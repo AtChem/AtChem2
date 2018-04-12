@@ -1,0 +1,12 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 =  ;
+
+* Reaction definitions. ;
+*;
+* photolysis reaction ;
+% J<1> : O3 = O1D ;

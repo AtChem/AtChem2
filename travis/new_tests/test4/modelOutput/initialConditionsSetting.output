@@ -1,2 +1,1 @@
-no match, m = O          != k = HNO3       concentration =       1.500E+10
-no match, m = O3         != k = HNO3       concentration =       1.500E+10
+match, m = k = O          concentration =       5.000E+08

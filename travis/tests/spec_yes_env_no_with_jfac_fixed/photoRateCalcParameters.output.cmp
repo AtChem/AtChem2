@@ -1,3 +1,3 @@
-              t       latitude      longitude           secx           cosx            lha          sinld          cosld          theta         eqtime
+              t       LATITUDE      LONGITUDE           SECX           COSX            LHA          SINLD          COSLD          THETA         EQTIME
   3.6000000E+04  5.3000000E+01 -1.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00  0.0000000E+00
   3.6200000E+04  5.3000000E+01 -1.0000000E+00  1.2453605E+00  8.0298034E-01 -5.0682790E-01  3.2127079E-01  5.5097312E-01  3.1329856E+00 -1.5978704E-02

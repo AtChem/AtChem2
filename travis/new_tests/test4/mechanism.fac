@@ -9,4 +9,5 @@ RO2 =  ;
 * Reaction definitions. ;
 *;
 * pressure and temperature dependence ;
-% 5.6D-34*N2*(TEMP/300)@-2.6*O2 : O = O3 ;
+* second-order reaction ;
+% 3.3D-39*EXP(530/TEMP)*O2 : NO + NO = NO2 + NO2 ;

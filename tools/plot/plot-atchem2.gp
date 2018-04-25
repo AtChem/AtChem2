@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Roberto Sommariva
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -9,8 +9,99 @@
 #
 # -----------------------------------------------------------------------------
 
-## gnuplot plotting tool for AtChem2 model output
+## plotting tool for the AtChem2 model output
+## --> gnuplot version
 ##
-## SCRIPT ARGUMENT:
-##   - model output directory
+## ARGUMENT:
+## - directory with the model output (default = modelOutput/)
+##
+## USAGE:
+##   gnuplot -c plot-atchem2.gp modelOutput/
+##
+## TODO: get name of variables from file header
 ## ---------------------------------------------- ##
+cd ARG1
+pwd
+
+df1 = 'concentration.output'
+df2 = 'envVar.output'
+df3 = 'photolysisRates.output'
+df4 = 'photoRateCalcParameters.output'
+
+stats df1 skip 1 noout; nc1 = STATS_columns
+stats df2 skip 1 noout; nc2 = STATS_columns
+stats df3 skip 1 noout; nc3 = STATS_columns
+stats df4 skip 1 noout; nc4 = STATS_columns
+
+## ---------------------------- ##
+
+set terminal pdf size 11,7
+set output 'atchem2_output.pdf'
+
+## concentration.output
+set multiplot layout 3,2
+j = 1
+do for [i=2:nc1] {
+    plot df1 using 1:i with lines title '' lt rgb 'black'
+    set title ''; set xlabel 'time'; set ylabel ''
+    if (j == 6) {
+        unset multiplot
+        set multiplot layout 3,2
+        j = 1
+    } else {
+        j = j + 1
+    }
+}
+unset multiplot
+
+## envVar.output
+set multiplot layout 3,2
+j = 1
+do for [i=2:nc2] {
+    plot df2 using 1:i with lines title '' lt rgb 'black'
+    set title ''; set xlabel 'time'; set ylabel ''
+    if (j == 6) {
+        unset multiplot
+        set multiplot layout 3,2
+        j = 1
+    } else {
+        j = j + 1
+    }
+}
+unset multiplot
+
+## photolysisRates.output
+set multiplot layout 3,2
+j = 1
+do for [i=2:nc3] {
+    plot df3 using 1:i with lines title '' lt rgb 'black'
+    set title ''; set xlabel 'time'; set ylabel ''
+    if (j == 6) {
+        unset multiplot
+        set multiplot layout 3,2
+        j = 1
+    } else {
+        j = j + 1
+    }
+}
+unset multiplot
+
+## photoRateCalcParameters.output
+set multiplot layout 3,2
+j = 1
+do for [i=2:nc4] {
+    plot df4 using 1:i with lines title '' lt rgb 'black'
+    set title ''; set xlabel 'time'; set ylabel ''
+    if (j == 6) {
+        unset multiplot
+        set multiplot layout 3,2
+        j = 1
+    } else {
+        j = j + 1
+    }
+}
+unset multiplot
+
+## ---------------------------- ##
+
+print "\n===> atchem2_output.pdf created in directory: ", ARG1, "\n\n"

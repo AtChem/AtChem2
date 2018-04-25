@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Roberto Sommariva
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -9,14 +9,106 @@
 #
 # -----------------------------------------------------------------------------
 
-## Python plotting tool for AtChem2 model output
+## plotting tool for the AtChem2 model output
+## --> Python version [requires matplotlib]
 ##
-## SCRIPT ARGUMENT:
-##   - model output directory
+## ARGUMENT:
+## - directory with the model output (default = modelOutput/)
+##
+## USAGE:
+##   python plot-atchem2.py modelOutput/
 ## ---------------------------------------------- ##
+import os, sys
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
-fin = open("envVar.output", "r")
-fin = open("photolysisRates.output", "r")
-fin = open("photoRateCalcParameters.output", "r")
+os.chdir(sys.argv[1])
+print os.getcwd()
 
-x = fin.readline()
+df1 = np.loadtxt('concentration.output', skiprows=1, unpack=True)
+df2 = np.loadtxt('envVar.output', skiprows=1, unpack=True)
+df3 = np.loadtxt('photolysisRates.output', skiprows=1, unpack=True)
+df4 = np.loadtxt('photoRateCalcParameters.output', skiprows=1, unpack=True)
+
+nc1 = df1.shape[0]
+nc2 = df2.shape[0]
+nc3 = df3.shape[0]
+nc4 = df4.shape[0]
+
+with open('concentration.output') as f:
+    var1 = f.readline().split()
+with open('envVar.output') as f:
+    var2 = f.readline().split()
+with open('photolysisRates.output') as f:
+    var3 = f.readline().split()
+with open('photoRateCalcParameters.output') as f:
+    var4 = f.readline().split()
+
+## ---------------------------- ##
+
+with PdfPages('atchem2_output.pdf') as pdf:
+
+    ## concentration.output
+    fig = plt.figure(figsize=(11,7))
+    j = 1
+    for i in range(1,nc1):
+        ax = fig.add_subplot(3,2,j)
+        ax.plot(df1[0], df1[i], linestyle='-', color='black')
+        ax.set(title=var1[i], xlabel='time', ylabel='')
+        if j == 6:
+            pdf.savefig(fig)
+            fig = plt.figure(figsize=(11,7))
+            j = 1
+        else:
+            j = j + 1
+    pdf.savefig(fig)
+
+    ## envVar.output
+    fig = plt.figure(figsize=(11,7))
+    j = 1
+    for i in range(1,nc2):
+        ax = fig.add_subplot(3,2,j)
+        ax.plot(df2[0], df2[i], linestyle='-', color='black')
+        ax.set(title=var2[i], xlabel='time', ylabel='')
+        if j == 6:
+            pdf.savefig(fig)
+            fig = plt.figure(figsize=(11,7))
+            j = 1
+        else:
+            j = j + 1
+    pdf.savefig(fig)
+
+    ## photolysisRates.output
+    fig = plt.figure(figsize=(11,7))
+    j = 1
+    for i in range(1,nc3):
+        ax = fig.add_subplot(3,2,j)
+        ax.plot(df3[0], df3[i], linestyle='-', color='black')
+        ax.set(title=var3[i], xlabel='time', ylabel='')
+        if j == 6:
+            pdf.savefig(fig)
+            fig = plt.figure(figsize=(11,7))
+            j = 1
+        else:
+            j = j + 1
+    pdf.savefig(fig)
+
+    ## photoRateCalcParameters.output
+    fig = plt.figure(figsize=(11,7))
+    j = 1
+    for i in range(1,nc4):
+        ax = fig.add_subplot(3,2,j)
+        ax.plot(df4[0], df4[i], linestyle='-', color='black')
+        ax.set(title=var4[i], xlabel='time', ylabel='')
+        if j == 6:
+            pdf.savefig(fig)
+            fig = plt.figure(figsize=(11,7))
+            j = 1
+        else:
+            j = j + 1
+    pdf.savefig(fig)
+
+## ---------------------------- ##
+
+print "\n===> atchem2_output.pdf created in directory:", sys.argv[1], "\n\n"

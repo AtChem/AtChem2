@@ -55,7 +55,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
     for i in range(1,nc1):
         ax = fig.add_subplot(3,2,j)
         ax.plot(df1[0], df1[i], linestyle='-', color='black')
-        ax.set(title=var1[i], xlabel='time', ylabel='')
+        ax.set(title=var1[i], xlabel='seconds', ylabel='')
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -70,7 +70,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
     for i in range(1,nc2):
         ax = fig.add_subplot(3,2,j)
         ax.plot(df2[0], df2[i], linestyle='-', color='black')
-        ax.set(title=var2[i], xlabel='time', ylabel='')
+        ax.set(title=var2[i], xlabel='seconds', ylabel='')
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -85,7 +85,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
     for i in range(1,nc3):
         ax = fig.add_subplot(3,2,j)
         ax.plot(df3[0], df3[i], linestyle='-', color='black')
-        ax.set(title=var3[i], xlabel='time', ylabel='')
+        ax.set(title=var3[i], xlabel='seconds', ylabel='')
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -100,7 +100,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
     for i in range(1,nc4):
         ax = fig.add_subplot(3,2,j)
         ax.plot(df4[0], df4[i], linestyle='-', color='black')
-        ax.set(title=var4[i], xlabel='time', ylabel='')
+        ax.set(title=var4[i], xlabel='seconds', ylabel='')
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))

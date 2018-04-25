@@ -17,8 +17,6 @@
 ##
 ## USAGE:
 ##   gnuplot -c plot-atchem2.gp modelOutput/
-##
-## TODO: get name of variables from file header
 ## ---------------------------------------------- ##
 cd ARG1
 pwd
@@ -43,7 +41,7 @@ set multiplot layout 3,2
 j = 1
 do for [i=2:nc1] {
     plot df1 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'time'; set ylabel ''
+    set title ''; set xlabel 'seconds'; set ylabel ''
     if (j == 6) {
         unset multiplot
         set multiplot layout 3,2
@@ -59,7 +57,7 @@ set multiplot layout 3,2
 j = 1
 do for [i=2:nc2] {
     plot df2 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'time'; set ylabel ''
+    set title ''; set xlabel 'seconds'; set ylabel ''
     if (j == 6) {
         unset multiplot
         set multiplot layout 3,2
@@ -75,7 +73,7 @@ set multiplot layout 3,2
 j = 1
 do for [i=2:nc3] {
     plot df3 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'time'; set ylabel ''
+    set title ''; set xlabel 'seconds'; set ylabel ''
     if (j == 6) {
         unset multiplot
         set multiplot layout 3,2
@@ -91,7 +89,7 @@ set multiplot layout 3,2
 j = 1
 do for [i=2:nc4] {
     plot df4 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'time'; set ylabel ''
+    set title ''; set xlabel 'seconds'; set ylabel ''
     if (j == 6) {
         unset multiplot
         set multiplot layout 3,2

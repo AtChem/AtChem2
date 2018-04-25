@@ -1,6 +1,6 @@
 % -----------------------------------------------------------------------------
 %
-% Copyright (c) 2017 Roberto Sommariva
+% Copyright (c) 2017 Sam Cox, Roberto Sommariva
 %
 % This file is part of the AtChem2 software package.
 %
@@ -9,8 +9,12 @@
 %
 % -----------------------------------------------------------------------------
 
-%% GNU Octave/MATLAB plotting tool for AtChem2 model output
+%% plotting tool for the AtChem2 model output
+%% --> GNU Octave/MATLAB version
 %%
-%% SCRIPT ARGUMENT:
-%%   - model output directory
+%% ARGUMENT:
+%% - directory with the model output (default = modelOutput/)
+%%
+%% USAGE:
+%%   octave plot-atchem2.m modelOutput/
 %% ---------------------------------------------- %%

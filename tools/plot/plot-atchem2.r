@@ -40,28 +40,28 @@ cairo_pdf("atchem2_output.pdf", onefile=T, width=11, height=7)
 par(mfrow=c(3,2))
 for (i in 2:nc1) {
   plot(df1[[1]], df1[[i]], type="l",
-       main=colnames(df1[i]), xlab="time", ylab="")
+       main=colnames(df1[i]), xlab="seconds", ylab="")
 }
 
 ## envVar.output
 par(mfrow=c(3,2))
 for (i in 2:nc2) {
   plot(df2[[1]], df2[[i]], type="l",
-       main=colnames(df2[i]), xlab="time", ylab="")
+       main=colnames(df2[i]), xlab="seconds", ylab="")
 }
 
 ## photolysisRates.output
 par(mfrow=c(3,2))
 for (i in 2:nc3) {
   plot(df3[[1]], df3[[i]], type="l",
-       main=colnames(df3[i]), xlab="time", ylab="")
+       main=colnames(df3[i]), xlab="seconds", ylab="")
 }
 
 ## photoRateCalcParameters.output
 par(mfrow=c(3,2))
 for (i in 2:nc4) {
   plot(df4[[1]], df4[[i]], type="l",
-       main=colnames(df4[i]), xlab="time", ylab="")
+       main=colnames(df4[i]), xlab="seconds", ylab="")
 }
 
 dev.off()

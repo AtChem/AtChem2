@@ -110,7 +110,7 @@ contains
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (59, '(100A15) ') 't', 'latitude', 'longitude', 'secx', 'cosx', 'lha', 'sinld', 'cosld', 'theta', 'eqtime'
+      write (59, '(100A15) ') 't', 'LATITUDE', 'LONGITUDE', 'SECX', 'COSX', 'LHA', 'SINLD', 'COSLD', 'THETA', 'EQTIME'
       first_time = .false.
     end if
 

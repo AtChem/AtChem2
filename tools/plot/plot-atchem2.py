@@ -26,6 +26,15 @@ from matplotlib.backends.backend_pdf import PdfPages
 os.chdir(sys.argv[1])
 print os.getcwd()
 
+with open('concentration.output') as f:
+    var1 = f.readline().split()
+with open('envVar.output') as f:
+    var2 = f.readline().split()
+with open('photolysisRates.output') as f:
+    var3 = f.readline().split()
+with open('photoRateCalcParameters.output') as f:
+    var4 = f.readline().split()
+
 df1 = np.loadtxt('concentration.output', skiprows=1, unpack=True)
 df2 = np.loadtxt('envVar.output', skiprows=1, unpack=True)
 df3 = np.loadtxt('photolysisRates.output', skiprows=1, unpack=True)
@@ -35,15 +44,6 @@ nc1 = df1.shape[0]
 nc2 = df2.shape[0]
 nc3 = df3.shape[0]
 nc4 = df4.shape[0]
-
-with open('concentration.output') as f:
-    var1 = f.readline().split()
-with open('envVar.output') as f:
-    var2 = f.readline().split()
-with open('photolysisRates.output') as f:
-    var3 = f.readline().split()
-with open('photoRateCalcParameters.output') as f:
-    var4 = f.readline().split()
 
 ## ---------------------------- ##
 

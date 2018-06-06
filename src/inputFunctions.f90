@@ -328,6 +328,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
+    filename = trim( param_dir ) // '/photolysisConstants.config'
     write (*, '(A)') ' Reading photolysis constants from file...'
     nrOfPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then

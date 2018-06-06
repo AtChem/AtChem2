@@ -328,18 +328,6 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    ! Check whether file exists correctly in readPhotolysisConstants.
-    filename = trim( param_dir ) // '/photolysisConstants.config'
-    write (*, '(A)') ' Looking for photolysis constants file...'
-    inquire(file=filename, exist=file_exists)
-    if ( file_exists .eqv. .false. ) then
-      usePhotolysisConstants = .false.
-      write (*, '(A)') ' Photolysis constants file not found, trying photolysis rates file...'
-      call readPhotolysisRates()
-      return
-    end if
-    usePhotolysisConstants = .true.
-
     write (*, '(A)') ' Reading photolysis constants from file...'
     nrOfPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then
@@ -723,9 +711,22 @@ contains
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
+    character(len=maxFilepathLength) :: filename
+    logical :: file_exists
 
     ! Get names of photo rates
-    call readPhotolysisConstants()
+    ! Check whether file exists correctly in readPhotolysisConstants.
+    filename = trim( param_dir ) // '/photolysisConstants.config'
+    write (*, '(A)') ' Looking for photolysis constants file...'
+    inquire(file=filename, exist=file_exists)
+    if ( file_exists .eqv. .true. ) then
+      usePhotolysisConstants = .true.
+      call readPhotolysisConstants()
+    else
+      usePhotolysisConstants = .false.
+      write (*, '(A)') ' Photolysis constants file not found, trying photolysis rates file...'
+      call readPhotolysisRates()
+    end if
     write (*,*)
 
     numConPhotoRates = 0

@@ -156,7 +156,7 @@ contains
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     use output_functions_mod, only : ro2sum
-    use constraint_functions_mod, only : getEnvVarsAtT, getEnvVarNum
+    use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
     implicit none
 
@@ -212,7 +212,7 @@ contains
         if ( cosx_below_threshold .eqv. .true. ) then
           j(ck(i)) = 0.0_DP
         else
-          j(ck(i)) = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i) * roofOpen * jfac
+          j(ck(i)) = calcPhotolysis( i ) * roofOpen * jfac
         end if
       else
         j(ck(i)) = cl(i)

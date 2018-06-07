@@ -25,6 +25,22 @@ module constraint_functions_mod
 contains
 
   ! ----------------------------------------------------------------- !
+  ! Calculate the photolysis rate of photolysis number i from the
+  ! photolysis equations, using the current zenith data values
+  function calcPhotolysis( i ) result ( photolysis )
+    use types_mod
+    use photolysis_rates_mod
+    use zenith_data_mod
+    implicit none
+
+    integer(kind=NPI), intent(in) :: i
+    real(kind=DP) :: photolysis
+    photolysis = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i)
+
+    return
+  end function calcPhotolysis
+
+  ! ----------------------------------------------------------------- !
   ! Calculate the value of jFac by comparing the constrained value of
   ! jFacSpecies to the value calculated from the photolysis equations.
   ! If the constrained rate is zero, or the value of cosx is below the
@@ -73,8 +89,7 @@ contains
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .false. ) then
-          jFac = JFacSpeciesAtT / ( transmissionFactor(jFacSpeciesLine) * cl(jFacSpeciesLine) * &
-                 ( cosx ** cmm(jFacSpeciesLine) ) * exp( -cnn(jFacSpeciesLine) * secx ) )
+          jFac = JFacSpeciesAtT / calcPhotolysis( jFacSpeciesLine )
         else
           jFac = 0
         end if

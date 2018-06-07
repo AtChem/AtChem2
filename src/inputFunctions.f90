@@ -310,9 +310,7 @@ contains
   end subroutine setConcentrations
 
   ! -----------------------------------------------------------------
-  ! If modelConfiguration/photolysisConstants.config exists, then read
-  ! in 3 values to fill ck, cl and str. Otherwise, call
-  ! ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
+  ! Read in 3 values to fill ck, cl and str.
   subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
@@ -365,7 +363,7 @@ contains
   end subroutine readPhotolysisConstants
 
   ! -----------------------------------------------------------------
-  ! This is called from readPhotolysisConstants if
+  ! This is called from readPhotoRates() if
   ! modelConfiguration/photolysisConstants.config doesn't exist. It
   ! reads ck, cl, cmm, cnn, str, and tf from
   ! modelConfiguration/photolysisRates.config.

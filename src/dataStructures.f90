@@ -433,7 +433,7 @@ module photolysis_rates_mod
   integer(kind=NPI) :: numConPhotoRates
   integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:)
   integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
-  integer(kind=NPI) :: nrOfPhotoRates
+  integer(kind=NPI) :: numPhotoRates
   integer(kind=NPI), allocatable :: ck(:)
   logical :: usePhotolysisConstants
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
@@ -449,14 +449,14 @@ contains
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
-    allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates))
+    allocate (ck(numPhotoRates), cl(numPhotoRates), photoRateNames(numPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
   subroutine allocate_photolysis_rates_variables()
     implicit none
 
-    allocate (ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates))
-    allocate (cnn(nrOfPhotoRates), photoRateNames(nrOfPhotoRates), transmissionFactor(nrOfPhotoRates))
+    allocate (ck(numPhotoRates), cl(numPhotoRates), cmm(numPhotoRates))
+    allocate (cnn(numPhotoRates), photoRateNames(numPhotoRates), transmissionFactor(numPhotoRates))
   end subroutine allocate_photolysis_rates_variables
 
   subroutine allocate_photolysis_j()

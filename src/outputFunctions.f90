@@ -123,7 +123,7 @@ contains
   ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
-    use photolysis_rates_mod, only : nrOfPhotoRates, ck, j, photoRateNames
+    use photolysis_rates_mod, only : numPhotoRates, ck, j, photoRateNames
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -131,10 +131,10 @@ contains
     logical :: firstTime = .true.
 
     if ( firstTime .eqv. .true. ) then
-      write (58, '(100A15) ') 't', (trim( photoRateNames(i) ), i = 1, nrOfPhotoRates)
+      write (58, '(100A15) ') 't', (trim( photoRateNames(i) ), i = 1, numPhotoRates)
       firstTime = .false.
     end if
-    write (58, '(100 (1P e15.7)) ') t, (j(ck(i)), i = 1, nrOfPhotoRates)
+    write (58, '(100 (1P e15.7)) ') t, (j(ck(i)), i = 1, numPhotoRates)
 
     return
   end subroutine outputPhotolysisRates

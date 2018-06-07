@@ -207,7 +207,7 @@ contains
 
     call calcAtmosphere( m, o2, n2 )
 
-    do i = 1, nrOfPhotoRates
+    do i = 1, numPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .true. ) then
           j(ck(i)) = 0.0_DP

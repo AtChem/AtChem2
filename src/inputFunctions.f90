@@ -315,7 +315,7 @@ contains
   ! ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
   subroutine readPhotolysisConstants()
     use types_mod
-    use photolysis_rates_mod, only : usePhotolysisConstants, nrOfPhotoRates, ck, cl, photoRateNames, &
+    use photolysis_rates_mod, only : usePhotolysisConstants, numPhotoRates, ck, cl, photoRateNames, &
                                     allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
@@ -341,14 +341,14 @@ contains
     usePhotolysisConstants = .true.
 
     write (*, '(A)') ' Reading photolysis constants from file...'
-    nrOfPhotoRates = count_lines_in_file( filename, .true. )
+    numPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then
       call allocate_photolysis_rates_variables()
       allocated = .true.
     end if
     open (10, file=filename, status='old', iostat=ierr)
     read (10,*) ! Ignore first line
-    do i = 1, nrOfPhotoRates
+    do i = 1, numPhotoRates
       read (10,*, iostat=ierr) ck(i), cl(i), photoRateNames(i)
       if ( ierr /= 0 ) then
         stop 'readPhotolysisConstants(): error reading file'
@@ -360,17 +360,17 @@ contains
       allocated_j = .true.
     end if
     close (10, status='keep')
-    if ( nrOfPhotoRates > 3 ) then
+    if ( numPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3)') ck(1), cl(1), photoRateNames(1)
       write (*, '(A)') ' ...'
-      write (*, '(I7, 1P e15.3, 1P e15.3)') ck(nrOfPhotoRates), cl(nrOfPhotoRates), photoRateNames(nrOfPhotoRates)
+      write (*, '(I7, 1P e15.3, 1P e15.3)') ck(numPhotoRates), cl(numPhotoRates), photoRateNames(numPhotoRates)
     else
-      do i = 1, nrOfPhotoRates
+      do i = 1, numPhotoRates
         write (*, '(I7, 1P e15.3, 1P e15.3)') ck(i), cl(i), photoRateNames(i)
       end do
     end if
     write (*, '(A)') ' Finished reading photolysis constants.'
-    write (*, '(A, I0)') ' Number of photolysis rates: ', nrOfPhotoRates
+    write (*, '(A, I0)') ' Number of photolysis rates: ', numPhotoRates
 
     return
   end subroutine readPhotolysisConstants
@@ -383,7 +383,7 @@ contains
   subroutine readPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : nrOfPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
+    use photolysis_rates_mod, only : numPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
                                      transmissionFactor, allocate_photolysis_rates_variables, &
                                      size_of_j, allocate_photolysis_j
     use directories_mod, only : param_dir
@@ -399,14 +399,14 @@ contains
     filename = trim( param_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading photolysis rates from file...'
     call inquire_or_abort( filename, 'readPhotolysisRates()')
-    nrOfPhotoRates = count_lines_in_file( filename, .true. )
+    numPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then
       call allocate_photolysis_rates_variables()
       allocated = .true.
     end if
     open (10, file=filename, status='old')
     read (10,*) ! Ignore first line
-    do i = 1, nrOfPhotoRates
+    do i = 1, numPhotoRates
       read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
       if ( ierr /= 0 ) then
         stop 'readPhotolysisRates(): error reading file'
@@ -418,20 +418,20 @@ contains
       call allocate_photolysis_j()
       allocated_j = .true.
     end if
-    if ( nrOfPhotoRates > 3 ) then
+    if ( numPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
                                 ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
       write (*, '(A)') ' ...'
-      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(nrOfPhotoRates), cl(nrOfPhotoRates), cmm(nrOfPhotoRates), &
-                  cnn(nrOfPhotoRates), adjustr( photoRateNames(nrOfPhotoRates) ), transmissionFactor(nrOfPhotoRates)
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numPhotoRates), cl(numPhotoRates), cmm(numPhotoRates), &
+                  cnn(numPhotoRates), adjustr( photoRateNames(numPhotoRates) ), transmissionFactor(numPhotoRates)
     else
-      do i = 1, nrOfPhotoRates
+      do i = 1, numPhotoRates
         write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
                                 ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
       end do
     end if
     write (*, '(A)') ' Finished reading photolysis rates.'
-    write (*, '(A, I0)') ' Number of photolysis rates: ', nrOfPhotoRates
+    write (*, '(A, I0)') ' Number of photolysis rates: ', numPhotoRates
 
     return
   end subroutine readPhotolysisRates
@@ -506,7 +506,7 @@ contains
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
-    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, nrOfPhotoRates, photoRateNames
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, numPhotoRates, photoRateNames
     implicit none
 
     integer(kind=NPI) :: k, j
@@ -564,7 +564,7 @@ contains
               jFacSpecies = trim( envVarTypes(i) )
               ! Get line number for the JFac base species:
               jFacSpeciesLine = 0_NPI
-              do j = 1_NPI, nrOfPhotoRates
+              do j = 1_NPI, numPhotoRates
                 if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
                   jFacSpeciesLine = j
                 end if
@@ -756,7 +756,7 @@ contains
 
     ! Get numbers of constrained photo rates
     do i = 1, numConPhotoRates
-      do k = 1, nrOfPhotoRates
+      do k = 1, numPhotoRates
         if ( constrainedPhotoRates(i) == photoRateNames(k) ) then
           constrainedPhotoRatesNumbers(i) = ck(k)
         end if

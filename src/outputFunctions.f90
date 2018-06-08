@@ -207,7 +207,6 @@ contains
   subroutine outputRates( r, arrayLen, t, p, flag )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use reaction_structure_mod
     use species_mod, only : getSpeciesList
     use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
@@ -265,7 +264,6 @@ contains
   subroutine outputInstantaneousRates( time )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use reaction_structure_mod
     use directories_mod, only : instantaneousRates_dir
     use reaction_rates_mod, only : instantaneousRates
     use storage_mod, only : maxFilepathLength

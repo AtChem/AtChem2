@@ -95,7 +95,7 @@ module date_mod
   integer(kind=DI) :: currentMonth, currentDayOfMonth
   integer(kind=DI) :: currentYear, currentDayOfYear
 
-  integer(kind=DI), parameter :: refMonthList(12) = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, &
+  integer(kind=DI), parameter :: refMonthList(12) = [31_DI, 28_DI, 31_DI, 30_DI, 31_DI, 30_DI, &
                                                      31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
 
 
@@ -115,6 +115,21 @@ contains
   end function isLeapYear
 
   ! -----------------------------------------------------------------
+  ! Return a copy of inMonthList which has the number of days in
+  ! February set to 29 if year is a leap year
+  subroutine applyLeapDay( monthList, year )
+    implicit none
+
+    integer(kind=DI), intent(inout) :: monthList(12)
+    integer(kind=DI), intent(in) :: year
+
+    if ( isLeapYear( year ) .eqv. .true. ) then
+      monthList(2) = 29_DI
+    end if
+    return
+  end subroutine applyLeapDay
+
+  ! -----------------------------------------------------------------
   ! Set startDayOfYear from startDay, startMonth, and startYear
   subroutine calcInitialDateParameters()
     implicit none
@@ -124,9 +139,7 @@ contains
     ! Number of days in each month; year is set in model.parameters.
     monthList = refMonthList
     ! Alter February length if a leap year
-    if ( isLeapYear( startYear ) .eqv. .true. ) then
-      monthList(2) = 28_DI
-    end if
+    call applyLeapDay( monthList, startYear )
 
     ! Day of year; day and month are set in model.parameters.
     ! January 1 = 0, January 2 = 1, etc...
@@ -160,9 +173,8 @@ contains
         ! Check whether this year is a leap year, and reset current month list as appropriate
         monthList = refMonthList
         ! Alter February length if a leap year
-        if ( isLeapYear( currentYear ) .eqv. .true. ) then
-          monthList(2) = 28_DI
-        end if
+        call applyLeapDay( monthList, currentYear )
+
         ! Increment day of the month
         currentDayOfMonth = currentDayOfMonth + 1_DI
         ! If incrementing causes us to tick over into the next month, then update
@@ -183,9 +195,8 @@ contains
       end do
     end if
     ! Alter February length if a leap year
-    if ( isLeapYear( currentYear ) .eqv. .true. ) then
-      monthList(2) = 28_DI
-    end if
+    call applyLeapDay( monthList, currentYear )
+
     currentDayOfYear = sum( monthList(1:currentMonth - 1_DI) ) + currentDayOfMonth - 1_DI
     return
   end subroutine calcCurrentDateParameters

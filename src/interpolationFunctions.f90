@@ -27,7 +27,8 @@ contains
   subroutine getConstrainedQuantAtT( t, x, y, dataNumberOfPoints, interpMethod, ind, concAtT )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use interpolation_method_mod
+    use interpolation_method_mod, only : getSpeciesInterpMethod, getConditionsInterpMethod, &
+                                         setSpeciesInterpMethod, setConditionsInterpMethod
     implicit none
 
     real(kind=DP), intent(in) :: t, x(:,:), y(:,:)

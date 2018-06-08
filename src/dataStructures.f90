@@ -151,10 +151,7 @@ contains
     currentDayOfMonth = startDay
     currentYear = startYear
     monthList = refMonthList
-    ! Alter February length if a leap year
-    if ( isLeapYear( currentYear ) .eqv. .true. ) then
-      monthList(2) = 28_DI
-    end if
+
     ! Count through the days - tick over into next month and year as appropriate
     if ( completedDays > 0 ) then
       countingDays = completedDays
@@ -184,6 +181,10 @@ contains
         ! decrease countingDays by one
         countingDays = countingDays - 1_QI
       end do
+    end if
+    ! Alter February length if a leap year
+    if ( isLeapYear( currentYear ) .eqv. .true. ) then
+      monthList(2) = 28_DI
     end if
     currentDayOfYear = sum( monthList(1:currentMonth - 1_DI) ) + currentDayOfMonth - 1_DI
     return

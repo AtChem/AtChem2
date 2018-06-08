@@ -3,7 +3,7 @@
   notifications:
     email: false
 
-  language: fortran
+  language: c
 
   os:
     - osx
@@ -34,3 +34,6 @@
   script:
     - ./atchem2
     - make test
+
+  after_success:
+    - bash <(curl -s https://codecov.io/bash)

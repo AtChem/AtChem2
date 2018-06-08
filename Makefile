@@ -51,7 +51,7 @@ endif
 OPENLIBMDIR  = openlibm-0.4.1
 
 # gfortran flags
-FFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
+FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
 LIBDIR   =  /usr/lib/:$(CVODELIB)
 # Intel Fortran flags
 #FORT_COMP = ifort

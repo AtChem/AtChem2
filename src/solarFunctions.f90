@@ -28,7 +28,7 @@ contains
   subroutine calcTheta( t )
     use types_mod
     use date_mod, only : currentYear, currentDayOfYear
-    use zenith_data_mod
+    use zenith_data_mod, only : theta
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -58,7 +58,7 @@ contains
   ! (Environmental UV Photobiology, 1993).
   pure function calcDec() result ( dec )
     use types_mod
-    use zenith_data_mod
+    use zenith_data_mod, only : theta
     implicit none
 
     real(kind=DP) :: dec, b0, b1, b2, b3, b4, b5, b6
@@ -86,7 +86,8 @@ contains
   subroutine calcZenith( t, dec )
     use types_mod
     use date_mod, only : currentDayOfYear
-    use zenith_data_mod
+    use zenith_data_mod, only : eqtime, theta, lha, latitude, longitude, sinld, cosld, cosx, secx, cosx_threshold, &
+                                cosx_below_threshold
     implicit none
 
     real(kind=DP), intent(in) :: t, dec

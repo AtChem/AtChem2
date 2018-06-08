@@ -1,4 +1,4 @@
-AtChem2
+AtChem2  [![Build Status](https://travis-ci.org/AtChem/AtChem2.svg?branch=master)](https://travis-ci.org/AtChem/AtChem2)  [![codecov](https://codecov.io/gh/AtChem/AtChem2/branch/master/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
 =======
 
 AtChem2 is an atmospheric chemistry numerical integrator, primarily designed for use with the Master Chemical Mechanism (MCM, http://mcm.leeds.ac.uk/MCM/). For more information and instructions, see the [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki).

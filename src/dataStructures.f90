@@ -130,6 +130,21 @@ contains
   end subroutine applyLeapDay
 
   ! -----------------------------------------------------------------
+  ! Return the number of days of the year that have been completed,
+  ! based on which day of the day it is, and which month it is. So
+  ! Jan 1 = 0, Jan 2 = 1 etc.
+  pure function calcDayOfYear( monthList, month, day ) result ( result )
+    implicit none
+
+    integer(kind=DI), intent(in) :: monthList(12), month, day
+    integer(kind=DI) :: result
+
+    result = sum( monthList(1:month - 1_DI) ) + day - 1_DI
+
+    return
+  end function calcDayOfYear
+
+  ! -----------------------------------------------------------------
   ! Set startDayOfYear from startDay, startMonth, and startYear
   subroutine calcInitialDateParameters()
     implicit none
@@ -143,7 +158,7 @@ contains
 
     ! Day of year; day and month are set in model.parameters.
     ! January 1 = 0, January 2 = 1, etc...
-    startDayOfYear = sum( monthList(1:startMonth - 1_DI) ) + startDay - 1_DI
+    startDayOfYear = calcDayOfYear( monthList, startMonth, startDay )
 
     return
   end subroutine calcInitialDateParameters
@@ -197,7 +212,7 @@ contains
     ! Alter February length if a leap year
     call applyLeapDay( monthList, currentYear )
 
-    currentDayOfYear = sum( monthList(1:currentMonth - 1_DI) ) + currentDayOfMonth - 1_DI
+    currentDayOfYear = calcDayOfYear( monthList, currentMonth, currentDayOfMonth )
     return
   end subroutine calcCurrentDateParameters
 

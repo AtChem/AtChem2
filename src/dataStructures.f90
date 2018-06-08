@@ -95,7 +95,24 @@ module date_mod
   integer(kind=DI) :: currentMonth, currentDayOfMonth
   integer(kind=DI) :: currentYear, currentDayOfYear
 
+  integer(kind=DI), parameter :: refMonthList(12) = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, &
+                                                     31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+
+
 contains
+
+  ! -----------------------------------------------------------------
+  ! Determine whether year is a leap year
+  pure function isLeapYear( year ) result ( result )
+    implicit none
+
+    integer(kind=DI), intent(in) :: year
+    logical :: result
+
+    result = ( (mod(year, 4_DI)==0 .and. .not. mod(year, 100_DI)==0) .or. (mod(year, 400_DI)==0) )
+
+    return
+  end function isLeapYear
 
   ! -----------------------------------------------------------------
   ! Set startDayOfYear from startDay, startMonth, and startYear
@@ -105,9 +122,9 @@ contains
     integer(kind=DI) :: monthList(12)
 
     ! Number of days in each month; year is set in model.parameters.
-    monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+    monthList = refMonthList
     ! Alter February length if a leap year
-    if ( (mod(startYear, 4_DI)==0 .and. .not. mod(startYear, 100_DI)==0) .or. (mod(startYear, 400_DI)==0) ) then
+    if ( isLeapYear( startYear ) .eqv. .true. ) then
       monthList(2) = 28_DI
     end if
 
@@ -133,9 +150,9 @@ contains
     currentMonth = startMonth
     currentDayOfMonth = startDay
     currentYear = startYear
-    monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+    monthList = refMonthList
     ! Alter February length if a leap year
-    if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
+    if ( isLeapYear( currentYear ) .eqv. .true. ) then
       monthList(2) = 28_DI
     end if
     ! Count through the days - tick over into next month and year as appropriate
@@ -144,9 +161,9 @@ contains
 
       do while ( countingDays > 0 )
         ! Check whether this year is a leap year, and reset current month list as appropriate
-        monthList = [31_DI, 29_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
+        monthList = refMonthList
         ! Alter February length if a leap year
-        if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
+        if ( isLeapYear( currentYear ) .eqv. .true. ) then
           monthList(2) = 28_DI
         end if
         ! Increment day of the month

@@ -38,7 +38,7 @@ contains
   ! Write each environment variable to file
   subroutine outputEnvVar( t )
     use types_mod
-    use env_vars_mod
+    use env_vars_mod, only : envVarNames, numEnvVars, currentEnvVarValues, ro2
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -103,7 +103,7 @@ contains
   ! Write parameters used in calculation of photolysis rates to file.
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
-    use zenith_data_mod
+    use zenith_data_mod, only : latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -145,7 +145,7 @@ contains
   ! reaction.
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     use types_mod
-    use reaction_structure_mod
+    use reaction_structure_mod, only : clhs, crhs
     use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
 

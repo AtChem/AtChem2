@@ -25,7 +25,7 @@ contains
   ! Calculates the system residual
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
-    use reaction_rates_mod
+    use reaction_rates_mod, only : lossRates, productionRates, instantaneousRates
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions

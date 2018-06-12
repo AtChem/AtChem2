@@ -939,6 +939,10 @@ contains
         constrainedNames(j + numberOfVariableConstrainedSpecies) = name
         dataFixedY(j) = value
         call setConstrainedSpecies( j + numberOfVariableConstrainedSpecies, id )
+      else
+        write (stderr, '(A, A, A)') 'Supplied fixed constrained species ', &
+                                    trim( constrainedNames(i) ), ' is not a species in the problem.'
+        stop
       end if
     end do
     close (14, status='keep')

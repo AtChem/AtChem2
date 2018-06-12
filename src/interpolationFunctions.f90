@@ -47,10 +47,16 @@ contains
     if ( size( x, 2 ) /= size( y, 2 ) ) then
       stop 'size( x, 2 ) /= size( y, 2 ) in getConstrainedQuantAtT()'
     end if
+    if ( ind > size( x, 1 ) ) then
+      stop 'ind > size( x, 1 ) in getConstrainedQuantAtT()'
+    end if
+    if ( ind < 1 ) then
+      stop 'ind < 1 in getConstrainedQuantAtT()'
+    end if
 
     ! Find the interval in which t sits
     interp_success = .false.
-    do i = 1, dataNumberOfPoints
+    do i = 1, dataNumberOfPoints - 1
       if ( ( t >= x(ind, i) ) .and. ( t < x(ind, i+1) ) ) then
         indexBefore = i
         interp_success = .true.

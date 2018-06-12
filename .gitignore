@@ -1,6 +1,8 @@
 # Ignore object files in this directory
 *.o
 *.mod
+*.gcda
+*.gcno
 atchem2
 makefile.*
 mechanism-rate-coefficients.f90

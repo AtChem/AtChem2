@@ -29,8 +29,8 @@ contains
   ! photolysis equations, using the current zenith data values
   function calcPhotolysis( i ) result ( photolysis )
     use types_mod
-    use photolysis_rates_mod
-    use zenith_data_mod
+    use photolysis_rates_mod, only : cl, cmm, cnn, transmissionFactor
+    use zenith_data_mod, only : cosx, secx
     implicit none
 
     integer(kind=NPI), intent(in) :: i
@@ -49,8 +49,8 @@ contains
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
-    use photolysis_rates_mod
-    use constraints_mod
+    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConPhotoRates, &
+                                     usePhotolysisConstants, constrainedPhotoRates
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
@@ -186,11 +186,9 @@ contains
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
     use env_vars_mod
-    use constraints_mod
-    use zenith_data_mod
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
-    use atmosphere_functions_mod
+    use atmosphere_functions_mod, only : calcAirDensity, convertRHtoH2O
     use solar_functions_mod
     implicit none
 

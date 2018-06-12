@@ -25,7 +25,7 @@ contains
   ! Calculates the system residual
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
-    use reaction_rates_mod
+    use reaction_rates_mod, only : lossRates, productionRates, instantaneousRates
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
@@ -151,7 +151,7 @@ contains
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
     use photolysis_rates_mod
-    use zenith_data_mod, only : cosx, secx, cosx_below_threshold
+    use zenith_data_mod, only : cosx_below_threshold
     use env_vars_mod, only : ro2, envVarNames, currentEnvVarValues
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod

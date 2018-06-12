@@ -26,11 +26,10 @@ PROGRAM ATCHEM2
   use constraints_mod
   use interpolation_method_mod
   use reaction_structure_mod
-  use photolysis_rates_mod
-  use zenith_data_mod
+  use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints
   use reaction_rates_mod
   use env_vars_mod
-  use date_mod
+  use date_mod, only : calcInitialDateParameters, calcCurrentDateParameters
   use directories_mod, only : output_dir, param_dir
   use storage_mod, only : maxSpecLength, maxPhotoRateNameLength
   use solver_params_mod
@@ -38,8 +37,8 @@ PROGRAM ATCHEM2
   use input_functions_mod
   use config_functions_mod
   use output_functions_mod
-  use constraint_functions_mod
-  use solver_functions_mod
+  use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
+  use solver_functions_mod, only : jfy
   implicit none
 
   ! *****************************************************************

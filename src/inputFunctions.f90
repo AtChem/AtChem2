@@ -310,9 +310,7 @@ contains
   end subroutine setConcentrations
 
   ! -----------------------------------------------------------------
-  ! If modelConfiguration/photolysisConstants.config exists, then read
-  ! in 3 values to fill ck, cl and str. Otherwise, call
-  ! ReadPhotolysisRates to fill ck, cl, cmm, cnn, str and tf.
+  ! Read in 3 values to fill ck, cl and str.
   subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : usePhotolysisConstants, numPhotoRates, ck, cl, photoRateNames, &
@@ -328,18 +326,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    ! Check whether file exists correctly in readPhotolysisConstants.
     filename = trim( param_dir ) // '/photolysisConstants.config'
-    write (*, '(A)') ' Looking for photolysis constants file...'
-    inquire(file=filename, exist=file_exists)
-    if ( file_exists .eqv. .false. ) then
-      usePhotolysisConstants = .false.
-      write (*, '(A)') ' Photolysis constants file not found, trying photolysis rates file...'
-      call readPhotolysisRates()
-      return
-    end if
-    usePhotolysisConstants = .true.
-
     write (*, '(A)') ' Reading photolysis constants from file...'
     numPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then
@@ -376,7 +363,7 @@ contains
   end subroutine readPhotolysisConstants
 
   ! -----------------------------------------------------------------
-  ! This is called from readPhotolysisConstants if
+  ! This is called from readPhotoRates() if
   ! modelConfiguration/photolysisConstants.config doesn't exist. It
   ! reads ck, cl, cmm, cnn, str, and tf from
   ! modelConfiguration/photolysisRates.config.
@@ -723,9 +710,22 @@ contains
     character(len=maxPhotoRateNameLength) :: string
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
+    character(len=maxFilepathLength) :: filename
+    logical :: file_exists
 
     ! Get names of photo rates
-    call readPhotolysisConstants()
+    ! Check whether file exists correctly in readPhotolysisConstants.
+    filename = trim( param_dir ) // '/photolysisConstants.config'
+    write (*, '(A)') ' Looking for photolysis constants file...'
+    inquire(file=filename, exist=file_exists)
+    if ( file_exists .eqv. .true. ) then
+      usePhotolysisConstants = .true.
+      call readPhotolysisConstants()
+    else
+      usePhotolysisConstants = .false.
+      write (*, '(A)') ' Photolysis constants file not found, trying photolysis rates file...'
+      call readPhotolysisRates()
+    end if
     write (*,*)
 
     numConPhotoRates = 0

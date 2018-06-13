@@ -25,10 +25,10 @@ OPENLIBMDIR  = openlibm-0.4.1/
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
-# if linux, pass gfortran and apt-get install location for cvode
+# if linux, pass gfortran
 FORT_COMP    = gfortran
 else
-# if macOS, then pass homebrew gfortran and self-built cvode
+# if macOS, pass homebrew gfortran
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
 endif
 # else it's not on Travis, so set the fortran compiler as gfortran

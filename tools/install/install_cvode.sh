@@ -23,7 +23,7 @@ OS=$(uname -s)
 if [ "$OS" == 'Darwin' ]; then
   LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
 else
-  LAPACK_LIBS=/usr/lib/liblapack.so:/usr/lib/libblas.so
+  LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
 fi
 # Ensure a first argument is provided, and that it is an existing directory
 if [ -z "$1" ] ; then
@@ -60,15 +60,15 @@ fi
 # Move to provided directory
 cd $cvode_dir
 
-wget https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
-tar -zxf sundials-2.7.0.tar.gz
-rm sundials-2.7.0.tar.gz
-cd sundials-2.7.0/
+wget https://computation.llnl.gov/projects/sundials/download/cvode-3.1.1.tar.gz
+tar -zxf cvode-3.1.1.tar.gz
+rm cvode-3.1.1.tar.gz
+cd cvode-3.1.1/
 
 mkdir build
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
+cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode-3.1.1-install \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=$FORT_COMP \
     -DBUILD_ARKODE:BOOL=OFF \

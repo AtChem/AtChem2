@@ -327,11 +327,16 @@ PROGRAM ATCHEM2
   ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   ! SPGMR SOLVER
   if ( solverType == 1 ) then
-    call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
+    call FSUNSPGMRINIT( 1, 0, lookBack, ier )
+    ! call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
+    call FCVSPILSINIT( ier )
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
   else if ( solverType == 2 ) then
-    call FCVSPGMR( 1, 1, lookBack, deltaMain, ier )
+    call FSUNSPGMRINIT( 1, 1, lookBack, ier )
+    call FCVSPILSINIT( ier )
     call FCVBPINIT( neq, preconBandUpper, preconBandLower, ier )
+    ! call FCVSPGMR( 1, 1, lookBack, deltaMain, ier )
+    ! call FCVBPINIT( neq, preconBandUpper, preconBandLower, ier )
     if ( ier /= 0 ) then
       write (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
       call FCVFREE()
@@ -339,7 +344,9 @@ PROGRAM ATCHEM2
     end if
     ! DENSE SOLVER
   else if ( solverType == 3 ) then
-    call FCVDENSE( neq, ier )
+    call FSUNDENSEMATINIT( 1, neq,  neq, ier )
+    ! call FCVDENSE( neq, ier )
+    call FCVDLSINIT( ier )
     ! UNEXPECTED SOLVER TYPE
   else
     write (stderr,*) 'Error with solverType input, input = ', solverType

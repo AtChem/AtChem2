@@ -20,26 +20,20 @@
 .PHONY: all test
 
 OS := $(shell uname -s)
+CVODELIB     = cvode/lib/
+OPENLIBMDIR  = openlibm-0.4.1/
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran and apt-get install location for cvode
 FORT_COMP    = gfortran
-CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode/lib
 else
 # if macOS, then pass homebrew gfortran and self-built cvode
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
-CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode/lib
 endif
-# else it's not on Travis, so check the OS, and then pass local path to cvode
-else
-ifeq ($(OS),Linux)
-FORT_COMP    = gfortran
-CVODELIB     = /path/to/cvode/lib
+# else it's not on Travis, so set the fortran compiler as gfortran
 else
 FORT_COMP    = gfortran
-CVODELIB     = /path/to/cvode/lib
-endif
 endif
 
 ifeq ($(OS),Linux)
@@ -47,8 +41,6 @@ RPATH_OPTION = -R
 else
 RPATH_OPTION = -rpath
 endif
-
-OPENLIBMDIR  = openlibm-0.4.1
 
 # gfortran flags
 FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all

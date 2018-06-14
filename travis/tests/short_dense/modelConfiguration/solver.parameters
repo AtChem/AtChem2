@@ -1,0 +1,9 @@
+1.0e-03			atol
+1.0e-04			rtol
+1.0e-04			delta main
+100			Lookback
+100			maximum solver step size (seconds)
+100000			maximum number of steps in solver
+3			Solver Type (1 = SPGMR, 2 = SPGMR + Banded Preconditioner, 3 = Dense)
+750			Banded Preconditioner Upper Bandwidth
+750			Banded Preconditioner Lower Bandwidth

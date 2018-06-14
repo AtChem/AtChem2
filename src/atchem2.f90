@@ -346,6 +346,7 @@ PROGRAM ATCHEM2
   else if ( solverType == 3 ) then
     call FSUNDENSEMATINIT( 1, neq,  neq, ier )
     ! call FCVDENSE( neq, ier )
+    call FSUNDENSELINSOLINIT( 1, ier )
     call FCVDLSINIT( ier )
     ! UNEXPECTED SOLVER TYPE
   else

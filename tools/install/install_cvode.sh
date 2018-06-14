@@ -23,7 +23,7 @@ OS=$(uname -s)
 if [ "$OS" == 'Darwin' ]; then
   LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
 else
-  LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
+  LAPACK_LIBS=/usr/lib/liblapack.so:/usr/lib/libblas.so
 fi
 # Ensure a first argument is provided, and that it is an existing directory
 if [ -z "$1" ] ; then

@@ -14,3 +14,4 @@ ro2-rates.f90
 cvode*
 numdiff*
 openlibm*
+Makefile

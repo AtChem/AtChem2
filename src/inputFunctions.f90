@@ -35,27 +35,27 @@ contains
     if ( cmd_arg_count > 0 ) then
       call get_command_argument( 1, output_dir )
     else
-      output_dir = "modelOutput"
+      output_dir = "output"
     end if
     if ( cmd_arg_count > 1 ) then
       call get_command_argument( 2, instantaneousRates_dir )
     else
-      instantaneousRates_dir = "instantaneousRates"
+      instantaneousRates_dir = "output/instantaneousRates"
     end if
     if ( cmd_arg_count > 2 ) then
       call get_command_argument( 3, param_dir )
     else
-      param_dir = "modelConfiguration"
+      param_dir = "model/modelConfiguration"
     end if
     if ( cmd_arg_count > 3 ) then
       call get_command_argument( 4, spec_constraints_dir )
     else
-      spec_constraints_dir = "speciesConstraints"
+      spec_constraints_dir = "model/speciesConstraints"
     end if
     if ( cmd_arg_count > 4 ) then
       call get_command_argument( 5, env_constraints_dir )
     else
-      env_constraints_dir = "environmentConstraints"
+      env_constraints_dir = "model/environmentConstraints"
     end if
 
     write (*, '(2A)') ' Output dir is ', trim( output_dir )

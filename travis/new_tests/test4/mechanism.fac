@@ -1,0 +1,13 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 =  ;
+
+* Reaction definitions. ;
+*;
+* pressure and temperature dependence ;
+* second-order reaction ;
+% 3.3D-39*EXP(530/TEMP)*O2 : NO + NO = NO2 + NO2 ;

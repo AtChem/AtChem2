@@ -1,0 +1,13 @@
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 = CH3O2 ;
+
+* Reaction definitions. ;
+*;
+* temperature dependence ;
+* pseudo first-order reaction ;
+% 1.85D-12*EXP(-1690/TEMP)*1.2e8 : CH4 = CH3O2 ;

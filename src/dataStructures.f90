@@ -474,27 +474,35 @@ module photolysis_rates_mod
   implicit none
   save
 
-  integer(kind=NPI) :: numConPhotoRates
-  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:)
+  integer(kind=NPI) :: numConstrainedPhotoRates
+  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:), constantPhotoJNumbers(:)
   integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
-  integer(kind=NPI) :: numPhotoRates
-  integer(kind=NPI), allocatable :: ck(:)
-  logical :: usePhotolysisConstants
+  integer(kind=NPI) :: numPhotoRates, totalNumPhotos, numConstantPhotoRates
+  integer(kind=NPI), allocatable :: ck(:), photoNumbers(:)
+  logical :: usePhotolysisConstants, allPRsConstrained, usePhotolysisConstraints
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
-  real(kind=DP), allocatable :: j(:)
-  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoRates(:)
+  real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoNames(:), constantPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
+  integer(kind=SI) :: PR_type
 
 contains
 
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
-    allocate (ck(numPhotoRates), cl(numPhotoRates), photoRateNames(numPhotoRates))
+    allocate (constantPhotoJNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
+              constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
+
+  subroutine allocate_photolysis_numbers_variables()
+    implicit none
+
+    allocate (photoNumbers(totalNumPhotos))
+  end subroutine allocate_photolysis_numbers_variables
 
   subroutine allocate_photolysis_rates_variables()
     implicit none

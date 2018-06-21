@@ -49,8 +49,8 @@ contains
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
-    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConPhotoRates, &
-                                     usePhotolysisConstants, constrainedPhotoRates
+    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConstrainedPhotoRates, &
+                                     usePhotolysisConstants, constrainedPhotoNames
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
@@ -68,8 +68,8 @@ contains
 
     ! GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY
     basePhotoRateNum = 0
-    do i = 1, numConPhotoRates
-      if ( trim( constrainedPhotoRates(i) ) == trim( jFacSpecies ) ) then
+    do i = 1, numConstrainedPhotoRates
+      if ( trim( constrainedPhotoNames(i) ) == trim( jFacSpecies ) ) then
         basePhotoRateNum = i
       end if
     end do

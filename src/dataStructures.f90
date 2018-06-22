@@ -474,15 +474,16 @@ module photolysis_rates_mod
   implicit none
   save
 
-  integer(kind=NPI) :: numConstrainedPhotoRates
-  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:), constantPhotoJNumbers(:)
+  integer(kind=NPI) :: numConstrainedPhotoRates, numUnconstrainedPhotoRates
+  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:), constantPhotoJNumbers(:), unconstrainedPhotoNumbers(:)
   integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
-  integer(kind=NPI) :: numPhotoRates, totalNumPhotos, numConstantPhotoRates
+  integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates
   integer(kind=NPI), allocatable :: ck(:), photoNumbers(:)
-  logical :: usePhotolysisConstants, allPRsConstrained, usePhotolysisConstraints
+  logical :: usePhotolysisConstants, usePhotolysisConstraints, unconstrainedPhotosExist
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
-  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoNames(:), constantPhotoNames(:)
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoNames(:), constantPhotoNames(:), &
+                                                        unconstrainedPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
@@ -504,12 +505,13 @@ contains
     allocate (photoNumbers(totalNumPhotos))
   end subroutine allocate_photolysis_numbers_variables
 
-  subroutine allocate_photolysis_rates_variables()
+  subroutine allocate_unconstrained_photolysis_rates_variables()
     implicit none
 
-    allocate (ck(numPhotoRates), cl(numPhotoRates), cmm(numPhotoRates))
-    allocate (cnn(numPhotoRates), photoRateNames(numPhotoRates), transmissionFactor(numPhotoRates))
-  end subroutine allocate_photolysis_rates_variables
+    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates))
+    allocate (cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
+              transmissionFactor(numUnconstrainedPhotoRates))
+  end subroutine allocate_unconstrained_photolysis_rates_variables
 
   subroutine allocate_photolysis_j()
     implicit none

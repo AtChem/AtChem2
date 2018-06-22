@@ -206,8 +206,9 @@ contains
     end do
 
     call calcAtmosphere( m, o2, n2 )
+    write(*,*) numUnconstrainedPhotoRates, ck(1)
 
-    do i = 1, numPhotoRates
+    do i = 1, numUnconstrainedPhotoRates
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .true. ) then
           j(ck(i)) = 0.0_DP

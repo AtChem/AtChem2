@@ -317,8 +317,8 @@ contains
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : numPhotoRates, totalNumPhotos, ck, cl, cmm, cnn, photoNumbers, photoRateNames, &
-                                     transmissionFactor, allocate_photolysis_rates_variables, &
+    use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, photoRateNames, &
+                                     allocate_photolysis_numbers_variables, &
                                      size_of_j, allocate_photolysis_j
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
@@ -371,9 +371,8 @@ contains
   ! Read in 3 values to fill ck, cl and str.
   subroutine readPhotolysisConstants()
     use types_mod
-    use photolysis_rates_mod, only : usePhotolysisConstants, numPhotoRates, ck, cl, photoRateNames, &
-                                    allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j, constantPhotoJNumbers, &
-                                    constantPhotoValues, constantPhotoNames, numConstantPhotoRates
+    use photolysis_rates_mod, only : photoRateNames, allocate_photolysis_constants_variables, size_of_j, allocate_photolysis_j, &
+                                    constantPhotoJNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -381,9 +380,7 @@ contains
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
     character(len=maxFilepathLength) :: filename
-    logical :: file_exists
     logical :: allocated = .false.
-    logical :: allocated_j = .false.
 
     filename = trim( param_dir ) // '/photolysisConstants.config'
     write (*, '(A)') ' Reading photolysis constants from file...'
@@ -406,6 +403,7 @@ contains
       end if
     end do
     close (10, status='keep')
+
     if ( numConstantPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoJNumbers(1), constantPhotoValues(1), constantPhotoNames(1)
       write (*, '(A)') ' ...'
@@ -425,8 +423,7 @@ contains
 
   subroutine readPhotolysisConstraints()
     use types_mod
-    use photolysis_rates_mod, only : usePhotolysisConstants, numPhotoRates, ck, cl, photoRateNames, &
-                                    allocate_photolysis_rates_variables, size_of_j, allocate_photolysis_j, &
+    use photolysis_rates_mod, only : photoRateNames, &
                                     constrainedPhotoNames, constrainedPhotoRatesNumbers, photoX, photoY, photoNumberOfPoints, &
                                     numConstrainedPhotoRates
     use directories_mod, only : param_dir, env_constraints_dir
@@ -442,9 +439,9 @@ contains
 
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
-    call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoNames.config', 'readPhotoRates()')
+    call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoConstraints()')
     allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoRatesNumbers(numConstrainedPhotoRates) )
-    open (10, file=trim( param_dir ) // '/constrainedPhotoNames.config', status='old') ! input file
+    open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
       if ( ierr /= 0 ) then
@@ -452,6 +449,7 @@ contains
       end if
     end do
     close (10, status='keep')
+
     if ( numConstrainedPhotoRates > 3 ) then
       write (*,*) constrainedPhotoNames(1)
       write (*, '(A)') ' ...'
@@ -514,60 +512,154 @@ contains
   ! Returns an array of unconstrained photos rates, and a logical indicating whether there are none
   subroutine findUnconstrainedPhotos()
     use types_mod
-    use photolysis_rates_mod, only : photoNumbers, constrainedPhotoRatesNumbers, numPhotoRates, numConstrainedPhotoRates, &
-                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotosExist
+    use photolysis_rates_mod, only : photoNumbers, constrainedPhotoRatesNumbers, numConstrainedPhotoRates, totalNumPhotos, &
+                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotosExist, photoNumbers
     implicit none
 
-    ! Firstly, check that constrainedPhotoRatesNumbers is a subset of photoNumbers - if not, then error out
-    do i = 1, numConstrainedPhotoRates
-      this_number_exists = .false.
-      do j = 1, numPhotoRates
-        if ( photoNumbers(j) == constrainedPhotoRatesNumbers(i) ) then
-          this_number_exists = .true.
-          exit
-        end if
-      end do
-      if ( this_number_exists .eqv. .false. ) then
-        ! This constrained number is not in photoNumbers, so error out
-        stop 'constrainedPhotoRatesNumbers(i) is not in photoNumbers, i = ', i, &
-             ', constrainedPhotoRatesNumbers(i) = ', constrainedPhotoRatesNumbers(i)
-      end if
-    end do
+    integer(kind=NPI) :: i, j, counter
+    logical :: this_number_unconstrained
 
-    ! Next, find all elements in photoNumbers that are not in constrainedPhotoRatesNumbers
+    ! Find all elements in photoNumbers that are not in constrainedPhotoRatesNumbers
     unconstrainedPhotosExist = .false.
     numUnconstrainedPhotoRates = 0
-    do j = 1, numPhotoRates
-      this_number_unconstrained = .false.
+    do j = 1, totalNumPhotos
+      this_number_unconstrained = .true.
       do i = 1, numConstrainedPhotoRates
         if ( photoNumbers(j) == constrainedPhotoRatesNumbers(i) ) then
-          this_number_unconstrained = .true.
+          this_number_unconstrained = .false.
           exit
         end if
       end do
       if ( this_number_unconstrained .eqv. .true. ) then
         ! This constrained number is unconstrained, so add to the list of unconstrained numbers
         numUnconstrainedPhotoRates = numUnconstrainedPhotoRates + 1
-        unconstrainedPhotoNumbers(numUnconstrainedPhotoRates) = j
+      end if
+    end do
+    allocate ( unconstrainedPhotoNumbers(numUnconstrainedPhotoRates))
+    counter = 0_NPI
+    write (*,*) 'maxval(photoNumbers):', maxval(photoNumbers)
+    do j = 1, totalNumPhotos
+      this_number_unconstrained = .true.
+      do i = 1, numConstrainedPhotoRates
+        if ( photoNumbers(j) == constrainedPhotoRatesNumbers(i) ) then
+          this_number_unconstrained = .false.
+          exit
+        end if
+      end do
+      if ( this_number_unconstrained .eqv. .true. ) then
+        ! This constrained number is unconstrained, so add to the list of unconstrained numbers
+        counter = counter + 1
+        unconstrainedPhotoNumbers(counter) = photoNumbers(j)
       end if
     end do
     if ( numUnconstrainedPhotoRates > 0 ) then
       unconstrainedPhotosExist = .true.
     end if
+    write(*,*) 'There are ', numUnconstrainedPhotoRates, ' unconstrained photo rates'
+    write(*,*) unconstrainedPhotoNumbers
   end subroutine findUnconstrainedPhotos
 
+
+  pure function isInNPIArray( a, array ) result ( isInArray )
+    use types_mod
+    implicit none
+
+    integer(kind=NPI), intent(in) :: a, array(:)
+    integer(kind=NPI) :: i
+    logical :: isInArray
+
+    isInArray = .false.
+
+    do i = 1, size(array)
+      if ( array(i) == a ) then
+        isInArray = .true.
+        exit
+      end if
+    end do
+
+    return
+  end function isInNPIArray
+
+
+  subroutine readUnconstrainedPhotolysisRates()
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use photolysis_rates_mod, only : ck, cl, cmm, cnn, photoRateNames, transmissionFactor, &
+                                     allocate_photolysis_j, numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, &
+                                     unconstrainedPhotoNames, allocate_unconstrained_photolysis_rates_variables, totalNumPhotos
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxFilepathLength
+    implicit none
+
+    integer(kind=NPI) :: i, index, this_ck, this_ck_pos
+    integer(kind=IntErr) :: ierr
+    character(len=maxFilepathLength) :: filename, line
+    logical :: allocated = .false.
+
+    filename = trim( param_dir ) // '/photolysisRates.config'
+    write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
+    call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
+    totalNumPhotos = count_lines_in_file( filename, .true. )
+    if ( allocated .eqv. .false. ) then
+      call allocate_unconstrained_photolysis_rates_variables()
+      allocated = .true.
+    end if
+    ! For each line, check whether the first column is in the unconstrained list. If so, write
+    ! the values to the appropriate variables.
+    open (10, file=filename, status='old')
+    read (10,*) ! Ignore first line
+    index = 0_NPI
+    do i = 1_NPI, totalNumPhotos
+      read (10,'(A100)', iostat=ierr) line
+      if ( ierr /= 0 ) then
+        stop 'readUnconstrainedPhotolysisRates(): error reading file'
+      end if
+      this_ck_pos = scan(line, "0123456789")
+      read(line(this_ck_pos:),'(I4)') this_ck
+      write(*,*) 'this_ck:', this_ck
+      ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
+      if ( isInNPIArray( this_ck, unconstrainedPhotoNumbers ) .eqv. .true. ) then
+        index = index + 1_NPI
+        write(*,*) line
+        read (line,*, iostat=ierr) ck(index), cl(index), cmm(index), cnn(index), unconstrainedPhotoNames(index), &
+                                   transmissionFactor(index)
+      end if
+      if ( ierr /= 0 ) then
+        stop 'readUnconstrainedPhotolysisRates(): error reading line'
+      end if
+    end do
+    close (10, status='keep')
+
+    if ( numUnconstrainedPhotoRates > 3 ) then
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
+                                ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
+      write (*, '(A)') ' ...'
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), &
+                  cmm(numUnconstrainedPhotoRates), cnn(numUnconstrainedPhotoRates), &
+                  adjustr( photoRateNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
+    else
+      do i = 1, numUnconstrainedPhotoRates
+        write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
+                                ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
+      end do
+    end if
+    write (*, '(A)') ' Finished reading unconstrained photolysis rates.'
+    write (*, '(A, I0)') ' Number of unconstrained photolysis rates: ', numUnconstrainedPhotoRates
+
+    return
+  end subroutine readUnconstrainedPhotolysisRates
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
   ! modelConfiguration/photolysisConstants.config doesn't exist. It
   ! reads ck, cl, cmm, cnn, str, and tf from
   ! modelConfiguration/photolysisRates.config.
-  subroutine readPhotolysisRates()
+  subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : numPhotoRates, ck, cl, cmm, cnn, photoRateNames, &
-                                     transmissionFactor, allocate_photolysis_rates_variables, &
-                                     size_of_j, allocate_photolysis_j
+    use photolysis_rates_mod, only : ck, cl, cmm, cnn, photoRateNames, &
+                                     transmissionFactor, allocate_unconstrained_photolysis_rates_variables, &
+                                     allocate_photolysis_j, numConstrainedPhotoRates, numUnconstrainedPhotoRates
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -576,47 +668,44 @@ contains
     integer(kind=IntErr) :: ierr
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
-    logical :: allocated_j = .false.
 
     filename = trim( param_dir ) // '/photolysisRates.config'
-    write (*, '(A)') ' Reading photolysis rates from file...'
-    call inquire_or_abort( filename, 'readPhotolysisRates()')
-    numPhotoRates = count_lines_in_file( filename, .true. )
+    write (*, '(A)') ' Reading all photolysis rates from file...'
+    call inquire_or_abort( filename, 'readAllPhotolysisRates()')
+    numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
     if ( allocated .eqv. .false. ) then
-      call allocate_photolysis_rates_variables()
+      call allocate_unconstrained_photolysis_rates_variables()
       allocated = .true.
     end if
+    ! For each
     open (10, file=filename, status='old')
     read (10,*) ! Ignore first line
-    do i = 1, numPhotoRates
+    do i = 1, numUnconstrainedPhotoRates
       read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
       if ( ierr /= 0 ) then
-        stop 'readPhotolysisRates(): error reading file'
+        stop 'readAllPhotolysisRates(): error reading file'
       end if
     end do
     close (10, status='keep')
-    if ( allocated_j .eqv. .false. ) then
-      size_of_j = maxval(ck)
-      call allocate_photolysis_j()
-      allocated_j = .true.
-    end if
-    if ( numPhotoRates > 3 ) then
+
+    if ( numUnconstrainedPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
                                 ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
       write (*, '(A)') ' ...'
-      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numPhotoRates), cl(numPhotoRates), cmm(numPhotoRates), &
-                  cnn(numPhotoRates), adjustr( photoRateNames(numPhotoRates) ), transmissionFactor(numPhotoRates)
+      write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), &
+                  cmm(numUnconstrainedPhotoRates), cnn(numUnconstrainedPhotoRates), &
+                  adjustr( photoRateNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
     else
-      do i = 1, numPhotoRates
+      do i = 1, numUnconstrainedPhotoRates
         write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
                                 ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
       end do
     end if
-    write (*, '(A)') ' Finished reading photolysis rates.'
-    write (*, '(A, I0)') ' Number of photolysis rates: ', numPhotoRates
+    write (*, '(A)') ' Finished reading all photolysis rates.'
+    write (*, '(A, I0)') ' Number of all photolysis rates: ', numUnconstrainedPhotoRates
 
     return
-  end subroutine readPhotolysisRates
+  end subroutine readAllPhotolysisRates
 
 
   ! ----------------------------------------------------------------- !
@@ -625,17 +714,10 @@ contains
   subroutine readPhotoRates()
     use types_mod
     use photolysis_rates_mod
-    use directories_mod, only : param_dir, env_constraints_dir
+    use directories_mod, only : param_dir
     use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
-    use constraints_mod, only : maxNumberOfPhotoDataPoints
     implicit none
 
-    integer(kind=NPI) :: i, k
-    real(kind=DP) :: input1, input2
-    integer(kind=IntErr) :: ierr
-    character(len=maxPhotoRateNameLength) :: string
-    character(len=maxFilepathLength) :: fileLocationPrefix
-    character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
     character(len=maxFilepathLength) :: filename
     logical :: file_exists
 
@@ -656,7 +738,13 @@ contains
       if ( numConstantPhotoRates > 0) then
         usePhotolysisConstants = .true.
         PR_type = 1
+      else
+        write (*, '(A)') ' Photolysis constants file is empty.'
+
       end if
+    else
+      write (*, '(A)') ' No photolysis constants file found.'
+
     end if
     if ( usePhotolysisConstants .eqv. .true. ) then
       call readPhotolysisConstants()
@@ -664,13 +752,13 @@ contains
       ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
       ! call readPhotolysisConstraints() to read in their values.
       write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
-      filename = trim( param_dir ) // '/constrainedPhotoNames.config'
+      filename = trim( param_dir ) // '/constrainedPhotoRates.config'
       write (*, '(A)') ' Looking for photolysis constraints file...'
       inquire(file=filename, exist=file_exists)
       usePhotolysisConstraints = .false.
       if ( file_exists .eqv. .true. ) then
         write (*, '(A)') ' Checking that photolysis constraints exist in file...'
-        numConstrainedPhotoRates = count_lines_in_file( filename, .true. )
+        numConstrainedPhotoRates = count_lines_in_file( filename, .false. )
         ! Only use constraints if the file exists and is not empty
         if ( numConstrainedPhotoRates > 0) then
           usePhotolysisConstraints = .true.
@@ -679,19 +767,27 @@ contains
           ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.
           call findUnconstrainedPhotos()
           if ( unconstrainedPhotosExist .eqv. .false. ) then
+            write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ',  &
+                             'so no photolysis rates will be calculated.'
             PR_type = 2
           else
+            write (*, '(2A)') ' Photolysis constraint file does not constrain all photolysis rates, ', &
+                             'so some photolysis rates will be calculated.'
             PR_type = 3
-            call readPhotolysisRates()
+            call readUnconstrainedPhotolysisRates()
           end if
         else
+          write (*, '(A)') ' Photolysis constraint file is empty, so all photolysis rates will be calculated.'
           PR_type = 4
-          call readPhotolysisRates()
+          call readAllPhotolysisRates()
         end if
+      else
+        write (*, '(A)') ' No photolysis constraint file exists, so all photolysis rates will be calculated.'
+        PR_type = 4
+        call readAllPhotolysisRates()
       end if
-
-
     end if
+    write (*, '(A, I0)') ' PR_type = ', PR_type
     write (*,*)
 
     return
@@ -768,7 +864,7 @@ contains
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
-    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, numPhotoRates, photoRateNames
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, numConstrainedPhotoRates, constrainedPhotoNames
     implicit none
 
     integer(kind=NPI) :: k, j
@@ -826,8 +922,8 @@ contains
               jFacSpecies = trim( envVarTypes(i) )
               ! Get line number for the JFac base species:
               jFacSpeciesLine = 0_NPI
-              do j = 1_NPI, numPhotoRates
-                if ( trim( photoRateNames(j) ) == trim( jFacSpecies ) ) then
+              do j = 1_NPI, numConstrainedPhotoRates
+                if ( trim( constrainedPhotoNames(j) ) == trim( jFacSpecies ) ) then
                   jFacSpeciesLine = j
                 end if
               end do

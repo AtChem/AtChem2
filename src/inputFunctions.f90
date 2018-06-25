@@ -466,7 +466,6 @@ contains
     ! Strip first character (which will be 'J'), then convert to integer
     do i = 1, numConstrainedPhotoRates
       read(constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*,iostat=ierr ) constrainedPhotoRatesNumbers(i)
-      write(*, '(A, I0)') constrainedPhotoNames(i), constrainedPhotoRatesNumbers(i)
     end do
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
@@ -616,11 +615,9 @@ contains
       end if
       this_ck_pos = scan(line, "0123456789")
       read(line(this_ck_pos:),'(I4)') this_ck
-      write(*,*) 'this_ck:', this_ck
       ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
       if ( isInNPIArray( this_ck, unconstrainedPhotoNumbers ) .eqv. .true. ) then
         index = index + 1_NPI
-        write(*,*) line
         read (line,*, iostat=ierr) ck(index), cl(index), cmm(index), cnn(index), unconstrainedPhotoNames(index), &
                                    transmissionFactor(index)
       end if
@@ -632,15 +629,15 @@ contains
 
     if ( numUnconstrainedPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
-                                ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
+                                ck(1), cl(1), cmm(1), cnn(1), adjustr( unconstrainedPhotoNames(1) ), transmissionFactor(1)
       write (*, '(A)') ' ...'
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), &
                   cmm(numUnconstrainedPhotoRates), cnn(numUnconstrainedPhotoRates), &
-                  adjustr( photoRateNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
+                  adjustr( unconstrainedPhotoNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
     else
       do i = 1, numUnconstrainedPhotoRates
         write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
-                                ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
+                                ck(i), cl(i), cmm(i), cnn(i), adjustr( unconstrainedPhotoNames(i) ), transmissionFactor(i)
       end do
     end if
     write (*, '(A)') ' Finished reading unconstrained photolysis rates.'
@@ -657,7 +654,7 @@ contains
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : ck, cl, cmm, cnn, photoRateNames, &
+    use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, &
                                      transmissionFactor, allocate_unconstrained_photolysis_rates_variables, &
                                      allocate_photolysis_j, numConstrainedPhotoRates, numUnconstrainedPhotoRates
     use directories_mod, only : param_dir
@@ -681,7 +678,7 @@ contains
     open (10, file=filename, status='old')
     read (10,*) ! Ignore first line
     do i = 1, numUnconstrainedPhotoRates
-      read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), photoRateNames(i), transmissionFactor(i)
+      read (10,*, iostat=ierr) ck(i), cl(i), cmm(i), cnn(i), unconstrainedPhotoNames(i), transmissionFactor(i)
       if ( ierr /= 0 ) then
         stop 'readAllPhotolysisRates(): error reading file'
       end if
@@ -690,15 +687,15 @@ contains
 
     if ( numUnconstrainedPhotoRates > 3 ) then
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
-                                ck(1), cl(1), cmm(1), cnn(1), adjustr( photoRateNames(1) ), transmissionFactor(1)
+                                ck(1), cl(1), cmm(1), cnn(1), adjustr( unconstrainedPhotoNames(1) ), transmissionFactor(1)
       write (*, '(A)') ' ...'
       write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), &
                   cmm(numUnconstrainedPhotoRates), cnn(numUnconstrainedPhotoRates), &
-                  adjustr( photoRateNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
+                  adjustr( unconstrainedPhotoNames(numUnconstrainedPhotoRates) ), transmissionFactor(numUnconstrainedPhotoRates)
     else
       do i = 1, numUnconstrainedPhotoRates
         write (*, '(I7, 1P e15.3, 1P e15.3, 1P e15.3, A, 1P e15.3)') &
-                                ck(i), cl(i), cmm(i), cnn(i), adjustr( photoRateNames(i) ), transmissionFactor(i)
+                                ck(i), cl(i), cmm(i), cnn(i), adjustr( unconstrainedPhotoNames(i) ), transmissionFactor(i)
       end do
     end if
     write (*, '(A)') ' Finished reading all photolysis rates.'

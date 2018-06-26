@@ -24,6 +24,19 @@
 module constraint_functions_mod
 contains
 
+  function calcPhotolysisRaw( l, m, n, tf ) result ( photolysis )
+    use types_mod
+    use zenith_data_mod, only : cosx, secx
+    implicit none
+
+    real(kind=DP), intent(in) :: l, m, n, tf
+    real(kind=DP) :: photolysis
+    write (*,*) l, m, n, tf, cosx, secx
+    photolysis = l * cosx ** m * exp( -n * secx ) * tf
+    write (*,*) photolysis
+    return
+  end function calcPhotolysisRaw
+
   ! ----------------------------------------------------------------- !
   ! Calculate the photolysis rate of photolysis number i from the
   ! photolysis equations, using the current zenith data values
@@ -50,7 +63,8 @@ contains
     use types_mod
     use zenith_data_mod
     use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConstrainedPhotoRates, &
-                                     usePhotolysisConstants, constrainedPhotoNames
+                                     usePhotolysisConstants, constrainedPhotoNames, cl, cmm, cnn, transmissionFactor, &
+                                     jFacL, jFacM, jFacN, jFacTransmissionFactor
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
@@ -89,7 +103,12 @@ contains
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .false. ) then
-          jFac = JFacSpeciesAtT / calcPhotolysis( jFacSpeciesLine )
+          jFac = JFacSpeciesAtT / calcPhotolysisRaw( jFacL, jFacM, jFacN, jFacTransmissionFactor )
+          write (*,*) 'jfac = ', jFac, ' = ', JFacSpeciesAtT, ' / ', &
+                      calcPhotolysisRaw( jFacL, jFacM, jFacN, jFacTransmissionFactor )
+          !write (*,*) cl( jFacSpeciesLine ), cosx, cmm( jFacSpeciesLine ), -cnn( jFacSpeciesLine ), secx, &
+          !transmissionFactor( jFacSpeciesLine )
+
         else
           jFac = 0
         end if

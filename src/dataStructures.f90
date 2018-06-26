@@ -479,7 +479,7 @@ module photolysis_rates_mod
   integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
   integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates
   integer(kind=NPI), allocatable :: ck(:), photoNumbers(:)
-  logical :: usePhotolysisConstants, usePhotolysisConstraints, unconstrainedPhotosExist
+  logical :: usePhotolysisConstants, usePhotolysisConstraints, unconstrainedPhotosExist, jFacSpeciesFound
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
   character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoNames(:), constantPhotoNames(:), &
@@ -489,6 +489,7 @@ module photolysis_rates_mod
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
   integer(kind=SI) :: PR_type
+  real(kind=DP) :: jFacL, jFacM, jFacN, jFacTransmissionFactor
 
 contains
 

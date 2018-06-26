@@ -554,8 +554,8 @@ contains
     if ( numUnconstrainedPhotoRates > 0 ) then
       unconstrainedPhotosExist = .true.
     end if
-    write(*,*) 'There are ', numUnconstrainedPhotoRates, ' unconstrained photo rates'
-    write(*,*) unconstrainedPhotoNumbers
+    write (*,*) 'There are ', numUnconstrainedPhotoRates, ' unconstrained photo rates'
+    return
   end subroutine findUnconstrainedPhotos
 
 
@@ -849,6 +849,56 @@ contains
   end function getParametersFromFile
 
   ! -----------------------------------------------------------------
+  ! This routine reads in the parameters required to calculate the reference
+  ! rate of the JFac photolysis rate
+  subroutine readJFacCalculationParameters()
+    use types_mod
+    use storage_mod, only: maxFilepathLength, maxPhotoRateNameLength
+    use directories_mod, only : param_dir
+    use constraint_functions_mod, only: calcPhotolysisRaw
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
+                                     jFacL, jFacM, jFacN, jFacTransmissionFactor
+    implicit none
+
+    character(len=maxFilepathLength) :: filename
+    character(len=maxPhotoRateNameLength) :: name
+    integer(kind=NPI) :: i, totalLines, temp
+    integer(kind=IntErr) :: ierr
+
+    write (*,*) 'start jfcp'
+    ! Read the config file, counting the lines
+    filename = trim( param_dir ) // '/photolysisRates.config'
+    write (*, '(A)') ' Reading all photolysis rates from file...'
+    call inquire_or_abort( filename, 'readJFacCalculationParameters()')
+    totalLines = count_lines_in_file( filename, .true. )
+
+    jFacSpeciesFound = .false.
+    ! Loop over the lines - if it finds one where the name matches jFacSpecies,
+    ! then read in all the elements in that line, and then calculate the jFacBaseRate
+    open (11, file=filename, status='old') ! input file
+    read (11,*, iostat=ierr)
+    do i = 1, totalLines
+      read (11,*, iostat=ierr) temp, jFacL, jFacM, jFacN, name, jFacTransmissionFactor
+      if ( ierr /= 0 ) then
+        stop 'readJFacCalculationParameters(): error reading file'
+      end if
+      ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
+      if ( trim( name ) == trim( jFacSpecies ) ) then
+        jFacSpeciesFound = .true.
+        exit
+      end if
+    end do
+    close (11, status='keep')
+    if ( jFacSpeciesFound .eqv. .false. ) then
+      stop 'error'
+  !    stop 'jFac base data for species ' // trim( jFacSpecies ) // ' not found in ' // trim( filename )
+    end if
+    write (*,*) 'end jfcp'
+    return
+  end subroutine readJFacCalculationParameters
+
+
+  ! -----------------------------------------------------------------
   ! This function reads in data from environmentVariables.config, and
   ! sets envVarTypesNum for each one. In the case of a constrained
   ! variable, this also reads in the constraint data from
@@ -861,7 +911,8 @@ contains
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
-    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, numConstrainedPhotoRates, constrainedPhotoNames
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, &
+                                     numUnconstrainedPhotoRates, unconstrainedPhotoNames, jFacSpeciesFound
     implicit none
 
     integer(kind=NPI) :: k, j
@@ -898,7 +949,7 @@ contains
     do i = 2_SI, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
-
+      write (*, *) trim( envVarNames(i) )
       select case ( trim( envVarNames(i) ) )
         case ('JFAC')
           ! JFAC gets special treatment so that we can pass in the name
@@ -918,14 +969,10 @@ contains
               envVarTypesNum(i) = 1_SI
               jFacSpecies = trim( envVarTypes(i) )
               ! Get line number for the JFac base species:
-              jFacSpeciesLine = 0_NPI
-              do j = 1_NPI, numConstrainedPhotoRates
-                if ( trim( constrainedPhotoNames(j) ) == trim( jFacSpecies ) ) then
-                  jFacSpeciesLine = j
-                end if
-              end do
+              call readJFacCalculationParameters()
+
               ! If it's not a valid photolysis rate then treat as a fixed number
-              if ( jFacSpeciesLine == 0_NPI ) then
+              if ( jFacSpeciesFound .eqv. .false. ) then
                 jFacSpecies = ''
                 envVarTypesNum(i) = 3_SI
                 read (envVarTypes(i),*) envVarFixedValues(i)
@@ -943,17 +990,24 @@ contains
             stop
           end if
         case ('TEMP', 'RH', 'H2O', 'PRESS', 'BLHEIGHT', 'DILUTE', 'DEC')
+          write(*,*) trim( envVarNames(i) ), trim( envVarTypes(i) )
           select case ( trim( envVarTypes(i) ) )
             case ('CALC')
               envVarTypesNum(i) = 1_SI
+              write (*,*) 1
             case ('CONSTRAINED')
               envVarTypesNum(i) = 2_SI
+              write (*,*) 2
             case ('NOTUSED')
               envVarTypesNum(i) = 4_SI
+              write (*,*) 4
             case default
               envVarTypesNum(i) = 3_SI
+              write (*,*) 3
               ! Copy 3rd column value to envVarFixedValues(i)
+              write (*,*) 'read start'
               read (envVarTypes(i),*) envVarFixedValues(i)
+              write (*,*) 'read finished'
           end select
         case default
           write (stderr,*) 'readEnvVar(): Invalid environment variable ', trim( envVarNames(i) ), &

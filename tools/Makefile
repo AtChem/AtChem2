@@ -20,26 +20,20 @@
 .PHONY: all test
 
 OS := $(shell uname -s)
+CVODELIB     = cvode/lib/
+OPENLIBMDIR  = openlibm-0.4.1/
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
-# if linux, pass gfortran and apt-get install location for cvode
+# if linux, pass gfortran
 FORT_COMP    = gfortran
-CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode/lib
 else
-# if macOS, then pass homebrew gfortran and self-built cvode
+# if macOS, pass homebrew gfortran
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
-CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode/lib
 endif
-# else it's not on Travis, so check the OS, and then pass local path to cvode
-else
-ifeq ($(OS),Linux)
-FORT_COMP    = gfortran
-CVODELIB     = /path/to/cvode/lib
+# else it's not on Travis, so set the fortran compiler as gfortran
 else
 FORT_COMP    = gfortran
-CVODELIB     = /path/to/cvode/lib
-endif
 endif
 
 ifeq ($(OS),Linux)
@@ -47,8 +41,6 @@ RPATH_OPTION = -R
 else
 RPATH_OPTION = -rpath
 endif
-
-OPENLIBMDIR  = openlibm-0.4.1
 
 # gfortran flags
 FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
@@ -65,17 +57,9 @@ AOUT = atchem2
 
 all: $(AOUT)
 
-LOCAL = makefile.$$(uname -n | perl -pe 's/\..+//')
-
-makefile.local:
-	touch $(LOCAL)
-	ln -f $(LOCAL) makefile.local
-
-include makefile.local
-
 SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/atchem2.f90
 
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -lblas -llapack
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)

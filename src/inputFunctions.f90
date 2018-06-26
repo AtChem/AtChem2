@@ -705,92 +705,6 @@ contains
   end subroutine readAllPhotolysisRates
 
 
-  ! ----------------------------------------------------------------- !
-  ! Read photolysis rates from file, either by (a) constant values,
-  ! (b) non-constant fixed values, or (c) calculation from equation.
-  subroutine readPhotoRates()
-    use types_mod
-    use photolysis_rates_mod
-    use directories_mod, only : param_dir
-    use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
-    implicit none
-
-    character(len=maxFilepathLength) :: filename
-    logical :: file_exists
-
-    ! Find out how many photolysis rates there are in the MCM data, and their numbers
-    call readPhotolysisNumbers()
-    ! Now that we know the photolysis rates' numbers, we can go about setting their values
-
-    ! Check whether photolysisConstants.config file exists - if so, and it is non-empty,
-    ! call readPhotolysisConstants() to set those to their given value, and set the rest to zero.
-    filename = trim( param_dir ) // '/photolysisConstants.config'
-    write (*, '(A)') ' Looking for photolysis constants file...'
-    inquire(file=filename, exist=file_exists)
-    usePhotolysisConstants = .false.
-    if ( file_exists .eqv. .true. ) then
-      write (*, '(A)') ' Checking that photolysis constants exist in file...'
-      numConstantPhotoRates = count_lines_in_file( filename, .true. )
-      ! Only use if the file exists and is not empty
-      if ( numConstantPhotoRates > 0) then
-        usePhotolysisConstants = .true.
-        PR_type = 1
-      else
-        write (*, '(A)') ' Photolysis constants file is empty.'
-
-      end if
-    else
-      write (*, '(A)') ' No photolysis constants file found.'
-
-    end if
-    if ( usePhotolysisConstants .eqv. .true. ) then
-      call readPhotolysisConstants()
-    else
-      ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
-      ! call readPhotolysisConstraints() to read in their values.
-      write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
-      filename = trim( param_dir ) // '/constrainedPhotoRates.config'
-      write (*, '(A)') ' Looking for photolysis constraints file...'
-      inquire(file=filename, exist=file_exists)
-      usePhotolysisConstraints = .false.
-      if ( file_exists .eqv. .true. ) then
-        write (*, '(A)') ' Checking that photolysis constraints exist in file...'
-        numConstrainedPhotoRates = count_lines_in_file( filename, .false. )
-        ! Only use constraints if the file exists and is not empty
-        if ( numConstrainedPhotoRates > 0) then
-          usePhotolysisConstraints = .true.
-          call readPhotolysisConstraints()
-          ! Test whether there are any unconstrained species left. If there are, read their calculation parameters in.
-          ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.
-          call findUnconstrainedPhotos()
-          if ( unconstrainedPhotosExist .eqv. .false. ) then
-            write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ',  &
-                             'so no photolysis rates will be calculated.'
-            PR_type = 2
-          else
-            write (*, '(2A)') ' Photolysis constraint file does not constrain all photolysis rates, ', &
-                             'so some photolysis rates will be calculated.'
-            PR_type = 3
-            call readUnconstrainedPhotolysisRates()
-          end if
-        else
-          write (*, '(A)') ' Photolysis constraint file is empty, so all photolysis rates will be calculated.'
-          PR_type = 4
-          call readAllPhotolysisRates()
-        end if
-      else
-        write (*, '(A)') ' No photolysis constraint file exists, so all photolysis rates will be calculated.'
-        PR_type = 4
-        call readAllPhotolysisRates()
-      end if
-    end if
-    write (*, '(A, I0)') ' PR_type = ', PR_type
-    write (*,*)
-
-    return
-  end subroutine readPhotoRates
-
-
   ! -----------------------------------------------------------------
   ! Read in contents of
   ! modelConfiguration/productionRatesOutput.config and
@@ -1104,6 +1018,90 @@ contains
 
     return
   end function readSpeciesOfInterest
+
+
+  ! ----------------------------------------------------------------- !
+  ! Read photolysis rates from file, either by (a) constant values,
+  ! (b) non-constant fixed values, or (c) calculation from equation.
+  subroutine readPhotoRates()
+    use types_mod
+    use photolysis_rates_mod
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
+    implicit none
+
+    character(len=maxFilepathLength) :: filename
+    logical :: file_exists
+
+    ! Find out how many photolysis rates there are in the MCM data, and their numbers
+    call readPhotolysisNumbers()
+    ! Now that we know the photolysis rates' numbers, we can go about setting their values
+
+    ! Check whether photolysisConstants.config file exists - if so, and it is non-empty,
+    ! call readPhotolysisConstants() to set those to their given value, and set the rest to zero.
+    filename = trim( param_dir ) // '/photolysisConstants.config'
+    write (*, '(A)') ' Looking for photolysis constants file...'
+    inquire(file=filename, exist=file_exists)
+    usePhotolysisConstants = .false.
+    if ( file_exists .eqv. .true. ) then
+      write (*, '(A)') ' Checking that photolysis constants exist in file...'
+      numConstantPhotoRates = count_lines_in_file( filename, .true. )
+      ! Only use if the file exists and is not empty
+      if ( numConstantPhotoRates > 0) then
+        usePhotolysisConstants = .true.
+        PR_type = 1
+      else
+        write (*, '(A)') ' Photolysis constants file is empty.'
+      end if
+    else
+      write (*, '(A)') ' No photolysis constants file found.'
+    end if
+    if ( usePhotolysisConstants .eqv. .true. ) then
+      call readPhotolysisConstants()
+    else
+      ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
+      ! call readPhotolysisConstraints() to read in their values.
+      write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
+      filename = trim( param_dir ) // '/constrainedPhotoRates.config'
+      write (*, '(A)') ' Looking for photolysis constraints file...'
+      inquire(file=filename, exist=file_exists)
+      usePhotolysisConstraints = .false.
+      if ( file_exists .eqv. .true. ) then
+        write (*, '(A)') ' Checking that photolysis constraints exist in file...'
+        numConstrainedPhotoRates = count_lines_in_file( filename, .false. )
+        ! Only use constraints if the file exists and is not empty
+        if ( numConstrainedPhotoRates > 0) then
+          usePhotolysisConstraints = .true.
+          call readPhotolysisConstraints()
+          ! Test whether there are any unconstrained species left. If there are, read their calculation parameters in.
+          ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.
+          call findUnconstrainedPhotos()
+          if ( unconstrainedPhotosExist .eqv. .false. ) then
+            write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ',  &
+                             'so no photolysis rates will be calculated.'
+            PR_type = 2
+          else
+            write (*, '(2A)') ' Photolysis constraint file does not constrain all photolysis rates, ', &
+                             'so some photolysis rates will be calculated.'
+            PR_type = 3
+            call readUnconstrainedPhotolysisRates()
+          end if
+        else
+          write (*, '(A)') ' Photolysis constraint file is empty, so all photolysis rates will be calculated.'
+          PR_type = 4
+          call readAllPhotolysisRates()
+        end if
+      else
+        write (*, '(A)') ' No photolysis constraint file exists, so all photolysis rates will be calculated.'
+        PR_type = 4
+        call readAllPhotolysisRates()
+      end if
+    end if
+    write (*, '(A, I0)') ' PR_type = ', PR_type
+    write (*,*)
+
+    return
+  end subroutine readPhotoRates
 
 
   ! ----------------------------------------------------------------- !

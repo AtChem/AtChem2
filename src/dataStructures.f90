@@ -259,7 +259,7 @@ module constraints_mod
   real(kind=DP), allocatable :: constrainedConcs(:)
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
-  integer(kind=NPI) :: maxNumberOfConstraintDataPoints, maxNumberOfEnvVarDataPoints, maxNumberOfPhotoDataPoints
+  integer(kind=NPI) :: maxNumberOfConstraintDataPoints, maxNumberOfEnvVarDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
 contains
@@ -483,6 +483,7 @@ module photolysis_rates_mod
                                                         unconstrainedPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
   logical :: usePhotolysisConstants, usePhotolysisConstraints, existUnconstrainedPhotos, jFacSpeciesFound
+  integer(kind=NPI) :: maxNumberOfPhotoDataPoints
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
@@ -503,6 +504,14 @@ contains
 
     allocate (photoNumbers(totalNumPhotos))
   end subroutine allocate_photolysis_numbers_variables
+
+  subroutine allocate_constrained_photolysis_rates_variables()
+    implicit none
+
+    allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
+              photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
+              photoNumberOfPoints(numConstrainedPhotoRates) )
+  end subroutine allocate_constrained_photolysis_rates_variables
 
   subroutine allocate_unconstrained_photolysis_rates_variables()
     implicit none

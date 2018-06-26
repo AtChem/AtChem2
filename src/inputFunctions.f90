@@ -424,10 +424,9 @@ contains
   subroutine readPhotolysisConstraints()
     use types_mod
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, photoX, photoY, photoNumberOfPoints, &
-                                    numConstrainedPhotoRates
+                                    numConstrainedPhotoRates, maxNumberOfPhotoDataPoints
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
-    use constraints_mod, only : maxNumberOfPhotoDataPoints
 
     character(len=maxFilepathLength) :: fileLocationPrefix
     character(len=maxFilepathLength+maxPhotoRateNameLength) :: fileLocation
@@ -482,9 +481,8 @@ contains
       write (*, '(A, I0)') ' maximum number of photolysis constraint data points: ', maxNumberOfPhotoDataPoints
     end if
     ! Allocate array size for storage of photolysis constraint data
-    allocate ( photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints) )
-    allocate ( photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints) )
-    allocate ( photoNumberOfPoints(numConstrainedPhotoRates) )
+    call allocate_constrained_photolysis_rates_variables()
+
     if ( numConstrainedPhotoRates > 0 ) then
       do i = 1, numConstrainedPhotoRates
         string = constrainedPhotoNames(i)

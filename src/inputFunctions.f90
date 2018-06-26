@@ -889,7 +889,7 @@ contains
     end do
     close (11, status='keep')
     if ( jFacSpeciesFound .eqv. .false. ) then
-       stop 'jFac base data for species ' // trim( jFacSpecies ) // ' not found in ' // trim( filename )
+       write (*,'(5A)') ' ', trim( jFacSpecies ), ' not found in ', trim( filename ), ', so it will be treated as a constant.'
     end if
     return
   end subroutine readJFacCalculationParameters

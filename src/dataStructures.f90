@@ -475,7 +475,7 @@ module photolysis_rates_mod
   save
 
   integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates, numConstrainedPhotoRates, numUnconstrainedPhotoRates
-  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoJNumbers(:), constrainedPhotoRatesNumbers(:), &
+  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoNumbers(:), constrainedPhotoNumbers(:), &
                                     unconstrainedPhotoNumbers(:), ck(:)
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
@@ -494,7 +494,7 @@ contains
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
-    allocate (constantPhotoJNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
+    allocate (constantPhotoNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
               constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 

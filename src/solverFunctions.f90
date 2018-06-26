@@ -209,7 +209,7 @@ contains
 
     if ( usePhotolysisConstants .eqv. .true. ) then
       do i = 1, numConstantPhotoRates
-        j(constantPhotoJNumbers(i)) = constantPhotoValues(i)
+        j(constantPhotoNumbers(i)) = constantPhotoValues(i)
       end do
     else
       do i = 1, numUnconstrainedPhotoRates
@@ -224,7 +224,7 @@ contains
       do i = 1, numConstrainedPhotoRates
         call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(i), &
                                      getConditionsInterpMethod(), i, photoRateAtT )
-        j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
+        j(constrainedPhotoNumbers(i)) = photoRateAtT
       end do
     end if
 

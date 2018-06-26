@@ -372,7 +372,7 @@ contains
   subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, allocate_photolysis_j, &
-                                    constantPhotoJNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates
+                                    constantPhotoNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -397,7 +397,7 @@ contains
     open (10, file=filename, status='old', iostat=ierr)
     read (10,*) ! Ignore first line
     do i = 1, numConstantPhotoRates
-      read (10,*, iostat=ierr) constantPhotoJNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
+      read (10,*, iostat=ierr) constantPhotoNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
       if ( ierr /= 0 ) then
         stop 'readPhotolysisConstants(): error reading file'
       end if
@@ -405,13 +405,13 @@ contains
     close (10, status='keep')
 
     if ( numConstantPhotoRates > 3 ) then
-      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoJNumbers(1), constantPhotoValues(1), constantPhotoNames(1)
+      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(1), constantPhotoValues(1), constantPhotoNames(1)
       write (*, '(A)') ' ...'
-      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoJNumbers(numConstantPhotoRates), &
+      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(numConstantPhotoRates), &
                                             constantPhotoValues(numConstantPhotoRates), constantPhotoNames(numConstantPhotoRates)
     else
       do i = 1, numConstantPhotoRates
-        write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoJNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
+        write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
       end do
     end if
     write (*, '(A)') ' Finished reading photolysis constants.'
@@ -423,7 +423,7 @@ contains
 
   subroutine readPhotolysisConstraints()
     use types_mod
-    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoRatesNumbers, photoX, photoY, photoNumberOfPoints, &
+    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, photoX, photoY, photoNumberOfPoints, &
                                     numConstrainedPhotoRates
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
@@ -439,7 +439,7 @@ contains
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
     call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoConstraints()')
-    allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoRatesNumbers(numConstrainedPhotoRates) )
+    allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates) )
     open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
@@ -464,7 +464,7 @@ contains
     ! TODO: REVIEW Get numbers of constrained photo rates
     ! Strip first character (which will be 'J'), then convert to integer
     do i = 1, numConstrainedPhotoRates
-      read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoRatesNumbers(i)
+      read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoNumbers(i)
     end do
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
@@ -510,20 +510,20 @@ contains
   ! Returns an array of unconstrained photos rates, and a logical indicating whether there are none
   subroutine findUnconstrainedPhotos()
     use types_mod
-    use photolysis_rates_mod, only : photoNumbers, constrainedPhotoRatesNumbers, numConstrainedPhotoRates, totalNumPhotos, &
+    use photolysis_rates_mod, only : photoNumbers, constrainedPhotoNumbers, numConstrainedPhotoRates, totalNumPhotos, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, existUnconstrainedPhotos, photoNumbers
     implicit none
 
     integer(kind=NPI) :: i, j, counter
     logical :: this_number_unconstrained
 
-    ! Find all elements in photoNumbers that are not in constrainedPhotoRatesNumbers
+    ! Find all elements in photoNumbers that are not in constrainedPhotoNumbers
     existUnconstrainedPhotos = .false.
     numUnconstrainedPhotoRates = 0
     do j = 1, totalNumPhotos
       this_number_unconstrained = .true.
       do i = 1, numConstrainedPhotoRates
-        if ( photoNumbers(j) == constrainedPhotoRatesNumbers(i) ) then
+        if ( photoNumbers(j) == constrainedPhotoNumbers(i) ) then
           this_number_unconstrained = .false.
           exit
         end if
@@ -539,7 +539,7 @@ contains
     do j = 1, totalNumPhotos
       this_number_unconstrained = .true.
       do i = 1, numConstrainedPhotoRates
-        if ( photoNumbers(j) == constrainedPhotoRatesNumbers(i) ) then
+        if ( photoNumbers(j) == constrainedPhotoNumbers(i) ) then
           this_number_unconstrained = .false.
           exit
         end if

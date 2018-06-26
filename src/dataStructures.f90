@@ -507,8 +507,8 @@ contains
   subroutine allocate_unconstrained_photolysis_rates_variables()
     implicit none
 
-    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates))
-    allocate (cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
+    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates), &
+              cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
               transmissionFactor(numUnconstrainedPhotoRates))
   end subroutine allocate_unconstrained_photolysis_rates_variables
 

@@ -123,10 +123,10 @@ contains
   ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
-    use photolysis_rates_mod, only : ck, j, constantPhotoNames, numConstantPhotoRates, &
+    use photolysis_rates_mod, only : ck, constrainedPhotoRatesNumbers, j, PR_type, &
+                                     constantPhotoNames, numConstantPhotoRates, &
                                      constrainedPhotoNames, numConstrainedPhotoRates, &
-                                     unconstrainedPhotoNames, numUnconstrainedPhotoRates, PR_type, &
-                                     constrainedPhotoRatesNumbers
+                                     unconstrainedPhotoNames, numUnconstrainedPhotoRates
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -135,36 +135,42 @@ contains
 
     ! Output constant photolysis rates if any.
     ! Otherwise, output constrained (if any), then unconstrained (if any).
-    if ( PR_type == 1 ) then
-      if ( firstTime .eqv. .true. ) then
-        write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1, numConstantPhotoRates)
-        firstTime = .false.
-      end if
-      write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstantPhotoRates)
-    end if
-    if ( PR_type == 2 ) then
-      if ( firstTime .eqv. .true. ) then
-        write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
-        firstTime = .false.
-      end if
-      write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
-    end if
-    if ( PR_type == 3) then
-      if ( firstTime .eqv. .true. ) then
-        write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates), &
-                                (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
-        firstTime = .false.
-      end if
-      write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates), &
-                                     (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
-    end if
-    if ( PR_type == 4 ) then
-      if ( firstTime .eqv. .true. ) then
-        write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates)
-        firstTime = .false.
-      end if
-      write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates)
-    end if
+    select case ( PR_type )
+      case ( 1_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1, numConstantPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstantPhotoRates)
+
+      case ( 2_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
+
+      case ( 3_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates), &
+                                  (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates), &
+                                        (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
+
+      case ( 4_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates)
+
+      case default
+        stop 'outputPhotolysisRates(): invalid case of PR_type.'
+
+    end select
+
     return
   end subroutine outputPhotolysisRates
 

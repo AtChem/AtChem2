@@ -317,9 +317,8 @@ contains
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, &
-                                     allocate_photolysis_numbers_variables, &
-                                     size_of_j, allocate_photolysis_j
+    use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, size_of_j, &
+                                     allocate_photolysis_numbers_variables, allocate_photolysis_j
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -373,8 +372,9 @@ contains
   !  Any photolysis rates not in the file will be set to zero when evaluated for j.
   subroutine readPhotolysisConstants()
     use types_mod
-    use photolysis_rates_mod, only : allocate_photolysis_constants_variables, allocate_photolysis_j, &
-                                    constantPhotoNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates
+    use photolysis_rates_mod, only : allocate_photolysis_constants_variables, &
+                                     constantPhotoNumbers, constantPhotoValues, &
+                                     constantPhotoNames, numConstantPhotoRates
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -424,9 +424,8 @@ contains
   ! photolysis rates, with size numConstrainedPhotoRates
   subroutine readPhotolysisConstraints()
     use types_mod
-    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, &
-                                     photoX, photoY, photoNumberOfPoints, &
-                                     numConstrainedPhotoRates, maxNumberOfPhotoDataPoints, &
+    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, numConstrainedPhotoRates, &
+                                     photoX, photoY, photoNumberOfPoints, maxNumberOfPhotoDataPoints, &
                                      allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
@@ -437,11 +436,15 @@ contains
     integer(kind=IntErr) :: ierr
     real(kind=DP) :: input1, input2
     character(len=maxPhotoRateNameLength) :: string
+    logical :: allocated = .false.
 
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
     call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoConstraints()')
-    call allocate_constrained_photolysis_rates_variables()
+    if ( allocated .eqv. .false. ) then
+      call allocate_constrained_photolysis_rates_variables()
+      allocated = .true.
+    end if
     open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
@@ -463,7 +466,6 @@ contains
     write (*, '(A)') ' Finished reading names of constrained photolysis rates.'
     write (*, '(A, I0)') ' Number of constrained photorates: ', numConstrainedPhotoRates
 
-    ! TODO: REVIEW Get numbers of constrained photo rates
     ! Strip first character (which will be 'J'), then convert to integer
     do i = 1, numConstrainedPhotoRates
       read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoNumbers(i)
@@ -514,8 +516,8 @@ contains
   ! and a logical indicating whether there are any such rates (existUnconstrainedPhotos)
   subroutine findUnconstrainedPhotos()
     use types_mod
-    use photolysis_rates_mod, only : photoNumbers, constrainedPhotoNumbers, numConstrainedPhotoRates, totalNumPhotos, &
-                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, existUnconstrainedPhotos, photoNumbers
+    use photolysis_rates_mod, only : photoNumbers, totalNumPhotos, constrainedPhotoNumbers, numConstrainedPhotoRates, &
+                                     unconstrainedPhotoNumbers, numUnconstrainedPhotoRates, existUnconstrainedPhotos
     implicit none
 
     integer(kind=NPI) :: i, j, counter
@@ -594,9 +596,9 @@ contains
   subroutine readUnconstrainedPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, &
-                                     allocate_photolysis_j, numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, &
-                                     unconstrainedPhotoNames, allocate_unconstrained_photolysis_rates_variables, totalNumPhotos
+    use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, totalNumPhotos, &
+                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotoNames, &
+                                     allocate_unconstrained_photolysis_rates_variables
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -667,9 +669,9 @@ contains
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, &
-                                     transmissionFactor, allocate_unconstrained_photolysis_rates_variables, &
-                                     allocate_photolysis_j, numUnconstrainedPhotoRates
+    use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
+                                     numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
+
     use directories_mod, only : param_dir
     use storage_mod, only : maxFilepathLength
     implicit none

@@ -371,7 +371,7 @@ contains
   ! -----------------------------------------------------------------
   !  Set all the photolysis rates to their constant values from file
   !  Any photolysis rates not in the file will be set to zero when evaluated for j.
-    subroutine readPhotolysisConstants()
+  subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, allocate_photolysis_j, &
                                     constantPhotoNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates

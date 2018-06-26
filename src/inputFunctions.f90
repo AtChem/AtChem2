@@ -423,8 +423,10 @@ contains
 
   subroutine readPhotolysisConstraints()
     use types_mod
-    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, photoX, photoY, photoNumberOfPoints, &
-                                    numConstrainedPhotoRates, maxNumberOfPhotoDataPoints
+    use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, &
+                                     photoX, photoY, photoNumberOfPoints, &
+                                     numConstrainedPhotoRates, maxNumberOfPhotoDataPoints, &
+                                     allocate_constrained_photolysis_rates_variables
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 

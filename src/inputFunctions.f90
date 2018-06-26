@@ -975,11 +975,11 @@ contains
               call readJFacCalculationParameters()
 
               ! If it's not a valid photolysis rate then treat as a fixed number
-               if ( jFacSpeciesFound .eqv. .false. ) then
-                 jFacSpecies = ''
-                 envVarTypesNum(i) = 3_SI
-                 read (envVarTypes(i),*) envVarFixedValues(i)
-               end if
+              if ( jFacSpeciesFound .eqv. .false. ) then
+                jFacSpecies = ''
+                envVarTypesNum(i) = 3_SI
+                read (envVarTypes(i),*) envVarFixedValues(i)
+              end if
           end select
         case ('ROOFOPEN')
           if ( trim( envVarTypes(i) ) == 'ON' ) then
@@ -997,20 +997,14 @@ contains
           select case ( trim( envVarTypes(i) ) )
             case ('CALC')
               envVarTypesNum(i) = 1_SI
-              write (*,*) 1
             case ('CONSTRAINED')
               envVarTypesNum(i) = 2_SI
-              write (*,*) 2
             case ('NOTUSED')
               envVarTypesNum(i) = 4_SI
-              write (*,*) 4
             case default
               envVarTypesNum(i) = 3_SI
-              write (*,*) 3
               ! Copy 3rd column value to envVarFixedValues(i)
-              write (*,*) 'read start'
               read (envVarTypes(i),*) envVarFixedValues(i)
-              write (*,*) 'read finished'
           end select
         case default
           write (stderr,*) 'readEnvVar(): Invalid environment variable ', trim( envVarNames(i) ), &

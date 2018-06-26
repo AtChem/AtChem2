@@ -125,7 +125,8 @@ contains
     use types_mod
     use photolysis_rates_mod, only : ck, j, constantPhotoNames, numConstantPhotoRates, &
                                      constrainedPhotoNames, numConstrainedPhotoRates, &
-                                     unconstrainedPhotoNames, numUnconstrainedPhotoRates
+                                     unconstrainedPhotoNames, numUnconstrainedPhotoRates, PR_type, &
+                                     constrainedPhotoRatesNumbers
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -134,21 +135,30 @@ contains
 
     ! Output constant photolysis rates if any.
     ! Otherrwise, output constrained (if any), then unconstrained (if any).
-    if ( allocated(constantPhotoNames) .eqv. .true. ) then
+    if ( PR_type == 1 ) then
       if ( firstTime .eqv. .true. ) then
         write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1, numConstantPhotoRates)
         firstTime = .false.
       end if
       write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstantPhotoRates)
     end if
-    if ( allocated(constrainedPhotoNames) .eqv. .true. ) then
+    if ( PR_type == 2 ) then
       if ( firstTime .eqv. .true. ) then
         write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
         firstTime = .false.
       end if
-      write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstrainedPhotoRates)
+      write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
     end if
-    if ( allocated(unconstrainedPhotoNames) .eqv. .true. ) then
+    if ( PR_type == 3) then
+      if ( firstTime .eqv. .true. ) then
+        write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates), &
+                                (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
+        firstTime = .false.
+      end if
+      write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates), &
+                                     (j(constrainedPhotoRatesNumbers(i)), i = 1, numConstrainedPhotoRates)
+    end if
+    if ( PR_type == 4 ) then
       if ( firstTime .eqv. .true. ) then
         write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates)
         firstTime = .false.

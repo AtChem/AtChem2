@@ -865,7 +865,6 @@ contains
     integer(kind=IntErr) :: ierr
     !logical :: jFacSpeciesFound
 
-    write (*,*) 'start jfcp'
     ! Read the config file, counting the lines
     filename = trim( param_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading all photolysis rates from file...'
@@ -884,19 +883,14 @@ contains
       end if
   !     ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
        if ( trim( name ) == trim( jFacSpecies ) ) then
-         write (*,'(A)') 'found'
          jFacSpeciesFound = .true.
-         write (*,'(A)') 'assigned'
          exit
       end if
     end do
     close (11, status='keep')
-    write (*,'(A)') 'write value'
-    write (*,*) jFacSpeciesFound
     if ( jFacSpeciesFound .eqv. .false. ) then
        stop 'jFac base data for species ' // trim( jFacSpecies ) // ' not found in ' // trim( filename )
     end if
-    write (*,*) 'end jfcp'
     return
   end subroutine readJFacCalculationParameters
 
@@ -993,7 +987,6 @@ contains
             stop
           end if
         case ('TEMP', 'RH', 'H2O', 'PRESS', 'BLHEIGHT', 'DILUTE', 'DEC')
-          write(*,*) trim( envVarNames(i) ), trim( envVarTypes(i) )
           select case ( trim( envVarTypes(i) ) )
             case ('CALC')
               envVarTypesNum(i) = 1_SI

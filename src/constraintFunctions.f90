@@ -104,11 +104,6 @@ contains
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .false. ) then
           jFac = JFacSpeciesAtT / calcPhotolysisRaw( jFacL, jFacM, jFacN, jFacTransmissionFactor )
-          write (*,*) 'jfac = ', jFac, ' = ', JFacSpeciesAtT, ' / ', &
-                      calcPhotolysisRaw( jFacL, jFacM, jFacN, jFacTransmissionFactor )
-          !write (*,*) cl( jFacSpeciesLine ), cosx, cmm( jFacSpeciesLine ), -cnn( jFacSpeciesLine ), secx, &
-          !transmissionFactor( jFacSpeciesLine )
-
         else
           jFac = 0
         end if

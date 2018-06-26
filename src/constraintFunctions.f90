@@ -31,9 +31,9 @@ contains
 
     real(kind=DP), intent(in) :: l, m, n, tf
     real(kind=DP) :: photolysis
-    write (*,*) l, m, n, tf, cosx, secx
+
     photolysis = l * cosx ** m * exp( -n * secx ) * tf
-    write (*,*) photolysis
+
     return
   end function calcPhotolysisRaw
 

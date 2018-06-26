@@ -855,7 +855,6 @@ contains
     use types_mod
     use storage_mod, only: maxFilepathLength, maxPhotoRateNameLength
     use directories_mod, only : param_dir
-    use constraint_functions_mod, only: calcPhotolysisRaw
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     implicit none
@@ -864,6 +863,7 @@ contains
     character(len=maxPhotoRateNameLength) :: name
     integer(kind=NPI) :: i, totalLines, temp
     integer(kind=IntErr) :: ierr
+    !logical :: jFacSpeciesFound
 
     write (*,*) 'start jfcp'
     ! Read the config file, counting the lines
@@ -882,16 +882,19 @@ contains
       if ( ierr /= 0 ) then
         stop 'readJFacCalculationParameters(): error reading file'
       end if
-      ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
-      if ( trim( name ) == trim( jFacSpecies ) ) then
-        jFacSpeciesFound = .true.
-        exit
+  !     ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
+       if ( trim( name ) == trim( jFacSpecies ) ) then
+         write (*,'(A)') 'found'
+         jFacSpeciesFound = .true.
+         write (*,'(A)') 'assigned'
+         exit
       end if
     end do
     close (11, status='keep')
+    write (*,'(A)') 'write value'
+    write (*,*) jFacSpeciesFound
     if ( jFacSpeciesFound .eqv. .false. ) then
-      stop 'error'
-  !    stop 'jFac base data for species ' // trim( jFacSpecies ) // ' not found in ' // trim( filename )
+       stop 'jFac base data for species ' // trim( jFacSpecies ) // ' not found in ' // trim( filename )
     end if
     write (*,*) 'end jfcp'
     return
@@ -911,8 +914,8 @@ contains
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
-    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, &
-                                     numUnconstrainedPhotoRates, unconstrainedPhotoNames, jFacSpeciesFound
+    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, jFacSpeciesFound, &
+                                     numUnconstrainedPhotoRates, unconstrainedPhotoNames
     implicit none
 
     integer(kind=NPI) :: k, j
@@ -949,7 +952,7 @@ contains
     do i = 2_SI, numEnvVars
       read (10,*) dummy, envVarNames(i), envVarTypes(i)
       write (*, '(A, A4, A12, A20) ') ' ', dummy, envVarNames(i), adjustr( envVarTypes(i) )
-      write (*, *) trim( envVarNames(i) )
+
       select case ( trim( envVarNames(i) ) )
         case ('JFAC')
           ! JFAC gets special treatment so that we can pass in the name
@@ -972,11 +975,11 @@ contains
               call readJFacCalculationParameters()
 
               ! If it's not a valid photolysis rate then treat as a fixed number
-              if ( jFacSpeciesFound .eqv. .false. ) then
-                jFacSpecies = ''
-                envVarTypesNum(i) = 3_SI
-                read (envVarTypes(i),*) envVarFixedValues(i)
-              end if
+               if ( jFacSpeciesFound .eqv. .false. ) then
+                 jFacSpecies = ''
+                 envVarTypesNum(i) = 3_SI
+                 read (envVarTypes(i),*) envVarFixedValues(i)
+               end if
           end select
         case ('ROOFOPEN')
           if ( trim( envVarTypes(i) ) == 'ON' ) then

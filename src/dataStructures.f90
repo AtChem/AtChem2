@@ -517,7 +517,7 @@ contains
 
     allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
               photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
-              photoNumberOfPoints(numConstrainedPhotoRates) )
+              photoNumberOfPoints(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_data
 
   subroutine allocate_unconstrained_photolysis_rates_variables()

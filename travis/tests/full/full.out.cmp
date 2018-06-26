@@ -107,7 +107,6 @@
      61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
  Finished reading all photolysis rates.
  Number of all photolysis rates: 35
- PR_type = 4
 
 
 -----------------------
@@ -175,5 +174,5 @@
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 11
+ Runtime = 10
  Deallocating memory.

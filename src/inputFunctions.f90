@@ -1093,7 +1093,6 @@ contains
         call readAllPhotolysisRates()
       end if
     end if
-    write (*, '(A, I0)') ' PR_type = ', PR_type
     write (*,*)
 
     return

@@ -134,7 +134,7 @@ contains
     logical :: firstTime = .true.
 
     ! Output constant photolysis rates if any.
-    ! Otherrwise, output constrained (if any), then unconstrained (if any).
+    ! Otherwise, output constrained (if any), then unconstrained (if any).
     if ( PR_type == 1 ) then
       if ( firstTime .eqv. .true. ) then
         write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1, numConstantPhotoRates)

@@ -141,7 +141,7 @@ contains
           write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1_NPI, numConstantPhotoRates)
           firstTime = .false.
         end if
-        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstantPhotoRates)
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numConstantPhotoRates)
 
       case ( 2_SI )
         if ( firstTime .eqv. .true. ) then

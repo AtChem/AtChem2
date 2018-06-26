@@ -138,33 +138,33 @@ contains
     select case ( PR_type )
       case ( 1_SI )
         if ( firstTime .eqv. .true. ) then
-          write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1, numConstantPhotoRates)
+          write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1_NPI, numConstantPhotoRates)
           firstTime = .false.
         end if
         write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numConstantPhotoRates)
 
       case ( 2_SI )
         if ( firstTime .eqv. .true. ) then
-          write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
+          write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1_NPI, numConstrainedPhotoRates)
           firstTime = .false.
         end if
-        write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoNumbers(i)), i = 1, numConstrainedPhotoRates)
+        write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoNumbers(i)), i = 1_NPI, numConstrainedPhotoRates)
 
       case ( 3_SI )
         if ( firstTime .eqv. .true. ) then
-          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates), &
-                                  (trim( constrainedPhotoNames(i) ), i = 1, numConstrainedPhotoRates)
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1_NPI, numUnconstrainedPhotoRates), &
+                                  (trim( constrainedPhotoNames(i) ), i = 1_NPI, numConstrainedPhotoRates)
           firstTime = .false.
         end if
-        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates), &
-                                        (j(constrainedPhotoNumbers(i)), i = 1, numConstrainedPhotoRates)
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numUnconstrainedPhotoRates), &
+                                        (j(constrainedPhotoNumbers(i)), i = 1_NPI, numConstrainedPhotoRates)
 
       case ( 4_SI )
         if ( firstTime .eqv. .true. ) then
-          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1, numUnconstrainedPhotoRates)
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1_NPI, numUnconstrainedPhotoRates)
           firstTime = .false.
         end if
-        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numUnconstrainedPhotoRates)
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numUnconstrainedPhotoRates)
 
       case default
         stop 'outputPhotolysisRates(): invalid case of PR_type.'

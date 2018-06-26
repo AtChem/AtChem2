@@ -62,7 +62,7 @@ contains
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
-    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConstrainedPhotoRates, &
+    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, numConstrainedPhotoRates, &
                                      usePhotolysisConstants, constrainedPhotoNames, cl, cmm, cnn, transmissionFactor, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     use interpolation_functions_mod, only : getConstrainedQuantAtT

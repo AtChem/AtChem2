@@ -822,7 +822,7 @@ contains
     use directories_mod, only : param_dir, env_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
-    use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesLine, photoRateNames, jFacSpeciesFound, &
+    use photolysis_rates_mod, only : jFacSpecies, photoRateNames, jFacSpeciesFound, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNames
     implicit none
 

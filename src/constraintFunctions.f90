@@ -63,7 +63,7 @@ contains
     use types_mod
     use zenith_data_mod
     use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, numConstrainedPhotoRates, &
-                                     usePhotolysisConstants, constrainedPhotoNames, cl, cmm, cnn, transmissionFactor, &
+                                     usePhotolysisConstants, constrainedPhotoNames, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod

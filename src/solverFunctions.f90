@@ -207,23 +207,26 @@ contains
 
     call calcAtmosphere( m, o2, n2 )
 
-    do i = 1, numUnconstrainedPhotoRates
-      if ( usePhotolysisConstants .eqv. .false. ) then
+    if ( usePhotolysisConstants .eqv. .true. ) then
+      do i = 1, numConstantPhotoRates
+        j(constantPhotoJNumbers(i)) = constantPhotoValues(i)
+      end do
+    else
+      do i = 1, numUnconstrainedPhotoRates
         if ( cosx_below_threshold .eqv. .true. ) then
+          ! Apply zero if below the cosx threshold, to reduce potential numerical issues
           j(ck(i)) = 0.0_DP
         else
           j(ck(i)) = calcPhotolysis( i ) * roofOpen * jfac
         end if
-      else
-        j(ck(i)) = cl(i)
-      end if
-    end do
+      end do
 
-    do i = 1, numConstrainedPhotoRates
-      call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(i), &
-                                   getConditionsInterpMethod(), i, photoRateAtT )
-      j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
-    end do
+      do i = 1, numConstrainedPhotoRates
+        call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(i), &
+                                     getConditionsInterpMethod(), i, photoRateAtT )
+        j(constrainedPhotoRatesNumbers(i)) = photoRateAtT
+      end do
+    end if
 
     include 'mechanism-rate-coefficients.f90'
 

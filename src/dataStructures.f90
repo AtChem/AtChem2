@@ -509,7 +509,7 @@ contains
   subroutine allocate_constrained_photolysis_rates_variables()
     implicit none
 
-    allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates) )
+    allocate (constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_rates_variables
 
   subroutine allocate_constrained_photolysis_data()

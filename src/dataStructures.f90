@@ -479,8 +479,8 @@ module photolysis_rates_mod
                                     unconstrainedPhotoNumbers(:), ck(:)
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
-  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constantPhotoNames(:), constrainedPhotoNames(:), &
-                                                        unconstrainedPhotoNames(:)
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constantPhotoNames(:), &
+                                                        constrainedPhotoNames(:), unconstrainedPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
   logical :: usePhotolysisConstants, existUnconstrainedPhotos, jFacSpeciesFound
   integer(kind=NPI) :: maxNumberOfPhotoDataPoints

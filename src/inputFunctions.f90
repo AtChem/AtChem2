@@ -1063,13 +1063,11 @@ contains
       filename = trim( param_dir ) // '/constrainedPhotoRates.config'
       write (*, '(A)') ' Looking for photolysis constraints file...'
       inquire(file=filename, exist=file_exists)
-      usePhotolysisConstraints = .false.
       if ( file_exists .eqv. .true. ) then
         write (*, '(A)') ' Checking that photolysis constraints exist in file...'
         numConstrainedPhotoRates = count_lines_in_file( filename, .false. )
         ! Only use constraints if the file exists and is not empty
         if ( numConstrainedPhotoRates > 0) then
-          usePhotolysisConstraints = .true.
           call readPhotolysisConstraints()
           ! Test whether there are any unconstrained species left. If there are, read their calculation parameters in.
           ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.

@@ -505,13 +505,20 @@ contains
     allocate (photoNumbers(totalNumPhotos))
   end subroutine allocate_photolysis_numbers_variables
 
+
   subroutine allocate_constrained_photolysis_rates_variables()
+    implicit none
+
+    allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates) )
+  end subroutine allocate_constrained_photolysis_rates_variables
+
+  subroutine allocate_constrained_photolysis_data()
     implicit none
 
     allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
               photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
               photoNumberOfPoints(numConstrainedPhotoRates) )
-  end subroutine allocate_constrained_photolysis_rates_variables
+  end subroutine allocate_constrained_photolysis_data
 
   subroutine allocate_unconstrained_photolysis_rates_variables()
     implicit none

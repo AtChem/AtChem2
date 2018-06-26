@@ -426,7 +426,7 @@ contains
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, &
                                      photoX, photoY, photoNumberOfPoints, &
                                      numConstrainedPhotoRates, maxNumberOfPhotoDataPoints, &
-                                     allocate_constrained_photolysis_rates_variables
+                                     allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
     use directories_mod, only : param_dir, env_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 
@@ -440,7 +440,7 @@ contains
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
     call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoConstraints()')
-    allocate ( constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates) )
+    call allocate_constrained_photolysis_rates_variables()
     open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
@@ -483,7 +483,7 @@ contains
       write (*, '(A, I0)') ' maximum number of photolysis constraint data points: ', maxNumberOfPhotoDataPoints
     end if
     ! Allocate array size for storage of photolysis constraint data
-    call allocate_constrained_photolysis_rates_variables()
+    call allocate_constrained_photolysis_data()
 
     if ( numConstrainedPhotoRates > 0 ) then
       do i = 1, numConstrainedPhotoRates

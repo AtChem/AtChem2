@@ -367,9 +367,11 @@ contains
     return
   end subroutine readPhotolysisNumbers
 
+
   ! -----------------------------------------------------------------
-  ! Read in 3 values to fill ck, cl and str.
-  subroutine readPhotolysisConstants()
+  !  Set all the photolysis rates to their constant values from file
+  !  Any photolysis rates not in the file will be set to zero when evaluated for j.
+    subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, allocate_photolysis_j, &
                                     constantPhotoNumbers, constantPhotoValues, constantPhotoNames, numConstantPhotoRates
@@ -384,16 +386,11 @@ contains
 
     filename = trim( param_dir ) // '/photolysisConstants.config'
     write (*, '(A)') ' Reading photolysis constants from file...'
-    !  Setting all the photolysis rates to their constant values from file
-    !   Any photolysis rates not in the file will be set to zero.
-    !   Only the variables for constants are required - the rest should be left uninitialised.
-    !   So we should have a dedicated array to hold the constant (or zero) for each
-    !   rate, with the index on the left being the photo number from photoNumbers.
-    !   Future behaviour is dictated by the setting of usePhotolysisConstants = .true.
     if ( allocated .eqv. .false. ) then
       call allocate_photolysis_constants_variables()
       allocated = .true.
     end if
+
     open (10, file=filename, status='old', iostat=ierr)
     read (10,*) ! Ignore first line
     do i = 1, numConstantPhotoRates
@@ -420,7 +417,11 @@ contains
     return
   end subroutine readPhotolysisConstants
 
-
+  ! -----------------------------------------------------------------
+  ! For each constrained photolysis rate defined in the config file,
+  ! read in their values to the data arrays. We use
+  ! constrainedPhotoNames/Numbers to keep a list of the constrained
+  ! photolysis rates, with size numConstrainedPhotoRates
   subroutine readPhotolysisConstraints()
     use types_mod
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, &
@@ -507,7 +508,10 @@ contains
 
   end subroutine readPhotolysisConstraints
 
-  ! Returns an array of unconstrained photos rates, and a logical indicating whether there are none
+
+  ! -----------------------------------------------------------------
+  ! Returns an array of the numbers of unconstrained photolysis rates,
+  ! and a logical indicating whether there are any such rates (existUnconstrainedPhotos)
   subroutine findUnconstrainedPhotos()
     use types_mod
     use photolysis_rates_mod, only : photoNumbers, constrainedPhotoNumbers, numConstrainedPhotoRates, totalNumPhotos, &
@@ -558,6 +562,9 @@ contains
   end subroutine findUnconstrainedPhotos
 
 
+  ! -----------------------------------------------------------------
+  ! Given an NPI array and an NPI integer, returns a logical denoting
+  ! whether the integer is present at least once in the array
   pure function isInNPIArray( a, array ) result ( isInArray )
     use types_mod
     implicit none
@@ -579,6 +586,11 @@ contains
   end function isInNPIArray
 
 
+  ! -----------------------------------------------------------------
+  ! Read in the photolysis rates from the MCM file. If the rate
+  ! is not present in the constrained rates list, read in that rate's
+  ! identifiers to unconstrainedPhotoNames/Numbers, with the data
+  ! stored in ck, cl, cmm, cnn, and transmissionFactor
   subroutine readUnconstrainedPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -645,11 +657,13 @@ contains
     return
   end subroutine readUnconstrainedPhotolysisRates
 
+
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
-  ! modelConfiguration/photolysisConstants.config doesn't exist. It
-  ! reads ck, cl, cmm, cnn, str, and tf from
-  ! modelConfiguration/photolysisRates.config.
+  ! modelConfiguration/photolysisConstants.config doesn't exist/is empty.
+  ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
+  ! modelConfiguration/photolysisRates.config. It uses
+  ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -1019,8 +1033,12 @@ contains
 
 
   ! ----------------------------------------------------------------- !
-  ! Read photolysis rates from file, either by (a) constant values,
-  ! (b) non-constant fixed values, or (c) calculation from equation.
+  ! Read photolysis rates from file, either by
+  !  (a) constant values, or
+  !  (b) constrained values, or
+  !  (c) constrained values and calculation from equation,
+  !  (d) calculation from equation only.
+  ! Sets PR_type to denote which choice is made, for future use.
   subroutine readPhotoRates()
     use types_mod
     use photolysis_rates_mod

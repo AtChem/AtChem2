@@ -475,14 +475,14 @@ module photolysis_rates_mod
   save
 
   integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates, numConstrainedPhotoRates, numUnconstrainedPhotoRates
-  integer(kind=NPI), allocatable :: photoNumbers(:),  constantPhotoJNumbers(:), constrainedPhotoRatesNumbers(:), &
+  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoJNumbers(:), constrainedPhotoRatesNumbers(:), &
                                     unconstrainedPhotoNumbers(:), ck(:)
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
   character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constantPhotoNames(:), constrainedPhotoNames(:), &
                                                         unconstrainedPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
-  logical :: usePhotolysisConstants, usePhotolysisConstraints, unconstrainedPhotosExist, jFacSpeciesFound
+  logical :: usePhotolysisConstants, usePhotolysisConstraints, existUnconstrainedPhotos, jFacSpeciesFound
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j

@@ -464,7 +464,7 @@ contains
     ! TODO: REVIEW Get numbers of constrained photo rates
     ! Strip first character (which will be 'J'), then convert to integer
     do i = 1, numConstrainedPhotoRates
-      read(constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*,iostat=ierr ) constrainedPhotoRatesNumbers(i)
+      read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoRatesNumbers(i)
     end do
 
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
@@ -511,14 +511,14 @@ contains
   subroutine findUnconstrainedPhotos()
     use types_mod
     use photolysis_rates_mod, only : photoNumbers, constrainedPhotoRatesNumbers, numConstrainedPhotoRates, totalNumPhotos, &
-                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotosExist, photoNumbers
+                                     numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, existUnconstrainedPhotos, photoNumbers
     implicit none
 
     integer(kind=NPI) :: i, j, counter
     logical :: this_number_unconstrained
 
     ! Find all elements in photoNumbers that are not in constrainedPhotoRatesNumbers
-    unconstrainedPhotosExist = .false.
+    existUnconstrainedPhotos = .false.
     numUnconstrainedPhotoRates = 0
     do j = 1, totalNumPhotos
       this_number_unconstrained = .true.
@@ -551,7 +551,7 @@ contains
       end if
     end do
     if ( numUnconstrainedPhotoRates > 0 ) then
-      unconstrainedPhotosExist = .true.
+      existUnconstrainedPhotos = .true.
     end if
     write (*,*) 'There are ', numUnconstrainedPhotoRates, ' unconstrained photo rates'
     return
@@ -608,12 +608,12 @@ contains
     read (10,*) ! Ignore first line
     index = 0_NPI
     do i = 1_NPI, totalNumPhotos
-      read (10,'(A100)', iostat=ierr) line
+      read (10, '(A100)', iostat=ierr) line
       if ( ierr /= 0 ) then
         stop 'readUnconstrainedPhotolysisRates(): error reading file'
       end if
       this_ck_pos = scan(line, "0123456789")
-      read(line(this_ck_pos:),'(I4)') this_ck
+      read(line(this_ck_pos:), '(I4)') this_ck
       ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
       if ( isInNPIArray( this_ck, unconstrainedPhotoNumbers ) .eqv. .true. ) then
         index = index + 1_NPI
@@ -766,7 +766,7 @@ contains
   ! rate of the JFac photolysis rate
   subroutine readJFacCalculationParameters()
     use types_mod
-    use storage_mod, only: maxFilepathLength, maxPhotoRateNameLength
+    use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
     use directories_mod, only : param_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
@@ -794,15 +794,15 @@ contains
       if ( ierr /= 0 ) then
         stop 'readJFacCalculationParameters(): error reading file'
       end if
-  !     ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
-       if ( trim( name ) == trim( jFacSpecies ) ) then
-         jFacSpeciesFound = .true.
-         exit
+
+      if ( trim( name ) == trim( jFacSpecies ) ) then
+        jFacSpeciesFound = .true.
+        exit
       end if
     end do
     close (11, status='keep')
     if ( jFacSpeciesFound .eqv. .false. ) then
-       write (*,'(5A)') ' ', trim( jFacSpecies ), ' not found in ', trim( filename ), ', so it will be treated as a constant.'
+      write (*, '(5A)') ' ', trim( jFacSpecies ), ' not found in ', trim( filename ), ', so it will be treated as a constant.'
     end if
     return
   end subroutine readJFacCalculationParameters
@@ -1074,8 +1074,8 @@ contains
           ! Test whether there are any unconstrained species left. If there are, read their calculation parameters in.
           ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.
           call findUnconstrainedPhotos()
-          if ( unconstrainedPhotosExist .eqv. .false. ) then
-            write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ',  &
+          if ( existUnconstrainedPhotos .eqv. .false. ) then
+            write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ', &
                              'so no photolysis rates will be calculated.'
             PR_type = 2
           else

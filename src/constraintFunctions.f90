@@ -43,12 +43,12 @@ contains
   function calcPhotolysis( i ) result ( photolysis )
     use types_mod
     use photolysis_rates_mod, only : cl, cmm, cnn, transmissionFactor
-    use zenith_data_mod, only : cosx, secx
     implicit none
 
     integer(kind=NPI), intent(in) :: i
     real(kind=DP) :: photolysis
-    photolysis = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i)
+
+    photolysis = calcPhotolysisRaw( cl(i), cmm(i), cnn(i), transmissionFactor(i) )
 
     return
   end function calcPhotolysis

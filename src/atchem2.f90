@@ -26,7 +26,7 @@ PROGRAM ATCHEM2
   use constraints_mod
   use interpolation_method_mod
   use reaction_structure_mod
-  use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints
+  use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, PR_type
   use reaction_rates_mod
   use env_vars_mod
   use date_mod, only : calcInitialDateParameters, calcCurrentDateParameters
@@ -511,7 +511,9 @@ PROGRAM ATCHEM2
   deallocate (envVarX, envVarY, envVarNumberOfPoints)
 
   ! deallocate arrays from module photolysis_rates_mod
-  deallocate (photoX, photoY, photoNumberOfPoints)
+  if ( PR_type == 2 .or. PR_type == 3) then
+    deallocate (photoX, photoY, photoNumberOfPoints)
+  end if
 
   ! Close output files and end program
   close (50)

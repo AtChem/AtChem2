@@ -24,18 +24,31 @@
 module constraint_functions_mod
 contains
 
+  function calcPhotolysisRaw( l, m, n, tf ) result ( photolysis )
+    use types_mod
+    use zenith_data_mod, only : cosx, secx
+    implicit none
+
+    real(kind=DP), intent(in) :: l, m, n, tf
+    real(kind=DP) :: photolysis
+
+    photolysis = l * cosx ** m * exp( -n * secx ) * tf
+
+    return
+  end function calcPhotolysisRaw
+
   ! ----------------------------------------------------------------- !
   ! Calculate the photolysis rate of photolysis number i from the
   ! photolysis equations, using the current zenith data values
   function calcPhotolysis( i ) result ( photolysis )
     use types_mod
     use photolysis_rates_mod, only : cl, cmm, cnn, transmissionFactor
-    use zenith_data_mod, only : cosx, secx
     implicit none
 
     integer(kind=NPI), intent(in) :: i
     real(kind=DP) :: photolysis
-    photolysis = cl(i) * cosx ** cmm(i) * exp( -cnn(i) * secx ) * transmissionFactor(i)
+
+    photolysis = calcPhotolysisRaw( cl(i), cmm(i), cnn(i), transmissionFactor(i) )
 
     return
   end function calcPhotolysis
@@ -49,8 +62,9 @@ contains
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
-    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, jFacSpeciesLine, numConPhotoRates, &
-                                     usePhotolysisConstants, constrainedPhotoRates
+    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, numConstrainedPhotoRates, &
+                                     usePhotolysisConstants, constrainedPhotoNames, &
+                                     jFacL, jFacM, jFacN, jFacTransmissionFactor
     use interpolation_functions_mod, only : getConstrainedQuantAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
@@ -68,8 +82,8 @@ contains
 
     ! GET INDEX OF basePhotoRate SPECIES IN PHOTO CONSTRAINT ARRAY
     basePhotoRateNum = 0
-    do i = 1, numConPhotoRates
-      if ( trim( constrainedPhotoRates(i) ) == trim( jFacSpecies ) ) then
+    do i = 1, numConstrainedPhotoRates
+      if ( trim( constrainedPhotoNames(i) ) == trim( jFacSpecies ) ) then
         basePhotoRateNum = i
       end if
     end do
@@ -89,7 +103,7 @@ contains
     else
       if ( usePhotolysisConstants .eqv. .false. ) then
         if ( cosx_below_threshold .eqv. .false. ) then
-          jFac = JFacSpeciesAtT / calcPhotolysis( jFacSpeciesLine )
+          jFac = JFacSpeciesAtT / calcPhotolysisRaw( jFacL, jFacM, jFacN, jFacTransmissionFactor )
         else
           jFac = 0
         end if

@@ -259,7 +259,7 @@ module constraints_mod
   real(kind=DP), allocatable :: constrainedConcs(:)
   real(kind=DP), allocatable :: dataX(:,:), dataY(:,:), dataFixedY(:)
   integer(kind=NPI), allocatable :: constrainedSpecies(:)
-  integer(kind=NPI) :: maxNumberOfConstraintDataPoints, maxNumberOfEnvVarDataPoints, maxNumberOfPhotoDataPoints
+  integer(kind=NPI) :: maxNumberOfConstraintDataPoints, maxNumberOfEnvVarDataPoints
   integer(kind=NPI), allocatable :: speciesNumberOfPoints(:)
 
 contains
@@ -474,34 +474,59 @@ module photolysis_rates_mod
   implicit none
   save
 
-  integer(kind=NPI) :: numConPhotoRates
-  integer(kind=NPI), allocatable :: constrainedPhotoRatesNumbers(:)
-  integer(kind=NPI) :: jFacSpeciesLine = 0_NPI ! number of line in photolysis rates file corresponding to Jfac species
-  integer(kind=NPI) :: numPhotoRates
-  integer(kind=NPI), allocatable :: ck(:)
-  logical :: usePhotolysisConstants
+  integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates, numConstrainedPhotoRates, numUnconstrainedPhotoRates
+  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoNumbers(:), constrainedPhotoNumbers(:), &
+                                    unconstrainedPhotoNumbers(:), ck(:)
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
-  real(kind=DP), allocatable :: j(:)
-  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constrainedPhotoRates(:)
+  real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
+  character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constantPhotoNames(:), &
+                                                        constrainedPhotoNames(:), unconstrainedPhotoNames(:)
   character(len=maxPhotoRateNameLength) :: jFacSpecies
+  logical :: usePhotolysisConstants, existUnconstrainedPhotos, jFacSpeciesFound
+  integer(kind=NPI) :: maxNumberOfPhotoDataPoints
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
   integer(kind=NPI) :: size_of_j
+  integer(kind=SI) :: PR_type
+  real(kind=DP) :: jFacL, jFacM, jFacN, jFacTransmissionFactor
 
 contains
 
   subroutine allocate_photolysis_constants_variables()
     implicit none
 
-    allocate (ck(numPhotoRates), cl(numPhotoRates), photoRateNames(numPhotoRates))
+    allocate (constantPhotoNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
+              constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
-  subroutine allocate_photolysis_rates_variables()
+  subroutine allocate_photolysis_numbers_variables()
     implicit none
 
-    allocate (ck(numPhotoRates), cl(numPhotoRates), cmm(numPhotoRates))
-    allocate (cnn(numPhotoRates), photoRateNames(numPhotoRates), transmissionFactor(numPhotoRates))
-  end subroutine allocate_photolysis_rates_variables
+    allocate (photoNumbers(totalNumPhotos))
+  end subroutine allocate_photolysis_numbers_variables
+
+
+  subroutine allocate_constrained_photolysis_rates_variables()
+    implicit none
+
+    allocate (constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates))
+  end subroutine allocate_constrained_photolysis_rates_variables
+
+  subroutine allocate_constrained_photolysis_data()
+    implicit none
+
+    allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
+              photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
+              photoNumberOfPoints(numConstrainedPhotoRates))
+  end subroutine allocate_constrained_photolysis_data
+
+  subroutine allocate_unconstrained_photolysis_rates_variables()
+    implicit none
+
+    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates), &
+              cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
+              transmissionFactor(numUnconstrainedPhotoRates))
+  end subroutine allocate_unconstrained_photolysis_rates_variables
 
   subroutine allocate_photolysis_j()
     implicit none

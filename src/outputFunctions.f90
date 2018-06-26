@@ -123,18 +123,53 @@ contains
   ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
-    use photolysis_rates_mod, only : numPhotoRates, ck, j, photoRateNames
+    use photolysis_rates_mod, only : ck, constrainedPhotoNumbers, j, PR_type, &
+                                     constantPhotoNames, numConstantPhotoRates, &
+                                     constrainedPhotoNames, numConstrainedPhotoRates, &
+                                     unconstrainedPhotoNames, numUnconstrainedPhotoRates
     implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: i
     logical :: firstTime = .true.
 
-    if ( firstTime .eqv. .true. ) then
-      write (58, '(100A15) ') 't', (trim( photoRateNames(i) ), i = 1, numPhotoRates)
-      firstTime = .false.
-    end if
-    write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1, numPhotoRates)
+    ! Output constant photolysis rates if any.
+    ! Otherwise, output constrained (if any), then unconstrained (if any).
+    select case ( PR_type )
+      case ( 1_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1_NPI, numConstantPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numConstantPhotoRates)
+
+      case ( 2_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( constrainedPhotoNames(i) ), i = 1_NPI, numConstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(constrainedPhotoNumbers(i)), i = 1_NPI, numConstrainedPhotoRates)
+
+      case ( 3_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1_NPI, numUnconstrainedPhotoRates), &
+                                  (trim( constrainedPhotoNames(i) ), i = 1_NPI, numConstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numUnconstrainedPhotoRates), &
+                                        (j(constrainedPhotoNumbers(i)), i = 1_NPI, numConstrainedPhotoRates)
+
+      case ( 4_SI )
+        if ( firstTime .eqv. .true. ) then
+          write (58, '(100A15) ') 't', (trim( unconstrainedPhotoNames(i) ), i = 1_NPI, numUnconstrainedPhotoRates)
+          firstTime = .false.
+        end if
+        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numUnconstrainedPhotoRates)
+
+      case default
+        stop 'outputPhotolysisRates(): invalid case of PR_type.'
+
+    end select
 
     return
   end subroutine outputPhotolysisRates

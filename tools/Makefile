@@ -21,7 +21,7 @@
 
 OS := $(shell uname -s)
 CVODELIB     = cvode/lib/
-OPENLIBMDIR  = openlibm-0.4.1/
+OPENLIBMDIR  = openlibm-0.4.1
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)

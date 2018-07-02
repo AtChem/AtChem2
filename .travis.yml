@@ -29,11 +29,19 @@
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
 
   install:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_fruit.sh /Users/travis/build/AtChem/AtChem2/fruit /Users/travis/build/AtChem/AtChem2/fruit ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_fruit.sh /home/travis/build/AtChem/AtChem2/fruit  /home/travis/build/AtChem/AtChem2/fruit  ; fi
+    - cd ~/build/AtChem/AtChem2
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
     - ./atchem2
+    - cd travis/unit_tests
+    - cp Makefile.base Makefile
+    - make build
+    - ./fruit_driver.exe
+    - cd ../../
     - make test
 
   after_success:

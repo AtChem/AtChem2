@@ -1,0 +1,69 @@
+#sample for gfortran and make.
+
+OS := $(shell uname -s)
+CVODELIB     = ../../cvode/lib/
+OPENLIBMDIR  = ../../openlibm-0.4.1
+FRUITDIR     = ../../fruit/fruit_3.4.3
+
+ifeq ($(TRAVIS),true)
+ifeq ($(TRAVIS_OS_NAME),linux)
+# if linux, pass gfortran
+FORT_COMP    = gfortran
+else
+# if macOS, pass homebrew gfortran
+FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
+endif
+# else it's not on Travis, so set the fortran compiler as gfortran
+else
+FORT_COMP    = gfortran
+endif
+
+ifeq ($(OS),Linux)
+RPATH_OPTION = -R
+else
+RPATH_OPTION = -rpath
+endif
+
+LIBDIR   =  /usr/lib/:$(CVODELIB)
+RPATH_OPTION = -rpath
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
+
+compiler=$(FORT_COMP)
+option=-Wall -Wextra -pedantic -fbounds-check -Wuninitialized -O -g -Wno-unused-parameter -cpp
+
+### fruit_code = ../src/fruit_util.f90 ../src/fruit.f90
+fruit_code = $(FRUITDIR)/src/fruit.f90
+SRC = ../../src
+code = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(shell ls -d *_test.f90 )
+code_gen = fruit_basket_gen.f90 fruit_driver_gen.f90
+
+all_code = $(fruit_code) $(code) $(code_gen)
+
+driver = fruit_driver.exe
+
+all : build run
+
+build : $(driver)
+
+fruit_basket_gen.f90 : $(code)
+	ruby fruit_generator.rb
+
+fruit_driver_gen.f90 : $(code)
+	ruby fruit_generator.rb
+
+fruit_driver.exe : $(all_code)
+	$(compiler) $(option) $(all_code) -o fruit_driver.exe $(LDFLAGS)
+
+clean :
+	rm -f *.o *.mod *.obj *.exe
+	rm -f fruit_driver_gen.f90
+	rm -f fruit_basket_gen.f90
+	rm -f result.xml result_tmp.xml
+
+run : $(driver)
+	@echo "Run"
+	./$(driver)
+
+
+
+.PHONY : all clean run

@@ -1,0 +1,3 @@
+# Ignore module files in this directory
+*.mod
+Makefile

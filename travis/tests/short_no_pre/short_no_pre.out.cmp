@@ -5,7 +5,7 @@
  Instantaneous rates dir is travis/tests/short_no_pre/instantaneousRates
  Parameter dir is travis/tests/short_no_pre/model/configuration
  Species constraints dir is travis/tests/short_no_pre/model/constraints/species
- Environment constraints dir is travis/tests/short_no_pre/environmentConstraints
+ Environment constraints dir is travis/tests/short_no_pre/model/constraints/environment
 
 -----------------------
  Species and reactions

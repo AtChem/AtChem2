@@ -55,7 +55,7 @@ contains
     if ( cmd_arg_count > 4 ) then
       call get_command_argument( 5, env_constraints_dir )
     else
-      env_constraints_dir = "model/environmentConstraints"
+      env_constraints_dir = "model/constraints/environment"
     end if
 
     write (*, '(2A)') ' Output dir is ', trim( output_dir )
@@ -828,7 +828,7 @@ contains
   ! This function reads in data from environmentVariables.config, and
   ! sets envVarTypesNum for each one. In the case of a constrained
   ! variable, this also reads in the constraint data from
-  ! environmentConstraints directory, the file named after the
+  ! model/constraints/environment directory, the file named after the
   ! environmental variable.
   subroutine readEnvVar()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -882,7 +882,7 @@ contains
           ! calculating JFAC on the fly.
           select case ( trim( envVarTypes(i) ) )
             case ('CONSTRAINED')
-              ! We now expect a file JFAC in environmentConstraints directory
+              ! We now expect a file JFAC in model/constraints/environment directory
               envVarTypesNum(i) = 2_SI
             case ('NOTUSED')
               ! JFAC should be set to its default value of 1 everywhere

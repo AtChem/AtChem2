@@ -5,7 +5,7 @@
  Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac/instantaneousRates
  Parameter dir is travis/tests/spec_yes_env_no_with_jfac/model/configuration
  Species constraints dir is travis/tests/spec_yes_env_no_with_jfac/model/constraints/species
- Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac/environmentConstraints
+ Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac/model/constraints/environment
 
 -----------------------
  Species and reactions

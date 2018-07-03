@@ -144,7 +144,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/$test.fac src $TESTS_DIR/$test/model/configuration &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/$test.fac src/gen $TESTS_DIR/$test/model/configuration &> /dev/null
 
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
@@ -208,7 +208,7 @@ $this_file_failures"
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/ro2-rates.f90.cmp; do
     echo 'Checking' $filename
-    this_file_failures=$(test_output_file src/ro2-rates.f90 $filename)
+    this_file_failures=$(test_output_file src/gen/ro2-rates.f90 $filename)
     exitcode=$?
     if [ $exitcode -eq 0 ]; then
       continue

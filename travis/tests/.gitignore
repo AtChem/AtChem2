@@ -2,9 +2,9 @@
 *.output
 *.out
 */output/instantaneousRates/*
-*/*/mechanism.prod
-*/*/mechanism.reac
-*/*/mechanism.species
+*/model/configuration/mechanism.prod
+*/model/configuration/mechanism.reac
+*/model/configuration/mechanism.species
 results
 
 # Except configuration and reference files

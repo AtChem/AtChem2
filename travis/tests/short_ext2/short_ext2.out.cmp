@@ -4,7 +4,7 @@
  Output dir is travis/tests/short_ext2
  Instantaneous rates dir is travis/tests/short_ext2/instantaneousRates
  Parameter dir is travis/tests/short_ext2/model/configuration
- Species constraints dir is travis/tests/short_ext2/speciesConstraints
+ Species constraints dir is travis/tests/short_ext2/model/constraints/species
  Environment constraints dir is travis/tests/short_ext2/environmentConstraints
 
 -----------------------

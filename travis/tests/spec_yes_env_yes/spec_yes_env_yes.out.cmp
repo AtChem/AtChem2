@@ -4,7 +4,7 @@
  Output dir is travis/tests/spec_yes_env_yes
  Instantaneous rates dir is travis/tests/spec_yes_env_yes/instantaneousRates
  Parameter dir is travis/tests/spec_yes_env_yes/model/configuration
- Species constraints dir is travis/tests/spec_yes_env_yes/speciesConstraints
+ Species constraints dir is travis/tests/spec_yes_env_yes/model/constraints/species
  Environment constraints dir is travis/tests/spec_yes_env_yes/environmentConstraints
 
 -----------------------

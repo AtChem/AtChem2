@@ -50,7 +50,7 @@ contains
     if ( cmd_arg_count > 3 ) then
       call get_command_argument( 4, spec_constraints_dir )
     else
-      spec_constraints_dir = "model/speciesConstraints"
+      spec_constraints_dir = "model/constraints/species"
     end if
     if ( cmd_arg_count > 4 ) then
       call get_command_argument( 5, env_constraints_dir )

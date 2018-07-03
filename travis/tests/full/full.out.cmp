@@ -4,7 +4,7 @@
  Output dir is travis/tests/full
  Instantaneous rates dir is travis/tests/full/instantaneousRates
  Parameter dir is travis/tests/full/model/configuration
- Species constraints dir is travis/tests/full/speciesConstraints
+ Species constraints dir is travis/tests/full/model/constraints/species
  Environment constraints dir is travis/tests/full/environmentConstraints
 
 -----------------------

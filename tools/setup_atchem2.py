@@ -33,7 +33,7 @@ def main():
     else:
         output_dir = sys.argv[2]
     if len(sys.argv) <= 3:
-        param_dir = './model/modelConfiguration/'
+        param_dir = './model/configuration/'
     else:
         param_dir = sys.argv[3]
     setup_files_for_atchem2(input_filename, output_dir, param_dir)

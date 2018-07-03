@@ -3,7 +3,7 @@
 -------------
  Output dir is travis/tests/short_dense
  Instantaneous rates dir is travis/tests/short_dense/instantaneousRates
- Parameter dir is travis/tests/short_dense/modelConfiguration
+ Parameter dir is travis/tests/short_dense/model/configuration
  Species constraints dir is travis/tests/short_dense/speciesConstraints
  Environment constraints dir is travis/tests/short_dense/environmentConstraints
 

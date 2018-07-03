@@ -27,7 +27,7 @@
 #    - mechanism.prod
 #    - mechanism.reac
 #    - mechanism.species
-#    By default it is modelConfiguration/ in the base directory of AtChem2.
+#    By default it is model/configuration/ in the base directory of AtChem2.
 
 set -e
 echo ''

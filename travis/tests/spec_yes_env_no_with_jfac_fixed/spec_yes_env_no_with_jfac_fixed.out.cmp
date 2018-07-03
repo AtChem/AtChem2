@@ -3,7 +3,7 @@
 -------------
  Output dir is travis/tests/spec_yes_env_no_with_jfac_fixed
  Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac_fixed/instantaneousRates
- Parameter dir is travis/tests/spec_yes_env_no_with_jfac_fixed/modelConfiguration
+ Parameter dir is travis/tests/spec_yes_env_no_with_jfac_fixed/model/configuration
  Species constraints dir is travis/tests/spec_yes_env_no_with_jfac_fixed/speciesConstraints
  Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac_fixed/environmentConstraints
 
@@ -33,14 +33,14 @@
  Species of interest
 ---------------------
  Reading products of interest...
-      1 OH        
-      2 HO2       
+      1 OH
+      2 HO2
  Finished reading products of interest.
  products of interest (number of species found): 2
 
  Reading reactants of interest...
-      1 OH        
-      2 HO2       
+      1 OH
+      2 HO2
  Finished reading reactants of interest.
  reactants of interest (number of species found): 2
 
@@ -55,7 +55,7 @@
          maxStep:   1.000E+02
  preconBandUpper:         750
  preconBandLower:         750
-      solverType: SPGMR + Banded Preconditioner 
+      solverType: SPGMR + Banded Preconditioner
  ------------------
 
  Finished reading solver parameters from file.
@@ -66,8 +66,8 @@
  -----------------
                                    number of steps:           2
                                step size (seconds):   0.200E+03
-                      species interpolation method: piecewise linear 
-                   conditions interpolation method: piecewise linear 
+                      species interpolation method: piecewise linear
+                   conditions interpolation method: piecewise linear
                                ratesOutputStepSize:         400
               instantaneous rates output step size:         400
                                     modelStartTime:       36000
@@ -85,9 +85,9 @@
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 3 species:
-      1 CH4       
-      2 NO2       
-      3 O3        
+      1 CH4
+      2 NO2
+      3 O3
 
 ------------
  Photolysis
@@ -126,7 +126,7 @@
  7      DILUTE                NOTUSED
  8      JFAC                      0.9
  Reading all photolysis rates from file...
- 0.9 not found in travis/tests/spec_yes_env_no_with_jfac_fixed/modelConfiguration/photolysisRates.config, so it will be treated as a constant.
+ 0.9 not found in travis/tests/spec_yes_env_no_with_jfac_fixed/model/configuration/photolysisRates.config, so it will be treated as a constant.
  9      ROOFOPEN                   ON
  Finished reading environment variables.
 
@@ -146,8 +146,8 @@
  Setting size of constraint arrays, n = 2
  Reading in the names of variable-concentration constrained species...
  Finished reading the names of variable-concentration constrained species
-      1 CH4       
-      2 O3        
+      1 CH4
+      2 O3
  maximum number of species constraint data points: 9
  Reading concentration data for variable-concentration constrained species...
  CH4       ...

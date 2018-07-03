@@ -144,11 +144,11 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/$test.fac src $TESTS_DIR/$test/modelConfiguration &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/$test.fac src $TESTS_DIR/$test/model/configuration &> /dev/null
 
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/modelConfiguration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test/$test.out
+  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/speciesConstraints $TESTS_DIR/$test/environmentConstraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...
@@ -243,10 +243,10 @@ $this_file_failures"
     fi
   done
 
-  # Loop over all files (that fit mechanism.*.cmp) in the modelConfiguration
+  # Loop over all files (that fit mechanism.*.cmp) in the model/configuration
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/modelConfiguration/mechanism.* ; do
+  for filename in $TESTS_DIR/$test/model/configuration/mechanism.* ; do
     # guard against empty filelist
     #[ -e "$filename" ] || continue
     if [ ${filename: -4} == ".cmp" ] ; then

@@ -45,7 +45,7 @@ contains
     if ( cmd_arg_count > 2 ) then
       call get_command_argument( 3, param_dir )
     else
-      param_dir = "model/modelConfiguration"
+      param_dir = "model/configuration"
     end if
     if ( cmd_arg_count > 3 ) then
       call get_command_argument( 4, spec_constraints_dir )
@@ -97,7 +97,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! outputs lhs_size and rhs_size, which hold the number of lines in
-  ! modelConfiguration/mechanism.(reac/prod), excluding the first line
+  ! model/configuration/mechanism.(reac/prod), excluding the first line
   ! and last line
   subroutine readReactions()
     use types_mod
@@ -312,7 +312,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
-  ! modelConfiguration/photolysisRates.config so that we know the numbers
+  ! model/configuration/photolysisRates.config so that we know the numbers
   ! of all the photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -662,9 +662,9 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
-  ! modelConfiguration/photolysisConstants.config doesn't exist/is empty.
+  ! model/configuration/photolysisConstants.config doesn't exist/is empty.
   ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
-  ! modelConfiguration/photolysisRates.config. It uses
+  ! model/configuration/photolysisRates.config. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -722,10 +722,10 @@ contains
 
   ! -----------------------------------------------------------------
   ! Read in contents of
-  ! modelConfiguration/productionRatesOutput.config and
-  ! modelConfiguration/lossRatesOutput.config, which contains a list
+  ! model/configuration/productionRatesOutput.config and
+  ! model/configuration/lossRatesOutput.config, which contains a list
   ! of the species we want to have outputted to
-  ! mC/production/lossRates.output Output the contents in r, with i as
+  ! model/configuration/{production,loss}Rates.output Output the contents in r, with i as
   ! the length of r.
   subroutine readProductsOrReactantsOfInterest( filename, r )
     use types_mod

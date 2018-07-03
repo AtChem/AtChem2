@@ -3,7 +3,7 @@
 -------------
  Output dir is travis/tests/spec_yes_env_no_with_jfac_fail1
  Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac_fail1/instantaneousRates
- Parameter dir is travis/tests/spec_yes_env_no_with_jfac_fail1/modelConfiguration
+ Parameter dir is travis/tests/spec_yes_env_no_with_jfac_fail1/model/configuration
  Species constraints dir is travis/tests/spec_yes_env_no_with_jfac_fail1/speciesConstraints
  Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac_fail1/environmentConstraints
 

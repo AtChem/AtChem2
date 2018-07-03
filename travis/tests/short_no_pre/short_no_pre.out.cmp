@@ -1,8 +1,8 @@
 -------------
  Directories
 -------------
- Output dir is travis/tests/short_no_pre
- Instantaneous rates dir is travis/tests/short_no_pre/instantaneousRates
+ Output dir is travis/tests/short_no_pre/output
+ Instantaneous rates dir is travis/tests/short_no_pre/output/instantaneousRates
  Parameter dir is travis/tests/short_no_pre/model/configuration
  Species constraints dir is travis/tests/short_no_pre/model/constraints/species
  Environment constraints dir is travis/tests/short_no_pre/model/constraints/environment

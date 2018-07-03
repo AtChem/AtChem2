@@ -35,12 +35,12 @@ contains
     if ( cmd_arg_count > 0 ) then
       call get_command_argument( 1, output_dir )
     else
-      output_dir = "output"
+      output_dir = "model/output"
     end if
     if ( cmd_arg_count > 1 ) then
       call get_command_argument( 2, instantaneousRates_dir )
     else
-      instantaneousRates_dir = "output/instantaneousRates"
+      instantaneousRates_dir = "model/output/instantaneousRates"
     end if
     if ( cmd_arg_count > 2 ) then
       call get_command_argument( 3, param_dir )

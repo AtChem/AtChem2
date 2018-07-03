@@ -20,8 +20,8 @@ function test_output_text {
   # $3 start line number of section to compare
   # $4 end line number of section to compare
   # $5 name of test
-  file1=travis/tests/$5/temporary_file.tmp
-  file2=travis/tests/$5/temporary_file.tmp.cmp
+  file1=travis/tests/$5/output/temporary_file.tmp
+  file2=travis/tests/$5/output/temporary_file.tmp.cmp
   ndselect -b $3 -e $4 -o $file1 $1
   ndselect -b $3 -e $4 -o $file2 $2
   # Save output of test_output_file
@@ -148,7 +148,7 @@ for test in $1; do
 
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
+  ./atchem2 $TESTS_DIR/$test/output $TESTS_DIR/$test/output/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...
@@ -173,7 +173,7 @@ for test in $1; do
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
     this_file_failures=$(test_output_text $TESTS_DIR/$test/$test.out $TESTS_DIR/$test/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
     exitcode=$?
-    echo 'Checking' $TESTS_DIR/$test/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
+    echo 'Checking' $TESTS_DIR/$test/output/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
     if [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
@@ -188,7 +188,7 @@ $this_file_failures"
 
   # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/*.output.cmp; do
+  for filename in $TESTS_DIR/$test/output/*.output.cmp; do
     echo 'Checking' $filename
     this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
     exitcode=$?
@@ -225,7 +225,7 @@ $this_file_failures"
   # Loop over all files (that don't end in .cmp) in the instantaneousRates
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/instantaneousRates/* ; do
+  for filename in $TESTS_DIR/$test/output/instantaneousRates/* ; do
     if [ ${filename: -4} == ".cmp" ] ; then
       echo 'Checking' $filename
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)

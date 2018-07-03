@@ -1,7 +1,7 @@
 # Ignore output files from test runs
 *.output
 *.out
-*/instantaneousRates/*
+*/output/instantaneousRates/*
 */*/mechanism.prod
 */*/mechanism.reac
 */*/mechanism.species

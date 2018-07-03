@@ -1,8 +1,8 @@
 -------------
  Directories
 -------------
- Output dir is travis/tests/spec_yes_env_no
- Instantaneous rates dir is travis/tests/spec_yes_env_no/instantaneousRates
+ Output dir is travis/tests/spec_yes_env_no/output
+ Instantaneous rates dir is travis/tests/spec_yes_env_no/output/instantaneousRates
  Parameter dir is travis/tests/spec_yes_env_no/model/configuration
  Species constraints dir is travis/tests/spec_yes_env_no/model/constraints/species
  Environment constraints dir is travis/tests/spec_yes_env_no/model/constraints/environment

@@ -148,7 +148,7 @@ for test in $1; do
 
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment > $TESTS_DIR/$test/$test.out
+  ./atchem2 $TESTS_DIR/$test $TESTS_DIR/$test/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...

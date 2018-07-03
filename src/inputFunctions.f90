@@ -57,12 +57,18 @@ contains
     else
       env_constraints_dir = "model/constraints/environment"
     end if
+    if ( cmd_arg_count > 5 ) then
+      call get_command_argument( 6, photolysis_constraints_dir )
+    else
+      photolysis_constraints_dir = "model/constraints/photolysis"
+    end if
 
     write (*, '(2A)') ' Output dir is ', trim( output_dir )
     write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
     write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
     write (*, '(2A)') ' Species constraints dir is ', trim( spec_constraints_dir )
     write (*, '(2A)') ' Environment constraints dir is ', trim( env_constraints_dir )
+    write (*, '(2A)') ' Photolysis constraints dir is ', trim( photolysis_constraints_dir )
 
   end subroutine get_and_set_directories_from_command_arguments
 
@@ -427,7 +433,7 @@ contains
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, numConstrainedPhotoRates, &
                                      photoX, photoY, photoNumberOfPoints, maxNumberOfPhotoDataPoints, &
                                      allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
-    use directories_mod, only : param_dir, env_constraints_dir
+    use directories_mod, only : param_dir, photolysis_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 
     character(len=maxFilepathLength) :: fileLocationPrefix
@@ -471,7 +477,7 @@ contains
       read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoNumbers(i)
     end do
 
-    fileLocationPrefix = trim( env_constraints_dir ) // "/"
+    fileLocationPrefix = trim( photolysis_constraints_dir ) // "/"
 
     ! Read in photolysis data
     maxNumberOfPhotoDataPoints = 0_NPI
@@ -834,7 +840,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod
-    use directories_mod, only : param_dir, env_constraints_dir
+    use directories_mod, only : param_dir, env_constraints_dir, photolysis_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound
@@ -946,11 +952,15 @@ contains
     numConEnvVarRates = 0_SI
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
-
-        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        if ( trim( envVarNames(i) ) == 'JFAC' ) then
+          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+        else
+          fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        end if
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         maxNumberOfEnvVarDataPoints = max( maxNumberOfEnvVarDataPoints, count_lines_in_file( fileLocation ) )
         numConEnvVarRates = numConEnvVarRates + 1_SI
+
       end if
     end do
 
@@ -967,7 +977,11 @@ contains
 
         write (*, '(2A)') ' Reading constraint data for ', trim( envVarNames(i) )
 
-        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        if ( trim( envVarNames(i) ) == 'JFAC' ) then
+          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+        else
+          fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        end if
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         open (11, file=fileLocation, status='old')
 

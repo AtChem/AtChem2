@@ -6,6 +6,7 @@
  Parameter dir is travis/tests/spec_yes_plus_fixed_env_no/model/configuration
  Species constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/species
  Environment constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/environment
+ Photolysis constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/photolysis
 
 -----------------------
  Species and reactions

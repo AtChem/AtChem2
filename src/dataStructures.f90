@@ -71,7 +71,7 @@ module directories_mod
   save
 
   character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, &
-                                      spec_constraints_dir, env_constraints_dir
+                                      spec_constraints_dir, env_constraints_dir, photolysis_constraints_dir
 
 end module directories_mod
 

@@ -6,6 +6,7 @@
  Parameter dir is travis/tests/spec_yes_env_no_with_jfac_fail1/model/configuration
  Species constraints dir is travis/tests/spec_yes_env_no_with_jfac_fail1/model/constraints/species
  Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac_fail1/model/constraints/environment
+ Photolysis constraints dir is travis/tests/spec_yes_env_no_with_jfac_fail1/model/constraints/photolysis
 
 -----------------------
  Species and reactions

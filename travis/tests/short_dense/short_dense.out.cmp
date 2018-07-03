@@ -6,6 +6,7 @@
  Parameter dir is travis/tests/short_dense/model/configuration
  Species constraints dir is travis/tests/short_dense/model/constraints/species
  Environment constraints dir is travis/tests/short_dense/model/constraints/environment
+ Photolysis constraints dir is travis/tests/short_dense/model/constraints/photolysis
 
 -----------------------
  Species and reactions

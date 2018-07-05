@@ -144,7 +144,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/$test.fac src/gen $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac src/gen $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm &> /dev/null
 
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...

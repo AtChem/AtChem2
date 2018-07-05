@@ -48,17 +48,22 @@ contains
       param_dir = "model/configuration"
     end if
     if ( cmd_arg_count > 3 ) then
-      call get_command_argument( 4, spec_constraints_dir )
+      call get_command_argument( 4, mcm_dir )
+    else
+      mcm_dir = "mcm"
+    end if
+    if ( cmd_arg_count > 4 ) then
+      call get_command_argument( 5, spec_constraints_dir )
     else
       spec_constraints_dir = "model/constraints/species"
     end if
-    if ( cmd_arg_count > 4 ) then
-      call get_command_argument( 5, env_constraints_dir )
+    if ( cmd_arg_count > 5 ) then
+      call get_command_argument( 6, env_constraints_dir )
     else
       env_constraints_dir = "model/constraints/environment"
     end if
-    if ( cmd_arg_count > 5 ) then
-      call get_command_argument( 6, photolysis_constraints_dir )
+    if ( cmd_arg_count > 6 ) then
+      call get_command_argument( 7, photolysis_constraints_dir )
     else
       photolysis_constraints_dir = "model/constraints/photolysis"
     end if
@@ -66,6 +71,7 @@ contains
     write (*, '(2A)') ' Output dir is ', trim( output_dir )
     write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
     write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
+    write (*, '(2A)') ' MCM dir is ', trim( mcm_dir )
     write (*, '(2A)') ' Species constraints dir is ', trim( spec_constraints_dir )
     write (*, '(2A)') ' Environment constraints dir is ', trim( env_constraints_dir )
     write (*, '(2A)') ' Photolysis constraints dir is ', trim( photolysis_constraints_dir )
@@ -318,14 +324,14 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
-  ! model/configuration/photolysisRates.config so that we know the numbers
+  ! mcm/photolysisRates.config so that we know the numbers
   ! of all the photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, size_of_j, &
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -335,7 +341,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading photolysis numbers from file...'
     call inquire_or_abort( filename, 'readPhotolysisNumbers()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -605,7 +611,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, totalNumPhotos, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotoNames, &
                                      allocate_unconstrained_photolysis_rates_variables
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -614,7 +620,7 @@ contains
     character(len=maxFilepathLength) :: filename, line
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
     call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -670,7 +676,7 @@ contains
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstants.config doesn't exist/is empty.
   ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
-  ! model/configuration/photolysisRates.config. It uses
+  ! mcm/photolysisRates.config. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -678,7 +684,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
                                      numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
 
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -687,7 +693,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readAllPhotolysisRates()')
     numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
@@ -789,7 +795,7 @@ contains
   subroutine readJFacCalculationParameters()
     use types_mod
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     implicit none
@@ -801,7 +807,7 @@ contains
     !logical :: jFacSpeciesFound
 
     ! Read the config file, counting the lines
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readJFacCalculationParameters()')
     totalLines = count_lines_in_file( filename, .true. )

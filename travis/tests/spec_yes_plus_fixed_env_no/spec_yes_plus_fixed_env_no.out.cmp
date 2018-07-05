@@ -4,6 +4,7 @@
  Output dir is travis/tests/spec_yes_plus_fixed_env_no/output
  Instantaneous rates dir is travis/tests/spec_yes_plus_fixed_env_no/output/instantaneousRates
  Parameter dir is travis/tests/spec_yes_plus_fixed_env_no/model/configuration
+ MCM dir is travis/tests/spec_yes_plus_fixed_env_no/mcm
  Species constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/species
  Environment constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/environment
  Photolysis constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/photolysis

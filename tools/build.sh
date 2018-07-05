@@ -27,6 +27,7 @@
 #    - mechanism.prod
 #    - mechanism.reac
 #    - mechanism.species
+# $4 is the directory in which the MCM RO2 file exists
 #    By default it is model/configuration/ in the base directory of AtChem2.
 
 set -e
@@ -34,10 +35,11 @@ echo ''
 echo "input mechanism file:" $1
 echo "fortran output directory:" $2
 echo "mechanism output directory:" $3
+echo "mcm directory:" $4
 
 echo ''
 echo "call setup_atchem2.py"
-python ./tools/setup_atchem2.py $1 $2 $3
+python ./tools/setup_atchem2.py $1 $2 $3 $4
 
 echo ''
 echo "make" $1

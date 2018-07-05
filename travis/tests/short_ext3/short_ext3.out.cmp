@@ -4,6 +4,7 @@
  Output dir is travis/tests/short_ext3/output
  Instantaneous rates dir is travis/tests/short_ext3/output/instantaneousRates
  Parameter dir is travis/tests/short_ext3/model/configuration
+ MCM dir is travis/tests/short_ext3/mcm
  Species constraints dir is travis/tests/short_ext3/model/constraints/species
  Environment constraints dir is travis/tests/short_ext3/model/constraints/environment
  Photolysis constraints dir is travis/tests/short_ext3/model/constraints/photolysis

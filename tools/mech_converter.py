@@ -20,8 +20,7 @@ import sys
 import fix_mechanism_fac
 
 
-def convert(input_file, output_dir, mc_dir):
-    script_directory = os.path.dirname(os.path.abspath(__file__))
+def convert(input_file, output_dir, mc_dir, mcm_dir):
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
     assert os.path.isfile(os.path.join(input_directory, input_filename)), 'The input file ' + str(
@@ -192,7 +191,7 @@ def convert(input_file, output_dir, mc_dir):
 
     # check RO2s are in RO2 list
     # Read in RO2 list, and strip off newlines
-    with open(os.path.join(script_directory, 'RO2listv3.3.1')) as RO2List_file:
+    with open(os.path.join(mcm_dir, 'RO2listv3.3.1')) as RO2List_file:
         RO2List_input = [r.rstrip() for r in RO2List_file.readlines()]
 
     # Check that each species is in the RO2 list. If so, just print to screen. Otherwise, print a warning at the top of

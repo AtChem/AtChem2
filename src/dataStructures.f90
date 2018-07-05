@@ -70,8 +70,8 @@ module directories_mod
   implicit none
   save
 
-  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, &
-                                      spec_constraints_dir, env_constraints_dir
+  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, mcm_dir, &
+                                      spec_constraints_dir, env_constraints_dir, photolysis_constraints_dir
 
 end module directories_mod
 

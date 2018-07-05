@@ -3,11 +3,13 @@ AtChem2 v1.1-dev
 -------------
  Directories
 -------------
- Output dir is travis/tests/short_ext1
- Instantaneous rates dir is travis/tests/short_ext1/instantaneousRates
- Parameter dir is travis/tests/short_ext1/modelConfiguration
- Species constraints dir is travis/tests/short_ext1/speciesConstraints
- Environment constraints dir is travis/tests/short_ext1/environmentConstraints
+ Output dir is travis/tests/short_ext1/output
+ Instantaneous rates dir is travis/tests/short_ext1/output/instantaneousRates
+ Parameter dir is travis/tests/short_ext1/model/configuration
+ MCM dir is travis/tests/short_ext1/mcm
+ Species constraints dir is travis/tests/short_ext1/model/constraints/species
+ Environment constraints dir is travis/tests/short_ext1/model/constraints/environment
+ Photolysis constraints dir is travis/tests/short_ext1/model/constraints/photolysis
 
 -----------------------
  Species and reactions

@@ -35,34 +35,46 @@ contains
     if ( cmd_arg_count > 0 ) then
       call get_command_argument( 1, output_dir )
     else
-      output_dir = "modelOutput"
+      output_dir = "model/output"
     end if
     if ( cmd_arg_count > 1 ) then
       call get_command_argument( 2, instantaneousRates_dir )
     else
-      instantaneousRates_dir = "instantaneousRates"
+      instantaneousRates_dir = "model/output/instantaneousRates"
     end if
     if ( cmd_arg_count > 2 ) then
       call get_command_argument( 3, param_dir )
     else
-      param_dir = "modelConfiguration"
+      param_dir = "model/configuration"
     end if
     if ( cmd_arg_count > 3 ) then
-      call get_command_argument( 4, spec_constraints_dir )
+      call get_command_argument( 4, mcm_dir )
     else
-      spec_constraints_dir = "speciesConstraints"
+      mcm_dir = "mcm"
     end if
     if ( cmd_arg_count > 4 ) then
-      call get_command_argument( 5, env_constraints_dir )
+      call get_command_argument( 5, spec_constraints_dir )
     else
-      env_constraints_dir = "environmentConstraints"
+      spec_constraints_dir = "model/constraints/species"
+    end if
+    if ( cmd_arg_count > 5 ) then
+      call get_command_argument( 6, env_constraints_dir )
+    else
+      env_constraints_dir = "model/constraints/environment"
+    end if
+    if ( cmd_arg_count > 6 ) then
+      call get_command_argument( 7, photolysis_constraints_dir )
+    else
+      photolysis_constraints_dir = "model/constraints/photolysis"
     end if
 
     write (*, '(2A)') ' Output dir is ', trim( output_dir )
     write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
     write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
+    write (*, '(2A)') ' MCM dir is ', trim( mcm_dir )
     write (*, '(2A)') ' Species constraints dir is ', trim( spec_constraints_dir )
     write (*, '(2A)') ' Environment constraints dir is ', trim( env_constraints_dir )
+    write (*, '(2A)') ' Photolysis constraints dir is ', trim( photolysis_constraints_dir )
 
   end subroutine get_and_set_directories_from_command_arguments
 
@@ -97,7 +109,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! outputs lhs_size and rhs_size, which hold the number of lines in
-  ! modelConfiguration/mechanism.(reac/prod), excluding the first line
+  ! model/configuration/mechanism.(reac/prod), excluding the first line
   ! and last line
   subroutine readReactions()
     use types_mod
@@ -312,14 +324,14 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
-  ! modelConfiguration/photolysisRates.config so that we know the numbers
+  ! mcm/photolysisRates.config so that we know the numbers
   ! of all the photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, size_of_j, &
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -329,7 +341,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading photolysis numbers from file...'
     call inquire_or_abort( filename, 'readPhotolysisNumbers()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -427,7 +439,7 @@ contains
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, numConstrainedPhotoRates, &
                                      photoX, photoY, photoNumberOfPoints, maxNumberOfPhotoDataPoints, &
                                      allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
-    use directories_mod, only : param_dir, env_constraints_dir
+    use directories_mod, only : param_dir, photolysis_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 
     character(len=maxFilepathLength) :: fileLocationPrefix
@@ -471,7 +483,7 @@ contains
       read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoNumbers(i)
     end do
 
-    fileLocationPrefix = trim( env_constraints_dir ) // "/"
+    fileLocationPrefix = trim( photolysis_constraints_dir ) // "/"
 
     ! Read in photolysis data
     maxNumberOfPhotoDataPoints = 0_NPI
@@ -599,7 +611,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, totalNumPhotos, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotoNames, &
                                      allocate_unconstrained_photolysis_rates_variables
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -608,7 +620,7 @@ contains
     character(len=maxFilepathLength) :: filename, line
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
     call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -662,9 +674,9 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
-  ! modelConfiguration/photolysisConstants.config doesn't exist/is empty.
+  ! model/configuration/photolysisConstants.config doesn't exist/is empty.
   ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
-  ! modelConfiguration/photolysisRates.config. It uses
+  ! mcm/photolysisRates.config. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -672,7 +684,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
                                      numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
 
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -681,7 +693,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readAllPhotolysisRates()')
     numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
@@ -722,10 +734,10 @@ contains
 
   ! -----------------------------------------------------------------
   ! Read in contents of
-  ! modelConfiguration/productionRatesOutput.config and
-  ! modelConfiguration/lossRatesOutput.config, which contains a list
+  ! model/configuration/productionRatesOutput.config and
+  ! model/configuration/lossRatesOutput.config, which contains a list
   ! of the species we want to have outputted to
-  ! mC/production/lossRates.output Output the contents in r, with i as
+  ! model/configuration/{production,loss}Rates.output Output the contents in r, with i as
   ! the length of r.
   subroutine readProductsOrReactantsOfInterest( filename, r )
     use types_mod
@@ -783,7 +795,7 @@ contains
   subroutine readJFacCalculationParameters()
     use types_mod
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
-    use directories_mod, only : param_dir
+    use directories_mod, only : mcm_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     implicit none
@@ -795,7 +807,7 @@ contains
     !logical :: jFacSpeciesFound
 
     ! Read the config file, counting the lines
-    filename = trim( param_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysisRates.config'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readJFacCalculationParameters()')
     totalLines = count_lines_in_file( filename, .true. )
@@ -828,13 +840,13 @@ contains
   ! This function reads in data from environmentVariables.config, and
   ! sets envVarTypesNum for each one. In the case of a constrained
   ! variable, this also reads in the constraint data from
-  ! environmentConstraints directory, the file named after the
+  ! model/constraints/environment directory, the file named after the
   ! environmental variable.
   subroutine readEnvVar()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod
-    use directories_mod, only : param_dir, env_constraints_dir
+    use directories_mod, only : param_dir, env_constraints_dir, photolysis_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound
@@ -882,7 +894,7 @@ contains
           ! calculating JFAC on the fly.
           select case ( trim( envVarTypes(i) ) )
             case ('CONSTRAINED')
-              ! We now expect a file JFAC in environmentConstraints directory
+              ! We now expect a file JFAC in model/constraints/environment directory
               envVarTypesNum(i) = 2_SI
             case ('NOTUSED')
               ! JFAC should be set to its default value of 1 everywhere
@@ -946,11 +958,15 @@ contains
     numConEnvVarRates = 0_SI
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
-
-        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        if ( trim( envVarNames(i) ) == 'JFAC' ) then
+          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+        else
+          fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        end if
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         maxNumberOfEnvVarDataPoints = max( maxNumberOfEnvVarDataPoints, count_lines_in_file( fileLocation ) )
         numConEnvVarRates = numConEnvVarRates + 1_SI
+
       end if
     end do
 
@@ -967,7 +983,11 @@ contains
 
         write (*, '(2A)') ' Reading constraint data for ', trim( envVarNames(i) )
 
-        fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        if ( trim( envVarNames(i) ) == 'JFAC' ) then
+          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+        else
+          fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
+        end if
         call inquire_or_abort( fileLocation, 'readEnvVar()')
         open (11, file=fileLocation, status='old')
 

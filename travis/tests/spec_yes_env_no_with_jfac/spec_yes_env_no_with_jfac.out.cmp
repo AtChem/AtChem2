@@ -3,11 +3,13 @@ AtChem2 v1.1-dev
 -------------
  Directories
 -------------
- Output dir is travis/tests/spec_yes_env_no_with_jfac
- Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac/instantaneousRates
- Parameter dir is travis/tests/spec_yes_env_no_with_jfac/modelConfiguration
- Species constraints dir is travis/tests/spec_yes_env_no_with_jfac/speciesConstraints
- Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac/environmentConstraints
+ Output dir is travis/tests/spec_yes_env_no_with_jfac/output
+ Instantaneous rates dir is travis/tests/spec_yes_env_no_with_jfac/output/instantaneousRates
+ Parameter dir is travis/tests/spec_yes_env_no_with_jfac/model/configuration
+ MCM dir is travis/tests/spec_yes_env_no_with_jfac/mcm
+ Species constraints dir is travis/tests/spec_yes_env_no_with_jfac/model/constraints/species
+ Environment constraints dir is travis/tests/spec_yes_env_no_with_jfac/model/constraints/environment
+ Photolysis constraints dir is travis/tests/spec_yes_env_no_with_jfac/model/constraints/photolysis
 
 -----------------------
  Species and reactions

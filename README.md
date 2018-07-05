@@ -24,11 +24,11 @@ After installation of all the dependencies, refer to the instructions on the [wi
 
 Firstly, create a `makefile.local` file and set the variables `CVODELIB` and `OPENLIBMDIR` to the locations of the CVODE and openlibm libraries. Type `./tools/build.sh tools/mcm_example.fac` in the top-level directory and this should create an executable name `atchem2`, with a default configuration.
 
-Note that, at present, AtChem2 requires recompilation for each new chemical mechanism (`.fac`) file. This is handled by the script `./tools/build.sh`, which converts the `.fac` file into a format usable by AtChem2 (namely, it generates two Fortran files and several data files in the `modelConfiguration/` directory).
+Note that, at present, AtChem2 requires recompilation for each new chemical mechanism (`.fac`) file. This is handled by the script `./tools/build.sh`, which converts the `.fac` file into a format usable by AtChem2 (namely, it generates two Fortran files and several data files in the `model/configuration/` directory).
 
 Configuring and running AtChem2
 -------------------------------
 
-AtChem2 accepts several command line arguments to configure the location of output and input files, with defaults also defined if not provided. After completing the build step above, set the initial conditions, required outputs and other model paramters in the files inside the `modelConfiguration/` directory.
+AtChem2 accepts several command line arguments to configure the location of output and input files, with defaults also defined if not provided. After completing the build step above, set the initial conditions, required outputs and other model parameters in the files inside the `model/configuration/` directory.
 
 To run the model, type `./atchem2`. More information on model configuration and execution see the [wiki page](https://github.com/AtChem/AtChem2/wiki/2.-Model-Configuration-and-Execution).

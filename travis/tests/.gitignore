@@ -1,10 +1,10 @@
 # Ignore output files from test runs
 *.output
 *.out
-*/instantaneousRates/*
-*/*/mechanism.prod
-*/*/mechanism.reac
-*/*/mechanism.species
+*/output/instantaneousRates/*
+*/model/configuration/mechanism.prod
+*/model/configuration/mechanism.reac
+*/model/configuration/mechanism.species
 results
 
 # Except configuration and reference files

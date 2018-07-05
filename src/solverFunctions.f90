@@ -168,7 +168,7 @@ contains
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
-    include 'mechanism-rate-declarations.f90'
+    include './gen/mechanism-rate-declarations.f90'
 
     ro2 = ro2sum( y )
     dummy = y(1)
@@ -228,7 +228,7 @@ contains
       end do
     end if
 
-    include 'mechanism-rate-coefficients.f90'
+    include './gen/mechanism-rate-coefficients.f90'
 
     return
   end subroutine mechanism_rates

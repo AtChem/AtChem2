@@ -452,12 +452,12 @@ contains
 
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
-    call inquire_or_abort( trim( param_dir ) // '/constrainedPhotoRates.config', 'readPhotoConstraints()')
+    call inquire_or_abort( trim( param_dir ) // '/photolysisRatesConstrained.config', 'readPhotoConstraints()')
     if ( allocated .eqv. .false. ) then
       call allocate_constrained_photolysis_rates_variables()
       allocated = .true.
     end if
-    open (10, file=trim( param_dir ) // '/constrainedPhotoRates.config', status='old') ! input file
+    open (10, file=trim( param_dir ) // '/photolysisRatesConstrained.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
       if ( ierr /= 0 ) then
@@ -1100,7 +1100,7 @@ contains
       ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
       ! call readPhotolysisConstraints() to read in their values.
       write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
-      filename = trim( param_dir ) // '/constrainedPhotoRates.config'
+      filename = trim( param_dir ) // '/photolysisRatesConstrained.config'
       write (*, '(A)') ' Looking for photolysis constraints file...'
       inquire(file=filename, exist=file_exists)
       if ( file_exists .eqv. .true. ) then

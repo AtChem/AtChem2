@@ -169,7 +169,7 @@ PROGRAM ATCHEM2
   ! Read in product species of interest, and set up variables to hold
   ! these
   write (*, '(A)') ' Reading products of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/productionRatesOutput.config', prodIntName )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputProductionRates.config', prodIntName )
   write (*, '(A)') ' Finished reading products of interest.'
 
   allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))

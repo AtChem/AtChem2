@@ -1174,8 +1174,8 @@ contains
     write (*, '(A, I0)') ' Number of names of variable-concentration constrained species: ', numberOfVariableConstrainedSpecies
 
     ! read in number of fixed-concentration constrained species
-    write (*, '(A)') ' Counting the fixed-concentration species to be constrained (in file constrainedFixedSpecies.config)...'
-    numberOfFixedConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedFixedSpecies.config' )
+    write (*, '(A)') ' Counting the fixed-concentration species to be constrained (in file speciesFixed.config)...'
+    numberOfFixedConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/speciesFixed.config' )
     write (*, '(A)') ' Finished counting the names of fixed-concentration constrained species.'
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
@@ -1259,9 +1259,9 @@ contains
 
     ! Read in names and concentration data for fixed constrained species
     allocate (dataFixedY(numberOfFixedConstrainedSpecies))
-    fileLocation = trim( param_dir ) // '/constrainedFixedSpecies.config'
+    fileLocation = trim( param_dir ) // '/speciesFixed.config'
     write (*, '(A)') ' Reading in the names and concentration of the fixed constrained species ' // &
-                '(in file constrainedFixedSpecies.config)...'
+                '(in file speciesFixed.config)...'
     call inquire_or_abort( fileLocation, 'readSpeciesConstraints()')
     open (14, file=fileLocation, status='old') ! input file
     id = 0

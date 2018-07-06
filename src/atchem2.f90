@@ -193,7 +193,7 @@ PROGRAM ATCHEM2
 
   ! Read in reactant species of interest, and set up variables to hold these
   write (*, '(A)') ' Reading reactants of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/lossRatesOutput.config', reacIntName )
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputLossRates.config', reacIntName )
   write (*, '(A)') ' Finished reading reactants of interest.'
 
   allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))

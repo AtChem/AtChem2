@@ -735,7 +735,7 @@ contains
   ! -----------------------------------------------------------------
   ! Read in contents of
   ! model/configuration/productionRatesOutput.config and
-  ! model/configuration/lossRatesOutput.config, which contains a list
+  ! model/configuration/outputLossRates.config, which contains a list
   ! of the species we want to have outputted to
   ! model/configuration/{production,loss}Rates.output Output the contents in r, with i as
   ! the length of r.

@@ -1011,7 +1011,7 @@ contains
   end subroutine readEnvVar
 
   ! ----------------------------------------------------------------- !
-  ! Read concentrationOutput.config to get species of interest
+  ! Read outputConcentration.config to get species of interest
   function readSpeciesOfInterest() result ( r )
     use types_mod
     use species_mod, only : getNumberOfSpecies
@@ -1023,7 +1023,7 @@ contains
     character(len=maxFilepathLength) :: filename
     integer(kind=NPI) :: j, nsp, length
 
-    filename = trim( param_dir ) // '/concentrationOutput.config'
+    filename = trim( param_dir ) // '/outputConcentration.config'
     write (*, '(A)') ' Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
     allocate (r(length) )

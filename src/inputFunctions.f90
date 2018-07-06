@@ -205,7 +205,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! Reads in concentration per species from
-  ! mC/initialConcentrations.config Checks that there aren't more
+  ! mC/speciesInitialConcentrations.config Checks that there aren't more
   ! inputs than species.  concSpeciesNames is filled with all species
   ! names of initial concentrations, concentration is filled with
   ! corresponding concentration VALUES
@@ -226,7 +226,7 @@ contains
     integer(kind=IntErr) :: ierr
 
     write (*, '(A)') ' Reading initial concentrations...'
-    filename = trim( param_dir ) // '/initialConcentrations.config'
+    filename = trim( param_dir ) // '/speciesInitialConcentrations.config'
     ! Count lines in file, allocate appropriately
     numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()

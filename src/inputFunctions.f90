@@ -1168,8 +1168,8 @@ contains
     speciesNames = getSpeciesList()
 
     ! read in number of variable-concentration constrained species
-    write (*, '(A)') ' Counting the variable-concentration species to be constrained (in file constrainedSpecies.config)...'
-    numberOfVariableConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/constrainedSpecies.config' )
+    write (*, '(A)') ' Counting the variable-concentration species to be constrained (in file speciesConstrained.config)...'
+    numberOfVariableConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/speciesConstrained.config' )
     write (*, '(A)') ' Finished counting the names of variable-concentration constrained species.'
     write (*, '(A, I0)') ' Number of names of variable-concentration constrained species: ', numberOfVariableConstrainedSpecies
 
@@ -1187,7 +1187,7 @@ contains
     ! numbers of variable-concentration constrained species
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       write (*, '(A)') ' Reading in the names of variable-concentration constrained species...'
-      call read_in_single_column_string_file( trim( param_dir ) // '/constrainedSpecies.config', constrainedNames )
+      call read_in_single_column_string_file( trim( param_dir ) // '/speciesConstrained.config', constrainedNames )
       do i = 1, numberOfVariableConstrainedSpecies
         id = getIndexWithinList( speciesNames, constrainedNames(i) )
         if ( id /= 0 ) then

@@ -191,7 +191,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
     # check RO2s are in RO2 list
     # Read in RO2 list, and strip off newlines
-    with open(os.path.join(mcm_dir, 'photolysis-rates_v3.3.1')) as RO2List_file:
+    with open(os.path.join(mcm_dir, 'peroxy-radicals_v3.3.1')) as RO2List_file:
         RO2List_input = [r.rstrip() for r in RO2List_file.readlines()]
 
     # Check that each species is in the RO2 list. If so, just print to screen. Otherwise, print a warning at the top of
@@ -347,7 +347,7 @@ ro2 = 0.00D+00\n""")
         for item in mechanism_rates_decl:
             mr3_file.write(item)
 
-    # # Combine mechanism rates and RO2 / NOY sum files
+    # # Combine mechanism rates and RO2 sum files
     with open(os.path.join(output_dir, 'mechanism-rate-coefficients.f90'), 'a') as mech_rates_coeff_file:
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)

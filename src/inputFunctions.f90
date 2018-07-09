@@ -324,7 +324,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
-  ! mcm/photolysisRates.config so that we know the numbers
+  ! mcm/photolysis-rates_v3.3.1 so that we know the numbers
   ! of all the photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -341,7 +341,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    filename = trim( mcm_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
     write (*, '(A)') ' Reading photolysis numbers from file...'
     call inquire_or_abort( filename, 'readPhotolysisNumbers()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -620,7 +620,7 @@ contains
     character(len=maxFilepathLength) :: filename, line
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
     write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
     call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -676,7 +676,7 @@ contains
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstants.config doesn't exist/is empty.
   ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
-  ! mcm/photolysisRates.config. It uses
+  ! mcm/photolysis-rates_v3.3.1. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -693,7 +693,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readAllPhotolysisRates()')
     numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
@@ -807,7 +807,7 @@ contains
     !logical :: jFacSpeciesFound
 
     ! Read the config file, counting the lines
-    filename = trim( mcm_dir ) // '/photolysisRates.config'
+    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readJFacCalculationParameters()')
     totalLines = count_lines_in_file( filename, .true. )

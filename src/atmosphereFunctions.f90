@@ -32,8 +32,8 @@ contains
     real(kind=DP), intent(in) :: press, temp
     real(kind=DP) :: m, press_pa
 
-    press_pa = press * 1.0d+02
-    m = 1.0d-06 * ( 6.02214129d+23 / 8.3144621 ) * ( press_pa / temp )
+    press_pa = press * 1.0e+02_DP
+    m = 1.0e-06_DP * ( 6.02214129e+23_DP / 8.3144621_DP ) * ( press_pa / temp )
 
     return
   end function calcAirDensity

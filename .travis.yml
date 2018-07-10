@@ -36,11 +36,7 @@
 
   script:
     - ./atchem2
-    - cd travis/unit_tests
-    - cp Makefile.base Makefile
-    - make build
-    - ./fruit_driver.exe
-    - cd ../../
+    - make unittests
     - make test
 
   after_success:

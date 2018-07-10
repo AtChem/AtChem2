@@ -20,8 +20,9 @@
 .PHONY: all test
 
 OS := $(shell uname -s)
-CVODELIB     = cvode/lib/
-OPENLIBMDIR  = openlibm-0.4.1/
+CVODELIB     = cvode/lib
+OPENLIBMDIR  = openlibm-0.4.1
+FRUITDIR     = fruit/fruit_3.4.3
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
@@ -52,12 +53,14 @@ LIBDIR   =  /usr/lib/:$(CVODELIB)
 
 OBJ = obj
 SRC = src
+UNITTESTDIR = travis/unit_tests
 
 AOUT = atchem2
 
 all: $(AOUT)
 
-SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/atchem2.f90
+UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
+SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
 
@@ -66,10 +69,27 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' $(SRC)/*.f90
 
+fruit_code = $(FRUITDIR)/src/fruit.f90
+unittest_code = $(UNITTEST_SRCS) $(shell ls travis/unit_tests/*_test.f90 )
+unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90
+all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
+fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
+
+$(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
+	@cd $(UNITTESTDIR) ; ruby fruit_generator.rb
+
+$(fruit_driver) : $(all_unittest_code)
+	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
+
+build_unittests : $(fruit_driver)
+
+unittests: $(fruit_driver) build_unittests
+	$(fruit_driver)
+
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
-test:
+test: unittests
 	@echo "Make: performing 'make clean'."
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
@@ -81,7 +101,7 @@ clean:
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
-
+	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
 
 # dependencies:
 

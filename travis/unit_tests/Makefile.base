@@ -34,6 +34,7 @@ option=-Wall -Wextra -pedantic -fbounds-check -Wuninitialized -O -g -Wno-unused-
 ### fruit_code = ../src/fruit_util.f90 ../src/fruit.f90
 fruit_code = $(FRUITDIR)/src/fruit.f90
 SRC = ../../src
+OBJ = obj/
 code = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(shell ls -d *_test.f90 )
 code_gen = fruit_basket_gen.f90 fruit_driver_gen.f90
 
@@ -52,10 +53,10 @@ fruit_driver_gen.f90 : $(code)
 	ruby fruit_generator.rb
 
 fruit_driver.exe : $(all_code)
-	$(compiler) $(option) $(all_code) -o fruit_driver.exe $(LDFLAGS)
+	$(compiler) $(option) $(all_code) -J$(OBJ) -I$(OBJ) -o fruit_driver.exe $(LDFLAGS)
 
 clean :
-	rm -f *.o *.mod *.obj *.exe
+	rm -f *.o $(OBJ)/*.mod *.obj *.exe
 	rm -f fruit_driver_gen.f90
 	rm -f fruit_basket_gen.f90
 	rm -f result.xml result_tmp.xml

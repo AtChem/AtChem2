@@ -23,7 +23,7 @@ rvm install ruby-2.4.2
 gem list
 wget https://kent.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
 mkdir -p $1
-unzip fruit_3.4.3.zip -d $1
+unzip fruit_3.4.3.zip -d $1 -q
 cd $1/fruit_3.4.3/fruit_processor_gem/
 rake install
 rake

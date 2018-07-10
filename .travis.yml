@@ -27,10 +27,10 @@
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
+    - ./tools/install/install_fruit.sh $PWD/fruit ; fi
 
   install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_fruit.sh /Users/travis/build/AtChem/AtChem2/fruit /Users/travis/build/AtChem/AtChem2/fruit ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_fruit.sh /home/travis/build/AtChem/AtChem2/fruit  /home/travis/build/AtChem/AtChem2/fruit  ; fi
+    - env
     - cd ~/build/AtChem/AtChem2
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac

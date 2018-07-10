@@ -12,9 +12,8 @@
 #!/bin/sh
 
 # This script downloads and installs FRUIT 3.4.3 into the directory
-# given by input argument $1, using the RVM sourced from the directory
-# given by input argument $2.
-##
+# given by input argument $1.
+#
 # Example usage:
 #   ./install_fruit.sh /path/to/install/directory /path/to/rvm/directory
 

@@ -18,7 +18,6 @@
 # Example usage:
 #   ./install_fruit.sh /path/to/install/directory /path/to/rvm/directory
 
-source $2/.rvm/scripts/rvm
 rvm list known
 rvm install ruby-2.4.2
 gem list

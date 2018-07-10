@@ -30,8 +30,7 @@
     - ./tools/install/install_fruit.sh $PWD/fruit
 
   install:
-    - env
-    - cd ~/build/AtChem/AtChem2
+    - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
 

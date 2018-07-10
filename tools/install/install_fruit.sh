@@ -18,9 +18,7 @@
 # Example usage:
 #   ./install_fruit.sh /path/to/install/directory /path/to/rvm/directory
 
-rvm list known
 rvm install ruby-2.4.2
-gem list
 wget https://kent.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
 mkdir -p $1
 unzip -q fruit_3.4.3.zip -d $1

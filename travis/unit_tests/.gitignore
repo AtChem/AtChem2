@@ -1,3 +1,6 @@
 # Ignore module files in this directory
 *.mod
 Makefile
+*_gen.f90
+fruit_driver.exe
+*.xml

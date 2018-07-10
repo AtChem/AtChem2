@@ -27,13 +27,20 @@
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
+    - ./tools/install/install_fruit.sh $PWD/fruit
 
   install:
+    - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
     - ./atchem2
+    - cd travis/unit_tests
+    - cp Makefile.base Makefile
+    - make build
+    - ./fruit_driver.exe
+    - cd ../../
     - make test
 
   after_success:

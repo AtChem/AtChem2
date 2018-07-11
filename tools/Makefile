@@ -81,20 +81,20 @@ $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
-build_unittests : $(fruit_driver)
-
-unittests: $(fruit_driver) build_unittests
+unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
-test: unittests
+behaviourtests:
 	@echo "Make: performing 'make clean'."
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
 	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMDIR)"
+
+test : unittests behaviourtests
 
 clean:
 	rm -f *.o

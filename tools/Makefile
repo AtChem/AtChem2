@@ -84,7 +84,7 @@ $(fruit_driver) : $(all_unittest_code)
 build_unittests : $(fruit_driver)
 
 unittests: $(fruit_driver) build_unittests
-	$(fruit_driver)
+	@export DYLD_LIBRARY_PATH=$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')

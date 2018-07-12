@@ -21,7 +21,7 @@
 - adopt coding style guidelines and standardize the naming of variables, subroutines, source files
 - improve formatting of output files, screen output and error reporting
 - improve code comments and create a [wiki](https://github.com/AtChem/AtChem2/wiki) for the documentation
-- tidy and speed up the python and bash scripts
+- tidy and speed up the Python and shell scripts
 - create a user-friendly command line interface to install, compile and run the model
 - verify that the model compiles with both gfortran and intel compilers, and runs on Linux/Unix and macOS machines
 - implement continuous integration with [TravisCI](https://travis-ci.org/) and develop a range of test scenarios (new dependency: **numdiff**)

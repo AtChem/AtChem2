@@ -218,7 +218,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 ! Any manual edits to this file will be overwritten when
 ! calling tools/mech_converter.py
 
-ro2 = 0.00D+00\n""")
+ro2 = 0.00e+00_DP\n""")
 
             for ro2List_i in ro2List:
                 for speciesNumber, y in zip(range(1, len(speciesList) + 1), speciesList):

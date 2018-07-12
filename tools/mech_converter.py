@@ -263,12 +263,12 @@ ro2 = 0.00e+00_DP\n""")
                            '\g<speciesnames>',
                            line2)
             # Undo the suffix _DP for any numbers like 1D7 or 2.3D-8
-            line2 = re.sub(r'\b(?P<doubles>[0-9][0-9\.]*[dDeE][+-]*[0-9]+)_DP',
-                           '\g<doubles>',
+            line2 = re.sub(r'\b(?P<doubles1>[0-9][0-9\.]*)[dDeE](?P<doubles2>[+-]*[0-9]+)_DP',
+                           '\g<doubles1>e\g<doubles2>_DP',
                            line2)
             # Add .0 to any literals that don't have a decimal place - this is necessary as it seems you can't use extended
             # precision on such a number - gfortran complains about an unknown integer kind, when it should really be a real kind
-            line2 = re.sub(r'(?<![\.0-9])(?P<doubles>[0-9]+)_DP',
+            line2 = re.sub(r'(?<![\.0-9+-dDeE])(?P<doubles>[0-9]+)_DP',
                            '\g<doubles>.0_DP',
                            line2)
             # Save the resulting string to mechanism_rates_coeff_list

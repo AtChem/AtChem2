@@ -3,7 +3,7 @@
 ! Any manual edits to this file will be overwritten when
 ! calling tools/mech_converter.py
 
-ro2 = 0.00D+00
+ro2 = 0.00e+00_DP
 ro2 = ro2 + y(26)!HOCH2CH2O2
 ro2 = ro2 + y(29)!HO1C3O2
 ro2 = ro2 + y(30)!HYPROPO2

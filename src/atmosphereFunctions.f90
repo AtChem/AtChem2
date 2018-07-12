@@ -73,10 +73,10 @@ contains
 
     ! Calculate volume of water vapour per volume of dry air using
     ! Eq.18 (see Vaisala paper).
-    h2o_ppm = 1.0d+06 * wvp / (press - wvp)
+    h2o_ppm = 1.0e+06_DP * wvp / (press - wvp)
 
     ! convert ppm to molecule cm-3
-    h2o = h2o_ppm * calcAirDensity(press, temp) * 1.0d-06
+    h2o = h2o_ppm * calcAirDensity(press, temp) * 1.0e-06_DP
 
     return
   end function convertRHtoH2O
@@ -90,10 +90,10 @@ contains
 
     real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor, exponent
 
-    temp = 289.86_DP + 8.3_DP * sin( ( 7.2722d-5 * ttime ) - 1.9635_DP )
+    temp = 289.86_DP + 8.3_DP * sin( ( 7.2722e-5_DP * ttime ) - 1.9635_DP )
     temp = 298.00_DP
-    rh = 23.0_DP * sin( ( 7.2722d-5 * ttime ) + 1.1781_DP ) + 66.5_DP
-    h2o_factor = 10.0_DP / ( 1.38d-16 * temp ) * rh
+    rh = 23.0_DP * sin( ( 7.2722e-5_DP * ttime ) + 1.1781_DP ) + 66.5_DP
+    h2o_factor = 10.0_DP / ( 1.38e-16_DP * temp ) * rh
     exponent = -1.0_DP * ( 597.3_DP - 0.57_DP * ( temp - 273.16_DP ) ) * 18.0_DP / 1.986_DP * ( 1.0_DP / temp - 1.0_DP / 273.16_DP )
     h2o = 6.1078_DP * exp( exponent ) * h2o_factor
 

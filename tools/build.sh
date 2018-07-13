@@ -16,26 +16,33 @@
 #
 # N.B.: the script MUST be run from the base directory of AtChem2.
 #
-# $1 is the mechanism input file
+# $1 is the directory for the chemical mechanism file in FACSIMILE
+#    format. This argument is NOT optional, and there is no
+#    default. The suggested directory is ./model/
 #
-# $2 is the directory in which to place the output files:
+# $2 is the directory for the auto-generated Fortran files:
 #    - mechanism-rate-coefficients.f90
 #    - mechanism-rate-declarations.f90
-#    By default, it is the base directory of AtChem2.
+#    - ro2-rates.f90
+#    By default, it is ./src/gen/
 #
-# $3 is the directory in which to place the output files:
+# $3 is the directory for the chemical mechanism in Fortran format:
 #    - mechanism.prod
 #    - mechanism.reac
 #    - mechanism.species
-# $4 is the directory in which the MCM RO2 file exists
-#    By default it is model/configuration/ in the base directory of AtChem2.
+#    By default, it is ./model/configuration/
+#
+# $4 is the directory for MCM-specific files:
+#    - list of organic peroxy radicals
+#    - parameters to calculate photolysis rates
+#    By default, it is ./mcm/
 
 set -e
 echo ''
-echo "input mechanism file:" $1
-echo "fortran output directory:" $2
-echo "mechanism output directory:" $3
-echo "mcm directory:" $4
+echo "facsimile mechanism directory:" $1
+echo "auto-generated fortran files directory:" $2
+echo "fortran mechanism directory:" $3
+echo "mcm files directory:" $4
 
 echo ''
 echo "call setup_atchem2.py"

@@ -191,10 +191,10 @@ AtChem2 v1.1-dev
 ------------------
  Final statistics
 ------------------
- No. steps = 245   No. f-s = 293   No. J-s = 512   No. LU-s = 53
- No. nonlinear iterations = 292
+ No. steps = 240   No. f-s = 282   No. J-s = 478   No. LU-s = 52
+ No. nonlinear iterations = 281
  No. nonlinear convergence failures = 0
- No. error test failures = 4
+ No. error test failures = 2
 
  Runtime = 0
  Deallocating memory.

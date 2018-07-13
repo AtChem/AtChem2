@@ -25,32 +25,27 @@ contains
   ! Calculate the day angle (radians). Equations taken from "The
   ! Atmosphere and UV-B Radiation at Ground Level" by S. Madronich
   ! (Environmental UV Photobiology, 1993).
-  subroutine calcTheta( t )
+  pure function calcTheta() result ( theta )
     use types_mod
     use date_mod, only : currentYear, currentDayOfYear
-    use zenith_data_mod, only : theta
     implicit none
 
-    real(kind=DP), intent(in) :: t
-    real(kind=DP) :: pi, currentFracDay
+    real(kind=DP) :: theta, pi
 
     pi = 4.0_DP * atan( 1.0_DP )
-
-    ! Time as day of year and fractional seconds of day
-    currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
 
     ! The day angle accounts for the variation in the Sun-Earth
     ! distance caused by the ellipticity of the Earth's orbit.
     if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
       ! leap year
-      theta = 2.0_DP * pi * floor(currentFracDay) / 366.0_DP
+      theta = 2.0_DP * pi * (currentDayOfYear - 1.0_DP) / 366.0_DP
     else
       ! not a leap year
-      theta = 2.0_DP * pi * floor(currentFracDay) / 365.0_DP
+      theta = 2.0_DP * pi * (currentDayOfYear - 1.0_DP) / 365.0_DP
     end if
 
     return
-  end subroutine calcTheta
+  end function calcTheta
 
   ! -----------------------------------------------------------------
   ! Calculate the sun declination (radians). Equations taken from "The
@@ -58,10 +53,12 @@ contains
   ! (Environmental UV Photobiology, 1993).
   pure function calcDec() result ( dec )
     use types_mod
-    use zenith_data_mod, only : theta
     implicit none
 
-    real(kind=DP) :: dec, b0, b1, b2, b3, b4, b5, b6
+    real(kind=DP) :: theta, dec
+    real(kind=DP) :: b0, b1, b2, b3, b4, b5, b6
+
+    theta = calcTheta()
 
     ! The sun declination is the angle between the center of the Sun
     ! and Earth's equatorial plane.
@@ -86,14 +83,16 @@ contains
   subroutine calcZenith( t, dec )
     use types_mod
     use date_mod, only : currentDayOfYear
-    use zenith_data_mod, only : eqtime, theta, lha, latitude, longitude, sinld, cosld, cosx, secx, cosx_threshold, &
-                                cosx_below_threshold
+    use zenith_data_mod, only : eqtime, lha, latitude, longitude, sinld, cosld, &
+                                cosx, secx, cosx_threshold, cosx_below_threshold
     implicit none
 
     real(kind=DP), intent(in) :: t, dec
-    real(kind=DP) :: pi, c0, c1, c2, c3, c4
+    real(kind=DP) :: theta, pi, lat
+    real(kind=DP) :: c0, c1, c2, c3, c4
     real(kind=DP) :: currentFracDay, currentFracHour
-    real(kind=DP) :: lat
+
+    theta = calcTheta()
 
     pi = 4.0_DP * atan( 1.0_DP )
 
@@ -110,7 +109,12 @@ contains
     ! The local hour angle is the angle between the observer's
     ! meridian and the Sun's meridian. Time must be in GMT/UTC and
     ! longitude in degrees.
-    currentFracDay = currentDayOfYear + ( t / 86400.0_DP )
+    !
+    ! TODO: currentFracDay is wrong because t/86400 is not the
+    ! fractional time of day (eg: 12:00 = 0.5). This is only used to
+    ! calculate currentFracHour. The error in the calculation of LHA
+    ! is very small but it needs to be fixed
+    currentFracDay = currentDayOfYear - 1.0_DP + ( t / 86400.0_DP )
     currentFracHour =  (currentFracDay - floor(currentFracDay)) * 24.0_DP
     lha = pi * ((currentFracHour / 12.0_DP) - (1.0_DP + longitude / 180.0_DP)) + eqtime
 

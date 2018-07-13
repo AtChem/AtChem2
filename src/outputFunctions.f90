@@ -103,18 +103,19 @@ contains
   ! Write parameters used in calculation of photolysis rates to file.
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
-    use zenith_data_mod, only : latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
+    use zenith_data_mod, only : latitude, longitude, secx, cosx, lha, sinld, &
+                                cosld, eqtime
     implicit none
 
     real(kind=DP), intent(in) :: t
     logical :: first_time = .true.
 
     if ( first_time .eqv. .true. ) then
-      write (59, '(100A15) ') 't', 'LATITUDE', 'LONGITUDE', 'SECX', 'COSX', 'LHA', 'SINLD', 'COSLD', 'THETA', 'EQTIME'
+      write (59, '(100A15) ') 't', 'latitude', 'longitude', 'secx', 'cosx', 'lha', 'sinld', 'cosld', 'eqtime'
       first_time = .false.
     end if
 
-    write (59, '(100 (ES15.6E3)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld, theta, eqtime
+    write (59, '(100 (ES15.6E3)) ') t, latitude, longitude, secx, cosx, lha, sinld, cosld, eqtime
 
     return
   end subroutine outputPhotoRateCalcParameters

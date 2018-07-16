@@ -12,7 +12,6 @@
 import os
 import sys
 import mech_converter as mc
-import shutil
 """This script builds the program atchem2"""
 
 

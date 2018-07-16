@@ -99,7 +99,7 @@ test : unittests behaviourtests
 
 clean:
 	rm -f *.o
-	rm -f *.gcda *.gcno
+	rm -f *.gcda *.gcno *.xml
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]

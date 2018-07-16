@@ -4,9 +4,9 @@ if ENV['TRAVIS'] == nil
   load "~/libs/fruit_3.4.3/rake_base.rb"
 else
   if ENV['TRAVIS_OS_NAME'] == 'linux'
-    load "/home/travis/build/AtChem/AtChem2/fruit/fruit_3.4.3/rake_base.rb"
+    load "/home/travis/build/AtChem/AtChem2/fruit_3.4.3/rake_base.rb"
   else
-    load "/Users/travis/build/AtChem/AtChem2/fruit/fruit_3.4.3/rake_base.rb"
+    load "/Users/travis/build/AtChem/AtChem2/fruit_3.4.3/rake_base.rb"
   end
 end
 # fruit.f90 and fruit_util.f90 must exist in this directry.

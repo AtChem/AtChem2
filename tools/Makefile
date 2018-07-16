@@ -22,7 +22,7 @@
 OS := $(shell uname -s)
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
-FRUITDIR     = fruit/fruit_3.4.3
+FRUITDIR     = fruit_3.4.3
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)

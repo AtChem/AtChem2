@@ -30,3 +30,5 @@ rm v0.4.1.tar.gz
 
 cd openlibm-0.4.1/
 make -j
+
+exit 0

@@ -32,3 +32,5 @@ cd fruit_3.4.3
 gem install rake
 cd fruit_processor_gem
 rake install
+
+exit 0

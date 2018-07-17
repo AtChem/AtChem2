@@ -3,6 +3,7 @@
 *.mod
 *.gcda
 *.gcno
+*.xml
 atchem2
 cvode*
 numdiff*

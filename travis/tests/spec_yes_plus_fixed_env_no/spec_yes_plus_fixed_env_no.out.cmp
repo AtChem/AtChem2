@@ -3,13 +3,13 @@ AtChem2 v1.1
 -------------
  Directories
 -------------
- Output dir is travis/tests/spec_yes_plus_fixed_env_no/output
- Instantaneous rates dir is travis/tests/spec_yes_plus_fixed_env_no/output/instantaneousRates
- Parameter dir is travis/tests/spec_yes_plus_fixed_env_no/model/configuration
- MCM dir is travis/tests/spec_yes_plus_fixed_env_no/mcm
- Species constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/species
- Environment constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/environment
- Photolysis constraints dir is travis/tests/spec_yes_plus_fixed_env_no/model/constraints/photolysis
+ Output dir is: travis/tests/spec_yes_plus_fixed_env_no/output
+ Instantaneous Rates dir is: travis/tests/spec_yes_plus_fixed_env_no/output/instantaneousRates
+ Configuration dir is: travis/tests/spec_yes_plus_fixed_env_no/model/configuration
+ MCM dir is: travis/tests/spec_yes_plus_fixed_env_no/mcm
+ Species Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/species
+ Environment Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/environment
+ Photolysis Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/photolysis
 
 -----------------------
  Species and reactions

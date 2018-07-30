@@ -41,5 +41,5 @@
     - make test
 
   after_success:
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls --gcov-options '\-lp' ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls --exclude src/gen --exclude travis/unit_tests --gcov-options '\-lp' ; fi
     - bash <(curl -s https://codecov.io/bash)

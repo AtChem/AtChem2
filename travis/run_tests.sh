@@ -62,7 +62,7 @@ function find_string {
 
 TESTS_DIR=travis/tests
 RESULTS_FILE=$TESTS_DIR/results
-export DYLD_LIBRARY_PATH=$2
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$2
 
 echo "Running style script on:"
 for file in src/*.f90 ; do

@@ -82,7 +82,7 @@ $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
 unittests: $(fruit_driver)
-	@export DYLD_LIBRARY_PATH=$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+	@export DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')

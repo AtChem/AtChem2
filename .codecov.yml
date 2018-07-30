@@ -5,4 +5,6 @@ coverage:
         threshold: 5%
       tests:  # declare a new status context "tests"
         target: 100%  # we always want 100% coverage here
-        paths: "travis/tests/"  # only include coverage in "travis/tests/" folder
+        paths:
+          - travis/tests/  # only include coverage in "travis/tests/" and "travis/unit_tests" folders
+          - travis/unit_tests/

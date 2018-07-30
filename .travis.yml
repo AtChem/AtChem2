@@ -12,6 +12,9 @@
   compiler:
     - gcc
 
+  cache:
+    directories: /usr/local/Cellar/gcc@4.9/4.9.4_1
+    
   addons:
     apt:
       packages:

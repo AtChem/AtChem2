@@ -61,7 +61,7 @@ function find_string {
 # sections between the skipped lines, and to numdiff those sections.
 
 TESTS_DIR=travis/tests
-RESULTS_FILE=$TESTS_DIR/results
+RESULTS_FILE=$TESTS_DIR/testsuite.log
 export DYLD_LIBRARY_PATH=$2
 
 echo "Running style script on:"

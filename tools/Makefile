@@ -13,7 +13,7 @@
 # -----------------------------------------------------------------------------
 
 #!/bin/sh
-# Makefile for AtChem2 project
+# Makefile for AtChem2
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
@@ -22,7 +22,7 @@
 OS := $(shell uname -s)
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
-FRUITDIR     = fruit/fruit_3.4.3
+FRUITDIR     = fruit_3.4.3
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
@@ -43,10 +43,11 @@ else
 RPATH_OPTION = -rpath
 endif
 
-# gfortran flags
+# GNU gfortran flags
 FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
 LIBDIR   =  /usr/lib/:$(CVODELIB)
-# Intel Fortran flags
+
+# Intel ifort flags
 #FORT_COMP = ifort
 #FFLAGS   = -free -warn
 #LIBDIR =
@@ -84,7 +85,7 @@ $(fruit_driver) : $(all_unittest_code)
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
-# Search travis/tests/ for all subdirectories, which should reflect the full list of tests
+# search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
 behaviourtests:
@@ -98,13 +99,13 @@ test : unittests behaviourtests
 
 clean:
 	rm -f *.o
+	rm -f *.gcda *.gcno *.xml
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
 
 # dependencies:
-
 atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o
 constraintFunctions.o : constraintFunctions.f90 dataStructures.o
 atmosphereFunctions.o : atmosphereFunctions.f90

@@ -32,3 +32,5 @@ cd numdiff-5.8.1/
 ./configure --prefix=$1/numdiff
 make
 make install
+
+exit 0

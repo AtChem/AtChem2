@@ -5,7 +5,7 @@
 */model/configuration/mechanism.prod
 */model/configuration/mechanism.reac
 */model/configuration/mechanism.species
-results
+testsuite.log
 
 # Except configuration and reference files
 !*.cmp

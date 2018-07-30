@@ -1,4 +1,2 @@
-# Ignore several files in this directory
-mechanism.*
-*.fac
+# Ignore python bytecode files in this directory
 *.pyc

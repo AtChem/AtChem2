@@ -68,13 +68,13 @@ contains
       photolysis_constraints_dir = "model/constraints/photolysis"
     end if
 
-    write (*, '(2A)') ' Output dir is ', trim( output_dir )
-    write (*, '(2A)') ' Instantaneous rates dir is ', trim( instantaneousRates_dir )
-    write (*, '(2A)') ' Parameter dir is ', trim( param_dir )
-    write (*, '(2A)') ' MCM dir is ', trim( mcm_dir )
-    write (*, '(2A)') ' Species constraints dir is ', trim( spec_constraints_dir )
-    write (*, '(2A)') ' Environment constraints dir is ', trim( env_constraints_dir )
-    write (*, '(2A)') ' Photolysis constraints dir is ', trim( photolysis_constraints_dir )
+    write (*, '(2A)') ' Output dir is: ', trim( output_dir )
+    write (*, '(2A)') ' Instantaneous Rates dir is: ', trim( instantaneousRates_dir )
+    write (*, '(2A)') ' Configuration dir is: ', trim( param_dir )
+    write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
+    write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
+    write (*, '(2A)') ' Environment Constraints dir is: ', trim( env_constraints_dir )
+    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photolysis_constraints_dir )
 
   end subroutine get_and_set_directories_from_command_arguments
 

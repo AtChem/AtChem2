@@ -3,13 +3,13 @@ AtChem2 v1.1-dev
 -------------
  Directories
 -------------
- Output dir is travis/tests/full/output
- Instantaneous rates dir is travis/tests/full/output/instantaneousRates
- Parameter dir is travis/tests/full/model/configuration
- MCM dir is travis/tests/full/mcm
- Species constraints dir is travis/tests/full/model/constraints/species
- Environment constraints dir is travis/tests/full/model/constraints/environment
- Photolysis constraints dir is travis/tests/full/model/constraints/photolysis
+ Output dir is: travis/tests/full/output
+ Instantaneous Rates dir is: travis/tests/full/output/instantaneousRates
+ Configuration dir is: travis/tests/full/model/configuration
+ MCM dir is: travis/tests/full/mcm
+ Species Constraints dir is: travis/tests/full/model/constraints/species
+ Environment Constraints dir is: travis/tests/full/model/constraints/environment
+ Photolysis Constraints dir is: travis/tests/full/model/constraints/photolysis
 
 -----------------------
  Species and reactions
@@ -178,5 +178,5 @@ AtChem2 v1.1-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 13
+ Runtime = 11
  Deallocating memory.

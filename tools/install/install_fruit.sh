@@ -12,15 +12,25 @@
 #!/bin/sh
 
 # This script downloads and installs FRUIT 3.4.3 into the directory
-# given by input argument $1.
+# given by input argument $1. This is dependent on the existence of a
+# Ruby installation.
 #
 # Example usage:
-#   ./install_fruit.sh /path/to/install/directory /path/to/rvm/directory
+#   ./install_fruit.sh /path/to/install/directory
 
-rvm install ruby-2.4.2
+if [ -z "$1" ] ; then
+  echo "Please provide an argument to tools/install/install_fruit.sh"
+  exit 1
+fi
+cd $1
 wget https://kent.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
-mkdir -p $1
-unzip -q fruit_3.4.3.zip -d $1
-cd $1/fruit_3.4.3/fruit_processor_gem/
+
+unzip -q fruit_3.4.3.zip
+rm fruit_3.4.3.zip
+
+cd fruit_3.4.3
+gem install rake
+cd fruit_processor_gem
 rake install
-rake
+
+exit 0

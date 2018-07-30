@@ -63,6 +63,7 @@ function find_string {
 TESTS_DIR=travis/tests
 RESULTS_FILE=$TESTS_DIR/results
 export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:$2
+echo $DYLD_LIBRARY_PATH
 
 echo "Running style script on:"
 for file in src/*.f90 ; do
@@ -147,6 +148,7 @@ for test in $1; do
   ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac src/gen $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm &> /dev/null
 
   # Run atchem2 with the argument pointing to the output directory
+  echo $DYLD_LIBRARY_PATH
   echo Running   $TESTS_DIR/$test ...
   ./atchem2 $TESTS_DIR/$test/output $TESTS_DIR/$test/output/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
 

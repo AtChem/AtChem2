@@ -39,6 +39,7 @@
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
     - ./atchem2
     - make unittests
     - make test

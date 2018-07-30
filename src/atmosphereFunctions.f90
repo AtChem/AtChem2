@@ -63,7 +63,7 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: rh, temp, press
-    real(kind=DP) :: h2o, h2o_ppm, temp_c, wvp
+    real(kind=DP) :: h2o, h2o_ppu, temp_c, wvp
 
     ! Use Eq.6 to calculate the water vapour saturation pressure and
     ! Eq.1 to calculate the water vapour pressure from relative
@@ -72,11 +72,14 @@ contains
     wvp = ( rh/100.0_DP ) * ( 6.116441_DP * 10.0_DP**((7.591386_DP * temp_c)/(temp_c + 240.7263_DP)) )
 
     ! Calculate volume of water vapour per volume of dry air using
-    ! Eq.18 (see Vaisala paper).
-    h2o_ppm = 1.0e+06_DP * wvp / (press - wvp)
+    ! Eq.18 (see Vaisala paper). We don't use ppm here, because doing
+    ! so requires a multiplication by 1e6 then division by the same
+    ! in the final line. This incurs possible rounding. Instead, we
+    ! use 'parts per unit'
+    h2o_ppu = wvp / (press - wvp)
 
-    ! convert ppm to molecule cm-3
-    h2o = h2o_ppm * calcAirDensity(press, temp) * 1.0e-06_DP
+    ! convert ppv to molecule cm-3
+    h2o = h2o_ppu * calcAirDensity(press, temp)
 
     return
   end function convertRHtoH2O

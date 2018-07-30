@@ -84,6 +84,7 @@ $(fruit_driver) : $(all_unittest_code)
 
 unittests: $(fruit_driver)
 	@otool -L $(fruit_driver)
+	@install_name_tool -change /usr/local/opt/gcc@4.9/lib/gcc/4.9/libgfortran.3.dylib /usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9/libgfortran.3.dylib $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # Search travis/tests/ for all subdirectories, which should reflect the full list of tests

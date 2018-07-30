@@ -1,11 +1,6 @@
-# Ignore object files in this directory
-*.o
-*.mod
+# Ignore compiler generated files, Makefile and executable in this directory
 *.gcda
 *.gcno
 *.xml
-atchem2
-cvode*
-numdiff*
-openlibm*
 Makefile
+atchem2

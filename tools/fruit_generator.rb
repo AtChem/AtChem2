@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'fruit_processor'
 if ENV['TRAVIS'] == nil
-  load "~/libs/fruit_3.4.3/rake_base.rb"
+  load "~/atchem-libraries/fruit_3.4.3/rake_base.rb"
 else
   if ENV['TRAVIS_OS_NAME'] == 'linux'
     load "/home/travis/build/AtChem/AtChem2/fruit_3.4.3/rake_base.rb"

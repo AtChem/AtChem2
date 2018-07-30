@@ -1,7 +1,2 @@
-# Ignore everything in this directory
-*
-
-# Except the following
-!*.config
-!*.parameters
-!.gitignore
+# Ignore auto-generated mechanism files in this directory
+mechanism.*

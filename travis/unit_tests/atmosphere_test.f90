@@ -45,7 +45,51 @@ contains
     call assert_true( m == 2.0_DP, "m unchanged 2" )
     call assert_true( o2 == 0.4190_DP, "o2 correct 2" )
     call assert_true( n2 == 1.5618_DP, "n2 correct 2" )
+
+    m = 0.0_DP
+    call calcAtmosphere( m, o2, n2 )
+
+    call assert_true( m == 0.0_DP, "m unchanged 0" )
+    call assert_true( o2 == 0.0_DP, "o2 correct 0" )
+    call assert_true( n2 == 0.0_DP, "n2 correct 0" )
   end subroutine test_calcAtmosphere
+
+  subroutine test_convertRHtoH2O
+    use types_mod
+    use atmosphere_functions_mod
+    implicit none
+
+    real(kind=DP) :: rh, temp, press, ad, h2o
+
+    rh = 50.0_DP
+    temp = 273.15_DP
+    press = 6.116441_DP
+
+    ad = calcAirDensity(press, temp)
+
+    h2o = convertRHtoH2O( rh, temp, press )
+
+    call assert_equals( h2o, ad, "convertRHtoH2O: 50% relative humidity, 0C, pressure = A" )
+
+    rh = 100.0_DP
+    temp = 273.15_DP
+    press = 2.0_DP*6.116441_DP
+
+    ad = calcAirDensity(press, temp)
+
+    h2o = convertRHtoH2O( rh, temp, press )
+
+    call assert_equals( h2o, ad, "convertRHtoH2O: 100% relative humidity, 0C, pressure = 2*A" )
+
+    rh = 0.0_DP
+    temp = 300.0_DP
+    press = 10.0_DP
+
+    h2o = convertRHtoH2O( rh, temp, press )
+
+    call assert_equals( h2o, 0.0_DP, "convertRHtoH2O: 0% relative humidity" )
+
+  end subroutine test_convertRHtoH2O
 
   subroutine test_zero_equal
     use types_mod

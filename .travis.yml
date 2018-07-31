@@ -34,6 +34,7 @@
     - ./tools/install/install_fruit.sh $PWD
 
   install:
+    - echo $PATH
     - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
@@ -44,7 +45,7 @@
     - ./atchem2
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; fi
     - make unittests
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
     - make test
 
   after_success:

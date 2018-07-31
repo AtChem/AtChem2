@@ -67,7 +67,7 @@ LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIB
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
-	$(FORT_COMP) -v -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS) -Wl,--verbose
+	$(FORT_COMP) -v -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS) -Wl,-t
 	@otool -L $(AOUT)
 	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' $(SRC)/*.f90
 

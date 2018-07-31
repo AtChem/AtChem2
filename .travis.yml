@@ -30,11 +30,11 @@
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin ; fi
     - ./tools/install/install_fruit.sh $PWD
 
   install:
-    - echo $PATH
+    - echo $PATH; echo $DYLD_LIBRARY_PATH
     - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac

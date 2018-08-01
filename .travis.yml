@@ -47,6 +47,8 @@
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; fi
     - make unittests
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
     - printenv
     - make test
 

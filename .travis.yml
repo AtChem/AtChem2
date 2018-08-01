@@ -12,6 +12,9 @@
   compiler:
     - gcc
 
+  cache:
+    directories: /usr/local/Cellar/gcc@4.9/4.9.4_1
+
   addons:
     apt:
       packages:
@@ -20,24 +23,35 @@
         - numdiff
 
   before_install:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then pip install --user cpp-coveralls ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$PWD/cvode/lib:$PWD/openlibm-0.4.1 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/include/c++' ; brew update ; brew install gcc@4.9 libffi gettext ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ls -R /usr/local/Cellar/gcc@4.9/4.9.4_1/ ; rm '/usr/local/include/c++' ; fi
+    - printenv
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin ; fi
     - ./tools/install/install_fruit.sh $PWD
 
   install:
+    - echo $PATH; echo $DYLD_LIBRARY_PATH
     - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; fi
     - ./atchem2
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; fi
     - make unittests
-    - make test
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
+    - printenv
+    - make behaviourtests
 
   after_success:
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls --exclude src/gen --exclude gen --exclude unit_tests --exclude travis/unit_tests --gcov-options '\-lp' ; fi
     - bash <(curl -s https://codecov.io/bash)

@@ -24,16 +24,15 @@
 
   before_install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$PWD/cvode/lib:$PWD/openlibm-0.4.1 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/include/c++' ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then rm '/usr/local/include/c++' ; brew update ; brew install gcc@4.9 libffi gettext ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; PATH=$PATH:$PWD/numdiff/bin ; fi
     - ./tools/install/install_fruit.sh $PWD
 
   install:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
     - cd $TRAVIS_BUILD_DIR
     - cp tools/Makefile Makefile
     - ./tools/build.sh ./tools/mcm_example.fac
@@ -41,7 +40,7 @@
   script:
     - ./atchem2
     - make unittests
-    - make behaviourtests
+    - make test
 
   after_success:
     - bash <(curl -s https://codecov.io/bash)

@@ -28,16 +28,13 @@ ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran
 FORT_COMP    = gfortran
-FORT_LIB = ""
 else
 # if macOS, pass homebrew gfortran
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
-FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9
 endif
 # else it's not on Travis, so set the fortran compiler as gfortran
 else
 FORT_COMP    = gfortran
-FORT_LIB = ""
 endif
 
 ifeq ($(OS),Linux)
@@ -86,7 +83,7 @@ $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
 unittests: $(fruit_driver)
-	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+	@export DYLD_LIBRARY_PATH=$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
@@ -96,7 +93,7 @@ behaviourtests:
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
-	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+	@./travis/run_tests.sh "$(TESTS)" "$(CVODELIB):$(OPENLIBMDIR)"
 
 test : unittests behaviourtests
 

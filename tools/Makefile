@@ -91,14 +91,14 @@ unittests: $(fruit_driver)
 # search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
-behaviourtests:
+tests:
 	@echo "Make: performing 'make clean'."
 	@make clean
 	@echo "Make: Running the following tests:" $(TESTS)
 	@rm -f travis/tests/results
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-test : unittests behaviourtests
+alltests : unittests tests
 
 clean:
 	rm -f *.o

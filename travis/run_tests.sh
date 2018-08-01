@@ -64,7 +64,7 @@ TESTS_DIR=travis/tests
 RESULTS_FILE=$TESTS_DIR/testsuite.log
 echo $PATH
 echo $DYLD_LIBRARY_PATH
-export DYLD_LIBRARY_PATH=$($DYLD_LIBRARY_PATH):$2
+export DYLD_LIBRARY_PATH=$2
 echo $DYLD_LIBRARY_PATH
 echo $PATH
 echo "Running style script on:"

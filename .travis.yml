@@ -41,7 +41,7 @@
   script:
     - ./atchem2
     - make unittests
-    - make behaviourtests
+    - make tests
 
   after_success:
     - bash <(curl -s https://codecov.io/bash)

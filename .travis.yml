@@ -50,7 +50,7 @@
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $DYLD_LIBRARY_PATH ; echo $PATH ; fi
     - printenv
-    - make test
+    - make behaviourtests
 
   after_success:
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then coveralls --exclude src/gen --exclude gen --exclude unit_tests --exclude travis/unit_tests --gcov-options '\-lp' ; fi

@@ -266,6 +266,8 @@ $this_file_failures"
     fi
   done
 
+  bash <(curl -s https://codecov.io/bash) -F tests
+
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
   # Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then

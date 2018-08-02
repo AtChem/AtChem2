@@ -1,9 +1,15 @@
+ignore:
+  - "src/gen/"
 coverage:
   status:
     project:
+      src:
+        target: 100%
+        paths: "src/*"
+
       tests:  # declare a new status context "tests"
         target: 100%  # we always want 100% coverage here
-        paths: "travis/tests/"  # only include coverage in "travis/tests/" folder
+        paths: "travis/tests/*"  # only include coverage in "travis/tests/" folder
       unittests:  # declare a new status context "unittests"
         target: 100%  # we always want 100% coverage here
-        paths: "travis/unit_tests/"  # only include coverage in "travis/unit_tests" folder
+        paths: "travis/unit_tests/*"  # only include coverage in "travis/unit_tests" folder

@@ -266,7 +266,7 @@ $this_file_failures"
     fi
   done
 
-  bash <(curl -s https://codecov.io/bash) -F tests
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
   # Increment the counters as necessary.

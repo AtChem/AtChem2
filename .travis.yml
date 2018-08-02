@@ -44,4 +44,5 @@
     - make tests
 
   after_success:
+    - ls -l .
     - bash <(curl -s https://codecov.io/bash)

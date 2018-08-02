@@ -40,8 +40,12 @@
 
   script:
     - ./atchem2
+    - bash <(curl -s https://codecov.io/bash) -F build
     - make unittests
+    - bash <(curl -s https://codecov.io/bash) -F unittests
     - make tests
+    - bash <(curl -s https://codecov.io/bash) -F tests
+
 
   after_success:
     - ls -l .

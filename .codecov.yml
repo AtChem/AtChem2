@@ -1,10 +1,11 @@
+ignore:
+  - "src/gen/"
 coverage:
   status:
     project:
-      default:  # disable the default status that measures entire project
-        threshold: 5%
-      tests:  # declare a new status context "tests"
+      src:
+        target: auto
+        paths: "src/"
+      unittests:  # declare a new status context "unittests"
         target: 100%  # we always want 100% coverage here
-        paths:
-          - travis/tests/  # only include coverage in "travis/tests/" and "travis/unit_tests" folders
-          - travis/unit_tests/
+        paths: "travis/unit_tests/"  # only include coverage in "travis/unit_tests" folder

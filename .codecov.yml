@@ -4,7 +4,7 @@ coverage:
   status:
     project:
       src:
-        target: 100%
+        target: auto
         paths: "src/*"
 
       tests:  # declare a new status context "tests"

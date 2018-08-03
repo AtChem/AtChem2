@@ -45,5 +45,5 @@
     - make unittests
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
     - make clean
-    - make tests #coverage info is uploaded (with flag 'tests') after each of the individual tests within this.
-                 #This is necessary because the executable changes between runs, so the coverage reports don't seem to combine.
+    - make tests
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi

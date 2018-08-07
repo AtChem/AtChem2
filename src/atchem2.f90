@@ -58,11 +58,12 @@ PROGRAM ATCHEM2
   ! Number of species and reactions
   integer(kind=NPI) :: numSpec, numReac
 
-  ! Declarations for rates of production and loss
-  integer(kind=NPI), allocatable :: prodIntSpecies(:,:), reacIntSpecies(:,:)
-  integer(kind=NPI), allocatable :: prodIntSpeciesLengths(:), reacIntSpeciesLengths(:)
+  ! Declarations for detailed rates output
+  integer(kind=NPI), allocatable :: reacDetailedRatesSpecies(:,:), prodDetailedRatesSpecies(:,:)
+  integer(kind=NPI), allocatable :: reacDetailedRatesSpeciesLengths(:), prodDetailedRatesSpeciesLengths(:)
+  character(len=maxSpecLength), allocatable :: detailedRatesSpeciesName(:)
+  ! Declarations for concentration outputs
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
-  character(len=maxSpecLength), allocatable :: prodIntName(:), reacIntName(:)
   character(len=maxSpecLength), allocatable :: speciesOfInterest(:)
   ! simulation output time variables
   integer(kind=QI) :: time, elapsed
@@ -162,57 +163,38 @@ PROGRAM ATCHEM2
   call readAndSetInitialConcentrations( speciesConcs )
   write (*,*)
 
-  write (*, '(A)') '---------------------'
-  write (*, '(A)') ' Species of interest'
-  write (*, '(A)') '---------------------'
+  write (*, '(A)') '----------------------------------------'
+  write (*, '(A)') ' Species requiring detailed rate output'
+  write (*, '(A)') '----------------------------------------'
 
   ! Read in product species of interest, and set up variables to hold
   ! these
-  write (*, '(A)') ' Reading products of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputProductionRates.config', prodIntName )
-  write (*, '(A)') ' Finished reading products of interest.'
+  write (*, '(A)') ' Reading which species require detailed rate output...'
+  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputRates.config', detailedRatesSpeciesName )
+  write (*, '(A)') ' Finished reading which species require detailed rate output.'
 
-  allocate (prodIntSpecies(size( prodIntName ), size( crhs, 2 )))
-  prodIntSpecies(:,:) = -1_NPI
-  allocate (prodIntSpeciesLengths(size( prodIntName )))
+  allocate (reacDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( clhs, 2 )))
+  allocate (prodDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( crhs, 2 )))
+  reacDetailedRatesSpecies(:,:) = -1_NPI
+  prodDetailedRatesSpecies(:,:) = -1_NPI
+  allocate (reacDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
+  allocate (prodDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
 
-  ! Fill prodIntSpecies(:,1) with a list of the numbers of the
-  ! interesting product species, with numbers from their ordering in
+  ! Fill detailedRatesSpecies(:,1) with a list of the numbers of the
+  ! species requiring detailed rates output, with numbers from their ordering in
   ! speciesList
-  call matchNameToNumber( getSpeciesList(), prodIntName, prodIntSpecies(:, 1) )
-  ! prodIntSpecies will eventually hold one row per interesting
-  ! product species, with the first element being the number of that
+  call matchNameToNumber( getSpeciesList(), detailedRatesSpeciesName, reacDetailedRatesSpecies(:, 1) )
+  call matchNameToNumber( getSpeciesList(), detailedRatesSpeciesName, prodDetailedRatesSpecies(:, 1) )
+  ! reac/prodDetailedRatesSpecies will each eventually hold one row per species
+  ! requiring detailed rate output, with the first element being the number of that
   ! species, and the remaining elements being the numbers of the
-  ! reactions in which that species is a product
+  ! reactions in which that species appears as a reactant/product respectively
   !
-  ! Fill the remaining elements of each row of prodIntSpecies with the
-  ! numbers of the reactions in which that species is a product
-  call findReactionsWithProductOrReactant( prodIntSpecies, crhs, prodIntSpeciesLengths )
-  write (*, '(A, I0)') ' products of interest (number of species found): ', size( prodIntName )
-  write (*,*)
-
-  ! Read in reactant species of interest, and set up variables to hold these
-  write (*, '(A)') ' Reading reactants of interest...'
-  call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputLossRates.config', reacIntName )
-  write (*, '(A)') ' Finished reading reactants of interest.'
-
-  allocate (reacIntSpecies(size( reacIntName ), size( clhs, 2 )))
-  reacIntSpecies(:,:) = -1_NPI
-  allocate (reacIntSpeciesLengths(size( reacIntName )))
-
-  ! Fill reacIntSpecies(:,1) with a list of the numbers of the
-  ! interesting reaction species, with numbers from their ordering in
-  ! speciesList
-  call matchNameToNumber( getSpeciesList(), reacIntName, reacIntSpecies(:, 1) )
-  ! reacIntSpecies will eventually hold one row per interesting
-  ! reactant species, with the first element being the number of that
-  ! species, and the remaining elements being the numbers of the
-  ! reactions in which that species is a reactant
-  !
-  ! Fill the remaining elements of each row of reacIntSpecies with the
-  ! numbers of the reactions in which that species is a reactant
-  call findReactionsWithProductOrReactant( reacIntSpecies, clhs, reacIntSpeciesLengths )
-  write (*, '(A, I0)') ' reactants of interest (number of species found): ', size( reacIntName )
+  ! Fill the remaining elements of each row of reac/prodDetailedRatesSpecies with the
+  ! numbers of the reactions in which that species appears as a reactant/product respectively
+  call findReactionsWithProductOrReactant( reacDetailedRatesSpecies, clhs, reacDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( prodDetailedRatesSpecies, crhs, prodDetailedRatesSpeciesLengths )
+  write (*, '(A, I0)') ' Species requiring detailed rate output (number of species found): ', size( detailedRatesSpeciesName )
   write (*,*)
 
   ! Read in and set solver parameters
@@ -424,8 +406,8 @@ PROGRAM ATCHEM2
     ! Output rates of production and loss (output frequency set in
     ! model.parameters)
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( prodIntSpecies, prodIntSpeciesLengths, t, productionRates, 1_SI )
-      call outputRates( reacIntSpecies, reacIntSpeciesLengths, t, lossRates, 0_SI )
+      call outputRates( prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths, t, productionRates, 1_SI )
+      call outputRates( reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, lossRates, 0_SI )
     end if
 
     concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
@@ -490,13 +472,12 @@ PROGRAM ATCHEM2
   ! deallocate CVODE internal data
   call FCVFREE()
   deallocate (speciesConcs, z)
-  deallocate (prodIntSpecies, reacIntSpecies)
-  deallocate (concsOfSpeciesOfInterest, prodIntName, reacIntName, speciesOfInterest)
+  deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
+  deallocate (concsOfSpeciesOfInterest, detailedRatesSpeciesName, speciesOfInterest)
   deallocate (instantaneousRates)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)
-  deallocate (prodIntSpeciesLengths)
-  deallocate (reacIntSpeciesLengths)
+  deallocate (reacDetailedRatesSpeciesLengths, prodDetailedRatesSpeciesLengths)
 
   ! deallocate data allocated in inputFunctions.f90
   ! deallocate arrays from module constraints_mod

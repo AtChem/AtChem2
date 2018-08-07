@@ -1,7 +1,7 @@
            time speciesNumber speciesName reactionNumber           rate
   3.640000E+004             8          OH             16  1.297931E+009  OH+O3=HO2
-  3.640000E+004             8          OH             17  6.810591E-003  OH+H2=HO2
-  3.640000E+004             8          OH             18  4.973188E-001  OH+CO=HO2
+  3.640000E+004             8          OH             17  6.810592E-003  OH+H2=HO2
+  3.640000E+004             8          OH             18  4.973189E-001  OH+CO=HO2
   3.640000E+004             8          OH             19  2.321985E-003  OH+H2O2=HO2
   3.640000E+004             8          OH             21  1.356961E+003  OH+HO2=
   3.640000E+004             8          OH             24  1.298375E+009  OH+NO=HONO
@@ -14,7 +14,7 @@
   3.640000E+004             8          OH             50  3.198549E+005  OH+CH4=CH3O2
   3.640000E+004             8          OH             61  1.172109E-002  OH+CH3OOH=CH3O2
   3.640000E+004             8          OH             62  1.661870E-002  OH+CH3OOH=HCHO+OH
-  3.640000E+004             8          OH             66  9.178308E+003  OH+HCHO=HO2+CO
+  3.640000E+004             8          OH             66  9.178309E+003  OH+HCHO=HO2+CO
   3.640000E+004             8          OH             68  1.033695E-001  OH+CH3NO3=HCHO+NO2
   3.640000E+004             8          OH             71  3.538012E+006  CH3OH+OH=HO2+HCHO
   3.640000E+004             9         HO2             20  1.297933E+009  HO2+O3=OH

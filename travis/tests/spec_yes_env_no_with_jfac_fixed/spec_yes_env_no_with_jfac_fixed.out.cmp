@@ -33,20 +33,14 @@ AtChem2 v1.1-dev
       3 O3               1.320E+12
  Finished reading initial concentrations.
 
----------------------
- Species of interest
----------------------
- Reading products of interest...
+----------------------------------------
+ Species requiring detailed rate output
+----------------------------------------
+ Reading which species require detailed rate output...
       1 OH        
       2 HO2       
- Finished reading products of interest.
- products of interest (number of species found): 2
-
- Reading reactants of interest...
-      1 OH        
-      2 HO2       
- Finished reading reactants of interest.
- reactants of interest (number of species found): 2
+ Finished reading which species require detailed rate output.
+ Species requiring detailed rate output (number of species found): 2
 
  Reading solver parameters from file...
  ------------------

@@ -71,6 +71,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
     with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, open(
             os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
         mech_reac_list = []
+        mech_prod_list = []
         # Loop over all lines in the reaction_definitions section of the input file
         for line in reaction_definitions:
 
@@ -140,10 +141,18 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
                     # Write the products to mechanism.prod
                     for z in productNums:
-                        prod_file.write(str(reactionNumber) + ' ' + str(z) + '\n')
+                        mech_prod_list.append(str(reactionNumber) + ' ' + str(z) + '\n')
+
+
+        # Output number of species and number of reactions
+        prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+        # Write all other lines
+        for line in mech_prod_list:
+            prod_file.write(line)
 
         # Output number of species and number of reactions
         reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+
         # Write all other lines
         for line in mech_reac_list:
             reac_file.write(line)

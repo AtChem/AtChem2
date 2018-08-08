@@ -124,7 +124,7 @@ contains
     call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
     lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
     call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
-    rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.false. )
+    rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
 
     allocate (clhs(2, lhs_size), crhs(2, rhs_size), clcoeff(lhs_size), crcoeff(rhs_size))
 
@@ -159,6 +159,7 @@ contains
     ! coeff(i) contains 1.0 as a constant factor (stoichiometric coefficient)
     count = 0
     ierr = 0
+    read (11,*, iostat=ierr)
     read (11,*, iostat=ierr) k, l
     do while ( ierr == 0 )
       count = count + 1

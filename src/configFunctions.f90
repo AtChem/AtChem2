@@ -83,12 +83,12 @@ contains
   ! Fill the second (and later) column(s) of each row of r with the
   ! numbers of the reactions in which it is present in chs. Used
   ! arrayLen to keep track of how many are present in each row.
-  subroutine findReactionsWithProductOrReactant( r, chs, arrayLen )
+  subroutine findReactionsWithProductOrReactant( rSpecies, r, chs, arrayLen )
     use types_mod
     implicit none
 
     integer(kind=NPI), intent(inout) :: r(:,:)
-    integer(kind=NPI), intent(in) :: chs(:,:)
+    integer(kind=NPI), intent(in) :: rSpecies(:), chs(:,:)
     integer(kind=NPI), intent(out) :: arrayLen(:)
     integer(kind=NPI) :: rCounter, i, j
 
@@ -101,7 +101,7 @@ contains
       stop "size(arrayLen) /= size(r, 1) in findReactionsWithProductOrReactant()."
     end if
     ! initialise counter for r array
-    rCounter = 2
+    rCounter = 1
     ! loop over interesting species (i.e. over 1st index of r)
     do i = 1, size( arrayLen )
       ! loop over elements of 2nd index of chs
@@ -111,14 +111,14 @@ contains
         ! interesting species number)?  If so, then append the first
         ! element of this row in chs (the equation number) to this row
         ! in r, and update the length counter arrayLen for this row.
-        if ( chs(2, j) == r(i, 1) ) then
+        if ( chs(2, j) == rSpecies(i) ) then
           ! Match found
           r(i, rCounter) = chs(1, j)
           rCounter = rCounter + 1
         end if
       end do
-      arrayLen(i) = rCounter - 1
-      rCounter = 2
+      arrayLen(i) = rCounter
+      rCounter = 1
     end do
 
     return

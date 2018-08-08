@@ -240,14 +240,14 @@ contains
 
   ! ----------------------------------------------------------------- !
   ! Write production and loss rates to file.
-  subroutine outputRates( r, arrayLen, t, p, flag )
+  subroutine outputRates( rSpecies, r, arrayLen, t, p, flag )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use species_mod, only : getSpeciesList
     use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
 
-    integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:)
+    integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:), rSpecies(:)
     real(kind=DP), intent(in) :: t, p(:)
     integer(kind=SI), intent(in) :: flag
     character(len=maxSpecLength), allocatable :: speciesNames(:)
@@ -283,10 +283,12 @@ contains
         write (stderr,*) "arrayLen(i) > size( r, 2 ) in outputRates(). i = ", i
         stop
       end if
-      do j = 2, arrayLen(i)
+
+      do j = 1, arrayLen(i)
         if ( r(i, j) /= -1 ) then
           reaction = getReaction( speciesNames, r(i, j) )
-          write (output_file_number, '(ES15.6E3, I14, A12, I15, ES15.6E3, A, A)') t, r(i, 1), trim( speciesNames(r(i, 1)) ), &
+          write (output_file_number, '(ES15.6E3, I14, A12, I15, ES15.6E3, A, A)') t, rSpecies(i), &
+                                                                                  trim( speciesNames(rSpecies(i)) ), &
                                                                                   r(i, j), p(r(i, j)), '  ', trim( reaction )
         end if
       end do

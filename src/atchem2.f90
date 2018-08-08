@@ -61,6 +61,7 @@ PROGRAM ATCHEM2
   ! Declarations for detailed rates output
   integer(kind=NPI), allocatable :: reacDetailedRatesSpecies(:,:), prodDetailedRatesSpecies(:,:)
   integer(kind=NPI), allocatable :: reacDetailedRatesSpeciesLengths(:), prodDetailedRatesSpeciesLengths(:)
+  integer(kind=NPI), allocatable :: detailedRatesSpecies(:)
   character(len=maxSpecLength), allocatable :: detailedRatesSpeciesName(:)
   ! Declarations for concentration outputs
   real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
@@ -173,6 +174,7 @@ PROGRAM ATCHEM2
   call readProductsOrReactantsOfInterest( trim( param_dir ) // '/outputRates.config', detailedRatesSpeciesName )
   write (*, '(A)') ' Finished reading which species require detailed rate output.'
 
+  allocate (detailedRatesSpecies(size( detailedRatesSpeciesName )))
   allocate (reacDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( clhs, 2 )))
   allocate (prodDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( crhs, 2 )))
   reacDetailedRatesSpecies(:,:) = -1_NPI
@@ -180,11 +182,11 @@ PROGRAM ATCHEM2
   allocate (reacDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
   allocate (prodDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
 
-  ! Fill detailedRatesSpecies(:,1) with a list of the numbers of the
+  ! Fill detailedRatesSpecies with a list of the numbers of the
   ! species requiring detailed rates output, with numbers from their ordering in
   ! speciesList
-  call matchNameToNumber( getSpeciesList(), detailedRatesSpeciesName, reacDetailedRatesSpecies(:, 1) )
-  call matchNameToNumber( getSpeciesList(), detailedRatesSpeciesName, prodDetailedRatesSpecies(:, 1) )
+  call matchNameToNumber( getSpeciesList(), detailedRatesSpeciesName, detailedRatesSpecies )
+
   ! reac/prodDetailedRatesSpecies will each eventually hold one row per species
   ! requiring detailed rate output, with the first element being the number of that
   ! species, and the remaining elements being the numbers of the
@@ -192,8 +194,8 @@ PROGRAM ATCHEM2
   !
   ! Fill the remaining elements of each row of reac/prodDetailedRatesSpecies with the
   ! numbers of the reactions in which that species appears as a reactant/product respectively
-  call findReactionsWithProductOrReactant( reacDetailedRatesSpecies, clhs, reacDetailedRatesSpeciesLengths )
-  call findReactionsWithProductOrReactant( prodDetailedRatesSpecies, crhs, prodDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, reacDetailedRatesSpecies, clhs, reacDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, prodDetailedRatesSpecies, crhs, prodDetailedRatesSpeciesLengths )
   write (*, '(A, I0)') ' Species requiring detailed rate output (number of species found): ', size( detailedRatesSpeciesName )
   write (*,*)
 
@@ -406,8 +408,8 @@ PROGRAM ATCHEM2
     ! Output rates of production and loss (output frequency set in
     ! model.parameters)
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths, t, productionRates, 1_SI )
-      call outputRates( reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, lossRates, 0_SI )
+      call outputRates( detailedRatesSpecies, prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths, t, productionRates, 1_SI )
+      call outputRates( detailedRatesSpecies, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, lossRates, 0_SI )
     end if
 
     concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )

@@ -93,7 +93,6 @@ TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g'
 
 tests:
 	@echo "Make: Running the following tests:" $(TESTS)
-	@rm -f travis/tests/results
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
 formattest:

@@ -96,7 +96,13 @@ tests:
 	@rm -f travis/tests/results
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-alltests : unittests tests
+formattest:
+	@./travis/run_format_test.sh
+
+styletest:
+	@./travis/run_style_test.sh
+
+alltests: formattest styletest unittests tests
 
 clean:
 	rm -f *.o

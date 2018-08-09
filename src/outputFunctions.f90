@@ -317,8 +317,9 @@ contains
     irfileLocation = trim( instantaneousRates_dir ) // '/' // adjustl( strTime )
 
     open (10, file=irfileLocation)
+    write (10,*) 'reaction number : reaction rate'
     do i = 1, size( instantaneousRates )
-      write (10,*) instantaneousRates(i)
+      write (10,*) i, instantaneousRates(i)
     end do
     close (10, status='keep')
 

@@ -111,7 +111,7 @@ contains
 
     real(kind=DP), intent(in) :: t, dec
     real(kind=DP) :: pi, lat
-    real(kind=DP) :: currentFracDay, currentFracHour
+    real(kind=DP) :: currentFracHour
 
     pi = 4.0_DP * atan( 1.0_DP )
 
@@ -124,11 +124,11 @@ contains
     ! calculate currentFracHour. The error in the calculation of LHA
     ! is very small but it needs to be fixed
     eqtime = calcEQT()
-    ! currentFracDay holds 0 for 00:00 Jan 1, 1 for 00:00 Jan 2, etc
-    currentFracDay = currentDayOfYear - 1.0_DP + ( t / 86400.0_DP )
-    ! currentFracDay takes the fractional part of the above, and multiplies by
-    ! 24 to get the time of day in units of hours
-    currentFracHour =  (currentFracDay - floor(currentFracDay)) * 24.0_DP
+
+    ! Calculate the fraction of the day in units of hours - convert from
+    ! seconds to hours, then mod 24 to remove any previous days' hours.
+    currentFracHour = mod( t / 3600.0_DP, 24.0_DP )
+
     lha = pi * ((currentFracHour / 12.0_DP) - (1.0_DP + longitude / 180.0_DP)) + eqtime
 
     ! The solar zenith angle is the angle between the local vertical

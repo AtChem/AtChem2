@@ -38,10 +38,10 @@ contains
     ! distance caused by the ellipticity of the Earth's orbit.
     if ( (mod(currentYear, 4_DI)==0 .and. .not. mod(currentYear, 100_DI)==0) .or. (mod(currentYear, 400_DI)==0) ) then
       ! leap year
-      theta = 2.0_DP * pi * (currentDayOfYear - 1.0_DP) / 366.0_DP
+      theta = 2.0_DP * pi * currentDayOfYear / 366.0_DP
     else
       ! not a leap year
-      theta = 2.0_DP * pi * (currentDayOfYear - 1.0_DP) / 365.0_DP
+      theta = 2.0_DP * pi * currentDayOfYear / 365.0_DP
     end if
 
     return

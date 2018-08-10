@@ -75,6 +75,9 @@ contains
     return
   end function calcDec
 
+  ! -----------------------------------------------------------------
+  ! The equation of time accounts for the discrepancy between the
+  ! apparent and the mean solar time at a given location.
   pure function calcEQT() result ( eqt )
     use types_mod
     implicit none
@@ -83,8 +86,6 @@ contains
 
     theta = calcTheta()
 
-    ! The equation of time accounts for the discrepancy between the
-    ! apparent and the mean solar time at a given location.
     c0 = 0.000075_DP
     c1 = 0.001868_DP
     c2 = -0.032077_DP
@@ -95,6 +96,7 @@ contains
 
     return
   end function
+
   ! -----------------------------------------------------------------
   ! Calculate the local hour angle (radians) and the solar zenith
   ! angle (radians). Equations taken from "The Atmosphere and UV-B
@@ -113,8 +115,6 @@ contains
 
     pi = 4.0_DP * atan( 1.0_DP )
 
-    eqtime = calcEQT()
-
     ! The local hour angle is the angle between the observer's
     ! meridian and the Sun's meridian. Time must be in GMT/UTC and
     ! longitude in degrees.
@@ -123,7 +123,11 @@ contains
     ! fractional time of day (eg: 12:00 = 0.5). This is only used to
     ! calculate currentFracHour. The error in the calculation of LHA
     ! is very small but it needs to be fixed
+    eqtime = calcEQT()
+    ! currentFracDay holds 0 for 00:00 Jan 1, 1 for 00:00 Jan 2, etc
     currentFracDay = currentDayOfYear - 1.0_DP + ( t / 86400.0_DP )
+    ! currentFracDay takes the fractional part of the above, and multiplies by
+    ! 24 to get the time of day in units of hours
     currentFracHour =  (currentFracDay - floor(currentFracDay)) * 24.0_DP
     lha = pi * ((currentFracHour / 12.0_DP) - (1.0_DP + longitude / 180.0_DP)) + eqtime
 

@@ -75,6 +75,26 @@ contains
     return
   end function calcDec
 
+  pure function calcEQT() result ( eqt )
+    use types_mod
+    implicit none
+
+    real(kind=DP) :: c0, c1, c2, c3, c4, theta, eqt
+
+    theta = calcTheta()
+
+    ! The equation of time accounts for the discrepancy between the
+    ! apparent and the mean solar time at a given location.
+    c0 = 0.000075_DP
+    c1 = 0.001868_DP
+    c2 = -0.032077_DP
+    c3 = -0.014615_DP
+    c4 = -0.040849_DP
+    eqt = c0 + c1 * cos(theta) + c2 * sin(theta) + c3 * cos(2.0_DP * theta) + &
+          c4 * sin(2.0_DP * theta)
+
+    return
+  end function
   ! -----------------------------------------------------------------
   ! Calculate the local hour angle (radians) and the solar zenith
   ! angle (radians). Equations taken from "The Atmosphere and UV-B
@@ -88,23 +108,12 @@ contains
     implicit none
 
     real(kind=DP), intent(in) :: t, dec
-    real(kind=DP) :: theta, pi, lat
-    real(kind=DP) :: c0, c1, c2, c3, c4
+    real(kind=DP) :: pi, lat
     real(kind=DP) :: currentFracDay, currentFracHour
-
-    theta = calcTheta()
 
     pi = 4.0_DP * atan( 1.0_DP )
 
-    ! The equation of time accounts for the discrepancy between the
-    ! apparent and the mean solar time at a given location.
-    c0 = 0.000075_DP
-    c1 = 0.001868_DP
-    c2 = -0.032077_DP
-    c3 = -0.014615_DP
-    c4 = -0.040849_DP
-    eqtime = c0 + c1 * cos(theta) + c2 * sin(theta) + c3 * cos(2.0_DP * theta) + &
-             c4 * sin(2.0_DP * theta)
+    eqtime = calcEQT()
 
     ! The local hour angle is the angle between the observer's
     ! meridian and the Sun's meridian. Time must be in GMT/UTC and

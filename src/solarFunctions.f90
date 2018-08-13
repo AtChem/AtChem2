@@ -104,7 +104,6 @@ contains
   ! Photobiology, 1993).
   subroutine calcZenith( t, dec )
     use types_mod
-    use date_mod, only : currentDayOfYear
     use zenith_data_mod, only : eqtime, lha, latitude, longitude, sinld, cosld, &
                                 cosx, secx, cosx_threshold, cosx_below_threshold
     implicit none

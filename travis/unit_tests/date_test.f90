@@ -144,18 +144,18 @@ contains
     startYear = 2004_DI
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP-1 )
     call assert_true( currentDayOfYear == 162_DI , "Current day of year, starting at Jan 1 2004, &
-    with 163*86400-1 seconds, is day 162")
+    &with 163*86400-1 seconds, is day 162")
     call assert_true( currentMonth == 6_DI , "Current month, starting at Jan 1 2004, with 163*86400-1 seconds, is month 6")
     call assert_true( currentDayOfMonth == 11_DI , "Current day of month, starting at Jan 1 2004, &
-    with 163*86400-1 seconds, is day 11")
+    &with 163*86400-1 seconds, is day 11")
 
     ! first second of a day after leap day
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP )
     call assert_true( currentDayOfYear == 163_DI , "Current day of year, starting at Jan 1 2004, &
-    with 163*86400 seconds, is day 163")
+    &with 163*86400 seconds, is day 163")
     call assert_true( currentMonth == 6_DI , "Current month, starting at Jan 1 2004, with 163*86400 seconds, is month 6")
     call assert_true( currentDayOfMonth == 12_DI , "Current day of month, starting at Jan 1 2004, &
-    with 163*86400 seconds, is day 12")
+    &with 163*86400 seconds, is day 12")
 
     ! last second of a day after non-existent leap day
     startDay = 1_DI
@@ -163,18 +163,18 @@ contains
     startYear = 2001_DI
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP-1 )
     call assert_true( currentDayOfYear == 162_DI , "Current day of year, starting at Jan 1 2001, &
-    with 163*86400-1 seconds, is day 162")
+    &with 163*86400-1 seconds, is day 162")
     call assert_true( currentMonth == 6_DI , "Current month, starting at Jan 1 2001, with 163*86400-1 seconds, is month 6")
     call assert_true( currentDayOfMonth == 12_DI , "Current day of month, starting at Jan 1 2001, &
-    with 163*86400-1 seconds, is day 12")
+    &with 163*86400-1 seconds, is day 12")
 
     ! first second of a day after non-existent leap day
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP )
     call assert_true( currentDayOfYear == 163_DI , "Current day of year, starting at Jan 1 2001, &
-    with 163*86400 seconds, is day 163")
+    &with 163*86400 seconds, is day 163")
     call assert_true( currentMonth == 6_DI , "Current month, starting at Jan 1 2001, with 163*86400 seconds, is month 6")
     call assert_true( currentDayOfMonth == 13_DI , "Current day of month, starting at Jan 1 2001, &
-    with 163*86400 seconds, is day 13")
+    &with 163*86400 seconds, is day 13")
 
     ! last second of a day after leap day with different start day
     startDay = 12_DI
@@ -182,18 +182,18 @@ contains
     startYear = 2004_DI
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP-1 )
     call assert_true( currentDayOfYear == 204_DI , "Current day of year, starting at June 12 2004, &
-    with 163*86400-1 seconds, is day 162")
+    &with 163*86400-1 seconds, is day 162")
     call assert_true( currentMonth == 7_DI , "Current month, starting at June 12 2004, with 163*86400-1 seconds, is month 6")
     call assert_true( currentDayOfMonth == 23_DI , "Current day of month, starting at June 12 2004, &
-    with 163*86400-1 seconds, is day 11")
+    &with 163*86400-1 seconds, is day 11")
 
     ! first second of a day after leap day with different start day
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP )
     call assert_true( currentDayOfYear == 205_DI , "Current day of year, starting at Feb 12 2004, &
-    with 163*86400 seconds, is day 163")
+    &with 163*86400 seconds, is day 163")
     call assert_true( currentMonth == 7_DI , "Current month, starting at Feb 12 2004, with 163*86400 seconds, is month 6")
     call assert_true( currentDayOfMonth == 24_DI , "Current day of month, starting at Feb 12 2004, &
-    with 163*86400 seconds, is day 12")
+    &with 163*86400 seconds, is day 12")
 
     ! last second of a day after non-existent leap day with different start day
     startDay = 12_DI
@@ -201,46 +201,46 @@ contains
     startYear = 2001_DI
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP-1 )
     call assert_true( currentDayOfYear == 204_DI , "Current day of year, starting at Feb 12 2001, &
-    with 163*86400-1 seconds, is day 162")
+    &with 163*86400-1 seconds, is day 162")
     call assert_true( currentMonth == 7_DI , "Current month, starting at Feb 12 2001, with 163*86400-1 seconds, is month 6")
     call assert_true( currentDayOfMonth == 24_DI , "Current day of month, starting at Feb 12 2001, &
-    with 163*86400-1 seconds, is day 12")
+    &with 163*86400-1 seconds, is day 12")
 
     ! first second of a day after non-existent leap day with different start day
     call calcCurrentDateParameters( 163.0_DP * 86400.0_DP )
     call assert_true( currentDayOfYear == 205_DI , "Current day of year, starting at Feb 12 2001, &
-    with 163*86400 seconds, is day 163")
+    &with 163*86400 seconds, is day 163")
     call assert_true( currentMonth == 7_DI , "Current month, starting at Feb 12 2001, with 163*86400 seconds, is month 6")
     call assert_true( currentDayOfMonth == 25_DI , "Current day of month, starting at Feb 12 2001, &
-    with 163*86400 seconds, is day 13")
+    &with 163*86400 seconds, is day 13")
 
     startDay = 31_DI
     startMonth = 12_DI
     startYear = 2001_DI
     call calcCurrentDateParameters( 1.0_DP * 86400.0_DP )
     call assert_true( currentYear == 2002_DI , "Current year, starting at Dec 31 2001, &
-    with 1*86400 seconds, is 2002")
+    &with 1*86400 seconds, is 2002")
     call calcCurrentDateParameters( 1.0_DP * 86400.0_DP-1.0_DP)
     call assert_true( currentYear == 2001_DI , "Current year, starting at Dec 31 2001, &
-    with 1*86400-1 seconds, is 2001")
+    &with 1*86400-1 seconds, is 2001")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP) * 86400.0_DP )
     call assert_true( currentYear == 2003_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365)*86400 seconds, is 2003")
+    &with (1+365)*86400 seconds, is 2003")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP) * 86400.0_DP-1.0_DP)
     call assert_true( currentYear == 2002_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365)*86400-1 seconds, is 2002")
+    &with (1+365)*86400-1 seconds, is 2002")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP + 365.0_DP) * 86400.0_DP )
     call assert_true( currentYear == 2004_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365+365)*86400 seconds, is 2004")
+    &with (1+365+365)*86400 seconds, is 2004")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP + 365.0_DP) * 86400.0_DP-1.0_DP)
     call assert_true( currentYear == 2003_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365+365)*86400-1 seconds, is 2003")
+    &with (1+365+365)*86400-1 seconds, is 2003")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP + 365.0_DP + 366.0_DP) * 86400.0_DP )
     call assert_true( currentYear == 2005_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365+365+366)*86400 seconds, is 2005")
+    &with (1+365+365+366)*86400 seconds, is 2005")
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP + 365.0_DP + 366.0_DP) * 86400.0_DP-1.0_DP)
     call assert_true( currentYear == 2004_DI , "Current year, starting at Dec 31 2001, &
-    with (1+365+365+366*86400-1 seconds, is 2004")
+    &with (1+365+365+366*86400-1 seconds, is 2004")
 
   end subroutine test_calcCurrentDateParameters
 

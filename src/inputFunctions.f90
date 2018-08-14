@@ -397,7 +397,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisConstants.config'
+    filename = trim( param_dir ) // '/photolysisConstant.config'
     write (*, '(A)') ' Reading photolysis constants from file...'
     if ( allocated .eqv. .false. ) then
       call allocate_photolysis_constants_variables()
@@ -453,12 +453,12 @@ contains
 
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
-    call inquire_or_abort( trim( param_dir ) // '/photolysisRatesConstrained.config', 'readPhotoConstraints()')
+    call inquire_or_abort( trim( param_dir ) // '//photolysisConstrained.config', 'readPhotoConstraints()')
     if ( allocated .eqv. .false. ) then
       call allocate_constrained_photolysis_rates_variables()
       allocated = .true.
     end if
-    open (10, file=trim( param_dir ) // '/photolysisRatesConstrained.config', status='old') ! input file
+    open (10, file=trim( param_dir ) // '//photolysisConstrained.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
       if ( ierr /= 0 ) then
@@ -675,7 +675,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
-  ! model/configuration/photolysisConstants.config doesn't exist/is empty.
+  ! model/configuration/photolysisConstant.config doesn't exist/is empty.
   ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
   ! mcm/photolysis-rates_v3.3.1. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
@@ -1076,9 +1076,9 @@ contains
     call readPhotolysisNumbers()
     ! Now that we know the photolysis rates' numbers, we can go about setting their values
 
-    ! Check whether photolysisConstants.config file exists - if so, and it is non-empty,
+    ! Check whether photolysisConstant.config file exists - if so, and it is non-empty,
     ! call readPhotolysisConstants() to set those to their given value, and set the rest to zero.
-    filename = trim( param_dir ) // '/photolysisConstants.config'
+    filename = trim( param_dir ) // '/photolysisConstant.config'
     write (*, '(A)') ' Looking for photolysis constants file...'
     inquire(file=filename, exist=file_exists)
     usePhotolysisConstants = .false.
@@ -1101,7 +1101,7 @@ contains
       ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
       ! call readPhotolysisConstraints() to read in their values.
       write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
-      filename = trim( param_dir ) // '/photolysisRatesConstrained.config'
+      filename = trim( param_dir ) // '//photolysisConstrained.config'
       write (*, '(A)') ' Looking for photolysis constraints file...'
       inquire(file=filename, exist=file_exists)
       if ( file_exists .eqv. .true. ) then

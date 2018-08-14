@@ -26,19 +26,19 @@ from matplotlib.backends.backend_pdf import PdfPages
 os.chdir(sys.argv[1])
 print os.getcwd()
 
-with open('concentration.output') as f:
+with open('speciesConcentrations.output') as f:
     var1 = f.readline().split()
-with open('envVar.output') as f:
+with open('environmentVariables.output') as f:
     var2 = f.readline().split()
 with open('photolysisRates.output') as f:
     var3 = f.readline().split()
-with open('photoRateCalcParameters.output') as f:
+with open('photolysisRatesParameters.output') as f:
     var4 = f.readline().split()
 
-df1 = np.loadtxt('concentration.output', skiprows=1, unpack=True)
-df2 = np.loadtxt('envVar.output', skiprows=1, unpack=True)
+df1 = np.loadtxt('speciesConcentrations.output', skiprows=1, unpack=True)
+df2 = np.loadtxt('environmentVariables.output', skiprows=1, unpack=True)
 df3 = np.loadtxt('photolysisRates.output', skiprows=1, unpack=True)
-df4 = np.loadtxt('photoRateCalcParameters.output', skiprows=1, unpack=True)
+df4 = np.loadtxt('photolysisRatesParameters.output', skiprows=1, unpack=True)
 
 nc1 = df1.shape[0]
 nc2 = df2.shape[0]
@@ -49,7 +49,7 @@ nc4 = df4.shape[0]
 
 with PdfPages('atchem2_output.pdf') as pdf:
 
-    ## concentration.output
+    ## speciesConcentrations.output
     fig = plt.figure(figsize=(11,7))
     j = 1
     for i in range(1,nc1):
@@ -64,7 +64,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
             j = j + 1
     pdf.savefig(fig)
 
-    ## envVar.output
+    ## environmentVariables.output
     fig = plt.figure(figsize=(11,7))
     j = 1
     for i in range(1,nc2):
@@ -94,7 +94,7 @@ with PdfPages('atchem2_output.pdf') as pdf:
             j = j + 1
     pdf.savefig(fig)
 
-    ## photoRateCalcParameters.output
+    ## photolysisRatesParameters.output
     fig = plt.figure(figsize=(11,7))
     j = 1
     for i in range(1,nc4):

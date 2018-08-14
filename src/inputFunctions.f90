@@ -269,14 +269,14 @@ contains
   ! ----------------------------------------------------------------- !
   ! Set the concentrations of all species - default to 0.0_DP.
   ! Called in readAndSetInitialConcentrations()
-  subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputConcentrations )
+  subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputSpecies )
     use types_mod
     use storage_mod, only : maxSpecLength
     implicit none
 
     character(len=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
     real(kind=DP), intent(in) :: inputConcentrations(:)
-    real(kind=DP), intent(out) :: outputConcentrations(:)
+    real(kind=DP), intent(out) :: outputSpecies(:)
     character(len=maxSpecLength) :: k, m
     integer(kind=NPI) :: j, i
     logical :: match
@@ -286,17 +286,17 @@ contains
     ! inputConcentrationsSize), look through refSpeciesNames (size
     ! numSpecies) for the number of this species in that list, then
     ! transer the value from inputConcentrations to
-    ! outputConcentrations. If no match is found, output this to
+    ! outputSpecies. If no match is found, output this to
     ! errors.output, but don't stop, just ignore the input value.
     ! Print outcome of each search into
     ! initialConditionsSetting.output.
     if ( size( concSpeciesNames ) /= size( inputConcentrations ) ) then
       stop "size(concSpeciesNames) /= size(inputConcentrations) in setConcentrations()."
     end if
-    if ( size( refSpeciesNames ) /= size( outputConcentrations ) ) then
-      stop "size(refSpeciesNames) /= size(outputConcentrations) in setConcentrations()."
+    if ( size( refSpeciesNames ) /= size( outputSpecies ) ) then
+      stop "size(refSpeciesNames) /= size(outputSpecies) in setConcentrations()."
     end if
-    outputConcentrations(:) = 0.0_DP
+    outputSpecies(:) = 0.0_DP
     do i = 1, size( concSpeciesNames )
       match = .false.
       k = concSpeciesNames(i)
@@ -304,8 +304,8 @@ contains
         m = refSpeciesNames(j)
         if ( m == k ) then
           match = .true.
-          ! Set concentration in outputConcentrations
-          outputConcentrations(j) = inputConcentrations(i)
+          ! Set concentration in outputSpecies
+          outputSpecies(j) = inputConcentrations(i)
           write (54, '(A, A, A, 1P e15.3)') 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
           exit
         else
@@ -1012,7 +1012,7 @@ contains
   end subroutine readEnvVar
 
   ! ----------------------------------------------------------------- !
-  ! Read outputConcentration.config to get species of interest
+  ! Read outputSpecies.config to get species of interest
   function readSpeciesOfInterest() result ( r )
     use types_mod
     use species_mod, only : getNumberOfSpecies
@@ -1024,7 +1024,7 @@ contains
     character(len=maxFilepathLength) :: filename
     integer(kind=NPI) :: j, nsp, length
 
-    filename = trim( param_dir ) // '/outputConcentration.config'
+    filename = trim( param_dir ) // '/outputSpecies.config'
     write (*, '(A)') ' Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
     allocate (r(length) )

@@ -124,16 +124,16 @@ PROGRAM ATCHEM2
   write (*,*)
 
   ! Open files for output
-  open (unit=50, file=trim( output_dir ) // "/concentration.output")
+  open (unit=50, file=trim( output_dir ) // "/speciesConcentrations.output")
   open (unit=51, file=trim( output_dir ) // "/errors.output")
-  open (unit=52, file=trim( output_dir ) // "/envVar.output")
+  open (unit=52, file=trim( output_dir ) // "/environmentVariables.output")
   open (unit=53, file=trim( output_dir ) // "/finalModelState.output")
   open (unit=54, file=trim( output_dir ) // "/initialConditionsSetting.output")
   open (unit=55, file=trim( output_dir ) // "/jacobian.output")
   open (unit=56, file=trim( output_dir ) // "/lossRates.output")
   open (unit=57, file=trim( output_dir ) // "/mainSolverParameters.output")
   open (unit=58, file=trim( output_dir ) // "/photolysisRates.output")
-  open (unit=59, file=trim( output_dir ) // "/photoRateCalcParameters.output")
+  open (unit=59, file=trim( output_dir ) // "/photolysisRatesParameters.output")
   open (unit=60, file=trim( output_dir ) // "/productionRates.output")
   flush(6)
 

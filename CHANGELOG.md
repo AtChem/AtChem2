@@ -4,19 +4,21 @@
 
 - implement a new directory structure
 - simplify the installation procedure and remove `makefile.local`
-- restructure the handling and calculation of the photolysis rates
+- restructure the handling and calculation of photolysis rates
 - fix the calculation of sun declination and solar zenith angle
 - improve handling of dates and numerical precision
+- check calculation of reaction rates and improve format of instantaneousRates files
 - implement code coverage testing with [Codecov](https://codecov.io/)
 - implement a unit testing framework (new dependencies: **Ruby**, **FRUIT**)
 - add unit tests for some functions
+- improve running and reporting of the testsuite
 - add plotting tools in R, Python, Matlab, gnuplot
 
 ## v1.0 (July 2017)
 
 - create a code repository on [github.com](https://github.com/)
 - adopt the [MIT open source license](https://opensource.org/licenses/MIT)
-- upgrade to **CVODE** version 2.9.0
+- upgrade to **CVODE** version 2.9
 - remove the web interface and all the code related to AtChem-online [web service](https://atchem.leeds.ac.uk/)
 - standardize the codebase to Fortran95, use a consistent modular structure for the source code
 - adopt coding style guidelines and standardize the naming of variables, subroutines, source files

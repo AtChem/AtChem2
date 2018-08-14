@@ -190,8 +190,8 @@ contains
 
     write (*, '(A)') ' Reading species names from mechanism.species...'
     fileLocation=trim( param_dir ) // '/mechanism.species'
-    ! Read in species number and name from mC/mechanism.species to
-    ! speciesName and sdummy (to be thrown).
+    ! Read in species number and name from model/configuration/mechanism.species
+    ! to speciesName and sdummy (to be thrown).
     allocate(speciesName(getNumberOfSpecies()))
     call inquire_or_abort( fileLocation, 'readSpecies()')
     open (10, file=fileLocation) ! input file
@@ -205,11 +205,11 @@ contains
   end function readSpecies
 
   ! -----------------------------------------------------------------
-  ! Reads in concentration per species from
-  ! mC/speciesInitialConcentrations.config Checks that there aren't more
-  ! inputs than species.  concSpeciesNames is filled with all species
-  ! names of initial concentrations, concentration is filled with
-  ! corresponding concentration VALUES
+  ! Reads in concentration per species from model/configuration/initialSpecies.config
+  ! Checks that there aren't more inputs than species.
+  ! concSpeciesNames is filled with all species names of initial
+  ! concentrations, concentration is filled with corresponding
+  ! concentration VALUES
   subroutine readAndSetInitialConcentrations( speciesConcs )
     use types_mod
     use species_mod, only : getNumberOfSpecies, getSpeciesList
@@ -227,7 +227,7 @@ contains
     integer(kind=IntErr) :: ierr
 
     write (*, '(A)') ' Reading initial concentrations...'
-    filename = trim( param_dir ) // '/speciesInitialConcentrations.config'
+    filename = trim( param_dir ) // '/initialSpecies.config'
     ! Count lines in file, allocate appropriately
     numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()
@@ -282,13 +282,12 @@ contains
     logical :: match
 
     ! For each input species in concSpeciesNames (size concCounter),
-    ! and matching value in inputConcentrations (size
-    ! inputConcentrationsSize), look through refSpeciesNames (size
-    ! numSpecies) for the number of this species in that list, then
-    ! transer the value from inputConcentrations to
-    ! outputConcentrations. If no match is found, output this to
-    ! errors.output, but don't stop, just ignore the input value.
-    ! Print outcome of each search into
+    ! and matching value in inputConcentrations (size inputConcentrationsSize),
+    ! look through refSpeciesNames (size numSpecies) for the number of
+    ! this species in that list, then transer the value from
+    ! inputConcentrations to outputConcentrations. If no match is
+    ! found, output this to errors.output, but don't stop, just ignore
+    ! the input value.  Print outcome of each search into
     ! initialConditionsSetting.output.
     if ( size( concSpeciesNames ) /= size( inputConcentrations ) ) then
       stop "size(concSpeciesNames) /= size(inputConcentrations) in setConcentrations()."
@@ -382,7 +381,8 @@ contains
 
   ! -----------------------------------------------------------------
   !  Set all the photolysis rates to their constant values from file
-  !  Any photolysis rates not in the file will be set to zero when evaluated for j.
+  !  Any photolysis rates not in the file will be set to zero when
+  !  evaluated for j.
   subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, &
@@ -526,7 +526,8 @@ contains
 
   ! -----------------------------------------------------------------
   ! Returns an array of the numbers of unconstrained photolysis rates,
-  ! and a logical indicating whether there are any such rates (existUnconstrainedPhotos)
+  ! and a logical indicating whether there are any such rates
+  ! (existUnconstrainedPhotos)
   subroutine findUnconstrainedPhotos()
     use types_mod
     use photolysis_rates_mod, only : photoNumbers, totalNumPhotos, constrainedPhotoNumbers, numConstrainedPhotoRates, &
@@ -602,8 +603,8 @@ contains
 
 
   ! -----------------------------------------------------------------
-  ! Read in the photolysis rates from the MCM file. If the rate
-  ! is not present in the constrained rates list, read in that rate's
+  ! Read in the photolysis rates from the MCM file. If the rate is not
+  ! present in the constrained rates list, read in that rate's
   ! identifiers to unconstrainedPhotoNames/Numbers, with the data
   ! stored in ck, cl, cmm, cnn, and transmissionFactor
   subroutine readUnconstrainedPhotolysisRates()
@@ -675,9 +676,9 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
-  ! model/configuration/photolysisConstant.config doesn't exist/is empty.
-  ! It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and transmissionFactor from
-  ! mcm/photolysis-rates_v3.3.1. It uses
+  ! model/configuration/photolysisConstant.config doesn't exist/is
+  ! empty. It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and
+  ! transmissionFactor from mcm/photolysis-rates_v3.3.1. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -734,12 +735,10 @@ contains
 
 
   ! -----------------------------------------------------------------
-  ! Read in contents of
-  ! model/configuration/outputProductionRates.config and
-  ! model/configuration/outputLossRates.config, which contains a list
-  ! of the species we want to have outputted to
-  ! model/configuration/{production,loss}Rates.output Output the contents in r, with i as
-  ! the length of r.
+  ! Read in contents of model/configuration/outputRates.config, which
+  ! contains a list of the species we want to write to
+  ! model/output/{production,loss}Rates.output Output the contents in
+  ! r, with i as the length of r.
   subroutine readProductsOrReactantsOfInterest( filename, r )
     use types_mod
     use storage_mod, only : maxSpecLength
@@ -791,8 +790,8 @@ contains
   end function getParametersFromFile
 
   ! -----------------------------------------------------------------
-  ! This routine reads in the parameters required to calculate the reference
-  ! rate of the JFac photolysis rate
+  ! This routine reads in the parameters required to calculate the
+  ! reference rate of the JFac photolysis rate
   subroutine readJFacCalculationParameters()
     use types_mod
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
@@ -864,9 +863,9 @@ contains
     write (*, '(A)') ' Reading environment variables...'
 
     ! Count number of environment variables by reading in lines from
-    ! file, and then adding 1 to account for M, which should be omitted
-    ! from the config file since it is always calculated from temperature
-    ! and pressure
+    ! file, and then adding 1 to account for M, which should be
+    ! omitted from the config file since it is always calculated from
+    ! temperature and pressure
     numEnvVars = int( count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
 
     ! Allocate storage for current values of env vars used for output
@@ -1111,7 +1110,7 @@ contains
         if ( numConstrainedPhotoRates > 0) then
           call readPhotolysisConstraints()
           ! Test whether there are any unconstrained species left. If there are, read their calculation parameters in.
-          ! Exact test is whether there are any species in pR.config that aren't already covered by constraints.
+          ! Exact test is whether there are any species in outputRates.config that aren't already covered by constraints.
           call findUnconstrainedPhotos()
           if ( existUnconstrainedPhotos .eqv. .false. ) then
             write (*, '(2A)') ' Photolysis constraint file constrains all photolysis rates, ', &

@@ -3,6 +3,7 @@
 ## v1.1 (August 2018)
 
 - implement a new directory structure
+- rename some configuration and output files
 - simplify the installation procedure and remove `makefile.local`
 - restructure the handling and calculation of photolysis rates
 - fix the calculation of sun declination and solar zenith angle
@@ -13,6 +14,7 @@
 - add unit tests for some functions
 - improve running and reporting of the testsuite
 - add plotting tools in R, Python, Matlab, gnuplot
+- fix a number of minor bugs
 
 ## v1.0 (July 2017)
 

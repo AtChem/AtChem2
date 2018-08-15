@@ -205,7 +205,7 @@ contains
   end function readSpecies
 
   ! -----------------------------------------------------------------
-  ! Reads in concentration per species from model/configuration/initialSpecies.config
+  ! Reads in concentration per species from model/configuration/initialConcentrations.config
   ! Checks that there aren't more inputs than species.
   ! concSpeciesNames is filled with all species names of initial
   ! concentrations, concentration is filled with corresponding
@@ -227,7 +227,7 @@ contains
     integer(kind=IntErr) :: ierr
 
     write (*, '(A)') ' Reading initial concentrations...'
-    filename = trim( param_dir ) // '/initialSpecies.config'
+    filename = trim( param_dir ) // '/initialConcentrations.config'
     ! Count lines in file, allocate appropriately
     numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()

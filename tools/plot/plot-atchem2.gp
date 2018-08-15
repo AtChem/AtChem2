@@ -21,10 +21,10 @@
 cd ARG1
 pwd
 
-df1 = 'concentration.output'
-df2 = 'envVar.output'
+df1 = 'speciesConcentrations.output'
+df2 = 'environmentVariables.output'
 df3 = 'photolysisRates.output'
-df4 = 'photoRateCalcParameters.output'
+df4 = 'photolysisRatesParameters.output'
 
 stats df1 skip 1 noout; nc1 = STATS_columns
 stats df2 skip 1 noout; nc2 = STATS_columns
@@ -36,7 +36,7 @@ stats df4 skip 1 noout; nc4 = STATS_columns
 set terminal pdf size 11,7
 set output 'atchem2_output.pdf'
 
-## concentration.output
+## speciesConcentrations.output
 set multiplot layout 3,2
 j = 1
 do for [i=2:nc1] {
@@ -52,7 +52,7 @@ do for [i=2:nc1] {
 }
 unset multiplot
 
-## envVar.output
+## environmentVariables.output
 set multiplot layout 3,2
 j = 1
 do for [i=2:nc2] {
@@ -84,7 +84,7 @@ do for [i=2:nc3] {
 }
 unset multiplot
 
-## photoRateCalcParameters.output
+## photolysisRatesParameters.output
 set multiplot layout 3,2
 j = 1
 do for [i=2:nc4] {

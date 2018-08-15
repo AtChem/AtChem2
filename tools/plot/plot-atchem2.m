@@ -22,23 +22,23 @@ arg_list = argv();
 cd(arg_list{1});
 pwd
 
-fin = fopen('concentration.output','r');
+fin = fopen('speciesConcentrations.output','r');
 var1 = strsplit(fgetl(fin))(2:end);
 fclose(fin);
-fin = fopen('envVar.output','r');
+fin = fopen('environmentVariables.output','r');
 var2 = strsplit(fgetl(fin))(2:end);
 fclose(fin);
 fin = fopen('photolysisRates.output','r');
 var3 = strsplit(fgetl(fin))(2:end);
 fclose(fin);
-fin = fopen('photoRateCalcParameters.output','r');
+fin = fopen('photolysisRatesParameters.output','r');
 var4 = strsplit(fgetl(fin))(2:end);
 fclose(fin);
 
-df1 = dlmread ('concentration.output', '', 1, 0);
-df2 = dlmread ('envVar.output', '', 1, 0);
+df1 = dlmread ('speciesConcentrations.output', '', 1, 0);
+df2 = dlmread ('environmentVariables.output', '', 1, 0);
 df3 = dlmread ('photolysisRates.output', '', 1, 0);
-df4 = dlmread ('photoRateCalcParameters.output', '', 1, 0);
+df4 = dlmread ('photolysisRatesParameters.output', '', 1, 0);
 
 nc1 = size(df1)(2);
 nc2 = size(df2)(2);
@@ -47,7 +47,7 @@ nc4 = size(df4)(2);
 
 %% ---------------------------- %%
 
-%% concentration.output
+%% speciesConcentrations.output
 j = 1;
 for i = 2:1:nc1
   subplot(3,2,j)
@@ -60,7 +60,7 @@ for i = 2:1:nc1
   end
 end
 
-%% envVar.output
+%% environmentVariables.output
 j = 1;
 for i = 2:1:nc2
   subplot(3,2,j)
@@ -86,7 +86,7 @@ for i = 2:1:nc3
   end
 end
 
-%% photoRateCalcParameters.output
+%% photolysisRatesParameters.output
 j = 1;
 for i = 2:1:nc4
   subplot(3,2,j)

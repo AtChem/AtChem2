@@ -22,10 +22,10 @@ cmd_args <- commandArgs(trailingOnly = TRUE)
 setwd(cmd_args[1])
 getwd()
 
-df1 <- read.table("concentration.output", header=T)
-df2 <- read.table("envVar.output", header=T)
+df1 <- read.table("speciesConcentrations.output", header=T)
+df2 <- read.table("environmentVariables.output", header=T)
 df3 <- read.table("photolysisRates.output", header=T)
-df4 <- read.table("photoRateCalcParameters.output", header=T)
+df4 <- read.table("photolysisRatesParameters.output", header=T)
 
 nc1 <- ncol(df1)
 nc2 <- ncol(df2)
@@ -36,14 +36,14 @@ nc4 <- ncol(df4)
 
 cairo_pdf("atchem2_output.pdf", onefile=T, width=11, height=7)
 
-## concentration.output
+## speciesConcentrations.output
 par(mfrow=c(3,2))
 for (i in 2:nc1) {
   plot(df1[[1]], df1[[i]], type="l",
        main=colnames(df1[i]), xlab="seconds", ylab="")
 }
 
-## envVar.output
+## environmentVariables.output
 par(mfrow=c(3,2))
 for (i in 2:nc2) {
   plot(df2[[1]], df2[[i]], type="l",
@@ -57,7 +57,7 @@ for (i in 2:nc3) {
        main=colnames(df3[i]), xlab="seconds", ylab="")
 }
 
-## photoRateCalcParameters.output
+## photolysisRatesParameters.output
 par(mfrow=c(3,2))
 for (i in 2:nc4) {
   plot(df4[[1]], df4[[i]], type="l",

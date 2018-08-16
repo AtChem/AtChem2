@@ -51,17 +51,13 @@ contains
   ! Calculate the sun declination (radians). Equations taken from "The
   ! Atmosphere and UV-B Radiation at Ground Level" by S. Madronich
   ! (Environmental UV Photobiology, 1993).
-  pure function calcDec() result ( dec )
+  pure function decFromTheta( theta ) result ( dec )
     use types_mod
     implicit none
 
-    real(kind=DP) :: theta, dec
-    real(kind=DP) :: b0, b1, b2, b3, b4, b5, b6
+    real(kind=DP), intent(in) :: theta
+    real(kind=DP) :: b0, b1, b2, b3, b4, b5, b6, dec
 
-    theta = calcTheta()
-
-    ! The sun declination is the angle between the center of the Sun
-    ! and Earth's equatorial plane.
     b0 =  0.006918_DP
     b1 = -0.399912_DP
     b2 =  0.070257_DP
@@ -69,8 +65,27 @@ contains
     b4 =  0.000907_DP
     b5 = -0.002697_DP
     b6 =  0.001480_DP
+    
     dec = b0 + b1 * cos(theta) + b2 * sin(theta) + b3 * cos(2.0_DP * theta) + &
           b4 * sin(2.0_DP * theta) + b5 * cos(3.0_DP * theta) + b6 * sin(3.0_DP * theta)
+
+    return
+  end function decFromTheta
+
+  ! -----------------------------------------------------------------
+  ! Calculate the sun declination (radians). Firstly update theta
+  ! (day angle) to today's value, then calculate dec from that.
+  pure function calcDec() result ( dec )
+    use types_mod
+    implicit none
+
+    real(kind=DP) :: theta, dec
+
+    theta = calcTheta()
+
+    ! The sun declination is the angle between the center of the Sun
+    ! and Earth's equatorial plane.
+    dec = decFromTheta( theta )
 
     return
   end function calcDec

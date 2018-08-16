@@ -167,8 +167,8 @@ PROGRAM ATCHEM2
   write (*, '(A)') ' Species requiring detailed rate output'
   write (*, '(A)') '----------------------------------------'
 
-  ! Read in product species of interest, and set up variables to hold
-  ! these
+  ! Read in species requiring detailed reats output, and set up variables to
+  ! hold these
   write (*, '(A)') ' Reading which species require detailed rate output...'
   call readDetailedRatesSpeciesNames( trim( param_dir ) // '/outputRates.config', detailedRatesSpeciesName )
   write (*, '(A)') ' Finished reading which species require detailed rate output.'

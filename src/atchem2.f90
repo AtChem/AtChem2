@@ -64,7 +64,6 @@ PROGRAM ATCHEM2
   integer(kind=NPI), allocatable :: detailedRatesSpecies(:)
   character(len=maxSpecLength), allocatable :: detailedRatesSpeciesName(:)
   ! Declarations for concentration outputs
-  real(kind=DP), allocatable :: concsOfSpeciesOfInterest(:)
   character(len=maxSpecLength), allocatable :: speciesOfInterest(:)
   ! simulation output time variables
   integer(kind=QI) :: time, elapsed
@@ -247,9 +246,6 @@ PROGRAM ATCHEM2
   speciesOfInterest = readSpeciesOfInterest()
   write (*,*)
 
-  ! Allocate concsOfSpeciesOfInterest
-  allocate ( concsOfSpeciesOfInterest(size( speciesOfInterest )))
-
   flush(stderr)
 
   ! *****************************************************************
@@ -280,8 +276,7 @@ PROGRAM ATCHEM2
   call readSpeciesConstraints( t, speciesConcs )
   write (*,*)
 
-  concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
-  call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
+  call outputSpeciesOfInterest( t, speciesOfInterest, speciesConcs )
 
   ! This outputs z, which is speciesConcs with all the constrained
   ! species removed.
@@ -412,8 +407,7 @@ PROGRAM ATCHEM2
       call outputRates( detailedRatesSpecies, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, lossRates, 0_SI )
     end if
 
-    concsOfSpeciesOfInterest = getConcForSpeciesOfInterest( speciesConcs, speciesOfInterest )
-    call outputSpeciesOfInterest( t, speciesOfInterest, concsOfSpeciesOfInterest )
+    call outputSpeciesOfInterest( t, speciesOfInterest, speciesConcs )
     call outputPhotolysisRates( t )
 
     ! Output instantaneous rates
@@ -475,7 +469,7 @@ PROGRAM ATCHEM2
   call FCVFREE()
   deallocate (speciesConcs, z)
   deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
-  deallocate (concsOfSpeciesOfInterest, detailedRatesSpeciesName, speciesOfInterest)
+  deallocate (detailedRatesSpeciesName, speciesOfInterest)
   deallocate (instantaneousRates)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)

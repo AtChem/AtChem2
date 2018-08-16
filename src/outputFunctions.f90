@@ -330,17 +330,20 @@ contains
   ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
   ! If any concentration is negative, then set it to zero before
   ! printing.
-  subroutine outputSpeciesOfInterest( t, specOutReqNames, arrayOfConcs )
+  subroutine outputSpeciesOfInterest( t, specOutReqNames, allSpeciesConcs )
     use types_mod
     use storage_mod, only : maxSpecLength
+    use config_functions_mod, only: getConcForSpeciesOfInterest
     implicit none
 
     real(kind=DP), intent(in) :: t
     character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
-    real(kind=DP), intent(inout) :: arrayOfConcs(:)
+    real(kind=DP), intent(in) :: allSpeciesConcs(:)
+    real(kind=DP), allocatable :: arrayOfConcs(:)
     integer(kind=NPI) :: i
     logical :: first_time = .true.
 
+    arrayOfConcs = getConcForSpeciesOfInterest( allSpeciesConcs, specOutReqNames )
     if ( size( specOutReqNames ) /= size( arrayOfConcs ) ) then
       stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOfInterest()."
     end if

@@ -739,7 +739,7 @@ contains
   ! contains a list of the species we want to write to
   ! model/output/{production,loss}Rates.output Output the contents in
   ! r, with i as the length of r.
-  subroutine readProductsOrReactantsOfInterest( filename, r )
+  subroutine readDetailedRatesSpeciesNames( filename, r )
     use types_mod
     use storage_mod, only : maxSpecLength
     implicit none
@@ -763,7 +763,7 @@ contains
     end if
 
     return
-  end subroutine readProductsOrReactantsOfInterest
+  end subroutine readDetailedRatesSpeciesNames
 
   ! -----------------------------------------------------------------
   ! Read in parameters from file at input_file, and save the contents

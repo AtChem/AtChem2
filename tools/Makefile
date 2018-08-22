@@ -28,11 +28,13 @@ ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran
 FORT_COMP    = gfortran
-CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode-3.1.1-install/lib
+FORT_LIB     = ""
+CVODELIB     = /home/travis/build/AtChem/AtChem2/cvode-3.1.2-install/lib
 else
 # if macOS, pass homebrew gfortran
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
-CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode-3.1.1-install/lib
+FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9
+CVODELIB     = /Users/travis/build/AtChem/AtChem2/cvode-3.1.2-install/lib
 endif
 # else it's not on Travis, so set the fortran compiler as gfortran
 else

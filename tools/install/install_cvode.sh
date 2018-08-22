@@ -60,15 +60,15 @@ fi
 # Move to provided directory
 cd $cvode_dir
 
-wget https://computation.llnl.gov/projects/sundials/download/cvode-3.1.1.tar.gz
-tar -zxf cvode-3.1.1.tar.gz
-rm cvode-3.1.1.tar.gz
-cd cvode-3.1.1/
+wget https://computation.llnl.gov/projects/sundials/download/cvode-3.1.2.tar.gz
+tar -zxf cvode-3.1.2.tar.gz
+rm cvode-3.1.2.tar.gz
+cd cvode-3.1.2/
 
 mkdir build
 cd build
 
-cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode-3.1.1-install \
+cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode-3.1.2-install \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=$FORT_COMP \
     -DBUILD_ARKODE:BOOL=OFF \

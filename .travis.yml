@@ -39,6 +39,7 @@
     - ./tools/build.sh ./tools/mcm_example.fac
 
   script:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ls -R /Users/travis/build/AtChem/AtChem2/cvode-3.1.2-install/ ; fi
     - ./atchem2
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
     - make clean

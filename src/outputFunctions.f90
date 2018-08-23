@@ -333,7 +333,7 @@ contains
   subroutine outputSpeciesOfInterest( t, specOutReqNames, allSpeciesConcs )
     use types_mod
     use storage_mod, only : maxSpecLength
-    use config_functions_mod, only: getConcForSpeciesOfInterest
+    use config_functions_mod, only : getConcForSpeciesOfInterest
     implicit none
 
     real(kind=DP), intent(in) :: t

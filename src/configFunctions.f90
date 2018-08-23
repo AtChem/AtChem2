@@ -80,8 +80,8 @@ contains
   end function getIndexWithinList
 
   ! ----------------------------------------------------------------- !
-  ! Fill the second (and later) column(s) of each row of r with the
-  ! numbers of the reactions in which it is present in chs. Used
+  ! Fill the column(s) of each row of r with the
+  ! numbers of the reactions in which it is present in chs. Uses
   ! arrayLen to keep track of how many are present in each row.
   subroutine findReactionsWithProductOrReactant( rSpecies, r, chs, arrayLen )
     use types_mod
@@ -92,11 +92,10 @@ contains
     integer(kind=NPI), intent(out) :: arrayLen(:)
     integer(kind=NPI) :: rCounter, i, j
 
-    ! For each interesting species, held in the first element of each
-    ! row of r, find all reactions in chs which match (i.e. second
-    ! column of chs matches first element of given row from r), and
-    ! append the number of that reaction (first column of chs) to this
-    ! row of r. arrayLen keeps track of how long each row in r is.
+    ! For each interesting species, held in rSpecies, find all reactions
+    ! in chs which match (i.e. second column of chs matches first element of
+    ! given row from r), and append the number of that reaction (first column
+    ! of chs) to this row of r. arrayLen keeps track of how long each row in r is.
     if ( size( arrayLen ) /= size( r, 1 ) ) then
       stop "size(arrayLen) /= size(r, 1) in findReactionsWithProductOrReactant()."
     end if
@@ -107,17 +106,16 @@ contains
       ! loop over elements of 2nd index of chs
       do j = 1, size( chs, 2 )
         ! Is the second element of this row in chs (a species number)
-        ! equal to the first element of this column in r (the
-        ! interesting species number)?  If so, then append the first
+        ! equal to the same element in rSpecies?  If so, then append the first
         ! element of this row in chs (the equation number) to this row
         ! in r, and update the length counter arrayLen for this row.
         if ( chs(2, j) == rSpecies(i) ) then
-          ! Match found
+          ! Match found - fill r with the reaction number
           r(i, rCounter) = chs(1, j)
           rCounter = rCounter + 1
         end if
       end do
-      arrayLen(i) = rCounter
+      arrayLen(i) = rCounter - 1
       rCounter = 1
     end do
 

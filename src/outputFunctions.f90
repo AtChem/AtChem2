@@ -333,7 +333,7 @@ contains
   subroutine outputSpeciesOfInterest( t, specOutReqNames, allSpeciesConcs )
     use types_mod
     use storage_mod, only : maxSpecLength
-    use config_functions_mod, only : getConcForSpeciesOfInterest
+    use config_functions_mod, only : getSubsetOfConcs
     implicit none
 
     real(kind=DP), intent(in) :: t
@@ -343,7 +343,7 @@ contains
     integer(kind=NPI) :: i
     logical :: first_time = .true.
 
-    arrayOfConcs = getConcForSpeciesOfInterest( allSpeciesConcs, specOutReqNames )
+    arrayOfConcs = getSubsetOfConcs( allSpeciesConcs, specOutReqNames )
     if ( size( specOutReqNames ) /= size( arrayOfConcs ) ) then
       stop "size( specOutReqNames ) /= size( arrayOfConcs ) in outputSpeciesOfInterest()."
     end if

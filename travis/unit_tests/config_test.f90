@@ -39,6 +39,7 @@ contains
 
     call assert_true(getIndexWithinList( list, 'a' ) == 1_NPI, "getIndexWithinList, a = 1")
     call assert_true(getIndexWithinList( list, 'e' ) == 5_NPI, "getIndexWithinList, e = 5")
+    ! Any items not in the list should return 0
     call assert_true(getIndexWithinList( list, 'f' ) == 0_NPI, "getIndexWithinList, f = 0")
     call assert_true(getIndexWithinList( list, 'z' ) == 0_NPI, "getIndexWithinList, z = 0")
     call assert_true(getIndexWithinList( list, ' 0' ) == 0_NPI, "getIndexWithinList,  0 = 0")
@@ -85,4 +86,33 @@ contains
     enddo
 
   end subroutine test_findReactionsWithProductOrReactant
+
+  subroutine test_getSubsetOfConcs
+    use types_mod
+    use config_functions_mod, only : getSubsetOfConcs
+    use species_mod, only : setSpeciesList, setNumberOfSpecies
+    use storage_mod, only : maxSpecLength
+    implicit none
+
+    character(len=maxSpecLength) :: fullListOfSpecies(10), speciesSubset(6)
+    real(kind=DP) :: fullListOfConcs(10), concsSubset(6), concsAnswer(6)
+    integer(kind=NPI) :: i
+
+    ! Set up the environment of species
+    fullListOfSpecies = (/ ' CO', 'NO2', ' O3', ' O2', 'H2O', ' OH', 'CO2', ' C6', '  K', ' Pb' /)
+    call setNumberOfSpecies( 10_NPI )
+    call setSpeciesList( fullListOfSpecies )
+
+    ! Pass in the full list of cncentrations, and those we're interest in
+    fullListOfConcs = (/ 0.1_DP, 0.2_DP, 0.5_DP, 0.7_DP, 1.0_DP, 1.3_DP, 1.5_DP, 1.7_DP, 1.9_DP, 2.0_DP /)
+    speciesSubset = (/ ' O3', 'NO2', ' CO', ' C6', 'H2O', ' Pb' /)
+    concsSubset = getSubsetOfConcs( fullListOfConcs, speciesSubset )
+
+    ! The function should return the subset of concentrations for the given species
+    concsAnswer = (/ 0.5_DP, 0.2_DP, 0.1_DP, 1.7_DP, 1.0_DP, 2.0_DP /)
+
+    do i = 1_NPI, size( speciesSubset )
+      call assert_true( concsSubset(i) == concsAnswer(i), "test_getSubsetOfConcs" )
+    enddo
+  end subroutine test_getSubsetOfConcs
 end module config_test

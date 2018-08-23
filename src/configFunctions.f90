@@ -125,25 +125,25 @@ contains
   ! -----------------------------------------------------------------
   ! This function outputs interestSpeciesConcList, the concentration
   ! of each species of interest, in the same order as the species are
-  ! in specInt
-  pure function getConcForSpeciesOfInterest( masterConcList, speciesOfInterest ) result ( interestSpeciesConcList )
+  ! in subsetOfSpecies
+  pure function getSubsetOfConcs( masterConcList, subsetOfSpecies ) result ( interestSpeciesConcList )
     use types_mod
     use species_mod, only : getSpeciesList
     use storage_mod, only : maxSpecLength
     implicit none
 
     real(kind=DP), intent(in) :: masterConcList(:)
-    character(len=maxSpecLength), intent(in) :: speciesOfInterest(:)
+    character(len=maxSpecLength), intent(in) :: subsetOfSpecies(:)
     character(len=maxSpecLength), allocatable :: allSpecies(:)
-    real(kind=DP) :: interestSpeciesConcList(size( speciesOfInterest ))
+    real(kind=DP) :: interestSpeciesConcList(size( subsetOfSpecies ))
     integer(kind=NPI) :: i, j
 
     ! Set interestSpeciesConcList(j) to the value of the concentration
     ! pulled from masterConcList, using the elements of specInt as key
     allSpecies = getSpeciesList()
     do i = 1, size( allSpecies )
-      do j = 1, size( speciesOfInterest )
-        if ( trim( speciesOfInterest(j) ) == trim( allSpecies(i) ) ) then
+      do j = 1, size( subsetOfSpecies )
+        if ( trim( subsetOfSpecies(j) ) == trim( allSpecies(i) ) ) then
           interestSpeciesConcList(j) = masterConcList(i)
           exit
         end if
@@ -151,6 +151,6 @@ contains
     end do
 
     return
-  end function getConcForSpeciesOfInterest
+  end function getSubsetOfConcs
 
 end module config_functions_mod

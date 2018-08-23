@@ -496,7 +496,7 @@ contains
     implicit none
 
     allocate (constantPhotoNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
-              constantPhotoNames(numConstantPhotoRates))
+              & constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
   subroutine allocate_photolysis_numbers_variables()
@@ -516,16 +516,16 @@ contains
     implicit none
 
     allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
-              photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
-              photoNumberOfPoints(numConstrainedPhotoRates))
+              & photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
+              & photoNumberOfPoints(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_data
 
   subroutine allocate_unconstrained_photolysis_rates_variables()
     implicit none
 
     allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates), &
-              cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
-              transmissionFactor(numUnconstrainedPhotoRates))
+              & cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
+              & transmissionFactor(numUnconstrainedPhotoRates))
   end subroutine allocate_unconstrained_photolysis_rates_variables
 
   subroutine allocate_photolysis_j()

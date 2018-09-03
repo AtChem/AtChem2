@@ -58,16 +58,32 @@ contains
     ! get values of reactions rates
     call mechanism_rates( time, y, r )
 
+    ! r is of length #reactions. This loop multiplies the reaction coefficient of
+    ! the reaction by the concentration of each reactant, giving the
+    ! reaction rate of the reaction.
+    ! As an example, if we have reaction 1 as A+A+B -> C +C + D with rate k, then this
+    ! loop will update r(1) to kAAB.
     do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lcoeff(i)
       instantaneousRates(lhs(1, i)) = r(lhs(1, i))
     end do
 
+    ! loop over each of the species in each reaction, updating the dy (rate of change of species y)
+    ! with the reaction rate from each of the reactants in each reaction.
+    ! continuing the example from above, this loop updates dy(A) by r(1) for the first reactant A.
+    ! After that, it updates dy(A) again for the second reactant A.
+    ! Now dy(A) = -2kAAB.
+    ! Finally, it updates dy(B) by r(1) for the reactant B to set dy(B) = -kAAB.
     do i = 1, size( lhs, 2 )
       dy(lhs(2, i)) = dy(lhs(2, i)) - lcoeff(i) * r(lhs(1, i))
       lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
     end do
 
+    ! This does the same as the above but updates each of the product species by
+    ! the values of the relevant elements of r.
+    ! Continuing the example above, it will update dy(C) by kAAB, then again for
+    ! the second product C, giving dy(C) = 2kAAB. Finally, update dy(D) once to
+    ! give dy(D) = kAAB.
     do i = 1, size( rhs, 2 )
       dy(rhs(2, i)) = dy(rhs(2, i)) + rcoeff(i) * r(rhs(1, i))
       productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + rcoeff(i) * r(rhs(1, i))

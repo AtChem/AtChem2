@@ -71,7 +71,6 @@ LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIB
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
-	@perl -ne 'm/\d+\.\d*[eE][-+]?\d+/ and push @a, "$$ARGV:$$.: $$&:\t$$_";END{@a and print("\nWARNING! Single-precision constants found:\n", @a)}' $(SRC)/*.f90
 
 fruit_code = $(FRUITDIR)/src/fruit.f90
 unittest_code = $(UNITTEST_SRCS) $(shell ls travis/unit_tests/*_test.f90 )

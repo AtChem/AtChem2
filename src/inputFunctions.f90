@@ -1152,7 +1152,7 @@ contains
     use directories_mod, only : param_dir, spec_constraints_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use config_functions_mod, only : getIndexWithinList
-    use interpolation_functions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
     use interpolation_method_mod , only : getSpeciesInterpMethod
     implicit none
 
@@ -1315,7 +1315,7 @@ contains
     allocate (concAtT(numberOfConstrainedSpecies))
     do i = 1, numberOfConstrainedSpecies
       if ( i <= numberOfVariableConstrainedSpecies ) then
-        call getConstrainedQuantAtT( t, datax, datay, speciesNumberOfPoints(i), getSpeciesInterpMethod(), i, concAtT(i) )
+        call getVariableConstrainedSpeciesConcentrationAtT( t, i, concAtT(i) )
       else
         concAtT(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
       end if

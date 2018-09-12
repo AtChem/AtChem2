@@ -166,10 +166,12 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
-    use photolysis_rates_mod
+    use photolysis_rates_mod, only : numConstantPhotoRates, constantPhotoNumbers, constantPhotoValues, &
+                                     numUnconstrainedPhotoRates, numConstrainedPhotoRates, j, ck, &
+                                     constrainedPhotoNumbers, usePhotolysisConstants
     use zenith_data_mod, only : cosx_below_threshold
     use env_vars_mod, only : ro2, envVarNames, currentEnvVarValues
-    use interpolation_functions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedPhotoRatesAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     use output_functions_mod, only : ro2sum
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
@@ -238,8 +240,7 @@ contains
       end do
 
       do i = 1, numConstrainedPhotoRates
-        call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(i), &
-                                     getConditionsInterpMethod(), i, photoRateAtT )
+        call getConstrainedPhotoRatesAtT( t, i, photoRateAtT )
         j(constrainedPhotoNumbers(i)) = photoRateAtT
       end do
     end if

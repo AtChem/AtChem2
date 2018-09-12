@@ -21,6 +21,61 @@ module interpolation_functions_mod
 contains
 
   ! -----------------------------------------------------------------
+  ! Wrapper for getting variably constrained species values - this fills
+  ! just the ind-th element of concAtT with the value of the ind-th species
+  ! from that data.
+  subroutine getVariableConstrainedSpeciesConcentrationAtT( t, ind, concAtT )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use constraints_mod, only : dataX, dataY, speciesNumberOfPoints
+    use interpolation_method_mod , only : getSpeciesInterpMethod
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: ind
+    real(kind=DP), intent(inout) :: concAtT
+
+    call getConstrainedQuantAtT( t, dataX, dataY, speciesNumberOfPoints(ind), getSpeciesInterpMethod(), ind, concAtT )
+
+  end subroutine getVariableConstrainedSpeciesConcentrationAtT
+
+  ! -----------------------------------------------------------------
+  ! Wrapper for getting variably constrained photolysis rates - this fills
+  ! photoRateAtT with the value of the ind-th rate from that data.
+  subroutine getConstrainedPhotoRatesAtT( t, ind, photoRateAtT )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints
+    use interpolation_method_mod , only : getConditionsInterpMethod
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: ind
+    real(kind=DP), intent(inout) :: photoRateAtT
+
+    call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints(ind), getConditionsInterpMethod(), ind, photoRateAtT )
+
+  end subroutine getConstrainedPhotoRatesAtT
+
+  ! -----------------------------------------------------------------
+  ! Wrapper for getting constrained environment variables - this fills
+  ! envVarAtT with the value of the ind-th rate from that data.
+  subroutine getConstrainedEnvVarAtT( t, ind, envVarAtT )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use env_vars_mod, only : envVarX, envVarY, envVarNumberOfPoints
+    use interpolation_method_mod , only : getConditionsInterpMethod
+    implicit none
+
+    real(kind=DP), intent(in) :: t
+    integer(kind=NPI) :: ind
+    real(kind=DP), intent(inout) :: envVarAtT
+
+    call getConstrainedQuantAtT( t, envVarX, envVarY, envVarNumberOfPoints(ind), getConditionsInterpMethod(), ind, envVarAtT )
+
+  end subroutine getConstrainedEnvVarAtT
+
+  ! -----------------------------------------------------------------
   ! This routine returns in concAtT the value of the requested
   ! quantity (referenced by the ind-th line of x, y) based upon
   ! the constraint data given and interpolation method given

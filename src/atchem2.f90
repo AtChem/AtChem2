@@ -83,7 +83,7 @@ PROGRAM ATCHEM2
       use species_mod
       use constraints_mod
       use reaction_structure_mod
-      use interpolation_functions_mod, only : getConstrainedQuantAtT
+      use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
       use constraint_functions_mod
       implicit none
 
@@ -520,10 +520,11 @@ END PROGRAM ATCHEM2
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
   use species_mod
-  use constraints_mod
+  use constraints_mod, only : getNumberOfConstrainedSpecies, numberOfVariableConstrainedSpecies, dataFixedY, &
+                              getConstrainedSpecies, setConstrainedConcs
   use reaction_structure_mod
   use interpolation_method_mod, only : getSpeciesInterpMethod
-  use interpolation_functions_mod, only : getConstrainedQuantAtT
+  use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT, getConstrainedPhotoRatesAtT
   use constraint_functions_mod
   use solver_functions_mod, only : resid
   implicit none
@@ -548,8 +549,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   do i = 1, numConSpec
     ! if it's a variable-concentration constrained species,
     if ( i <= numberOfVariableConstrainedSpecies ) then
-      call getConstrainedQuantAtT( t, datax, datay, speciesNumberOfPoints(i), &
-                                   getSpeciesInterpMethod(), i, constrainedConcs(i) )
+      call getVariableConstrainedSpeciesConcentrationAtT( t, i, constrainedConcs(i) )
     else
       constrainedConcs(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
     end if

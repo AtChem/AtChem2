@@ -153,7 +153,7 @@ contains
     ! Use the local variable speciesInterpolationMethod to set the
     ! value speciesInterpMethod, the private member of MODULE
     ! interpolation_method_mod.
-    ! getSpeciesInterpMethod() is called by getConstrainedQuantAtT.
+    ! getSpeciesInterpMethod() is called by getVariableConstrainedSpeciesConcentrationAtT.
     ! Values:
     ! 1: Piecewise constant
     ! 2: Piecewise linear

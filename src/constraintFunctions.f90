@@ -62,10 +62,10 @@ contains
   subroutine calcJFac( t, jFac )
     use types_mod
     use zenith_data_mod
-    use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints, jFacSpecies, numConstrainedPhotoRates, &
+    use photolysis_rates_mod, only : jFacSpecies, numConstrainedPhotoRates, &
                                      usePhotolysisConstants, constrainedPhotoNames, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
-    use interpolation_functions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedPhotoRatesAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     implicit none
 
@@ -95,8 +95,7 @@ contains
 
     ! GET CURRENT VALUE OF basePhotoRate
 
-    call getConstrainedQuantAtT( t, photoX, photoY, photoNumberOfPoints (basePhotoRateNum), &
-                                 getConditionsInterpMethod(), basePhotoRateNum, JFacSpeciesAtT )
+    call getConstrainedPhotoRatesAtT( t, basePhotoRateNum, JFacSpeciesAtT )
 
     if ( JFacSpeciesAtT == 0 ) then
       jFac = 0
@@ -200,7 +199,7 @@ contains
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
     use env_vars_mod
-    use interpolation_functions_mod, only : getConstrainedQuantAtT
+    use interpolation_functions_mod, only : getConstrainedEnvVarAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     use atmosphere_functions_mod, only : calcAirDensity, convertRHtoH2O
     use solar_functions_mod
@@ -289,8 +288,7 @@ contains
             write (stderr,*) 'ROOFOPEN should not be constrained.'
             stop
           end if
-          call getConstrainedQuantAtT( t, envVarX, envVarY, envVarNumberOfPoints(envVarNum), &
-                                       getConditionsInterpMethod(), envVarNum, this_env_val )
+          call getConstrainedEnvVarAtT( t, envVarNum, this_env_val )
 
           if (this_env_var_name == 'PRESS') pressure_set = .true.
           if (this_env_var_name == 'TEMP') temp_set = .true.

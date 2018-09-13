@@ -519,13 +519,12 @@ END PROGRAM ATCHEM2
 !  Fortran routine for right-hand side function.
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
-  use species_mod
   use constraints_mod, only : getNumberOfConstrainedSpecies, numberOfVariableConstrainedSpecies, dataFixedY, &
                               getConstrainedSpecies, setConstrainedConcs
-  use reaction_structure_mod
+  use reaction_structure_mod, only : clhs, clcoeff, crhs, crcoeff
   use interpolation_method_mod, only : getSpeciesInterpMethod
   use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT, getConstrainedPhotoRatesAtT
-  use constraint_functions_mod
+  use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
   use solver_functions_mod, only : resid
   implicit none
 
@@ -542,7 +541,8 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   np = ipar(1) + numConSpec
   numReac = ipar(2)
   dummy = rpar(1)
-
+  ! TODO: these should be the same size on every call? If so, then better to allocate once and re-use
+  ! TODO: rather than re-allocating each time.
   allocate (dy(np), z(np), constrainedConcs(numConSpec))
 
   ! for each constrained species...

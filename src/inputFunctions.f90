@@ -1145,7 +1145,7 @@ contains
   subroutine readSpeciesConstraints( t, y )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use species_mod
+    use species_mod, only : getSpeciesList, getNumberOfSpecies
     use constraints_mod, only : maxNumberOfConstraintDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                                 numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
                                 setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataFixedY

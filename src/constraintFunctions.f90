@@ -114,6 +114,9 @@ contains
     return
   end subroutine calcJFac
 
+  ! TODO: As the numbers of the constrained species will be constant, it may be possible
+  ! TODO: to speed this up by computing a vector of bools once then apply this as a mask
+  ! TODO: each time. Same for the removal.
   ! ----------------------------------------------------------------- !
   ! Take in z, the vector of concentrations of unconstrained species,
   ! and add the concentrations of the constrained species. Return this
@@ -202,7 +205,7 @@ contains
     use interpolation_functions_mod, only : getConstrainedEnvVarAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
     use atmosphere_functions_mod, only : calcAirDensity, convertRHtoH2O
-    use solar_functions_mod
+    use solar_functions_mod, only : calcDec, calcZenith
     implicit none
 
     real(kind=DP), intent(in) :: t

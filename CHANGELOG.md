@@ -1,9 +1,10 @@
 # AtChem2 - CHANGELOG
 
-## v1.1 (August 2018)
+## v1.1 (??? 2018)
 
 - implement a new directory structure
 - rename some configuration and output files
+- add changelog and citation files
 - simplify the installation procedure and remove `makefile.local`
 - restructure the handling and calculation of photolysis rates
 - fix the calculation of sun declination and solar zenith angle
@@ -11,10 +12,11 @@
 - check calculation of reaction rates and improve format of instantaneousRates files
 - implement code coverage testing with [Codecov](https://codecov.io/)
 - implement a unit testing framework (new dependencies: **Ruby**, **FRUIT**)
-- add unit tests for some functions
+- add unit tests for atmosphere, config, date, solar functions
+- add exact solution tests
 - improve running and reporting of the testsuite
 - add plotting tools in R, Python, Matlab, gnuplot
-- fix a number of minor bugs
+- fix several minor bugs
 
 ## v1.0 (July 2017)
 

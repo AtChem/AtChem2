@@ -1,0 +1,11 @@
+To reference AtChem2 in publications, please cite:
+
+Sommariva, R.; Cox, S.; Martin, C.; Boronska, K.; Young, J.; Jimack, P.; Pilling, M. J.; Bloss, W. J.; Monks, P. S., Rickard, A. R., AtChem, an open source box-model for the Master Chemical Mechanism, Atmospheric Chemical Mechanisms Conference, UC-Davis (2018).
+
+@conference{Sommariva_2018b,
+  author   = {Sommariva, R. and Cox, S. and Martin, C. and Boronska, K. and Young, J. and Jimack, P. and Pilling, M. J. and Bloss, W. J. and Monks, P. S. and Rickard, A. R.},
+  title    = {{AtChem}, an open source box-model for the {Master Chemical Mechanism}},
+  year     = {2018},
+  location = {UC-Davis, CA, USA},
+  comment  = {poster},
+}

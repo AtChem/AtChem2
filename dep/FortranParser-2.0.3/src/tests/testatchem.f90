@@ -10,18 +10,17 @@ PROGRAM fptest
   USE FortranParser,    ONLY: EquationParser
   USE input_functions_mod, only : count_lines_in_file
   IMPLICIT NONE
-  type(EquationParser) :: eqParser
+  type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
   INTEGER,                             PARAMETER :: neval = 1000000
   INTEGER                                        :: nfunc, ngeneric
   ! CHARACTER (LEN=*), DIMENSION(nfunc), PARAMETER :: func = (/ 'vel*COS(beta)           ', &
   !                                                             'vel*SIN(beta)*COS(alpha)', &
   !                                                             'vel*SIN(beta)*SIN(alpha)' /)
-  INTEGER,                             PARAMETER :: nvar = 4
+  INTEGER,                             PARAMETER :: nvar = 3
   CHARACTER (LEN=*), DIMENSION(nvar),  PARAMETER :: var  = (/ 'O2  ', &
                                                               'N2  ', &
-                                                              'p1  ', &
                                                               'TEMP' /)
-  REAL(rn),          DIMENSION(nvar),  PARAMETER :: val  = (/  10., 10., 1.5, 2.0  /)
+  REAL(rn),          DIMENSION(nvar),  PARAMETER :: val  = (/  10., 1.5, 2.0  /)
   REAL(rn)                                       :: res
   INTEGER                                        :: i,n, ierr
   REAL                                           :: rt1,rt2,rt3
@@ -33,7 +32,7 @@ PROGRAM fptest
   ! Read in generic rate coefficients
   write (*,*) 'start'
   ngeneric = count_lines_in_file('generic.txt')
-  allocate(generic(ngeneric), generic_coeff(ngeneric))
+  allocate(generic(ngeneric), generic_coeff(ngeneric), eqParserGeneric(ngeneric))
   write(*,*) 'counted'
   open (10, file='generic.txt', status='old')
   i = 0
@@ -51,12 +50,10 @@ PROGRAM fptest
     write(*,*) generic_coeff(i), generic(i)
   end do
 
-  CALL initf (ngeneric)                      ! Initialize function parser for nfunc functions
-  write(*,*) 'inited'
   DO i=1,ngeneric
-    write(*,*) 'parse'
-     CALL parsef (i, trim(generic(i)), var)        ! Parse and bytecompile ith function string
+    eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
   END DO
+  write(*,*) 'inited'
 
   ! Read in number of reactions
   write (*,*) 'start'
@@ -82,9 +79,10 @@ PROGRAM fptest
   temp = 300.0
   o2 = 2.0
   n2 = 2.0
-  CALL initf (nfunc)                      ! Initialize function parser for nfunc functions
+  allocate(eqParser(nfunc))
+
   DO i=1,nfunc
-     CALL parsef (i, trim(func(i)), var)        ! Parse and bytecompile ith function string
+    eqParser(i) = EquationParser(trim(func(i)), var) ! Initialize function parser for nfunc functions
   END DO
   o2   = val(1)
   n2   = val(2)
@@ -92,9 +90,7 @@ PROGRAM fptest
   CALL CPU_TIME (rt1)
   DO n=1,neval
      DO i=1,nfunc
-        eqParser = EquationParser(trim(func(i)), var)
-        res = evalf (i, val)              ! Interprete bytecode representation of ith function
-        IF (EvalErrType > 0) WRITE(*,*)'*** Error: ',EvalErrMsg ()
+        res = eqParser(i)%evaluate(val(:)) ! Interpret bytecode representation of ith function
      END DO
   END DO
   CALL CPU_TIME (rt2)

@@ -329,7 +329,7 @@ contains
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, size_of_j, &
+    use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, &
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
     use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
@@ -358,8 +358,7 @@ contains
       end if
     end do
     if ( allocated_j .eqv. .false. ) then
-      size_of_j = maxval(photoNumbers)
-      call allocate_photolysis_j()
+      call allocate_photolysis_j(maxval(photoNumbers))
       allocated_j = .true.
     end if
     close (10, status='keep')

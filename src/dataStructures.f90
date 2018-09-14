@@ -486,7 +486,6 @@ module photolysis_rates_mod
   integer(kind=NPI) :: maxNumberOfPhotoDataPoints
   real(kind=DP), allocatable :: photoX(:,:), photoY(:,:)
   integer(kind=NPI), allocatable :: photoNumberOfPoints(:)
-  integer(kind=NPI) :: size_of_j
   integer(kind=SI) :: PR_type
   real(kind=DP) :: jFacL, jFacM, jFacN, jFacTransmissionFactor
 
@@ -528,9 +527,10 @@ contains
               transmissionFactor(numUnconstrainedPhotoRates))
   end subroutine allocate_unconstrained_photolysis_rates_variables
 
-  subroutine allocate_photolysis_j()
+  subroutine allocate_photolysis_j( size_of_j )
     implicit none
 
+    integer(kind=NPI), intent(in) :: size_of_j
     allocate (j(size_of_j))
     j(:) = 0.0_DP
   end subroutine allocate_photolysis_j

@@ -240,8 +240,6 @@ ro2 = 0.00e+00_DP\n""")
                 else:
                     ro2_file.write('\t ! error RO2 not in mechanism: ' + ro2List_i + '\n')
 
-        mech_rates_file.write('ro2 = ro2sum( y ) \n\n')
-
 
     coeffSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
     reactionNumber = 0

@@ -245,6 +245,8 @@ contains
       end do
     end if
 
+    ro2 = ro2sum( y )
+
     include './gen/mechanism-rate-coefficients.f90'
 
     return

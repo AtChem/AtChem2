@@ -198,6 +198,9 @@ PROGRAM ATCHEM2
   write (*, '(A, I0)') ' Species requiring detailed rate output (number of species found): ', size( detailedRatesSpeciesName )
   write (*,*)
 
+  ! Read in the numbers of RO2 species from mechanism.ro2
+  call readRO2species()
+
   ! Read in and set solver parameters
   call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
   write (*,*)

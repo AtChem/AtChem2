@@ -1327,6 +1327,41 @@ contains
   end subroutine readSpeciesConstraints
 
   ! ----------------------------------------------------------------- !
+  ! Read in the contents of model/configuration/ro2-rates.list and add
+  ! its contents to the variable ro2Numbers
+  subroutine readRO2species()
+    use types_mod
+    use env_vars_mod, only : ro2Numbers
+    use storage_mod, only : maxFilepathLength
+    use directories_mod, only : param_dir
+    implicit none
+
+    integer(kind=NPI) :: j, numberOfRO2Species
+    character(len=maxFilepathLength) :: fileLocation
+
+    write (*, '(A)') ' Reading ro2 numbers from mechanism.ro2...'
+    fileLocation=trim( param_dir ) // '/mechanism.ro2'
+
+    ! Read in ro2 species numbers from model/configuration/mechanism.ro2
+    ! to ro2Numbers
+
+    call inquire_or_abort( fileLocation, 'readSpecies()')
+    numberOfRO2Species = count_lines_in_file( fileLocation, .true. )
+    allocate(ro2Numbers(numberOfRO2Species))
+
+    open (10, file=fileLocation) ! input file
+    ! skip first line
+    read (10,*)
+    do j = 1, numberOfRO2Species
+      read (10,*) ro2Numbers(j)
+    end do
+    close (10, status='keep')
+    write (*, '(A)') ' Finished reading ro2 numbers.'
+
+    return
+  end subroutine readRO2species
+
+  ! ----------------------------------------------------------------- !
   ! Given a filename, count the number of lines. Optional argument
   ! skip_first_line_in ignores the first line if it exists.
   function count_lines_in_file( filename, skip_first_line_in ) result ( counter )

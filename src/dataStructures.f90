@@ -236,6 +236,7 @@ module env_vars_mod
   real(kind=DP), allocatable :: envVarX (:,:), envVarY (:,:)
   integer(kind=NPI), allocatable :: envVarNumberOfPoints(:)
   real(kind=DP) :: ro2
+  integer(kind=NPI), allocatable :: ro2Numbers(:)
 
 end module env_vars_mod
 

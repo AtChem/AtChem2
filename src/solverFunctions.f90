@@ -244,7 +244,7 @@ contains
         j(constrainedPhotoNumbers(i)) = photoRateAtT
       end do
     end if
-
+    !TODO: is this necessary a second time?
     ro2 = ro2sum( y )
 
     include './gen/mechanism-rate-coefficients.f90'

@@ -40,6 +40,8 @@ AtChem2 v1.1-dev
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
+ Reading ro2 numbers from mechanism.ro2...
+ Finished reading ro2 numbers.
  Reading solver parameters from file...
  ------------------
  Solver parameters:

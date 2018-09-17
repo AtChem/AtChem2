@@ -24,13 +24,19 @@ contains
   ! Returns the sum of all ro2 species' concentrations
   pure function ro2Sum( y ) result ( ro2 )
     use types_mod
+    use env_vars_mod, only : ro2Numbers
     implicit none
 
     real(kind=DP), intent(in) :: y(*)
     real(kind=DP) :: ro2
+    integer(kind=NPI) :: i
 
-    include './gen/ro2-rates.f90'
-
+    ro2 = 0.0_DP
+    if ( size( ro2Numbers ) > 0 ) then
+      do i = 1, size( ro2Numbers )
+        ro2 = ro2 + y(ro2Numbers(i))
+      end do
+    end if
     return
   end function ro2Sum
 

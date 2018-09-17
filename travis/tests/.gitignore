@@ -4,6 +4,7 @@
 */output/instantaneousRates/*
 */model/configuration/mechanism.prod
 */model/configuration/mechanism.reac
+*/model/configuration/mechanism.ro2
 */model/configuration/mechanism.species
 testsuite.log
 

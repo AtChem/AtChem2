@@ -8,18 +8,18 @@ MODULE FortranParser
   !------- -------- --------- --------- --------- --------- --------- --------- -------
   ! Fortran 2008 function parser
   !------- -------- --------- --------- --------- --------- --------- --------- -------
-  ! 
+  !
   ! This is an OOP Fortran 2008 version of the original fparser by Roland Schmehl. This simple class
   ! wrapping of the original fparser has been developed by Jacopo Chevallard, and it is available on
   ! the GitHub repository https://github.com/jacopo-chevallard/FortranParser.
-  ! 
+  !
   ! For comments and bug reports, please open an issue on
   ! https://github.com/jacopo-chevallard/FortranParser/issues
   !
   ! This function parser module is intended for applications where a set of mathematical
-  ! fortran-style expressions is specified at runtime and is then evaluated for a large 
-  ! number of variable values. This is done by compiling the set of function strings 
-  ! into byte code, which is interpreted efficiently for the various variable values. 
+  ! fortran-style expressions is specified at runtime and is then evaluated for a large
+  ! number of variable values. This is done by compiling the set of function strings
+  ! into byte code, which is interpreted efficiently for the various variable values.
   !
   ! The source code of the original fparser is available from http://fparser.sourceforge.net
   !
@@ -27,7 +27,7 @@ MODULE FortranParser
   ! Roland Schmehl <roland.schmehl@alumni.uni-karlsruhe.de>
   !
   !------- -------- --------- --------- --------- --------- --------- --------- -------
-  ! The function parser concept is based on a C++ class library written by  Juha 
+  ! The function parser concept is based on a C++ class library written by  Juha
   ! Nieminen <warp@iki.fi> available from http://warp.povusers.org/FunctionParser/
   !------- -------- --------- --------- --------- --------- --------- --------- -------
   USE FortranParser_parameters, ONLY: rn,is               ! Import KIND parameters
@@ -41,11 +41,11 @@ MODULE FortranParser
 
   INTEGER(is),                              PARAMETER :: cImmed   = 1,          &
                                                          cNeg     = 2,          &
-                                                         cAdd     = 3,          & 
-                                                         cSub     = 4,          & 
-                                                         cMul     = 5,          & 
-                                                         cDiv     = 6,          & 
-                                                         cPow     = 7,          & 
+                                                         cAdd     = 3,          &
+                                                         cSub     = 4,          &
+                                                         cMul     = 5,          &
+                                                         cDiv     = 6,          &
+                                                         cPow     = 7,          &
                                                          cAbs     = 8,          &
                                                          cExp     = 9,          &
                                                          cLog10   = 10,         &
@@ -60,7 +60,8 @@ MODULE FortranParser
                                                          cAsin    = 19,         &
                                                          cAcos    = 20,         &
                                                          cAtan    = 21,         &
-                                                         VarBegin = 22
+                                                         cQ       = 22,         &
+                                                         VarBegin = 23
 
   CHARACTER (LEN=1), DIMENSION(cAdd:cPow),  PARAMETER :: Ops      = (/ '+',     &
                                                                        '-',     &
@@ -68,7 +69,7 @@ MODULE FortranParser
                                                                        '/',     &
                                                                        '^' /)
 
-  CHARACTER (LEN=5), DIMENSION(cAbs:cAtan), PARAMETER :: Funcs    = (/ 'abs  ', &
+  CHARACTER (LEN=5), DIMENSION(cAbs:cQ), PARAMETER :: Funcs    = (/ 'abs  ', &
                                                                        'exp  ', &
                                                                        'log10', &
                                                                        'log  ', &
@@ -81,7 +82,8 @@ MODULE FortranParser
                                                                        'tan  ', &
                                                                        'asin ', &
                                                                        'acos ', &
-                                                                       'atan ' /)
+                                                                       'atan ', &
+                                                                       'q    ' /)
 
   INTEGER, parameter  :: MAX_FUN_LENGTH = 1024
 
@@ -97,7 +99,7 @@ MODULE FortranParser
 
     character(len=MAX_FUN_LENGTH) :: funcString = ''
     character(len=MAX_FUN_LENGTH) :: funcStringOrig = ''
-    character(len=MAX_FUN_LENGTH), allocatable :: variableNames(:) 
+    character(len=MAX_FUN_LENGTH), allocatable :: variableNames(:)
     contains
 
       private
@@ -174,10 +176,10 @@ CONTAINS
   END SUBROUTINE parse
 
 !*****************************************************************************************
-  FUNCTION evaluate(this, Val) RESULT (res)
+  FUNCTION evaluate(this, Val, q) RESULT (res)
     ! Evaluate bytecode of ith function for the values passed in array Val(:)
     class(EquationParser) :: this
-    REAL(rn), DIMENSION(:), INTENT(in) :: Val                ! Variable values
+    REAL(rn), DIMENSION(:), INTENT(in) :: Val, q             ! Variable values
 
     REAL(rn)                           :: res                ! Result
     INTEGER                            :: IP,              & ! Instruction pointer
@@ -206,7 +208,7 @@ CONTAINS
 
        CASE   (cDiv)
 
-         IF (this%Stack(SP)==0._rn) THEN 
+         IF (this%Stack(SP)==0._rn) THEN
            EvalErrType=1
            res=zero
            exit
@@ -258,7 +260,7 @@ CONTAINS
 
        CASE   (cTan); this%Stack(SP)=TAN(this%Stack(SP))
 
-       CASE  (cAsin) 
+       CASE  (cAsin)
 
          IF ((this%Stack(SP)<-1._rn) .OR. (this%Stack(SP)>1._rn)) THEN
            EvalErrType=4
@@ -267,7 +269,7 @@ CONTAINS
          ENDIF
          this%Stack(SP)=ASIN(this%Stack(SP))
 
-       CASE  (cAcos); 
+       CASE  (cAcos);
          IF ((this%Stack(SP)<-1._rn).OR.(this%Stack(SP)>1._rn)) THEN
            EvalErrType=4
            res=zero
@@ -276,6 +278,8 @@ CONTAINS
          this%Stack(SP)=ACOS(this%Stack(SP))
 
        CASE  (cAtan); this%Stack(SP)=ATAN(this%Stack(SP))
+
+       CASE  (cQ); this%Stack(SP)=q(this%Stack(SP))
 
        CASE  DEFAULT; SP=SP+1; this%Stack(SP)=Val(this%ByteCode(IP)-VarBegin+1)
 
@@ -361,7 +365,7 @@ CONTAINS
           CALL ParseErrMsg (j, this%funcStringOrig, 'Missing operator')
        END IF
        !-- -------- --------- --------- --------- --------- --------- --------- -------
-       ! Now, we have an operand and an operator: the next loop will check for another 
+       ! Now, we have an operand and an operator: the next loop will check for another
        ! operand (must appear)
        !-- -------- --------- --------- --------- --------- --------- --------- -------
        j = j+1
@@ -437,8 +441,8 @@ CONTAINS
 
     n = 0
 
-    DO j=cAbs,cAtan                                          ! Check all math functions
-       k = MIN(LEN_TRIM(Funcs(j)), LEN(str))   
+    DO j=cAbs,cQ                                             ! Check all math functions
+       k = MIN(LEN_TRIM(Funcs(j)), LEN(str))
        CALL LowCase (str(1:k), fun)
        IF (fun == Funcs(j)) THEN                             ! Compare lower case letters
           n = j                                              ! Found a matching function
@@ -466,12 +470,12 @@ CONTAINS
     IF (lstr > 0) THEN
        DO ib=1,lstr                                          ! Search for first character in str
           IF (str(ib:ib) /= ' ') EXIT                        ! When lstr>0 at least 1 char in str
-       END DO                        
+       END DO
        DO in=ib,lstr                                         ! Search for name terminators
           IF (SCAN(str(in:in),'+-*/^) ') > 0) EXIT
        END DO
        DO j=1,SIZE(Var)
-          IF (str(ib:in-1) == Var(j)) THEN                     
+          IF (str(ib:in-1) == Var(j)) THEN
              n = j                                           ! Variable name found
              EXIT
           END IF
@@ -492,7 +496,7 @@ CONTAINS
 
     k = 1
 
-    DO WHILE (str(k:lstr) /= ' ')                             
+    DO WHILE (str(k:lstr) /= ' ')
        IF (str(k:k) == ' ') THEN
           str(k:lstr)  = str(k+1:lstr)//' '                  ! Move 1 character to left
           k = k-1
@@ -535,7 +539,7 @@ CONTAINS
 
     CALL this%CompileSubstr(1,LEN_TRIM(this%funcString))               ! Compile string to determine size
 
-    ALLOCATE ( this%ByteCode(this%ByteCodeSize), & 
+    ALLOCATE ( this%ByteCode(this%ByteCodeSize), &
                this%Immed(this%ImmedSize),       &
                this%Stack(this%StackSize),       &
                STAT = istat                            )
@@ -633,7 +637,7 @@ CONTAINS
 !      WRITE(*,*)'2. funcString(b:e) = "(...)"'
        CALL this%CompileSubstr(b+1, e-1)
        RETURN
-    ELSEIF (SCAN(this%funcString(b:b), calpha) > 0) THEN        
+    ELSEIF (SCAN(this%funcString(b:b), calpha) > 0) THEN
        n = MathFunctionIndex(this%funcString(b:e))
        IF (n > 0) THEN
           b2 = b+INDEX(this%funcString(b:e),'(')-1
@@ -681,7 +685,7 @@ CONTAINS
 !               WRITE(*,*)'6. this%funcString(b:e) = "-...Op..." with Op > -'
                 CALL this%CompileSubstr(b+1, e)
                 CALL this%AddCompiledByte(cNeg)
-                RETURN                 
+                RETURN
              ELSE                                                        ! Case 7: this%funcString(b:e) = '...BinOp...'
 !               WRITE(*,*)'7. Binary operator',this%funcString(j:j)
                 CALL this%CompileSubstr(b, j-1)
@@ -735,7 +739,7 @@ CONTAINS
                SCAN(F(j-1:j-1),'eEdD')       > 0) THEN
           Dflag=.false.; Pflag=.false.
           k = j-1
-          DO WHILE (k > 1)                                   !   step to the left in mantissa 
+          DO WHILE (k > 1)                                   !   step to the left in mantissa
              k = k-1
              IF     (SCAN(F(k:k),'0123456789') > 0) THEN
                 Dflag=.true.
@@ -783,17 +787,17 @@ CONTAINS
           ib = ib+1
           IF (InMan .OR. Eflag .OR. InExp) EXIT
        CASE ('+','-')                                        ! Permitted only
-          IF     (Bflag) THEN           
+          IF     (Bflag) THEN
              InMan=.true.; Bflag=.false.                     ! - at beginning of mantissa
-          ELSEIF (Eflag) THEN               
+          ELSEIF (Eflag) THEN
              InExp=.true.; Eflag=.false.                     ! - at beginning of exponent
           ELSE
              EXIT                                            ! - otherwise STOP
           ENDIF
        CASE ('0':'9')                                        ! Mark
-          IF     (Bflag) THEN           
+          IF     (Bflag) THEN
              InMan=.true.; Bflag=.false.                     ! - beginning of mantissa
-          ELSEIF (Eflag) THEN               
+          ELSEIF (Eflag) THEN
              InExp=.true.; Eflag=.false.                     ! - beginning of exponent
           ENDIF
           IF (InMan) DInMan=.true.                           ! Mantissa contains digit

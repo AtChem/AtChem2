@@ -8,9 +8,8 @@ MODULE FortranParser_parameters
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
   ! Specify data types
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
+  use types_mod
   IMPLICIT NONE
-  INTEGER, PARAMETER :: rn = selected_real_kind(p=6,r=37)          ! Precision of real numbers
-  INTEGER, PARAMETER :: is = SELECTED_INT_KIND(1) ! Data type of bytecode
+  INTEGER, PARAMETER :: rn = selected_real_kind(DP)          ! Precision of real numbers
+  INTEGER, PARAMETER :: is = SELECTED_INT_KIND(NPI) ! Data type of bytecode
 END MODULE FortranParser_parameters
-
-

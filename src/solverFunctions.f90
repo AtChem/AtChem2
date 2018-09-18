@@ -176,11 +176,13 @@ contains
     use output_functions_mod, only : ro2sum
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
+    use species_mod, only : getNumberOfGenericComplex
     implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
+    real(kind=DP) :: q(getNumberOfGenericComplex())
 
     real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i

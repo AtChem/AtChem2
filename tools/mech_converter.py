@@ -247,7 +247,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
             # Now we need to find the list of all species that are used in these equations, so we can declare them
             # at the top of the Fortran source file.
 
-
+    numberOfGenericComplex = reactionNumber
 
 
 
@@ -335,13 +335,13 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
 
         # Output number of species and number of reactions
-        prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+        prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' ' + str(numberOfGenericComplex) + ' numberOfSpecies numberOfReactions numberOfGenericComplex\n')
         # Write all other lines
         for line in mech_prod_list:
             prod_file.write(line)
 
         # Output number of species and number of reactions
-        reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+        reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' ' + str(numberOfGenericComplex) + ' numberOfSpecies numberOfReactions numberOfGenericComplex\n')
 
         # Write all other lines
         for line in mech_reac_list:

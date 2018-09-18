@@ -84,11 +84,11 @@ contains
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
     use directories_mod, only : param_dir
-    use species_mod, only : setNumberOfSpecies, setNumberOfReactions
+    use species_mod, only : setNumberOfSpecies, setNumberOfReactions, setNumberOfGenericComplex
     use storage_mod, only : maxFilepathLength
     implicit none
 
-    integer(kind=NPI) :: numSpec, numReac
+    integer(kind=NPI) :: numSpec, numReac, numGenericComplex
     character(len=maxFilepathLength) :: fileLocation
 
     fileLocation = trim( param_dir ) // '/mechanism.reac'
@@ -96,12 +96,13 @@ contains
     call inquire_or_abort( fileLocation, 'readNumberOfSpeciesAndReactions()')
 
     open (10, file=fileLocation, status='old') ! input file
-    read (10,*) numSpec, numReac
+    read (10,*) numSpec, numReac, numGenericComplex
     close (10, status='keep')
 
     call setNumberOfSpecies( numSpec )
     call setNumberOfReactions( numReac )
-
+    call setNumberOfGenericComplex( numGenericComplex )
+    !TODO: output numGenericComplex to screen?
     write (*, '(A, I0)') ' Number of Species   = ', numSpec
     write (*, '(A, I0)') ' Number of Reactions = ', numReac
 

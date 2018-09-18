@@ -186,6 +186,7 @@ contains
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
+    real(kind=DP) :: N2, O2, M, RH, H2O, DEC, BLH, DILUTE, JFAC, ROOFOPEN
     include './gen/mechanism-rate-declarations.f90'
 
     ro2 = ro2sum( y )

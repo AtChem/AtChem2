@@ -311,14 +311,14 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                 # - otherwise, be a species
 
                 # Create a list
-                print value
+                # print value
                 list_of_symbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[()\-+*@/ ]+', value)]
-                print 'symbol_locs:', list_of_symbol_locs
-                print 'symbols:   ', [value[item_start:item_end] for [item_start, item_end] in list_of_symbol_locs]
+                # print 'symbol_locs:', list_of_symbol_locs
+                # print 'symbols:   ', [value[item_start:item_end] for [item_start, item_end] in list_of_symbol_locs]
                 list_of_nonsymbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[^()\-+*@/ ]+', value)]
-                print 'nonsymbol_locs:', list_of_nonsymbol_locs
-                print 'nonsymbols:', [value[item_start:item_end] for [item_start, item_end] in list_of_nonsymbol_locs]
-                print list_of_symbol_locs
+                # print 'nonsymbol_locs:', list_of_nonsymbol_locs
+                # print 'nonsymbols:', [value[item_start:item_end] for [item_start, item_end] in list_of_nonsymbol_locs]
+                # print list_of_symbol_locs
                 list_of_symbol_starts = [item[0] for item in list_of_symbol_locs]
                 list_of_symbol_ends = [item[1] for item in list_of_symbol_locs]
                 list_of_nonsymbol_starts = [item[0] for item in list_of_nonsymbol_locs]
@@ -363,14 +363,10 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                         del list_of_nonsymbol_starts[0]
                         del list_of_nonsymbol_ends[0]
                         del list_of_nonsymbol_locs[0]
-                print new_rhs
+                # print new_rhs
 
                 RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
-                # Filter out nunbers, and spaces, and any reserved words, and any known species
-                print [x for x in RHSList_sub if (not re.match('[0-9]', x))
-                       and (not x == '')
-                       and (not x in reservedOtherList)
-                       and (not x in reservedSpeciesList)]
+
 
             new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + new_rhs
 

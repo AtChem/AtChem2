@@ -20,6 +20,68 @@ import sys
 import fix_mechanism_fac
 
 
+def tokenise_and_process(value, variablesDict):
+    reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN', 'RO2']
+    reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
+
+
+    list_of_symbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[()\-+*@/ ]+', value)]
+    # print 'symbol_locs:', list_of_symbol_locs
+    # print 'symbols:   ', [value[item_start:item_end] for [item_start, item_end] in list_of_symbol_locs]
+    list_of_nonsymbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[^()\-+*@/ ]+', value)]
+    # print 'nonsymbol_locs:', list_of_nonsymbol_locs
+    # print 'nonsymbols:', [value[item_start:item_end] for [item_start, item_end] in list_of_nonsymbol_locs]
+    # print list_of_symbol_locs
+    list_of_symbol_starts = [item[0] for item in list_of_symbol_locs]
+    list_of_symbol_ends = [item[1] for item in list_of_symbol_locs]
+    list_of_nonsymbol_starts = [item[0] for item in list_of_nonsymbol_locs]
+    list_of_nonsymbol_ends = [item[1] for item in list_of_nonsymbol_locs]
+    new_rhs = ''
+    print value
+    print variablesDict
+    # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
+    # (and thus must be new species/intermediate values) with q(i) notation.
+    while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
+        # print list_of_symbol_starts
+        # print list_of_nonsymbol_starts
+        if list_of_symbol_starts != [] and list_of_nonsymbol_starts != []:
+            if list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]:
+                # add next symbol
+                new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+                del list_of_symbol_starts[0]
+                del list_of_symbol_ends[0]
+                del list_of_symbol_locs[0]
+            else:
+                # add next nonsymbol
+                varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+                if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
+                    new_rhs += 'q(' + str(variablesDict[varname]) + ')'
+                else:
+                    new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+                del list_of_nonsymbol_starts[0]
+                del list_of_nonsymbol_ends[0]
+                del list_of_nonsymbol_locs[0]
+        elif list_of_symbol_starts != []:
+            # add next symbol
+            new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+            del list_of_symbol_starts[0]
+            del list_of_symbol_ends[0]
+            del list_of_symbol_locs[0]
+        else:
+            # add next nonsymbol
+            assert list_of_nonsymbol_starts != []
+            varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+            if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
+                new_rhs += 'q(' + str(variablesDict[varname]) + ')'
+            else:
+                new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+            del list_of_nonsymbol_starts[0]
+            del list_of_nonsymbol_ends[0]
+            del list_of_nonsymbol_locs[0]
+
+    return new_rhs
+
+
 def convert(input_file, output_dir, mc_dir, mcm_dir):
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
@@ -99,8 +161,6 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
 
 
-    reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN']
-    reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T']
     variablesDict = dict()
     reactionNumber = 0
     mechanism_rates_coeff_list = []
@@ -173,63 +233,13 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
                 # Create a list
                 # print value
-                list_of_symbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[()\-+*@/ ]+', value)]
-                # print 'symbol_locs:', list_of_symbol_locs
-                # print 'symbols:   ', [value[item_start:item_end] for [item_start, item_end] in list_of_symbol_locs]
-                list_of_nonsymbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[^()\-+*@/ ]+', value)]
-                # print 'nonsymbol_locs:', list_of_nonsymbol_locs
-                # print 'nonsymbols:', [value[item_start:item_end] for [item_start, item_end] in list_of_nonsymbol_locs]
-                # print list_of_symbol_locs
-                list_of_symbol_starts = [item[0] for item in list_of_symbol_locs]
-                list_of_symbol_ends = [item[1] for item in list_of_symbol_locs]
-                list_of_nonsymbol_starts = [item[0] for item in list_of_nonsymbol_locs]
-                list_of_nonsymbol_ends = [item[1] for item in list_of_nonsymbol_locs]
-                new_rhs = ''
-                # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
-                # (and thus must be new species/intermediate values) with q(i) notation.
-                while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
-                    # print list_of_symbol_starts
-                    # print list_of_nonsymbol_starts
-                    if list_of_symbol_starts != [] and list_of_nonsymbol_starts != []:
-                        if list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]:
-                            # add next symbol
-                            new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
-                            del list_of_symbol_starts[0]
-                            del list_of_symbol_ends[0]
-                            del list_of_symbol_locs[0]
-                        else:
-                            # add next nonsymbol
-                            varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                            if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
-                                new_rhs += 'q(' + str(variablesDict[varname]) + ')'
-                            else:
-                                new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                            del list_of_nonsymbol_starts[0]
-                            del list_of_nonsymbol_ends[0]
-                            del list_of_nonsymbol_locs[0]
-                    elif list_of_symbol_starts != []:
-                        # add next symbol
-                        new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
-                        del list_of_symbol_starts[0]
-                        del list_of_symbol_ends[0]
-                        del list_of_symbol_locs[0]
-                    else:
-                        # add next nonsymbol
-                        assert list_of_nonsymbol_starts != []
-                        varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                        if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
-                            new_rhs += 'q(' + str(variablesDict[varname]) + ')'
-                        else:
-                            new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                        del list_of_nonsymbol_starts[0]
-                        del list_of_nonsymbol_ends[0]
-                        del list_of_nonsymbol_locs[0]
+                new_rhs = tokenise_and_process(value, variablesDict)
                 # print new_rhs
 
                 RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
 
 
-            new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + new_rhs
+            new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + new_rhs + '  !' + a
 
             # Save the resulting string to mechanism_rates_coeff_list
             mechanism_rates_coeff_list.append(new_line2 + '\n')
@@ -243,99 +253,99 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
 
 
-        # Initialise a few variables
-        speciesList = []
-        rateConstants = []
-        reactionNumber = 0
+    # Initialise a few variables
+    speciesList = []
+    rateConstants = []
+    reactionNumber = 0
 
-        with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, open(
-                os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
-            mech_reac_list = []
-            mech_prod_list = []
-            # Loop over all lines in the reaction_definitions section of the input file
-            for line in reaction_definitions:
+    with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, open(
+            os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
+        mech_reac_list = []
+        mech_prod_list = []
+        # Loop over all lines in the reaction_definitions section of the input file
+        for line in reaction_definitions:
 
-                # Check for comments (beginning with a !), or blank lines
-                if (re.match('!', line) is not None) | (line.isspace()):
-                    rateConstants.append(line)
-                # Check for lines starting with either ; or *, and write these as comments
-                elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
-                    rateConstants.append('!' + line)
-                # Otherwise assume all remaining lines are in the correct format, and so process them
-                else:
-                    # reactionNumber keeps track of the line we are processing
-                    reactionNumber += 1
+            # Check for comments (beginning with a !), or blank lines
+            if (re.match('!', line) is not None) | (line.isspace()):
+                rateConstants.append(line)
+            # Check for lines starting with either ; or *, and write these as comments
+            elif (re.match(';', line) is not None) | (re.match('[*]', line) is not None):
+                rateConstants.append('!' + line)
+            # Otherwise assume all remaining lines are in the correct format, and so process them
+            else:
+                # reactionNumber keeps track of the line we are processing
+                reactionNumber += 1
 
-                    # strip whitespace, ; and %
-                    line = line.strip().strip('%;').strip()
+                # strip whitespace, ; and %
+                line = line.strip().strip('%;').strip()
 
-                    # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
-                    a = re.split(':', line)
+                # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
+                a = re.split(':', line)
 
-                    # Add reaction rate to rateConstants
-                    rateConstants.append(a[0])
+                # Add reaction rate to rateConstants
+                rateConstants.append(a[0])
 
-                    # Process the reaction: split by = into reactants and products
-                    reaction_parts = re.split('=', a[1])
+                # Process the reaction: split by = into reactants and products
+                reaction_parts = re.split('=', a[1])
 
-                    reactantsList = reaction_parts[0]
-                    productsList = reaction_parts[1]
+                reactantsList = reaction_parts[0]
+                productsList = reaction_parts[1]
 
-                    # Process each of reactants and products by splitting by +. Strip each at this stage.
-                    reactants = [item.strip() for item in re.split('[+]', reactantsList)]
-                    products = [item.strip() for item in re.split('[+]', productsList)]
+                # Process each of reactants and products by splitting by +. Strip each at this stage.
+                reactants = [item.strip() for item in re.split('[+]', reactantsList)]
+                products = [item.strip() for item in re.split('[+]', productsList)]
 
-                    # Ignore empty reactantsList
-                    if not reactantsList == '':
-                        # Compare each reactant against known species.
-                        reactantNums = []
-                        for x in reactants:
-                            # If the reactant is a known species then add its number to reactantNums
-                            if x in speciesList:
-                                reactantNums.append(speciesList.index(x)+1)
-                            else:
-                                # Reactant x is not a known species.
-                                # Add reactant to speciesList, and add this number to
-                                # reactantNums to record this reaction.
-                                speciesList.append(x)
-                                reactantNums.append(len(speciesList))
-                                # print 'adding', x, 'to speciesList'
+                # Ignore empty reactantsList
+                if not reactantsList == '':
+                    # Compare each reactant against known species.
+                    reactantNums = []
+                    for x in reactants:
+                        # If the reactant is a known species then add its number to reactantNums
+                        if x in speciesList:
+                            reactantNums.append(speciesList.index(x)+1)
+                        else:
+                            # Reactant x is not a known species.
+                            # Add reactant to speciesList, and add this number to
+                            # reactantNums to record this reaction.
+                            speciesList.append(x)
+                            reactantNums.append(len(speciesList))
+                            # print 'adding', x, 'to speciesList'
 
-                        # Write the reactants to mech_reac_list
-                        mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in reactantNums])
+                    # Write the reactants to mech_reac_list
+                    mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in reactantNums])
 
-                    if not productsList == '':
-                        # Compare each product against known species.
-                        productNums = []
-                        for x in products:
-                            # If the reactant is a known species then add its number to reactantNums
-                            if x in speciesList:
-                                productNums.append(speciesList.index(x)+1)
-                            else:
-                                # Product x is not a known species.
-                                # Add product to speciesList, add this number to
-                                # productNums to record this reaction.
-                                speciesList.append(x)
-                                productNums.append(len(speciesList))
-                                # print 'adding', x, 'to speciesList'
+                if not productsList == '':
+                    # Compare each product against known species.
+                    productNums = []
+                    for x in products:
+                        # If the reactant is a known species then add its number to reactantNums
+                        if x in speciesList:
+                            productNums.append(speciesList.index(x)+1)
+                        else:
+                            # Product x is not a known species.
+                            # Add product to speciesList, add this number to
+                            # productNums to record this reaction.
+                            speciesList.append(x)
+                            productNums.append(len(speciesList))
+                            # print 'adding', x, 'to speciesList'
 
-                        # Write the products to mechanism.prod
-                        for z in productNums:
-                            mech_prod_list.append(str(reactionNumber) + ' ' + str(z) + '\n')
+                    # Write the products to mechanism.prod
+                    for z in productNums:
+                        mech_prod_list.append(str(reactionNumber) + ' ' + str(z) + '\n')
 
 
-            # Output number of species and number of reactions
-            prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
-            # Write all other lines
-            for line in mech_prod_list:
-                prod_file.write(line)
+        # Output number of species and number of reactions
+        prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+        # Write all other lines
+        for line in mech_prod_list:
+            prod_file.write(line)
 
-            # Output number of species and number of reactions
-            reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
+        # Output number of species and number of reactions
+        reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' numberOfSpecies numberOfReactions\n')
 
-            # Write all other lines
-            for line in mech_reac_list:
-                reac_file.write(line)
+        # Write all other lines
+        for line in mech_reac_list:
+            reac_file.write(line)
 
 
         # Write speciesList to mechanism.species, indexed by (1 to len(speciesList))
@@ -362,7 +372,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                                '\g<single>D',
                                string)
                 mech_rates_list.append(
-                    'p(' + str(i) + ') = ' + string + '  !' + reaction_definitions[rate_counter])
+                    'p(' + str(i) + ') = ' + tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
                 i += 1
 
 

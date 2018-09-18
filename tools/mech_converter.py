@@ -146,9 +146,12 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
 
 
 
+
+    # Initialise list, dictionary and a counter,
     variablesDict = dict()
     reactionNumber = 0
     mechanism_rates_coeff_list = []
+    # Process sections 1 and 2
     for line in generic_rate_coefficients + complex_reactions:
         # Check for comments (beginning with a !), or blank lines
         if (re.match('!', line) is not None) | (line.isspace()):
@@ -184,67 +187,43 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                            '\g<doubles>.0_DP',
                            line2)
 
+            # strip whitespace, ; and %
+            cleaned_line = line2.strip().strip('%;').strip()
+
+            # Process the assignment: split by = into variable names and values
+            [lhs, rhs] = re.split('=', cleaned_line)
+
+            # Process each of reactants and products by splitting by +. Strip each at this stage.
+            variable_name = lhs.strip()  # [item.strip() for item in re.split('[+]', LHSList)]
+            value = rhs.strip()  # [item.strip() for item in re.split('[+]', RHSList)]
+
             # Now capture the left hand-side as the variable name, and the right hand-side as the value.
             # reactionNumber keeps track of the line we are processing
             reactionNumber += 1
 
-            # strip whitespace, ; and %
-            a = line2.strip().strip('%;').strip()
-
-            # Process the assignment: split by = into variable names and values
-            assignment_parts = re.split('=', a)
-
-            LHSList = assignment_parts[0]
-            RHSList = assignment_parts[1]
-
-            # Process each of reactants and products by splitting by +. Strip each at this stage.
-            variable_name = LHSList.strip()  # [item.strip() for item in re.split('[+]', LHSList)]
-            value = RHSList.strip()  # [item.strip() for item in re.split('[+]', RHSList)]
-
             # TODO: check for duplicates
             variablesDict[variable_name] = reactionNumber
 
-
             # Replace any variables declared here with references to q, with each new variable assigned
             # to a new element of q.
-
-            if not RHSList.isspace():
-                # Compare each product against known species.
-                # Replace all math characters and brackets with spaces, and split the remaining string by spaces.
-                # Now, each string in the sublist will:
-                # - start with a digit
-                # - be a 'reserved word' i.e. LOG10, EXP, TEMP, PRESS
-                # - otherwise, be a species
-
-                # Create a list
-                # print value
-                new_rhs = tokenise_and_process(value, variablesDict)
-                # print new_rhs
-
-                RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
-
-
-            new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + new_rhs + '  !' + a
+            new_rhs = tokenise_and_process(value, variablesDict)
 
             # Save the resulting string to mechanism_rates_coeff_list
-            mechanism_rates_coeff_list.append(new_line2 + '\n')
+            mechanism_rates_coeff_list.append('q('+str(variablesDict[variable_name]) + ') = ' + new_rhs + '  !' + cleaned_line + '\n')
 
-            # Now we need to find the list of all species that are used in these equations, so we can declare them
-            # at the top of the Fortran source file.
-
+    # Save the number of such equations to be output to mechanism.{prod,reac}
     numberOfGenericComplex = reactionNumber
 
 
 
-
-
+    # Process section 4. We process this before section 3 (ro2) because that telies on our speciesList generated here
     # Initialise a few variables
     speciesList = []
     rateConstants = []
     reactionNumber = 0
 
-    with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, open(
-            os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
+    with open(os.path.join(mc_dir, 'mechanism.reac'), 'w') as reac_file, \
+        open(os.path.join(mc_dir, 'mechanism.prod'), 'w') as prod_file:
         mech_reac_list = []
         mech_prod_list = []
         # Loop over all lines in the reaction_definitions section of the input file
@@ -264,14 +243,14 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                 # strip whitespace, ; and %
                 line = line.strip().strip('%;').strip()
 
-                # split by the semi-colon : a[0] is reaction rate, a[1] is reaction equation
-                a = re.split(':', line)
+                # split by the semi-colon : lhs is reaction rate, rhs is reaction equation
+                [lhs, rhs] = re.split(':', line)
 
                 # Add reaction rate to rateConstants
-                rateConstants.append(a[0])
+                rateConstants.append(lhs)
 
                 # Process the reaction: split by = into reactants and products
-                reaction_parts = re.split('=', a[1])
+                reaction_parts = re.split('=', rhs)
 
                 reactantsList = reaction_parts[0]
                 productsList = reaction_parts[1]
@@ -356,8 +335,8 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                 string = re.sub(r'(?P<single>[0-9]+\.[0-9]+)[eE]',
                                '\g<single>D',
                                string)
-                mech_rates_list.append(
-                    'p(' + str(i) + ') = ' + tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
+                mech_rates_list.append('p(' + str(i) + ') = ' + \
+                  tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
                 i += 1
 
 

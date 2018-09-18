@@ -19,65 +19,50 @@ import os
 import sys
 import fix_mechanism_fac
 
+reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN', 'RO2']
+reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 
+
+# This function takes in a single string, and a disctionary of known variables from previous lines,
+# and returns the same string but with known variables replaced by a reference to their matching
+# element in a vector q. This removes the dependence on potentially 100+ named variables, and
+# replaces them with a single vector.
 def tokenise_and_process(value, variablesDict):
-    reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLH', 'DILUTE', 'JFAC', 'ROOFOPEN', 'RO2']
-    reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
-
-
-    list_of_symbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[()\-+*@/ ]+', value)]
-    # print 'symbol_locs:', list_of_symbol_locs
-    # print 'symbols:   ', [value[item_start:item_end] for [item_start, item_end] in list_of_symbol_locs]
-    list_of_nonsymbol_locs = [[m.start(0), m.end(0)] for m in re.finditer('[^()\-+*@/ ]+', value)]
-    # print 'nonsymbol_locs:', list_of_nonsymbol_locs
-    # print 'nonsymbols:', [value[item_start:item_end] for [item_start, item_end] in list_of_nonsymbol_locs]
-    # print list_of_symbol_locs
-    list_of_symbol_starts = [item[0] for item in list_of_symbol_locs]
-    list_of_symbol_ends = [item[1] for item in list_of_symbol_locs]
-    list_of_nonsymbol_starts = [item[0] for item in list_of_nonsymbol_locs]
-    list_of_nonsymbol_ends = [item[1] for item in list_of_nonsymbol_locs]
+    # Generate start and end points of sections of symbols and nonsymbols
+    symbol_regex = '[()\-+*@/ ]+'
+    nonsymbol_regex = '[^()\-+*@/ ]+'
+    list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, value)]
+    list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, value)]
+    list_of_nonsymbol_starts = [m.start(0) for m in re.finditer(nonsymbol_regex, value)]
+    list_of_nonsymbol_ends = [m.end(0) for m in re.finditer(nonsymbol_regex, value)]
     new_rhs = ''
-    print value
-    print variablesDict
     # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
     # (and thus must be new species/intermediate values) with q(i) notation.
     while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
-        # print list_of_symbol_starts
-        # print list_of_nonsymbol_starts
-        if list_of_symbol_starts != [] and list_of_nonsymbol_starts != []:
-            if list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]:
-                # add next symbol
-                new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
-                del list_of_symbol_starts[0]
-                del list_of_symbol_ends[0]
-                del list_of_symbol_locs[0]
-            else:
-                # add next nonsymbol
-                varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
-                    new_rhs += 'q(' + str(variablesDict[varname]) + ')'
-                else:
-                    new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
-                del list_of_nonsymbol_starts[0]
-                del list_of_nonsymbol_ends[0]
-                del list_of_nonsymbol_locs[0]
-        elif list_of_symbol_starts != []:
+        # We should use the next symbol if either
+        #    1) both lists are non-empty and the symbols list has a lower first element, or
+        #    2) only the symbols list has anything left in it
+        if ((list_of_symbol_starts != [] and list_of_nonsymbol_starts != []) and list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]) \
+          or (list_of_symbol_starts != [] and list_of_nonsymbol_starts == []):
             # add next symbol
+            # Print the substring as-is
             new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+            # Remove the indices from the lists
             del list_of_symbol_starts[0]
             del list_of_symbol_ends[0]
-            del list_of_symbol_locs[0]
-        else:
+        else: # This will execute if there are only non-symbols left, or if the non-symbols list has a lower first element.
             # add next nonsymbol
-            assert list_of_nonsymbol_starts != []
+            # Get the substring of interest
             varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+            # If it's not a number or a reserved word, it must be a variable, so substitute with the relevant element from q.
             if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
                 new_rhs += 'q(' + str(variablesDict[varname]) + ')'
+            # Otherwise, just print the substring as-is
             else:
                 new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+            # Remove the indices from the lists
             del list_of_nonsymbol_starts[0]
             del list_of_nonsymbol_ends[0]
-            del list_of_nonsymbol_locs[0]
 
     return new_rhs
 

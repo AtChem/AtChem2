@@ -323,14 +323,16 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                 list_of_symbol_ends = [item[1] for item in list_of_symbol_locs]
                 list_of_nonsymbol_starts = [item[0] for item in list_of_nonsymbol_locs]
                 list_of_nonsymbol_ends = [item[1] for item in list_of_nonsymbol_locs]
-                intermediate = ''
+                new_rhs = ''
+                # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
+                # (and thus must be new species/intermediate values) with q(i) notation.
                 while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
                     # print list_of_symbol_starts
                     # print list_of_nonsymbol_starts
                     if list_of_symbol_starts != [] and list_of_nonsymbol_starts != []:
                         if list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]:
                             # add next symbol
-                            intermediate += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+                            new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
                             del list_of_symbol_starts[0]
                             del list_of_symbol_ends[0]
                             del list_of_symbol_locs[0]
@@ -338,15 +340,15 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                             # add next nonsymbol
                             varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
                             if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
-                                intermediate += 'q(' + str(variablesDict[varname]) + ')'
+                                new_rhs += 'q(' + str(variablesDict[varname]) + ')'
                             else:
-                                intermediate += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+                                new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
                             del list_of_nonsymbol_starts[0]
                             del list_of_nonsymbol_ends[0]
                             del list_of_nonsymbol_locs[0]
                     elif list_of_symbol_starts != []:
                         # add next symbol
-                        intermediate += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+                        new_rhs += value[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
                         del list_of_symbol_starts[0]
                         del list_of_symbol_ends[0]
                         del list_of_symbol_locs[0]
@@ -355,13 +357,13 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                         assert list_of_nonsymbol_starts != []
                         varname = value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
                         if not re.match('^[0-9]', varname) and varname not in reservedSpeciesList and varname not in reservedOtherList:
-                            intermediate += 'q(' + str(variablesDict[varname]) + ')'
+                            new_rhs += 'q(' + str(variablesDict[varname]) + ')'
                         else:
-                            intermediate += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+                            new_rhs += value[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
                         del list_of_nonsymbol_starts[0]
                         del list_of_nonsymbol_ends[0]
                         del list_of_nonsymbol_locs[0]
-                print intermediate
+                print new_rhs
 
                 RHSList_sub = [item.upper() for item in re.sub('[()\-+*@/]', ' ', RHSList).split(' ')]
                 # Filter out nunbers, and spaces, and any reserved words, and any known species
@@ -370,7 +372,7 @@ def convert(input_file, output_dir, mc_dir, mcm_dir):
                        and (not x in reservedOtherList)
                        and (not x in reservedSpeciesList)]
 
-            new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + intermediate
+            new_line2 = 'q('+str(variablesDict[variable_name]) + ') = ' + new_rhs
 
             # Save the resulting string to mechanism_rates_coeff_list
             mechanism_rates_coeff_list.append(new_line2 + '\n')

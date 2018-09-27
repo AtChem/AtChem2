@@ -176,17 +176,19 @@ contains
     use output_functions_mod, only : ro2sum
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
+    use species_mod, only : getNumberOfGenericComplex
     implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
+    real(kind=DP) :: q(getNumberOfGenericComplex())
 
     real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
-    include './gen/mechanism-rate-declarations.f90'
+    real(kind=DP) :: N2, O2, M, RH, H2O, DEC, BLH, DILUTE, JFAC, ROOFOPEN
 
     ro2 = ro2sum( y )
     dummy = y(1)

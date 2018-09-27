@@ -21,9 +21,8 @@
 #    default. The suggested directory is ./model/
 #
 # $2 is the directory for the auto-generated Fortran files:
+# TODO: delete this!
 #    - mechanism-rate-coefficients.f90
-#    - mechanism-rate-declarations.f90
-#    - ro2-rates.f90
 #    By default, it is ./src/gen/
 #
 # $3 is the directory for the chemical mechanism in Fortran format:

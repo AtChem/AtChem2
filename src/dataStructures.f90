@@ -346,12 +346,13 @@ module species_mod
   implicit none
   save
 
-  private :: numSpecies, numReactions, speciesList
+  private :: numSpecies, numReactions, numGenericComplex, speciesList
   public :: getNumberOfSpecies, setNumberOfSpecies
   public :: getNumberOfReactions, setNumberOfReactions
+  public :: getNumberOfGenericComplex, setNumberOfGenericComplex
   public :: deallocateSpeciesList, getSpeciesList, setSpeciesList
 
-  integer(kind=NPI) :: numSpecies, numReactions
+  integer(kind=NPI) :: numSpecies, numReactions, numGenericComplex
   character(len=maxSpecLength), allocatable :: speciesList(:)
 
 contains
@@ -382,6 +383,18 @@ contains
     integer(kind=NPI) :: n
     numReactions = n
   end subroutine setNumberOfReactions
+
+  pure function getNumberOfGenericComplex() result ( n )
+    implicit none
+    integer(kind=NPI) :: n
+    n = numGenericComplex
+  end function getNumberOfGenericComplex
+
+  subroutine setNumberOfGenericComplex( n )
+    implicit none
+    integer(kind=NPI) :: n
+    numGenericComplex = n
+  end subroutine setNumberOfGenericComplex
 
   subroutine deallocateSpeciesList
     implicit none

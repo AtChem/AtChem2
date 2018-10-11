@@ -147,7 +147,7 @@ PROGRAM ATCHEM2
   ! Set array sizes = number of species
   allocate (speciesConcs(numSpec), z(numSpec))
   ! Set array sizes = number of reactions
-  allocate (lossRates(numReac), productionRates(numReac), instantaneousRates(numReac))
+  allocate (lossRates(numReac), productionRates(numReac), reactionRates(numReac))
 
   ! Read in reactions
   call readReactions()
@@ -413,9 +413,9 @@ PROGRAM ATCHEM2
     call outputSpeciesOfInterest( t, speciesOfInterest, speciesConcs )
     call outputPhotolysisRates( t )
 
-    ! Output instantaneous rates
+    ! Output reaction rates
     if ( mod( elapsed, irOutStepSize ) == 0 ) then
-      call outputInstantaneousRates( time )
+      call outputreactionRates( time )
     end if
 
     ! Output CVODE solver parameters and timestep sizes
@@ -473,7 +473,7 @@ PROGRAM ATCHEM2
   deallocate (speciesConcs, z)
   deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
   deallocate (detailedRatesSpeciesName, speciesOfInterest)
-  deallocate (instantaneousRates)
+  deallocate (reactionRates)
   deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (reacDetailedRatesSpeciesLengths, prodDetailedRatesSpeciesLengths)

@@ -181,7 +181,7 @@ contains
     startDay = nint( input_parameters(10), SI )
     startMonth = nint( input_parameters(11), SI )
     startYear = nint( input_parameters(12), DI )
-    ! Frequency at which to output instantaneous rates
+    ! Frequency at which to output reaction rates
     irOutStepSize = nint( input_parameters(13), QI )
 
     ! float format
@@ -198,7 +198,7 @@ contains
     write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
     write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
     write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
-    write (*, 400) 'instantaneous rates output step size: ', irOutStepSize
+    write (*, 400) 'reaction rates output step size: ', irOutStepSize
     write (*, 400) 'modelStartTime: ', modelStartTime
     write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
     write (*, 300) 'latitude: ', latitude

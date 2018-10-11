@@ -88,7 +88,7 @@ for test in $1; do
   fi
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 $TESTS_DIR/$test/output $TESTS_DIR/$test/output/instantaneousRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
+  ./atchem2 $TESTS_DIR/$test/output $TESTS_DIR/$test/output/reactionRates $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/mcm $TESTS_DIR/$test/model/constraints/species $TESTS_DIR/$test/model/constraints/environment $TESTS_DIR/$test/model/constraints/photolysis > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...
@@ -144,10 +144,10 @@ $this_file_failures"
     fi
   done
 
-  # Loop over all files (that don't end in .cmp) in the instantaneousRates
+  # Loop over all files (that don't end in .cmp) in the reactionRates
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
-  for filename in $TESTS_DIR/$test/output/instantaneousRates/* ; do
+  for filename in $TESTS_DIR/$test/output/reactionRates/* ; do
     if [ ${filename: -4} == ".cmp" ] ; then
       echo 'Checking' $filename
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)

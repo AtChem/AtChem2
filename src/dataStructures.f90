@@ -70,7 +70,7 @@ module directories_mod
   implicit none
   save
 
-  character(len=maxFilepathLength) :: output_dir, instantaneousRates_dir, param_dir, mcm_dir, &
+  character(len=maxFilepathLength) :: output_dir, reactionRates_dir, param_dir, mcm_dir, &
                                       spec_constraints_dir, env_constraints_dir, photolysis_constraints_dir
 
 end module directories_mod
@@ -579,6 +579,6 @@ module reaction_rates_mod
   save
 
   real(kind=DP), allocatable :: lossRates(:), productionRates(:)
-  real(kind=DP), allocatable :: instantaneousRates(:)
+  real(kind=DP), allocatable :: reactionRates(:)
 
 end module reaction_rates_mod

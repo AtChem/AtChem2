@@ -25,7 +25,7 @@ contains
   ! Calculates the system residual
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
-    use reaction_rates_mod, only : lossRates, productionRates, instantaneousRates
+    use reaction_rates_mod, only : lossRates, productionRates, reactionRates
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
@@ -65,7 +65,7 @@ contains
     ! loop will update r(1) to kAAB.
     do i = 1, size( lhs, 2 )
       r(lhs(1, i)) = r(lhs(1, i)) * y(lhs(2, i)) ** lcoeff(i)
-      instantaneousRates(lhs(1, i)) = r(lhs(1, i))
+      reactionRates(lhs(1, i)) = r(lhs(1, i))
     end do
 
     ! loop over each of the species in each reaction, updating the dy (rate of change of species y)

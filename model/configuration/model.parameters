@@ -10,4 +10,4 @@
 21			day
 06			month
 2010			year
-1800			instantaneous rates output step size (seconds)
+1800			reaction rates output step size (seconds)

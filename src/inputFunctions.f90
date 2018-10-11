@@ -38,9 +38,9 @@ contains
       output_dir = "model/output"
     end if
     if ( cmd_arg_count > 1 ) then
-      call get_command_argument( 2, instantaneousRates_dir )
+      call get_command_argument( 2, reactionRates_dir )
     else
-      instantaneousRates_dir = "model/output/instantaneousRates"
+      reactionRates_dir = "model/output/reactionRates"
     end if
     if ( cmd_arg_count > 2 ) then
       call get_command_argument( 3, param_dir )
@@ -69,7 +69,7 @@ contains
     end if
 
     write (*, '(2A)') ' Output dir is: ', trim( output_dir )
-    write (*, '(2A)') ' Instantaneous Rates dir is: ', trim( instantaneousRates_dir )
+    write (*, '(2A)') ' Reaction Rates dir is: ', trim( reactionRates_dir )
     write (*, '(2A)') ' Configuration dir is: ', trim( param_dir )
     write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
     write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
@@ -359,7 +359,7 @@ contains
       end if
     end do
     if ( allocated_j .eqv. .false. ) then
-      call allocate_photolysis_j(maxval(photoNumbers))
+      call allocate_photolysis_j( maxval(photoNumbers) )
       allocated_j = .true.
     end if
     close (10, status='keep')

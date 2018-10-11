@@ -304,12 +304,12 @@ contains
   end subroutine outputRates
 
   ! ----------------------------------------------------------------- !
-  ! Write instantaneous rates to file.
-  subroutine outputInstantaneousRates( time )
+  ! Write reaction rates to file.
+  subroutine outputreactionRates( time )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use directories_mod, only : instantaneousRates_dir
-    use reaction_rates_mod, only : instantaneousRates
+    use directories_mod, only : reactionRates_dir
+    use reaction_rates_mod, only : reactionRates
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -320,17 +320,17 @@ contains
 
     write (strTime,*) time
 
-    irfileLocation = trim( instantaneousRates_dir ) // '/' // adjustl( strTime )
+    irfileLocation = trim( reactionRates_dir ) // '/' // adjustl( strTime )
 
     open (10, file=irfileLocation)
     write (10,*) 'reactionNumber reactionRate'
-    do i = 1, size( instantaneousRates )
-      write (10, '(I0, ES15.6E3)') i, instantaneousRates(i)
+    do i = 1, size( reactionRates )
+      write (10, '(I0, ES15.6E3)') i, reactionRates(i)
     end do
     close (10, status='keep')
 
     return
-  end subroutine outputInstantaneousRates
+  end subroutine outputreactionRates
 
   ! -----------------------------------------------------------------
   ! Print each element of arrayOfConcs, with size arrayOfConcsSize.

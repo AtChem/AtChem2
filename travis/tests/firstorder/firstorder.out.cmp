@@ -4,7 +4,7 @@ AtChem2 v1.1-dev
  Directories
 -------------
  Output dir is: travis/tests/firstorder/output
- Instantaneous Rates dir is: travis/tests/firstorder/output/instantaneousRates
+ Reaction Rates dir is: travis/tests/firstorder/output/reactionRates
  Configuration dir is: travis/tests/firstorder/model/configuration
  MCM dir is: travis/tests/firstorder/mcm
  Species Constraints dir is: travis/tests/firstorder/model/constraints/species
@@ -68,7 +68,7 @@ AtChem2 v1.1-dev
                       species interpolation method: piecewise linear
                    conditions interpolation method: piecewise linear
                                ratesOutputStepSize:           1
-              instantaneous rates output step size:         100
+              reaction rates output step size:         100
                                     modelStartTime:           0
                             jacobianOutputStepSize:           1
                                           latitude:   0.529E+02

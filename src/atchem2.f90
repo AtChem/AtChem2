@@ -59,7 +59,8 @@ PROGRAM ATCHEM2
   integer(kind=NPI) :: numSpec, numReac
 
   ! Declarations for detailed rates output
-  integer(kind=NPI), allocatable :: reacDetailedRatesSpecies(:,:), prodDetailedRatesSpecies(:,:)
+  type(reaction_frequency_pair) :: invalid_reaction_frequency_pair
+  type(reaction_frequency_pair), allocatable :: reacDetailedRatesSpecies(:,:), prodDetailedRatesSpecies(:,:)
   integer(kind=NPI), allocatable :: reacDetailedRatesSpeciesLengths(:), prodDetailedRatesSpeciesLengths(:)
   integer(kind=NPI), allocatable :: detailedRatesSpecies(:)
   character(len=maxSpecLength), allocatable :: detailedRatesSpeciesName(:)
@@ -146,8 +147,8 @@ PROGRAM ATCHEM2
 
   ! Set array sizes = number of species
   allocate (speciesConcs(numSpec), z(numSpec))
-  ! Set array sizes = number of reactions
-  allocate (lossRates(numReac), productionRates(numReac), reactionRates(numReac))
+  ! Set array size = number of reactions
+  allocate (reactionRates(numReac))
 
   ! Read in reactions
   call readReactions()
@@ -176,8 +177,9 @@ PROGRAM ATCHEM2
   allocate (detailedRatesSpecies(size( detailedRatesSpeciesName )))
   allocate (reacDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( clhs, 2 )))
   allocate (prodDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( crhs, 2 )))
-  reacDetailedRatesSpecies(:,:) = -1_NPI
-  prodDetailedRatesSpecies(:,:) = -1_NPI
+  invalid_reaction_frequency_pair = reaction_frequency_pair(-1_NPI, 0_NPI)
+  reacDetailedRatesSpecies(:,:) = invalid_reaction_frequency_pair
+  prodDetailedRatesSpecies(:,:) = invalid_reaction_frequency_pair
   allocate (reacDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
   allocate (prodDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
 
@@ -193,8 +195,8 @@ PROGRAM ATCHEM2
   !
   ! Fill the remaining elements of each row of reac/prodDetailedRatesSpecies with the
   ! numbers of the reactions in which that species appears as a reactant/product respectively
-  call findReactionsWithProductOrReactant( detailedRatesSpecies, reacDetailedRatesSpecies, clhs, reacDetailedRatesSpeciesLengths )
-  call findReactionsWithProductOrReactant( detailedRatesSpecies, prodDetailedRatesSpecies, crhs, prodDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, clhs, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, crhs, prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths )
   write (*, '(A, I0)') ' Species requiring detailed rate output (number of species found): ', size( detailedRatesSpeciesName )
   write (*,*)
 
@@ -406,8 +408,8 @@ PROGRAM ATCHEM2
     ! Output rates of production and loss (output frequency set in
     ! model.parameters)
     if ( mod( elapsed, ratesOutputStepSize ) == 0 ) then
-      call outputRates( detailedRatesSpecies, prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths, t, productionRates, 1_SI )
-      call outputRates( detailedRatesSpecies, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, lossRates, 0_SI )
+      call outputRates( detailedRatesSpecies, prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths, t, reactionRates, 1_SI )
+      call outputRates( detailedRatesSpecies, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths, t, reactionRates, 0_SI )
     end if
 
     call outputSpeciesOfInterest( t, speciesOfInterest, speciesConcs )
@@ -474,7 +476,6 @@ PROGRAM ATCHEM2
   deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
   deallocate (detailedRatesSpeciesName, speciesOfInterest)
   deallocate (reactionRates)
-  deallocate (lossRates, productionRates)
   deallocate (clhs, clcoeff, crhs, crcoeff)
   deallocate (reacDetailedRatesSpeciesLengths, prodDetailedRatesSpeciesLengths)
 

@@ -253,7 +253,8 @@ contains
     use storage_mod, only : maxSpecLength, maxReactionStringLength
     implicit none
 
-    integer(kind=NPI), intent(in) :: r(:,:), arrayLen(:), rSpecies(:)
+    type(reaction_frequency_pair), intent(in) :: r(:,:)
+    integer(kind=NPI), intent(in) :: arrayLen(:), rSpecies(:)
     real(kind=DP), intent(in) :: t, p(:)
     integer(kind=SI), intent(in) :: flag
     character(len=maxSpecLength), allocatable :: speciesNames(:)
@@ -291,11 +292,16 @@ contains
       end if
 
       do j = 1, arrayLen(i)
-        if ( r(i, j) /= -1 ) then
-          reaction = getReaction( speciesNames, r(i, j) )
+        if ( ( r(i, j)%reaction /= -1_NPI ) .and. ( r(i,j)%frequency /= 0_NPI ) ) then
+          reaction = getReaction( speciesNames, r(i, j)%reaction )
+          ! r contains the occurences of each of the detailed species in reactions.
+          ! r should have row lengths as in arrayLen, so all accesss to r(i,j) should
+          !  be valid.
           write (output_file_number, '(ES15.6E3, I14, A12, I15, ES15.6E3, A, A)') t, rSpecies(i), &
                                                                                   trim( speciesNames(rSpecies(i)) ), &
-                                                                                  r(i, j), p(r(i, j)), '  ', trim( reaction )
+                                                                                  r(i, j)%reaction, &
+                                                                                  r(i, j)%frequency * p(r(i, j)%reaction), &
+                                                                                  '  ', trim( reaction )
         end if
       end do
     end do

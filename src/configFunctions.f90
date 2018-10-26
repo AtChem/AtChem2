@@ -80,15 +80,20 @@ contains
   end function getIndexWithinList
 
   ! ----------------------------------------------------------------- !
-  ! Fill the column(s) of each row of r with the
-  ! numbers of the reactions in which it is present in chs. Uses
-  ! arrayLen to keep track of how many are present in each row.
-  subroutine findReactionsWithProductOrReactant( rSpecies, r, chs, arrayLen )
+  ! At the end of this function, each row of r is associated to one of
+  ! the species in rSpecies. Each element of the row corresponds to a
+  ! reaction in which this species appears as a product or reactant.
+  ! Each element consists of %reaction holding the reaction number, and
+  ! %frequency holding the number of occurences of that species in that
+  ! reaction.
+  ! chs contains the product or reactant information.
+  ! arrayLen is used to keep track of how many are present in each row.
+  subroutine findReactionsWithProductOrReactant( rSpecies, chs, r, arrayLen )
     use types_mod
     implicit none
 
-    integer(kind=NPI), intent(inout) :: r(:,:)
     integer(kind=NPI), intent(in) :: rSpecies(:), chs(:,:)
+    type(reaction_frequency_pair), intent(inout) :: r(:,:)
     integer(kind=NPI), intent(out) :: arrayLen(:)
     integer(kind=NPI) :: rCounter, i, j
 
@@ -100,7 +105,7 @@ contains
       stop "size(arrayLen) /= size(r, 1) in findReactionsWithProductOrReactant()."
     end if
     ! initialise counter for r array
-    rCounter = 1
+    rCounter = 0_NPI
     ! loop over interesting species (i.e. over 1st index of r)
     do i = 1, size( arrayLen )
       ! loop over elements of 2nd index of chs
@@ -110,13 +115,22 @@ contains
         ! element of this row in chs (the equation number) to this row
         ! in r, and update the length counter arrayLen for this row.
         if ( chs(2, j) == rSpecies(i) ) then
-          ! Match found - fill r with the reaction number
-          r(i, rCounter) = chs(1, j)
-          rCounter = rCounter + 1
+          ! Match found
+          ! If the reaction number is not the same as previously, then move on in the array
+          ! Regardless of that, fill r with the reaction number
+          ! Handle the corner case
+
+          if ( rCounter == 0_NPI ) then
+            rCounter = 1_NPI
+          elseif ( chs(1,j) /= r(i, rCounter)%reaction ) then
+            rCounter = rCounter + 1_NPI
+          end if
+          r(i, rCounter)%reaction = chs(1, j)
+          r(i, rCounter)%frequency = r(i, rCounter)%frequency + 1_NPI
         end if
       end do
-      arrayLen(i) = rCounter - 1
-      rCounter = 1
+      arrayLen(i) = rCounter
+      rCounter = 0_NPI
     end do
 
     return

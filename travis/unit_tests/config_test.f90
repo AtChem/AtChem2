@@ -51,12 +51,15 @@ contains
     use config_functions_mod, only : findReactionsWithProductOrReactant
     implicit none
 
-    integer(kind=NPI) :: speciesList(3), chs(2, 6), r(3, 10), lens(3), i, j, lenAnswer(3), rAnswer(3, 10)
+    integer(kind=NPI) :: speciesList(3), chs(2, 7), lens(3), i, j, lenAnswer(3)
+    type(reaction_frequency_pair) :: r(3, 10), rAnswer(3, 10)
 
     do i = 1, size( r, 1 )
       do j = 1, size( r, 2 )
-        r(i,j) = 0_NPI
-        rAnswer(i, j) = 0_NPI
+        r(i,j)%reaction = 0_NPI
+        rAnswer(i, j)%reaction = 0_NPI
+        r(i,j)%frequency = 0_NPI
+        rAnswer(i, j)%frequency = 0_NPI
       enddo
     enddo
     speciesList = (/ 3_NPI, 2_NPI, 1_NPI /)
@@ -65,16 +68,27 @@ contains
                      1_NPI, 4_NPI, &
                      2_NPI, 1_NPI, &
                      2_NPI, 2_NPI, &
+                     2_NPI, 2_NPI, &
                      2_NPI, 3_NPI, &
                      3_NPI, 2_NPI /), (/ size( chs, 1 ), size( chs, 2 )/))
     lenAnswer = (/ 2_NPI, 2_NPI, 1_NPI /)
-    rAnswer(1,1) = 1_NPI
-    rAnswer(1,2) = 2_NPI
-    rAnswer(2,1) = 2_NPI
-    rAnswer(2,2) = 3_NPI
-    rAnswer(3,1) = 2_NPI
+    ! species 3 occurs in reaction 1 once
+    rAnswer(1,1)%reaction = 1_NPI
+    rAnswer(1,1)%frequency = 1_NPI
+    ! species 3 occurs in reaction 2 once
+    rAnswer(1,2)%reaction = 2_NPI
+    rAnswer(1,2)%frequency = 1_NPI
+    ! species 2 occurs in reaction 2 twice
+    rAnswer(2,1)%reaction = 2_NPI
+    rAnswer(2,1)%frequency = 2_NPI
+    ! species 2 occurs in reaction 3 once
+    rAnswer(2,2)%reaction = 3_NPI
+    rAnswer(2,2)%frequency = 1_NPI
+    ! species 1 occurs in reaction 2 once
+    rAnswer(3,1)%reaction = 2_NPI
+    rAnswer(3,1)%frequency = 1_NPI
 
-    call findReactionsWithProductOrReactant(speciesList,r,chs,lens)
+    call findReactionsWithProductOrReactant(speciesList,chs,r,lens)
     do i = 1_NPI, size( lenAnswer )
       call assert_true( lenAnswer(i) == lens(i), "test_findReactionsWithProductOrReactant length" )
     enddo

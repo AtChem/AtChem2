@@ -25,7 +25,7 @@ contains
   ! Calculates the system residual
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
-    use reaction_rates_mod, only : lossRates, productionRates, reactionRates
+    use reaction_rates_mod, only : reactionRates
     implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
@@ -52,8 +52,6 @@ contains
 
     ! set rate eqn to zero
     dy(:) = 0
-    productionRates(:) = 0
-    lossRates(:) = 0
 
     ! get values of reactions rates
     call mechanism_rates( time, y, r )
@@ -76,7 +74,6 @@ contains
     ! Finally, it updates dy(B) by r(1) for the reactant B to set dy(B) = -kAAB.
     do i = 1, size( lhs, 2 )
       dy(lhs(2, i)) = dy(lhs(2, i)) - lcoeff(i) * r(lhs(1, i))
-      lossRates(lhs(1, i)) = abs( dy(lhs(2, i)) )
     end do
 
     ! This does the same as the above but updates each of the product species by
@@ -86,7 +83,6 @@ contains
     ! give dy(D) = kAAB.
     do i = 1, size( rhs, 2 )
       dy(rhs(2, i)) = dy(rhs(2, i)) + rcoeff(i) * r(rhs(1, i))
-      productionRates(rhs(1, i)) = productionRates(rhs(1, i)) + rcoeff(i) * r(rhs(1, i))
     end do
 
     return

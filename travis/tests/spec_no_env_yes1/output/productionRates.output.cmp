@@ -1,10 +1,8 @@
            time speciesNumber speciesName reactionNumber           rate
   3.600000E+003             8          OH             15  0.000000E+000  O1D=OH+OH
-  3.600000E+003             8          OH             15  0.000000E+000  O1D=OH+OH
   3.600000E+003             8          OH             20  0.000000E+000  HO2+O3=OH
   3.600000E+003             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   3.600000E+003             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  3.600000E+003             8          OH             41  0.000000E+000  H2O2=OH+OH
   3.600000E+003             8          OH             41  0.000000E+000  H2O2=OH+OH
   3.600000E+003             8          OH             45  0.000000E+000  HONO=OH+NO
   3.600000E+003             8          OH             46  0.000000E+000  HNO3=OH+NO2
@@ -17,7 +15,6 @@
   3.600000E+003             9         HO2             26  0.000000E+000  OH+NO3=HO2+NO2
   3.600000E+003             9         HO2             35  0.000000E+000  HSO3=HO2+SO3
   3.600000E+003             9         HO2             48  0.000000E+000  HO2NO2=HO2+NO2
-  3.600000E+003             9         HO2             63  0.000000E+000  HCHO=CO+HO2+HO2
   3.600000E+003             9         HO2             63  0.000000E+000  HCHO=CO+HO2+HO2
   3.600000E+003             9         HO2             65  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   3.600000E+003             9         HO2             66  0.000000E+000  OH+HCHO=HO2+CO

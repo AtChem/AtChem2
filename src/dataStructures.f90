@@ -41,6 +41,11 @@ module types_mod
   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
   integer, parameter :: QP = selected_real_kind( p = 33, r = 4931 )
 
+  type reaction_frequency_pair
+    integer(kind=NPI) :: reaction
+    integer(kind=NPI) :: frequency
+  end type reaction_frequency_pair
+
 end module types_mod
 
 ! ******************************************************************** !
@@ -578,7 +583,6 @@ module reaction_rates_mod
   implicit none
   save
 
-  real(kind=DP), allocatable :: lossRates(:), productionRates(:)
   real(kind=DP), allocatable :: reactionRates(:)
 
 end module reaction_rates_mod

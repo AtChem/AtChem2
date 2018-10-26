@@ -10,7 +10,6 @@
   8.520000E+004             9         HO2             51  0.000000E+000  C2H5OH+OH=CH3CHO+HO2
   8.520000E+004             9         HO2             54  0.000000E+000  BUT2OL+OH=MEK+HO2
   8.520000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
-  8.520000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
   8.520000E+004             9         HO2             57  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   8.520000E+004             9         HO2             58  0.000000E+000  OH+HCHO=HO2+CO
   8.520000E+004             9         HO2             59  0.000000E+000  C2H5O=CH3CHO+HO2
@@ -20,7 +19,6 @@
   8.520000E+004             9         HO2            111  0.000000E+000  ETHGLY+OH=HOCH2CHO+HO2
   8.520000E+004             9         HO2            113  0.000000E+000  HOCH2CHO+OH=GLYOX+HO2
   8.520000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
-  8.520000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
   8.520000E+004             9         HO2            119  0.000000E+000  BUT2OLAO=CH3CHO+CH3CHO+HO2
   8.520000E+004             9         HO2            121  0.000000E+000  BUT2OLO+OH=BIACET+HO2
   8.520000E+004             9         HO2            122  0.000000E+000  BUT2OLO=CH3CO3+CH3CHO+HO2
@@ -28,7 +26,6 @@
   8.520000E+004             9         HO2            155  0.000000E+000  CH3O=HCHO+HO2
   8.520000E+004             9         HO2            165  0.000000E+000  HCOCH2OOH=HO2+CO+HCHO+OH
   8.520000E+004             9         HO2            166  0.000000E+000  HCOCH2O=HCHO+CO+HO2
-  8.520000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.520000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.520000E+004             9         HO2            172  0.000000E+000  HOCH2CO3+HO2=HO2+HCHO+OH
   8.520000E+004             9         HO2            175  0.000000E+000  HOCH2CO3+NO=NO2+HO2+HCHO
@@ -56,16 +53,13 @@
   8.520000E+004             9         HO2            298  0.000000E+000  ACETOL=CH3CO3+HCHO+HO2
   8.520000E+004             9         HO2            299  0.000000E+000  MGLYOX=CH3CO3+CO+HO2
   8.520000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
-  8.520000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
   8.520000E+004             9         HO2            308  0.000000E+000  OH+HCOCO2H=CO+HO2
   8.520000E+004             9         HO2            309  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.520000E+004             9         HO2            310  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.520000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
-  8.520000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
   8.520000E+004             8          OH             20  0.000000E+000  HO2+O3=OH
   8.520000E+004             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   8.520000E+004             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  8.520000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.520000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.520000E+004             8          OH             45  0.000000E+000  HONO=OH+NO
   8.520000E+004             8          OH             46  0.000000E+000  HNO3=OH+NO2
@@ -125,7 +119,6 @@
   8.580000E+004             9         HO2             51  0.000000E+000  C2H5OH+OH=CH3CHO+HO2
   8.580000E+004             9         HO2             54  0.000000E+000  BUT2OL+OH=MEK+HO2
   8.580000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
-  8.580000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
   8.580000E+004             9         HO2             57  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   8.580000E+004             9         HO2             58  0.000000E+000  OH+HCHO=HO2+CO
   8.580000E+004             9         HO2             59  0.000000E+000  C2H5O=CH3CHO+HO2
@@ -135,7 +128,6 @@
   8.580000E+004             9         HO2            111  0.000000E+000  ETHGLY+OH=HOCH2CHO+HO2
   8.580000E+004             9         HO2            113  0.000000E+000  HOCH2CHO+OH=GLYOX+HO2
   8.580000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
-  8.580000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
   8.580000E+004             9         HO2            119  0.000000E+000  BUT2OLAO=CH3CHO+CH3CHO+HO2
   8.580000E+004             9         HO2            121  0.000000E+000  BUT2OLO+OH=BIACET+HO2
   8.580000E+004             9         HO2            122  0.000000E+000  BUT2OLO=CH3CO3+CH3CHO+HO2
@@ -143,7 +135,6 @@
   8.580000E+004             9         HO2            155  0.000000E+000  CH3O=HCHO+HO2
   8.580000E+004             9         HO2            165  0.000000E+000  HCOCH2OOH=HO2+CO+HCHO+OH
   8.580000E+004             9         HO2            166  0.000000E+000  HCOCH2O=HCHO+CO+HO2
-  8.580000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.580000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.580000E+004             9         HO2            172  0.000000E+000  HOCH2CO3+HO2=HO2+HCHO+OH
   8.580000E+004             9         HO2            175  0.000000E+000  HOCH2CO3+NO=NO2+HO2+HCHO
@@ -171,16 +162,13 @@
   8.580000E+004             9         HO2            298  0.000000E+000  ACETOL=CH3CO3+HCHO+HO2
   8.580000E+004             9         HO2            299  0.000000E+000  MGLYOX=CH3CO3+CO+HO2
   8.580000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
-  8.580000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
   8.580000E+004             9         HO2            308  0.000000E+000  OH+HCOCO2H=CO+HO2
   8.580000E+004             9         HO2            309  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.580000E+004             9         HO2            310  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.580000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
-  8.580000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
   8.580000E+004             8          OH             20  0.000000E+000  HO2+O3=OH
   8.580000E+004             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   8.580000E+004             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  8.580000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.580000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.580000E+004             8          OH             45  0.000000E+000  HONO=OH+NO
   8.580000E+004             8          OH             46  0.000000E+000  HNO3=OH+NO2
@@ -240,7 +228,6 @@
   8.640000E+004             9         HO2             51  0.000000E+000  C2H5OH+OH=CH3CHO+HO2
   8.640000E+004             9         HO2             54  0.000000E+000  BUT2OL+OH=MEK+HO2
   8.640000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
-  8.640000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
   8.640000E+004             9         HO2             57  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   8.640000E+004             9         HO2             58  0.000000E+000  OH+HCHO=HO2+CO
   8.640000E+004             9         HO2             59  0.000000E+000  C2H5O=CH3CHO+HO2
@@ -250,7 +237,6 @@
   8.640000E+004             9         HO2            111  0.000000E+000  ETHGLY+OH=HOCH2CHO+HO2
   8.640000E+004             9         HO2            113  0.000000E+000  HOCH2CHO+OH=GLYOX+HO2
   8.640000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
-  8.640000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
   8.640000E+004             9         HO2            119  0.000000E+000  BUT2OLAO=CH3CHO+CH3CHO+HO2
   8.640000E+004             9         HO2            121  0.000000E+000  BUT2OLO+OH=BIACET+HO2
   8.640000E+004             9         HO2            122  0.000000E+000  BUT2OLO=CH3CO3+CH3CHO+HO2
@@ -258,7 +244,6 @@
   8.640000E+004             9         HO2            155  0.000000E+000  CH3O=HCHO+HO2
   8.640000E+004             9         HO2            165  0.000000E+000  HCOCH2OOH=HO2+CO+HCHO+OH
   8.640000E+004             9         HO2            166  0.000000E+000  HCOCH2O=HCHO+CO+HO2
-  8.640000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.640000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.640000E+004             9         HO2            172  0.000000E+000  HOCH2CO3+HO2=HO2+HCHO+OH
   8.640000E+004             9         HO2            175  0.000000E+000  HOCH2CO3+NO=NO2+HO2+HCHO
@@ -286,16 +271,13 @@
   8.640000E+004             9         HO2            298  0.000000E+000  ACETOL=CH3CO3+HCHO+HO2
   8.640000E+004             9         HO2            299  0.000000E+000  MGLYOX=CH3CO3+CO+HO2
   8.640000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
-  8.640000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
   8.640000E+004             9         HO2            308  0.000000E+000  OH+HCOCO2H=CO+HO2
   8.640000E+004             9         HO2            309  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.640000E+004             9         HO2            310  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.640000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
-  8.640000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
   8.640000E+004             8          OH             20  0.000000E+000  HO2+O3=OH
   8.640000E+004             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   8.640000E+004             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  8.640000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.640000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.640000E+004             8          OH             45  0.000000E+000  HONO=OH+NO
   8.640000E+004             8          OH             46  0.000000E+000  HNO3=OH+NO2
@@ -355,7 +337,6 @@
   8.700000E+004             9         HO2             51  0.000000E+000  C2H5OH+OH=CH3CHO+HO2
   8.700000E+004             9         HO2             54  0.000000E+000  BUT2OL+OH=MEK+HO2
   8.700000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
-  8.700000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
   8.700000E+004             9         HO2             57  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   8.700000E+004             9         HO2             58  0.000000E+000  OH+HCHO=HO2+CO
   8.700000E+004             9         HO2             59  0.000000E+000  C2H5O=CH3CHO+HO2
@@ -365,7 +346,6 @@
   8.700000E+004             9         HO2            111  0.000000E+000  ETHGLY+OH=HOCH2CHO+HO2
   8.700000E+004             9         HO2            113  0.000000E+000  HOCH2CHO+OH=GLYOX+HO2
   8.700000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
-  8.700000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
   8.700000E+004             9         HO2            119  0.000000E+000  BUT2OLAO=CH3CHO+CH3CHO+HO2
   8.700000E+004             9         HO2            121  0.000000E+000  BUT2OLO+OH=BIACET+HO2
   8.700000E+004             9         HO2            122  0.000000E+000  BUT2OLO=CH3CO3+CH3CHO+HO2
@@ -373,7 +353,6 @@
   8.700000E+004             9         HO2            155  0.000000E+000  CH3O=HCHO+HO2
   8.700000E+004             9         HO2            165  0.000000E+000  HCOCH2OOH=HO2+CO+HCHO+OH
   8.700000E+004             9         HO2            166  0.000000E+000  HCOCH2O=HCHO+CO+HO2
-  8.700000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.700000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.700000E+004             9         HO2            172  0.000000E+000  HOCH2CO3+HO2=HO2+HCHO+OH
   8.700000E+004             9         HO2            175  0.000000E+000  HOCH2CO3+NO=NO2+HO2+HCHO
@@ -401,16 +380,13 @@
   8.700000E+004             9         HO2            298  0.000000E+000  ACETOL=CH3CO3+HCHO+HO2
   8.700000E+004             9         HO2            299  0.000000E+000  MGLYOX=CH3CO3+CO+HO2
   8.700000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
-  8.700000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
   8.700000E+004             9         HO2            308  0.000000E+000  OH+HCOCO2H=CO+HO2
   8.700000E+004             9         HO2            309  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.700000E+004             9         HO2            310  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.700000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
-  8.700000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
   8.700000E+004             8          OH             20  0.000000E+000  HO2+O3=OH
   8.700000E+004             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   8.700000E+004             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  8.700000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.700000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.700000E+004             8          OH             45  0.000000E+000  HONO=OH+NO
   8.700000E+004             8          OH             46  0.000000E+000  HNO3=OH+NO2
@@ -470,7 +446,6 @@
   8.760000E+004             9         HO2             51  0.000000E+000  C2H5OH+OH=CH3CHO+HO2
   8.760000E+004             9         HO2             54  0.000000E+000  BUT2OL+OH=MEK+HO2
   8.760000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
-  8.760000E+004             9         HO2             55  0.000000E+000  HCHO=CO+HO2+HO2
   8.760000E+004             9         HO2             57  0.000000E+000  NO3+HCHO=HNO3+CO+HO2
   8.760000E+004             9         HO2             58  0.000000E+000  OH+HCHO=HO2+CO
   8.760000E+004             9         HO2             59  0.000000E+000  C2H5O=CH3CHO+HO2
@@ -480,7 +455,6 @@
   8.760000E+004             9         HO2            111  0.000000E+000  ETHGLY+OH=HOCH2CHO+HO2
   8.760000E+004             9         HO2            113  0.000000E+000  HOCH2CHO+OH=GLYOX+HO2
   8.760000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
-  8.760000E+004             9         HO2            115  0.000000E+000  HOCH2CHO=HO2+HCHO+HO2+CO
   8.760000E+004             9         HO2            119  0.000000E+000  BUT2OLAO=CH3CHO+CH3CHO+HO2
   8.760000E+004             9         HO2            121  0.000000E+000  BUT2OLO+OH=BIACET+HO2
   8.760000E+004             9         HO2            122  0.000000E+000  BUT2OLO=CH3CO3+CH3CHO+HO2
@@ -488,7 +462,6 @@
   8.760000E+004             9         HO2            155  0.000000E+000  CH3O=HCHO+HO2
   8.760000E+004             9         HO2            165  0.000000E+000  HCOCH2OOH=HO2+CO+HCHO+OH
   8.760000E+004             9         HO2            166  0.000000E+000  HCOCH2O=HCHO+CO+HO2
-  8.760000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.760000E+004             9         HO2            168  0.000000E+000  GLYOX=CO+CO+HO2+HO2
   8.760000E+004             9         HO2            172  0.000000E+000  HOCH2CO3+HO2=HO2+HCHO+OH
   8.760000E+004             9         HO2            175  0.000000E+000  HOCH2CO3+NO=NO2+HO2+HCHO
@@ -516,16 +489,13 @@
   8.760000E+004             9         HO2            298  0.000000E+000  ACETOL=CH3CO3+HCHO+HO2
   8.760000E+004             9         HO2            299  0.000000E+000  MGLYOX=CH3CO3+CO+HO2
   8.760000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
-  8.760000E+004             9         HO2            307  0.000000E+000  HCOCO2H=HO2+HO2+CO
   8.760000E+004             9         HO2            308  0.000000E+000  OH+HCOCO2H=CO+HO2
   8.760000E+004             9         HO2            309  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.760000E+004             9         HO2            310  0.000000E+000  HCOCO3H=HO2+CO+OH
   8.760000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
-  8.760000E+004             8          OH             15  0.000000E+000  O1D=OH+OH
   8.760000E+004             8          OH             20  0.000000E+000  HO2+O3=OH
   8.760000E+004             8          OH             27  0.000000E+000  HO2+NO=OH+NO2
   8.760000E+004             8          OH             30  0.000000E+000  HO2+NO3=OH+NO2
-  8.760000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.760000E+004             8          OH             41  0.000000E+000  H2O2=OH+OH
   8.760000E+004             8          OH             45  0.000000E+000  HONO=OH+NO
   8.760000E+004             8          OH             46  0.000000E+000  HNO3=OH+NO2

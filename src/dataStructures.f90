@@ -50,14 +50,14 @@ module types_mod
     module procedure reaction_frequency_pair_equals
   end interface
 
-  contains
-    function reaction_frequency_pair_equals(a,b) result ( res )
-      implicit none
-      type(reaction_frequency_pair), intent(in) :: a, b
-      logical :: res
+contains
+  function reaction_frequency_pair_equals( a, b ) result ( res )
+    implicit none
+    type(reaction_frequency_pair), intent(in) :: a, b
+    logical :: res
 
-      res = ( ( a%reaction == b%reaction ) .and. ( a%frequency == b%frequency ) )
-    end function reaction_frequency_pair_equals
+    res = ( ( a%reaction == b%reaction ) .and. ( a%frequency == b%frequency ) )
+  end function reaction_frequency_pair_equals
 end module types_mod
 
 ! ******************************************************************** !

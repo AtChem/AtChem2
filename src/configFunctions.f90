@@ -122,7 +122,7 @@ contains
 
           if ( rCounter == 0_NPI ) then
             rCounter = 1_NPI
-          elseif ( chs(1,j) /= r(i, rCounter)%reaction ) then
+          elseif ( chs(1, j) /= r(i, rCounter)%reaction ) then
             rCounter = rCounter + 1_NPI
           end if
           r(i, rCounter)%reaction = chs(1, j)

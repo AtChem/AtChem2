@@ -121,7 +121,8 @@ with open(out_filename, 'w') as output_file:
                 # match if, do, subroutine, function, module, else, contains, program, interface, select, case, type (definition, not instantiation) to set the next line indent higher
                 if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE) or re.match('^\s*else\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*do\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*subroutine\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*function\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
+                    or ( re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) and not re.match('^\s*module procedure \s*', to_output, flags=re.IGNORECASE) ) \
+                    or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*select\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*case\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*type\s+', to_output, flags=re.IGNORECASE):

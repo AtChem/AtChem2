@@ -43,6 +43,8 @@
   script:
     - ./atchem2
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+    - make formattest
+    - make styletest
     - make clean
     - make unittests
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi

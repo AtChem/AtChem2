@@ -51,7 +51,7 @@ module types_mod
   end interface
 
 contains
-  function reaction_frequency_pair_equals(a,b) result ( res )
+  function reaction_frequency_pair_equals( a, b ) result ( res )
     implicit none
     type(reaction_frequency_pair), intent(in) :: a, b
     logical :: res

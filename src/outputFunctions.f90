@@ -292,7 +292,7 @@ contains
       end if
 
       do j = 1, arrayLen(i)
-        if ( ( r(i, j)%reaction /= -1_NPI ) .and. ( r(i,j)%frequency /= 0_NPI ) ) then
+        if ( ( r(i, j)%reaction /= -1_NPI ) .and. ( r(i, j)%frequency /= 0_NPI ) ) then
           reaction = getReaction( speciesNames, r(i, j)%reaction )
           ! r contains the occurences of each of the detailed species in reactions.
           ! r should have row lengths as in arrayLen, so all accesss to r(i,j) should

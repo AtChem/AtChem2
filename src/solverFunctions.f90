@@ -180,11 +180,11 @@ contains
     real(kind=DP), intent(out) :: p(:)
     real(kind=DP) :: q(getNumberOfGenericComplex())
 
-    real(kind=DP) :: temp, pressure, dummy, this_env_val, photoRateAtT
+    real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
-    real(kind=DP) :: N2, O2, M, RH, H2O, DEC, BLH, DILUTE, JFAC, ROOFOPEN
+    real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
 
     ro2 = ro2sum( y )
     dummy = y(1)
@@ -204,11 +204,11 @@ contains
         case ( 'DEC' )
           dec = this_env_val
         case ( 'PRESS' )
-          pressure = this_env_val
+          press = this_env_val
         case ( 'M' )
           m = this_env_val
         case ( 'BLHEIGHT' )
-          blh = this_env_val
+          blheight = this_env_val
         case ( 'DILUTE' )
           dilute = this_env_val
         case ( 'JFAC' )

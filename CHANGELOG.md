@@ -1,6 +1,6 @@
 # AtChem2 - CHANGELOG
 
-## v1.1 (??? 2018)
+## v1.1 (November 2018)
 
 - implement a new directory structure
 - rename some configuration and output files
@@ -9,9 +9,9 @@
 - restructure the handling and calculation of photolysis rates
 - fix the calculations of sun declination and solar zenith angle
 - improve handling of dates and numerical precision
-- check calculation of reaction rates and improve format of `instantaneousRates` files
+- check calculation of reaction rates and improve format of `instantaneousRates` files (now called `reactionRates`)
 - merge `outputLossRates.config` and `outputProductionRates.config` into `outputRates.config`
-- correct the output of `lossRates.output` and `productionRates.output`
+- fix the output of `lossRates.output` and `productionRates.output`
 - implement code coverage testing with [Codecov](https://codecov.io/)
 - implement a unit testing framework (new requirements: **Ruby**, **FRUIT**)
 - add unit tests for atmosphere, configuration, date and solar functions

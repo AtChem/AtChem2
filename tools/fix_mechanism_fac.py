@@ -62,7 +62,7 @@ def fix_fac_full_contents(filename):
     # If there are any lines that have now been doubled-stacked, then break them into pieces.
     # Find the end of the header section, because we don't want to parse that section anymore - it
     # often contains semicolons within the lines as well as at the end, which breaks all our logic
-    end_of_header_index = [i for i, item in enumerate(contents) if re.search(r'Variable definitions.  All species are listed here.', item)]
+    end_of_header_index = [i for i, item in enumerate(contents) if re.search(r'Generic Rate Coefficients', item)]
     assert len(end_of_header_index) == 1
     end_of_header_index = end_of_header_index[0]
     # Split non-header lines by semicolons, but we keep the semicolons this way.

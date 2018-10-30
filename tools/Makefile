@@ -78,8 +78,10 @@ unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_dri
 all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
 fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
+# copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
-	@cd $(UNITTESTDIR) ; ruby fruit_generator.rb
+	@cp tools/fruit_generator.rb $(UNITTESTDIR)
+	@cd $(UNITTESTDIR); sed -i "4s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)

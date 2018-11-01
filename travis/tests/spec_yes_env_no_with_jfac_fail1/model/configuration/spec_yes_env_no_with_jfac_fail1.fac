@@ -252,4 +252,5 @@ RO2 = CH3O2 ;
 % KMT14 : CH3O2NO2 = CH3O2 + NO2 ;
 % 2.85D-12*EXP(-345/TEMP) : CH3OH + OH = HO2 + HCHO ;
 *;
-* End of Subset.  No. of Species = 30, No. of Reactions = 71 ; 
+* End of Subset.  No. of Species = 30, No. of Reactions = 71 ;
+   

@@ -6,7 +6,7 @@ AtChem2 v1.1
  Output dir is: travis/tests/spec_yes_plus_fixed_env_no/output
  Reaction Rates dir is: travis/tests/spec_yes_plus_fixed_env_no/output/reactionRates
  Configuration dir is: travis/tests/spec_yes_plus_fixed_env_no/model/configuration
- MCM dir is: travis/tests/spec_yes_plus_fixed_env_no/mcm
+ MCM dir is: mcm
  Species Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/species
  Environment Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/environment
  Photolysis Constraints dir is: travis/tests/spec_yes_plus_fixed_env_no/model/constraints/photolysis

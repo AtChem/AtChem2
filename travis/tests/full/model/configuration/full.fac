@@ -18414,4 +18414,5 @@ RO2 = HOCH2CH2O2 + HO1C3O2 + HYPROPO2 + IPROPOLO2 + NBUTOLAO2 +
 % J<41> : C828OOH = C828O + OH ;
 % KDEC : C828O = CO2C3CO3 + CO + CH3COCH3 ;
 *;
-* End of Subset.  No. of Species = 5833, No. of Reactions = 17224 ; 
+* End of Subset.  No. of Species = 5833, No. of Reactions = 17224 ;
+   

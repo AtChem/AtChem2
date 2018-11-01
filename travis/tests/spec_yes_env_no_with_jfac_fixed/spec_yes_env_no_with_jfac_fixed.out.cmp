@@ -6,7 +6,7 @@ AtChem2 v1.1
  Output dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/output
  Reaction Rates dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/output/reactionRates
  Configuration dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/configuration
- MCM dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/mcm
+ MCM dir is: mcm
  Species Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/species
  Environment Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/environment
  Photolysis Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/photolysis
@@ -126,7 +126,7 @@ AtChem2 v1.1
  7      DILUTE                NOTUSED
  8      JFAC                      0.9
  Reading all photolysis rates from file...
- 0.9 not found in travis/tests/spec_yes_env_no_with_jfac_fixed/mcm/photolysis-rates_v3.3.1, so it will be treated as a constant.
+ 0.9 not found in mcm/photolysis-rates_v3.3.1, so it will be treated as a constant.
  9      ROOFOPEN                   ON
  Finished reading environment variables.
 

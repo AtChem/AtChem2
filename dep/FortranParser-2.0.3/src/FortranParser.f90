@@ -30,7 +30,7 @@ MODULE FortranParser
   ! The function parser concept is based on a C++ class library written by  Juha
   ! Nieminen <warp@iki.fi> available from http://warp.povusers.org/FunctionParser/
   !------- -------- --------- --------- --------- --------- --------- --------- -------
-  USE FortranParser_parameters, ONLY: rn,is               ! Import KIND parameters
+  USE types_mod, ONLY: DP,NPI,SI,DI              ! Import KIND parameters
 
   IMPLICIT NONE
 
@@ -39,7 +39,7 @@ MODULE FortranParser
   !------- -------- --------- --------- --------- --------- --------- --------- -------
   PRIVATE
 
-  INTEGER(is),                              PARAMETER :: cImmed   = 1,          &
+  INTEGER(kind=SI),                         PARAMETER :: cImmed   = 1,          &
                                                          cNeg     = 2,          &
                                                          cAdd     = 3,          &
                                                          cSub     = 4,          &
@@ -89,11 +89,11 @@ MODULE FortranParser
 
   TYPE EquationParser
 
-    INTEGER(is), POINTER :: ByteCode(:) => null()
+    INTEGER(DI), POINTER :: ByteCode(:) => null()
     INTEGER              :: ByteCodeSize = 0
-    REAL(rn),    POINTER :: Immed(:) => null()
+    REAL(DP),    POINTER :: Immed(:) => null()
     INTEGER              :: ImmedSize = 0
-    REAL(rn),    POINTER :: Stack(:) => null()
+    REAL(DP),    POINTER :: Stack(:) => null()
     INTEGER              :: StackSize = 0
     INTEGER              :: StackPtr = 0
 
@@ -178,110 +178,111 @@ CONTAINS
 !*****************************************************************************************
   FUNCTION evaluate(this, Val, q) RESULT (res)
     ! Evaluate bytecode of ith function for the values passed in array Val(:)
+    USE types_mod
     class(EquationParser) :: this
-    REAL(rn), DIMENSION(:), INTENT(in) :: Val, q             ! Variable values
+    REAL(DP), DIMENSION(:), INTENT(in) :: Val, q             ! Variable values
 
-    REAL(rn)                           :: res                ! Result
-    INTEGER                            :: IP,              & ! Instruction pointer
-                                          DP,              & ! Data pointer
-                                          SP                 ! Stack pointer
-    REAL(rn),                PARAMETER :: zero = 0._rn
+    REAL(DP)                           :: res                ! Result
+    INTEGER                            :: IPo,              & ! Instruction pointer
+                                          DPo,              & ! Data pointer
+                                          SPo                 ! Stack pointer
+    REAL(DP),                PARAMETER :: zero = 0._DP
     integer       :: EvalErrType
 
-    DP = 1
-    SP = 0
+    DPo = 1
+    SPo = 0
     EvalErrType=0
 
-    DO IP=1,this%ByteCodeSize
+    DO IPo=1,this%ByteCodeSize
 
-       SELECT CASE (this%ByteCode(IP))
+       SELECT CASE (this%ByteCode(IPo))
 
-       CASE (cImmed); SP=SP+1; this%Stack(SP)=this%Immed(DP); DP=DP+1
+       CASE (cImmed); SPo=SPo+1; this%Stack(SPo)=this%Immed(DPo); DPo=DPo+1
 
-       CASE   (cNeg); this%Stack(SP)=-this%Stack(SP)
+       CASE   (cNeg); this%Stack(SPo)=-this%Stack(SPo)
 
-       CASE   (cAdd); this%Stack(SP-1)=this%Stack(SP-1)+this%Stack(SP); SP=SP-1
+       CASE   (cAdd); this%Stack(SPo-1)=this%Stack(SPo-1)+this%Stack(SPo); SPo=SPo-1
 
-       CASE   (cSub); this%Stack(SP-1)=this%Stack(SP-1)-this%Stack(SP); SP=SP-1
+       CASE   (cSub); this%Stack(SPo-1)=this%Stack(SPo-1)-this%Stack(SPo); SPo=SPo-1
 
-       CASE   (cMul); this%Stack(SP-1)=this%Stack(SP-1)*this%Stack(SP); SP=SP-1
+       CASE   (cMul); this%Stack(SPo-1)=this%Stack(SPo-1)*this%Stack(SPo); SPo=SPo-1
 
        CASE   (cDiv)
 
-         IF (this%Stack(SP)==0._rn) THEN
+         IF (this%Stack(SPo)==0._DP) THEN
            EvalErrType=1
            res=zero
            exit
          ENDIF
-         this%Stack(SP-1)=this%Stack(SP-1)/this%Stack(SP); SP=SP-1
+         this%Stack(SPo-1)=this%Stack(SPo-1)/this%Stack(SPo); SPo=SPo-1
 
-       CASE   (cPow); this%Stack(SP-1)=this%Stack(SP-1)**this%Stack(SP); SP=SP-1
+       CASE   (cPow); this%Stack(SPo-1)=this%Stack(SPo-1)**this%Stack(SPo); SPo=SPo-1
 
-       CASE   (cAbs); this%Stack(SP)=ABS(this%Stack(SP))
+       CASE   (cAbs); this%Stack(SPo)=ABS(this%Stack(SPo))
 
-       CASE   (cExp); this%Stack(SP)=EXP(this%Stack(SP))
+       CASE   (cExp); this%Stack(SPo)=EXP(this%Stack(SPo))
 
        CASE (cLog10)
 
-         IF (this%Stack(SP)<=0._rn) THEN
+         IF (this%Stack(SPo)<=0._DP) THEN
            EvalErrType=3
            res=zero
            exit
          ENDIF
-         this%Stack(SP)=LOG10(this%Stack(SP))
+         this%Stack(SPo)=LOG10(this%Stack(SPo))
 
        CASE   (cLog)
 
-         IF (this%Stack(SP)<=0._rn) THEN
+         IF (this%Stack(SPo)<=0._DP) THEN
            EvalErrType=3
            res=zero
            exit
          ENDIF
-         this%Stack(SP)=LOG(this%Stack(SP))
+         this%Stack(SPo)=LOG(this%Stack(SPo))
 
        CASE  (cSqrt)
 
-         IF (this%Stack(SP)<0._rn) THEN
+         IF (this%Stack(SPo)<0._DP) THEN
            EvalErrType=3
            res=zero
            exit
          ENDIF
-         this%Stack(SP)=SQRT(this%Stack(SP))
+         this%Stack(SPo)=SQRT(this%Stack(SPo))
 
-       CASE  (cSinh); this%Stack(SP)=SINH(this%Stack(SP))
+       CASE  (cSinh); this%Stack(SPo)=SINH(this%Stack(SPo))
 
-       CASE  (cCosh); this%Stack(SP)=COSH(this%Stack(SP))
+       CASE  (cCosh); this%Stack(SPo)=COSH(this%Stack(SPo))
 
-       CASE  (cTanh); this%Stack(SP)=TANH(this%Stack(SP))
+       CASE  (cTanh); this%Stack(SPo)=TANH(this%Stack(SPo))
 
-       CASE   (cSin); this%Stack(SP)=SIN(this%Stack(SP))
+       CASE   (cSin); this%Stack(SPo)=SIN(this%Stack(SPo))
 
-       CASE   (cCos); this%Stack(SP)=COS(this%Stack(SP))
+       CASE   (cCos); this%Stack(SPo)=COS(this%Stack(SPo))
 
-       CASE   (cTan); this%Stack(SP)=TAN(this%Stack(SP))
+       CASE   (cTan); this%Stack(SPo)=TAN(this%Stack(SPo))
 
        CASE  (cAsin)
 
-         IF ((this%Stack(SP)<-1._rn) .OR. (this%Stack(SP)>1._rn)) THEN
+         IF ((this%Stack(SPo)<-1._DP) .OR. (this%Stack(SPo)>1._DP)) THEN
            EvalErrType=4
            res=zero
            exit
          ENDIF
-         this%Stack(SP)=ASIN(this%Stack(SP))
+         this%Stack(SPo)=ASIN(this%Stack(SPo))
 
        CASE  (cAcos);
-         IF ((this%Stack(SP)<-1._rn).OR.(this%Stack(SP)>1._rn)) THEN
+         IF ((this%Stack(SPo)<-1._DP).OR.(this%Stack(SPo)>1._DP)) THEN
            EvalErrType=4
            res=zero
            exit
          ENDIF
-         this%Stack(SP)=ACOS(this%Stack(SP))
+         this%Stack(SPo)=ACOS(this%Stack(SPo))
 
-       CASE  (cAtan); this%Stack(SP)=ATAN(this%Stack(SP))
+       CASE  (cAtan); this%Stack(SPo)=ATAN(this%Stack(SPo))
 
-       CASE  (cQ); this%Stack(SP)=q(INT(this%Stack(SP)))
+       CASE  (cQ); this%Stack(SPo)=q(INT(this%Stack(SPo)))
 
-       CASE  DEFAULT; SP=SP+1; this%Stack(SP)=Val(this%ByteCode(IP)-VarBegin+1)
+       CASE  DEFAULT; SPo=SPo+1; this%Stack(SPo)=Val(this%ByteCode(IPo)-VarBegin+1)
 
        END SELECT
 
@@ -299,9 +300,9 @@ CONTAINS
   SUBROUTINE CheckSyntax(this)
     ! Check syntax of function string,  returns 0 if syntax is ok
     class(EquationParser) :: this
-    INTEGER(is)                                 :: n
+    INTEGER(kind=SI)                            :: n
     CHARACTER (LEN=1)                           :: c
-    REAL(rn)                                    :: r
+    REAL(kind=DP)                               :: r
     LOGICAL                                     :: err
     INTEGER                                     :: ParCnt, & ! Parenthesis counter
                                                    j,ib,in,lFunc
@@ -417,7 +418,7 @@ CONTAINS
   FUNCTION OperatorIndex (c) RESULT (n)
     ! Return operator index
     CHARACTER (LEN=1), INTENT(in) :: c
-    INTEGER(is)                   :: n,j
+    INTEGER(SI)                   :: n,j
 
     n = 0
 
@@ -435,8 +436,8 @@ CONTAINS
     ! Return index of math function beginnig at 1st position of string str
     CHARACTER (LEN=*), INTENT(in) :: str
 
-    INTEGER(is)                   :: n,j
-    INTEGER                       :: k
+    INTEGER(kind=SI)              :: n,j
+    INTEGER(kind=DI)              :: k
     CHARACTER (LEN=LEN(Funcs))    :: fun
 
     n = 0
@@ -460,7 +461,7 @@ CONTAINS
     IMPLICIT NONE
     CHARACTER (LEN=*),               INTENT(in) :: str       ! String
     CHARACTER (LEN=*), DIMENSION(:), INTENT(in) :: Var       ! Array with variable names
-    INTEGER(is)                                 :: n         ! Index of variable
+    INTEGER(kind=NPI)                           :: n         ! Index of variable
     INTEGER, OPTIONAL,              INTENT(out) :: ibegin, & ! Start position of variable name
                                                    inext     ! Position of character after name
     INTEGER                                     :: j,ib,in,lstr
@@ -560,7 +561,7 @@ CONTAINS
   SUBROUTINE AddCompiledByte(this, b)
     ! Add compiled byte to bytecode
     class(EquationParser) :: this
-    INTEGER(is), INTENT(in) :: b                             ! Value of byte to be added
+    INTEGER(kind=SI), INTENT(in) :: b                             ! Value of byte to be added
 
     this%ByteCodeSize = this%ByteCodeSize + 1
 
@@ -576,7 +577,7 @@ CONTAINS
     class(EquationParser) :: this
 
     INTEGER,           INTENT(in) :: b,e                     ! First and last pos. of substring
-    INTEGER(is)                                 :: n         ! Byte value of math item
+    INTEGER(kind=SI)                                 :: n         ! Byte value of math item
 
     n = 0
 
@@ -623,7 +624,7 @@ CONTAINS
     class(EquationParser) :: this
     INTEGER,                         INTENT(in) :: b,e       ! Begin and end position substring
 
-    INTEGER(is)                                 :: n
+    INTEGER(kind=SI)                                 :: n
     INTEGER                                     :: b2,j,k,io
     CHARACTER (LEN=*),                PARAMETER :: calpha = 'abcdefghijklmnopqrstuvwxyz'// &
                                                             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -762,7 +763,7 @@ CONTAINS
   FUNCTION RealNum(str, ibegin, inext, error) RESULT (res)
     ! Get real number from string - Format: [blanks][+|-][nnn][.nnn][e|E|d|D[+|-]nnn]
     CHARACTER (LEN=*),  INTENT(in) :: str                    ! String
-    REAL(rn)                       :: res                    ! Real number
+    REAL(kind=DP)                       :: res                    ! Real number
     INTEGER, OPTIONAL, INTENT(out) :: ibegin,              & ! Start position of real number
                                       inext                  ! 1st character after real number
     LOGICAL, OPTIONAL, INTENT(out) :: error                  ! Error flag
@@ -824,7 +825,7 @@ CONTAINS
     END DO
     err = (ib > in-1) .OR. (.NOT.DInMan) .OR. ((Eflag.OR.InExp).AND..NOT.DInExp)
     IF (err) THEN
-       res = 0.0_rn
+       res = 0.0_DP
     ELSE
        READ(str(ib:in-1),*,IOSTAT=istat) res
        err = istat /= 0

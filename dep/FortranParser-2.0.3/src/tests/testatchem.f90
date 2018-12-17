@@ -6,7 +6,6 @@ PROGRAM fptest
   ! Assessing how fast the interpreter is compared against a direct evaluation
   !
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
-  USE FortranParser_parameters, ONLY: rn, is
   USE FortranParser,    ONLY: EquationParser
   USE input_functions_mod, only : count_lines_in_file
   use types_mod
@@ -21,11 +20,11 @@ PROGRAM fptest
   CHARACTER (LEN=*), DIMENSION(nvar),  PARAMETER :: var  = (/ 'O2  ', &
                                                               'N2  ', &
                                                               'TEMP' /)
-  REAL(rn),          DIMENSION(nvar),  PARAMETER :: val  = (/  10., 1.5, 2.0  /)
-  REAL(rn)                                       :: res
+  REAL(kind=DP),     DIMENSION(nvar),  PARAMETER :: val  = (/  10., 1.5, 2.0  /)
+  REAL(kind=DP)                                  :: res
   INTEGER(kind=NPI)                              :: i,n, ierr
   REAL                                           :: rt1,rt2,rt3
-  REAL(rn)                                       :: o2,n2,temp, p1, p1a, p2, p2a, p3, p3a, p4, p4a, q(3)
+  REAL(kind=DP)                                  :: o2,n2,temp, p1, p1a, p2, p2a, p3, p3a, p4, p4a, q(3)
   CHARACTER (LEN=50)                             :: c
   CHARACTER (LEN=50), allocatable                :: func(:)
   CHARACTER (LEN=50), allocatable                :: generic(:)

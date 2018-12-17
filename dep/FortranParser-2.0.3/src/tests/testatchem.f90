@@ -6,14 +6,14 @@ PROGRAM fptest
   ! Assessing how fast the interpreter is compared against a direct evaluation
   !
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
-  USE FortranParser_parameters, ONLY: rn
+  USE FortranParser_parameters, ONLY: rn, is
   USE FortranParser,    ONLY: EquationParser
   USE input_functions_mod, only : count_lines_in_file
   use types_mod
   IMPLICIT NONE
   type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
-  INTEGER,                             PARAMETER :: neval = 1000000
-  INTEGER                                        :: nfunc, ngeneric
+  INTEGER,                             PARAMETER :: neval = 10000000
+  INTEGER(kind=DP)                               :: nfunc, ngeneric
   ! CHARACTER (LEN=*), DIMENSION(nfunc), PARAMETER :: func = (/ 'vel*COS(beta)           ', &
   !                                                             'vel*SIN(beta)*COS(alpha)', &
   !                                                             'vel*SIN(beta)*SIN(alpha)' /)
@@ -23,7 +23,7 @@ PROGRAM fptest
                                                               'TEMP' /)
   REAL(rn),          DIMENSION(nvar),  PARAMETER :: val  = (/  10., 1.5, 2.0  /)
   REAL(rn)                                       :: res
-  INTEGER                                        :: i,n, ierr
+  INTEGER(kind=NPI)                              :: i,n, ierr
   REAL                                           :: rt1,rt2,rt3
   REAL(rn)                                       :: o2,n2,temp, p1, p1a, p2, p2a, p3, p3a, p4, p4a, q(3)
   CHARACTER (LEN=50)                             :: c

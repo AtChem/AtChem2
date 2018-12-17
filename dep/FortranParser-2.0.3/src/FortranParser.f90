@@ -279,7 +279,7 @@ CONTAINS
 
        CASE  (cAtan); this%Stack(SP)=ATAN(this%Stack(SP))
 
-       CASE  (cQ); this%Stack(SP)=q(this%Stack(SP))
+       CASE  (cQ); this%Stack(SP)=q(INT(this%Stack(SP)))
 
        CASE  DEFAULT; SP=SP+1; this%Stack(SP)=Val(this%ByteCode(IP)-VarBegin+1)
 

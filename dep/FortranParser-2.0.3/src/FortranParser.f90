@@ -30,7 +30,7 @@ MODULE FortranParser
   ! The function parser concept is based on a C++ class library written by  Juha
   ! Nieminen <warp@iki.fi> available from http://warp.povusers.org/FunctionParser/
   !------- -------- --------- --------- --------- --------- --------- --------- -------
-  USE types_mod, ONLY: DP,NPI,SI,DI              ! Import KIND parameters
+  USE types_mod, ONLY: DP,NPI,SI              ! Import KIND parameters
 
   IMPLICIT NONE
 
@@ -39,7 +39,7 @@ MODULE FortranParser
   !------- -------- --------- --------- --------- --------- --------- --------- -------
   PRIVATE
 
-  INTEGER(kind=SI),                         PARAMETER :: cImmed   = 1,          &
+  INTEGER(kind=NPI),                        PARAMETER :: cImmed   = 1,          &
                                                          cNeg     = 2,          &
                                                          cAdd     = 3,          &
                                                          cSub     = 4,          &
@@ -69,7 +69,7 @@ MODULE FortranParser
                                                                        '/',     &
                                                                        '^' /)
 
-  CHARACTER (LEN=5), DIMENSION(cAbs:cQ), PARAMETER :: Funcs    = (/ 'abs  ', &
+  CHARACTER (LEN=5), DIMENSION(cAbs:cQ), PARAMETER :: Funcs       = (/ 'abs  ', &
                                                                        'exp  ', &
                                                                        'log10', &
                                                                        'log  ', &
@@ -89,13 +89,13 @@ MODULE FortranParser
 
   TYPE EquationParser
 
-    INTEGER(DI), POINTER :: ByteCode(:) => null()
-    INTEGER              :: ByteCodeSize = 0
-    REAL(DP),    POINTER :: Immed(:) => null()
-    INTEGER              :: ImmedSize = 0
-    REAL(DP),    POINTER :: Stack(:) => null()
-    INTEGER              :: StackSize = 0
-    INTEGER              :: StackPtr = 0
+    INTEGER(NPI), POINTER :: ByteCode(:) => null()
+    INTEGER(NPI)          :: ByteCodeSize = 0_NPI
+    REAL(DP),     POINTER :: Immed(:) => null()
+    INTEGER(NPI)          :: ImmedSize = 0_NPI
+    REAL(DP),     POINTER :: Stack(:) => null()
+    INTEGER(NPI)          :: StackSize = 0
+    INTEGER(NPI)          :: StackPtr = 0
 
     character(len=MAX_FUN_LENGTH) :: funcString = ''
     character(len=MAX_FUN_LENGTH) :: funcStringOrig = ''
@@ -105,7 +105,7 @@ MODULE FortranParser
       private
 
       procedure, public :: evaluate
-      procedure:: parse
+      procedure :: parse
       procedure :: Compile
       procedure :: AddCompiledByte
       procedure :: CompileSubstr
@@ -133,10 +133,10 @@ CONTAINS
     constructor%Immed => null()
     constructor%Stack => null()
 
-    constructor%ByteCodeSize = 0
-    constructor%ImmedSize = 0
-    constructor%StackSize = 0
-    constructor%StackPtr = 0
+    constructor%ByteCodeSize = 0_NPI
+    constructor%ImmedSize = 0_NPI
+    constructor%StackSize = 0_NPI
+    constructor%StackPtr = 0_NPI
 
     constructor%funcString = FuncStr
     constructor%funcStringOrig = FuncStr
@@ -180,43 +180,43 @@ CONTAINS
     ! Evaluate bytecode of ith function for the values passed in array Val(:)
     USE types_mod
     class(EquationParser) :: this
-    REAL(DP), DIMENSION(:), INTENT(in) :: Val, q             ! Variable values
+    REAL(kind=DP), DIMENSION(:), INTENT(in) :: Val, q             ! Variable values
 
-    REAL(DP)                           :: res                ! Result
-    INTEGER                            :: IPo,              & ! Instruction pointer
-                                          DPo,              & ! Data pointer
-                                          SPo                 ! Stack pointer
-    REAL(DP),                PARAMETER :: zero = 0._DP
-    integer       :: EvalErrType
+    REAL(kind=DP)                          :: res                ! Result
+    INTEGER(kind=NPI)                      :: IPo,              & ! Instruction pointer
+                                              DPo,              & ! Data pointer
+                                              SPo                 ! Stack pointer
+    REAL(kind=DP),               PARAMETER :: zero = 0._DP
+    INTEGER(kind=SI)                       :: EvalErrType
 
-    DPo = 1
-    SPo = 0
-    EvalErrType=0
+    DPo = 1_NPI
+    SPo = 0_NPI
+    EvalErrType=0_SI
 
-    DO IPo=1,this%ByteCodeSize
+    DO IPo=1_NPI,this%ByteCodeSize
 
        SELECT CASE (this%ByteCode(IPo))
 
-       CASE (cImmed); SPo=SPo+1; this%Stack(SPo)=this%Immed(DPo); DPo=DPo+1
+       CASE (cImmed); SPo=SPo+1_NPI; this%Stack(SPo)=this%Immed(DPo); DPo=DPo+1_NPI
 
        CASE   (cNeg); this%Stack(SPo)=-this%Stack(SPo)
 
-       CASE   (cAdd); this%Stack(SPo-1)=this%Stack(SPo-1)+this%Stack(SPo); SPo=SPo-1
+       CASE   (cAdd); this%Stack(SPo-1_NPI)=this%Stack(SPo-1_NPI)+this%Stack(SPo); SPo=SPo-1_NPI
 
-       CASE   (cSub); this%Stack(SPo-1)=this%Stack(SPo-1)-this%Stack(SPo); SPo=SPo-1
+       CASE   (cSub); this%Stack(SPo-1_NPI)=this%Stack(SPo-1_NPI)-this%Stack(SPo); SPo=SPo-1_NPI
 
-       CASE   (cMul); this%Stack(SPo-1)=this%Stack(SPo-1)*this%Stack(SPo); SPo=SPo-1
+       CASE   (cMul); this%Stack(SPo-1_NPI)=this%Stack(SPo-1_NPI)*this%Stack(SPo); SPo=SPo-1_NPI
 
        CASE   (cDiv)
 
          IF (this%Stack(SPo)==0._DP) THEN
-           EvalErrType=1
+           EvalErrType=1_SI
            res=zero
            exit
          ENDIF
-         this%Stack(SPo-1)=this%Stack(SPo-1)/this%Stack(SPo); SPo=SPo-1
+         this%Stack(SPo-1_NPI)=this%Stack(SPo-1_NPI)/this%Stack(SPo); SPo=SPo-1_NPI
 
-       CASE   (cPow); this%Stack(SPo-1)=this%Stack(SPo-1)**this%Stack(SPo); SPo=SPo-1
+       CASE   (cPow); this%Stack(SPo-1_NPI)=this%Stack(SPo-1_NPI)**this%Stack(SPo); SPo=SPo-1_NPI
 
        CASE   (cAbs); this%Stack(SPo)=ABS(this%Stack(SPo))
 
@@ -225,7 +225,7 @@ CONTAINS
        CASE (cLog10)
 
          IF (this%Stack(SPo)<=0._DP) THEN
-           EvalErrType=3
+           EvalErrType=3_SI
            res=zero
            exit
          ENDIF
@@ -234,7 +234,7 @@ CONTAINS
        CASE   (cLog)
 
          IF (this%Stack(SPo)<=0._DP) THEN
-           EvalErrType=3
+           EvalErrType=3_SI
            res=zero
            exit
          ENDIF
@@ -243,7 +243,7 @@ CONTAINS
        CASE  (cSqrt)
 
          IF (this%Stack(SPo)<0._DP) THEN
-           EvalErrType=3
+           EvalErrType=3_SI
            res=zero
            exit
          ENDIF
@@ -264,7 +264,7 @@ CONTAINS
        CASE  (cAsin)
 
          IF ((this%Stack(SPo)<-1._DP) .OR. (this%Stack(SPo)>1._DP)) THEN
-           EvalErrType=4
+           EvalErrType=4_SI
            res=zero
            exit
          ENDIF
@@ -272,7 +272,7 @@ CONTAINS
 
        CASE  (cAcos);
          IF ((this%Stack(SPo)<-1._DP).OR.(this%Stack(SPo)>1._DP)) THEN
-           EvalErrType=4
+           EvalErrType=4_SI
            res=zero
            exit
          ENDIF
@@ -280,15 +280,15 @@ CONTAINS
 
        CASE  (cAtan); this%Stack(SPo)=ATAN(this%Stack(SPo))
 
-       CASE  (cQ); this%Stack(SPo)=q(INT(this%Stack(SPo)))
+       CASE     (cQ); this%Stack(SPo)=q(INT(this%Stack(SPo)))
 
-       CASE  DEFAULT; SPo=SPo+1; this%Stack(SPo)=Val(this%ByteCode(IPo)-VarBegin+1)
+       CASE  DEFAULT; SPo=SPo+1_NPI; this%Stack(SPo)=Val(this%ByteCode(IPo)-VarBegin+1_NPI)
 
        END SELECT
 
     END DO
 
-    IF (EvalErrType > 0) then
+    IF (EvalErrType > 0_SI) then
       WRITE(*,*)'*** Error: ',EvalErrMsg(EvalErrType)
     else
       res = this%Stack(1)
@@ -300,15 +300,16 @@ CONTAINS
   SUBROUTINE CheckSyntax(this)
     ! Check syntax of function string,  returns 0 if syntax is ok
     class(EquationParser) :: this
-    INTEGER(kind=SI)                            :: n
-    CHARACTER (LEN=1)                           :: c
+    INTEGER(kind=NPI)                           :: n
+    CHARACTER(LEN=1)                            :: c
     REAL(kind=DP)                               :: r
     LOGICAL                                     :: err
-    INTEGER                                     :: ParCnt, & ! Parenthesis counter
-                                                   j,ib,in,lFunc
+    INTEGER(kind=SI)                            :: ParCnt ! Parenthesis counter
+    INTEGER(kind=NPI)                           :: ib, in, j
+    INTEGER                                     :: lFunc
 
-    j = 1
-    ParCnt = 0
+    j = 1_NPI
+    ParCnt = 0_SI
     lFunc = LEN_TRIM(this%funcString)
     step: DO
        IF (j > lFunc) CALL ParseErrMsg (j, this%funcStringOrig)
@@ -317,41 +318,41 @@ CONTAINS
        ! Check for valid operand (must appear)
        !-- -------- --------- --------- --------- --------- --------- --------- -------
        IF (c == '-' .OR. c == '+') THEN                      ! Check for leading - or +
-          j = j+1
+          j = j+1_NPI
           IF (j > lFunc) CALL ParseErrMsg (j, this%funcStringOrig, 'Missing operand')
           c = this%funcString(j:j)
           IF (ANY(c == Ops)) CALL ParseErrMsg (j, this%funcStringOrig, 'Multiple operators')
        END IF
        n = MathFunctionIndex (this%funcString(j:))
-       IF (n > 0) THEN                                       ! Check for math function
+       IF (n > 0_NPI) THEN                                       ! Check for math function
           j = j+LEN_TRIM(Funcs(n))
           IF (j > lFunc) CALL ParseErrMsg (j, this%funcStringOrig, 'Missing function argument')
           c = this%funcString(j:j)
           IF (c /= '(') CALL ParseErrMsg (j, this%funcStringOrig, 'Missing opening parenthesis')
        END IF
        IF (c == '(') THEN                                    ! Check for opening parenthesis
-          ParCnt = ParCnt+1
-          j = j+1
+          ParCnt = ParCnt+1_SI
+          j = j+1_NPI
           CYCLE step
        END IF
        IF (SCAN(c,'0123456789.') > 0) THEN                   ! Check for number
           r = RealNum (this%funcString(j:),ib,in,err)
           IF (err) CALL ParseErrMsg (j, this%funcStringOrig, 'Invalid number format:  '//this%funcString(j+ib-1:j+in-2))
-          j = j+in-1
+          j = j+in-1_NPI
           IF (j > lFunc) EXIT
           c = this%funcString(j:j)
        ELSE                                                  ! Check for variable
           n = VariableIndex (this%funcString(j:),this%variableNames,ib,in)
-          IF (n == 0) CALL ParseErrMsg (j, this%funcStringOrig, 'Invalid element: '//this%funcString(j+ib-1:j+in-2))
-          j = j+in-1
+          IF (n == 0_NPI) CALL ParseErrMsg (j, this%funcStringOrig, 'Invalid element: '//this%funcString(j+ib-1:j+in-2))
+          j = j+in-1_NPI
           IF (j > lFunc) EXIT
           c = this%funcString(j:j)
        END IF
        DO WHILE (c == ')')                                   ! Check for closing parenthesis
-          ParCnt = ParCnt-1
-          IF (ParCnt < 0) CALL ParseErrMsg (j, this%funcStringOrig, 'Mismatched parenthesis')
-          IF (this%funcString(j-1:j-1) == '(') CALL ParseErrMsg (j-1, this%funcStringOrig, 'Empty parentheses')
-          j = j+1
+          ParCnt = ParCnt-1_SI
+          IF (ParCnt < 0_SI) CALL ParseErrMsg (j, this%funcStringOrig, 'Mismatched parenthesis')
+          IF (this%funcString(j-1_NPI:j-1_NPI) == '(') CALL ParseErrMsg (j-1_NPI, this%funcStringOrig, 'Empty parentheses')
+          j = j+1_NPI
           IF (j > lFunc) EXIT
           c = this%funcString(j:j)
        END DO
@@ -360,8 +361,8 @@ CONTAINS
        !-- -------- --------- --------- --------- --------- --------- --------- -------
        IF (j > lFunc) EXIT
        IF (ANY(c == Ops)) THEN                               ! Check for multiple operators
-          IF (j+1 > lFunc) CALL ParseErrMsg (j, this%funcStringOrig)
-          IF (ANY(this%funcString(j+1:j+1) == Ops)) CALL ParseErrMsg (j+1, this%funcStringOrig, 'Multiple operators')
+          IF (j+1_NPI > lFunc) CALL ParseErrMsg (j, this%funcStringOrig)
+          IF (ANY(this%funcString(j+1_NPI:j+1_NPI) == Ops)) CALL ParseErrMsg (j+1_NPI, this%funcStringOrig, 'Multiple operators')
        ELSE                                                  ! Check for next operand
           CALL ParseErrMsg (j, this%funcStringOrig, 'Missing operator')
        END IF
@@ -369,22 +370,22 @@ CONTAINS
        ! Now, we have an operand and an operator: the next loop will check for another
        ! operand (must appear)
        !-- -------- --------- --------- --------- --------- --------- --------- -------
-       j = j+1
+       j = j+1_NPI
     END DO step
-    IF (ParCnt > 0) CALL ParseErrMsg (j, this%funcStringOrig, 'Missing )')
+    IF (ParCnt > 0_SI) CALL ParseErrMsg (j, this%funcStringOrig, 'Missing )')
   END SUBROUTINE CheckSyntax
 
 !*****************************************************************************************
   FUNCTION EvalErrMsg(EvalErrType) RESULT (msg)
     ! Return error message
-    integer, intent(in) :: EvalErrType
+    integer(kind=SI), intent(in) :: EvalErrType
     CHARACTER (LEN=*), DIMENSION(4), PARAMETER :: m = (/ 'Division by zero                ', &
                                                          'Argument of SQRT negative       ', &
                                                          'Argument of LOG negative        ', &
                                                          'Argument of ASIN or ACOS illegal' /)
     CHARACTER (LEN=LEN(m))                     :: msg
     !----- -------- --------- --------- --------- --------- --------- --------- -------
-    IF (EvalErrType < 1 .OR. EvalErrType > SIZE(m)) THEN
+    IF (EvalErrType < 1_SI .OR. EvalErrType > SIZE(m)) THEN
        msg = ''
     ELSE
        msg = m(EvalErrType)
@@ -395,7 +396,7 @@ CONTAINS
 !*****************************************************************************************
   SUBROUTINE ParseErrMsg (j, FuncStr, Msg)
     ! Print error message and terminate program
-    INTEGER,                     INTENT(in) :: j
+    INTEGER(kind=NPI),           INTENT(in) :: j
     CHARACTER (LEN=*),           INTENT(in) :: FuncStr       ! Original function string
     CHARACTER (LEN=*), OPTIONAL, INTENT(in) :: Msg
 
@@ -418,7 +419,7 @@ CONTAINS
   FUNCTION OperatorIndex (c) RESULT (n)
     ! Return operator index
     CHARACTER (LEN=1), INTENT(in) :: c
-    INTEGER(SI)                   :: n,j
+    INTEGER(NPI)                  :: n,j
 
     n = 0
 
@@ -436,11 +437,10 @@ CONTAINS
     ! Return index of math function beginnig at 1st position of string str
     CHARACTER (LEN=*), INTENT(in) :: str
 
-    INTEGER(kind=SI)              :: n,j
-    INTEGER(kind=DI)              :: k
+    INTEGER(kind=NPI)             :: n, j, k
     CHARACTER (LEN=LEN(Funcs))    :: fun
 
-    n = 0
+    n = 0_NPI
 
     DO j=cAbs,cQ                                             ! Check all math functions
        k = MIN(LEN_TRIM(Funcs(j)), LEN(str))
@@ -462,21 +462,21 @@ CONTAINS
     CHARACTER (LEN=*),               INTENT(in) :: str       ! String
     CHARACTER (LEN=*), DIMENSION(:), INTENT(in) :: Var       ! Array with variable names
     INTEGER(kind=NPI)                           :: n         ! Index of variable
-    INTEGER, OPTIONAL,              INTENT(out) :: ibegin, & ! Start position of variable name
+    INTEGER(kind=NPI), OPTIONAL,     INTENT(out) :: ibegin, & ! Start position of variable name
                                                    inext     ! Position of character after name
-    INTEGER                                     :: j,ib,in,lstr
+    INTEGER(kind=NPI)                           :: j, ib, in, lstr
     !----- -------- --------- --------- --------- --------- --------- --------- -------
-    n = 0
+    n = 0_NPI
     lstr = LEN_TRIM(str)
     IF (lstr > 0) THEN
-       DO ib=1,lstr                                          ! Search for first character in str
+       DO ib=1_NPI,lstr                                          ! Search for first character in str
           IF (str(ib:ib) /= ' ') EXIT                        ! When lstr>0 at least 1 char in str
        END DO
        DO in=ib,lstr                                         ! Search for name terminators
           IF (SCAN(str(in:in),'+-*/^) ') > 0) EXIT
        END DO
-       DO j=1,SIZE(Var)
-          IF (str(ib:in-1) == Var(j)) THEN
+       DO j=1_NPI,SIZE(Var)
+          IF (str(ib:in-1_NPI) == Var(j)) THEN
              n = j                                           ! Variable name found
              EXIT
           END IF
@@ -531,14 +531,14 @@ CONTAINS
     INTEGER                                     :: istat
 
     IF (ASSOCIATED(this%ByteCode)) DEALLOCATE ( this%ByteCode, &
-                                                   this%Immed,    &
-                                                   this%Stack     )
-    this%ByteCodeSize = 0
-    this%ImmedSize    = 0
-    this%StackSize    = 0
-    this%StackPtr     = 0
+                                                this%Immed,    &
+                                                this%Stack     )
+    this%ByteCodeSize = 0_NPI
+    this%ImmedSize    = 0_NPI
+    this%StackSize    = 0_NPI
+    this%StackPtr     = 0_NPI
 
-    CALL this%CompileSubstr(1,LEN_TRIM(this%funcString))               ! Compile string to determine size
+    CALL this%CompileSubstr(1_NPI,INT(LEN_TRIM(this%funcString),KIND(1_NPI)))
 
     ALLOCATE ( this%ByteCode(this%ByteCodeSize), &
                this%Immed(this%ImmedSize),       &
@@ -548,11 +548,11 @@ CONTAINS
        WRITE(*,*) '*** Parser error: Memmory allocation for byte code failed'
        STOP
     ELSE
-       this%ByteCodeSize = 0
-       this%ImmedSize    = 0
-       this%StackSize    = 0
-       this%StackPtr     = 0
-       CALL this%CompileSubstr(1,LEN_TRIM(this%funcString))            ! Compile string into bytecode
+       this%ByteCodeSize = 0_NPI
+       this%ImmedSize    = 0_NPI
+       this%StackSize    = 0_NPI
+       this%StackPtr     = 0_NPI
+       CALL this%CompileSubstr(1_NPI,INT(LEN_TRIM(this%funcString),KIND(1_NPI)))
     END IF
 
   END SUBROUTINE Compile
@@ -561,9 +561,9 @@ CONTAINS
   SUBROUTINE AddCompiledByte(this, b)
     ! Add compiled byte to bytecode
     class(EquationParser) :: this
-    INTEGER(kind=SI), INTENT(in) :: b                             ! Value of byte to be added
+    INTEGER(kind=NPI), INTENT(in) :: b                             ! Value of byte to be added
 
-    this%ByteCodeSize = this%ByteCodeSize + 1
+    this%ByteCodeSize = this%ByteCodeSize + 1_NPI
 
     IF (ASSOCIATED(this%ByteCode)) then
       this%ByteCode(this%ByteCodeSize) = b
@@ -576,18 +576,18 @@ CONTAINS
     ! Return math item index, if item is real number, enter it into Comp-structure
     class(EquationParser) :: this
 
-    INTEGER,           INTENT(in) :: b,e                     ! First and last pos. of substring
-    INTEGER(kind=SI)                                 :: n         ! Byte value of math item
+    INTEGER(kind=NPI), INTENT(in) :: b, e      ! First and last pos. of substring
+    INTEGER(kind=NPI)             :: n         ! Byte value of math item
 
-    n = 0
+    n = 0_NPI
 
-    IF (SCAN(this%funcString(b:b),'0123456789.') > 0) THEN                 ! Check for begin of a number
-       this%ImmedSize = this%ImmedSize + 1
+    IF (SCAN(this%funcString(b:b),'0123456789.') > 0_NPI) THEN                 ! Check for begin of a number
+       this%ImmedSize = this%ImmedSize + 1_NPI
        IF (ASSOCIATED(this%Immed)) this%Immed(this%ImmedSize) = RealNum(this%funcString(b:e))
        n = cImmed
     ELSE                                                     ! Check for a variable
        n = VariableIndex(this%funcString(b:e), this%variableNames)
-       IF (n > 0) n = VarBegin+n-1
+       IF (n > 0_NPI) n = VarBegin+n-1_NPI
     END IF
 
   END FUNCTION MathItemIndex
@@ -596,24 +596,25 @@ CONTAINS
   FUNCTION CompletelyEnclosed (F, b, e) RESULT (res)
     ! Check if function substring F(b:e) is completely enclosed by a pair of parenthesis
     CHARACTER (LEN=*), INTENT(in) :: F                       ! Function substring
-    INTEGER,           INTENT(in) :: b,e                     ! First and last pos. of substring
+    INTEGER(kind=NPI), INTENT(in) :: b,e                     ! First and last pos. of substring
 
     LOGICAL                       :: res
-    INTEGER                       :: j,k
+    INTEGER(kind=NPI)             :: j
+    INTEGER(kind=SI)              :: k
 
     res=.false.
 
     IF (F(b:b) == '(' .AND. F(e:e) == ')') THEN
        k = 0
-       DO j=b+1,e-1
+       DO j = b + 1_NPI, e - 1_NPI
           IF     (F(j:j) == '(') THEN
-             k = k+1
+             k = k + 1_SI
           ELSEIF (F(j:j) == ')') THEN
-             k = k-1
+             k = k - 1_SI
           END IF
-          IF (k < 0) EXIT
+          IF (k < 0_SI) EXIT
        END DO
-       IF (k == 0) res=.true.                                ! All opened parenthesis closed
+       IF (k == 0_SI) res=.true.                                ! All opened parenthesis closed
     END IF
 
   END FUNCTION CompletelyEnclosed
@@ -622,10 +623,11 @@ CONTAINS
   RECURSIVE SUBROUTINE CompileSubstr(this, b, e)
     ! Compile i-th function string funcString into bytecode
     class(EquationParser) :: this
-    INTEGER,                         INTENT(in) :: b,e       ! Begin and end position substring
+    INTEGER(kind=NPI),               INTENT(in) :: b, e      ! Begin and end position substring
 
-    INTEGER(kind=SI)                                 :: n
-    INTEGER                                     :: b2,j,k,io
+    INTEGER(kind=NPI)                           :: n
+    INTEGER(kind=NPI)                           :: b2, j
+    INTEGER                                     :: k, io
     CHARACTER (LEN=*),                PARAMETER :: calpha = 'abcdefghijklmnopqrstuvwxyz'// &
                                                             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     ! Check for special cases of substring
@@ -722,26 +724,26 @@ CONTAINS
     ! Check if operator F(j:j) in string F is binary operator
     ! Special cases already covered elsewhere:              (that is corrected in v1.1)
     ! - operator character F(j:j) is first character of string (j=1)
-    INTEGER,           INTENT(in) :: j                       ! Position of Operator
+    INTEGER(kind=NPI), INTENT(in) :: j                       ! Position of Operator
     CHARACTER (LEN=*), INTENT(in) :: F                       ! String
 
     LOGICAL                       :: res                     ! Result
-    INTEGER                       :: k
+    INTEGER(kind=NPI)             :: k
     LOGICAL                       :: Dflag,Pflag
 
     res=.true.
 
     IF (F(j:j) == '+' .OR. F(j:j) == '-') THEN               ! Plus or minus sign:
-       IF (j == 1) THEN                                      ! - leading unary operator ?
+       IF (j == 1_NPI) THEN                                      ! - leading unary operator ?
           res = .false.
-       ELSEIF (SCAN(F(j-1:j-1),'+-*/^(') > 0) THEN           ! - other unary operator ?
+  ELSEIF (SCAN(F(j-1_NPI:j-1_NPI),'+-*/^(') > 0) THEN           ! - other unary operator ?
           res = .false.
-       ELSEIF (SCAN(F(j+1:j+1),'0123456789') > 0 .AND. &     ! - in exponent of real number ?
-               SCAN(F(j-1:j-1),'eEdD')       > 0) THEN
+  ELSEIF (SCAN(F(j+1_NPI:j+1_NPI),'0123456789') > 0 .AND. &     ! - in exponent of real number ?
+               SCAN(F(j-1_NPI:j-1_NPI),'eEdD')       > 0) THEN
           Dflag=.false.; Pflag=.false.
-          k = j-1
-          DO WHILE (k > 1)                                   !   step to the left in mantissa
-             k = k-1
+          k = j-1_NPI
+          DO WHILE (k > 1_NPI)                                   !   step to the left in mantissa
+             k = k-1_NPI
              IF     (SCAN(F(k:k),'0123456789') > 0) THEN
                 Dflag=.true.
              ELSEIF (F(k:k) == '.') THEN
@@ -754,7 +756,7 @@ CONTAINS
                 EXIT                                         !   * all other characters
              END IF
           END DO
-          IF (Dflag .AND. (k == 1 .OR. SCAN(F(k:k),'+-*/^(') > 0)) res = .false.
+          IF (Dflag .AND. (k == 1_NPI .OR. SCAN(F(k:k),'+-*/^(') > 0)) res = .false.
        END IF
     END IF
   END FUNCTION IsBinaryOp
@@ -763,12 +765,13 @@ CONTAINS
   FUNCTION RealNum(str, ibegin, inext, error) RESULT (res)
     ! Get real number from string - Format: [blanks][+|-][nnn][.nnn][e|E|d|D[+|-]nnn]
     CHARACTER (LEN=*),  INTENT(in) :: str                    ! String
-    REAL(kind=DP)                       :: res                    ! Real number
-    INTEGER, OPTIONAL, INTENT(out) :: ibegin,              & ! Start position of real number
-                                      inext                  ! 1st character after real number
+    REAL(kind=DP)                  :: res                    ! Real number
+    INTEGER(kind=NPI), OPTIONAL, INTENT(out) :: ibegin,    & ! Start position of real number
+                                                inext        ! 1st character after real number
     LOGICAL, OPTIONAL, INTENT(out) :: error                  ! Error flag
 
-    INTEGER                        :: ib,in,istat
+    INTEGER(kind=NPI)              :: ib,in
+    INTEGER                        :: istat
     LOGICAL                        :: Bflag,               & ! .T. at begin of number in str
                                       InMan,               & ! .T. in mantissa of number
                                       Pflag,               & ! .T. after 1st '.' encountered
@@ -780,12 +783,12 @@ CONTAINS
     !----- -------- --------- --------- --------- --------- --------- --------- -------
     Bflag=.true.; InMan=.false.; Pflag=.false.; Eflag=.false.; InExp=.false.
     DInMan=.false.; DInExp=.false.
-    ib   = 1
-    in   = 1
+    ib   = 1_NPI
+    in   = 1_NPI
     DO WHILE (in <= LEN_TRIM(str))
        SELECT CASE (str(in:in))
        CASE (' ')                                            ! Only leading blanks permitted
-          ib = ib+1
+          ib = ib+1_NPI
           IF (InMan .OR. Eflag .OR. InExp) EXIT
        CASE ('+','-')                                        ! Permitted only
           IF     (Bflag) THEN
@@ -821,13 +824,13 @@ CONTAINS
        CASE DEFAULT
           EXIT                                               ! STOP at all other characters
        END SELECT
-       in = in+1
+       in = in+1_NPI
     END DO
-    err = (ib > in-1) .OR. (.NOT.DInMan) .OR. ((Eflag.OR.InExp).AND..NOT.DInExp)
+    err = (ib > in-1_NPI) .OR. (.NOT.DInMan) .OR. ((Eflag.OR.InExp).AND..NOT.DInExp)
     IF (err) THEN
        res = 0.0_DP
     ELSE
-       READ(str(ib:in-1),*,IOSTAT=istat) res
+       READ(str(ib:in-1_NPI),*,IOSTAT=istat) res
        err = istat /= 0
     END IF
     IF (PRESENT(ibegin)) ibegin = ib

@@ -1,4 +1,4 @@
-           time speciesNumber speciesName reactionNumber           rate
+           time speciesNumber speciesName reactionNumber           rate  reaction
   4.380000E+004             8          OH             15  1.036823E+006  O1D=OH+OH
   4.380000E+004             8          OH             20  2.161390E+005  HO2+O3=OH
   4.380000E+004             8          OH             27  9.647831E+005  HO2+NO=OH+NO2

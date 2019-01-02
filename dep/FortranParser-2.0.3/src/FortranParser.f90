@@ -306,11 +306,11 @@ CONTAINS
     LOGICAL                                     :: err
     INTEGER(kind=SI)                            :: ParCnt ! Parenthesis counter
     INTEGER(kind=NPI)                           :: ib, in, j
-    INTEGER                                     :: lFunc
+    INTEGER(kind=NPI)                           :: lFunc
 
     j = 1_NPI
     ParCnt = 0_SI
-    lFunc = LEN_TRIM(this%funcString)
+    lFunc = LEN_TRIM(this%funcString, KIND(1_NPI))
     step: DO
        IF (j > lFunc) CALL ParseErrMsg (j, this%funcStringOrig)
        c = this%funcString(j:j)
@@ -378,7 +378,7 @@ CONTAINS
 !*****************************************************************************************
   FUNCTION EvalErrMsg(EvalErrType) RESULT (msg)
     ! Return error message
-    integer(kind=SI), intent(in) :: EvalErrType
+    INTEGER(kind=SI), INTENT(in) :: EvalErrType
     CHARACTER (LEN=*), DIMENSION(4), PARAMETER :: m = (/ 'Division by zero                ', &
                                                          'Argument of SQRT negative       ', &
                                                          'Argument of LOG negative        ', &
@@ -399,8 +399,6 @@ CONTAINS
     INTEGER(kind=NPI),           INTENT(in) :: j
     CHARACTER (LEN=*),           INTENT(in) :: FuncStr       ! Original function string
     CHARACTER (LEN=*), OPTIONAL, INTENT(in) :: Msg
-
-    INTEGER                                 :: k
 
     IF (PRESENT(Msg)) THEN
        WRITE(*,*) '*** Error in syntax of function string: '//Msg
@@ -462,13 +460,13 @@ CONTAINS
     CHARACTER (LEN=*),               INTENT(in) :: str       ! String
     CHARACTER (LEN=*), DIMENSION(:), INTENT(in) :: Var       ! Array with variable names
     INTEGER(kind=NPI)                           :: n         ! Index of variable
-    INTEGER(kind=NPI), OPTIONAL,     INTENT(out) :: ibegin, & ! Start position of variable name
+    INTEGER(kind=NPI), OPTIONAL,    INTENT(out) :: ibegin, & ! Start position of variable name
                                                    inext     ! Position of character after name
     INTEGER(kind=NPI)                           :: j, ib, in, lstr
     !----- -------- --------- --------- --------- --------- --------- --------- -------
     n = 0_NPI
     lstr = LEN_TRIM(str)
-    IF (lstr > 0) THEN
+    IF (lstr > 0_NPI) THEN
        DO ib=1_NPI,lstr                                          ! Search for first character in str
           IF (str(ib:ib) /= ' ') EXIT                        ! When lstr>0 at least 1 char in str
        END DO
@@ -491,18 +489,18 @@ CONTAINS
     ! Remove Spaces from string, remember positions of characters in old string
     CHARACTER (LEN=*), INTENT(inout) :: str
 
-    INTEGER                          :: k,lstr
+    INTEGER(kind=NPI)                :: k,lstr
 
-    lstr = LEN_TRIM(str)
+    lstr = LEN_TRIM(str,KIND(1_NPI))
 
-    k = 1
+    k = 1_NPI
 
     DO WHILE (str(k:lstr) /= ' ')
        IF (str(k:k) == ' ') THEN
-          str(k:lstr)  = str(k+1:lstr)//' '                  ! Move 1 character to left
-          k = k-1
+          str(k:lstr)  = str(k+1_NPI:lstr)//' '                  ! Move 1 character to left
+          k = k-1_NPI
        END IF
-       k = k+1
+       k = k+1_NPI
     END DO
 
   END SUBROUTINE RemoveSpaces
@@ -514,12 +512,12 @@ CONTAINS
     CHARACTER (LEN=LEN(ca)), INTENT(in) :: cb                ! LEN(ca) must be LEN(cb)
     CHARACTER (LEN=*),    INTENT(inout) :: str
 
-    INTEGER                             :: j,lca
+    INTEGER(kind=NPI)                   :: j,lca
 
-    lca = LEN(ca)
+    lca = LEN(ca,KIND(1_NPI))
 
-    DO j=1,LEN_TRIM(str)-lca+1
-       IF (str(j:j+lca-1) == ca) str(j:j+lca-1) = cb
+    DO j=1_NPI,LEN_TRIM(str)-lca+1_NPI
+       IF (str(j:j+lca-1_NPI) == ca) str(j:j+lca-1_NPI) = cb
     END DO
 
   END SUBROUTINE Replace
@@ -575,7 +573,6 @@ CONTAINS
   FUNCTION MathItemIndex(this, b, e) RESULT (n)
     ! Return math item index, if item is real number, enter it into Comp-structure
     class(EquationParser) :: this
-
     INTEGER(kind=NPI), INTENT(in) :: b, e      ! First and last pos. of substring
     INTEGER(kind=NPI)             :: n         ! Byte value of math item
 
@@ -605,7 +602,7 @@ CONTAINS
     res=.false.
 
     IF (F(b:b) == '(' .AND. F(e:e) == ')') THEN
-       k = 0
+       k = 0_SI
        DO j = b + 1_NPI, e - 1_NPI
           IF     (F(j:j) == '(') THEN
              k = k + 1_SI
@@ -626,24 +623,24 @@ CONTAINS
     INTEGER(kind=NPI),               INTENT(in) :: b, e      ! Begin and end position substring
 
     INTEGER(kind=NPI)                           :: n
-    INTEGER(kind=NPI)                           :: b2, j
-    INTEGER                                     :: k, io
+    INTEGER(kind=NPI)                           :: b2, j, k
+    INTEGER(kind=SI)                            :: io
     CHARACTER (LEN=*),                PARAMETER :: calpha = 'abcdefghijklmnopqrstuvwxyz'// &
                                                             'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     ! Check for special cases of substring
 
     IF     (this%funcString(b:b) == '+') THEN                              ! Case 1: funcString(b:e) = '+...'
 !      WRITE(*,*)'1. funcString(b:e) = "+..."'
-       CALL this%CompileSubstr(b+1, e)
+       CALL this%CompileSubstr(b+1_NPI, e)
        RETURN
     ELSEIF (CompletelyEnclosed (this%funcString, b, e)) THEN               ! Case 2: funcString(b:e) = '(...)'
 !      WRITE(*,*)'2. funcString(b:e) = "(...)"'
-       CALL this%CompileSubstr(b+1, e-1)
+       CALL this%CompileSubstr(b+1_NPI, e-1_NPI)
        RETURN
     ELSEIF (SCAN(this%funcString(b:b), calpha) > 0) THEN
        n = MathFunctionIndex(this%funcString(b:e))
-       IF (n > 0) THEN
-          b2 = b+INDEX(this%funcString(b:e),'(')-1
+       IF (n > 0_NPI) THEN
+          b2 = b+INDEX(this%funcString(b:e),'(')-1_NPI
           IF (CompletelyEnclosed(this%funcString, b2, e)) THEN             ! Case 3: funcString(b:e) = 'fcn(...)'
 !            WRITE(*,*)'3. funcString(b:e) = "fcn(...)"'
              CALL this%CompileSubstr(b2+1, e-1)
@@ -653,18 +650,18 @@ CONTAINS
        END IF
 
     ELSEIF (this%funcString(b:b) == '-') THEN
-       IF (CompletelyEnclosed(this%funcString, b+1, e)) THEN              ! Case 4: this%funcString(b:e) = '-(...)'
+       IF (CompletelyEnclosed(this%funcString, b+1_NPI, e)) THEN              ! Case 4: this%funcString(b:e) = '-(...)'
 !         WRITE(*,*)'4. this%funcString(b:e) = "-(...)"'
-          CALL this%CompileSubstr(b+2, e-1)
+          CALL this%CompileSubstr(b+2_NPI, e-1_NPI)
           CALL this%AddCompiledByte(cNeg)
           RETURN
-       ELSEIF (SCAN(this%funcString(b+1:b+1),calpha) > 0) THEN
-          n = MathFunctionIndex(this%funcString(b+1:e))
-          IF (n > 0) THEN
-             b2 = b+INDEX(this%funcString(b+1:e),'(')
+       ELSEIF (SCAN(this%funcString(b+1_NPI:b+1_NPI),calpha) > 0) THEN
+          n = MathFunctionIndex(this%funcString(b+1_NPI:e))
+          IF (n > 0_NPI) THEN
+             b2 = b+INDEX(this%funcString(b+1_NPI:e),'(')
              IF (CompletelyEnclosed(this%funcString, b2, e)) THEN          ! Case 5: this%funcString(b:e) = '-fcn(...)'
 !               WRITE(*,*)'5. this%funcString(b:e) = "-fcn(...)"'
-                CALL this%CompileSubstr(b2+1, e-1);
+                CALL this%CompileSubstr(b2+1_NPI, e-1_NPI);
                 CALL this%AddCompiledByte(n)
                 CALL this%AddCompiledByte(cNeg)
                 RETURN
@@ -676,25 +673,25 @@ CONTAINS
     ! Check for operator in substring: check only base level (k=0), exclude expr. in ()
 
     DO io=cAdd,cPow                                          ! Increasing priority +-*/^
-       k = 0
-       DO j=e,b,-1
+       k = 0_NPI
+       DO j=e,b,-1_NPI
           IF     (this%funcString(j:j) == ')') THEN
-             k = k+1
+             k = k+1_NPI
           ELSEIF (this%funcString(j:j) == '(') THEN
-             k = k-1
+             k = k-1_NPI
           END IF
-          IF (k == 0 .AND. this%funcString(j:j) == Ops(io) .AND. IsBinaryOp (j, this%funcString)) THEN
+          IF (k == 0_NPI .AND. this%funcString(j:j) == Ops(io) .AND. IsBinaryOp (j, this%funcString)) THEN
              IF (ANY(this%funcString(j:j) == Ops(cMul:cPow)) .AND. this%funcString(b:b) == '-') THEN ! Case 6: this%funcString(b:e) = '-...Op...' with Op > -
 !               WRITE(*,*)'6. this%funcString(b:e) = "-...Op..." with Op > -'
-                CALL this%CompileSubstr(b+1, e)
+                CALL this%CompileSubstr(b+1_NPI, e)
                 CALL this%AddCompiledByte(cNeg)
                 RETURN
              ELSE                                                        ! Case 7: this%funcString(b:e) = '...BinOp...'
 !               WRITE(*,*)'7. Binary operator',this%funcString(j:j)
-                CALL this%CompileSubstr(b, j-1)
-                CALL this%CompileSubstr(j+1, e)
+                CALL this%CompileSubstr(b, j-1_NPI)
+                CALL this%CompileSubstr(j+1_NPI, e)
                 CALL this%AddCompiledByte(OperatorIndex(Ops(io)))
-                this%StackPtr = this%StackPtr - 1
+                this%StackPtr = this%StackPtr - 1_NPI
                 RETURN
              END IF
           END IF
@@ -705,15 +702,15 @@ CONTAINS
 
     b2 = b
 
-    IF (this%funcString(b:b) == '-') b2 = b2+1
+    IF (this%funcString(b:b) == '-') b2 = b2+1_NPI
 
     n = this%MathItemIndex(b2, e)
 
 !   WRITE(*,*)'8. AddCompiledByte ',n
     CALL this%AddCompiledByte(n)
 
-    this%StackPtr = this%StackPtr + 1
-    IF (this%StackPtr > this%StackSize) this%StackSize = this%StackSize + 1
+    this%StackPtr = this%StackPtr + 1_NPI
+    IF (this%StackPtr > this%StackSize) this%StackSize = this%StackSize + 1_NPI
 
     IF (b2 > b) CALL this%AddCompiledByte(cNeg)
 

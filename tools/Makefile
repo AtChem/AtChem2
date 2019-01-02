@@ -63,7 +63,7 @@ AOUT = atchem2
 
 all: $(AOUT)
 
-UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
+UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90 $(SRC)/FortranParser.f90
 SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
@@ -103,6 +103,10 @@ styletest:
 	@./travis/run_style_test.sh
 
 alltests: formattest styletest unittests tests
+
+parsertest: parser $(SRCS)
+	$(FORT_COMP) -o $(SRC)/testatchem2 -J$(OBJ) -I$(OBJ) $(UNITTEST_SRCS) $(SRC)/testatchem.f90 $(FFLAGS) $(LDFLAGS)
+	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; cd $(SRC) ; ./testatchem2
 
 clean:
 	rm -f *.o

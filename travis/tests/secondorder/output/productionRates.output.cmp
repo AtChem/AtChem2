@@ -1,4 +1,4 @@
-           time speciesNumber speciesName reactionNumber           rate
+           time speciesNumber speciesName reactionNumber           rate  reaction
   1.000000E+000             2          O3              1  1.778894E+000  O+O=O3+O3
   2.000000E+000             2          O3              1  1.730847E+000  O+O=O3+O3
   3.000000E+000             2          O3              1  1.607989E+000  O+O=O3+O3

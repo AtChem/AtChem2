@@ -1,4 +1,4 @@
-           time speciesNumber speciesName reactionNumber           rate
+           time speciesNumber speciesName reactionNumber           rate  reaction
   4.380000E+004             9         HO2             20  0.000000E+000  HO2+O3=OH
   4.380000E+004             9         HO2             21  0.000000E+000  OH+HO2=
   4.380000E+004             9         HO2             22  0.000000E+000  HO2+HO2=H2O2

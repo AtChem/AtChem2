@@ -260,6 +260,7 @@ contains
     character(len=maxSpecLength), allocatable :: speciesNames(:)
     integer(kind=NPI) :: i, j, output_file_number
     character(len=maxReactionStringLength) :: reaction
+    character(len=maxReactionStringLength) :: header
     logical :: first_time = .true.
 
     if ( size( r, 1 ) /= size( arrayLen ) ) then
@@ -267,8 +268,9 @@ contains
     end if
     ! Add headers at the first call
     if ( first_time .eqv. .true. ) then
-      write (56,*) '          time speciesNumber speciesName reactionNumber           rate'
-      write (60,*) '          time speciesNumber speciesName reactionNumber           rate'
+      header = "          time speciesNumber speciesName reactionNumber           rate  reaction"
+      write (56,*) header
+      write (60,*) header
       first_time = .false.
     end if
 

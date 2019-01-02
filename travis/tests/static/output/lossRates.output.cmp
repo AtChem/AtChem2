@@ -1,4 +1,4 @@
-           time speciesNumber speciesName reactionNumber           rate
+           time speciesNumber speciesName reactionNumber           rate  reaction
   7.320000E+004             1           O              1  9.398333E+008  O=O3
   7.320000E+004             2          O3              2  9.398333E+008  O3=O
   1.032000E+005             1           O              1  9.398333E+008  O=O3

@@ -104,7 +104,7 @@ styletest:
 
 alltests: formattest styletest unittests tests
 
-parsertest: parser $(SRCS)
+parsertest: $(SRCS)
 	$(FORT_COMP) -o $(SRC)/testatchem2 -J$(OBJ) -I$(OBJ) $(UNITTEST_SRCS) $(SRC)/testatchem.f90 $(FFLAGS) $(LDFLAGS)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; cd $(SRC) ; ./testatchem2
 

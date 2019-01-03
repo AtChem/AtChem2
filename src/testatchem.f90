@@ -18,8 +18,8 @@ program fptest
   !                                                             'vel*SIN(beta)*SIN(alpha)' /)
   integer, parameter :: nvar = 3
   character(len=*), dimension(nvar), parameter :: var  = (/ 'O2  ', &
-                                                              'N2  ', &
-                                                              'TEMP' /)
+                                                            'N2  ', &
+                                                            'TEMP' /)
   real(kind=DP), dimension(nvar) :: val  = (/  10., 1.5, 2.0  /)
   real(kind=DP) :: res
   integer(kind=NPI) :: i, n, ierr

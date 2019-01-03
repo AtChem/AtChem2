@@ -85,7 +85,7 @@ module FortranParser
                                                                 'atan ', &
                                                                 'q    ' /)
 
-  integer, parameter :: MAX_FUN_LENGTH = 1024
+  integer(kind=SI), parameter :: MAX_FUN_LENGTH = 127_SI
 
   type EquationParser
 
@@ -460,7 +460,7 @@ function VariableIndex( str, Var, ibegin, inext) result (n )
   character(len=*), dimension(:), intent(in) :: Var       ! Array with variable names
   integer(kind=SI) :: n         ! Index of variable
   integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of variable name
-                                                   inext     ! Position of character after name
+                                             inext     ! Position of character after name
   integer(kind=SI) :: j, ib, in, lstr
   !----- -------- --------- --------- --------- --------- --------- --------- -------
   n = 0_SI
@@ -893,7 +893,7 @@ if (ngenericparsers > 0) then
   open (10, file='src/gen/gen-complex.rates', status='old')
   i = 1
   read (10, '(A100)', iostat=ierr) generic(i)
-  write(*,*) generic(i)
+
   do while ( ierr == 0 .and. i < ngenericparsers)
     i = i + 1
     read (10, '(A100)', iostat=ierr) generic(i)

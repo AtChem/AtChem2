@@ -1,4 +1,4 @@
-PROGRAM fptest
+program fptest
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
   !
   ! Example program 3 for using the function parser module:
@@ -17,10 +17,10 @@ PROGRAM fptest
   !                                                             'vel*SIN(beta)*COS(alpha)', &
   !                                                             'vel*SIN(beta)*SIN(alpha)' /)
   integer, parameter :: nvar = 3
-  character(len=*), DIMENSION(nvar), parameter :: var  = (/ 'O2  ', &
+  character(len=*), dimension(nvar), parameter :: var  = (/ 'O2  ', &
                                                               'N2  ', &
                                                               'TEMP' /)
-  real(kind=DP), DIMENSION(nvar) :: val  = (/  10., 1.5, 2.0  /)
+  real(kind=DP), dimension(nvar) :: val  = (/  10., 1.5, 2.0  /)
   real(kind=DP) :: res
   integer(kind=NPI) :: i, n, ierr
   real :: rt1, rt2, rt3
@@ -138,7 +138,7 @@ PROGRAM fptest
   write(*,*)'- Bytecode interpreter cpu time = ', rt2-rt1
   write(*,*)'- Machine code         cpu time = ', rt3-rt2, ' = ', (rt3-rt2)/(rt2-rt1)*100., '% = ', (rt2-rt1)/(rt3-rt2), 'x faster'
   !
-END PROGRAM fptest
+end program fptest
 
 ! split a string into 2 either side of a delimiter token
 subroutine split_string( instring, string1, string2, delim )

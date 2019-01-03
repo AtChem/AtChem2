@@ -312,465 +312,465 @@ contains
     ParCnt = 0_SI
     lFunc = LEN_trim(this%funcString, KIND(1_SI))
     step: do
-    if (j > lFunc) call ParseErrMsg (this%funcStringOrig)
-    c = this%funcString(j:j)
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    ! Check for valid operand (must appear)
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    if (c == '-' .or. c == '+') then                      ! Check for leading - or +
-      j = j+1_SI
-      if (j > lFunc) call ParseErrMsg (this%funcStringOrig, 'Missing operand')
+      if (j > lFunc) call ParseErrMsg (this%funcStringOrig)
       c = this%funcString(j:j)
-      if (ANY(c == Ops)) call ParseErrMsg (this%funcStringOrig, 'Multiple operators')
-    end if
-    n = MathFunctionIndex (this%funcString(j:))
-    if (n > 0_SI) then                                       ! Check for math function
-      j = j+LEN_trim(Funcs(n), KIND(1_SI))
-      if (j > lFunc) call ParseErrMsg (this%funcStringOrig, 'Missing function argument')
-      c = this%funcString(j:j)
-      if (c /= '(') call ParseErrMsg (this%funcStringOrig, 'Missing opening parenthesis')
-    end if
-    if (c == '(') then                                    ! Check for opening parenthesis
-      ParCnt = ParCnt+1_SI
-      j = j+1_SI
-      cycle step
-    end if
-    if (SCAN(c, '0123456789.') > 0) then                   ! Check for number
-      r = RealNum (this%funcString(j:), ib, in, err)
-      if (err) call ParseErrMsg (this%funcStringOrig, 'Invalid number format:  '//this%funcString(j+ib-1:j+in-2))
-      j = j+in-1_SI
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
+      ! Check for valid operand (must appear)
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
+      if (c == '-' .or. c == '+') then                      ! Check for leading - or +
+        j = j+1_SI
+        if (j > lFunc) call ParseErrMsg (this%funcStringOrig, 'Missing operand')
+        c = this%funcString(j:j)
+        if (ANY(c == Ops)) call ParseErrMsg (this%funcStringOrig, 'Multiple operators')
+      end if
+      n = MathFunctionIndex (this%funcString(j:))
+      if (n > 0_SI) then                                       ! Check for math function
+        j = j+LEN_trim(Funcs(n), KIND(1_SI))
+        if (j > lFunc) call ParseErrMsg (this%funcStringOrig, 'Missing function argument')
+        c = this%funcString(j:j)
+        if (c /= '(') call ParseErrMsg (this%funcStringOrig, 'Missing opening parenthesis')
+      end if
+      if (c == '(') then                                    ! Check for opening parenthesis
+        ParCnt = ParCnt+1_SI
+        j = j+1_SI
+        cycle step
+      end if
+      if (SCAN(c, '0123456789.') > 0) then                   ! Check for number
+        r = RealNum (this%funcString(j:), ib, in, err)
+        if (err) call ParseErrMsg (this%funcStringOrig, 'Invalid number format:  '//this%funcString(j+ib-1:j+in-2))
+        j = j+in-1_SI
+        if (j > lFunc) exit
+        c = this%funcString(j:j)
+      else                                                  ! Check for variable
+        n = VariableIndex (this%funcString(j:), this%variableNames, ib, in)
+        if (n == 0_SI) call ParseErrMsg (this%funcStringOrig, 'Invalid element: '//this%funcString(j+ib-1:j+in-2))
+        j = j+in-1_SI
+        if (j > lFunc) exit
+        c = this%funcString(j:j)
+      end if
+      do while (c == ')') ! Check for closing parenthesis
+        ParCnt = ParCnt-1_SI
+        if (ParCnt < 0_SI) call ParseErrMsg (this%funcStringOrig, 'Mismatched parenthesis')
+        if (this%funcString(j-1_SI:j-1_SI) == '(') call ParseErrMsg (this%funcStringOrig, 'Empty parentheses')
+        j = j+1_SI
+        if (j > lFunc) exit
+        c = this%funcString(j:j)
+      end do
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
+      ! Now, we have a legal operand: A legal operator or end of string must follow
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
       if (j > lFunc) exit
-      c = this%funcString(j:j)
-    else                                                  ! Check for variable
-      n = VariableIndex (this%funcString(j:), this%variableNames, ib, in)
-      if (n == 0_SI) call ParseErrMsg (this%funcStringOrig, 'Invalid element: '//this%funcString(j+ib-1:j+in-2))
-      j = j+in-1_SI
-      if (j > lFunc) exit
-      c = this%funcString(j:j)
-    end if
-    do while (c == ')') ! Check for closing parenthesis
-      ParCnt = ParCnt-1_SI
-      if (ParCnt < 0_SI) call ParseErrMsg (this%funcStringOrig, 'Mismatched parenthesis')
-      if (this%funcString(j-1_SI:j-1_SI) == '(') call ParseErrMsg (this%funcStringOrig, 'Empty parentheses')
+      if (ANY(c == Ops)) then                               ! Check for multiple operators
+        if (j+1_SI > lFunc) call ParseErrMsg (this%funcStringOrig)
+        if (ANY(this%funcString(j+1_SI:j+1_SI) == Ops)) call ParseErrMsg (this%funcStringOrig, 'Multiple operators')
+      else                                                  ! Check for next operand
+        call ParseErrMsg( this%funcStringOrig, 'Missing operator')
+      end if
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
+      ! Now, we have an operand and an operator: the next loop will check for another
+      ! operand (must appear)
+      !-- -------- --------- --------- --------- --------- --------- --------- -------
       j = j+1_SI
-      if (j > lFunc) exit
-      c = this%funcString(j:j)
-    end do
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    ! Now, we have a legal operand: A legal operator or end of string must follow
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    if (j > lFunc) exit
-    if (ANY(c == Ops)) then                               ! Check for multiple operators
-      if (j+1_SI > lFunc) call ParseErrMsg (this%funcStringOrig)
-      if (ANY(this%funcString(j+1_SI:j+1_SI) == Ops)) call ParseErrMsg (this%funcStringOrig, 'Multiple operators')
-    else                                                  ! Check for next operand
-      call ParseErrMsg( this%funcStringOrig, 'Missing operator')
-    end if
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    ! Now, we have an operand and an operator: the next loop will check for another
-    ! operand (must appear)
-    !-- -------- --------- --------- --------- --------- --------- --------- -------
-    j = j+1_SI
-  end do step
-  if (ParCnt > 0_SI) call ParseErrMsg (this%funcStringOrig, 'Missing )')
-end subroutine CheckSyntax
+    end do step
+    if (ParCnt > 0_SI) call ParseErrMsg (this%funcStringOrig, 'Missing )')
+  end subroutine CheckSyntax
 
-!*****************************************************************************************
-function EvalErrMsg( EvalErrType) result (msg )
-  ! Return error message
-  integer(kind=SI), intent(in) :: EvalErrType
-  character(len=*), dimension(4), parameter :: m = (/ 'Division by zero                ', &
+  !*****************************************************************************************
+  function EvalErrMsg( EvalErrType) result (msg )
+    ! Return error message
+    integer(kind=SI), intent(in) :: EvalErrType
+    character(len=*), dimension(4), parameter :: m = (/ 'Division by zero                ', &
                                                       'Argument of SQRT negative       ', &
                                                       'Argument of LOG negative        ', &
                                                       'Argument of ASIN or ACOS illegal' /)
-  character(len=len(m)) :: msg
-  !----- -------- --------- --------- --------- --------- --------- --------- -------
-  if (EvalErrType < 1_SI .or. EvalErrType > SIZE(m)) then
-    msg = ''
-  else
-    msg = m(EvalErrType)
-  end if
-
-end function EvalErrMsg
-
-!*****************************************************************************************
-subroutine ParseErrMsg( FuncStr, Msg )
-  ! Print error message and terminate program
-  character(len=*), intent(in) :: FuncStr       ! Original function string
-  character(len=*), optional, intent(in) :: Msg
-
-  if (PRESENT(Msg)) then
-    write(*,*) '*** Error in syntax of function string: '//Msg
-  else
-    write(*,*) '*** Error in syntax of function string:'
-  end if
-
-  write(*,*)
-  write(*, '(A)') ' '//FuncStr
-
-  write(*, '(A)') '?'
-  stop
-end subroutine ParseErrMsg
-
-!*****************************************************************************************
-function OperatorIndex( c) result (n )
-  ! Return operator index
-  character(len=1), intent(in) :: c
-  integer(SI) :: n, j
-
-  n = 0
-
-  do j=cAdd, cPow
-    if (c == Ops(j)) then
-      n = j
-      exit
+    character(len=len(m)) :: msg
+    !----- -------- --------- --------- --------- --------- --------- --------- -------
+    if (EvalErrType < 1_SI .or. EvalErrType > SIZE(m)) then
+      msg = ''
+    else
+      msg = m(EvalErrType)
     end if
-  end do
 
-end function OperatorIndex
+  end function EvalErrMsg
 
-!*****************************************************************************************
-function MathFunctionIndex( str) result (n )
-  ! Return index of math function beginnig at 1st position of string str
-  character(len=*), intent(in) :: str
+  !*****************************************************************************************
+  subroutine ParseErrMsg( FuncStr, Msg )
+    ! Print error message and terminate program
+    character(len=*), intent(in) :: FuncStr       ! Original function string
+    character(len=*), optional, intent(in) :: Msg
 
-  integer(kind=SI) :: n, j, k
-  character(len=len(Funcs)) :: fun
-
-  n = 0_SI
-
-  do j=cAbs, cQ                                             ! Check all math functions
-    k = MIN(LEN_trim(Funcs(j), KIND(1_SI)), len(str))
-    call LowCase( str(1_SI:k), fun )
-    if (fun == Funcs(j)) then                             ! Compare lower case letters
-      n = j                                              ! Found a matching function
-      exit
+    if (PRESENT(Msg)) then
+      write(*,*) '*** Error in syntax of function string: '//Msg
+    else
+      write(*,*) '*** Error in syntax of function string:'
     end if
-  end do
 
-end function MathFunctionIndex
+    write(*,*)
+    write(*, '(A)') ' '//FuncStr
 
-!*****************************************************************************************
-function VariableIndex( str, Var, ibegin, inext) result (n )
-  !----- -------- --------- --------- --------- --------- --------- --------- -------
-  ! Return index of variable at begin of string str (returns 0 if no variable found)
-  !----- -------- --------- --------- --------- --------- --------- --------- -------
-  implicit none
-  character(len=*), intent(in) :: str       ! String
-  character(len=*), dimension(:), intent(in) :: Var       ! Array with variable names
-  integer(kind=SI) :: n         ! Index of variable
-  integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of variable name
-                                             inext     ! Position of character after name
-  integer(kind=SI) :: j, ib, in, lstr
-  !----- -------- --------- --------- --------- --------- --------- --------- -------
-  n = 0_SI
-  ib = 0_SI
-  in = 0_SI
-  lstr = LEN_trim(str, KIND(1_SI))
-  if (lstr > 0_SI) then
-    do ib=1_SI, lstr                                          ! Search for first character in str
-      if (str(ib:ib) /= ' ') exit                        ! When lstr>0 at least 1 char in str
-    end do
-    do in=ib, lstr                                         ! Search for name terminators
-      if (SCAN(str(in:in), '+-*/^) ') > 0) exit
-    end do
-    do j=1_SI, SIZE(Var, KIND(1_SI))
-      if (str(ib:in-1_SI) == Var(j)) then
-        n = j                                           ! Variable name found
+    write(*, '(A)') '?'
+    stop
+  end subroutine ParseErrMsg
+
+  !*****************************************************************************************
+  function OperatorIndex( c) result (n )
+    ! Return operator index
+    character(len=1), intent(in) :: c
+    integer(SI) :: n, j
+
+    n = 0
+
+    do j=cAdd, cPow
+      if (c == Ops(j)) then
+        n = j
         exit
       end if
     end do
-  end if
-  if (PRESENT(ibegin)) ibegin = ib
-  if (PRESENT(inext)) inext  = in
-end function VariableIndex
 
-!*****************************************************************************************
-subroutine RemoveSpaces( str )
-  ! Remove Spaces from string, remember positions of characters in old string
-  character(len=*), intent(inout) :: str
+  end function OperatorIndex
 
-  integer(kind=SI) :: k, lstr
+  !*****************************************************************************************
+  function MathFunctionIndex( str) result (n )
+    ! Return index of math function beginnig at 1st position of string str
+    character(len=*), intent(in) :: str
 
-  lstr = LEN_trim(str, KIND(1_SI))
+    integer(kind=SI) :: n, j, k
+    character(len=len(Funcs)) :: fun
 
-  k = 1_SI
+    n = 0_SI
 
-  do while (str(k:lstr) /= ' ')
-    if (str(k:k) == ' ') then
-      str(k:lstr) = str(k+1_SI:lstr)//' '                  ! Move 1 character to left
-      k = k-1_SI
+    do j=cAbs, cQ                                             ! Check all math functions
+      k = MIN(LEN_trim(Funcs(j), KIND(1_SI)), len(str))
+      call LowCase( str(1_SI:k), fun )
+      if (fun == Funcs(j)) then                             ! Compare lower case letters
+        n = j                                              ! Found a matching function
+        exit
+      end if
+    end do
+
+  end function MathFunctionIndex
+
+  !*****************************************************************************************
+  function VariableIndex( str, Var, ibegin, inext) result (n )
+    !----- -------- --------- --------- --------- --------- --------- --------- -------
+    ! Return index of variable at begin of string str (returns 0 if no variable found)
+    !----- -------- --------- --------- --------- --------- --------- --------- -------
+    implicit none
+    character(len=*), intent(in) :: str       ! String
+    character(len=*), dimension(:), intent(in) :: Var       ! Array with variable names
+    integer(kind=SI) :: n         ! Index of variable
+    integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of variable name
+                                             inext     ! Position of character after name
+    integer(kind=SI) :: j, ib, in, lstr
+    !----- -------- --------- --------- --------- --------- --------- --------- -------
+    n = 0_SI
+    ib = 0_SI
+    in = 0_SI
+    lstr = LEN_trim(str, KIND(1_SI))
+    if (lstr > 0_SI) then
+      do ib=1_SI, lstr                                          ! Search for first character in str
+        if (str(ib:ib) /= ' ') exit                        ! When lstr>0 at least 1 char in str
+      end do
+      do in=ib, lstr                                         ! Search for name terminators
+        if (SCAN(str(in:in), '+-*/^) ') > 0) exit
+      end do
+      do j=1_SI, SIZE(Var, KIND(1_SI))
+        if (str(ib:in-1_SI) == Var(j)) then
+          n = j                                           ! Variable name found
+          exit
+        end if
+      end do
     end if
-    k = k+1_SI
-  end do
+    if (PRESENT(ibegin)) ibegin = ib
+    if (PRESENT(inext)) inext  = in
+  end function VariableIndex
 
-end subroutine RemoveSpaces
+  !*****************************************************************************************
+  subroutine RemoveSpaces( str )
+    ! Remove Spaces from string, remember positions of characters in old string
+    character(len=*), intent(inout) :: str
 
-!*****************************************************************************************
-subroutine Replace( ca, cb, str )
-  ! Replace ALL appearances of character set ca in string str by character set cb
-  character(len=*), intent(in) :: ca
-  character(len=len(ca)) , intent(in) :: cb                ! len(ca) must be len(cb)
-  character(len=*), intent(inout) :: str
+    integer(kind=SI) :: k, lstr
 
-  integer(kind=SI) :: j, lca
+    lstr = LEN_trim(str, KIND(1_SI))
 
-  lca = len(ca, KIND(1_SI))
+    k = 1_SI
 
-  do j=1_SI, LEN_trim(str, KIND(1_SI))-lca+1_SI
-    if (str(j:j+lca-1_SI) == ca) str(j:j+lca-1_SI) = cb
-  end do
+    do while (str(k:lstr) /= ' ')
+      if (str(k:k) == ' ') then
+        str(k:lstr) = str(k+1_SI:lstr)//' '                  ! Move 1 character to left
+        k = k-1_SI
+      end if
+      k = k+1_SI
+    end do
 
-end subroutine Replace
+  end subroutine RemoveSpaces
 
-!*****************************************************************************************
-subroutine Compile( this )
-  ! Compile i-th function string F into bytecode
-  class(EquationParser) :: this
-  integer :: istat
+  !*****************************************************************************************
+  subroutine Replace( ca, cb, str )
+    ! Replace ALL appearances of character set ca in string str by character set cb
+    character(len=*), intent(in) :: ca
+    character(len=len(ca)) , intent(in) :: cb                ! len(ca) must be len(cb)
+    character(len=*), intent(inout) :: str
 
-  if (ASSOCIATED(this%ByteCode)) DEALLOCATE ( this%ByteCode, &
+    integer(kind=SI) :: j, lca
+
+    lca = len(ca, KIND(1_SI))
+
+    do j=1_SI, LEN_trim(str, KIND(1_SI))-lca+1_SI
+      if (str(j:j+lca-1_SI) == ca) str(j:j+lca-1_SI) = cb
+    end do
+
+  end subroutine Replace
+
+  !*****************************************************************************************
+  subroutine Compile( this )
+    ! Compile i-th function string F into bytecode
+    class(EquationParser) :: this
+    integer :: istat
+
+    if (ASSOCIATED(this%ByteCode)) DEALLOCATE ( this%ByteCode, &
                                               this%Immed, &
                                               this%Stack     )
-  this%ByteCodeSize = 0_SI
-  this%ImmedSize    = 0_SI
-  this%StackSize    = 0_SI
-  this%StackPtr     = 0_SI
-
-  call this%CompileSubstr( 1_SI, INT(LEN_trim(this%funcString), KIND(1_SI)) )
-
-  allocate ( this%ByteCode(this%ByteCodeSize), &
-             this%Immed(this%ImmedSize), &
-             this%Stack(this%StackSize), &
-             STAT = istat                      )
-  if (istat /= 0) then
-    write(*,*) '*** Parser error: Memmory allocation for byte code failed'
-    stop
-  else
     this%ByteCodeSize = 0_SI
     this%ImmedSize    = 0_SI
     this%StackSize    = 0_SI
     this%StackPtr     = 0_SI
+
     call this%CompileSubstr( 1_SI, INT(LEN_trim(this%funcString), KIND(1_SI)) )
-  end if
 
-end subroutine Compile
-
-!*****************************************************************************************
-subroutine AddCompiledByte( this, b )
-  ! Add compiled byte to bytecode
-  class(EquationParser) :: this
-  integer(kind=SI), intent(in) :: b                             ! Value of byte to be added
-
-  this%ByteCodeSize = this%ByteCodeSize + 1_SI
-
-  if (ASSOCIATED(this%ByteCode)) then
-    this%ByteCode(this%ByteCodeSize) = b
-  end if
-
-end subroutine AddCompiledByte
-
-!*****************************************************************************************
-function MathItemIndex( this, b, e) result (n )
-  ! Return math item index, if item is real number, enter it into Comp-structure
-  class(EquationParser) :: this
-  integer(kind=SI), intent(in) :: b, e      ! First and last pos. of substring
-  integer(kind=SI) :: n         ! Byte value of math item
-
-  n = 0_SI
-
-  if (SCAN(this%funcString(b:b), '0123456789.') > 0_SI) then                 ! Check for begin of a number
-    this%ImmedSize = this%ImmedSize + 1_SI
-    if (ASSOCIATED(this%Immed)) this%Immed(this%ImmedSize) = RealNum(this%funcString(b:e))
-    n = cImmed
-  else                                                     ! Check for a variable
-    n = VariableIndex(this%funcString(b:e), this%variableNames)
-    if (n > 0_SI) n = VarBegin+n-1_SI
-  end if
-
-end function MathItemIndex
-
-!*****************************************************************************************
-function CompletelyEnclosed( F, b, e) result (res )
-  ! Check if function substring F(b:e) is completely enclosed by a pair of parenthesis
-  character(len=*), intent(in) :: F                       ! Function substring
-  integer(kind=SI), intent(in) :: b, e                     ! First and last pos. of substring
-
-  logical :: res
-  integer(kind=SI) :: j
-  integer(kind=SI) :: k
-
-  res=.false.
-
-  if (F(b:b) == '(' .and. F(e:e) == ')') then
-    k = 0_SI
-    do j = b + 1_SI, e - 1_SI
-      if (F(j:j) == '(') then
-        k = k + 1_SI
-      elseif (F(j:j) == ')') then
-        k = k - 1_SI
-      end if
-      if (k < 0_SI) exit
-    end do
-    if (k == 0_SI) res=.true.                                ! All opened parenthesis closed
-  end if
-
-end function CompletelyEnclosed
-
-!*****************************************************************************************
-recursive subroutine CompileSubstr(this, b, e)
-! Compile i-th function string funcString into bytecode
-class(EquationParser) :: this
-integer(kind=SI), intent(in) :: b, e      ! Begin and end position substring
-
-integer(kind=SI) :: n
-integer(kind=SI) :: b2, j, k
-integer(kind=SI) :: io
-character(len=*), parameter :: calpha = 'abcdefghijklmnopqrstuvwxyz'// &
-                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-! Check for special cases of substring
-
-if (this%funcString(b:b) == '+') then                              ! Case 1: funcString(b:e) = '+...'
-  !      write(*,*)'1. funcString(b:e) = "+..."'
-  call this%CompileSubstr( b+1_SI, e )
-  return
-elseif (CompletelyEnclosed (this%funcString, b, e)) then               ! Case 2: funcString(b:e) = '(...)'
-  !      write(*,*)'2. funcString(b:e) = "(...)"'
-  call this%CompileSubstr( b+1_SI, e-1_SI )
-  return
-elseif (SCAN(this%funcString(b:b), calpha) > 0) then
-  n = MathFunctionIndex(this%funcString(b:e))
-  if (n > 0_SI) then
-    b2 = b+INDEX(this%funcString(b:e), '(', .false., KIND(1_SI))-1_SI
-    if (CompletelyEnclosed(this%funcString, b2, e)) then             ! Case 3: funcString(b:e) = 'fcn(...)'
-      !            write(*,*)'3. funcString(b:e) = "fcn(...)"'
-      call this%CompileSubstr( b2+1_SI, e-1_SI )
-      call this%AddCompiledByte( n )
-      return
+    allocate ( this%ByteCode(this%ByteCodeSize), &
+             this%Immed(this%ImmedSize), &
+             this%Stack(this%StackSize), &
+             STAT = istat                      )
+    if (istat /= 0) then
+      write(*,*) '*** Parser error: Memmory allocation for byte code failed'
+      stop
+    else
+      this%ByteCodeSize = 0_SI
+      this%ImmedSize    = 0_SI
+      this%StackSize    = 0_SI
+      this%StackPtr     = 0_SI
+      call this%CompileSubstr( 1_SI, INT(LEN_trim(this%funcString), KIND(1_SI)) )
     end if
-  end if
 
-elseif (this%funcString(b:b) == '-') then
-  if (CompletelyEnclosed(this%funcString, b+1_SI, e)) then              ! Case 4: this%funcString(b:e) = '-(...)'
-    !         write(*,*)'4. this%funcString(b:e) = "-(...)"'
-    call this%CompileSubstr( b+2_SI, e-1_SI )
-    call this%AddCompiledByte( cNeg )
-    return
-  elseif (SCAN(this%funcString(b+1_SI:b+1_SI), calpha) > 0) then
-    n = MathFunctionIndex(this%funcString(b+1_SI:e))
-    if (n > 0_SI) then
-      b2 = b+INDEX(this%funcString(b+1_SI:e), '(', .false., KIND(1_SI))
-      if (CompletelyEnclosed(this%funcString, b2, e)) then          ! Case 5: this%funcString(b:e) = '-fcn(...)'
-        !               write(*,*)'5. this%funcString(b:e) = "-fcn(...)"'
-        call this%CompileSubstr( b2+1_SI, e-1_SI );
-        call this%AddCompiledByte( n )
-        call this%AddCompiledByte( cNeg )
-        return
-      end if
+  end subroutine Compile
+
+  !*****************************************************************************************
+  subroutine AddCompiledByte( this, b )
+    ! Add compiled byte to bytecode
+    class(EquationParser) :: this
+    integer(kind=SI), intent(in) :: b                             ! Value of byte to be added
+
+    this%ByteCodeSize = this%ByteCodeSize + 1_SI
+
+    if (ASSOCIATED(this%ByteCode)) then
+      this%ByteCode(this%ByteCodeSize) = b
     end if
-  end if
-end if
 
-! Check for operator in substring: check only base level (k=0), exclude expr. in ()
+  end subroutine AddCompiledByte
 
-do io=cAdd, cPow                                          ! Increasing priority +-*/^
-  k = 0_SI
-  do j=e, b, -1_SI
-    if (this%funcString(j:j) == ')') then
-      k = k+1_SI
-    elseif (this%funcString(j:j) == '(') then
-      k = k-1_SI
+  !*****************************************************************************************
+  function MathItemIndex( this, b, e) result (n )
+    ! Return math item index, if item is real number, enter it into Comp-structure
+    class(EquationParser) :: this
+    integer(kind=SI), intent(in) :: b, e      ! First and last pos. of substring
+    integer(kind=SI) :: n         ! Byte value of math item
+
+    n = 0_SI
+
+    if (SCAN(this%funcString(b:b), '0123456789.') > 0_SI) then                 ! Check for begin of a number
+      this%ImmedSize = this%ImmedSize + 1_SI
+      if (ASSOCIATED(this%Immed)) this%Immed(this%ImmedSize) = RealNum(this%funcString(b:e))
+      n = cImmed
+    else                                                     ! Check for a variable
+      n = VariableIndex(this%funcString(b:e), this%variableNames)
+      if (n > 0_SI) n = VarBegin+n-1_SI
     end if
-    if (k == 0_SI .and. this%funcString(j:j) == Ops(io) .and. IsBinaryOp (j, this%funcString)) then
-      if (ANY(this%funcString(j:j) == Ops(cMul:cPow)) .and. this%funcString(b:b) == '-') then ! Case 6: this%funcString(b:e) = '-...Op...' with Op > -
-        !               write(*,*)'6. this%funcString(b:e) = "-...Op..." with Op > -'
-        call this%CompileSubstr( b+1_SI, e )
-        call this%AddCompiledByte( cNeg )
-        return
-      else                                                        ! Case 7: this%funcString(b:e) = '...BinOp...'
-        !               write(*,*)'7. Binary operator',this%funcString(j:j)
-        call this%CompileSubstr( b, j-1_SI )
-        call this%CompileSubstr( j+1_SI, e )
-        call this%AddCompiledByte( OperatorIndex(Ops(io)) )
-        this%StackPtr = this%StackPtr - 1_SI
-        return
-      end if
-    end if
-  end do
-end do
 
-! Check for remaining items, i.e. variables or explicit numbers
+  end function MathItemIndex
 
-b2 = b
+  !*****************************************************************************************
+  function CompletelyEnclosed( F, b, e) result (res )
+    ! Check if function substring F(b:e) is completely enclosed by a pair of parenthesis
+    character(len=*), intent(in) :: F                       ! Function substring
+    integer(kind=SI), intent(in) :: b, e                     ! First and last pos. of substring
 
-if (this%funcString(b:b) == '-') b2 = b2+1_SI
+    logical :: res
+    integer(kind=SI) :: j
+    integer(kind=SI) :: k
 
-n = this%MathItemIndex(b2, e)
+    res=.false.
 
-!   write(*,*)'8. AddCompiledByte ',n
-call this%AddCompiledByte( n )
-
-this%StackPtr = this%StackPtr + 1_SI
-if (this%StackPtr > this%StackSize) this%StackSize = this%StackSize + 1_SI
-
-if (b2 > b) call this%AddCompiledByte(cNeg)
-
-end subroutine CompileSubstr
-
-!*****************************************************************************************
-function IsBinaryOp( j, F) result (res )
-! Check if operator F(j:j) in string F is binary operator
-! Special cases already covered elsewhere:              (that is corrected in v1.1)
-! - operator character F(j:j) is first character of string (j=1)
-integer(kind=SI), intent(in) :: j                       ! Position of Operator
-character(len=*), intent(in) :: F                       ! String
-
-logical :: res                     ! Result
-integer(kind=SI) :: k
-logical :: Dflag, Pflag
-
-res=.true.
-
-if (F(j:j) == '+' .or. F(j:j) == '-') then               ! Plus or minus sign:
-  if (j == 1_SI) then                                      ! - leading unary operator ?
-    res = .false.
-  elseif (SCAN(F(j-1_SI:j-1_SI), '+-*/^(') > 0) then           ! - other unary operator ?
-    res = .false.
-  elseif (SCAN(F(j+1_SI:j+1_SI), '0123456789') > 0 .and. &     ! - in exponent of real number ?
-               SCAN(F(j-1_SI:j-1_SI), 'eEdD') > 0) then
-    Dflag=.false.; Pflag=.false.
-    k = j-1_SI
-    do while (k > 1_SI) !   step to the left in mantissa
-      k = k-1_SI
-      if (SCAN(F(k:k), '0123456789') > 0) then
-        Dflag=.true.
-      elseif (F(k:k) == '.') then
-        if (Pflag) then
-          exit                                      !   * exit: 2nd appearance of '.'
-        else
-          Pflag=.true.                              !   * mark 1st appearance of '.'
+    if (F(b:b) == '(' .and. F(e:e) == ')') then
+      k = 0_SI
+      do j = b + 1_SI, e - 1_SI
+        if (F(j:j) == '(') then
+          k = k + 1_SI
+        elseif (F(j:j) == ')') then
+          k = k - 1_SI
         end if
-      else
-        exit                                         !   * all other characters
+        if (k < 0_SI) exit
+      end do
+      if (k == 0_SI) res=.true.                                ! All opened parenthesis closed
+    end if
+
+  end function CompletelyEnclosed
+
+  !*****************************************************************************************
+  recursive subroutine CompileSubstr(this, b, e)
+    ! Compile i-th function string funcString into bytecode
+    class(EquationParser) :: this
+    integer(kind=SI), intent(in) :: b, e      ! Begin and end position substring
+
+    integer(kind=SI) :: n
+    integer(kind=SI) :: b2, j, k
+    integer(kind=SI) :: io
+    character(len=*), parameter :: calpha = 'abcdefghijklmnopqrstuvwxyz'// &
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    ! Check for special cases of substring
+
+    if (this%funcString(b:b) == '+') then                              ! Case 1: funcString(b:e) = '+...'
+      !      write(*,*)'1. funcString(b:e) = "+..."'
+      call this%CompileSubstr( b+1_SI, e )
+      return
+    elseif (CompletelyEnclosed (this%funcString, b, e)) then               ! Case 2: funcString(b:e) = '(...)'
+      !      write(*,*)'2. funcString(b:e) = "(...)"'
+      call this%CompileSubstr( b+1_SI, e-1_SI )
+      return
+    elseif (SCAN(this%funcString(b:b), calpha) > 0) then
+      n = MathFunctionIndex(this%funcString(b:e))
+      if (n > 0_SI) then
+        b2 = b+INDEX(this%funcString(b:e), '(', .false., KIND(1_SI))-1_SI
+        if (CompletelyEnclosed(this%funcString, b2, e)) then             ! Case 3: funcString(b:e) = 'fcn(...)'
+          !            write(*,*)'3. funcString(b:e) = "fcn(...)"'
+          call this%CompileSubstr( b2+1_SI, e-1_SI )
+          call this%AddCompiledByte( n )
+          return
+        end if
       end if
+
+    elseif (this%funcString(b:b) == '-') then
+      if (CompletelyEnclosed(this%funcString, b+1_SI, e)) then              ! Case 4: this%funcString(b:e) = '-(...)'
+        !         write(*,*)'4. this%funcString(b:e) = "-(...)"'
+        call this%CompileSubstr( b+2_SI, e-1_SI )
+        call this%AddCompiledByte( cNeg )
+        return
+      elseif (SCAN(this%funcString(b+1_SI:b+1_SI), calpha) > 0) then
+        n = MathFunctionIndex(this%funcString(b+1_SI:e))
+        if (n > 0_SI) then
+          b2 = b+INDEX(this%funcString(b+1_SI:e), '(', .false., KIND(1_SI))
+          if (CompletelyEnclosed(this%funcString, b2, e)) then          ! Case 5: this%funcString(b:e) = '-fcn(...)'
+            !               write(*,*)'5. this%funcString(b:e) = "-fcn(...)"'
+            call this%CompileSubstr( b2+1_SI, e-1_SI );
+            call this%AddCompiledByte( n )
+            call this%AddCompiledByte( cNeg )
+            return
+          end if
+        end if
+      end if
+    end if
+
+    ! Check for operator in substring: check only base level (k=0), exclude expr. in ()
+
+    do io=cAdd, cPow                                          ! Increasing priority +-*/^
+      k = 0_SI
+      do j=e, b, -1_SI
+        if (this%funcString(j:j) == ')') then
+          k = k+1_SI
+        elseif (this%funcString(j:j) == '(') then
+          k = k-1_SI
+        end if
+        if (k == 0_SI .and. this%funcString(j:j) == Ops(io) .and. IsBinaryOp (j, this%funcString)) then
+          if (ANY(this%funcString(j:j) == Ops(cMul:cPow)) .and. this%funcString(b:b) == '-') then ! Case 6: this%funcString(b:e) = '-...Op...' with Op > -
+            !               write(*,*)'6. this%funcString(b:e) = "-...Op..." with Op > -'
+            call this%CompileSubstr( b+1_SI, e )
+            call this%AddCompiledByte( cNeg )
+            return
+          else                                                        ! Case 7: this%funcString(b:e) = '...BinOp...'
+            !               write(*,*)'7. Binary operator',this%funcString(j:j)
+            call this%CompileSubstr( b, j-1_SI )
+            call this%CompileSubstr( j+1_SI, e )
+            call this%AddCompiledByte( OperatorIndex(Ops(io)) )
+            this%StackPtr = this%StackPtr - 1_SI
+            return
+          end if
+        end if
+      end do
     end do
-    if (Dflag .and. (k == 1_SI .or. SCAN(F(k:k), '+-*/^(') > 0)) res = .false.
-  end if
-end if
-end function IsBinaryOp
 
-!*****************************************************************************************
-function RealNum( str, ibegin, inext, error) result (res )
-! Get real number from string - Format: [blanks][+|-][nnn][.nnn][e|E|d|D[+|-]nnn]
-character(len=*), intent(in) :: str                    ! String
-real(kind=DP) :: res                    ! Real number
-integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of real number
+    ! Check for remaining items, i.e. variables or explicit numbers
+
+    b2 = b
+
+    if (this%funcString(b:b) == '-') b2 = b2+1_SI
+
+    n = this%MathItemIndex(b2, e)
+
+    !   write(*,*)'8. AddCompiledByte ',n
+    call this%AddCompiledByte( n )
+
+    this%StackPtr = this%StackPtr + 1_SI
+    if (this%StackPtr > this%StackSize) this%StackSize = this%StackSize + 1_SI
+
+    if (b2 > b) call this%AddCompiledByte(cNeg)
+
+  end subroutine CompileSubstr
+
+  !*****************************************************************************************
+  function IsBinaryOp( j, F) result (res )
+    ! Check if operator F(j:j) in string F is binary operator
+    ! Special cases already covered elsewhere:              (that is corrected in v1.1)
+    ! - operator character F(j:j) is first character of string (j=1)
+    integer(kind=SI), intent(in) :: j                       ! Position of Operator
+    character(len=*), intent(in) :: F                       ! String
+
+    logical :: res                     ! Result
+    integer(kind=SI) :: k
+    logical :: Dflag, Pflag
+
+    res=.true.
+
+    if (F(j:j) == '+' .or. F(j:j) == '-') then               ! Plus or minus sign:
+      if (j == 1_SI) then                                      ! - leading unary operator ?
+        res = .false.
+      elseif (SCAN(F(j-1_SI:j-1_SI), '+-*/^(') > 0) then           ! - other unary operator ?
+        res = .false.
+      elseif (SCAN(F(j+1_SI:j+1_SI), '0123456789') > 0 .and. &     ! - in exponent of real number ?
+               SCAN(F(j-1_SI:j-1_SI), 'eEdD') > 0) then
+        Dflag=.false.; Pflag=.false.
+        k = j-1_SI
+        do while (k > 1_SI) !   step to the left in mantissa
+          k = k-1_SI
+          if (SCAN(F(k:k), '0123456789') > 0) then
+            Dflag=.true.
+          elseif (F(k:k) == '.') then
+            if (Pflag) then
+              exit                                      !   * exit: 2nd appearance of '.'
+            else
+              Pflag=.true.                              !   * mark 1st appearance of '.'
+            end if
+          else
+            exit                                         !   * all other characters
+          end if
+        end do
+        if (Dflag .and. (k == 1_SI .or. SCAN(F(k:k), '+-*/^(') > 0)) res = .false.
+      end if
+    end if
+  end function IsBinaryOp
+
+  !*****************************************************************************************
+  function RealNum( str, ibegin, inext, error) result (res )
+    ! Get real number from string - Format: [blanks][+|-][nnn][.nnn][e|E|d|D[+|-]nnn]
+    character(len=*), intent(in) :: str                    ! String
+    real(kind=DP) :: res                    ! Real number
+    integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of real number
                                                 inext        ! 1st character after real number
-logical, optional, intent(out) :: error                  ! Error flag
+    logical, optional, intent(out) :: error                  ! Error flag
 
-integer(kind=SI) :: ib, in
-integer :: istat
-logical :: Bflag, & ! .T. at begin of number in str
+    integer(kind=SI) :: ib, in
+    integer :: istat
+    logical :: Bflag, & ! .T. at begin of number in str
                                       InMan, & ! .T. in mantissa of number
                                       Pflag, & ! .T. after 1st '.' encountered
                                       Eflag, & ! .T. at exponent identifier 'eEdD'
@@ -778,97 +778,97 @@ logical :: Bflag, & ! .T. at begin of number in str
                                       DInMan, & ! .T. if at least 1 digit in mant.
                                       DInExp, & ! .T. if at least 1 digit in exp.
                                       err                    ! Local error flag
-!----- -------- --------- --------- --------- --------- --------- --------- -------
-Bflag=.true.; InMan=.false.; Pflag=.false.; Eflag=.false.; InExp=.false.
-DInMan=.false.; DInExp=.false.
-ib   = 1_SI
-in   = 1_SI
-do while (in <= LEN_trim(str))
-  select case (str(in:in))
-    case (' ') ! only leading blanks permitted
-      ib = ib+1_SI
-      if (InMan .or. Eflag .or. InExp) exit
-    case ('+', '-') ! Permitted only
-      if (Bflag) then
-        InMan=.true.; Bflag=.false.                     ! - at beginning of mantissa
-      elseif (Eflag) then
-        InExp=.true.; Eflag=.false.                     ! - at beginning of exponent
-      else
-        exit                                            ! - otherwise stop
-      end if
-    case ('0':'9') ! Mark
-      if (Bflag) then
-        InMan=.true.; Bflag=.false.                     ! - beginning of mantissa
-      elseif (Eflag) then
-        InExp=.true.; Eflag=.false.                     ! - beginning of exponent
-      end if
-      if (InMan) DInMan=.true.                           ! Mantissa contains digit
-      if (InExp) DInExp=.true.                           ! Exponent contains digit
-    case ('.')
-      if (Bflag) then
-        Pflag=.true.                                    ! - mark 1st appearance of '.'
-        InMan=.true.; Bflag=.false.                     !   mark beginning of mantissa
-      elseif (InMan .and..not.Pflag) then
-        Pflag=.true.                                    ! - mark 1st appearance of '.'
-      else
-        exit                                            ! - otherwise stop
-      end if
-    case ('e', 'E', 'd', 'D') ! Permitted only
-      if (InMan) then
-        Eflag=.true.; InMan=.false.                     ! - following mantissa
-      else
-        exit                                            ! - otherwise stop
-      end if
-    case DEFAULT
-      exit                                               ! stop at all other characters
-  end select
-  in = in+1_SI
-end do
-err = (ib > in-1_SI) .or. (.not.DInMan) .or. ((Eflag.or.InExp).and..not.DInExp)
-if (err) then
-  res = 0.0_DP
-else
-  read(str(ib:in-1_SI),*, iostat=istat) res
-  err = istat /= 0
-end if
-if (PRESENT(ibegin)) ibegin = ib
-if (PRESENT(inext)) inext  = in
-if (PRESENT(error)) error  = err
-end function RealNum
+    !----- -------- --------- --------- --------- --------- --------- --------- -------
+    Bflag=.true.; InMan=.false.; Pflag=.false.; Eflag=.false.; InExp=.false.
+    DInMan=.false.; DInExp=.false.
+    ib   = 1_SI
+    in   = 1_SI
+    do while (in <= LEN_trim(str))
+      select case (str(in:in))
+        case (' ') ! only leading blanks permitted
+          ib = ib+1_SI
+          if (InMan .or. Eflag .or. InExp) exit
+        case ('+', '-') ! Permitted only
+          if (Bflag) then
+            InMan=.true.; Bflag=.false.                     ! - at beginning of mantissa
+          elseif (Eflag) then
+            InExp=.true.; Eflag=.false.                     ! - at beginning of exponent
+          else
+            exit                                            ! - otherwise stop
+          end if
+        case ('0':'9') ! Mark
+          if (Bflag) then
+            InMan=.true.; Bflag=.false.                     ! - beginning of mantissa
+          elseif (Eflag) then
+            InExp=.true.; Eflag=.false.                     ! - beginning of exponent
+          end if
+          if (InMan) DInMan=.true.                           ! Mantissa contains digit
+          if (InExp) DInExp=.true.                           ! Exponent contains digit
+        case ('.')
+          if (Bflag) then
+            Pflag=.true.                                    ! - mark 1st appearance of '.'
+            InMan=.true.; Bflag=.false.                     !   mark beginning of mantissa
+          elseif (InMan .and..not.Pflag) then
+            Pflag=.true.                                    ! - mark 1st appearance of '.'
+          else
+            exit                                            ! - otherwise stop
+          end if
+        case ('e', 'E', 'd', 'D') ! Permitted only
+          if (InMan) then
+            Eflag=.true.; InMan=.false.                     ! - following mantissa
+          else
+            exit                                            ! - otherwise stop
+          end if
+        case DEFAULT
+          exit                                               ! stop at all other characters
+      end select
+      in = in+1_SI
+    end do
+    err = (ib > in-1_SI) .or. (.not.DInMan) .or. ((Eflag.or.InExp).and..not.DInExp)
+    if (err) then
+      res = 0.0_DP
+    else
+      read(str(ib:in-1_SI),*, iostat=istat) res
+      err = istat /= 0
+    end if
+    if (PRESENT(ibegin)) ibegin = ib
+    if (PRESENT(inext)) inext  = in
+    if (PRESENT(error)) error  = err
+  end function RealNum
 
-!*****************************************************************************************
-subroutine LowCase( str1, str2 )
-! Transform upper case letters in str1 into lower case letters, result is str2
-implicit none
-character(len=*), intent(in) :: str1
-character(len=*), intent(out) :: str2
-integer :: j, k
-character(len=*), parameter :: lc = 'abcdefghijklmnopqrstuvwxyz'
-character(len=*), parameter :: uc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  !*****************************************************************************************
+  subroutine LowCase( str1, str2 )
+    ! Transform upper case letters in str1 into lower case letters, result is str2
+    implicit none
+    character(len=*), intent(in) :: str1
+    character(len=*), intent(out) :: str2
+    integer :: j, k
+    character(len=*), parameter :: lc = 'abcdefghijklmnopqrstuvwxyz'
+    character(len=*), parameter :: uc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-str2 = str1
+    str2 = str1
 
-do j=1, LEN_trim(str1)
-  k = INDEX(uc, str1(j:j))
-  if (k > 0) str2(j:j) = lc(k:k)
-end do
+    do j=1, LEN_trim(str1)
+      k = INDEX(uc, str1(j:j))
+      if (k > 0) str2(j:j) = lc(k:k)
+    end do
 
-end subroutine LowCase
+  end subroutine LowCase
 
 end module FortranParser
 
 module parser_mod
-use types_mod
-use FortranParser, only : EquationParser
-implicit none
-save
+  use types_mod
+  use FortranParser, only : EquationParser
+  implicit none
+  save
 
-type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
-integer(kind=NPI) :: nparsers, ngenericparsers, i
-character(len=100), allocatable :: generic(:)
+  type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
+  integer(kind=NPI) :: nparsers, ngenericparsers, i
+  character(len=100), allocatable :: generic(:)
 
-integer, parameter :: nvar = 11
-character(len=*), dimension(nvar), parameter :: var  = (/ 'TEMP    ', &
+  integer, parameter :: nvar = 11
+  character(len=*), dimension(nvar), parameter :: var  = (/ 'TEMP    ', &
                                                                 'N2      ', &
                                                                 'O2      ', &
                                                                 'M       ', &
@@ -879,33 +879,33 @@ character(len=*), dimension(nvar), parameter :: var  = (/ 'TEMP    ', &
                                                                 'DILUTE  ', &
                                                                 'JFAC    ', &
                                                                 'ROOFOPEN' /)
-integer :: ierr
+  integer :: ierr
 
 contains
-subroutine initialiseGenericParser()
-use input_functions_mod, only : count_lines_in_file
-implicit none
+  subroutine initialiseGenericParser()
+    use input_functions_mod, only : count_lines_in_file
+    implicit none
 
-ngenericparsers = count_lines_in_file('src/gen/gen-complex.rates')
-allocate(generic(ngenericparsers), eqParserGeneric(ngenericparsers))
+    ngenericparsers = count_lines_in_file('src/gen/gen-complex.rates')
+    allocate(generic(ngenericparsers), eqParserGeneric(ngenericparsers))
 
-if (ngenericparsers > 0) then
-  open (10, file='src/gen/gen-complex.rates', status='old')
-  i = 1
-  read (10, '(A100)', iostat=ierr) generic(i)
+    if (ngenericparsers > 0) then
+      open (10, file='src/gen/gen-complex.rates', status='old')
+      i = 1
+      read (10, '(A100)', iostat=ierr) generic(i)
 
-  do while ( ierr == 0 .and. i < ngenericparsers)
-    i = i + 1
-    read (10, '(A100)', iostat=ierr) generic(i)
-  end do
-  close (10, status='keep')
+      do while ( ierr == 0 .and. i < ngenericparsers)
+        i = i + 1
+        read (10, '(A100)', iostat=ierr) generic(i)
+      end do
+      close (10, status='keep')
 
-  do i=1, ngenericparsers
-    eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
-  end do
-end if
+      do i=1, ngenericparsers
+        eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
+      end do
+    end if
 
-return
-end subroutine initialiseGenericParser
+    return
+  end subroutine initialiseGenericParser
 
 end module parser_mod

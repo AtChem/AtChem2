@@ -112,7 +112,7 @@ MODULE FortranParser
       procedure :: MathItemIndex
       procedure :: CheckSyntax
 
-      final :: finalize
+      procedure, public :: finalize
 
   END TYPE EquationParser
 

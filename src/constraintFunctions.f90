@@ -241,7 +241,7 @@ contains
     orderedEnvVarNames(7) = 'DEC'
     orderedEnvVarNames(8) = 'JFAC'
     orderedEnvVarNames(9) = 'DILUTE'
-    orderedEnvVarNames(10) = 'ROOFOPEN'
+    orderedEnvVarNames(10) = 'ROOF'
 
     pressure_set = .false.
     rh_set = .false.
@@ -257,7 +257,7 @@ contains
       select case ( envVarTypesNum(envVarNum) )
         case ( 1 ) ! CALC
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOFOPEN' )
+            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOF' )
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
@@ -287,8 +287,8 @@ contains
           end select
 
         case ( 2 ) ! CONSTRAINED
-          if ( this_env_var_name == 'ROOFOPEN') then
-            write (stderr,*) 'ROOFOPEN should not be constrained.'
+          if ( this_env_var_name == 'ROOF') then
+            write (stderr,*) 'ROOF should not be constrained.'
             stop
           end if
           call getConstrainedEnvVarAtT( t, envVarNum, this_env_val )
@@ -319,9 +319,9 @@ contains
               this_env_val = 0.41_DP
             case ( 'JFAC')
               this_env_val = 1.0_DP
-            case ( 'ROOFOPEN' )
-              if ( this_env_var_name == 'ROOFOPEN') then
-                write (stderr,*) 'ROOFOPEN should not be a default value.'
+            case ( 'ROOF' )
+              if ( this_env_var_name == 'ROOF') then
+                write (stderr,*) 'ROOF should not be a default value.'
                 stop
               end if
             case default
@@ -333,7 +333,7 @@ contains
 
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
-        case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN' )
+        case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF' )
         case ( 'DEC' )
           call calcZenith( t, this_env_val )
         case default

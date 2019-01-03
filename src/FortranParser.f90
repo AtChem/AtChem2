@@ -152,7 +152,7 @@ CONTAINS
 !*****************************************************************************************
   subroutine finalize(this)
 
-    type(EquationParser) :: this
+    class(EquationParser) :: this
 
     if (associated(this%ByteCode))  nullify(this%ByteCode)
     if (associated(this%Immed))     nullify(this%Immed)

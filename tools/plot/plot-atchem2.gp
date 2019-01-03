@@ -13,10 +13,10 @@
 ## --> gnuplot version
 ##
 ## ARGUMENT:
-## - directory with the model output (default = modelOutput/)
+## - directory with the model output
 ##
 ## USAGE:
-##   gnuplot -c plot-atchem2.gp modelOutput/
+##   gnuplot -c ./tools/plot/plot-atchem2.gp ./model/output/
 ## ---------------------------------------------- ##
 cd ARG1
 pwd

@@ -13,10 +13,10 @@
 %% --> GNU Octave/MATLAB version
 %%
 %% ARGUMENT:
-%% - directory with the model output (default = modelOutput/)
+%% - directory with the model output
 %%
 %% USAGE:
-%%   octave plot-atchem2.m modelOutput/
+%%   octave ./tools/plot/plot-atchem2.m ./model/output/
 %% ---------------------------------------------- %%
 arg_list = argv();
 cd(arg_list{1});

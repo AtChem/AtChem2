@@ -13,10 +13,10 @@
 ## --> Python version [requires matplotlib]
 ##
 ## ARGUMENT:
-## - directory with the model output (default = modelOutput/)
+## - directory with the model output
 ##
 ## USAGE:
-##   python plot-atchem2.py modelOutput/
+##   python ./tools/plot/plot-atchem2.py ./model/output/
 ## ---------------------------------------------- ##
 import os, sys
 import numpy as np

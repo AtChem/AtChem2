@@ -258,7 +258,7 @@ contains
     var(10) = jfac
     var(11) = roofOpen
     if (SIZE(eqParserGeneric) > 0) then
-      do i=1,SIZE(eqParserGeneric)
+      do i=1, SIZE(eqParserGeneric)
         q(i) = eqParserGeneric(i)%evaluate(var(:), q(:)) ! Interpret bytecode representation of ith function
       end do
     end if

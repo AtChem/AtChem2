@@ -889,19 +889,21 @@ CONTAINS
       ngenericparsers = count_lines_in_file('src/gen/gen-complex.rates')
       allocate(generic(ngenericparsers), eqParserGeneric(ngenericparsers))
 
-      open (10, file='src/gen/gen-complex.rates', status='old')
-      i = 1
-      read (10,'(A100)', iostat=ierr) generic(i)
-      write(*,*) generic(i)
-      do while ( ierr == 0 .AND. i < ngenericparsers)
-        i = i + 1
+      if (ngenericparsers > 0) then
+        open (10, file='src/gen/gen-complex.rates', status='old')
+        i = 1
         read (10,'(A100)', iostat=ierr) generic(i)
-      end do
-      close (10, status='keep')
+        write(*,*) generic(i)
+        do while ( ierr == 0 .AND. i < ngenericparsers)
+          i = i + 1
+          read (10,'(A100)', iostat=ierr) generic(i)
+        end do
+        close (10, status='keep')
 
-      do i=1,ngenericparsers
-        eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
-      end do
+        do i=1,ngenericparsers
+          eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
+        end do
+      end if
 
       return
   end subroutine initialiseGenericParser

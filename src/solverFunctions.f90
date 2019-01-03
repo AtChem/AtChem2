@@ -257,9 +257,11 @@ contains
     var(9) = dilute
     var(10) = jfac
     var(11) = roofOpen
-    do i=1,SIZE(eqParserGeneric)
-      q(i) = eqParserGeneric(i)%evaluate(var(:), q(:)) ! Interpret bytecode representation of ith function
-    end do
+    if (eqParserGeneric > 0) then
+      do i=1,SIZE(eqParserGeneric)
+        q(i) = eqParserGeneric(i)%evaluate(var(:), q(:)) ! Interpret bytecode representation of ith function
+      end do
+    end if
 
     include './gen/mechanism-rate-coefficients.f90'
 

@@ -916,10 +916,10 @@ contains
               end if
           end select
         case ('ROOF')
-          if ( trim( envVarTypes(i) ) == 'ON' ) then
+          if ( trim( envVarTypes(i) ) == 'OPEN' ) then
             envVarTypesNum(i) = 3_SI
             envVarFixedValues(i) = 1.0_DP
-          else if ( trim( envVarTypes(i) ) == 'OFF' ) then
+          else if ( trim( envVarTypes(i) ) == 'CLOSED' ) then
             envVarTypesNum(i) = 3_SI
             envVarFixedValues(i) = 0.0_DP
           else

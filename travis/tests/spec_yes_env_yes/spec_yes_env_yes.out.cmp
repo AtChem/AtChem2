@@ -125,7 +125,7 @@ AtChem2 v1.1
  6      BLHEIGHT          CONSTRAINED
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
- 9      ROOF                   ON
+ 9      ROOF                   OPEN
  Finished reading environment variables.
 
  Checking for constrained environment variables...

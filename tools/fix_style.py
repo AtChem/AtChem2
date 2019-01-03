@@ -239,7 +239,7 @@ with open(out_filename, 'w') as output_file:
           or re.match('\s*real\s*\(', to_output)
           or re.match('\s*character\s*\(', to_output)):
             to_output = re.sub('\s*\(', '(', to_output, 1)
-            to_output = re.sub('\)[^,]\s*', ') ', to_output, 1)
+            to_output = re.sub('\)[^),]\s*', ') ', to_output, 1)
 
         # Match if-thens, give one space and lowercase
         if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE):

@@ -192,6 +192,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
 
     # Initialise list, dictionary and a counter.
     mechanism_rates_coeff_list = []
+    new_mechanism_rates_coeff_list = []
     variablesDict = dict()
     reactionNumber = 0
     # Process sections 1 and 2
@@ -254,7 +255,8 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
             new_rhs = tokenise_and_process(value, variablesDict)
 
             # Save the resulting string to mechanism_rates_coeff_list
-            mechanism_rates_coeff_list.append('q('+str(variablesDict[variable_name]) + ') = ' + new_rhs + '  !' + cleaned_line + '\n')
+            mechanism_rates_coeff_list.append('!q('+str(variablesDict[variable_name]) + ') = ' + new_rhs + '  !' + cleaned_line + '\n')
+            new_mechanism_rates_coeff_list.append(new_rhs.replace("_DP","") + '\n')
 
     # Save the number of such equations to be output to mechanism.{prod,reac}
     numberOfGenericComplex = reactionNumber
@@ -362,6 +364,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
     # Write out rate coefficients
     i = 0
     mech_rates_list = []
+    new_mech_rates_list = []
     for rate_counter, x in zip(range(len(s)), rateConstants):
         if (re.match('!', x) is not None) | (x.isspace()):
             mech_rates_list.append(str(x))
@@ -381,6 +384,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
                            string)
             mech_rates_list.append('p(' + str(i) + ') = ' + \
               tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
+            new_mech_rates_list.append(tokenise_and_process(string, variablesDict).replace("_DP","") + '\n')
 
 
     # # Combine mechanism rates and RO2 sum files
@@ -392,7 +396,15 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
         for r in mech_rates_list:
             mech_rates_coeff_file.write(r)
 
+    with open(os.path.join(gen_dir, 'gen-complex.rates'), 'w') as new_mech_rates_coeff_file:
+        # Write out Generic Rate Coefficients and Complex reactions
+        for item in new_mechanism_rates_coeff_list:
+            new_mech_rates_coeff_file.write(item)
 
+    with open(os.path.join(gen_dir, 'coeff.rates'), 'w') as new_mech_rates_coeff_file:
+        # Write out Reaction definitions
+        for r in new_mech_rates_list:
+            new_mech_rates_coeff_file.write(r)
 
 
     # Finally, now that we have the full species list, we can output the RO2s to mechanism.ro2

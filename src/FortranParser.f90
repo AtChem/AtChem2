@@ -856,3 +856,54 @@ CONTAINS
   END SUBROUTINE LowCase
 
   END MODULE FortranParser
+
+  module parser_mod
+    use types_mod
+    use FortranParser, only: EquationParser
+    implicit none
+    save
+
+    type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
+    integer(kind=NPI)                 :: nparsers, ngenericparsers, i
+    character (LEN=100), allocatable   :: generic(:)
+
+    integer,                             parameter :: nvar = 11
+    character (LEN=*), dimension(nvar),  parameter :: var  = (/ 'TEMP    ', &
+                                                                'N2      ', &
+                                                                'O2      ', &
+                                                                'M       ', &
+                                                                'RH      ', &
+                                                                'H2O     ', &
+                                                                'DEC     ', &
+                                                                'BLHEIGHT', &
+                                                                'DILUTE  ', &
+                                                                'JFAC    ', &
+                                                                'ROOFOPEN' /)
+  integer :: ierr
+
+  contains
+    subroutine initialiseGenericParser( )
+      use input_functions_mod, only: count_lines_in_file
+      implicit none
+
+      ngenericparsers = count_lines_in_file('src/gen/gen-complex.rates')
+      allocate(generic(ngenericparsers), eqParserGeneric(ngenericparsers))
+
+      open (10, file='src/gen/gen-complex.rates', status='old')
+      i = 1
+      read (10,'(A100)', iostat=ierr) generic(i)
+      write(*,*) generic(i)
+      do while ( ierr == 0 .AND. i < ngenericparsers)
+        i = i + 1
+        read (10,'(A100)', iostat=ierr) generic(i)
+      end do
+      close (10, status='keep')
+
+      do i=1,ngenericparsers
+        eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
+      end do
+
+      return
+  end subroutine initialiseGenericParser
+
+  end module parser_mod

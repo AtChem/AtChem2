@@ -39,6 +39,8 @@ PROGRAM ATCHEM2
   use output_functions_mod
   use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
   use solver_functions_mod, only : jfy
+  use FortranParser, only: EquationParser
+  use parser_mod, only: initialiseGenericParser
   implicit none
 
   ! *****************************************************************
@@ -364,6 +366,11 @@ PROGRAM ATCHEM2
     call FCVFREE()
     stop
   end if
+
+
+  call initialiseGenericParser()
+
+
 
   ! *****************************************************************
   ! RUN MODEL

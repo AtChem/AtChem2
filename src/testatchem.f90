@@ -20,11 +20,11 @@ PROGRAM fptest
   CHARACTER (LEN=*), DIMENSION(nvar),  PARAMETER :: var  = (/ 'O2  ', &
                                                               'N2  ', &
                                                               'TEMP' /)
-  REAL(kind=DP),     DIMENSION(nvar),  PARAMETER :: val  = (/  10., 1.5, 2.0  /)
+  REAL(kind=DP),     DIMENSION(nvar)             :: val  = (/  10., 1.5, 2.0  /)
   REAL(kind=DP)                                  :: res
   INTEGER(kind=NPI)                              :: i,n, ierr
   REAL                                           :: rt1,rt2,rt3
-  REAL(kind=DP)                                  :: o2,n2,temp, p1, p1a, p2, p2a, p3, p3a, p4, p4a, q(3)
+  REAL(kind=DP)                                  :: o2,n2,temp, p1, p1a, p2, p2a, p3, p3a, p4, p4a, q(3), r(3)
   CHARACTER (LEN=50)                             :: c
   CHARACTER (LEN=50), allocatable                :: func(:)
   CHARACTER (LEN=50), allocatable                :: generic(:)
@@ -76,9 +76,9 @@ PROGRAM fptest
   end do
   !--------- -------- --------- --------- --------- --------- --------- --------- -----
   !
-  temp = 300.0
-  o2 = 2.0
-  n2 = 2.0
+  ! temp = 300.0
+  ! o2 = 2.0
+  ! n2 = 2.0
   q(1) = 3.1416926
   q(2) = 2.0
   q(3) = 4.0
@@ -94,9 +94,10 @@ PROGRAM fptest
   CALL CPU_TIME (rt1)
 
   write(*,*) 'nfunc', nfunc
-  DO i=1,nfunc
-     DO n=1,neval
-        res = eqParser(i)%evaluate(val(:), q(:)) ! Interpret bytecode representation of ith function
+  DO n=1,neval
+     DO i=1,nfunc
+        CALL RANDOM_NUMBER(r)
+        res = eqParser(i)%evaluate(r(:), q(:)) ! Interpret bytecode representation of ith function
      END DO
   END DO
   p1 = eqParser(1)%evaluate(val(:), q(:))
@@ -111,9 +112,10 @@ PROGRAM fptest
   CALL CPU_TIME (rt2)
 
   DO n=1,neval
-    res = 5.6D-34*N2*(TEMP/300.0_DP)**(-2.6_DP)*O2
-    res = 6.0D-34*O2*(TEMP/300.0_DP)**(-2.6_DP)*O2
-    res = 8.0D-12*EXP(-2060.0_DP/TEMP)
+    CALL RANDOM_NUMBER(r)
+    res = 5.6D-34*r(2)*(r(3)/300.0_DP)**(-2.6_DP)*r(1)
+    res = 6.0D-34*r(1)*(r(3)/300.0_DP)**(-2.6_DP)*r(1)
+    res = 8.0D-12*EXP(-2060.0_DP/r(3))
     res = 8.0_DP*cos(1.0_DP)*q(1)
   END DO
   p1a = 5.6D-34*N2*(TEMP/300.0_DP)**(-2.6_DP)*O2

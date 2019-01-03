@@ -173,12 +173,13 @@ contains
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
     use species_mod, only : getNumberOfGenericComplex
+    use parser_mod, only : eqParserGeneric
     implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
-    real(kind=DP) :: q(getNumberOfGenericComplex())
+    real(kind=DP) :: q(getNumberOfGenericComplex()), var(11)
 
     real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
@@ -244,6 +245,21 @@ contains
     end if
     !TODO: is this necessary a second time?
     ro2 = ro2sum( y )
+
+    var(1) = temp
+    var(2) = n2
+    var(3) = o2
+    var(4) = m
+    var(5) = rh
+    var(6) = h2o
+    var(7) = dec
+    var(8) = blheight
+    var(9) = dilute
+    var(10) = jfac
+    var(11) = roofOpen
+    do i=1,SIZE(eqParserGeneric)
+      q(i) = eqParserGeneric(i)%evaluate(var(:), q(:)) ! Interpret bytecode representation of ith function
+    end do
 
     include './gen/mechanism-rate-coefficients.f90'
 

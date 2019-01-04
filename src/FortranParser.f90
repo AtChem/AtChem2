@@ -61,7 +61,8 @@ module FortranParser
                                  cAcos    = 20, &
                                  cAtan    = 21, &
                                  cQ       = 22, &
-                                 VarBegin = 23
+                                 cJ       = 23, &
+                                 VarBegin = 24
 
   character(len=1), dimension(cAdd:cPow), parameter :: Ops = (/ '+', &
                                                                 '-', &
@@ -69,7 +70,7 @@ module FortranParser
                                                                 '/', &
                                                                 '^' /)
 
-  character(len=5), dimension(cAbs:cQ), parameter :: Funcs = (/ 'abs  ', &
+  character(len=5), dimension(cAbs:cJ), parameter :: Funcs = (/ 'abs  ', &
                                                                 'exp  ', &
                                                                 'log10', &
                                                                 'log  ', &
@@ -83,7 +84,8 @@ module FortranParser
                                                                 'asin ', &
                                                                 'acos ', &
                                                                 'atan ', &
-                                                                'q    ' /)
+                                                                'q    ', &
+                                                                'j    ' /)
 
   integer(kind=SI), parameter :: MAX_FUN_LENGTH = 127_SI
 
@@ -176,16 +178,16 @@ contains
   end subroutine parse
 
   !*****************************************************************************************
-  function evaluate( this, Val, q) result (res )
+  function evaluate( this, Val, q, j) result (res )
     ! Evaluate bytecode of ith function for the values passed in array Val(:)
     use types_mod
     class(EquationParser) :: this
-    real(kind=DP), dimension(:), intent(in) :: Val, q             ! Variable values
+    real(kind=DP), dimension(:), intent(in) :: Val, q, j          ! Variable values
 
-    real(kind=DP) :: res                ! Result
-    integer(kind=SI) :: DPo                ! Data pointer
+    real(kind=DP) :: res       ! Result
+    integer(kind=SI) :: DPo    ! Data pointer
     integer(kind=SI) :: IPo, & ! Instruction pointer
-                                               SPo                ! Stack pointer
+                        SPo    ! Stack pointer
     real(kind=DP), parameter :: zero = 0._DP
     integer(kind=SI) :: EvalErrType
 
@@ -281,6 +283,8 @@ contains
         case  (cAtan); this%Stack(SPo)=ATAN(this%Stack(SPo))
 
         case     (cQ); this%Stack(SPo)=q(INT(this%Stack(SPo)))
+
+        case     (cJ); this%Stack(SPo)=j(INT(this%Stack(SPo)))
 
         case  DEFAULT; SPo=SPo+1_SI; this%Stack(SPo)=Val(this%ByteCode(IPo)-VarBegin+1_SI)
 
@@ -380,9 +384,9 @@ contains
     ! Return error message
     integer(kind=SI), intent(in) :: EvalErrType
     character(len=*), dimension(4), parameter :: m = (/ 'Division by zero                ', &
-                                                      'Argument of SQRT negative       ', &
-                                                      'Argument of LOG negative        ', &
-                                                      'Argument of ASIN or ACOS illegal' /)
+                                                        'Argument of SQRT negative       ', &
+                                                        'Argument of LOG negative        ', &
+                                                        'Argument of ASIN or ACOS illegal' /)
     character(len=len(m)) :: msg
     !----- -------- --------- --------- --------- --------- --------- --------- -------
     if (EvalErrType < 1_SI .or. EvalErrType > SIZE(m)) then
@@ -439,7 +443,7 @@ contains
 
     n = 0_SI
 
-    do j=cAbs, cQ                                             ! Check all math functions
+    do j=cAbs, cJ                                             ! Check all math functions
       k = MIN(LEN_trim(Funcs(j), KIND(1_SI)), len(str))
       call LowCase( str(1_SI:k), fun )
       if (fun == Funcs(j)) then                             ! Compare lower case letters
@@ -863,22 +867,21 @@ module parser_mod
   implicit none
   save
 
-  type(EquationParser), allocatable :: eqParserGeneric(:), eqParser(:)
-  integer(kind=NPI) :: nparsers, ngenericparsers, i
-  character(len=100), allocatable :: generic(:)
+  type(EquationParser), allocatable :: eqParserGeneric(:), eqParserReaction(:)
 
-  integer, parameter :: nvar = 11
+  integer, parameter :: nvar = 12
   character(len=*), dimension(nvar), parameter :: var  = (/ 'TEMP    ', &
-                                                                'N2      ', &
-                                                                'O2      ', &
-                                                                'M       ', &
-                                                                'RH      ', &
-                                                                'H2O     ', &
-                                                                'DEC     ', &
-                                                                'BLHEIGHT', &
-                                                                'DILUTE  ', &
-                                                                'JFAC    ', &
-                                                                'ROOFOPEN' /)
+                                                            'N2      ', &
+                                                            'O2      ', &
+                                                            'M       ', &
+                                                            'RH      ', &
+                                                            'H2O     ', &
+                                                            'DEC     ', &
+                                                            'BLHEIGHT', &
+                                                            'DILUTE  ', &
+                                                            'JFAC    ', &
+                                                            'ROOFOPEN', &
+                                                            'RO2     ' /)
   integer :: ierr
 
 contains
@@ -886,26 +889,58 @@ contains
     use input_functions_mod, only : count_lines_in_file
     implicit none
 
-    ngenericparsers = count_lines_in_file('src/gen/gen-complex.rates')
-    allocate(generic(ngenericparsers), eqParserGeneric(ngenericparsers))
+    integer(kind=NPI) :: i, nparsers
+    character(len=100), allocatable :: lines(:)
 
-    if (ngenericparsers > 0) then
+    nparsers = count_lines_in_file('src/gen/gen-complex.rates')
+    allocate(lines(nparsers), eqParserGeneric(nparsers))
+
+    if (nparsers > 0) then
       open (10, file='src/gen/gen-complex.rates', status='old')
       i = 1
-      read (10, '(A100)', iostat=ierr) generic(i)
+      read (10, '(A100)', iostat=ierr) lines(i)
 
-      do while ( ierr == 0 .and. i < ngenericparsers)
+      do while ( ierr == 0 .and. i < nparsers)
         i = i + 1
-        read (10, '(A100)', iostat=ierr) generic(i)
+        read (10, '(A100)', iostat=ierr) lines(i)
       end do
       close (10, status='keep')
 
-      do i=1, ngenericparsers
-        eqParserGeneric(i) = EquationParser(trim(generic(i)), var) ! Initialize function parser for nfunc functions
+      do i=1, nparsers
+        eqParserGeneric(i) = EquationParser(trim(lines(i)), var) ! Initialize function parser for nfunc functions
       end do
     end if
 
     return
   end subroutine initialiseGenericParser
+
+  subroutine initialiseReactionParser()
+    use input_functions_mod, only : count_lines_in_file
+    implicit none
+
+    integer(kind=NPI) :: i, nparsers
+    character(len=100), allocatable :: lines(:)
+
+    nparsers = count_lines_in_file('src/gen/coeff.rates')
+    allocate(lines(nparsers), eqParserReaction(nparsers))
+
+    if (nparsers > 0) then
+      open (10, file='src/gen/coeff.rates', status='old')
+      i = 1
+      read (10, '(A100)', iostat=ierr) lines(i)
+
+      do while ( ierr == 0 .and. i < nparsers)
+        i = i + 1
+        read (10, '(A100)', iostat=ierr) lines(i)
+      end do
+      close (10, status='keep')
+
+      do i=1, nparsers
+        eqParserReaction(i) = EquationParser(trim(lines(i)), var) ! Initialize function parser for nfunc functions
+      end do
+    end if
+
+    return
+  end subroutine initialiseReactionParser
 
 end module parser_mod

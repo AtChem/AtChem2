@@ -173,13 +173,13 @@ contains
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
     use species_mod, only : getNumberOfGenericComplex
-    use parser_mod, only : eqParserGeneric
+    use parser_mod, only : eqParserGeneric, eqParserReaction
     implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
-    real(kind=DP) :: q(getNumberOfGenericComplex()), var(11)
+    real(kind=DP) :: q(getNumberOfGenericComplex()), var(12)
 
     real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
@@ -257,9 +257,16 @@ contains
     var(9) = dilute
     var(10) = jfac
     var(11) = roofOpen
+    var(12) = ro2
     if (SIZE(eqParserGeneric) > 0) then
       do i=1, SIZE(eqParserGeneric)
-        q(i) = eqParserGeneric(i)%evaluate(var(:), q(:)) ! Interpret bytecode representation of ith function
+        q(i) = eqParserGeneric(i)%evaluate(var(:), q(:), j(:)) ! Interpret bytecode representation of ith function
+      end do
+    end if
+
+    if (SIZE(eqParserReaction) > 0) then
+      do i=1, SIZE(eqParserReaction)
+        p(i) = eqParserReaction(i)%evaluate(var(:), q(:), j(:)) ! Interpret bytecode representation of ith function
       end do
     end if
 

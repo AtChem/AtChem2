@@ -382,7 +382,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
             string = re.sub(r'(?P<single>[0-9]+\.[0-9]+)[eE]',
                            '\g<single>D',
                            string)
-            mech_rates_list.append('p(' + str(i) + ') = ' + \
+            mech_rates_list.append('!p(' + str(i) + ') = ' + \
               tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
             new_mech_rates_list.append(tokenise_and_process(string, variablesDict).replace("_DP","") + '\n')
 

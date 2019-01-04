@@ -40,7 +40,7 @@ PROGRAM ATCHEM2
   use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
   use solver_functions_mod, only : jfy
   use FortranParser, only : EquationParser
-  use parser_mod, only : initialiseGenericParser
+  use parser_mod, only : initialiseGenericParser, initialiseReactionParser
   implicit none
 
   ! *****************************************************************
@@ -369,7 +369,7 @@ PROGRAM ATCHEM2
 
 
   call initialiseGenericParser()
-
+  call initialiseReactionParser()
 
 
   ! *****************************************************************

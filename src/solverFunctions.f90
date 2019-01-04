@@ -270,8 +270,6 @@ contains
       end do
     end if
 
-    include './gen/mechanism-rate-coefficients.f90'
-
     return
   end subroutine mechanism_rates
 

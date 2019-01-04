@@ -766,22 +766,22 @@ contains
   !*****************************************************************************************
   function RealNum( str, ibegin, inext, error) result (res )
     ! Get real number from string - Format: [blanks][+|-][nnn][.nnn][e|E|d|D[+|-]nnn]
-    character(len=*), intent(in) :: str                    ! String
+    character(len=*), intent(in) :: str     ! String
     real(kind=DP) :: res                    ! Real number
     integer(kind=SI), optional, intent(out) :: ibegin, & ! Start position of real number
-                                                inext        ! 1st character after real number
+                                               inext     ! 1st character after real number
     logical, optional, intent(out) :: error                  ! Error flag
 
     integer(kind=SI) :: ib, in
     integer :: istat
     logical :: Bflag, & ! .T. at begin of number in str
-                                      InMan, & ! .T. in mantissa of number
-                                      Pflag, & ! .T. after 1st '.' encountered
-                                      Eflag, & ! .T. at exponent identifier 'eEdD'
-                                      InExp, & ! .T. in exponent of number
-                                      DInMan, & ! .T. if at least 1 digit in mant.
-                                      DInExp, & ! .T. if at least 1 digit in exp.
-                                      err                    ! Local error flag
+               InMan, & ! .T. in mantissa of number
+               Pflag, & ! .T. after 1st '.' encountered
+               Eflag, & ! .T. at exponent identifier 'eEdD'
+               InExp, & ! .T. in exponent of number
+               DInMan, & ! .T. if at least 1 digit in mant.
+               DInExp, & ! .T. if at least 1 digit in exp.
+               err                    ! Local error flag
     !----- -------- --------- --------- --------- --------- --------- --------- -------
     Bflag=.true.; InMan=.false.; Pflag=.false.; Eflag=.false.; InExp=.false.
     DInMan=.false.; DInExp=.false.

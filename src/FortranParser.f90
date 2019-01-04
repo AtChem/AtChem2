@@ -91,13 +91,13 @@ module FortranParser
 
   type EquationParser
 
-    integer(SI), pointer :: ByteCode(:) => null()
-    integer(SI) :: ByteCodeSize = 0_SI
-    real(DP), pointer :: Immed(:) => null()
-    integer(SI) :: ImmedSize = 0_SI
-    real(DP), pointer :: Stack(:) => null()
-    integer(SI) :: StackSize = 0
-    integer(SI) :: StackPtr = 0
+    integer(kind=SI), pointer :: ByteCode(:) => null()
+    integer(kind=SI) :: ByteCodeSize = 0_SI
+    real(kind=DP), pointer :: Immed(:) => null()
+    integer(kind=SI) :: ImmedSize = 0_SI
+    real(kind=DP), pointer :: Stack(:) => null()
+    integer(kind=SI) :: StackSize = 0
+    integer(kind=SI) :: StackPtr = 0
 
     character(len=MAX_FUN_LENGTH) :: funcString = ''
     character(len=MAX_FUN_LENGTH) :: funcStringOrig = ''

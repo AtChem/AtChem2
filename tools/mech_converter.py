@@ -385,12 +385,28 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
 
     # # Combine mechanism rates and RO2 sum files
     with open(os.path.join(gen_dir, 'mechanism-rate-coefficients.f90'), 'a') as mech_rates_coeff_file:
+        mech_rates_coeff_file.write("""
+module mechanism_mod
+    use, intrinsic :: iso_c_binding
+contains
+
+    subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J, RO2) bind(c,name='update_p')
+        implicit none
+
+        integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
+	    real(c_double), intent(inout) :: p(:), q(:)
+        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J(:), RO2
+        """)
         # Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # Write out Reaction definitions
         for r in mech_rates_list:
             mech_rates_coeff_file.write(r)
+        mech_rates_coeff_file.write("""
+    end subroutine update_p
+end module mechanism_mod
+""")
 
 
 

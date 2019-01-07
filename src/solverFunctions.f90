@@ -159,6 +159,7 @@ contains
   ! calculates rate constants from arrhenius information output p(:)
   ! contains the rate of each reaction
   subroutine mechanism_rates( t, y, p )
+    use :: iso_c_binding
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage_mod, only : maxEnvVarNameLength
@@ -175,6 +176,52 @@ contains
     use species_mod, only : getNumberOfGenericComplex
     implicit none
 
+    integer(c_int), parameter :: rtld_lazy=1 ! value extracte from the C header file
+    integer(c_int), parameter :: rtld_now=2 ! value extracte from the C header file
+    !
+    ! interface to linux API
+    interface
+      function dlopen(filename,mode) bind(c,name="dlopen")
+        ! void *dlopen(const char *filename, int mode);
+        use iso_c_binding
+        implicit none
+        type(c_ptr) :: dlopen
+        character(c_char), intent(in) :: filename(*)
+        integer(c_int), value :: mode
+      end function
+
+      function dlsym(handle,name) bind(c,name="dlsym")
+        ! void *dlsym(void *handle, const char *name);
+        use iso_c_binding
+        implicit none
+        type(c_funptr) :: dlsym
+        type(c_ptr), value :: handle
+        character(c_char), intent(in) :: name(*)
+      end function
+
+      function dlclose(handle) bind(c,name="dlclose")
+        ! int dlclose(void *handle);
+        use iso_c_binding
+        implicit none
+        integer(c_int) :: dlclose
+        type(c_ptr), value :: handle
+      end function
+    end interface
+
+    ! Define interface of call-back routine.
+    abstract interface
+      subroutine called_proc (i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14) bind(c)
+        use, intrinsic :: iso_c_binding
+        real(c_double), intent(inout) :: i(:), i2(:)
+        real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14(:)
+      end subroutine called_proc
+    end interface
+
+    procedure(called_proc), bind(c), pointer :: proc
+
+    type(c_funptr) :: proc_addr
+    type(c_ptr) :: handle
+
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
     real(kind=DP), intent(out) :: p(:)
@@ -185,6 +232,12 @@ contains
     character(len=maxEnvVarNameLength) :: this_env_var_name
 
     real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
+
+    handle=dlopen("./mechanism.so"//c_null_char, RTLD_LAZY)
+    if (.not. c_associated(handle))then
+        print*, 'Unable to load DLL ./mechanism.so'
+        stop
+    end if
 
     ro2 = ro2sum( y )
     dummy = y(1)
@@ -245,7 +298,13 @@ contains
     !TODO: is this necessary a second time?
     ro2 = ro2sum( y )
 
-    include './gen/mechanism-rate-coefficients.f90'
+    proc_addr=dlsym( handle, "update_p"//c_null_char )
+    if ( .not. c_associated(proc_addr) ) then
+      write(*,*)'Unable to load the procedure update_p'
+      stop
+    end if
+    call c_f_procpointer(proc_addr, proc)
+    call proc(p, q, temp, n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen, j)
 
     return
   end subroutine mechanism_rates

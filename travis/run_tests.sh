@@ -80,7 +80,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac src/gen $TESTS_DIR/$test/model/configuration mcm &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac src/gen $TESTS_DIR/$test/model/configuration mcm
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo Building $test test failed with exit code $exitcode

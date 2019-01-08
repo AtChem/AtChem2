@@ -181,7 +181,7 @@ contains
     !
     ! interface to linux API
     interface
-      function dlopen(filename,mode) bind(c,name="dlopen")
+      function dlopen( filename, mode ) bind ( c, name="dlopen" )
         ! void *dlopen(const char *filename, int mode);
         use iso_c_binding
         implicit none
@@ -190,7 +190,7 @@ contains
         integer(c_int), value :: mode
       end function
 
-      function dlsym(handle,name) bind(c,name="dlsym")
+      function dlsym( handle, name ) bind ( c, name="dlsym" )
         ! void *dlsym(void *handle, const char *name);
         use iso_c_binding
         implicit none
@@ -199,7 +199,7 @@ contains
         character(c_char), intent(in) :: name(*)
       end function
 
-      function dlclose(handle) bind(c,name="dlclose")
+      function dlclose( handle ) bind ( c, name="dlclose" )
         ! int dlclose(void *handle);
         use iso_c_binding
         implicit none
@@ -210,7 +210,7 @@ contains
 
     ! Define interface of call-back routine.
     abstract interface
-      subroutine called_proc (i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15) bind(c)
+      subroutine called_proc( i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15 ) bind ( c )
         use, intrinsic :: iso_c_binding
         real(c_double), intent(inout) :: i(:), i2(:)
         real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14(:), i15
@@ -235,9 +235,9 @@ contains
     real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
 
     handle=dlopen("./mechanism-rate-coefficients.so"//c_null_char, RTLD_LAZY)
-    if (.not. c_associated(handle))then
-        print*, 'Unable to load DLL ./mechanism-rate-coefficients.so'
-        stop
+    if (.not. c_associated(handle)) then
+      print(*,*) 'Unable to load DLL ./mechanism-rate-coefficients.so'
+      stop
     end if
 
     ro2 = ro2sum( y )
@@ -301,16 +301,13 @@ contains
 
     proc_addr=dlsym( handle, "update_p"//c_null_char )
     if ( .not. c_associated(proc_addr) ) then
-      write(*,*)'Unable to load the procedure update_p'
+      write(*,*) 'Unable to load the procedure update_p'
       stop
     end if
-    call c_f_procpointer(proc_addr, proc)
-    call proc(p, q, temp, n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen, j, ro2)
+    call c_f_procpointer( proc_addr, proc )
+    call proc( p, q, temp, n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen, j, ro2 )
     closure=dlclose(handle)
-    ! if (.not. assigned(closure)) then
-        ! print*, 'Unable to close DLL ./mechanism-rate-coefficients.so'
-        ! stop
-    ! end if
+
     return
   end subroutine mechanism_rates
 

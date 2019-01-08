@@ -124,6 +124,7 @@ with open(out_filename, 'w') as output_file:
                     or ( re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) and not re.match('^\s*module procedure \s*', to_output, flags=re.IGNORECASE) ) \
                     or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) \
+                    or re.match('^\s*abstract interface\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*select\s*', to_output, flags=re.IGNORECASE) \
                     or re.match('^\s*case\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*type\s+', to_output, flags=re.IGNORECASE):
                     next_line_indent_more = True

@@ -105,7 +105,7 @@ styletest:
 alltests: formattest styletest unittests tests
 
 sharedlib:
-	$(FORT_COMP) -c src/gen/mechanism-rate-coefficients.f90
+	$(FORT_COMP) -c src/gen/mechanism-rate-coefficients.f90 $(FFLAGS)
 	$(FORT_COMP) -shared -o mechanism-rate-coefficients.so mechanism-rate-coefficients.o
 
 clean:

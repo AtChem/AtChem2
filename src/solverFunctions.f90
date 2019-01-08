@@ -236,7 +236,7 @@ contains
 
     handle=dlopen("./mechanism-rate-coefficients.so"//c_null_char, RTLD_LAZY)
     if (.not. c_associated(handle)) then
-      print(*,*) 'Unable to load DLL ./mechanism-rate-coefficients.so'
+      write(*,*) 'Unable to load DLL ./mechanism-rate-coefficients.so'
       stop
     end if
 

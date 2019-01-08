@@ -221,6 +221,7 @@ contains
 
     type(c_funptr) :: proc_addr
     type(c_ptr) :: handle
+    integer :: closure
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)
@@ -305,7 +306,11 @@ contains
     end if
     call c_f_procpointer(proc_addr, proc)
     call proc(p, q, temp, n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen, j, ro2)
-
+    closure=dlclose(handle)
+    ! if (.not. assigned(closure)) then
+        ! print*, 'Unable to close DLL ./mechanism-rate-coefficients.so'
+        ! stop
+    ! end if
     return
   end subroutine mechanism_rates
 

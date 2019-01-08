@@ -66,10 +66,10 @@ all: $(AOUT)
 UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
 SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
-$(AOUT): $(SRCS)
+$(AOUT): sharedlib $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 fruit_code = $(FRUITDIR)/src/fruit.f90
@@ -103,6 +103,10 @@ styletest:
 	@./travis/run_style_test.sh
 
 alltests: formattest styletest unittests tests
+
+sharedlib:
+	$(FORT_COMP) -c src/gen/mechanism-rate-coefficients.f90
+	$(FORT_COMP) -shared -o mechanism-rate-coefficients.so mechanism-rate-coefficients.o
 
 clean:
 	rm -f *.o

@@ -394,10 +394,10 @@ contains
         implicit none
 
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
-	    real(c_double), intent(inout) :: p(:), q(:)
+           real(c_double), intent(inout) :: p(:), q(:)
         real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J(:), RO2
         """)
-        # Write out Generic Rate Coefficients and Complex reactions
+# Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # Write out Reaction definitions

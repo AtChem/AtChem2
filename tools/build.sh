@@ -16,9 +16,9 @@
 #
 # N.B.: the script MUST be run from the base directory of AtChem2.
 #
-# $1 is the directory for the chemical mechanism file in FACSIMILE
+# $1 is the location of the chemical mechanism file in FACSIMILE
 #    format. This argument is NOT optional, and there is no
-#    default. The suggested directory is ./model/
+#    default.
 #
 # $2 is the directory for the auto-generated Fortran files:
 # TODO: delete this!

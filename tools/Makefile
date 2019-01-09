@@ -71,7 +71,7 @@ SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
-$(AOUT): sharedlib $(SRCS)
+$(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 fruit_code = $(FRUITDIR)/src/fruit.f90

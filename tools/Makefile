@@ -48,7 +48,7 @@ endif
 
 # GNU gfortran flags
 FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-FSHAREDFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-parameter -fcheck=all -fPIC -shared
+FSHAREDFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
 LIBDIR   =  /usr/lib/:$(CVODELIB)
 
 # Intel ifort flags

@@ -49,4 +49,4 @@ python ./tools/setup_atchem2.py $1 $2 $3 $4
 
 echo ''
 echo "make" $1
-make --always-make
+make --always-make SHAREDLIBDIR=$3

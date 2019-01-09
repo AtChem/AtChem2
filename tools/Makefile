@@ -59,6 +59,7 @@ LIBDIR   =  /usr/lib/:$(CVODELIB)
 OBJ = obj
 SRC = src
 UNITTESTDIR = travis/unit_tests
+SHAREDLIBDIR = model/configuration
 
 AOUT = atchem2
 
@@ -106,8 +107,8 @@ styletest:
 alltests: formattest styletest unittests tests
 
 sharedlib:
-	$(FORT_COMP) -c src/gen/mechanism-rate-coefficients.f90 $(FSHAREDFLAGS)
-	$(FORT_COMP) -shared -o mechanism-rate-coefficients.so mechanism-rate-coefficients.o
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o
+	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o
 
 clean:
 	rm -f *.o

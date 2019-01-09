@@ -162,7 +162,8 @@ contains
     use :: iso_c_binding
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    use storage_mod, only : maxEnvVarNameLength
+    use directories_mod, only : param_dir
+    use storage_mod, only : maxEnvVarNameLength, maxFilepathLength
     use photolysis_rates_mod, only : numConstantPhotoRates, constantPhotoNumbers, constantPhotoValues, &
                                      numUnconstrainedPhotoRates, numConstrainedPhotoRates, j, ck, &
                                      constrainedPhotoNumbers, usePhotolysisConstants
@@ -231,12 +232,14 @@ contains
     real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
-
+    character(len=maxFilepathLength) :: library
     real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
 
-    handle=dlopen("./mechanism-rate-coefficients.so"//c_null_char, RTLD_LAZY)
+
+    library = trim( param_dir )//"/mechanism.so"
+    handle = dlopen(trim( library )//c_null_char, RTLD_LAZY)
     if (.not. c_associated(handle)) then
-      write(*,*) 'Unable to load DLL ./mechanism-rate-coefficients.so'
+      write(*, '(2A)') 'Unable to load DLL ', trim( library )
       stop
     end if
 

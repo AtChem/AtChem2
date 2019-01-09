@@ -22,7 +22,7 @@
 #
 # $2 is the directory for the auto-generated Fortran files:
 # TODO: delete this!
-#    - mechanism-rate-coefficients.f90
+#    - mechanism.f90
 #    By default, it is ./src/gen/
 #
 # $3 is the directory for the chemical mechanism in Fortran format:

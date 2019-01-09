@@ -1,5 +1,12 @@
 # AtChem2 - CHANGELOG
 
+## v1.1.1 (January 2019)
+
+- add `doc/` directory containing the documentation in markdown format
+- add `CONTRIBUTING.md` file
+- fix the header of `lossRates.output` and `productionRates.output`
+- change name of environment variable `ROOFOPEN` to `ROOF`
+
 ## v1.1 (November 2018)
 
 - implement a new directory structure

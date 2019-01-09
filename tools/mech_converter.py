@@ -101,7 +101,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
 
     :param input_file: string containing a relative or absolute reference to the mcm file to be processed.
     :param gen_dir: string containing a relative or absolute reference to the directory in which the function should
-      place mechanism.f90. This is normally src/gen/.
+      place mechanism.f90. This is normally model/configuration.
     :param mech_dir: string containing a relative or absolute reference to the directory in which the function should
       place mechanism.{prod,reac,ro2,species}. This is normally model/configuration/ for the given model.
     :param mcm_dir: string containing a relative or absolute reference to the directory housing the reference file peroxy-radicals_v3.3.1.

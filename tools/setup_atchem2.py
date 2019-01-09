@@ -27,7 +27,7 @@ def main():
     input_filename = sys.argv[1]
     # output_dir defaults to '.' if not given
     if len(sys.argv) <= 2:
-        output_dir = './src/gen/'
+        output_dir = './model/configuration/'
     else:
         output_dir = sys.argv[2]
     if len(sys.argv) <= 3:

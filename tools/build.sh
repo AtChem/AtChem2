@@ -23,7 +23,7 @@
 # $2 is the directory for the auto-generated Fortran files:
 # TODO: delete this!
 #    - mechanism.f90
-#    By default, it is ./src/gen/
+#    By default, it is ./model/configuration/
 #
 # $3 is the directory for the chemical mechanism in Fortran format:
 #    - mechanism.prod

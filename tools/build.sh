@@ -48,7 +48,12 @@ echo "call setup_atchem2.py"
 python ./tools/setup_atchem2.py $1 $2 $3 $4
 
 echo ''
-echo "make sharedlib" $3
-make sharedlib SHAREDLIBDIR=$3
+if [ -z $3 ]; then
+  echo "make sharedlib"
+  make sharedlib
+else
+  echo "make sharedlib" $3
+  make sharedlib SHAREDLIBDIR=$3
+fi
 echo "make" $1
 make

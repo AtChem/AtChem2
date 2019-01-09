@@ -915,15 +915,15 @@ contains
                 read (envVarTypes(i),*) envVarFixedValues(i)
               end if
           end select
-        case ('ROOFOPEN')
-          if ( trim( envVarTypes(i) ) == 'ON' ) then
+        case ('ROOF')
+          if ( trim( envVarTypes(i) ) == 'OPEN' ) then
             envVarTypesNum(i) = 3_SI
             envVarFixedValues(i) = 1.0_DP
-          else if ( trim( envVarTypes(i) ) == 'OFF' ) then
+          else if ( trim( envVarTypes(i) ) == 'CLOSED' ) then
             envVarTypesNum(i) = 3_SI
             envVarFixedValues(i) = 0.0_DP
           else
-            write (stderr,*) 'readEnvVar(): Invalid option given to ROOFOPEN in environmentVariables.config.'
+            write (stderr,*) 'readEnvVar(): Invalid option given to ROOF in environmentVariables.config.'
             stop
           end if
         case ('TEMP', 'RH', 'H2O', 'PRESS', 'BLHEIGHT', 'DILUTE', 'DEC')

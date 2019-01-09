@@ -213,7 +213,7 @@ contains
           dilute = this_env_val
         case ( 'JFAC' )
           jfac = this_env_val
-        case ( 'ROOFOPEN' )
+        case ( 'ROOF' )
           roofOpen = this_env_val
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )

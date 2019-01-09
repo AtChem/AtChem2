@@ -13,10 +13,10 @@
 ## --> R version
 ##
 ## ARGUMENT:
-## - directory with the model output (default = modelOutput/)
+## - directory with the model output
 ##
 ## USAGE:
-##   Rscript --vanilla plot-atchem2.r modelOutput/
+##   Rscript --vanilla ./tools/plot/plot-atchem2.r ./model/output/
 ## ---------------------------------------------- ##
 cmd_args <- commandArgs(trailingOnly = TRUE)
 setwd(cmd_args[1])

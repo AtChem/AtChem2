@@ -19,7 +19,7 @@ import os
 import sys
 import fix_mechanism_fac
 
-reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOFOPEN', 'RO2']
+reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF', 'RO2']
 reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 
 

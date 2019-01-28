@@ -188,8 +188,6 @@ $this_file_failures"
     fi
   done
 
-  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
-
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
   # Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then
@@ -204,6 +202,8 @@ $this_file_failures"
 
   echo "$this_test_failures"
 done
+
+if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$style_test_passed" -gt 0 ]]; then

@@ -23,6 +23,7 @@ OS := $(shell uname -s)
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
 FRUITDIR     = fruit_3.4.3
+SHAREDLIBDIR = model/configuration
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
@@ -59,7 +60,6 @@ LIBDIR   =  /usr/lib/:$(CVODELIB)
 OBJ = obj
 SRC = src
 UNITTESTDIR = travis/unit_tests
-SHAREDLIBDIR = model/configuration
 
 AOUT = atchem2
 

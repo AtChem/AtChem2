@@ -1083,7 +1083,7 @@ contains
     usePhotolysisConstants = .false.
     if ( file_exists .eqv. .true. ) then
       write (*, '(A)') ' Checking that photolysis constants exist in file...'
-      numConstantPhotoRates = count_lines_in_file( filename, .true. )
+      numConstantPhotoRates = count_lines_in_file( filename, .false. )
       ! Only use if the file exists and is not empty
       if ( numConstantPhotoRates > 0) then
         usePhotolysisConstants = .true.

@@ -16,14 +16,14 @@
 #
 # N.B.: the script MUST be run from the base directory of AtChem2.
 #
-# $1 is the directory for the chemical mechanism file in FACSIMILE
+# $1 is the location of the chemical mechanism file in FACSIMILE
 #    format. This argument is NOT optional, and there is no
-#    default. The suggested directory is ./model/
+#    default.
 #
 # $2 is the directory for the auto-generated Fortran files:
 # TODO: delete this!
-#    - mechanism-rate-coefficients.f90
-#    By default, it is ./src/gen/
+#    - mechanism.f90
+#    By default, it is ./model/configuration/
 #
 # $3 is the directory for the chemical mechanism in Fortran format:
 #    - mechanism.prod
@@ -48,5 +48,12 @@ echo "call setup_atchem2.py"
 python ./tools/setup_atchem2.py $1 $2 $3 $4
 
 echo ''
+if [ -z $3 ]; then
+  echo "make sharedlib"
+  make sharedlib
+else
+  echo "make sharedlib" $3
+  make sharedlib SHAREDLIBDIR=$3
+fi
 echo "make" $1
-make --always-make
+make

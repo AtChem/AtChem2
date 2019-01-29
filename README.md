@@ -3,7 +3,7 @@ AtChem2  [![Build Status](https://travis-ci.org/AtChem/AtChem2.svg?branch=master
 
 **AtChem2** is an atmospheric chemistry box-model, primarily designed for use with the Master Chemical Mechanism (MCM, http://mcm.leeds.ac.uk/MCM/). The latest stable release of AtChem can be downloaded here: https://github.com/AtChem/AtChem2/releases. Installation instructions and documentation can be found on the [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki).
 
-AtChem2 is open source, released under the [MIT license](https://opensource.org/licenses/MIT). Please, see the file `CITATION.md` for information on how to cite the model in publications.
+AtChem2 is open source, released under the [MIT license](https://opensource.org/licenses/MIT). Please see the file `CITATION.md` for information on how to cite the model in publications.
 
 Directory structure
 -------------------
@@ -28,7 +28,7 @@ Building and configuration
 
 Copy the example `Makefile`  from `tools/` to the main directory and set the variables `CVODELIB`, `OPENLIBMDIR` to the paths of the libraries CVODE and openlibm. Optionally, set the variable `FRUITDIR` to the path of the library FRUIT.
 
-Type `./tools/build.sh tools/mcm_example.fac` in the main directory to create an executable file called `atchem2`, using an example chemical mechanism and a default configuration. Note that, at present, AtChem2 requires recompilation for each new chemical mechanism file (`*.fac`). This is handled by the script `./tools/build.sh`, which converts the `.fac` file into a format usable by AtChem2 (namely, it generates three Fortran files in the `src/gen/` directory and several data files in the `model/configuration/` directory).
+Type `./tools/build.sh tools/mcm_example.fac model/configuration model/configuration mcm` in the main directory to create an executable file called `atchem2`, using an example chemical mechanism and a default configuration. This will also build a shared library `mechanism.so` and several data files in the `model/configuration/` directory.
 
 After completing the build step above, set the initial conditions, the required outputs and the other model parameters by editing the files in the `model/configuration/` directory. To run the model, type `./atchem2`. The build script and the executable accept several command line arguments to change the location of the configuration, input and output files from the default directories.
 

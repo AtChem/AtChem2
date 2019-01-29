@@ -1,5 +1,3 @@
-ignore:
-  - "src/gen/"
 coverage:
   status:
     project:

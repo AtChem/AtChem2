@@ -80,7 +80,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac src/gen $TESTS_DIR/$test/model/configuration mcm &> /dev/null
+  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/configuration mcm &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo Building $test test failed with exit code $exitcode
@@ -188,8 +188,6 @@ $this_file_failures"
     fi
   done
 
-  if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
-
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
   # Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then
@@ -204,6 +202,8 @@ $this_file_failures"
 
   echo "$this_test_failures"
 done
+
+if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$style_test_passed" -gt 0 ]]; then

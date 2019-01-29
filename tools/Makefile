@@ -23,6 +23,7 @@ OS := $(shell uname -s)
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
 FRUITDIR     = fruit_3.4.3
+SHAREDLIBDIR = model/configuration
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
@@ -47,7 +48,8 @@ RPATH_OPTION = -rpath
 endif
 
 # GNU gfortran flags
-FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all
+FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+FSHAREDFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
 LIBDIR   =  /usr/lib/:$(CVODELIB)
 
 # Intel ifort flags
@@ -66,7 +68,7 @@ all: $(AOUT)
 UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
 SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
@@ -103,6 +105,10 @@ styletest:
 	@./travis/run_style_test.sh
 
 alltests: formattest styletest unittests tests
+
+sharedlib:
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o
+	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o
 
 clean:
 	rm -f *.o

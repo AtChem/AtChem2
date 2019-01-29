@@ -6,6 +6,9 @@
 */model/configuration/mechanism.reac
 */model/configuration/mechanism.ro2
 */model/configuration/mechanism.species
+*/model/configuration/mechanism.f90
+*/model/configuration/mechanism.o
+*/model/configuration/mechanism.so
 testsuite.log
 
 # Except configuration and reference files

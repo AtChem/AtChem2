@@ -107,7 +107,7 @@ styletest:
 alltests: formattest styletest unittests tests
 
 sharedlib:
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)
 	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o
 
 clean:

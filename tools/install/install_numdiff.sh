@@ -29,7 +29,12 @@ tar -zxf numdiff-5.8.1.tar.gz
 rm numdiff-5.8.1.tar.gz
 
 cd numdiff-5.8.1/
-./configure --prefix=$1/numdiff
+OS=$(uname -s)
+if [ "$OS" == 'Darwin' ]; then
+  ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.19.8.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.19.8.1/lib
+else
+  ./configure --prefix=$1/numdiff
+fi
 make
 make install
 

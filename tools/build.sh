@@ -55,5 +55,5 @@ else
   echo "make sharedlib" $3
   make sharedlib SHAREDLIBDIR=$3
 fi
-echo "make" $1
+echo "make base executable"
 make

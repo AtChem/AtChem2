@@ -99,7 +99,7 @@ tests:
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
 formattest:
-	@./travis/run_format_test.sh
+	@./travis/run_indent_test.sh
 
 styletest:
 	@./travis/run_style_test.sh

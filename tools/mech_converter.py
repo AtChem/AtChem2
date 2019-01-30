@@ -86,7 +86,7 @@ def tokenise_and_process(input_string, variablesDict):
 
 def convert(input_file, gen_dir, mech_dir, mcm_dir):
     """
-    This is the main function of this file. It take as input an MCM file, and from it generic_rate_coefficients
+    This is the main function of this file. It takes as input an MCM file, and from it generates
     5 files for use by AtChem2's Fortran code:
 
     - 'Generic Rate Coefficients' and 'Complex reactions' go to gen_dir/mechanism.f90 with little more than formatting
@@ -166,7 +166,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
 
 
     # Read in the reference RO2 species from the peroxy-radicals_v3.3.1 file
-    with open(os.path.join(mcm_dir, 'peroxy-radicals_v3.3.1')) as RO2List_file:
+    with open(os.path.join(mcm_dir, 'peroxy-radicals_v3.3.1'), 'r') as RO2List_file:
         RO2List_reference = [r.rstrip() for r in RO2List_file.readlines()]
 
     # Check each of the RO2s from 'Peroxy radicals' are in the reference RO2 list. If not print a warning at the top of
@@ -431,13 +431,31 @@ end module mechanism_mod
 
 
 def main():
-    assert len(sys.argv) > 1, 'Please enter a filename as first argument, pointing to the mcm mechanism file.'
+    assert len(sys.argv) > 1, 'Please enter a filename as argument, pointing to the mcm mechanism file.'
     input_filename = sys.argv[1]
-    assert len(sys.argv) > 2, 'Please enter a directory as second argument, pointing to the directory containing source files of AtChem2.'
-    output_directory = sys.argv[2]
-    assert len(sys.argv) > 3, 'Please enter a directory as third argument, pointing to the directory for mechanism.species etc.'
-    param_directory = sys.argv[3]
-    convert(input_filename, output_directory, param_directory)
+    # output_dir defaults to '.' if not given
+    if len(sys.argv) <= 2:
+        output_dir = './model/configuration/'
+    else:
+        output_dir = sys.argv[2]
+    if len(sys.argv) <= 3:
+        param_dir = './model/configuration/'
+    else:
+        param_dir = sys.argv[3]
+    if len(sys.argv) <= 4:
+        mcm_dir = './mcm/'
+    else:
+        mcm_dir = sys.argv[4]
+
+    # check the locations supplied exist
+    assert os.path.isfile(input_filename), 'Failed to find file ' + input_filename
+    assert os.path.exists(output_dir), 'Failed to find directory ' + output_dir
+    assert os.path.exists(param_dir), 'Failed to find directory ' + param_dir
+    assert os.path.exists(mcm_dir), 'Failed to find directory ' + mcm_dir
+
+    # call conversion function
+    convert(input_filename, output_dir, param_dir, mcm_dir)
+
 
 if __name__ == '__main__':
     main()

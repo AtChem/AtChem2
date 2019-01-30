@@ -29,8 +29,7 @@
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_numdiff.sh $PWD ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./tools/install/install_numdiff_macOS.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin ; fi
+    - ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
     - ./tools/install/install_fruit.sh $PWD
 
   install:
@@ -42,11 +41,10 @@
   script:
     - ./atchem2
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
-    - make formattest
+    - make indenttest
     - make styletest
     - make clean
     - make unittests
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
     - make clean
-    - make tests #coverage info is uploaded (with flag 'tests') after each of the individual tests within this.
-                 #This is necessary because the executable changes between runs, so the coverage reports don't seem to combine.
+    - make tests

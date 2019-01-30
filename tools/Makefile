@@ -98,16 +98,16 @@ tests:
 	@echo "Make: Running the following tests:" $(TESTS)
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-formattest:
-	@./travis/run_format_test.sh
+indenttest:
+	@./travis/run_indent_test.sh
 
 styletest:
 	@./travis/run_style_test.sh
 
-alltests: formattest styletest unittests tests
+alltests: indenttest styletest unittests tests
 
 sharedlib:
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)
 	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o
 
 clean:
@@ -117,6 +117,7 @@ clean:
 	rm -f $(OBJ)/*.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
+	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
 
 # dependencies:
 atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o

@@ -98,13 +98,13 @@ tests:
 	@echo "Make: Running the following tests:" $(TESTS)
 	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-formattest:
+indenttest:
 	@./travis/run_indent_test.sh
 
 styletest:
 	@./travis/run_style_test.sh
 
-alltests: formattest styletest unittests tests
+alltests: indenttest styletest unittests tests
 
 sharedlib:
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)

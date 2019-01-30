@@ -38,7 +38,7 @@
 
 set -e
 echo ''
-echo "facsimile mechanism directory:" $1
+echo "facsimile mechanism file:" $1
 echo "auto-generated fortran files directory:" $2
 echo "fortran mechanism directory:" $3
 echo "mcm files directory:" $4

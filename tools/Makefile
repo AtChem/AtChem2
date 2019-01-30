@@ -117,6 +117,7 @@ clean:
 	rm -f $(OBJ)/*.mod
 	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/instantaneousRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
+	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
 
 # dependencies:
 atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o

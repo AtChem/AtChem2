@@ -21,69 +21,12 @@
 module input_functions_mod
 contains
 
-  ! -----------------------------------------------------------------
-  ! Read in command line argument to direct output files to a given
-  ! directory
-  subroutine get_and_set_directories_from_command_arguments()
-    use types_mod
-    use directories_mod
-    implicit none
-
-    integer(kind=QI) :: cmd_arg_count
-
-    cmd_arg_count = command_argument_count()
-    if ( cmd_arg_count > 0 ) then
-      call get_command_argument( 1, output_dir )
-    else
-      output_dir = "model/output"
-    end if
-    if ( cmd_arg_count > 1 ) then
-      call get_command_argument( 2, reactionRates_dir )
-    else
-      reactionRates_dir = "model/output/reactionRates"
-    end if
-    if ( cmd_arg_count > 2 ) then
-      call get_command_argument( 3, param_dir )
-    else
-      param_dir = "model/configuration"
-    end if
-    if ( cmd_arg_count > 3 ) then
-      call get_command_argument( 4, mcm_dir )
-    else
-      mcm_dir = "mcm"
-    end if
-    if ( cmd_arg_count > 4 ) then
-      call get_command_argument( 5, spec_constraints_dir )
-    else
-      spec_constraints_dir = "model/constraints/species"
-    end if
-    if ( cmd_arg_count > 5 ) then
-      call get_command_argument( 6, env_constraints_dir )
-    else
-      env_constraints_dir = "model/constraints/environment"
-    end if
-    if ( cmd_arg_count > 6 ) then
-      call get_command_argument( 7, photolysis_constraints_dir )
-    else
-      photolysis_constraints_dir = "model/constraints/photolysis"
-    end if
-
-    write (*, '(2A)') ' Output dir is: ', trim( output_dir )
-    write (*, '(2A)') ' Reaction Rates dir is: ', trim( reactionRates_dir )
-    write (*, '(2A)') ' Configuration dir is: ', trim( param_dir )
-    write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
-    write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
-    write (*, '(2A)') ' Environment Constraints dir is: ', trim( env_constraints_dir )
-    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photolysis_constraints_dir )
-
-  end subroutine get_and_set_directories_from_command_arguments
-
   ! ----------------------------------------------------------------- !
   ! Read the top line of mechanism.reac to get the number of species
   ! and number of reactions in the system
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use species_mod, only : setNumberOfSpecies, setNumberOfReactions, setNumberOfGenericComplex
     use storage_mod, only : maxFilepathLength
     implicit none
@@ -91,7 +34,7 @@ contains
     integer(kind=NPI) :: numSpec, numReac, numGenericComplex
     character(len=maxFilepathLength) :: fileLocation
 
-    fileLocation = trim( param_dir ) // '/mechanism.reac'
+    fileLocation = trim( configuration_dir ) // '/mechanism.reac'
     ! read in mechanism parameters
     call inquire_or_abort( fileLocation, 'readNumberOfSpeciesAndReactions()')
 
@@ -114,7 +57,7 @@ contains
   ! and last line
   subroutine readReactions()
     use types_mod
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use reaction_structure_mod
     implicit none
 
@@ -122,10 +65,10 @@ contains
     integer(kind=NPI) :: k, l, count
     integer(kind=IntErr) :: ierr
 
-    call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
-    lhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
-    call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
-    rhs_size = count_lines_in_file( trim( param_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
+    lhs_size = count_lines_in_file( trim( configuration_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
+    rhs_size = count_lines_in_file( trim( configuration_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
 
     allocate (clhs(2, lhs_size), crhs(2, rhs_size), clcoeff(lhs_size), crcoeff(rhs_size))
 
@@ -133,8 +76,8 @@ contains
     write (*, '(A, I0)') ' Size of rhs = ', rhs_size
     write (*,*)
     write (*, '(A)') ' Reading reactants (lhs) from mechanism.reac...'
-    call inquire_or_abort( trim( param_dir ) // '/mechanism.reac', 'readReactions()')
-    open (10, file=trim( param_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
+    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.reac', 'readReactions()')
+    open (10, file=trim( configuration_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
     ! lhs(1, i) contains the reaction number
     ! lhs(2, i) contains the species number of the reactant
@@ -152,8 +95,8 @@ contains
     close (10, status='keep')
 
     write (*, '(A)') ' Reading products (rhs) from mechanism.prod...'
-    call inquire_or_abort( trim( param_dir ) // '/mechanism.prod', 'readReactions()')
-    open (11, file=trim( param_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
+    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.prod', 'readReactions()')
+    open (11, file=trim( configuration_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
     ! rhs(1, i) contains the reaction number
     ! rhs(2, i) contains the species number of the product
@@ -180,7 +123,7 @@ contains
   ! Read in all species names and numbers from mechanism.species
   function readSpecies() result ( speciesName )
     use types_mod
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use species_mod, only : getNumberOfSpecies
     implicit none
@@ -190,7 +133,7 @@ contains
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading species names from mechanism.species...'
-    fileLocation=trim( param_dir ) // '/mechanism.species'
+    fileLocation=trim( configuration_dir ) // '/mechanism.species'
     ! Read in species number and name from model/configuration/mechanism.species
     ! to speciesName and sdummy (to be thrown).
     allocate(speciesName(getNumberOfSpecies()))
@@ -214,7 +157,7 @@ contains
   subroutine readAndSetInitialConcentrations( speciesConcs )
     use types_mod
     use species_mod, only : getNumberOfSpecies, getSpeciesList
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     implicit none
 
@@ -228,7 +171,7 @@ contains
     integer(kind=IntErr) :: ierr
 
     write (*, '(A)') ' Reading initial concentrations...'
-    filename = trim( param_dir ) // '/initialConcentrations.config'
+    filename = trim( configuration_dir ) // '/initialConcentrations.config'
     ! Count lines in file, allocate appropriately
     numLines = count_lines_in_file( trim( filename ), .false. )
     nsp = getNumberOfSpecies()
@@ -385,7 +328,7 @@ contains
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, &
                                      constantPhotoNumbers, constantPhotoValues, &
                                      constantPhotoNames, numConstantPhotoRates
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use storage_mod, only : maxFilepathLength
     implicit none
 
@@ -394,7 +337,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( param_dir ) // '/photolysisConstant.config'
+    filename = trim( configuration_dir ) // '/photolysisConstant.config'
     write (*, '(A)') ' Reading photolysis constants from file...'
     if ( allocated .eqv. .false. ) then
       call allocate_photolysis_constants_variables()
@@ -437,7 +380,7 @@ contains
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, numConstrainedPhotoRates, &
                                      photoX, photoY, photoNumberOfPoints, maxNumberOfPhotoDataPoints, &
                                      allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
-    use directories_mod, only : param_dir, photolysis_constraints_dir
+    use directories_mod, only : configuration_dir, photolysis_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 
     character(len=maxFilepathLength) :: fileLocationPrefix
@@ -450,12 +393,12 @@ contains
 
     ! Get names of constrained photo rates
     write (*, '(A)') ' Reading names of constrained photolysis rates from file...'
-    call inquire_or_abort( trim( param_dir ) // '//photolysisConstrained.config', 'readPhotoConstraints()')
+    call inquire_or_abort( trim( configuration_dir ) // '//photolysisConstrained.config', 'readPhotoConstraints()')
     if ( allocated .eqv. .false. ) then
       call allocate_constrained_photolysis_rates_variables()
       allocated = .true.
     end if
-    open (10, file=trim( param_dir ) // '//photolysisConstrained.config', status='old') ! input file
+    open (10, file=trim( configuration_dir ) // '//photolysisConstrained.config', status='old') ! input file
     do i = 1, numConstrainedPhotoRates
       read (10,*, iostat=ierr) constrainedPhotoNames(i)
       if ( ierr /= 0 ) then
@@ -843,7 +786,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod
-    use directories_mod, only : param_dir, env_constraints_dir, photolysis_constraints_dir
+    use directories_mod, only : configuration_dir, env_constraints_dir, photolysis_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound
@@ -863,7 +806,7 @@ contains
     ! file, and then adding 1 to account for M, which should be
     ! omitted from the config file since it is always calculated from
     ! temperature and pressure
-    numEnvVars = int( count_lines_in_file( trim( param_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
+    numEnvVars = int( count_lines_in_file( trim( configuration_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
 
     ! Allocate storage for current values of env vars used for output
     allocate (currentEnvVarValues(numEnvVars) )
@@ -876,7 +819,7 @@ contains
     envVarTypes(1) = 'CALC'
     envVarTypesNum(1) = 1_SI
 
-    fileLocation = trim( param_dir ) // '/environmentVariables.config'
+    fileLocation = trim( configuration_dir ) // '/environmentVariables.config'
     call inquire_or_abort( fileLocation, 'readEnvVar()')
     open (10, file=fileLocation, status='old') ! input file
     ! Read in environment variables
@@ -1012,7 +955,7 @@ contains
   function readSpeciesOfInterest() result ( r )
     use types_mod
     use species_mod, only : getNumberOfSpecies
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     implicit none
 
@@ -1020,7 +963,7 @@ contains
     character(len=maxFilepathLength) :: filename
     integer(kind=NPI) :: j, nsp, length
 
-    filename = trim( param_dir ) // '/outputSpecies.config'
+    filename = trim( configuration_dir ) // '/outputSpecies.config'
     write (*, '(A)') ' Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
     allocate (r(length) )
@@ -1061,7 +1004,7 @@ contains
   subroutine readPhotoRates()
     use types_mod
     use photolysis_rates_mod
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
     implicit none
 
@@ -1074,7 +1017,7 @@ contains
 
     ! Check whether photolysisConstant.config file exists - if so, and it is non-empty,
     ! call readPhotolysisConstants() to set those to their given value, and set the rest to zero.
-    filename = trim( param_dir ) // '/photolysisConstant.config'
+    filename = trim( configuration_dir ) // '/photolysisConstant.config'
     write (*, '(A)') ' Looking for photolysis constants file...'
     inquire(file=filename, exist=file_exists)
     usePhotolysisConstants = .false.
@@ -1097,7 +1040,7 @@ contains
       ! Check whether constrainedPhotoNames.config file exists - if so, and it is non-empty,
       ! call readPhotolysisConstraints() to read in their values.
       write (*, '(A)') ' No photolysis constants applied, so trying constrained photolysis rates file...'
-      filename = trim( param_dir ) // '//photolysisConstrained.config'
+      filename = trim( configuration_dir ) // '//photolysisConstrained.config'
       write (*, '(A)') ' Looking for photolysis constraints file...'
       inquire(file=filename, exist=file_exists)
       if ( file_exists .eqv. .true. ) then
@@ -1146,7 +1089,7 @@ contains
     use constraints_mod, only : maxNumberOfConstraintDataPoints, speciesNumberOfPoints, numberOfVariableConstrainedSpecies, &
                                 numberOfFixedConstrainedSpecies, setNumberOfConstrainedSpecies, setConstrainedConcs, &
                                 setConstrainedSpecies, getOneConstrainedSpecies, dataX, dataY, dataFixedY
-    use directories_mod, only : param_dir, spec_constraints_dir
+    use directories_mod, only : configuration_dir, spec_constraints_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use config_functions_mod, only : getIndexWithinList
     use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
@@ -1166,13 +1109,13 @@ contains
 
     ! read in number of variable-concentration constrained species
     write (*, '(A)') ' Counting the variable-concentration species to be constrained (in file speciesConstrained.config)...'
-    numberOfVariableConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/speciesConstrained.config' )
+    numberOfVariableConstrainedSpecies = count_lines_in_file( trim( configuration_dir ) // '/speciesConstrained.config' )
     write (*, '(A)') ' Finished counting the names of variable-concentration constrained species.'
     write (*, '(A, I0)') ' Number of names of variable-concentration constrained species: ', numberOfVariableConstrainedSpecies
 
     ! read in number of fixed-concentration constrained species
     write (*, '(A)') ' Counting the fixed-concentration species to be constrained (in file speciesConstant.config)...'
-    numberOfFixedConstrainedSpecies = count_lines_in_file( trim( param_dir ) // '/speciesConstant.config' )
+    numberOfFixedConstrainedSpecies = count_lines_in_file( trim( configuration_dir ) // '/speciesConstant.config' )
     write (*, '(A)') ' Finished counting the names of fixed-concentration constrained species.'
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
@@ -1184,7 +1127,7 @@ contains
     ! numbers of variable-concentration constrained species
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       write (*, '(A)') ' Reading in the names of variable-concentration constrained species...'
-      call read_in_single_column_string_file( trim( param_dir ) // '/speciesConstrained.config', constrainedNames )
+      call read_in_single_column_string_file( trim( configuration_dir ) // '/speciesConstrained.config', constrainedNames )
       do i = 1, numberOfVariableConstrainedSpecies
         id = getIndexWithinList( speciesNames, constrainedNames(i) )
         if ( id /= 0 ) then
@@ -1256,7 +1199,7 @@ contains
 
     ! Read in names and concentration data for fixed constrained species
     allocate (dataFixedY(numberOfFixedConstrainedSpecies))
-    fileLocation = trim( param_dir ) // '/speciesConstant.config'
+    fileLocation = trim( configuration_dir ) // '/speciesConstant.config'
     write (*, '(A)') ' Reading in the names and concentration of the fixed constrained species ' // &
                 '(in file speciesConstant.config)...'
     call inquire_or_abort( fileLocation, 'readSpeciesConstraints()')
@@ -1331,14 +1274,14 @@ contains
     use types_mod
     use env_vars_mod, only : ro2Numbers
     use storage_mod, only : maxFilepathLength
-    use directories_mod, only : param_dir
+    use directories_mod, only : configuration_dir
     implicit none
 
     integer(kind=NPI) :: j, numberOfRO2Species
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading ro2 numbers from mechanism.ro2...'
-    fileLocation=trim( param_dir ) // '/mechanism.ro2'
+    fileLocation=trim( configuration_dir ) // '/mechanism.ro2'
 
     ! Read in ro2 species numbers from model/configuration/mechanism.ro2
     ! to ro2Numbers

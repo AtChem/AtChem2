@@ -184,96 +184,86 @@ contains
 
   end function  read_value_or_default
 
+  ! -----------------------------------------------------------------
+  ! Read in command line argument to direct output files to a given
+  ! directory
+  subroutine get_and_set_directories_from_command_arguments()
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use directories_mod
+    implicit none
+
+    integer(kind=QI) :: cmd_arg_count, i
+    character(len=100), allocatable :: input_strings(:), names(:), values(:)
+    logical, allocatable :: names_valid(:), values_valid(:)
+    logical :: all_valid
+
+    all_valid = .true.
+    ! count possible arguments
+    cmd_arg_count = command_argument_count()
+    ! read in possible arguments
+    allocate(input_strings(cmd_arg_count), names(cmd_arg_count), values(cmd_arg_count), &
+             names_valid(cmd_arg_count), values_valid(cmd_arg_count))
+
+    if ( cmd_arg_count > 0 ) then
+      do i=1,cmd_arg_count
+        call get_command_argument( i, input_strings(i) )
+      end do
+
+    ! parse arguments and check for naive validity
+      do i=1,cmd_arg_count
+        call split_string( input_strings(i), names(i), values(i), '=')
+        call check_name_value_pair_validity(names(i), values(i), names_valid(i), values_valid(i))
+        if ( names_valid(i) .neqv. .true. ) then
+          all_valid = .false.
+          write(*,*) 'supplied flag "', trim(names(i)), '" is not valid when paired with value "', trim(values(i)), '"'
+        end if
+        if ( values_valid(i) .neqv. .true. ) then
+          all_valid = .false.
+          write(*,*) 'value "', trim(values(i)), '" is not valid when paired with name "', trim(names(i)), '"'
+        end if
+        if ( flag_array_contains(valid_flags, names(i)) == 0 ) then
+          all_valid = .false.
+          write(*,*) 'supplied flag "', trim(names(i)) ,'" is not a valid flag.'
+        end if
+      end do
+    end if
+
+    ! report back on validity
+    if (.not. all_valid) then
+      call print_help()
+      stop
+    end if
+
+    ! check for existence of --help flag - if it exists, ignore all others, and print the help text
+    if ( array_contains(names, valid_flags(1)%flag_switch) /= 0 ) then
+      write(*,*) '--help flag supplied'
+      call print_help()
+      stop
+    end if
+
+    ! set each of the directory locations from the command line, following the defined logic for defaults if some are not supplied
+    model_dir             = read_value_or_default( valid_flags(2)%flag_switch, 'model',                               names, values )
+    output_dir            = read_value_or_default( valid_flags(3)%flag_switch, trim(model_dir)//'/output',            names, values )
+    reactionRates_dir     = read_value_or_default( valid_flags(4)%flag_switch, trim(output_dir)//'/reactionRates',    names, values )
+    configuration_dir     = read_value_or_default( valid_flags(5)%flag_switch, trim(model_dir)//'/configuration',     names, values )
+    constraints_dir       = read_value_or_default( valid_flags(6)%flag_switch, trim(model_dir)//'/constraints',       names, values )
+    env_constraints_dir   = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/environment', names, values )
+    photo_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/photolysis',  names, values )
+    spec_constraints_dir  = read_value_or_default( valid_flags(9)%flag_switch, trim(constraints_dir)//'/species',     names, values )
+    mcm_dir               = read_value_or_default( valid_flags(10)%flag_switch, 'mcm',                                names, values )
+    shared_lib_dir        = read_value_or_default( valid_flags(11)%flag_switch, 'model/configuration',                names, values )
+
+    write (*, '(2A)') ' Model dir is: ', trim( model_dir )
+    write (*, '(2A)') ' Output dir is: ', trim( output_dir )
+    write (*, '(2A)') ' Reaction Rates dir is: ', trim( reactionRates_dir )
+    write (*, '(2A)') ' Configuration dir is: ', trim( configuration_dir )
+    write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
+    write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
+    write (*, '(2A)') ' Environment Constraints dir is: ', trim( env_constraints_dir )
+    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photolysis_constraints_dir )
+    write (*, '(2A)') ' Shared library dir is: ', trim( shared_lib_dir )
+
+  end subroutine get_and_set_directories_from_command_arguments
+
 end module argparse_mod
-
-
-
-
-
-
-
-
-
-
-
-program cli
-
-  use, intrinsic :: iso_fortran_env, only : stderr => error_unit
-  use helper_routines
-  implicit none
-
-  integer :: cmd_arg_count, i
-  character(len=100), allocatable :: input_strings(:), names(:), values(:)
-  character(len=100) :: model_dir, output_dir, reactionRates_dir, configuration_dir, constraints_dir, &
-                        env_constraints_dir, photo_constraints_dir, spec_constraints_dir, mcm_dir, shared_lib_dir
-  logical, allocatable :: names_valid(:), values_valid(:)
-  logical :: all_valid
-
-  all_valid = .true.
-  ! count possible arguments
-  cmd_arg_count = command_argument_count()
-  ! read in possible arguments
-  allocate(input_strings(cmd_arg_count), names(cmd_arg_count), values(cmd_arg_count), &
-           names_valid(cmd_arg_count), values_valid(cmd_arg_count))
-
-  if ( cmd_arg_count > 0 ) then
-    do i=1,cmd_arg_count
-      call get_command_argument( i, input_strings(i) )
-    end do
-
-  ! parse arguments and check for naive validity
-    do i=1,cmd_arg_count
-      call split_string( input_strings(i), names(i), values(i), '=')
-      call check_name_value_pair_validity(names(i), values(i), names_valid(i), values_valid(i))
-      if ( names_valid(i) .neqv. .true. ) then
-        all_valid = .false.
-        write(*,*) 'supplied flag "', trim(names(i)), '" is not valid when paired with value "', trim(values(i)), '"'
-      end if
-      if ( values_valid(i) .neqv. .true. ) then
-        all_valid = .false.
-        write(*,*) 'value "', trim(values(i)), '" is not valid when paired with name "', trim(names(i)), '"'
-      end if
-      if ( flag_array_contains(valid_flags, names(i)) == 0 ) then
-        all_valid = .false.
-        write(*,*) 'supplied flag "', trim(names(i)) ,'" is not a valid flag.'
-      end if
-    end do
-  end if
-
-  ! report back on validity
-  if (.not. all_valid) then
-    call print_help()
-    stop
-  end if
-
-  ! check for existence of --help flag - if it exists, ignore all others, and print the help text
-  if ( array_contains(names, valid_flags(1)%flag_switch) /= 0 ) then
-    write(*,*) '--help flag supplied'
-    call print_help()
-    stop
-  end if
-
-  ! set each of the directory locations from the command line, following the defined logic for defaults if some are not supplied
-  model_dir             = read_value_or_default( valid_flags(2)%flag_switch, 'model',                               names, values )
-  output_dir            = read_value_or_default( valid_flags(3)%flag_switch, trim(model_dir)//'/output',            names, values )
-  reactionRates_dir     = read_value_or_default( valid_flags(4)%flag_switch, trim(output_dir)//'/reactionRates',    names, values )
-  configuration_dir     = read_value_or_default( valid_flags(5)%flag_switch, trim(model_dir)//'/configuration',     names, values )
-  constraints_dir       = read_value_or_default( valid_flags(6)%flag_switch, trim(model_dir)//'/constraints',       names, values )
-  env_constraints_dir   = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/environment', names, values )
-  photo_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/photolysis',  names, values )
-  spec_constraints_dir  = read_value_or_default( valid_flags(9)%flag_switch, trim(constraints_dir)//'/species',     names, values )
-  mcm_dir               = read_value_or_default( valid_flags(10)%flag_switch, 'mcm',                                names, values )
-  shared_lib_dir        = read_value_or_default( valid_flags(11)%flag_switch, 'model/configuration',                names, values )
-
-  write(*,*) 'model dir:                   ', model_dir
-  write(*,*) 'output dir:                  ', output_dir
-  write(*,*) 'reactionRates dir:           ', reactionRates_dir
-  write(*,*) 'configuration dir:           ', configuration_dir
-  write(*,*) 'constraints dir:             ', constraints_dir
-  write(*,*) 'environment constraints dir: ', env_constraints_dir
-  write(*,*) 'photolysis constraints dir:  ', photo_constraints_dir
-  write(*,*) 'species constraints dir:     ', spec_constraints_dir
-  write(*,*) 'mcm dir:                     ', mcm_dir
-  write(*,*) 'shared library dir:          ', shared_lib_dir
-
-end program cli

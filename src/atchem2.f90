@@ -31,10 +31,11 @@ PROGRAM ATCHEM2
   use reaction_rates_mod
   use env_vars_mod
   use date_mod, only : calcInitialDateParameters, calcCurrentDateParameters
-  use directories_mod, only : output_dir, param_dir
+  use directories_mod, only : output_dir, configuration_dir
   use storage_mod, only : maxSpecLength, maxPhotoRateNameLength, maxFilepathLength
   use solver_params_mod
   use model_params_mod
+  use argparse_mod
   use input_functions_mod
   use config_functions_mod
   use output_functions_mod
@@ -223,7 +224,7 @@ PROGRAM ATCHEM2
   ! Read in species requiring detailed reats output, and set up variables to
   ! hold these
   write (*, '(A)') ' Reading which species require detailed rate output...'
-  call readDetailedRatesSpeciesNames( trim( param_dir ) // '/outputRates.config', detailedRatesSpeciesName )
+  call readDetailedRatesSpeciesNames( trim( configuration_dir ) // '/outputRates.config', detailedRatesSpeciesName )
   write (*, '(A)') ' Finished reading which species require detailed rate output.'
 
   allocate (detailedRatesSpecies(size( detailedRatesSpeciesName )))
@@ -256,11 +257,11 @@ PROGRAM ATCHEM2
   call readRO2species()
 
   ! Read in and set solver parameters
-  call set_solver_parameters( getParametersFromFile( trim( param_dir ) // "/solver.parameters" ) )
+  call set_solver_parameters( getParametersFromFile( trim( configuration_dir ) // "/solver.parameters" ) )
   write (*,*)
 
   ! Read in and set model parameters
-  call set_model_parameters( getParametersFromFile( trim( param_dir ) //  "/model.parameters" ) )
+  call set_model_parameters( getParametersFromFile( trim( configuration_dir ) //  "/model.parameters" ) )
   write (*,*)
 
   ! Set the parameters of MODULE date_mod to their value based on

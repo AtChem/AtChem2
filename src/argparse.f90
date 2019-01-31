@@ -95,7 +95,7 @@ contains
   subroutine check_name_value_pair_validity(name, value, name_valid, value_valid)
     implicit none
 
-    character(100), intent(in) :: name, value
+    character(len=*), intent(in) :: name, value
     logical, intent(out) :: name_valid, value_valid
 
     name_valid = .true.
@@ -129,7 +129,7 @@ contains
 
   function array_contains(array, value) result (index)
     implicit none
-    character(100), intent(in) :: array(:), value
+    character(len=*), intent(in) :: array(:), value
     integer :: index
     integer :: i
 
@@ -150,7 +150,7 @@ contains
   function flag_array_contains(array, value) result (index)
     implicit none
     type(flag), intent(in) :: array(:)
-    character(100), intent(in) :: value
+    character(len=*), intent(in) :: value
     integer :: index
     integer :: i
 

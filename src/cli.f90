@@ -15,9 +15,9 @@ module helper_routines
                 flag('--configuration',     'The directory of the model configuration.'), &
                 flag('--constraints',       'The base directory of constraints. ' // &
                                             'This typically contains 3 subdirectories: environment, photolysis, and species.'), &
-                flag('--spec_constraints ', 'The directory containing species constraints data.'), &
-                flag('--env_constraints  ', 'The directory containing environment constraints data.'), &
-                flag('--photo_constraints', 'The directory containing photolysis constraints data.') ]
+                flag('--env_constraints',   'The directory containing environment constraints data.'), &
+                flag('--photo_constraints', 'The directory containing photolysis constraints data.'), &
+                flag('--spec_constraints',  'The directory containing species constraints data.') ]
 
 contains
 
@@ -42,7 +42,7 @@ contains
     end do
 
     write(*,*) 'In essence, the directories default to sit in the following tree. '
-    write(*,*) 'Modification via the input parameters cascades to lower directories.'
+    write(*,*) 'Modification via the input parameters cascades to lower directories, but is overwritten by explicit input.'
     write(*,*)
     write(*,*) '                                 model_dir'
     write(*,*) '                                      | '
@@ -202,7 +202,7 @@ program cli
   integer :: cmd_arg_count, i
   character(len=100), allocatable :: input_strings(:), names(:), values(:)
   character(len=100) :: model_dir, output_dir, reactionRates_dir, configuration_dir, constraints_dir, &
-                        spec_constraints_dir, env_constraints_dir, photo_constraints_dir
+                        env_constraints_dir, photo_constraints_dir, spec_constraints_dir
   logical, allocatable :: names_valid(:), values_valid(:)
   logical :: all_valid
 
@@ -220,13 +220,8 @@ program cli
 
   ! parse arguments and check for naive validity
     do i=1,cmd_arg_count
-      ! write(*,*) i, input_strings(i)
       call split_string( input_strings(i), names(i), values(i), '=')
-      ! write(*,*) trim(names(i))
-      ! write(*,*) trim(values(i))
       call check_name_value_pair_validity(names(i), values(i), names_valid(i), values_valid(i))
-      ! write(*,*) names_valid(i), values_valid(i)
-      ! write(*,*)
       if ( names_valid(i) .neqv. .true. ) then
         all_valid = .false.
         write(*,*) 'supplied flag "', trim(names(i)), '" is not valid when paired with value "', trim(values(i)), '"'
@@ -238,8 +233,6 @@ program cli
       if ( flag_array_contains(valid_flags, names(i)) == 0 ) then
         all_valid = .false.
         write(*,*) 'supplied flag "', trim(names(i)) ,'" is not a valid flag.'
-        ! call print_help()
-        ! stop
       end if
     end do
   end if
@@ -252,6 +245,7 @@ program cli
 
   ! check for existence of --help flag - if it exists, ignore all others, and print the help text
   if ( array_contains(names, valid_flags(1)%flag_switch) /= 0 ) then
+    write(*,*) '--help flag supplied'
     call print_help()
     stop
   end if
@@ -262,17 +256,17 @@ program cli
   reactionRates_dir     = read_value_or_default( valid_flags(4)%flag_switch, trim(output_dir)//'/reactionRates',    names, values )
   configuration_dir     = read_value_or_default( valid_flags(5)%flag_switch, trim(model_dir)//'/configuration',     names, values )
   constraints_dir       = read_value_or_default( valid_flags(6)%flag_switch, trim(model_dir)//'/constraints',       names, values )
-  spec_constraints_dir  = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/species',     names, values )
-  env_constraints_dir   = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/environment', names, values )
-  photo_constraints_dir = read_value_or_default( valid_flags(9)%flag_switch, trim(constraints_dir)//'/photolysis',  names, values )
+  env_constraints_dir   = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/environment', names, values )
+  photo_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/photolysis',  names, values )
+  spec_constraints_dir  = read_value_or_default( valid_flags(9)%flag_switch, trim(constraints_dir)//'/species',     names, values )
 
   write(*,*) 'model dir:                   ', model_dir
   write(*,*) 'output dir:                  ', output_dir
   write(*,*) 'reactionRates dir:           ', reactionRates_dir
   write(*,*) 'configuration dir:           ', configuration_dir
   write(*,*) 'constraints dir:             ', constraints_dir
-  write(*,*) 'species constraints dir:     ', spec_constraints_dir
   write(*,*) 'environment constraints dir: ', env_constraints_dir
   write(*,*) 'photolysis constraints dir:  ', photo_constraints_dir
+  write(*,*) 'species constraints dir:     ', spec_constraints_dir
 
 end program cli

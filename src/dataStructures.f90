@@ -87,7 +87,7 @@ module directories_mod
   implicit none
   save
 
-  character(len=maxFilepathLength) :: model_diroutput_dir, reactionRates_dir, configuration_dir, mcm_dir, shared_lib_dir, &
+  character(len=maxFilepathLength) :: model_dir, output_dir, reactionRates_dir, configuration_dir, mcm_dir, shared_lib_dir, &
                                       spec_constraints_dir, env_constraints_dir, photolysis_constraints_dir
 
 end module directories_mod

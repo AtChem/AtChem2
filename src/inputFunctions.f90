@@ -380,7 +380,7 @@ contains
     use photolysis_rates_mod, only : constrainedPhotoNames, constrainedPhotoNumbers, numConstrainedPhotoRates, &
                                      photoX, photoY, photoNumberOfPoints, maxNumberOfPhotoDataPoints, &
                                      allocate_constrained_photolysis_rates_variables, allocate_constrained_photolysis_data
-    use directories_mod, only : configuration_dir, photolysis_constraints_dir
+    use directories_mod, only : configuration_dir, photo_constraints_dir
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
 
     character(len=maxFilepathLength) :: fileLocationPrefix
@@ -424,7 +424,7 @@ contains
       read( constrainedPhotoNames(i)(2:maxPhotoRateNameLength),*, iostat=ierr ) constrainedPhotoNumbers(i)
     end do
 
-    fileLocationPrefix = trim( photolysis_constraints_dir ) // "/"
+    fileLocationPrefix = trim( photo_constraints_dir ) // "/"
 
     ! Read in photolysis data
     maxNumberOfPhotoDataPoints = 0_NPI
@@ -786,7 +786,7 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod
-    use directories_mod, only : configuration_dir, env_constraints_dir, photolysis_constraints_dir
+    use directories_mod, only : configuration_dir, env_constraints_dir, photo_constraints_dir
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound
@@ -899,7 +899,7 @@ contains
     do i = 1, numEnvVars
       if ( envVarTypes(i) == 'CONSTRAINED' ) then
         if ( trim( envVarNames(i) ) == 'JFAC' ) then
-          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+          fileLocation = trim( photo_constraints_dir ) // "/" // trim( envVarNames(i) )
         else
           fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
         end if
@@ -924,7 +924,7 @@ contains
         write (*, '(2A)') ' Reading constraint data for ', trim( envVarNames(i) )
 
         if ( trim( envVarNames(i) ) == 'JFAC' ) then
-          fileLocation = trim( photolysis_constraints_dir ) // "/" // trim( envVarNames(i) )
+          fileLocation = trim( photo_constraints_dir ) // "/" // trim( envVarNames(i) )
         else
           fileLocation = trim( fileLocationPrefix ) // trim( envVarNames(i) )
         end if

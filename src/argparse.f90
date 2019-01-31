@@ -55,7 +55,7 @@ contains
     write(*,*) '     |                                                           |'
     write(*,*) 'reactionRates_dir                       +------------------------+----------------------+'
     write(*,*) '                                        |                        |                      |'
-    write(*,*) '                              env_constraints_dir   photolysis_constraints_dir  species_constraints_dir'
+    write(*,*) '                              env_constraints_dir   photo_constraints_dir  species_constraints_dir'
     write(*,*)
   end subroutine print_help
 
@@ -261,7 +261,7 @@ contains
     write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
     write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
     write (*, '(2A)') ' Environment Constraints dir is: ', trim( env_constraints_dir )
-    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photolysis_constraints_dir )
+    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photo_constraints_dir )
     write (*, '(2A)') ' Shared library dir is: ', trim( shared_lib_dir )
 
   end subroutine get_and_set_directories_from_command_arguments

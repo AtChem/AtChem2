@@ -1,5 +1,5 @@
 
-module helper_routines
+module argparse_mod
 
   type flag
     character(100) :: flag_switch
@@ -184,7 +184,7 @@ contains
 
   end function  read_value_or_default
 
-end module helper_routines
+end module argparse_mod
 
 
 

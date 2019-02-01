@@ -306,10 +306,7 @@ contains
           match = .true.
           ! Set concentration in outputConcentrations
           outputConcentrations(j) = inputConcentrations(i)
-          write (54, '(A, A, A, 1P e15.3)') 'match, m = k = ', m, ' concentration = ', inputConcentrations(i)
           exit
-        else
-          write (54, '(A, A, A, A, A, 1P e15.3)') 'no match, m = ', m, ' != k = ', k, ' concentration = ', inputConcentrations(i)!
         end if
       end do
       if ( match .eqv. .false. ) then

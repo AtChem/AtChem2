@@ -6,12 +6,10 @@ module argparse_mod
     character(200) :: flag_help
   end type flag
 
-  type(flag), parameter :: valid_flags(11) = &
+  type(flag), parameter :: valid_flags(10) = &
               [ flag('--help', 'Displays this help message.'), &
                 flag('--model', 'The base directory of the model.'), &
                 flag('--output', 'The destination directory for output.'), &
-                flag('--reactionRates', 'The destination directory for the reactionRates output. ' // &
-                                        'By default this is a subdirectory of the output directory.'), &
                 flag('--configuration', 'The directory of the model configuration.'), &
                 flag('--constraints', 'The base directory of constraints. ' // &
                                       'This typically contains 3 subdirectories: environment, photolysis, and species.'), &
@@ -52,8 +50,8 @@ contains
     write(*,*) '     +--------------------------------+--------------------------+'
     write(*,*) '     |                                |                          |'
     write(*,*) ' output_dir                     constraints_dir           configuration_dir'
-    write(*,*) '     |                                                           |'
-    write(*,*) 'reactionRates_dir                       +------------------------+----------------------+'
+    write(*,*) '                                                                 |'
+    write(*,*) '                                        +------------------------+----------------------+'
     write(*,*) '                                        |                        |                      |'
     write(*,*) '                              env_constraints_dir   photo_constraints_dir  species_constraints_dir'
     write(*,*)
@@ -245,18 +243,16 @@ contains
     ! set each of the directory locations from the command line, following the defined logic for defaults if some are not supplied
     model_dir             = read_value_or_default( valid_flags(2)%flag_switch, 'model', names, values )
     output_dir            = read_value_or_default( valid_flags(3)%flag_switch, trim(model_dir)//'/output', names, values )
-    reactionRates_dir     = read_value_or_default( valid_flags(4)%flag_switch, trim(output_dir)//'/reactionRates', names, values )
-    configuration_dir     = read_value_or_default( valid_flags(5)%flag_switch, trim(model_dir)//'/configuration', names, values )
-    constraints_dir       = read_value_or_default( valid_flags(6)%flag_switch, trim(model_dir)//'/constraints', names, values )
-    env_constraints_dir  = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/environment', names, values )
-    photo_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/photolysis', names, values )
-    spec_constraints_dir  = read_value_or_default( valid_flags(9)%flag_switch, trim(constraints_dir)//'/species', names, values )
-    mcm_dir               = read_value_or_default( valid_flags(10)%flag_switch, 'mcm', names, values )
-    shared_library        = read_value_or_default( valid_flags(11)%flag_switch, 'model/configuration/mechanism.so', names, values )
+    configuration_dir     = read_value_or_default( valid_flags(4)%flag_switch, trim(model_dir)//'/configuration', names, values )
+    constraints_dir       = read_value_or_default( valid_flags(5)%flag_switch, trim(model_dir)//'/constraints', names, values )
+    env_constraints_dir  = read_value_or_default( valid_flags(6)%flag_switch, trim(constraints_dir)//'/environment', names, values )
+    photo_constraints_dir = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/photolysis', names, values )
+    spec_constraints_dir  = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/species', names, values )
+    mcm_dir               = read_value_or_default( valid_flags(9)%flag_switch, 'mcm', names, values )
+    shared_library        = read_value_or_default( valid_flags(10)%flag_switch, 'model/configuration/mechanism.so', names, values )
 
     write (*, '(2A)') ' Model dir is: ', trim( model_dir )
     write (*, '(2A)') ' Output dir is: ', trim( output_dir )
-    write (*, '(2A)') ' Reaction Rates dir is: ', trim( reactionRates_dir )
     write (*, '(2A)') ' Configuration dir is: ', trim( configuration_dir )
     write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
     write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )

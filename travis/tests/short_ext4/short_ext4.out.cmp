@@ -11,7 +11,7 @@ AtChem2 v1.2-dev
  Species Constraints dir is: travis/tests/short_ext4/model/constraints/species
  Environment Constraints dir is: travis/tests/short_ext4/model/constraints/environment
  Photolysis Constraints dir is: travis/tests/short_ext4/model/constraints/photolysis
- Shared library dir is: model/configuration
+ Shared library is: model/configuration/mechanism.so
 
 -----------------------
  Species and reactions

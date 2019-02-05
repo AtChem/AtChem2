@@ -88,7 +88,7 @@ for test in $1; do
   fi
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out
+  ./atchem2 --shared_lib=$TESTS_DIR/$test/model/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...

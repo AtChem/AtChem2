@@ -159,7 +159,7 @@ contains
     ! requires cosx and secx to calculate the photolysis rates.
     if ( cosx <= cosx_threshold ) then
       cosx = 0.0_DP
-      secx = 1.0e+50_DP
+      secx = 1.0e+2_DP
       cosx_below_threshold = .true.
     else
       secx = 1.0_DP / cosx

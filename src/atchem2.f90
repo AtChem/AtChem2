@@ -21,6 +21,7 @@
 PROGRAM ATCHEM2
 
   use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+  use iso_c_binding
   use types_mod
   use species_mod
   use constraints_mod
@@ -31,15 +32,45 @@ PROGRAM ATCHEM2
   use env_vars_mod
   use date_mod, only : calcInitialDateParameters, calcCurrentDateParameters
   use directories_mod, only : output_dir, param_dir
-  use storage_mod, only : maxSpecLength, maxPhotoRateNameLength
+  use storage_mod, only : maxSpecLength, maxPhotoRateNameLength, maxFilepathLength
   use solver_params_mod
   use model_params_mod
   use input_functions_mod
   use config_functions_mod
   use output_functions_mod
   use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
-  use solver_functions_mod, only : jfy
+  use solver_functions_mod, only : jfy, proc
   implicit none
+
+  !
+  ! interface to linux API
+  interface
+    function dlopen( filename, mode ) bind ( c, name="dlopen" )
+      ! void *dlopen(const char *filename, int mode);
+      use iso_c_binding
+      implicit none
+      type(c_ptr) :: dlopen
+      character(c_char), intent(in) :: filename(*)
+      integer(c_int), value :: mode
+    end function
+
+    function dlsym( handle, name ) bind ( c, name="dlsym" )
+      ! void *dlsym(void *handle, const char *name);
+      use iso_c_binding
+      implicit none
+      type(c_funptr) :: dlsym
+      type(c_ptr), value :: handle
+      character(c_char), intent(in) :: name(*)
+    end function
+
+    function dlclose( handle ) bind ( c, name="dlclose" )
+      ! int dlclose(void *handle);
+      use iso_c_binding
+      implicit none
+      integer(c_int) :: dlclose
+      type(c_ptr), value :: handle
+    end function
+  end interface
 
   ! *****************************************************************
   ! DECLARATIONS
@@ -73,6 +104,14 @@ PROGRAM ATCHEM2
   real(kind=DP), allocatable :: z(:)
 
   character(len=400) :: fmt
+
+  type(c_ptr) :: handle
+  character(len=maxFilepathLength) :: library
+  type(c_funptr) :: proc_addr
+  integer :: closure
+  integer(c_int), parameter :: rtld_lazy=1 ! value extracted from the C header file
+  integer(c_int), parameter :: rtld_now=2 ! value extracted from the C header file
+
 
   ! *****************************************************************
   ! Explicit declaration of FCVFUN() interface, which is a
@@ -136,6 +175,20 @@ PROGRAM ATCHEM2
   open (unit=59, file=trim( output_dir ) // "/photolysisRatesParameters.output")
   open (unit=60, file=trim( output_dir ) // "/productionRates.output")
   flush(6)
+
+  library = trim( param_dir )//"/mechanism.so"
+  handle = dlopen(trim( library )//c_null_char, RTLD_LAZY)
+  if (.not. c_associated(handle)) then
+    write(*, '(2A)') 'Unable to load DLL ', trim( library )
+    stop
+  end if
+
+  proc_addr=dlsym( handle, "update_p"//c_null_char )
+  if ( .not. c_associated(proc_addr) ) then
+    write(*,*) 'Unable to load the procedure update_p'
+    stop
+  end if
+  call c_f_procpointer( proc_addr, proc )
 
   write (*, '(A)') '-----------------------'
   write (*, '(A)') ' Species and reactions'
@@ -510,6 +563,8 @@ PROGRAM ATCHEM2
   close (58)
   close (59)
   close (60)
+  closure=dlclose(handle)
+
   stop
 
 END PROGRAM ATCHEM2

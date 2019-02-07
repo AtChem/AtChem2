@@ -27,12 +27,12 @@ else
 fi
 # Ensure a first argument is provided, and that it is an existing directory
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to tools/install/install_cvode_osx.sh"
-  echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
+  echo "Please provide an argument to tools/install/install_cvode.sh"
+  echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
 elif [ ! -d "$1" ]; then
   echo "$1 is not a directory - please create it if you want to install CVODE there."
-  echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
+  echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
   exit 1
 fi
 cvode_dir="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
@@ -42,10 +42,10 @@ cvode_dir="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
 if [ -z "$2" ] ; then
   if [ -f /usr/bin/gfortran ] ; then
     echo "Default fortran compiler executable (/usr/bin/gfortran) selected. To choose another compiler, provide this as a second argument."
-    echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
+    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
   else
     echo "Default fortran compiler '/usr/bin/gfortran' executable selected, but this does not exist on this system."
-    echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
+    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
     exit 1
   fi
   FORT_COMP=/usr/bin/gfortran
@@ -53,7 +53,7 @@ else
   FORT_COMP=$2
   if [ ! -f "$2" ] ; then
     echo $2 " selected as fortran compiler, but this is not a valid filename."
-    echo "Example usage: ./install_cvode_osx.sh /path/to/install/directory /path/to/fortran/compiler"
+    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
     exit 1
   fi
 fi

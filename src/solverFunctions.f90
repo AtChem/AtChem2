@@ -172,10 +172,6 @@ contains
   subroutine mechanism_rates( t, y, p )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-<<<<<<< HEAD
-=======
-    use directories_mod, only : shared_library
->>>>>>> Change --shared_lib to point to the library itself rather than the directory containing it.
     use storage_mod, only : maxEnvVarNameLength, maxFilepathLength
     use photolysis_rates_mod, only : numConstantPhotoRates, constantPhotoNumbers, constantPhotoValues, &
                                      numUnconstrainedPhotoRates, numConstrainedPhotoRates, j, ck, &
@@ -201,17 +197,6 @@ contains
     character(len=maxEnvVarNameLength) :: this_env_var_name
     real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
 
-<<<<<<< HEAD
-=======
-
-    library = trim( shared_library )
-    handle = dlopen(trim( library )//c_null_char, RTLD_LAZY)
-    if (.not. c_associated(handle)) then
-      write(*, '(2A)') 'Unable to load DLL ', trim( library )
-      stop
-    end if
-
->>>>>>> Change --shared_lib to point to the library itself rather than the directory containing it.
     ro2 = ro2sum( y )
     dummy = y(1)
 

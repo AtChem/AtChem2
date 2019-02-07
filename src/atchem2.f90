@@ -176,7 +176,7 @@ PROGRAM ATCHEM2
   open (unit=60, file=trim( output_dir ) // "/productionRates.output")
   flush(6)
 
-  library = trim( param_dir )//"/mechanism.so"
+  library = trim( shared_library )
   handle = dlopen(trim( library )//c_null_char, RTLD_LAZY)
   if (.not. c_associated(handle)) then
     write(*, '(2A)') 'Unable to load DLL ', trim( library )

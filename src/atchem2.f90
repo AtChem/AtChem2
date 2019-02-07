@@ -31,7 +31,7 @@ PROGRAM ATCHEM2
   use reaction_rates_mod
   use env_vars_mod
   use date_mod, only : calcInitialDateParameters, calcCurrentDateParameters
-  use directories_mod, only : output_dir, configuration_dir
+  use directories_mod, only : output_dir, configuration_dir, shared_library
   use storage_mod, only : maxSpecLength, maxPhotoRateNameLength, maxFilepathLength
   use solver_params_mod
   use model_params_mod

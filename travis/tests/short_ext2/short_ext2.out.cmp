@@ -3,13 +3,14 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
+ Model dir is: model
  Output dir is: travis/tests/short_ext2/output
- Reaction Rates dir is: travis/tests/short_ext2/output/reactionRates
  Configuration dir is: travis/tests/short_ext2/model/configuration
  MCM dir is: mcm
  Species Constraints dir is: travis/tests/short_ext2/model/constraints/species
  Environment Constraints dir is: travis/tests/short_ext2/model/constraints/environment
  Photolysis Constraints dir is: travis/tests/short_ext2/model/constraints/photolysis
+ Shared library is: travis/tests/short_ext2/model/configuration/mechanism.so
 
 -----------------------
  Species and reactions

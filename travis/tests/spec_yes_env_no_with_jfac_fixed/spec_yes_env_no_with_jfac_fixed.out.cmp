@@ -3,13 +3,14 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
+ Model dir is: model
  Output dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/output
- Reaction Rates dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/output/reactionRates
  Configuration dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/configuration
  MCM dir is: mcm
  Species Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/species
  Environment Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/environment
  Photolysis Constraints dir is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/constraints/photolysis
+ Shared library is: travis/tests/spec_yes_env_no_with_jfac_fixed/model/configuration/mechanism.so
 
 -----------------------
  Species and reactions

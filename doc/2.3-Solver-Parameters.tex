@@ -1,0 +1,49 @@
+The \textbf{solver parameters} are set in the text file
+\texttt{model/configuration/solver.parameters}; they control the
+behaviour of the ordinary differential equations (ODE) solver. A
+complete explanation of these parameters can be found in the
+\href{https://computation.llnl.gov/projects/sundials/sundials-software}{CVODE
+documentation}.
+
+\begin{itemize}
+\item
+  \textbf{atol} (positive real) and \textbf{rtol} (positive real):
+  absolute and relative tolerance values for the solver. Standard values
+  for these parameters are listed below, for reference.
+\item
+  \textbf{delta main} (positive real): linear convergence tolerance
+  factor of the GMRES linear solver.
+\item
+  \textbf{lookback} (positive integer): maximum Krylov subspace
+  dimension of the GMRES linear solver.
+\item
+  \textbf{maximum solver step size} (positive real): maximum size (in
+  seconds) of the timesteps that the solver is allowed to use.
+\item
+  \textbf{maximum number of steps in solver} (positive integer): maximum
+  number of steps used by the solver before reaching \textbf{tout}, the
+  next output time.
+\item
+  \textbf{solver type} (integer): selects the linear solver to use:
+  \texttt{1} for GMRES, \texttt{2} for GMRES preconditioned with a
+  banded preconditioner, \texttt{3} for a dense solver. The default
+  option is \texttt{2}.
+\item
+  \textbf{banded preconditioner upper bandwidth} (integer): used in the
+  case that \texttt{solver\ type\ =\ 2}.
+\item
+  \textbf{banded preconditioner lower bandwidth} (integer): used in the
+  case that \texttt{solver\ type\ =\ 2}.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\hypertarget{solver-reference-values}{%
+\subsection{Solver reference values}\label{solver-reference-values}}
+
+Standard solver tolerance values:
+
+\begin{verbatim}
+1.0e-04     atol
+1.0e-06     rtol
+\end{verbatim}

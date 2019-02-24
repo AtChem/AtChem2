@@ -1,0 +1,141 @@
+The photolysis rates are identified in {[}{[}FACSIMILE
+format\textbar{}2.1 Chemical Mechanism{]}{]} as
+\texttt{J\textless{}n\textgreater{}}, where \texttt{n} is an integer
+determined by the
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/parameters/photolysis.htt}{MCM
+naming convention}. The photolysis rates are calculated by AtChem2 using
+the
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt}{MCM
+parametrization}, as explained in more detail below. Each photolysis
+rate can also be set to a constant value or to constrained values.
+
+The following rules apply:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  If a photolysis rate is set as constant, it assumes the given value.
+  Any other photolysis rate, without an explicitly defined constant
+  value, is set to zero.
+\item
+  If one or more photolysis rates are set to constrained (and none is
+  set to constant), they assume the values given in the corresponding
+  constraint files. Any other photolysis rate is calculated.
+\item
+  If no photolysis rate is set to constant or to constrained, the model
+  calculates all the photolysis rates.
+\end{enumerate}
+
+The environment variable \texttt{ROOF} can also be used to turn the
+photolysis rates ON/OFF, which is useful for simulations of some
+environmental chamber experiments (see {[}{[}2.4 Environment
+Variables{]}{]}).
+
+\hypertarget{constant-photolysis-rates}{%
+\subsection{Constant photolysis rates}\label{constant-photolysis-rates}}
+
+The typical scenario for constant photolysis rates is the use of a lamp
+in an environmental chamber. All the photolysis rates used in the
+mechanism need to be given a value (in
+\texttt{model/configuration/photolysisConstant.config}) otherwise they
+will be set to zero. This approach allows the user to model individual
+photolysis processes and/or to account for lamps that emit only in
+certain spectral windows. The format of the
+\texttt{photolysisConstant.config} file is described in the
+{[}{[}configuration files page\textbar{}2.6 Config Files{]}{]}.
+
+\hypertarget{constrained-photolysis-rates}{%
+\subsection{Constrained photolysis
+rates}\label{constrained-photolysis-rates}}
+
+Photolysis rates can be constrained to measured values. In this case,
+the name of the constrained photolysis rate (e.g., \texttt{J2}) must be
+in \texttt{model/configuration/photolysisConstrained.config} and a file
+with the constraint data must be present in
+\texttt{model/constraints/photolysis/}. For more information go to:
+{[}{[}2.6 Config Files{]}{]} and {[}{[}2.7 Constraints{]}{]}.
+
+It is not always possibile to measure - and therefore constrain - all
+the required photolysis rates. The photolysis rates that are not
+constrained (i.e., not listed in \texttt{photolysisConstrained.config})
+are calculated using the MCM parametrization.
+
+\hypertarget{calculated-photolysis-rates}{%
+\subsection{Calculated photolysis
+rates}\label{calculated-photolysis-rates}}
+
+AtChem2 implements the parametrization of photolysis rates used by the
+Master Chemical Mechanism. It is described in the MCM protocol papers:
+\href{https://doi.org/10.1016/S1352-2310(96)00105-7}{Jenkin et al.,
+Atmos. Environ., 31, 81, 1997} and
+\href{https://doi.org/10.5194/acp-3-161-2003}{Saunders et al., Atmos.
+Chem. Phys., 3, 161, 2003}.
+
+The MCM parametrization calculates the photolysis rate of a reaction
+(\texttt{J}) with the equation:
+
+\begin{verbatim}
+J = l * (cosX)^m * exp(-n * secX) * tau
+\end{verbatim}
+
+where \texttt{l}, \texttt{m}, \texttt{n} are empirical parameters,
+\texttt{cosX} is the cosine of the solar zenith angle, \texttt{secX} is
+the inverse of \texttt{cosX} (i.e., \texttt{secX\ =\ 1/cosX}) and
+\texttt{tau} is the transmission factor. The empirical parameters are
+different for each version of the MCM. AtChem2 v1.1 includes the
+empircal parameters for
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt}{version
+3.3.1} in the file \texttt{mcm/photolysis-rates\_v3.3.1}. This file also
+contains the transmission factor \texttt{tau}, which can be changed by
+the user (by default \texttt{tau\ =\ 1}). It is possible to use previous
+versions of the MCM parametrization: see the file \texttt{mcm/INFO.md}
+for instructions.
+
+The solar zenith angle is calculated by AtChem2 using latitude,
+longitude, time of the day and sun declination (see {[}{[}2.2 Model
+Parameters{]}{]} and {[}{[}2.4 Environment Variables{]}{]}). The
+calculation is detailed in ``The Atmosphere and UV-B Radiation at Ground
+Level'' (\href{https://doi.org//10.1007/978-1-4899-2406-3_1}{S.
+Madronich, Environmental UV Photobiology, 1993}).
+
+\hypertarget{jfac}{%
+\subsection{JFAC}\label{jfac}}
+
+Measurements of ambient photolysis rates typically show short-term
+variability, due to the changing meteorological conditions (clouds,
+rain, etc\ldots{}). This information is retained in the constrained
+photolysis rates, but it is lost in the calculated ones. To account for
+this, the calculated photolysis rates can be scaled by a correction
+factor (\texttt{JFAC}), as explained below.
+
+The environment variable \texttt{JFAC} is a constant or time-dependent
+parameter that can be used to correct the calculated photolysis rates
+for external factors not taken into account by the MCM parametrization,
+such as cloudiness. \texttt{JFAC} is defined as the ratio between a
+measured and the calculated photolysis rate. Typically \texttt{J4} (the
+photolysis rate of NO2) is used for this purpose, as it is one of the
+most frequently measured photolysis rates.
+
+\begin{verbatim}
+JFAC = j(NO2)/J4
+\end{verbatim}
+
+where \texttt{j(NO2)} is the measured value and \texttt{J4} is
+calculated with the MCM parametrization (see above). \texttt{JFAC} is by
+default 1, meaning that the calculated photolyis rates are not scaled;
+it can be set to any value between 0 and 1 (see {[}{[}2.4 Environment
+Variables{]}{]}) or it can be constrained (see {[}{[}2.7
+Constraints{]}{]}). Note that only the photolysis rates calculated with
+the MCM parameterization are scaled by \texttt{JFAC}, the constrained
+and the constant photolysis rates are not.
+
+\texttt{JFAC} can also be calculated at runtime. To do so, \texttt{JFAC}
+should be set to the name of the photolysis rate to be used as reference
+(e.g., \texttt{J4}) in
+\texttt{model/configuration/environmentVariables.config}. There should
+be an associated constraint file in
+\texttt{model/constraints/environment/}. \textbf{Important}: this option
+is not working very well in the current version of AtChem2, so it is
+suggested to calculate \texttt{JFAC} offline and to constrain it (see
+issue \href{https://github.com/AtChem/AtChem2/issues/16}{\#16}).

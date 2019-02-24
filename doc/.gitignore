@@ -1,2 +1,4 @@
 # Ignore latex auxiliary files in this directory
 *.aux
+*.log
+*.out

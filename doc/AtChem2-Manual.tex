@@ -2,7 +2,7 @@
 \documentclass[11pt,a4paper]{report}
 \usepackage{times,graphicx,hyperref,url,color}
 \usepackage{caption,natbib,lineno,longtable}
-\usepackage[version=3]{mhchem}
+%\usepackage[version=3]{mhchem}
 
 % ----- Science Pack ----- %
 \newcommand{\unit}[1]{\textmd{#1}}
@@ -11,13 +11,14 @@
 \newcommand{\degc}{^\circ\mathrm{C}}
 \newcommand{\numberdensity}{molecule/cm$^3$}
 \def\tightlist{}
+
 % ----- Style and Graphics ----- %
 \pagestyle{headings}
 \frenchspacing
 
 % ----- Title, Author, Date ----- %
-\title{}
-\author{}
+\title{AtChem2 manual}
+\author{R. Sommariva, S. Cox}
 \date{}
 
 % -------------------- DOCUMENT -------------------- %
@@ -25,26 +26,26 @@
 \maketitle
 \linenumbers
 
-\input{Home.tex}
+\include{Introduction.tex}
 
-\input{1.-Installation.tex}
-\input{1.1-Dependencies.tex}
-\input{1.2-Model-Structure.tex}
+\include{Installation.tex}
+\include{Dependencies.tex}
+\include{Model-Structure.tex}
 
-\input{2.-Model-Setup-and-Execution.tex}
-\input{2.1-Chemical-Mechanism.tex}
-\input{2.2-Model-Parameters.tex}
-\input{2.3-Solver-Parameters.tex}
-\input{2.4-Environment-Variables.tex}
-\input{2.5-Photolysis-Rates-and-JFAC.tex}
-\input{2.6-Config-Files.tex}
-\input{2.7-Constraints.tex}
-\input{2.8-Tools.tex}
+\include{Model-Setup-Execution.tex}
+\include{Chemical-Mechanism.tex}
+\include{Model-Parameters.tex}
+\include{Solver-Parameters.tex}
+\include{Environment-Variables.tex}
+\include{Photolysis-Rates.tex}
+\include{Config-Files.tex}
+\include{Constraints.tex}
+\include{Tools.tex}
 
-\input{3.-Model-Development.tex}
-\input{3.1-Test-Suite.tex}
-\input{3.2-Style-Guide.tex}
+\include{Model-Development.tex}
+\include{Test-Suite.tex}
+\include{Style-Guide.tex}
 
-\input{Acknowledgements-and-Credits.tex}
+\include{Credits.tex}
 
 \end{document}

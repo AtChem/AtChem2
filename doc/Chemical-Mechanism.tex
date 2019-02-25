@@ -1,0 +1,200 @@
+\section{Chemical Mechanism} \label{sec:mechanism}
+
+The \textbf{chemical mechanism} is the core element of an atmospheric
+chemistry box-model. In AtChem2, the mechanism file is written in
+FACSIMILE format and has the extension \texttt{.fac}. The FACSIMILE
+format is used to describe chemical reactions in the commercial
+\href{http://www.mcpa-software.com/}{FACSIMILE Kinetic Modelling
+Software}; for historical reasons, the software and the format have been
+widely used in conjunction with the MCM. The
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/extract.htt}{extraction tool} on
+the MCM website can generate \texttt{.fac} files directly in FACSIMILE
+format.
+
+\hypertarget{facsimile-format}{%
+\subsection{FACSIMILE format}\label{facsimile-format}}
+
+Chemical reactions are described in FACSIMILE format using the following
+notation:
+
+\begin{verbatim}
+% k : A + B = C + D ;
+\end{verbatim}
+
+where \texttt{k} is the rate coefficient, \texttt{A} and \texttt{B} are
+the reactants, \texttt{C} and \texttt{D} are the products. The reaction
+starts with the \texttt{\%} character and ends with the \texttt{;}
+character. Comments - enclosed between the characters \texttt{*} and
+\texttt{;} - can be added to the mechanism, and will be ignored by the
+compiler. For example:
+
+\begin{verbatim}
+* conversion of A to C with rate coefficient of 1e-4 *;
+% 1E-4 : A = C ;
+\end{verbatim}
+
+The mechanism file is processed by the script \texttt{tools/build.sh},
+as explained in the {[}{[}model setup page\textbar{}2. Model Setup and
+Execution{]}{]}. For the build process to work, the \texttt{.fac} file
+must include four sections delimited by a single comment line, which
+allows the script to recognize the beginning of each section: 1. Generic
+rate coefficients 1. Complex reactions rate coefficients 1. Sum of
+peroxy radicals (see below) 1. Chemical Reactions
+
+These comment lines must always be present, even though the respective
+sections can be empty. A minimal \texttt{.fac} file looks like this:
+
+\begin{verbatim}
+* Generic Rate Coefficients ;
+
+* Complex reactions ;
+
+* Peroxy radicals. ;
+
+RO2 =  ;
+
+* Reaction definitions. ;
+
+% k : A + B = C ;
+\end{verbatim}
+
+A simple chemical mechanism in FACSIMILE format - with the first step of
+the atmospheric oxidation of ethanol - is shown below, as an example.
+
+\hypertarget{ro2-sum}{%
+\subsection{RO2 sum}\label{ro2-sum}}
+
+The sum of organic peroxy radicals (RO2) is a key component of the
+Master Chemical Mechanism (see the MCM protocol papers:
+\href{https://doi.org/10.1016/S1352-2310(96)00105-7}{Jenkin et al.,
+Atmos. Environ., 31, 81-104, 1997} and
+\href{https://doi.org/10.5194/acp-3-161-2003}{Saunders et al., Atmos.
+Chem. Phys., 3, 161-180, 2003}). Since AtChem2 is designed primarily to
+run models based upon the MCM, the \texttt{.fac} file must contain a
+section with the RO2 sum. This section must be introduced by the comment
+line \texttt{*\ Peroxy\ radicals.\ ;} (see above) and has the format:
+
+\begin{verbatim}
+RO2 = RO2a + RO2b + RO2c + ... ;
+\end{verbatim}
+
+where \texttt{RO2a}, \texttt{RO2b}, \texttt{RO2c}, are the organic
+peroxy radicals in the chemical mechanism. If there are no organic
+peroxy radicals in the mechanism (or if the mechanism is not based upon
+the MCM), the RO2 sum must be left empty, e.g.:
+
+\begin{verbatim}
+RO2 = ;
+\end{verbatim}
+
+\emph{Important}: HO2 is a peroxy radical, but it is not an organic
+molecule. Therefore it should NOT be included in the RO2 sum.
+
+The RO2 sum is automatically generated from the mechanism file during
+the build process, using the list of RO2 extracted from the MCM
+database. AtChem2 includes the list of all the organic peroxy radicals
+in version 3.3.1 of the MCM (\texttt{mcm/peroxy-radicals\_v3.3.1}),
+which is used by default. Since v1.1, lists of organic peroxy radicals
+from other versions of the MCM are also included in the \texttt{mcm/}
+directory: see the file \texttt{mcm/INFO.md} for instructions on how to
+use previous versions of the MCM with AtChem2.
+
+\hypertarget{the-mcm-extraction-tool}{%
+\subsection{The MCM extraction tool}\label{the-mcm-extraction-tool}}
+
+The MCM website provides a convenient tool which can be used to download
+the whole MCM, or subsets of it, in FACSIMILE format. After selecting
+the species of interest in the
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/roots.htt}{MCM browser}, add them
+to the \emph{Mark List}, then proceed to the
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/extract.htt}{MCM extraction tool}
+and select \emph{FACSIMILE} as format. Make sure to tick the boxes:
+
+\begin{verbatim}
+[x] Include inorganic reactions?
+[x] Include generic rate coefficients? FACSIMILE, FORTRAN and KPP formats only
+\end{verbatim}
+
+then press the \emph{Extract} button to download the generated
+\texttt{.fac} file into a directory of choice (e.g., \texttt{model/};
+see the {[}{[}model structure page\textbar{}1.2 Model Structure{]}{]}).
+The mechanism can be modified with a text editor (if necessary) or
+directly used in AtChem2. More information about the MCM browser and the
+extractor tool can be found on the \href{http://mcm.leeds.ac.uk}{MCM
+website}.
+
+\hypertarget{the-build-process}{%
+\subsection{The build process}\label{the-build-process}}
+
+Atchem2 uses a Python script (\texttt{tools/mech\_converter.py},
+automatically called by \texttt{tools/build.sh} during the build
+process) to convert the chemical mechanism into a format that can be
+read by the Fortran code.
+
+The script generates one Fortran file, one shared library, and four
+configuration files from the \texttt{*.fac} file:
+
+\begin{itemize}
+\item
+  \textbf{mechanism.f90} contains the equations, in Fortran code, to
+  calculate the rate coefficients of each reaction. By default, it is
+  placed in \texttt{model/configuration/}.
+\item
+  \textbf{mechanism.so} is the compiled version of
+  \texttt{mechanism.f90}. By default, it is placed in
+  \texttt{model/configuration/}.
+\item
+  \textbf{mechanism.species} contains the list of chemical species in
+  the mechanism. By default, it is saved in
+  \texttt{model/configuration/}. The file has no header. The first
+  column is the \emph{ID number} of each species, the second column is
+  the name of the species:
+  \texttt{1\ O\ \ \ 2\ O3\ \ \ 3\ NO\ \ \ 4\ NO2}
+\item
+  \textbf{mechanism.reac} and \textbf{mechanism.prod} contain the
+  reactants and the products (respectively) in each reaction of the
+  mechanism. By default, it is saved in \texttt{model/configuration/}.
+  The files have a 1 line header with the number of species, the number
+  of reactions and the number of equations in the Generic Rate
+  Coefficients and Complex Reactions sections. The first column is the
+  \emph{ID number} of the reaction, the second column is the \emph{ID
+  number} of the species (from \texttt{mechanism.species}) which are
+  reactants/products in that reaction:
+  \texttt{29\ 71\ 139\ numberOfSpecies\ numberOfReactions\ numberOfGenericComplex\ \ \ 1\ 1\ \ \ 2\ 1\ \ \ 3\ 1\ \ \ 3\ 2}
+\item
+  \textbf{mechanism.ro2} contains the organic peroxy radicals (RO2). By
+  default, it is saved in \texttt{model/configuration/}. The file has a
+  comment line header (Fortran style). The first column is the \emph{ID
+  number} of the peroxy radical (from \texttt{mechanism.species}), the
+  second column is the name of the peroxy radical as Fortran comment:
+  \texttt{!\ Note\ that\ this\ file\ is\ generated\ by\ tools/mech\_converter.py\ based\ upon\ the\ file\ tools/mcm\_example.fac.\ Any\ manual\ edits\ to\ this\ file\ will\ be\ overwritten\ when\ calling\ tools/mech\_converter.py\ \ \ 23\ !CH3O2\ \ \ 26\ !C2H5O2\ \ \ 28\ !IC3H7O2\ \ \ 29\ !NC3H7O2}
+\end{itemize}
+
+The locations of the files generated during the build process can be
+modified by changing the second and the third argument of the script
+\texttt{tools/build.sh}. For more information and detailed instructions
+go to: {[}{[}2. Model Setup and Execution{]}{]}.
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\hypertarget{example-mechanism-file}{%
+\subsection{Example mechanism file}\label{example-mechanism-file}}
+
+\begin{verbatim}
+* ------------------------------------------------------------------- *;
+* SIMPLE CHEMICAL MECHANISM                                           *;
+* Chemical mechanism for ethanol - from MCM v3.3.1                    *;
+* ------------------------------------------------------------------- *;
+*;
+* Generic Rate Coefficients ;
+*;
+* Complex reactions ;
+*;
+* Peroxy radicals. ;
+RO2 = HOCH2CH2O2 ;
+*;
+* Reaction definitions. ;
+% 3.0D-12*EXP(20/TEMP)*0.05 : C2H5OH + OH = C2H5O ;
+% 3.0D-12*EXP(20/TEMP)*0.9  : C2H5OH + OH = CH3CHO + HO2 ;
+% 3.0D-12*EXP(20/TEMP)*0.05 : C2H5OH + OH = HOCH2CH2O2 ;
+\end{verbatim}

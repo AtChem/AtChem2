@@ -1,0 +1,122 @@
+\section{Style Guide} \label{sec:style}
+
+In order to make the code more readable, we attempt to use a consistent
+style of coding. Two scripts, \texttt{tools/fix\_style.py} and
+\texttt{tools/fix\_indent.py}, help with keeping the style of the
+Fortran code consistent:
+
+\begin{itemize}
+\item
+  \texttt{tools/fix\_style.py} edits files in-place to try to be
+  consistent with the style guide (passing two arguments sends the
+  output to the second argument, leaving the input file untouched, and
+  is thus the safer option). This script is by no means infallible.;
+  therefore, when using the script (by invoking
+  \texttt{python\ tools/fix\_style.py\ filename}), it is strongly
+  recommended to have a backup of the file to revert to, in case this
+  script wrongly edits.\\
+  This script is also used in the {[}{[}test suite\textbar{}3.1 Test
+  Suite{]}{]} to check a few aspects of the styling. This works by
+  running the script over the source file and outputting to a
+  \texttt{.cmp} file: if the copy matches the original file, then the
+  test passes.
+\item
+  \texttt{tools/fix\_indent.py} works similarly, but checks and corrects
+  the indentation level of each line of code. This is also used within
+  the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]}.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\hypertarget{style-recommendations}{%
+\subsection{Style recommendations}\label{style-recommendations}}
+
+\hypertarget{general-principles}{%
+\subsubsection{General principles}\label{general-principles}}
+
+\begin{itemize}
+\item
+  All code should be within a module structure, except the main program.
+  In our case, due to a complicating factor with linking to CVODE, we
+  also place \texttt{FCVFUN()} and \texttt{FCVJTIMES()} within the main
+  file \texttt{atchem.f90}.
+\item
+  Code is write in free-form Fortran, so source files should end in
+  \texttt{.f90}
+\item
+  Use two spaces to indent blocks
+\item
+  Comment each procedure with a high-level explanation of what that
+  procedure does.
+\item
+  Comment at the top of each file with author, date, purpose of code.
+\item
+  Anything in comments is not touched by the style guide, although
+  common sense rules, and any code within comments should probably
+  follow the rules below.
+\end{itemize}
+
+\hypertarget{specific-recommendations}{%
+\subsubsection{Specific
+recommendations}\label{specific-recommendations}}
+
+\begin{itemize}
+\item
+  All \textbf{keywords} are lowercase, e.g.~\texttt{if\ then},
+  \texttt{call}, \texttt{module}, \texttt{integer}, \texttt{real},
+  \texttt{only}, \texttt{intrinsic}. This also includes
+  \texttt{(kind=XX)} and \texttt{(len=XX)} statements.
+\item
+  All \textbf{intrinsic} function names are lowercase,
+  e.g.~\texttt{trim}, `adjustl', 'adjustr`.
+\item
+  \textbf{Relational operators} should use \texttt{\textgreater{}=},
+  \texttt{==} rather than \texttt{.GE.}, \texttt{.EQ.}, and surrounded
+  by a single space.
+\item
+  \texttt{=} should be surrounded by one space when used as assignment,
+  except in the cases of \texttt{(kind=XX)} and \texttt{(len=XX)} where
+  no spaces should be used.
+\item
+  \textbf{Mathematical operators} should be surrounded by one space,
+  e.g.~\texttt{*}, \texttt{-}, \texttt{+}, \texttt{**}.
+
+  \begin{itemize}
+    \item
+    The case of scientific number notation requires no spaces around the
+    \texttt{+} or \texttt{-}, e.g.~\texttt{1.5e-9}.
+  \end{itemize}
+\item
+  \textbf{Variables} begin with lowercase, while \textbf{procedures}
+  (that is, subroutines and functions) begin with uppercase. An
+  exception is \textbf{third-party functions}, which should be
+  uppercase. Use either CamelCase or underscores to write multiple-word
+  identifiers.
+\item
+  \textbf{All procedures and modules} should include the `implicit none'
+  statement.
+\item
+  All variable \textbf{declarations} should include the \texttt{::}
+  notation.
+\item
+  All procedure dummy arguments should include an \textbf{intent}
+  statement in their declaration.
+\item
+  \textbf{Brackets}:
+
+  \begin{itemize}
+    \item
+    Opening brackets always have no space before them, except for
+    \texttt{read}, \texttt{write}, \texttt{open}, \texttt{close}
+    statements.
+  \item
+    \texttt{call} statements, and the definitions of all procedures
+    should contain \textbf{one} space inside the brackets before the
+    first argument and after the last argument,
+    e.g.~\texttt{call\ function\_name(\ arg1,\ arg2\ )},
+    \texttt{subroutine\ subroutine\_name(\ arg1\ )}
+  \item
+    Functions calls, and array indices have \textbf{no such space}
+    before the first argument or after the last argument.
+  \end{itemize}
+\end{itemize}

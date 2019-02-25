@@ -1,0 +1,188 @@
+\section{Environment Variables} \label{sec:environment}
+
+The \textbf{environment variables} define the physical parameters of the
+box-model, such as temperature, pressure, humidity, latitude, longitude,
+position of the sun, etc\ldots{} These variables are set in the text
+file \texttt{model/configuration/environmentVariables.config}.
+
+The environment variables can have a fixed (constant) value or can be
+constrained to measured values (\texttt{CONSTRAINED}), in which case the
+corresponding data file must be in the
+\texttt{model/constraints/environment/} directory (see {[}{[}2.7
+Constraints{]}{]}). Some environment variables can be calculated by the
+model (\texttt{CALC}) and some can be deactivated if they are not used
+by the model (\texttt{NOTUSED}).
+
+By default, most environment variables are set to a fixed value,
+corresponding to \emph{standard environmental conditions} (listed
+below), or to \texttt{NOTUSED}.
+
+\hypertarget{temp}{%
+\subsection{TEMP}\label{temp}}
+
+Ambient Temperature (K).
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\end{itemize}
+
+Default fixed value = 298.15
+
+\hypertarget{press}{%
+\subsection{PRESS}\label{press}}
+
+Ambient Pressure (mbar).
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\end{itemize}
+
+Default fixed value = 1013.25
+
+\hypertarget{rh}{%
+\subsection{RH}\label{rh}}
+
+Relative Humidity (\%). It is required only if \textbf{H2O} is set to
+\texttt{CALC}, otherwise should be set to \texttt{NOTUSED}.
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  not used
+\end{itemize}
+
+Default = NOTUSED (-1)
+
+\hypertarget{h2o}{%
+\subsection{H2O}\label{h2o}}
+
+Water Concentration (molecules cm-3).
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  calculated -\textgreater{} requires \textbf{RH} set to fixed value or
+  \texttt{CONSTRAINED}
+\end{itemize}
+
+Default fixed value = 3.91e+17
+
+\hypertarget{dec}{%
+\subsection{DEC}\label{dec}}
+
+Sun Declination (radians) is the angle between the center of the Sun and
+Earth's equatorial plane.
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  calculated -\textgreater{} requires \textbf{DAY} and \textbf{MONTH},
+  which are set in \texttt{model.parameters} (see {[}{[}2.2 Model
+  Parameters{]}{]})
+\end{itemize}
+
+Default fixed value = 0.41
+
+\hypertarget{blheight}{%
+\subsection{BLHEIGHT}\label{blheight}}
+
+Boundary Layer Height. It is required only if the model includes
+emission or deposition processes (it must be used in the chemical
+mechanism as a multiplier of the rate coefficient). The unit is
+typically in cm, but it depends on how the processes are parameterized
+in the chemical mechanism (see {[}{[}2.1 Chemical Mechanism{]}{]}).
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  not used
+\end{itemize}
+
+Default = NOTUSED (-1)
+
+\hypertarget{dilute}{%
+\subsection{DILUTE}\label{dilute}}
+
+Dilution rate. It is required only if the model includes a dilution
+process (it must be used in the chemical mechanism as a multiplier of
+the rate coefficient). The unit is typically in s-1, but it depends on
+how the process is parameterized in the chemical mechanism (see
+{[}{[}2.1 Chemical Mechanism{]}{]}).
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  not used
+\end{itemize}
+
+Default value = NOTUSED (-1)
+
+\hypertarget{jfac}{%
+\subsection{JFAC}\label{jfac}}
+
+Correction factor used to correct the photolysis rates (e.g., to account
+for cloudiness). The calculated photolysis rates are scaled by JFAC,
+which can have a value between \texttt{0} (photolysis rates go to zero)
+and \texttt{1} (photolysis rates are not corrected). JFAC is NOT applied
+to constant or constrained photolysis rates. For more information go to:
+{[}{[}2.5 Photolysis Rates and JFAC{]}{]}.
+
+\begin{itemize}
+\item
+  fixed value
+\item
+  constrained
+\item
+  calculated
+\end{itemize}
+
+Default fixed value = 1
+
+\hypertarget{roof}{%
+\subsection{ROOF}\label{roof}}
+
+Flag to turn the photolysis rates ON/OFF. It is used in simulations of
+environmental chamber experiments, where the roof of the chamber can be
+opened/closed or the lights turned on/off.
+
+When ROOF is set to \texttt{CLOSED} all the photolysis rates are zero,
+including those that are constant or constrained; this is different than
+setting JFAC to \texttt{0}, which only applies to the calculated
+photolysis rates (see above). ROOF is the only environment variable that
+cannot be set to \texttt{CONSTRAINED}.
+
+Default value = OPEN
+
+\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
+
+\hypertarget{standard-environmental-conditions}{%
+\subsection{Standard environmental
+conditions}\label{standard-environmental-conditions}}
+
+\begin{verbatim}
+Temperature = 25C  
+Pressure = 1 atm  
+Relative Humidity = 50%  
+Day, Month = 21 June
+\end{verbatim}

@@ -28,7 +28,7 @@ module solver_functions_mod
     end subroutine called_proc
   end interface
 
-  procedure(called_proc), bind(c), pointer :: proc
+  procedure(called_proc), pointer :: proc
 
 contains
 

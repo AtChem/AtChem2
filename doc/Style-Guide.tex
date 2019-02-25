@@ -1,4 +1,4 @@
-\chapter{Style Guide}
+\section{Style Guide} \label{sec:style}
 
 In order to make the code more readable, we attempt to use a consistent
 style of coding. Two scripts, \texttt{tools/fix\_style.py} and
@@ -35,7 +35,6 @@ Fortran code consistent:
 \subsubsection{General principles}\label{general-principles}}
 
 \begin{itemize}
-\tightlist
 \item
   All code should be within a module structure, except the main program.
   In our case, due to a complicating factor with linking to CVODE, we
@@ -62,7 +61,6 @@ Fortran code consistent:
 recommendations}\label{specific-recommendations}}
 
 \begin{itemize}
-\tightlist
 \item
   All \textbf{keywords} are lowercase, e.g.~\texttt{if\ then},
   \texttt{call}, \texttt{module}, \texttt{integer}, \texttt{real},
@@ -84,8 +82,7 @@ recommendations}\label{specific-recommendations}}
   e.g.~\texttt{*}, \texttt{-}, \texttt{+}, \texttt{**}.
 
   \begin{itemize}
-  \tightlist
-  \item
+    \item
     The case of scientific number notation requires no spaces around the
     \texttt{+} or \texttt{-}, e.g.~\texttt{1.5e-9}.
   \end{itemize}
@@ -108,8 +105,7 @@ recommendations}\label{specific-recommendations}}
   \textbf{Brackets}:
 
   \begin{itemize}
-  \tightlist
-  \item
+    \item
     Opening brackets always have no space before them, except for
     \texttt{read}, \texttt{write}, \texttt{open}, \texttt{close}
     statements.

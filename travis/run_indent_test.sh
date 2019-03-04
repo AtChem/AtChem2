@@ -5,7 +5,7 @@ RESULTS_FILE=travis/tests/testsuite.log
 echo "Running indent script on:"
 for file in src/*.f90 ; do
   echo $file
-  python3 ./tools/fix_indent.py $file $file.cmp &>/dev/null
+  python ./tools/fix_indent.py $file $file.cmp &>/dev/null
   this_indent_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
   rm $file.cmp

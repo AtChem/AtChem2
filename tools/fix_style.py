@@ -15,6 +15,7 @@
 # WARNING: Please note that this script is not infallible, and can break your code! Please use with caution,
 # and make sure you have a copy of your source file to revert to in the event of it breaking.
 #
+from __future__ import print_function
 
 
 def replace_any_case_with_lower_first(string, to_output):
@@ -266,4 +267,4 @@ with open(out_filename, 'w') as output_file:
         outputs.append(to_output + add_newline(comment))
 
     output_file.writelines(outputs)
-    print 'Complete! Now run a find and replace by hand with regex "[^\\n^  !]  " to catch incorrect multiple-spaces.'
+    print('Complete! Now run a find and replace by hand with regex "[^\\n^  !]  " to catch incorrect multiple-spaces.')

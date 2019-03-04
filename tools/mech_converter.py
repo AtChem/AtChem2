@@ -163,7 +163,7 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
             # Then split by +. Append each item to ro2_input: multiple appends use 'extend'
             ro2List.extend([elem.strip() for elem in item.split('=')[-1].split(';')[0].strip().split('+')])
     # Remove empty strings
-    ro2List = filter(None, ro2List)
+    ro2List = list(filter(None, ro2List))
 
 
     # Read in the reference RO2 species from the peroxy-radicals_v3.3.1 file

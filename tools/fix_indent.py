@@ -27,6 +27,7 @@
 #    * if this line is the start of e.g. a procedure, store that the next line (that isn't following an ampersand) should be indented.
 #  * perform appropriate indentation, rejoin comment and newline, and output.
 #  * set up variables for next loop, passing on indent setting and whether this was an ampersand-ending line.
+from __future__ import print_function
 
 # strip newline characters from string
 def strip_newline(string):
@@ -160,4 +161,4 @@ with open(out_filename, 'w') as output_file:
         outputs.append(to_output + add_newline(comment))
 
     output_file.writelines(outputs)
-    print 'Complete! Now run a find and replace by hand with regex "&\s*\\n" to catch alignment of the lines following ampersands.'
+    print('Complete! Now run a find and replace by hand with regex "&\s*\\n" to catch alignment of the lines following ampersands.')

@@ -45,7 +45,7 @@ echo "mcm files directory:" $4
 
 echo ''
 echo "call mech_converter.py"
-python ./tools/mech_converter.py $1 $2 $3 $4
+python3 ./tools/mech_converter.py $1 $2 $3 $4
 
 echo ''
 if [ -z $3 ]; then

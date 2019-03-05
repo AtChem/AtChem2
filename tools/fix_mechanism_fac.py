@@ -11,6 +11,8 @@
 
 # This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
 # Call with a single parameter containing the file to fix.
+from __future__ import print_function
+from functools import reduce
 import sys
 import re
 
@@ -26,7 +28,7 @@ def fix_fac_full_contents(filename):
         contents = file_open.read().splitlines()
     # print contents
     orig_contents_len = len(contents)
-    print str(filename) + ': file read in ' + str(orig_contents_len) + ' items'
+    print(str(filename) + ': file read in ' + str(orig_contents_len) + ' items')
     contents_count = 0
     # This variable will hold the indices to be deleted once their contents have been concatenated onto the
     # previous element.
@@ -53,7 +55,7 @@ def fix_fac_full_contents(filename):
                     contents_count += 1
                     to_delete.append(i)
 
-    print str(contents_count) + ' corrections made - now removing old'
+    print(str(contents_count) + ' corrections made - now removing old')
     # Remove old elements which have now been concatenated onto previous
     for i in reversed(to_delete):
         del contents[i]
@@ -88,7 +90,7 @@ def fix_fac_full_file(filename):
     # stretching over two full lines, but should probably then give an error as output.
     # All the heavy lifting is done by fix_fac_contents - here we just provide a simple wrapper to write back to the
     # same file.
-    print 'Running fix_fac_file on ' + str(filename)
+    print('Running fix_fac_file on ' + str(filename))
     contents = fix_fac_full_contents(filename)
     contents = [item + '\n' for item in contents]
     with open(filename, 'w') as file_open:
@@ -101,9 +103,9 @@ def main():
     if len(sys.argv) > 1:
         fix_fac_full_contents(sys.argv[1])
     else:
-        print '******************************'
-        print "Please pass a filename as argument. This script will then fix this file to remove incorrect newlines."
-        print '******************************'
+        print('******************************')
+        print("Please pass a filename as argument. This script will then fix this file to remove incorrect newlines.")
+        print('******************************')
     return
 
 if __name__ == '__main__':

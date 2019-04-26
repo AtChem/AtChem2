@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## plotting tool for the AtChem2 model output
-## --> Python version [requires matplotlib]
+## --> Python2 version [requires numpy & matplotlib]
 ##
 ## ARGUMENT:
 ## - directory with the model output

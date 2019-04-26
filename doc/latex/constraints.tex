@@ -23,11 +23,9 @@ default directories can be modified by changing the arguments of the
 \texttt{atchem2} executable (see {[}{[}2. Model Setup and
 Execution{]}{]}).
 
-\hypertarget{constrained-variables}{%
-\subsection{Constrained variables}\label{constrained-variables}}
+\subsection{Constrained variables}\label{constrained-variables}
 
-\hypertarget{environment-variables}{%
-\subsubsection{Environment variables}\label{environment-variables}}
+\subsubsection{Environment variables}\label{environment-variables}
 
 All environment variables, except \texttt{ROOF}, can be constrained. To
 do so, set the variable to \texttt{CONSTRAINED} in
@@ -36,8 +34,7 @@ file with the constraining data. The name of the file must be the same
 as the name of the variable, e.g.~\texttt{TEMP} (without extension). See
 also: {[}{[}2.4 Environment Variables{]}{]}.
 
-\hypertarget{chemical-species}{%
-\subsubsection{Chemical species}\label{chemical-species}}
+\subsubsection{Chemical species}\label{chemical-species}
 
 Any chemical species in the chemical mechanism can be constrained. To do
 so, add the name of the species to
@@ -46,8 +43,7 @@ file with the constraining data. The name of the file must be the same
 as the name of the chemical species, e.g.~\texttt{CH3OH} (without
 extension). See also: {[}{[}2.6 Config Files{]}{]}.
 
-\hypertarget{photolysis-rates}{%
-\subsubsection{Photolysis rates}\label{photolysis-rates}}
+\subsubsection{Photolysis rates}\label{photolysis-rates}
 
 Any of the photolysis rates in the chemical mechanism can be
 constrained. The photolysis rates are identified as
@@ -59,8 +55,7 @@ file with the constraining data. The name of the file must be the same
 as the name of the photolysis rate, e.g.~\texttt{J4} (without
 extension). See also {[}{[}2.6 Config Files{]}{]}.
 
-\hypertarget{constraint-files}{%
-\subsection{Constraint files}\label{constraint-files}}
+\subsection{Constraint files}\label{constraint-files}
 
 The files with the constraining data are text files with two columns
 separated by spaces. The first column is the time in \textbf{seconds}
@@ -96,8 +91,7 @@ model starts at 42300 seconds and stops at 216000 seconds, the first and
 the last data points in a constraint file must have a timestamp of 42300
 (or lower) and 21600 (or higher), respectively.
 
-\hypertarget{interpolation}{%
-\subsection{Interpolation}\label{interpolation}}
+\subsection{Interpolation}\label{interpolation}
 
 Constraints can be provided at different timescales. Typically, the
 constraining data come from direct measurements and it is a very common

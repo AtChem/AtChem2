@@ -17,8 +17,7 @@ By default, most environment variables are set to a fixed value,
 corresponding to \emph{standard environmental conditions} (listed
 below), or to \texttt{NOTUSED}.
 
-\hypertarget{temp}{%
-\subsection{TEMP}\label{temp}}
+\subsection{TEMP}\label{temp}
 
 Ambient Temperature (K).
 
@@ -31,8 +30,7 @@ Ambient Temperature (K).
 
 Default fixed value = 298.15
 
-\hypertarget{press}{%
-\subsection{PRESS}\label{press}}
+\subsection{PRESS}\label{press}
 
 Ambient Pressure (mbar).
 
@@ -45,8 +43,7 @@ Ambient Pressure (mbar).
 
 Default fixed value = 1013.25
 
-\hypertarget{rh}{%
-\subsection{RH}\label{rh}}
+\subsection{RH}\label{rh}
 
 Relative Humidity (\%). It is required only if \textbf{H2O} is set to
 \texttt{CALC}, otherwise should be set to \texttt{NOTUSED}.
@@ -62,8 +59,7 @@ Relative Humidity (\%). It is required only if \textbf{H2O} is set to
 
 Default = NOTUSED (-1)
 
-\hypertarget{h2o}{%
-\subsection{H2O}\label{h2o}}
+\subsection{H2O}\label{h2o}
 
 Water Concentration (molecules cm-3).
 
@@ -79,8 +75,7 @@ Water Concentration (molecules cm-3).
 
 Default fixed value = 3.91e+17
 
-\hypertarget{dec}{%
-\subsection{DEC}\label{dec}}
+\subsection{DEC}\label{dec}
 
 Sun Declination (radians) is the angle between the center of the Sun and
 Earth's equatorial plane.
@@ -98,8 +93,7 @@ Earth's equatorial plane.
 
 Default fixed value = 0.41
 
-\hypertarget{blheight}{%
-\subsection{BLHEIGHT}\label{blheight}}
+\subsection{BLHEIGHT}\label{blheight}
 
 Boundary Layer Height. It is required only if the model includes
 emission or deposition processes (it must be used in the chemical
@@ -118,8 +112,7 @@ in the chemical mechanism (see {[}{[}2.1 Chemical Mechanism{]}{]}).
 
 Default = NOTUSED (-1)
 
-\hypertarget{dilute}{%
-\subsection{DILUTE}\label{dilute}}
+\subsection{DILUTE}\label{dilute}
 
 Dilution rate. It is required only if the model includes a dilution
 process (it must be used in the chemical mechanism as a multiplier of
@@ -138,8 +131,7 @@ how the process is parameterized in the chemical mechanism (see
 
 Default value = NOTUSED (-1)
 
-\hypertarget{jfac}{%
-\subsection{JFAC}\label{jfac}}
+\subsection{JFAC}\label{jfac}
 
 Correction factor used to correct the photolysis rates (e.g., to account
 for cloudiness). The calculated photolysis rates are scaled by JFAC,
@@ -159,8 +151,7 @@ to constant or constrained photolysis rates. For more information go to:
 
 Default fixed value = 1
 
-\hypertarget{roof}{%
-\subsection{ROOF}\label{roof}}
+\subsection{ROOF}\label{roof}
 
 Flag to turn the photolysis rates ON/OFF. It is used in simulations of
 environmental chamber experiments, where the roof of the chamber can be
@@ -176,9 +167,7 @@ Default value = OPEN
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-\hypertarget{standard-environmental-conditions}{%
-\subsection{Standard environmental
-conditions}\label{standard-environmental-conditions}}
+\subsection{Standard environmental conditions}\label{standard-environmental-conditions}
 
 \begin{verbatim}
 Temperature = 25C  

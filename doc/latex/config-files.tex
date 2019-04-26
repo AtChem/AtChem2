@@ -23,8 +23,7 @@ The content and the format of the \texttt{.config} files are described
 below. Note that the names of some files have changed with the release
 of \textbf{version 1.1} (November 2018).
 
-\hypertarget{environmentvariables.config}{%
-\subsection{environmentVariables.config}\label{environmentvariables.config}}
+\subsection{environmentVariables.config}\label{environmentvariables.config}
 
 This file contains the settings for the environment variables, which are
 described in detail in the related {[}{[}wiki page\textbar{}2.4
@@ -33,8 +32,7 @@ there must be a corresponding data file in
 \texttt{model/constraints/environment/} (see {[}{[}2.7
 Constraints{]}{]}).
 
-\hypertarget{initialconcentrations.config}{%
-\subsection{initialConcentrations.config}\label{initialconcentrations.config}}
+\subsection{initialConcentrations.config}\label{initialconcentrations.config}
 
 This file contains the initial concentrations of the chemical species.
 The first column is the list of initialized species, the second column
@@ -58,8 +56,7 @@ The environment variables are set in
 \texttt{environmentVariables.config} (see above) and should not be
 included in this file.
 
-\hypertarget{outputrates.config}{%
-\subsection{outputRates.config}\label{outputrates.config}}
+\subsection{outputRates.config}\label{outputrates.config}
 
 This file (called \texttt{productionRatesOutput.config} and
 \texttt{lossRatesOutput.config} in v1.0) lists the chemical species for
@@ -88,8 +85,7 @@ files in \texttt{model/output/reactionRates/}):
 7.200000E+003           9               HO2             17         0.000000E+000    OH+H2=HO2
 \end{verbatim}
 
-\hypertarget{outputspecies.config}{%
-\subsection{outputSpecies.config}\label{outputspecies.config}}
+\subsection{outputSpecies.config}\label{outputspecies.config}
 
 This file (called \texttt{concentrationOutput.config} in v1.0) lists the
 chemical species for which the model output is required. The current
@@ -101,8 +97,7 @@ The frequency of this output is controlled by the \textbf{step size}
 parameter in \texttt{model.parameters} (see {[}{[}2.2 Model
 Parameters{]}{]}).
 
-\hypertarget{photolysisconstant.config}{%
-\subsection{photolysisConstant.config}\label{photolysisconstant.config}}
+\subsection{photolysisConstant.config}\label{photolysisconstant.config}
 
 This file lists the photolysis rates that are constant. The file has
 three columns: the first column is the number that identifies the
@@ -119,8 +114,7 @@ If one or more photolysis rates is set to a constant value, the others
 to zero. For more information go to: {[}{[}2.5 Photolysis Rates and
 JFAC{]}{]}.
 
-\hypertarget{photolysisconstrained.config}{%
-\subsection{photolysisConstrained.config}\label{photolysisconstrained.config}}
+\subsection{photolysisConstrained.config}\label{photolysisconstrained.config}
 
 This file (called \texttt{constrainedPhotoRates.config} in v1.0) lists
 the photolysis rates that are constrained. The file has one column, with
@@ -140,8 +134,7 @@ photolysis parametrization can be used, as explained in the file
 \texttt{mcm/INFO.md}. For more information go to: {[}{[}2.5 Photolysis
 Rates and JFAC{]}{]}.
 
-\hypertarget{speciesconstant.config}{%
-\subsection{speciesConstant.config}\label{speciesconstant.config}}
+\subsection{speciesConstant.config}\label{speciesconstant.config}
 
 This file (called \texttt{constrainedFixedSpecies.config} in v1.0) lists
 the chemical species that are constant. The file has two columns: the
@@ -153,8 +146,7 @@ If a chemical species is constant, it does not need to be initialized:
 the values set in \texttt{speciesConstant.config} override those set in
 \texttt{initialConcentrations.config}.
 
-\hypertarget{speciesconstrained.config}{%
-\subsection{speciesConstrained.config}\label{speciesconstrained.config}}
+\subsection{speciesConstrained.config}\label{speciesconstrained.config}
 
 This file (called \texttt{constrainedSpecies.config} in v1.0) lists the
 chemical species that are constrained. The file has one column, with one

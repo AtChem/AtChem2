@@ -12,8 +12,7 @@ commands} is \emph{required} to use the AtChem2 model.
 There are two sets of inputs to AtChem2 - the mechanism file, and
 configuration files.
 
-\hypertarget{mechanism-file}{%
-\subsection{Mechanism file}\label{mechanism-file}}
+\subsection{Mechanism file}\label{mechanism-file}
 
 The model requires a chemical mechanism in FACSIMILE format
 (\texttt{.fac}). The \textbf{mechanism file} can be downloaded from the
@@ -25,8 +24,7 @@ shared library and a set of associated data files in the compilation
 step below. For more information on the chemical mechanism go to:
 {[}{[}2.1 Chemical Mechanism{]}{]}.
 
-\hypertarget{configuration-files}{%
-\subsection{Configuration files}\label{configuration-files}}
+\subsection{Configuration files}\label{configuration-files}
 
 The \textbf{model configuration} is set via a number of text files
 located in the \texttt{model/configuration/} directory. The text files
@@ -50,8 +48,7 @@ The model constraints - chemical species, environment variables,
 photolysis rates - are located in the \texttt{model/constraints/}
 directory. For more information, go to: {[}{[}2.7 Constraints{]}{]}.
 
-\hypertarget{compilation}{%
-\subsection{Compilation}\label{compilation}}
+\subsection{Compilation}\label{compilation}
 
 The script \texttt{build.sh} in the \texttt{tools/} directory is used to
 process the chemical mechanism file (\texttt{.fac}) and to compile the
@@ -142,8 +139,7 @@ script, as explained above. Otherwise, if only the Fortran code has been
 changed, executing \texttt{make} from the \emph{main directory} is
 enough to recompile the model.
 
-\hypertarget{execution}{%
-\subsection{Execution}\label{execution}}
+\subsection{Execution}\label{execution}
 
 The compilation process creates an executable file called
 \texttt{atchem2} in the \emph{main directory}. The executable file takes
@@ -199,8 +195,7 @@ models simultaneously. For example:
     ./atchem2 model_2/output/ model_2/output/reactionRates/ model_2/configuration/ mcm/ model_2/constraints/species/ model_2/constraints/environment/ model_2/constraints/photolysis/
 \end{verbatim}
 
-\hypertarget{important-note-1}{%
-\subsubsection{Important Note 1}\label{important-note-1}}
+\subsubsection{Important Note 1}\label{important-note-1}
 
 As explained above, if the chemical mechanism (\texttt{.fac}) is
 changed, only the shared library needs to be recompiled. This allows the
@@ -209,8 +204,7 @@ user to have only one base executable called \texttt{atchem2} in the
 user can reuse this base executable while pointing each model to the
 correct shared library and configuration files.
 
-\hypertarget{important-note-2}{%
-\subsubsection{Important Note 2}\label{important-note-2}}
+\subsubsection{Important Note 2}\label{important-note-2}
 
 The arguments need to be passed to the \texttt{atchem2} executable in
 the exact order, as listed above. This means that if - for example - the
@@ -221,8 +215,7 @@ arguments. This behaviour also applies to the \texttt{tools/build.sh}
 script used to compile the model. Future versions of AtChem2 will adopt
 a simpler command-line interface.
 
-\hypertarget{output}{%
-\subsection{Output}\label{output}}
+\subsection{Output}\label{output}
 
 The model output is saved by default in the directory
 \texttt{model/output/}. The location can be modified by changing the
@@ -258,8 +251,7 @@ mechanism are saved in the directory \texttt{reactionRates/}: one file
 for each model step, with the filename corresponding to the time in
 seconds.
 
-\hypertarget{running-on-hpc}{%
-\subsection{Running on HPC}\label{running-on-hpc}}
+\subsection{Running on HPC}\label{running-on-hpc}
 
 Atchem2 can be set up to run on a High Performance Computing (HPC)
 system. Compilation and configuration are the same as for a normal

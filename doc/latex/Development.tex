@@ -1,5 +1,8 @@
 \chapter{Model Development} \label{ch:development}
 
+% -------------------------------------------------------------------- %
+\section{Versions} \label{sec:versions}
+
 Two versions of Atchem2 are available:
 
 \begin{enumerate}
@@ -29,8 +32,6 @@ The roadmap for the development of Atchem2 can be found
 Feedback, bug reports, comments and suggestions are welcome. Please
 check \href{https://github.com/AtChem/AtChem2/issues}{this page} for a
 list of known and current issues.
-
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
 If you want to contribute to the model development, the best way is to
 use \textbf{git}. The procedure to contribute code is described below. A
@@ -67,6 +68,7 @@ A {[}{[}Style Guide\textbar{}3.2 Style Guide{]}{]} is available for code
 contributions. Note that style and indentation of the code are also
 checked by the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]}.
 
+% -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:testsuite}
 
 AtChem2 uses \href{https://travis-ci.org/}{Travis CI} for Continuous
@@ -96,8 +98,6 @@ terminal screen. To perform just the unit tests, call
 \texttt{make\ unittests}. To run just the build and behaviour tests,
 call \texttt{make\ tests}.
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
 The CI tester performs the following on each architecture: * Install
 \texttt{gfortran}, \texttt{cvode}, and \texttt{numdiff} * linux: use
 \texttt{apt-get} for \texttt{gfortran}, \texttt{numdiff}, and
@@ -112,7 +112,7 @@ and run several other examples of AtChem2, using different input files.
 PASS if no differences from the reference output files are found,
 otherwise FAIL. Every test must pass to allow the full CI to PASS.
 
-\subsection{Adding new unit tests} \label{adding-new-unit-tests}
+\subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
 
 To add new unit tests, do the following: 1. Navigate to
 \texttt{travis/unit\_tests}. This contains several files with the ending
@@ -151,7 +151,7 @@ tests have indeed been run and passed, check the output summary - you
 should see a line associated to each of the \texttt{test*} subroutines
 in each file in the unit test suite.
 
-\subsection{Adding new behaviour tests} \label{adding-new-behaviour-tests}
+\subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
 
 To add a new behaviour test called `\$TESTNAME' to the Testsuite, you
 should provide the following:
@@ -250,6 +250,7 @@ by \texttt{.cmp}. The \texttt{.gitignore} file should contain
 New tests will be picked up by the Makefile automatically when running
 \texttt{make\ test}.
 
+% -------------------------------------------------------------------- %
 \section{Style Guide} \label{sec:style}
 
 In order to make the code more readable, we attempt to use a consistent
@@ -278,9 +279,7 @@ Fortran code consistent:
   the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]}.
 \end{itemize}
 
-\begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
-
-\subsection{Style recommendations} \label{style-recommendations}
+\subsection{Style recommendations} \label{subsec:style-recommendations}
 
 \subsubsection{General principles} \label{general-principles}
 

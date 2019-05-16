@@ -1,13 +1,13 @@
 % -------------------- PREAMBLE -------------------- %
 \documentclass[11pt,a4paper]{report}
 \usepackage{times,graphicx,hyperref,color}
-\usepackage{caption,longtable}
+\usepackage[version=4]{mhchem}
 
 \pagestyle{headings}
 \frenchspacing
 
 % ----- Title Page ----- %
-\title{AtChem2 Manual}
+\title{User Manual for AtChem2\\ v1.1.1}
 \author{R. Sommariva, S. Cox}
 \date{\today}
 
@@ -17,26 +17,10 @@
 
 \tableofcontents
 
-\include{introduction}
-
-\include{installation}
-\include{dependencies}
-\include{model-structure}
-
-\include{model-setup-execution}
-\include{chemical-mechanism}
-\include{model-parameters}
-\include{solver-parameters}
-\include{environment-variables}
-\include{photolysis-rates}
-\include{config-files}
-\include{constraints}
-\include{tools}
-
-\include{model-development}
-\include{test-suite}
-\include{style-guide}
-
-\include{credits}
+\include{Introduction}
+\include{Installation}
+\include{Setup}
+\include{Development}
+\include{Credits}
 
 \end{document}

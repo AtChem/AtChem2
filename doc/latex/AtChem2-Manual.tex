@@ -1,0 +1,42 @@
+% -------------------- PREAMBLE -------------------- %
+\documentclass[11pt,a4paper]{report}
+\usepackage{times,graphicx,hyperref,color}
+\usepackage{caption,longtable}
+
+\pagestyle{headings}
+\frenchspacing
+
+% ----- Title Page ----- %
+\title{AtChem2 Manual}
+\author{R. Sommariva, S. Cox}
+\date{\today}
+
+% -------------------- DOCUMENT -------------------- %
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\include{introduction}
+
+\include{installation}
+\include{dependencies}
+\include{model-structure}
+
+\include{model-setup-execution}
+\include{chemical-mechanism}
+\include{model-parameters}
+\include{solver-parameters}
+\include{environment-variables}
+\include{photolysis-rates}
+\include{config-files}
+\include{constraints}
+\include{tools}
+
+\include{model-development}
+\include{test-suite}
+\include{style-guide}
+
+\include{credits}
+
+\end{document}

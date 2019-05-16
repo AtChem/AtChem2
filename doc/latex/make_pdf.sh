@@ -15,6 +15,5 @@
 
 pdflatex AtChem2-Manual.tex
 pdflatex AtChem2-Manual.tex
-rm -f *.aux *.log *.out *.toc
 
-mv -f AtChem2-Manual.pdf ../
+mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf

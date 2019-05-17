@@ -35,7 +35,7 @@ In addition, AtChem2 has the following dependencies:
 \end{itemize}
 
 For detailed instructions on the installation and configuration of the
-dependencies go to: {[}{[}1.1 Dependencies{]}{]}.
+dependencies go to: \hyperref[sec:dependencies]{Dependencies}.
 
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
@@ -43,9 +43,8 @@ dependencies go to: {[}{[}1.1 Dependencies{]}{]}.
 There are two versions of AtChem2: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the development version, also known as \texttt{master\ branch} (see
-the {[}{[}model development page\textbar{}3. Model Development{]}{]}
-for additional information). The source code can be obtained in two
-ways:
+the \hyperref[ch:development]{model development page} for additional
+information). The source code can be obtained in two ways:
 
 \begin{enumerate}
 \item with \textbf{git}:
@@ -89,18 +88,18 @@ To install AtChem2:
 \begin{enumerate}
 \item Move to the \emph{AtChem2 main directory} (\texttt{cd\
     \textasciitilde{}/AtChem2/}).  Install the
-  {[}{[}dependencies\textbar{}1.1 Dependencies{]}{]} and take note of
-  the name and path of the \emph{dependencies directory} (in the
-  following instructions, we will assume that the \emph{dependencies
-    directory} is \texttt{\textasciitilde{}/atchem-libraries/}).
+  \hyperref[sec:dependencies]{dependencies} and take note of the name
+  and path of the \emph{dependencies directory} (in the following
+  instructions, we will assume that the \emph{dependencies directory}
+  is \texttt{\textasciitilde{}/atchem-libraries/}).
 \item Copy the \texttt{Makefile} in the \texttt{tools/} directory to
   the \emph{main directory} (\texttt{cp\ tools/Makefile\ ./}).
 \item From the the \emph{main directory}, open the \texttt{Makefile}
   with a text editor. Set the variables \texttt{CVODELIB},
   \texttt{OPENLIBMDIR}, \texttt{FRUITDIR} to the paths of the CVODE,
-  openlibm and FRUIT libraries, as described in the {[}{[}dependencies
-  page\textbar{}1.1 Dependencies{]}{]}. Use the full path to the
-  libraries, not the relative path (see issue
+  openlibm and FRUIT libraries, as described in the
+  \hyperref[sec:dependencies]{dependencies page}. Use the full path to
+  the libraries, not the relative path (see issue
   \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}). For
   example:
   \begin{verbatim}
@@ -131,9 +130,9 @@ To install AtChem2:
 
 This means that AtChem2 has completed the test run without errors and
 is ready to be used. The directory structure of AtChem2 is described
-{[}{[}here\textbar{}1.2 Model Structure{]}{]}. For instructions on how
-to set up, compile and execute the model go to: {[}{[}2. Model Setup
-and Execution{]}{]}.
+\hyperref[sec:structure]{here}. For instructions on how to set up,
+compile and execute the model go to: \hyperref[ch:setup]{Model Setup}
+and \hyperref[ch:execution]{Model Execution}.
 
 \subsection{Note for macOS users} \label{subsec:note-for-macos-users}
 
@@ -166,13 +165,12 @@ each of \texttt{libsundials\_cvode.2.dylib},
 % -------------------------------------------------------------------- %
 \section{Tests (optional)} \label{sec:tests}
 
-You can run the {[}{[}Test Suite\textbar{}3.1 Test Suite{]}{]} to
-verify that AtChem2 has been installed properly and to make sure that
-changes to the code do not result in unintended behaviour. This is
-recommended if you want to contribute to the model development. Note
-that running the Test Suite requires the optional dependencies to be
-installed, as explained in the {[}{[}dependencies page\textbar{}1.1
-Dependencies{]}{]}.
+You can run the \hyperref[sec:testsuite]{Test Suite} to verify that
+AtChem2 has been installed properly and to make sure that changes to
+the code do not result in unintended behaviour. This is recommended if
+you want to contribute to the model development. Note that running the
+Test Suite requires the optional dependencies to be installed, as
+explained in the \hyperref[sec:dependencies]{dependencies page}.
 
 To run the tests, execute the following commands from the
 \emph{AtChem2 main directory}:
@@ -187,7 +185,7 @@ To run the tests, execute the following commands from the
 \end{itemize}
 
 For more information on the Test Suite go to the corresponding
-{[}{[}wiki page\textbar{}3.1 Test Suite{]}{]}.
+\hyperref[sec:testsuite]{wiki page}.
 
 % -------------------------------------------------------------------- %
 \section{Dependencies} \label{sec:dependencies}
@@ -202,7 +200,7 @@ assume that the \emph{dependencies directory} is
 
 Before installing the dependencies, make sure that Fortran, Python,
 cmake and (optionally) Ruby are installed on your system, as explained
-in the {[}{[}installation page\textbar{}1. Installation{]}{]}.
+in the \hyperref[sec:install]{installation page}.
 
 \subsection{Required
   dependencies} \label{subsec:required-dependencies}
@@ -287,10 +285,10 @@ installation at
 
 numdiff is a \href{https://www.nongnu.org/numdiff/}{program} used to
 compare files containing numerical fields. It is needed only if you
-want to run the {[}{[}Test Suite\textbar{}3.1 Test Suite{]}{]}, a
-series of tests to ensure that the model works properly. Installation
-of numdiff is recommended if you want to contribute to the development
-of AtChem2.
+want to run the \hyperref[sec:testsuite]{Test Suite}, a series of
+tests to ensure that the model works properly. Installation of numdiff
+is recommended if you want to contribute to the development of
+AtChem2.
 
 Use \texttt{which\ numdiff} to check if the program is already
 installed on your system. If not, you can install it locally, for
@@ -321,9 +319,9 @@ example in the \emph{dependencies directory}. Use the script
 FRUIT (FORTRAN Unit Test Framework) is a
 \href{https://en.wikipedia.org/wiki/Unit_testing}{unit test framework}
 for Fortran. It requires Ruby 2.0 and is needed only if you want to
-run the unit tests in the {[}{[}Test Suite\textbar{}3.1 Test
-Suite{]}{]}.  Installation of FRUIT is recommended if you want to
-contribute to the development of AtChem2.
+run the unit tests in the \hyperref[sec:testsuite]{Test Suite}.
+Installation of FRUIT is recommended if you want to contribute to the
+development of AtChem2.
 
 The current version of FRUIT is 3.4.3 and can be installed using the
 \texttt{install\_fruit.sh} script in the \texttt{tools/install/}
@@ -393,4 +391,4 @@ names) in the same location. As long as the correct paths are passed
 to the compilation and execution scripts, the model will compile and
 run. This approach gives the user the flexibility to run different
 versions of the same model or different models at the same time. For
-more information go to: {[}{[}2. Model Setup and Execution{]}{]}.
+more information go to: \hyperref[ch:execution]{Model Execution}.

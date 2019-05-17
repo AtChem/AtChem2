@@ -18,11 +18,11 @@ Two versions of Atchem2 are available:
 
 AtChem2 is under active development, which means that the
 \texttt{master\ branch} may sometimes be a few steps ahead of the
-latest stable release. The {[}{[}test suite\textbar{}3.1 Test
-Suite{]}{]} is designed to ensure that changes to the code do not
-cause unintended behaviour or unexplained differences in the model
-results, so the development version is usually safe to use, although
-caution is advised.
+latest stable release. The \hyperref[sec:testsuite]{Test Suite} is
+designed to ensure that changes to the code do not cause unintended
+behaviour or unexplained differences in the model results, so the
+development version is usually safe to use, although caution is
+advised.
 
 The roadmap for the development of Atchem2 can be found
 \href{https://github.com/AtChem/AtChem2/projects/1}{here}.
@@ -54,8 +54,8 @@ upstream    git@github.com:AtChem/AtChem2.git (push)
 
 \item Create a new branch in your local repository. Make your edits on
   the branch, commit and push. Before committing, it is advised to run
-  the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]} locally to verify
-  whether the changes could cause any problem.
+  the \hyperref[sec:testsuite]{Test Suite} locally to verify whether
+  the changes could cause any problem.
 \item Submit a pull request, together with a brief description of the
   proposed changes. One of the admins will review the edits and
   approve them or ask for additional changes, as appropriate.
@@ -64,9 +64,9 @@ upstream    git@github.com:AtChem/AtChem2.git (push)
 Contributions can also be submitted via email or via the
 \href{https://github.com/AtChem/AtChem2/issues}{issues page}.
 
-A {[}{[}Style Guide\textbar{}3.2 Style Guide{]}{]} is available for
-code contributions. Note that style and indentation of the code are
-also checked by the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]}.
+A \hyperref[sec:style]{Style Guide} is available for code
+contributions. Note that style and indentation of the code are also
+checked by the \hyperref[sec:testsuite]{Test Suite}.
 
 % -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:testsuite}
@@ -78,12 +78,12 @@ unintended fashion.
 
 To begin using CI on code modifications, create a Pull Request on
 github from your own fork to \texttt{AtChem/AtChem2} (see
-{[}{[}3. Model Development{]}{]} for instructions on how to set up
-\textbf{git}). Once the PR is created, Travis CI will automatically
-run build, unit and behaviour tests on 2 architectures (linux and
-OSX). Pull requests should only be merged once the Travis CI has
-completed with passes on both architectures. This is indicated by the
-meassage: ``All checks have passed''.
+\hyperref[sec:versions]{previous section} for instructions on how to
+set up \textbf{git}). Once the PR is created, Travis CI will
+automatically run build, unit and behaviour tests on 2 architectures
+(linux and OSX). Pull requests should only be merged once the Travis
+CI has completed with passes on both architectures. This is indicated
+by the meassage: ``All checks have passed''.
 
 In order to run the Testsuite on your local machine, call
 \texttt{make\ alltest} from the \emph{main directory}. This will run
@@ -302,14 +302,13 @@ Fortran code consistent:
     tools/fix\_style.py\ filename}), it is strongly recommended to
   have a
   backup of the file to revert to, in case this script wrongly edits.\\
-  This script is also used in the {[}{[}test suite\textbar{}3.1 Test
-  Suite{]}{]} to check a few aspects of the styling. This works by
-  running the script over the source file and outputting to a
-  \texttt{.cmp} file: if the copy matches the original file, then the
-  test passes.
+  This script is also used in the \hyperref[sec:testsuite]{Test Suite}
+  to check a few aspects of the styling. This works by running the
+  script over the source file and outputting to a \texttt{.cmp} file:
+  if the copy matches the original file, then the test passes.
 \item \texttt{tools/fix\_indent.py} works similarly, but checks and
   corrects the indentation level of each line of code. This is also
-  used within the {[}{[}test suite\textbar{}3.1 Test Suite{]}{]}.
+  used within the \hyperref[sec:testsuite]{Test Suite}.
 \end{itemize}
 
 \subsection{Style

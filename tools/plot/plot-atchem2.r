@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------------
 
-## plotting tool for the AtChem2 model output
+## Plotting tool for the AtChem2 model output
 ## --> R version
 ##
 ## ARGUMENT:

@@ -1,3 +1,13 @@
+% -----------------------------------------------------------------------------
+%
+% Copyright (c) 2017 Sam Cox, Roberto Sommariva
+%
+% This file is part of the AtChem2 software package.
+%
+% This file is covered by the MIT license which can be found in the file
+% LICENSE.md at the top level of the AtChem2 distribution.
+%
+% -----------------------------------------------------------------------------
 \chapter{Model Setup} \label{ch:setup}
 
 % -------------------------------------------------------------------- %
@@ -107,8 +117,7 @@ from other versions of the MCM are also included in the \texttt{mcm/}
 directory: see the file \texttt{mcm/INFO.md} for instructions on how
 to use previous versions of the MCM with AtChem2.
 
-\subsection{The MCM extraction
-  tool} \label{subsec:the-mcm-extraction-tool}
+\subsection{The MCM extraction tool} \label{subsec:the-mcm-extraction-tool}
 
 The MCM website provides a convenient tool which can be used to
 download the whole MCM, or subsets of it, in FACSIMILE format. After
@@ -200,8 +209,7 @@ modified by changing the second and the third argument of the script
 \texttt{tools/build.sh}. For more information and detailed
 instructions go to: \hyperref[ch:execution]{Model Execution}.
 
-\subsection{Example mechanism
-  file} \label{subsec:example-mechanism-file}
+\subsection{Example mechanism file} \label{subsec:example-mechanism-file}
 
 \begin{verbatim}
 * ------------------------------------------------------------------- *;
@@ -293,8 +301,7 @@ general setup of the model.
   \hyperref[sec:config]{Config Files}.
 \end{itemize}
 
-\subsection{Runtime reference
-  values} \label{subsec:runtime-reference-values}
+\subsection{Runtime reference values} \label{subsec:runtime-reference-values}
 
 For 1 day at 15 minute intervals:
 
@@ -350,8 +357,7 @@ complete explanation of these parameters can be found in the
   in the case that \texttt{solver\ type\ =\ 2}.
 \end{itemize}
 
-\subsection{Solver reference
-  values} \label{subsec:solver-reference-values}
+\subsection{Solver reference values} \label{subsec:solver-reference-values}
 
 Standard solver tolerance values:
 
@@ -509,8 +515,7 @@ that cannot be set to \texttt{CONSTRAINED}.
 
 Default value = OPEN
 
-\subsection{Standard environmental
-  conditions} \label{subsec:standard-environmental-conditions}
+\subsection{Standard environmental conditions} \label{subsec:standard-environmental-conditions}
 
 \begin{verbatim}
 Temperature = 25C
@@ -552,8 +557,7 @@ photolysis rates ON/OFF, which is useful for simulations of some
 environmental chamber experiments (see
 \hyperref[sec:envvar]{Environment Variables}).
 
-\subsection{Constant photolysis
-  rates} \label{subsec:constant-photolysis-rates}
+\subsection{Constant photolysis rates} \label{subsec:constant-photolysis-rates}
 
 The typical scenario for constant photolysis rates is the use of a
 lamp in an environmental chamber. All the photolysis rates used in the
@@ -565,8 +569,7 @@ certain spectral windows. The format of the
 \texttt{photolysisConstant.config} file is described in the
 \hyperref[sec:config]{Config Files} page.
 
-\subsection{Constrained photolysis
-  rates} \label{subsec:constrained-photolysis-rates}
+\subsection{Constrained photolysis rates} \label{subsec:constrained-photolysis-rates}
 
 Photolysis rates can be constrained to measured values. In this case,
 the name of the constrained photolysis rate (e.g., \texttt{J2}) must
@@ -582,8 +585,7 @@ constrained (i.e., not listed in
 \texttt{photolysisConstrained.config}) are calculated using the MCM
 parametrization.
 
-\subsection{Calculated photolysis
-  rates} \label{subsec:calculated-photolysis-rates}
+\subsection{Calculated photolysis rates} \label{subsec:calculated-photolysis-rates}
 
 AtChem2 implements the parametrization of photolysis rates used by the
 Master Chemical Mechanism. It is described in the MCM protocol papers:
@@ -851,8 +853,7 @@ rates. The default directories can be modified by changing the
 arguments of the \texttt{atchem2} executable (see
 \hyperref[subsec:execution]{Model Execution}).
 
-\subsection{Constrained
-  variables} \label{subsec:constrained-variables}
+\subsection{Constrained variables} \label{subsec:constrained-variables}
 
 \subsubsection{Environment variables} \label{environment-variables}
 

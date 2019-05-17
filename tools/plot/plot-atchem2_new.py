@@ -9,8 +9,10 @@
 #
 # -----------------------------------------------------------------------------
 
-## plotting tool for the AtChem2 model output
+## Plotting tool for the AtChem2 model output
 ## --> Python2 version [requires pandas & matplotlib]
+##
+## Acknowledgements: M. Panagi, M. Fabre'
 ##
 ## ARGUMENT:
 ## - directory with the model output
@@ -35,6 +37,8 @@ def generate_plots(df, rows=3, columns=2):
             ax = fig.add_subplot(rows, columns, i+1)
             ax.plot(df['t'], column, linestyle='-', color='black')
             ax.set(title=label, xlabel='seconds', ylabel='')
+            plt.tight_layout()
+            plt.ticklabel_format(style='sci', axis='y', useMathText=True)
         yield fig
 
 def column_grouper(df, n):

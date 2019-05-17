@@ -9,8 +9,10 @@
 #
 # -----------------------------------------------------------------------------
 
-## plotting tool for the AtChem2 model output
+## Plotting tool for the AtChem2 model output
 ## --> Python2 version [requires numpy & matplotlib]
+##
+## Acknowledgements: M. Panagi
 ##
 ## ARGUMENT:
 ## - directory with the model output
@@ -56,6 +58,8 @@ with PdfPages('atchem2_output.pdf') as pdf:
         ax = fig.add_subplot(3,2,j)
         ax.plot(df1[0], df1[i], linestyle='-', color='black')
         ax.set(title=var1[i], xlabel='seconds', ylabel='')
+        plt.tight_layout()
+        plt.ticklabel_format(style='sci', axis='y', useMathText=True)
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -71,6 +75,8 @@ with PdfPages('atchem2_output.pdf') as pdf:
         ax = fig.add_subplot(3,2,j)
         ax.plot(df2[0], df2[i], linestyle='-', color='black')
         ax.set(title=var2[i], xlabel='seconds', ylabel='')
+        plt.tight_layout()
+        plt.ticklabel_format(style='sci', axis='y', useMathText=True)
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -86,6 +92,8 @@ with PdfPages('atchem2_output.pdf') as pdf:
         ax = fig.add_subplot(3,2,j)
         ax.plot(df3[0], df3[i], linestyle='-', color='black')
         ax.set(title=var3[i], xlabel='seconds', ylabel='')
+        plt.tight_layout()
+        plt.ticklabel_format(style='sci', axis='y', useMathText=True)
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))
@@ -101,6 +109,8 @@ with PdfPages('atchem2_output.pdf') as pdf:
         ax = fig.add_subplot(3,2,j)
         ax.plot(df4[0], df4[i], linestyle='-', color='black')
         ax.set(title=var4[i], xlabel='seconds', ylabel='')
+        plt.tight_layout()
+        plt.ticklabel_format(style='sci', axis='y', useMathText=True)
         if j == 6:
             pdf.savefig(fig)
             fig = plt.figure(figsize=(11,7))

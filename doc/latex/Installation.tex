@@ -4,8 +4,8 @@
 %
 % This file is part of the AtChem2 software package.
 %
-% This file is covered by the MIT license which can be found in the file
-% LICENSE.md at the top level of the AtChem2 distribution.
+% This file is covered by the MIT license which can be found in the
+% file LICENSE.md at the top level of the AtChem2 distribution.
 %
 % -----------------------------------------------------------------------------
 \chapter{Model Installation} \label{ch:installation}
@@ -53,10 +53,10 @@ dependencies go to: \hyperref[sec:dependencies]{Dependencies}.
 There are two versions of AtChem2: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the development version, also known as \texttt{master\ branch} (see
-the \hyperref[ch:development]{model development page} for additional
-information). The source code can be obtained in two ways:
+the \hyperref[ch:development]{Model Development} section for
+additional information). The source code can be obtained in two ways:
 
-\begin{enumerate}
+\begin{itemize}
 \item with \textbf{git}:
   \begin{enumerate}
   \item Open the terminal. Move to the directory where you want to
@@ -67,7 +67,6 @@ information). The source code can be obtained in two ways:
     SSH). This method will download the development version and it is
     recommended if you want to contribute to the model development.
   \end{enumerate}
-
 \item with the \textbf{archive file} (\texttt{*.tar.gz} or
   \texttt{*.zip}):
   \begin{enumerate}
@@ -81,12 +80,12 @@ information). The source code can be obtained in two ways:
   \item Unpack the archive file (e.g., \texttt{tar\ -zxvf\
       v1.1.tar.gz} or \texttt{unzip\ master.zip}).
   \end{enumerate}
-\end{enumerate}
+\end{itemize}
 
 Depending on which of these methods you have used, the source code is
 now in a directory called \texttt{AtChem2} or \texttt{AtChem2-1.1} or
-\texttt{AtChem2-master}. This directory - which you can rename, if you
-want to - is the \emph{main directory} of the model. In the
+\texttt{AtChem2-master}. This directory -- which you can rename, if
+you want to -- is the \emph{main directory} of the model. In the
 documentation we will assume that the \emph{AtChem2 main directory} is
 \texttt{\$HOME/AtChem2}.
 
@@ -103,15 +102,16 @@ assume that the \emph{dependencies directory} is
 
 Before installing the dependencies, make sure that Fortran, Python,
 cmake and (optionally) Ruby are installed on your system, as explained
-in the \hyperref[sec:install]{installation page}.
+in the \hyperref[sec:install]{Installation} section.
 
-\subsection{Required dependencies} \label{subsec:required-dependencies}
+\subsection{Required
+  dependencies} \label{subsec:required-dependencies}
 
 \subsubsection{BLAS and LAPACK} \label{blas-and-lapack}
 
 BLAS and LAPACK are standard Fortran libraries for linear
 algebra. They are needed to install and compile the CVODE library (see
-below).  Usually, they are in \texttt{/usr/lib/} (e.g.,
+below). Usually, they are in \texttt{/usr/lib/} (e.g.,
 \texttt{/usr/lib/libblas/} and \texttt{/usr/lib/lapack/}). The
 location may be different, especially if you are on an HPC system, so
 check the local documentation or ask the system administrator.
@@ -130,8 +130,7 @@ installed using the \texttt{install\_cvode.sh} script in the
     \textasciitilde{}/AtChem2}).
 \item Open the installation script
   (\texttt{tools/install/install\_cvode.sh}) with a text editor:
-
-  \begin{enumerate}
+  \begin{itemize}
   \item If LAPACK and BLAS are not in the default location on your
     system (see above), change the \texttt{LAPACK\_LIBS} variable for
     your architecture (Linux or macOS), as appropriate.
@@ -139,11 +138,11 @@ installed using the \texttt{install\_cvode.sh} script in the
     (\texttt{gfortran} is part of \texttt{gcc}), change the line
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc\ \textbackslash{}}
     accordingly.
-  \end{enumerate}
+  \end{itemize}
 \item From the \emph{AtChem2 main directory}, run the installation
   script (change the path of the \emph{dependencies directory} as
   needed):
-\begin{verbatim}
+  \begin{verbatim}
   ./tools/install/install_cvode.sh ~/atchem-libraries/
 \end{verbatim}
 \end{enumerate}
@@ -171,7 +170,7 @@ the \texttt{install\_openlibm.sh} script in the
     \textasciitilde{}/AtChem2}).
 \item Run the installation script (change the path of the
   \emph{dependencies directory} as needed):
-\begin{verbatim}
+  \begin{verbatim}
   ./tools/install/install_openlibm.sh ~/atchem-libraries/
 \end{verbatim}
 \end{enumerate}
@@ -180,7 +179,8 @@ If the installation is successful, there should be a working openlibm
 installation at
 \texttt{\textasciitilde{}/atchem-libraries/openlibm-0.4.1/}.
 
-\subsection{Optional dependencies} \label{subsec:optional-dependencies}
+\subsection{Optional
+  dependencies} \label{subsec:optional-dependencies}
 
 \subsubsection{numdiff} \label{numdiff}
 
@@ -233,7 +233,7 @@ directory.
     \textasciitilde{}/AtChem2}).
 \item Run the installation script (change the path of the
   \emph{dependencies directory} as needed):
-\begin{verbatim}
+  \begin{verbatim}
   ./tools/install/install_fruit.sh ~/atchem-libraries/
 \end{verbatim}
 \end{enumerate}
@@ -249,8 +249,8 @@ To install AtChem2:
 
 \begin{enumerate}
 \item Move to the \emph{AtChem2 main directory} (\texttt{cd\
-    \textasciitilde{}/AtChem2/}).  Install the
-  \hyperref[sec:dependencies]{dependencies} and take note of the name
+    \textasciitilde{}/AtChem2/}). Install the
+  \hyperref[sec:dependencies]{Dependencies} and take note of the name
   and path of the \emph{dependencies directory} (in the following
   instructions, we will assume that the \emph{dependencies directory}
   is \texttt{\textasciitilde{}/atchem-libraries/}).
@@ -260,14 +260,14 @@ To install AtChem2:
   with a text editor. Set the variables \texttt{CVODELIB},
   \texttt{OPENLIBMDIR}, \texttt{FRUITDIR} to the paths of the CVODE,
   openlibm and FRUIT libraries, as described in the
-  \hyperref[sec:dependencies]{dependencies page}. Use the full path to
-  the libraries, not the relative path (see issue
+  \hyperref[sec:dependencies]{Dependencies} section. Use the full path
+  to the libraries, not the relative path (see issue
   \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}). For
   example:
   \begin{verbatim}
-    CVODELIB = $(HOME)/atchem-libraries/cvode/lib
-    OPENLIBMDIR = $(HOME)/atchem-libraries/openlibm-0.4.1
-    FRUITDIR = $(HOME)/atchem-libraries/fruit_3.4.3
+  CVODELIB = $(HOME)/atchem-libraries/cvode/lib
+  OPENLIBMDIR = $(HOME)/atchem-libraries/openlibm-0.4.1
+  FRUITDIR = $(HOME)/atchem-libraries/fruit_3.4.3
 \end{verbatim}
 \item Execute \texttt{./tools/build.sh\
     ./tools/mcm\_example.fac}. This command compiles the model and
@@ -275,7 +275,7 @@ To install AtChem2:
   file \texttt{mcm\_example.fac} in the \texttt{tools/} directory.
 \item Execute \texttt{./atchem2}. If the model has been installed
   correctly, you should see a message similar to this:
-\begin{verbatim}
+  \begin{verbatim}
   ------------------
    Final statistics
   ------------------
@@ -292,9 +292,10 @@ To install AtChem2:
 
 This means that AtChem2 has completed the test run without errors and
 is ready to be used. The directory structure of AtChem2 is described
-\hyperref[sec:structure]{here}. For instructions on how to set up,
-compile and execute the model go to: \hyperref[ch:setup]{Model Setup}
-and \hyperref[ch:execution]{Model Execution}.
+in \hyperref[sec:structure]{Model Structure}. For instructions on how
+to set up, compile and execute the model go to:
+\hyperref[ch:setup]{Model Setup} and \hyperref[ch:execution]{Model
+  Execution}.
 
 \subsection{Note for macOS users} \label{subsec:note-for-macos-users}
 
@@ -332,22 +333,22 @@ AtChem2 has been installed properly and to make sure that changes to
 the code do not result in unintended behaviour. This is recommended if
 you want to contribute to the model development. Note that running the
 Test Suite requires the optional dependencies to be installed, as
-explained in the \hyperref[sec:dependencies]{dependencies page}.
+explained in the \hyperref[sec:dependencies]{Dependencies} section.
 
 To run the tests, execute the following commands from the
 \emph{AtChem2 main directory}:
 
 \begin{itemize}
 \item \texttt{make\ alltests} runs all the tests (requires
-  \textbf{numdiff} and \textbf{FRUIT})
+  \textbf{numdiff} and \textbf{FRUIT}).
 \item \texttt{make\ tests} runs only the behaviour tests (requires
-  \textbf{numdiff})
+  \textbf{numdiff}).
 \item \texttt{make\ unittests} runs only the unit tests (requires
-  \textbf{FRUIT})
+  \textbf{FRUIT}).
 \end{itemize}
 
 For more information on the Test Suite go to the corresponding
-\hyperref[sec:testsuite]{wiki page}.
+\hyperref[sec:testsuite]{section}.
 
 % -------------------------------------------------------------------- %
 \section{Model Structure} \label{sec:structure}

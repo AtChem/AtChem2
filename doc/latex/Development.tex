@@ -4,8 +4,8 @@
 %
 % This file is part of the AtChem2 software package.
 %
-% This file is covered by the MIT license which can be found in the file
-% LICENSE.md at the top level of the AtChem2 distribution.
+% This file is covered by the MIT license which can be found in the
+% file LICENSE.md at the top level of the AtChem2 distribution.
 %
 % -----------------------------------------------------------------------------
 \chapter{Model Development} \label{ch:development}
@@ -21,9 +21,9 @@ Two versions of Atchem2 are available:
   \href{https://github.com/AtChem/AtChem2/releases}{here}.
 \item the development version: which is indicated by a version number
   with the suffix \texttt{-dev} (e.g., \textbf{v1.1-dev}), and can be
-  downloaded from the \texttt{master\ branch}
-  (https://github.com/AtChem/AtChem2/archive/master.zip) or obtained
-  via \textbf{git}.
+  downloaded from the
+  \href{https://github.com/AtChem/AtChem2/archive/master.zip}{master
+    branch} or obtained via \textbf{git}.
 \end{enumerate}
 
 AtChem2 is under active development, which means that the
@@ -38,8 +38,8 @@ The roadmap for the development of Atchem2 can be found
 \href{https://github.com/AtChem/AtChem2/projects/1}{here}.
 
 Feedback, bug reports, comments and suggestions are welcome. Please
-check \href{https://github.com/AtChem/AtChem2/issues}{this page} for a
-list of known and current issues.
+check \href{https://github.com/AtChem/AtChem2/issues}{this github
+  page} for a list of known and open issues.
 
 If you want to contribute to the model development, the best way is to
 use \textbf{git}. The procedure to contribute code is described
@@ -54,14 +54,12 @@ below. A basic level of
   (\texttt{username/AtChem2}) and \texttt{upstream} is the official
   repository (\texttt{AtChem/AtChem2}). The output of \texttt{git\
     remote\ -v} should look like this:
-
-\begin{verbatim}
-origin  git@github.com:username/AtChem2.git (fetch)
-origin  git@github.com:username/AtChem2.git (push)
-upstream    git@github.com:AtChem/AtChem2.git (fetch)
-upstream    git@github.com:AtChem/AtChem2.git (push)
+  \begin{verbatim}
+  origin  git@github.com:username/AtChem2.git (fetch)
+  origin  git@github.com:username/AtChem2.git (push)
+  upstream    git@github.com:AtChem/AtChem2.git (fetch)
+  upstream    git@github.com:AtChem/AtChem2.git (push)
 \end{verbatim}
-
 \item Create a new branch in your local repository. Make your edits on
   the branch, commit and push. Before committing, it is advised to run
   the \hyperref[sec:testsuite]{Test Suite} locally to verify whether
@@ -72,7 +70,8 @@ upstream    git@github.com:AtChem/AtChem2.git (push)
 \end{enumerate}
 
 Contributions can also be submitted via email or via the
-\href{https://github.com/AtChem/AtChem2/issues}{issues page}.
+\href{https://github.com/AtChem/AtChem2/issues}{issues page} on
+github.com.
 
 A \hyperref[sec:style]{Style Guide} is available for code
 contributions. Note that style and indentation of the code are also
@@ -88,8 +87,8 @@ unintended fashion.
 
 To begin using CI on code modifications, create a Pull Request on
 github from your own fork to \texttt{AtChem/AtChem2} (see
-\hyperref[sec:information]{previous section} for instructions on how to
-set up \textbf{git}). Once the PR is created, Travis CI will
+\hyperref[sec:information]{previous section} for instructions on how
+to set up \textbf{git}). Once the PR is created, Travis CI will
 automatically run build, unit and behaviour tests on 2 architectures
 (linux and OSX). Pull requests should only be merged once the Travis
 CI has completed with passes on both architectures. This is indicated
@@ -136,30 +135,31 @@ The CI tester performs the following on each architecture:
   to PASS.
 \end{itemize}
 
-\subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
+\subsection{Adding new unit
+  tests} \label{subsec:adding-new-unit-tests}
 
 To add new unit tests, do the following:
 
 \begin{itemize}
 \item Navigate to \texttt{travis/unit\_tests}. This contains several
   files with the ending \texttt{*\_test.f90}. IF the new test to be
-  added fits into an existing test file, edit that file - otherwise,
+  added fits into an existing test file, edit that file -- otherwise,
   make a new file, but it must follow that pattern of
   \texttt{*\_test.f90}. It is suggested that unit tests covering
   functions from the source file \texttt{xFunctions.f90} should be
   named \texttt{x\_test.f90}.
 \item The file must contain a module with the same name as the file,
-  i.e.~\texttt{*\_test}. It must \texttt{use\ fruit}, and any other
+  i.e., \texttt{*\_test}. It must \texttt{use\ fruit}, and any other
   modules as needed.
 \item The module should contain subroutines with the naming scheme
   \texttt{test\_*\textasciitilde{}}. These subroutines must take no
   arguments (and, crucially, not have any brackets for arguments
-  either - subroutine \texttt{test\_calc} is correct, but subroutine
+  either -- subroutine \texttt{test\_calc} is correct, but subroutine
   \texttt{test\_calc()} is wrong).
 \item Each subroutine should call one or more assert functions
   (usually \texttt{assert\_equals()}, \texttt{assert\_not\_equals()},
-  \texttt{assert\_true()} or \texttt{assert\_false()}).  These assert
-  functions act as the arbiters of pass or failure - each assert must
+  \texttt{assert\_true()} or \texttt{assert\_false()}). These assert
+  functions act as the arbiters of pass or failure -- each assert must
   pass for the subroutine to pass, and each subroutine must pass for
   the unit tests to pass.
 \item The assert functions have the following syntax:
@@ -182,10 +182,11 @@ understanding of which test has failed, and perhaps why.
 If these steps are followed, calling \texttt{make\ unittests} is
 enough to run all the unit tests, including new ones. To check that
 your new tests have indeed been run and passed, check the output
-summary - you should see a line associated to each of the
+summary -- you should see a line associated to each of the
 \texttt{test*} subroutines in each file in the unit test suite.
 
-\subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
+\subsection{Adding new behaviour
+  tests} \label{subsec:adding-new-behaviour-tests}
 
 To add a new behaviour test called \texttt{\$TESTNAME} to the
 Testsuite, you should provide the following:
@@ -320,13 +321,14 @@ Fortran code consistent:
   used within the \hyperref[sec:testsuite]{Test Suite}.
 \end{itemize}
 
-\subsection{Style recommendations} \label{subsec:style-recommendations}
+\subsection{Style
+  recommendations} \label{subsec:style-recommendations}
 
 \subsubsection{General principles} \label{general-principles}
 
 \begin{itemize}
 \item All code should be within a module structure, except the main
-  program.  In our case, due to a complicating factor with linking to
+  program. In our case, due to a complicating factor with linking to
   CVODE, we also place \texttt{FCVFUN()} and \texttt{FCVJTIMES()}
   within the main file \texttt{atchem.f90}.
 \item Code is write in free-form Fortran, so source files should end
@@ -341,15 +343,16 @@ Fortran code consistent:
   follow the rules below.
 \end{itemize}
 
-\subsubsection{Specific recommendations} \label{specific-recommendations}
+\subsubsection{Specific
+  recommendations} \label{specific-recommendations}
 
 \begin{itemize}
-\item All \textbf{keywords} are lowercase, e.g.~\texttt{if\ then},
+\item All \textbf{keywords} are lowercase, e.g., \texttt{if\ then},
   \texttt{call}, \texttt{module}, \texttt{integer}, \texttt{real},
   \texttt{only}, \texttt{intrinsic}. This also includes
   \texttt{(kind=XX)} and \texttt{(len=XX)} statements.
-\item All \textbf{intrinsic} function names are lowercase,
-  e.g.~\texttt{trim}, `adjustl', 'adjustr`.
+\item All \textbf{intrinsic} function names are lowercase, e.g.,
+  \texttt{trim}, \texttt{adjustl}, \texttt{adjustr}.
 \item \textbf{Relational operators} should use
   \texttt{\textgreater{}=}, \texttt{==} rather than \texttt{.GE.},
   \texttt{.EQ.}, and surrounded by a single space.
@@ -357,10 +360,10 @@ Fortran code consistent:
   assignment, except in the cases of \texttt{(kind=XX)} and
   \texttt{(len=XX)} where no spaces should be used.
 \item \textbf{Mathematical operators} should be surrounded by one
-  space, e.g.~\texttt{*}, \texttt{-}, \texttt{+}, \texttt{**}.
+  space, e.g., \texttt{*}, \texttt{-}, \texttt{+}, \texttt{**}.
   \begin{itemize}
   \item The case of scientific number notation requires no spaces
-    around the \texttt{+} or \texttt{-}, e.g.~\texttt{1.5e-9}.
+    around the \texttt{+} or \texttt{-}, e.g., \texttt{1.5e-9}.
   \end{itemize}
 \item \textbf{Variables} begin with lowercase, while
   \textbf{procedures} (that is, subroutines and functions) begin with
@@ -380,8 +383,8 @@ Fortran code consistent:
     statements.
   \item \texttt{call} statements, and the definitions of all
     procedures should contain \textbf{one} space inside the brackets
-    before the first argument and after the last argument,
-    e.g.~\texttt{call\ function\_name(\ arg1,\ arg2\ )},
+    before the first argument and after the last argument, e.g.,
+    \texttt{call\ function\_name(\ arg1,\ arg2\ )},
     \texttt{subroutine\ subroutine\_name(\ arg1\ )}
   \item Functions calls, and array indices have \textbf{no such space}
     before the first argument or after the last argument.

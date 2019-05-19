@@ -4,8 +4,8 @@
 %
 % This file is part of the AtChem2 software package.
 %
-% This file is covered by the MIT license which can be found in the file
-% LICENSE.md at the top level of the AtChem2 distribution.
+% This file is covered by the MIT license which can be found in the
+% file LICENSE.md at the top level of the AtChem2 distribution.
 %
 % -----------------------------------------------------------------------------
 \chapter{Model Execution} \label{ch:execution}
@@ -17,13 +17,13 @@ AtChem2 is designed to build and run atmospheric chemistry box-models
 based upon the Master Chemical Mechanism
 (\href{http://mcm.leeds.ac.uk/MCM/}{MCM}). This page explains how to
 set up, compile and run an atmospheric chemistry box-model with
-AtChem2. The directory structure of AtChem2 is described
-\hyperref[sec:structure]{here}. A working knowledge of the
+AtChem2. The directory structure of AtChem2 is described in
+\hyperref[sec:structure]{Model Structure}. A working knowledge of the
 \textbf{unix shell} and its
 \href{https://swcarpentry.github.io/shell-novice/reference/}{basic
   commands} is \emph{required} to use the AtChem2 model.
 
-There are two sets of inputs to AtChem2 - the mechanism file, and
+There are two sets of inputs to AtChem2 -- the mechanism file, and
 configuration files.
 
 \subsection{Mechanism file} \label{subsec:mechanism-file}
@@ -46,19 +46,19 @@ can be modified with a text editor. Detailed information on the
 configuration files can be found in the corresponding wiki pages:
 
 \begin{itemize}
-\item model and solver parameters - see
+\item model and solver parameters -- see
   \hyperref[sec:parameters]{Model Parameters} and
   \hyperref[sec:solver]{Solver Parameters}.
-\item environment variables - see \hyperref[sec:envvar]{Environment
+\item environment variables -- see \hyperref[sec:envvar]{Environment
     Variables}.
-\item photolysis rates - see \hyperref[sec:photolysis]{Photolysis
+\item photolysis rates -- see \hyperref[sec:photolysis]{Photolysis
     Rates and JFAC}.
 \item initial concentrations of chemical species and lists of output
-  variables - see \hyperref[sec:config]{Config Files}.
+  variables -- see \hyperref[sec:config]{Config Files}.
 \end{itemize}
 
-The model constraints - chemical species, environment variables,
-photolysis rates - are located in the \texttt{model/constraints/}
+The model constraints -- chemical species, environment variables,
+photolysis rates -- are located in the \texttt{model/constraints/}
 directory. For more information, go to:
 \hyperref[sec:constraints]{Constraints}.
 
@@ -82,13 +82,13 @@ takes four arguments (see the \textbf{Important Note 2} at the end of
 this section):
 
 \begin{enumerate}
-\item the path to the chemical mechanism file - no default (suggested:
-  \texttt{model/}).
+\item the path to the chemical mechanism file -- no default
+  (suggested: \texttt{model/}).
 \item the path to the directory for the Fortran files generated from
-  the chemical mechanism - default:\\ \texttt{model/configuration/}.
+  the chemical mechanism -- default:\\ \texttt{model/configuration/}.
 \item the path to the directory with the configuration files -
   default:\\ \texttt{model/configuration/}.
-\item the path to the directory with the MCM data files - default:\\
+\item the path to the directory with the MCM data files -- default:\\
   \texttt{mcm/}.
 \end{enumerate}
 
@@ -107,6 +107,7 @@ time. In the following example, there are two \texttt{model/}
 directories, each with their own chemical mechanism, configuration,
 constraints and output:
 
+\newpage
 \begin{verbatim}
 AtChem2/
         | mcm/
@@ -163,21 +164,22 @@ takes seven arguments, corresponding to the directories containing the
 model configuration and output:
 
 \begin{enumerate}
-\item the path to the directory for the model output - default:\\
+\item the path to the directory for the model output -- default:\\
   \texttt{model/output}
 \item the path to the directory for the model output reaction rates -
-  default:\\ \texttt{model/output/reactionRates}
+  default:\\ \texttt{model/output/reactionRates/}
 \item the path to the directory with the configuration files -
   default:\\ \texttt{model/configuration/}.
-\item the path to the directory with the MCM data files - default:\\
+\item the path to the directory with the MCM data files -- default:\\
   \texttt{mcm/}.
 \item the path to the directory with the data files of constrained
-  chemical species - default:\\ \texttt{model/constraints/species/}
+  chemical species -- default:\\ \texttt{model/constraints/species/}
 \item the path to the directory with the data files of constrained
-  environment variables - default:\\
+  environment variables -- default:\\
   \texttt{model/constraints/environment/}
 \item the path to the directory with the data files of constrained
-  photolysis rates - default:\\ \texttt{model/constraints/photolysis/}
+  photolysis rates -- default:\\
+  \texttt{model/constraints/photolysis/}
 \end{enumerate}
 
 The model can be run by executing the \texttt{atchem2} command from
@@ -222,7 +224,7 @@ to the correct shared library and configuration files.
 \subsubsection{Important Note 2} \label{important-note-2}
 
 The arguments need to be passed to the \texttt{atchem2} executable in
-the exact order, as listed above. This means that if - for example -
+the exact order, as listed above. This means that if -- for example --
 the third argument needs to be specified, it is also necessary to
 specify the first and the second arguments, even if they have the
 default values. To avoid mistakes, the user can choose to always

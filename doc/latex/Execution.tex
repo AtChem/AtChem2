@@ -78,8 +78,8 @@ directory. Go to the \hyperref[sec:mechanism]{Chemical Mechanism} for
 more information.
 
 The script must be run from the \emph{AtChem2 main directory} and
-takes four arguments (see the \textbf{Important Note 2} at the end of
-this section):
+takes four arguments (see \hyperref[important-note-1]{Important Note
+  1}):
 
 \begin{enumerate}
 \item the path to the chemical mechanism file -- no default
@@ -128,8 +128,8 @@ AtChem2/
 \end{verbatim}
 
 Each model can be built by passing the correct path to the
-\texttt{build.sh} script (see the \textbf{Important Note 1} at the end
-of this section). For example:
+\texttt{build.sh} script (see \hyperref[important-note-1]{Important
+  Note 1})). For example:
 
 \begin{verbatim}
 ./tools/build.sh model_1/mechanism.fac model_1/configuration/
@@ -155,6 +155,16 @@ if the \texttt{.fac} file has also been changed, use the
 \texttt{build.sh} script, as explained above. Otherwise, if only the
 Fortran code has been changed, executing \texttt{make} from the
 \emph{main directory} is enough to recompile the model.
+
+\subsubsection{Important Note 1} \label{important-note-1}
+
+The arguments need to be passed to the \texttt{tools/build.sh}
+executable in the exact order, as listed above. This means that if --
+for example -- the third argument needs to be specified, it is also
+necessary to specify the first and the second arguments, even if they
+have the default values. To avoid mistakes, the user can choose to
+always specify all the arguments. Future versions of AtChem2 will
+adopt a simpler command-line interface.
 
 \subsection{Execution} \label{subsec:execution}
 
@@ -185,15 +195,27 @@ model configuration and output:
 The model can be run by executing the \texttt{atchem2} command from
 the \emph{main directory}, in which case the executable will use the
 default configuration and output directories. Otherwise, the
-configuration and output directories need to be specified (see the
-\textbf{Important Note 2} at the end of this section).
+configuration and output directories need to be specified. The
+\texttt{atchem2} executableuses the following flags to set the
+arguments: \texttt{--model}, \texttt{--output},
+\texttt{--reactionRates}, \texttt{--configuration},
+\texttt{--constraints}, \texttt{--env\_constraints},
+\texttt{--photo\_constraints}, \texttt{--spec\_constraints},
+\texttt{--mcm}, and \texttt{--shared-lib}. The command \texttt{atchem2
+  --help} displays a help message showing the usage of the command
+line arguments.
 
 For example, if the constraints are in the default directories (or not
 used), the model can be run by executing:
 
 \begin{verbatim}
-./atchem2 model/output/ model/output/reactionRates/
-          model/configuration/
+./atchem2 --output=model/output/
+          --reactionRates=model/output/reactionRates/
+          --configuration=model/configuration/
+          --spec_constraints=model_1/constraints/species/
+          --env_constraints=model_1/constraints/environment/
+          --photo_constraints=model_1/constraints/photolysis/
+          --mcm=mcm/
 \end{verbatim}
 
 In the case of multiple \texttt{model/} directories, the directories
@@ -202,17 +224,13 @@ corresponding to each model need to be passed as arguments to the
 models simultaneously. For example:
 
 \begin{verbatim}
-    ./atchem2 model_1/output/ model_1/output/reactionRates/
-              model_1/configuration/ mcm/ model_1/constraints/species/
-              model_1/constraints/environment/
-              model_1/constraints/photolysis/
-    ./atchem2 model_2/output/ model_2/output/reactionRates/
-              model_2/configuration/ mcm/ model_2/constraints/species/
-              model_2/constraints/environment/
-              model_2/constraints/photolysis/
+    ./atchem2 --output=model_1/output/
+              --configuration=model_1/configuration/
+              --constraints=model_1/constraints/
+    ./atchem2 --output=model_2/output/
+              --configuration=model_2/configuration/
+              --constraints=model_2/constraints/
 \end{verbatim}
-
-\subsubsection{Important Note 1} \label{important-note-1}
 
 As explained above, if the chemical mechanism (\texttt{.fac}) is
 changed, only the shared library needs to be recompiled. This allows
@@ -220,17 +238,6 @@ the user to have only one base executable called \texttt{atchem2} in
 the \emph{main directory}: when running multiple models at the same
 time the user can reuse this base executable while pointing each model
 to the correct shared library and configuration files.
-
-\subsubsection{Important Note 2} \label{important-note-2}
-
-The arguments need to be passed to the \texttt{atchem2} executable in
-the exact order, as listed above. This means that if -- for example --
-the third argument needs to be specified, it is also necessary to
-specify the first and the second arguments, even if they have the
-default values. To avoid mistakes, the user can choose to always
-specify all the arguments. This behaviour also applies to the
-\texttt{tools/build.sh} script used to compile the model. Future
-versions of AtChem2 will adopt a simpler command-line interface.
 
 \subsection{Output} \label{subsec:output}
 

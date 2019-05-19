@@ -1,0 +1,307 @@
+% -----------------------------------------------------------------------------
+%
+% Copyright (c) 2017 Sam Cox, Roberto Sommariva
+%
+% This file is part of the AtChem2 software package.
+%
+% This file is covered by the MIT license which can be found in the
+% file LICENSE.md at the top level of the AtChem2 distribution.
+%
+% -----------------------------------------------------------------------------
+\chapter{Model Execution} \label{ch:execution}
+
+% -------------------------------------------------------------------- %
+\section{The Box-model} \label{sec:boxmodel}
+
+AtChem2 is designed to build and run atmospheric chemistry box-models
+based upon the Master Chemical Mechanism
+(\href{http://mcm.leeds.ac.uk/MCM/}{MCM}). This page explains how to
+set up, compile and run an atmospheric chemistry box-model with
+AtChem2. The directory structure of AtChem2 is described in
+\hyperref[sec:structure]{Model Structure}. A working knowledge of the
+\textbf{unix shell} and its
+\href{https://swcarpentry.github.io/shell-novice/reference/}{basic
+  commands} is \emph{required} to use the AtChem2 model.
+
+There are two sets of inputs to AtChem2 -- the mechanism file, and
+configuration files.
+
+\subsection{Mechanism file} \label{subsec:mechanism-file}
+
+The model requires a chemical mechanism in FACSIMILE format
+(\texttt{.fac}). The \textbf{mechanism file} can be downloaded from
+the MCM website using the
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/extract.htt}{extraction tool}
+or assembled manually. The user can modify the \texttt{.fac} file as
+required with a text editor. This mechanism file is converted into a
+shared library and a set of associated data files in the compilation
+step below. For more information on the chemical mechanism go to:
+\hyperref[sec:mechanism]{Chemical Mechanism}.
+
+\subsection{Configuration files} \label{subsec:configuration-files}
+
+The \textbf{model configuration} is set via a number of text files
+located in the \texttt{model/configuration/} directory. The text files
+can be modified with a text editor. Detailed information on the
+configuration files can be found in the corresponding wiki pages:
+
+\begin{itemize}
+\item model and solver parameters -- see
+  \hyperref[sec:parameters]{Model Parameters} and
+  \hyperref[sec:solver]{Solver Parameters}.
+\item environment variables -- see \hyperref[sec:envvar]{Environment
+    Variables}.
+\item photolysis rates -- see \hyperref[sec:photolysis]{Photolysis
+    Rates and JFAC}.
+\item initial concentrations of chemical species and lists of output
+  variables -- see \hyperref[sec:config]{Config Files}.
+\end{itemize}
+
+The model constraints -- chemical species, environment variables,
+photolysis rates -- are located in the \texttt{model/constraints/}
+directory. For more information, go to:
+\hyperref[sec:constraints]{Constraints}.
+
+% -------------------------------------------------------------------- %
+\section{Building the model} \label{sec:build}
+
+\subsection{Compilation} \label{subsec:compilation}
+
+The script \texttt{build.sh} in the \texttt{tools/} directory is used
+to process the chemical mechanism file (\texttt{.fac}) and to compile
+the model. The script generates one Fortran file
+(\texttt{mechanism.f90}), one shared library (\texttt{mechanism.so})
+and four configuration files (\texttt{mechanism.prod},
+\texttt{mechanism.reac}, \texttt{mechanism.ro2},
+\texttt{mechanism.species}) in the \texttt{model/configuration/}
+directory. Go to the \hyperref[sec:mechanism]{Chemical Mechanism} for
+more information.
+
+The script must be run from the \emph{AtChem2 main directory} and
+takes four arguments (see \hyperref[important-note-1]{Important Note
+  1}):
+
+\begin{enumerate}
+\item the path to the chemical mechanism file -- no default
+  (suggested: \texttt{model/}).
+\item the path to the directory for the Fortran files generated from
+  the chemical mechanism -- default:\\ \texttt{model/configuration/}.
+\item the path to the directory with the configuration files -
+  default:\\ \texttt{model/configuration/}.
+\item the path to the directory with the MCM data files -- default:\\
+  \texttt{mcm/}.
+\end{enumerate}
+
+For example, if the \texttt{.fac} file is in the \texttt{model/}
+directory:
+
+\begin{verbatim}
+./tools/build.sh model/mechanism.fac model/configuration/
+                 model/configuration/ mcm/
+\end{verbatim}
+
+An installation of AtChem2 can have multiple \texttt{model/}
+directories, which may correspond to different models or different
+projects; this allows the user to run more than one model at the same
+time. In the following example, there are two \texttt{model/}
+directories, each with their own chemical mechanism, configuration,
+constraints and output:
+
+\newpage
+\begin{verbatim}
+AtChem2/
+        | mcm/
+        | model_1/
+             | configuration/
+             | constraints/
+             | output/
+             | mechanism.fac
+        | model_2/
+             | configuration/
+             | constraints/
+             | output/
+             | mechanism.fac
+        | obj/
+        | src/
+        | tools/
+        | travis/
+\end{verbatim}
+
+Each model can be built by passing the correct path to the
+\texttt{build.sh} script (see \hyperref[important-note-1]{Important
+  Note 1})). For example:
+
+\begin{verbatim}
+./tools/build.sh model_1/mechanism.fac model_1/configuration/
+                 model_1/configuration/ mcm/
+./tools/build.sh model_2/mechanism.fac model_2/configuration/
+                 model_2/configuration/ mcm/
+\end{verbatim}
+
+Compilation is required only once for a given \texttt{.fac} file. If
+the user changes the configuration files, there is no need to
+recompile the model. Likewise, if the constraints files are changed,
+there is no need to recompile the model. This is because the model
+configuration and the model constraints are read by the executable at
+runtime. However, if the user makes changes to the \texttt{.fac} file,
+then the shared library \texttt{model/configuration/mechanism.so}
+needs to be recompiled from the source file
+\texttt{model/configuration/mechanism.f90} using the \texttt{build.sh}
+script.
+
+The user may want or need to change the Fortran code
+(\texttt{src/*.f90}), in which case the model needs to be recompiled:
+if the \texttt{.fac} file has also been changed, use the
+\texttt{build.sh} script, as explained above. Otherwise, if only the
+Fortran code has been changed, executing \texttt{make} from the
+\emph{main directory} is enough to recompile the model.
+
+\subsubsection{Important Note 1} \label{important-note-1}
+
+The arguments need to be passed to the \texttt{tools/build.sh}
+executable in the exact order, as listed above. This means that if --
+for example -- the third argument needs to be specified, it is also
+necessary to specify the first and the second arguments, even if they
+have the default values. To avoid mistakes, the user can choose to
+always specify all the arguments. Future versions of AtChem2 will
+adopt a simpler command-line interface.
+
+\subsection{Execution} \label{subsec:execution}
+
+The compilation process creates an executable file called
+\texttt{atchem2} in the \emph{main directory}. The executable file
+takes seven arguments, corresponding to the directories containing the
+model configuration and output:
+
+\begin{enumerate}
+\item the path to the directory for the model output -- default:\\
+  \texttt{model/output}
+\item the path to the directory for the model output reaction rates -
+  default:\\ \texttt{model/output/reactionRates/}
+\item the path to the directory with the configuration files -
+  default:\\ \texttt{model/configuration/}.
+\item the path to the directory with the MCM data files -- default:\\
+  \texttt{mcm/}.
+\item the path to the directory with the data files of constrained
+  chemical species -- default:\\ \texttt{model/constraints/species/}
+\item the path to the directory with the data files of constrained
+  environment variables -- default:\\
+  \texttt{model/constraints/environment/}
+\item the path to the directory with the data files of constrained
+  photolysis rates -- default:\\
+  \texttt{model/constraints/photolysis/}
+\end{enumerate}
+
+The model can be run by executing the \texttt{atchem2} command from
+the \emph{main directory}, in which case the executable will use the
+default configuration and output directories. Otherwise, the
+configuration and output directories need to be specified. The
+\texttt{atchem2} executableuses the following flags to set the
+arguments: \texttt{--model}, \texttt{--output},
+\texttt{--reactionRates}, \texttt{--configuration},
+\texttt{--constraints}, \texttt{--env\_constraints},
+\texttt{--photo\_constraints}, \texttt{--spec\_constraints},
+\texttt{--mcm}, and \texttt{--shared-lib}. The command \texttt{atchem2
+  --help} displays a help message showing the usage of the command
+line arguments.
+
+For example, if the constraints are in the default directories (or not
+used), the model can be run by executing:
+
+\begin{verbatim}
+./atchem2 --output=model/output/
+          --reactionRates=model/output/reactionRates/
+          --configuration=model/configuration/
+          --spec_constraints=model_1/constraints/species/
+          --env_constraints=model_1/constraints/environment/
+          --photo_constraints=model_1/constraints/photolysis/
+          --mcm=mcm/
+\end{verbatim}
+
+In the case of multiple \texttt{model/} directories, the directories
+corresponding to each model need to be passed as arguments to the
+\texttt{atchem2} executable. This allows the user to run two or more
+models simultaneously. For example:
+
+\begin{verbatim}
+    ./atchem2 --output=model_1/output/
+              --configuration=model_1/configuration/
+              --constraints=model_1/constraints/
+    ./atchem2 --output=model_2/output/
+              --configuration=model_2/configuration/
+              --constraints=model_2/constraints/
+\end{verbatim}
+
+As explained above, if the chemical mechanism (\texttt{.fac}) is
+changed, only the shared library needs to be recompiled. This allows
+the user to have only one base executable called \texttt{atchem2} in
+the \emph{main directory}: when running multiple models at the same
+time the user can reuse this base executable while pointing each model
+to the correct shared library and configuration files.
+
+\subsection{Output} \label{subsec:output}
+
+The model output is saved by default in the directory
+\texttt{model/output/}. The location can be modified by changing the
+arguments of the \texttt{atchem2} executable (see above).
+
+The AtChem2 output files are space-delimited text files, with a header
+containing the names of the variables:
+
+\begin{itemize}
+\item values of environment variables and concentrations of chemical
+  species:\\ \texttt{environmentVariables.output},
+  \texttt{speciesConcentrations.output}.
+\item values of photolysis rates and related parameters:\\
+  \texttt{photolysisRates.output},
+  \texttt{photolysisRatesParameters.output}.
+\item loss and production rates of selected species (see
+  \hyperref[sec:config]{Config Files}):\\ \texttt{lossRates.output},
+  \texttt{productionRates.output}.
+\item Jacobian matrix (if requested, see
+  \hyperref[sec:parameters]{Model Parameters}):\\
+  \texttt{jacobian.output}.
+\item model diagnostic variables:\\ \texttt{finalModelState.output},
+  \texttt{initialConditionsSetting.output},
+  \texttt{mainSolverParameters.output}.
+\end{itemize}
+
+In addition, the reaction rates of all the reactions in the chemical
+mechanism are saved in the directory \texttt{reactionRates/}: one file
+for each model step, with the filename corresponding to the time in
+seconds.
+
+\subsection{Running on HPC} \label{subsec:running-on-hpc}
+
+Atchem2 can be set up to run on a High Performance Computing (HPC)
+system. Compilation and configuration are the same as for a normal
+workstation. Typically, a job scheduler is used to allocate computing
+resources on an HPC system. A \textbf{submission script} is therefore
+needed to submit the AtChem2 models for execution.
+
+The format and the syntax of the submission script depend on the
+specific software installed on the HPC system. For instructions on how
+to prepare a submission script for AtChem2, check the local
+documentation or ask the HPC system administrator.
+
+An \emph{example} submission script for the
+\href{https://en.wikipedia.org/wiki/Portable_Batch_System}{Portable
+  Batch System (PBS)} is shown below:
+
+\begin{verbatim}
+#PBS -o atchem2.log
+#PBS -e atchem2_error.log
+#PBS -N base_v1
+#PBS -l walltime=15:00:00
+#PBS -l vmem=10gb
+#PBS -m bea
+#PBS -l nodes=1:ppn=1
+
+cd ~/AtChem2/
+MODELDIR="base_model_v1"
+./atchem2 $MODELDIR/model/output/ $MODELDIR/model/output/reactionRates/
+          $MODELDIR/model/configuration/ $MODELDIR/mcm/
+          $MODELDIR/model/constraints/species
+          $MODELDIR/model/environment/species
+          $MODELDIR/photolysis/constraints/species
+\end{verbatim}

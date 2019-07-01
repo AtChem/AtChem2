@@ -15,7 +15,9 @@
 #
 # N.B.: the script MUST be run from the base directory of AtChem2.
 
-VERS_OLD="AtChem2 v1.2-dev"
-VERS_NEW="AtChem2 v1.2"
+VERS_OLD="v1.2-dev"
+VERS_NEW="v1.2"
 
-find ./ -type f ! -name "version.sh" -print | xargs sed -i -e "s/$VERS_OLD/$VERS_NEW/g"
+find ./ -type f ! -name "version.sh" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
+
+echo "AtChem2 version number changed to:" $VERS_NEW

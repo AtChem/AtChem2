@@ -1,3 +1,23 @@
+! -----------------------------------------------------------------------------
+!
+! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+! Peter Jimack, Mike Pilling
+!
+! Copyright (c) 2017 - 2018 Sam Cox, Roberto Sommariva
+!
+! This file is part of the AtChem2 software package.
+!
+! This file is covered by the MIT license which can be found in the file
+! LICENSE.md at the top level of the AtChem2 distribution.
+!
+! -----------------------------------------------------------------------------
+
+! ******************************************************************** !
+! ATCHEM2 -- MODULE argparse
+!
+! This module implements the argument parser for the atchem2
+! executable.
+! ******************************************************************** !
 
 module argparse_mod
 
@@ -45,15 +65,17 @@ contains
     write(*,*) 'In essence, the directories default to sit in the following tree. '
     write(*,*) 'Modification via the input parameters cascades to lower directories, but is overwritten by explicit input.'
     write(*,*)
-    write(*,*) '                                 model_dir                                          mcm_dir        shared_library'
+    write(*,*) '     +--------------------------------+--------------------+-------------------+'
+    write(*,*) '                                      |                    |                   |'
+    write(*,*) '                                  model_dir             mcm_dir        shared_lib_dir'
     write(*,*) '                                      | '
     write(*,*) '     +--------------------------------+--------------------------+'
     write(*,*) '     |                                |                          |'
-    write(*,*) ' output_dir                     constraints_dir           configuration_dir'
+    write(*,*) ' output_dir                   configuration_dir           constraints_dir'
     write(*,*) '                                                                 |'
     write(*,*) '                                        +------------------------+----------------------+'
     write(*,*) '                                        |                        |                      |'
-    write(*,*) '                              env_constraints_dir   photo_constraints_dir  species_constraints_dir'
+    write(*,*) '                               env_constraints_dir     photo_constraints_dir    species_constraints_dir'
     write(*,*)
   end subroutine print_help
 

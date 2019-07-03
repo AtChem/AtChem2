@@ -14,7 +14,7 @@
 
 ! ******************************************************************** !
 !
-!                        ATCHEM2 -- MAIN PROGRAM                        !
+!                        ATCHEM2 -- MAIN PROGRAM                       !
 !
 ! ******************************************************************** !
 
@@ -43,7 +43,6 @@ PROGRAM ATCHEM2
   use solver_functions_mod, only : jfy, proc
   implicit none
 
-  !
   ! interface to linux API
   interface
     function dlopen( filename, mode ) bind ( c, name="dlopen" )
@@ -112,7 +111,6 @@ PROGRAM ATCHEM2
   integer :: closure
   integer(c_int), parameter :: rtld_lazy=1 ! value extracted from the C header file
   integer(c_int), parameter :: rtld_now=2 ! value extracted from the C header file
-
 
   ! *****************************************************************
   ! Explicit declaration of FCVFUN() interface, which is a
@@ -572,6 +570,7 @@ END PROGRAM ATCHEM2
 ! ******************************************************************** !
 ! CVODE function implementations
 ! ******************************************************************** !
+
 
 ! -------------------------------------------------------- !
 !  Fortran routine for right-hand side function.

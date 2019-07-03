@@ -16,7 +16,7 @@
 ! ATCHEM2 -- dataStructures file
 !
 ! This file contains numerous modules that hold logically separate
-! variables and functions
+! variables and functions.
 ! ******************************************************************** !
 
 

@@ -16,7 +16,7 @@
 ! ATCHEM2 -- MODULE inputFunctions
 !
 ! This module contains functions controlling the reading of data from
-! external files, apart from model.parameters and solver.parameters
+! external files, apart from model.parameters and solver.parameters.
 ! ******************************************************************** !
 module input_functions_mod
 contains

@@ -11,7 +11,7 @@
 
 #!/bin/sh
 
-# This script downloads and installs OPENLIBM 0.4.1 into the directory
+# This script downloads and installs openlibm v0.4.1 into the directory
 # given by input argument $1. This is dependent on the existence of a
 # gcc installation.
 #

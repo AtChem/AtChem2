@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2018 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -11,7 +11,7 @@
 
 #!/bin/sh
 
-# This script downloads and installs FRUIT 3.4.3 into the directory
+# This script downloads and installs FRUIT v3.4.3 into the directory
 # given by input argument $1. This is dependent on the existence of a
 # Ruby installation.
 #

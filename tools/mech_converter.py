@@ -12,12 +12,12 @@
 #
 # -----------------------------------------------------------------------------
 
-# This program fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
+# This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
 # This only reads a file containing the 'reaction definitions' part.
 from __future__ import print_function
+import sys
 import re
 import os
-import sys
 import fix_mechanism_fac
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF', 'RO2']
@@ -42,6 +42,7 @@ def tokenise_and_process(input_string, variablesDict):
 
     assert isinstance(input_string, str), 'tokenise_and_process: input_string is not of type str: ' + str(input_string)
     assert isinstance(variablesDict, dict), 'tokenise_and_process: variablesDict is not of type dict: ' + str(variablesDict)
+
     # Generate start and end points of sections of symbols and nonsymbols
     symbol_regex = '[()\-+*@/ ]+'
     nonsymbol_regex = '[^()\-+*@/ ]+'
@@ -56,7 +57,7 @@ def tokenise_and_process(input_string, variablesDict):
     #
     # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
     # (and thus must be new species/intermediate values) with q(i) notation.
-
+    #
     # Loop while there are any substrings left
     while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
         # We should use the next symbol if either
@@ -111,6 +112,7 @@ def convert(input_file, mech_dir, mcm_dir):
     :param mcm_dir: string containing a relative or absolute reference to the directory housing the reference file peroxy-radicals_v3.3.1.
       This is normally mcm/
     """
+
     # Work out the values of directory and filename of input_file, and check their existence.
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
@@ -382,7 +384,7 @@ def convert(input_file, mech_dir, mcm_dir):
               tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
 
 
-    # # Combine mechanism rates and RO2 sum files
+    # Combine mechanism rates and RO2 sum files
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
         mech_rates_coeff_file.write("""
 module mechanism_mod
@@ -396,7 +398,7 @@ contains
            real(c_double), intent(inout) :: p(:), q(:)
         real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J(:), RO2
         """)
-# Write out Generic Rate Coefficients and Complex reactions
+        # Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # Write out Reaction definitions

@@ -104,8 +104,7 @@ Before installing the dependencies, make sure that Fortran, Python,
 cmake and (optionally) Ruby are installed on your system, as explained
 in the \hyperref[sec:install]{Installation} section.
 
-\subsection{Required
-  dependencies} \label{subsec:required-dependencies}
+\subsection{Required dependencies} \label{subsec:required-dependencies}
 
 \subsubsection{BLAS and LAPACK} \label{blas-and-lapack}
 
@@ -144,7 +143,7 @@ installed using the \texttt{install\_cvode.sh} script in the
   needed):
   \begin{verbatim}
   ./tools/install/install_cvode.sh ~/atchem-libraries/
-\end{verbatim}
+  \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working CVODE
@@ -172,15 +171,14 @@ the \texttt{install\_openlibm.sh} script in the
   \emph{dependencies directory} as needed):
   \begin{verbatim}
   ./tools/install/install_openlibm.sh ~/atchem-libraries/
-\end{verbatim}
+  \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working openlibm
 installation at
 \texttt{\textasciitilde{}/atchem-libraries/openlibm-0.4.1/}.
 
-\subsection{Optional
-  dependencies} \label{subsec:optional-dependencies}
+\subsection{Optional dependencies} \label{subsec:optional-dependencies}
 
 \subsubsection{numdiff} \label{numdiff}
 
@@ -203,7 +201,7 @@ example in the \emph{dependencies directory}. Use the script
   \emph{dependencies directory} as needed):
   \begin{verbatim}
   ./tools/install/install_numdiff.sh ~/atchem-libraries/
-\end{verbatim}
+  \end{verbatim}
 \item Move to your \texttt{\$HOME} directory (\texttt{cd\
     \textasciitilde{}}). Open the \texttt{.bash\_profile} file (or the
   \texttt{.profile} file, depending on your configuration) with a text
@@ -235,7 +233,7 @@ directory.
   \emph{dependencies directory} as needed):
   \begin{verbatim}
   ./tools/install/install_fruit.sh ~/atchem-libraries/
-\end{verbatim}
+  \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working FRUIT
@@ -268,7 +266,7 @@ To install AtChem2:
   CVODELIB = $(HOME)/atchem-libraries/cvode/lib
   OPENLIBMDIR = $(HOME)/atchem-libraries/openlibm-0.4.1
   FRUITDIR = $(HOME)/atchem-libraries/fruit_3.4.3
-\end{verbatim}
+  \end{verbatim}
 \item Execute \texttt{./tools/build.sh\
     ./tools/mcm\_example.fac}. This command compiles the model and
   creates an executable (\texttt{atchem2}) using the test mechanism
@@ -287,7 +285,7 @@ To install AtChem2:
 
    Runtime = 0
    Deallocating memory.
-\end{verbatim}
+  \end{verbatim}
 \end{enumerate}
 
 This means that AtChem2 has completed the test run without errors and
@@ -296,34 +294,6 @@ in \hyperref[sec:structure]{Model Structure}. For instructions on how
 to set up, compile and execute the model go to:
 \hyperref[ch:setup]{Model Setup} and \hyperref[ch:execution]{Model
   Execution}.
-
-\subsection{Note for macOS users} \label{subsec:note-for-macos-users}
-
-When you first run AtChem2, you may receive an error message like
-this:
-
-\begin{verbatim}
-dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
-Referenced from: /Users/username/AtChem2/./atchem2
-Reason: image not found
-Abort trap: 6
-\end{verbatim}
-
-In this case, type at the terminal prompt the following command
-(change the path to the CVODE library as appropriate):
-
-\begin{verbatim}
-export DYLD_LIBRARY_PATH=$(HOME)/atchem-libraries/cvode/lib
-\end{verbatim}
-
-To make it permanent, add the command to your
-\texttt{\textasciitilde{}/.bash\_profile} file. Advanced users may
-wish to use instead the accepted answer in
-\href{https://stackoverflow.com/questions/17703510/dyld-library-not-loaded-reason-image-not-loaded}{this
-  Stack Overflow post} to hardcode \texttt{rpath} in this instance for
-each of \texttt{libsundials\_cvode.2.dylib},
-\texttt{libsundials\_fvecserial.2.dylib},
-\texttt{libsundials\_vecserial.2.dylib}.
 
 % -------------------------------------------------------------------- %
 \section{Tests (optional)} \label{sec:tests}

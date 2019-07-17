@@ -270,38 +270,3 @@ In addition, the reaction rates of all the reactions in the chemical
 mechanism are saved in the directory \texttt{reactionRates/}: one file
 for each model step, with the filename corresponding to the time in
 seconds.
-
-\subsection{Running on HPC} \label{subsec:running-on-hpc}
-
-Atchem2 can be set up to run on a High Performance Computing (HPC)
-system. Compilation and configuration are the same as for a normal
-workstation. Typically, a job scheduler is used to allocate computing
-resources on an HPC system. A \textbf{submission script} is therefore
-needed to submit the AtChem2 models for execution.
-
-The format and the syntax of the submission script depend on the
-specific software installed on the HPC system. For instructions on how
-to prepare a submission script for AtChem2, check the local
-documentation or ask the HPC system administrator.
-
-An \emph{example} submission script for the
-\href{https://en.wikipedia.org/wiki/Portable_Batch_System}{Portable
-  Batch System (PBS)} is shown below:
-
-\begin{verbatim}
-#PBS -o atchem2.log
-#PBS -e atchem2_error.log
-#PBS -N base_v1
-#PBS -l walltime=15:00:00
-#PBS -l vmem=10gb
-#PBS -m bea
-#PBS -l nodes=1:ppn=1
-
-cd ~/AtChem2/
-MODELDIR="base_model_v1"
-./atchem2 $MODELDIR/model/output/ $MODELDIR/model/output/reactionRates/
-          $MODELDIR/model/configuration/ $MODELDIR/mcm/
-          $MODELDIR/model/constraints/species
-          $MODELDIR/model/environment/species
-          $MODELDIR/photolysis/constraints/species
-\end{verbatim}

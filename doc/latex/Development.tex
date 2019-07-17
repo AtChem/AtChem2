@@ -43,39 +43,9 @@ check \href{https://github.com/AtChem/AtChem2/issues}{this github
 
 If you want to contribute to the model development, the best way is to
 use \textbf{git}. The procedure to contribute code is described
-below. A basic level of
-\href{https://swcarpentry.github.io/git-novice/}{knowledge of git} is
-\emph{required}.
-
-\begin{enumerate}
-\item Fork the official repository (\texttt{AtChem/AtChem2}) to your
-  github account (\texttt{username/AtChem2}).
-\item Configure git so that \texttt{origin} is your fork
-  (\texttt{username/AtChem2}) and \texttt{upstream} is the official
-  repository (\texttt{AtChem/AtChem2}). The output of \texttt{git\
-    remote\ -v} should look like this:
-  \begin{verbatim}
-  origin  git@github.com:username/AtChem2.git (fetch)
-  origin  git@github.com:username/AtChem2.git (push)
-  upstream    git@github.com:AtChem/AtChem2.git (fetch)
-  upstream    git@github.com:AtChem/AtChem2.git (push)
-\end{verbatim}
-\item Create a new branch in your local repository. Make your edits on
-  the branch, commit and push. Before committing, it is advised to run
-  the \hyperref[sec:testsuite]{Test Suite} locally to verify whether
-  the changes could cause any problem.
-\item Submit a pull request, together with a brief description of the
-  proposed changes. One of the admins will review the edits and
-  approve them or ask for additional changes, as appropriate.
-\end{enumerate}
-
-Contributions can also be submitted via email or via the
-\href{https://github.com/AtChem/AtChem2/issues}{issues page} on
-github.com.
-
-A \hyperref[sec:style]{Style Guide} is available for code
-contributions. Note that style and indentation of the code are also
-checked by the \hyperref[sec:testsuite]{Test Suite}.
+on this \href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki page}.
+A basic level of \href{https://swcarpentry.github.io/git-novice/}{knowledge of git}
+is \emph{required}.
 
 % -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:testsuite}
@@ -135,8 +105,7 @@ The CI tester performs the following on each architecture:
   to PASS.
 \end{itemize}
 
-\subsection{Adding new unit
-  tests} \label{subsec:adding-new-unit-tests}
+\subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
 
 To add new unit tests, do the following:
 
@@ -185,8 +154,7 @@ your new tests have indeed been run and passed, check the output
 summary -- you should see a line associated to each of the
 \texttt{test*} subroutines in each file in the unit test suite.
 
-\subsection{Adding new behaviour
-  tests} \label{subsec:adding-new-behaviour-tests}
+\subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
 
 To add a new behaviour test called \texttt{\$TESTNAME} to the
 Testsuite, you should provide the following:
@@ -321,8 +289,7 @@ Fortran code consistent:
   used within the \hyperref[sec:testsuite]{Test Suite}.
 \end{itemize}
 
-\subsection{Style
-  recommendations} \label{subsec:style-recommendations}
+\subsection{Style recommendations} \label{subsec:style-recommendations}
 
 \subsubsection{General principles} \label{general-principles}
 
@@ -343,8 +310,7 @@ Fortran code consistent:
   follow the rules below.
 \end{itemize}
 
-\subsubsection{Specific
-  recommendations} \label{specific-recommendations}
+\subsubsection{Specific recommendations} \label{specific-recommendations}
 
 \begin{itemize}
 \item All \textbf{keywords} are lowercase, e.g., \texttt{if\ then},

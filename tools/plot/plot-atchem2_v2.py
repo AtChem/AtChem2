@@ -18,7 +18,7 @@
 ## - directory with the model output
 ##
 ## USAGE:
-##   python ./tools/plot/plot-atchem2.py ./model/output/
+##   python2 ./tools/plot/plot-atchem2_v2.py ./model/output/
 ## ---------------------------------------------- ##
 import os, sys
 import numpy as np

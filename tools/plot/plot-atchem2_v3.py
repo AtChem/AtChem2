@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> Python2 version [requires pandas & matplotlib]
+## --> Python3 version [requires pandas & matplotlib]
 ##
 ## Acknowledgements: M. Panagi, M. Fabre'
 ##
@@ -18,7 +18,7 @@
 ## - directory with the model output
 ##
 ## USAGE:
-##   python ./tools/plot/plot-atchem2.py ./model/output/
+##   python3 ./tools/plot/plot-atchem2_v3.py ./model/output/
 ## ---------------------------------------------- ##
 import os, sys
 import pandas as pd
@@ -33,7 +33,7 @@ def parse_file(input_file, output_file, rows=3, columns=2):
 def generate_plots(df, rows=3, columns=2):
     for group in column_grouper(df, rows*columns):
         fig = plt.figure(figsize=(11, 7))
-        for i, (label, column) in enumerate(group.iteritems()):
+        for i, (label, column) in enumerate(group.items()):
             ax = fig.add_subplot(rows, columns, i+1)
             ax.plot(df['t'], column, linestyle='-', color='black')
             ax.set(title=label, xlabel='seconds', ylabel='')
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     output_file = 'atchem2_output.pdf'
 
     os.chdir(sys.argv[1])
-    print os.getcwd()
+    print(os.getcwd())
 
     with PdfPages(output_file) as pdf:
         for input_file in input_files:
@@ -65,4 +65,4 @@ if __name__ == "__main__":
 
 ## ---------------------------- ##
 
-print "\n===> atchem2_output.pdf created in directory:", sys.argv[1], "\n\n"
+print("\n===> atchem2_output.pdf created in directory:", sys.argv[1], "\n\n")

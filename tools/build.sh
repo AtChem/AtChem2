@@ -20,40 +20,36 @@
 #    format. This argument is NOT optional, and there is no
 #    default.
 #
-# $2 is the directory for the auto-generated Fortran files:
-# TODO: delete this!
+# $2 is the directory for the chemical mechanism in Fortran format:
+#    - mechanism.species
+#    - mechanism.reac
+#    - mechanism.prod
+#    - mechanism.ro2
 #    - mechanism.f90
 #    By default, it is ./model/configuration/
 #
-# $3 is the directory for the chemical mechanism in Fortran format:
-#    - mechanism.prod
-#    - mechanism.reac
-#    - mechanism.species
-#    By default, it is ./model/configuration/
-#
-# $4 is the directory for MCM-specific files:
-#    - list of organic peroxy radicals
+# $3 is the directory of the MCM data files:
+#    - list of organic peroxy radicals (RO2)
 #    - parameters to calculate photolysis rates
 #    By default, it is ./mcm/
 
 set -e
 echo ''
 echo "facsimile mechanism file:" $1
-echo "auto-generated fortran files directory:" $2
-echo "fortran mechanism directory:" $3
-echo "mcm files directory:" $4
+echo "fortran mechanism directory:" $2
+echo "mcm files directory:" $3
 
 echo ''
 echo "call mech_converter.py"
-python ./tools/mech_converter.py $1 $2 $3 $4
+python ./tools/mech_converter.py $1 $2 $3
 
 echo ''
-if [ -z $3 ]; then
+if [ -z $2 ]; then
   echo "make sharedlib"
   make sharedlib
 else
-  echo "make sharedlib" $3
-  make sharedlib SHAREDLIBDIR=$3
+  echo "make sharedlib" $2
+  make sharedlib SHAREDLIBDIR=$2
 fi
 echo "make base executable"
 make

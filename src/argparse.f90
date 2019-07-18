@@ -274,13 +274,15 @@ contains
     mcm_dir               = read_value_or_default( valid_flags(9)%flag_switch, 'mcm', names, values )
     shared_library        = read_value_or_default( valid_flags(10)%flag_switch, 'model/configuration/mechanism.so', names, values )
 
-    write (*, '(2A)') ' Model dir is: ', trim( model_dir )
-    write (*, '(2A)') ' Output dir is: ', trim( output_dir )
-    write (*, '(2A)') ' Configuration dir is: ', trim( configuration_dir )
-    write (*, '(2A)') ' MCM dir is: ', trim( mcm_dir )
-    write (*, '(2A)') ' Species Constraints dir is: ', trim( spec_constraints_dir )
-    write (*, '(2A)') ' Environment Constraints dir is: ', trim( env_constraints_dir )
-    write (*, '(2A)') ' Photolysis Constraints dir is: ', trim( photo_constraints_dir )
+    write (*, '(2A)') ' Model directory is: ', trim( model_dir )
+    write (*, '(2A)') ' Output directory is: ', trim( output_dir )
+    write (*, '(2A)') ' Reaction Rates directory is: ', trim( reactionRates_dir )
+    write (*, '(2A)') ' Configuration directory is: ', trim( configuration_dir )
+    write (*, '(2A)') ' Constraints directory is: ', trim( constraints_dir )
+    write (*, '(2A)') ' Environment Constraints directory is: ', trim( env_constraints_dir )
+    write (*, '(2A)') ' Photolysis Constraints directory is: ', trim( photo_constraints_dir )
+    write (*, '(2A)') ' Species Constraints directory is: ', trim( spec_constraints_dir )
+    write (*, '(2A)') ' MCM directory is: ', trim( mcm_dir )
     write (*, '(2A)') ' Shared library is: ', trim( shared_library )
 
   end subroutine get_and_set_directories_from_command_arguments

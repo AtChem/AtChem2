@@ -35,9 +35,9 @@
 
 set -e
 echo ''
-echo "facsimile mechanism file:" $1
-echo "fortran mechanism directory:" $2
-echo "mcm files directory:" $3
+echo "* facsimile mechanism file:" $1
+echo "* fortran mechanism directory [ default = ./model/configuration/ ]:" $2
+echo "* mcm data files directory [ default = ./mcm/ ]:" $3
 
 echo ''
 echo "call mech_converter.py"
@@ -47,9 +47,15 @@ echo ''
 if [ -z $2 ]; then
   echo "make sharedlib"
   make sharedlib
+  echo "=> shared library directory: ./model/configuration/"
 else
   echo "make sharedlib" $2
   make sharedlib SHAREDLIBDIR=$2
+  echo "=> shared library directory:" $2
 fi
+
+echo ''
 echo "make base executable"
 make
+
+exit 0

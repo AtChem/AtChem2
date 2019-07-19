@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/spec_yes_env_no_with_jfac/output
- Configuration dir is: travis/tests/spec_yes_env_no_with_jfac/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/species
- Environment Constraints dir is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/spec_yes_env_no_with_jfac/output
+ Reaction Rates directory is: travis/tests/spec_yes_env_no_with_jfac/output/reactionRates
+ Configuration directory is: travis/tests/spec_yes_env_no_with_jfac/model/configuration
+ Constraints directory is: travis/tests/spec_yes_env_no_with_jfac/model/constraints
+ Environment Constraints directory is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/spec_yes_env_no_with_jfac/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/spec_yes_env_no_with_jfac/model/configuration/mechanism.so
 
 -----------------------
@@ -70,7 +72,7 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:         400
-              reaction rates output step size:         400
+                   reaction rates output step size:         400
                                     modelStartTime:       36000
                             jacobianOutputStepSize:           0
                                           latitude:   0.530E+02
@@ -137,7 +139,7 @@ AtChem2 v1.2-dev
  7      DILUTE                NOTUSED
  8      JFAC                       J4
  Reading all photolysis rates from file...
- 9      ROOF                   OPEN
+ 9      ROOF                     OPEN
  Finished reading environment variables.
 
  Checking for constrained environment variables...

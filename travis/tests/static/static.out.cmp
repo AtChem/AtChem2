@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/static/output
- Configuration dir is: travis/tests/static/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/static/model/constraints/species
- Environment Constraints dir is: travis/tests/static/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/static/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/static/output
+ Reaction Rates directory is: travis/tests/static/output/reactionRates
+ Configuration directory is: travis/tests/static/model/configuration
+ Constraints directory is: travis/tests/static/model/constraints
+ Environment Constraints directory is: travis/tests/static/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/static/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/static/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/static/model/configuration/mechanism.so
 
 -----------------------
@@ -69,7 +71,7 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:         600
-              reaction rates output step size:         300
+                   reaction rates output step size:         300
                                     modelStartTime:       43200
                             jacobianOutputStepSize:         300
                                           latitude:   0.529E+02
@@ -124,7 +126,7 @@ AtChem2 v1.2-dev
  6      BLHEIGHT              NOTUSED
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
- 9      ROOF                  CLOSED
+ 9      ROOF                   CLOSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -271,5 +273,5 @@ AtChem2 v1.2-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 3
+ Runtime = 0
  Deallocating memory.

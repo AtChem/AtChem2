@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/secondorder/output
- Configuration dir is: travis/tests/secondorder/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/secondorder/model/constraints/species
- Environment Constraints dir is: travis/tests/secondorder/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/secondorder/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/secondorder/output
+ Reaction Rates directory is: travis/tests/secondorder/output/reactionRates
+ Configuration directory is: travis/tests/secondorder/model/configuration
+ Constraints directory is: travis/tests/secondorder/model/constraints
+ Environment Constraints directory is: travis/tests/secondorder/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/secondorder/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/secondorder/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/secondorder/model/configuration/mechanism.so
 
 -----------------------
@@ -69,7 +71,7 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:           1
-              reaction rates output step size:         100
+                   reaction rates output step size:         100
                                     modelStartTime:           0
                             jacobianOutputStepSize:           1
                                           latitude:   0.529E+02
@@ -124,7 +126,7 @@ AtChem2 v1.2-dev
  6      BLHEIGHT              NOTUSED
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
- 9      ROOF                  CLOSED
+ 9      ROOF                   CLOSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...

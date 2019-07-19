@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/firstorder/output
- Configuration dir is: travis/tests/firstorder/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/firstorder/model/constraints/species
- Environment Constraints dir is: travis/tests/firstorder/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/firstorder/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/firstorder/output
+ Reaction Rates directory is: travis/tests/firstorder/output/reactionRates
+ Configuration directory is: travis/tests/firstorder/model/configuration
+ Constraints directory is: travis/tests/firstorder/model/constraints
+ Environment Constraints directory is: travis/tests/firstorder/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/firstorder/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/firstorder/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/firstorder/model/configuration/mechanism.so
 
 -----------------------
@@ -37,8 +39,8 @@ AtChem2 v1.2-dev
  Species requiring detailed rate output
 ----------------------------------------
  Reading which species require detailed rate output...
-      1 O
-      2 O3
+      1 O         
+      2 O3        
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
@@ -55,7 +57,7 @@ AtChem2 v1.2-dev
          maxStep:   1.000E+02
  preconBandUpper:         750
  preconBandLower:         750
-      solverType: SPGMR + Banded Preconditioner
+      solverType: SPGMR + Banded Preconditioner 
  ------------------
 
  Finished reading solver parameters from file.
@@ -66,10 +68,10 @@ AtChem2 v1.2-dev
  -----------------
                                    number of steps:        1500
                                step size (seconds):   0.100E+01
-                      species interpolation method: piecewise linear
-                   conditions interpolation method: piecewise linear
+                      species interpolation method: piecewise linear 
+                   conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:           1
-              reaction rates output step size:         100
+                   reaction rates output step size:         100
                                     modelStartTime:           0
                             jacobianOutputStepSize:           1
                                           latitude:   0.529E+02
@@ -85,8 +87,8 @@ AtChem2 v1.2-dev
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 2 species:
-      1 O
-      2 O3
+      1 O         
+      2 O3        
 
 ------------
  Photolysis
@@ -124,7 +126,7 @@ AtChem2 v1.2-dev
  6      BLHEIGHT              NOTUSED
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
- 9      ROOF                  CLOSED
+ 9      ROOF                   CLOSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...

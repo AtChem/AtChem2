@@ -11,7 +11,7 @@
 
 #!/bin/sh
 #
-# Script to update the version number of Atchem2.
+# Script to update the version number of AtChem2.
 #
 # N.B.: the script MUST be run from the base directory of AtChem2.
 

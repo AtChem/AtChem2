@@ -13,7 +13,7 @@
 % -------------------------------------------------------------------- %
 \section{General Information} \label{sec:information}
 
-Two versions of Atchem2 are available:
+Two versions of AtChem2 are available:
 
 \begin{enumerate}
 \item the stable version, which is indicated by a version number
@@ -34,7 +34,7 @@ behaviour or unexplained differences in the model results, so the
 development version is usually safe to use, although caution is
 advised.
 
-The roadmap for the development of Atchem2 can be found
+The roadmap for the development of AtChem2 can be found
 \href{https://github.com/AtChem/AtChem2/projects/1}{here}.
 
 Feedback, bug reports, comments and suggestions are welcome. Please
@@ -267,24 +267,24 @@ New tests will be picked up by the Makefile automatically when running
 \section{Style Guide} \label{sec:style}
 
 In order to make the code more readable, we attempt to use a
-consistent style of coding. Two scripts, \texttt{tools/fix\_style.py}
-and \texttt{tools/fix\_indent.py}, help with keeping the style of the
+consistent style of coding. Two scripts, \texttt{tools/build/fix\_style.py}
+and \texttt{tools/build/fix\_indent.py}, help with keeping the style of the
 Fortran code consistent:
 
 \begin{itemize}
-\item \texttt{tools/fix\_style.py} edits files in-place to try to be
+\item \texttt{tools/build/fix\_style.py} edits files in-place to try to be
   consistent with the style guide (passing two arguments sends the
   output to the second argument, leaving the input file untouched, and
   is thus the safer option). This script is by no means infallible.;
   therefore, when using the script (by invoking \texttt{python\
-    tools/fix\_style.py\ filename}), it is strongly recommended to
+    tools/build/fix\_style.py\ filename}), it is strongly recommended to
   have a
   backup of the file to revert to, in case this script wrongly edits.\\
   This script is also used in the \hyperref[sec:testsuite]{Test Suite}
   to check a few aspects of the styling. This works by running the
   script over the source file and outputting to a \texttt{.cmp} file:
   if the copy matches the original file, then the test passes.
-\item \texttt{tools/fix\_indent.py} works similarly, but checks and
+\item \texttt{tools/build/fix\_indent.py} works similarly, but checks and
   corrects the indentation level of each line of code. This is also
   used within the \hyperref[sec:testsuite]{Test Suite}.
 \end{itemize}

@@ -9,7 +9,8 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script ...
+# This script creates a new FruitProcessor object, and generates files
+# to control the unit tests.
 require 'rubygems'
 require 'fruit_processor'
 

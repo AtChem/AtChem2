@@ -41,7 +41,7 @@ echo "* mcm data files directory [ default = ./mcm/ ]:" $3
 
 echo ''
 echo "call mech_converter.py"
-python ./tools/build/mech_converter.py $1 $2 $3
+python ./build/mech_converter.py $1 $2 $3
 
 echo ''
 if [ -z $2 ]; then

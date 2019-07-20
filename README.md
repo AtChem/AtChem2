@@ -30,7 +30,7 @@ AtChem2 compiles and runs on Unix/Linux and macOS systems. From the main directo
 
 From the main directory, execute:
 ```
-./tools/build/build_atchem2.sh mcm/mechanism_test.fac model/configuration/ mcm/
+./build/build_atchem2.sh mcm/mechanism_test.fac model/configuration/ mcm/
 ```
 to compile AtChem2 using an example chemical mechanism and a default model configuration. The build script converts the chemical mechanism from the FACSIMILE format (`.fac`) to a Fortran compatible format and generates the shared library `mechanism.so` and other related files in the `model/configuration/` directory. At completion of the build process an executable file called `atchem2` is created in the main directory.
 

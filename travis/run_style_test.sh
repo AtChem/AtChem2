@@ -5,7 +5,7 @@ RESULTS_FILE=travis/tests/testsuite.log
 echo "Running style script on:"
 for file in src/*.f90 ; do
   echo $file
-  python ./tools/build/fix_style.py $file $file.cmp &>/dev/null
+  python ./build/fix_style.py $file $file.cmp &>/dev/null
   this_style_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
   rm $file.cmp

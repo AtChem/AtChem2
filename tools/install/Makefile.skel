@@ -13,17 +13,27 @@
 # -----------------------------------------------------------------------------
 
 #!/bin/sh
+#
 # Makefile for AtChem2
+
+## paths to the dependencies
+## N.B.: use the full path, not the relative path
+CVODELIB     = cvode/lib
+OPENLIBMDIR  = openlibm-0.4.1
+FRUITDIR     = fruit_3.4.3
+
+## default location of the chemical mechanism shared library (mechanism.so)
+## use the second argument of the build script to change $SHAREDLIBDIR
+SHAREDLIBDIR = model/configuration
+
+## ================================================================== ##
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
 .PHONY: all test
 
+# detect operating system
 OS := $(shell uname -s)
-CVODELIB     = cvode/lib
-OPENLIBMDIR  = openlibm-0.4.1
-FRUITDIR     = fruit_3.4.3
-SHAREDLIBDIR = model/configuration
 
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)

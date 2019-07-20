@@ -16,16 +16,23 @@
 #
 # Makefile for AtChem2
 
-## paths to the dependencies
-## N.B.: use the full path, not the relative path
+# choose fortran compiler:
+# 1. "gnu" for gfortran
+# 2. "intel" for ifort
+FORTC = "gnu"
+
+# paths to the dependencies
+# N.B.: use the full path, not the relative path
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
 FRUITDIR     = fruit_3.4.3
 
-## default location of the chemical mechanism shared library (mechanism.so)
-## use the second argument of the build script to change $SHAREDLIBDIR
+# default location of the chemical mechanism shared library (mechanism.so)
+# use the second argument of the build script to change $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
+## ================================================================== ##
+## DO NOT MODIFY BELOW THIS LINE
 ## ================================================================== ##
 
 .SUFFIXES:
@@ -35,6 +42,7 @@ SHAREDLIBDIR = model/configuration
 # detect operating system
 OS := $(shell uname -s)
 
+# if on Travis
 ifeq ($(TRAVIS),true)
 ifeq ($(TRAVIS_OS_NAME),linux)
 # if linux, pass gfortran
@@ -45,10 +53,22 @@ else
 FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_1/bin/gfortran-4.9
 FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9
 endif
-# else it's not on Travis, so set the fortran compiler as gfortran
+# if not on Travis, set the fortran compiler
 else
+ifeq ($(FORTC),"gnu")
 FORT_COMP    = gfortran
 FORT_LIB     = ""
+FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+FSHAREDFLAGS =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+LIBDIR       =  /usr/lib/:$(CVODELIB)
+endif
+ifeq ($(FORTC),"intel")
+FORT_COMP    = ifort
+FORT_LIB     = ""
+FFLAGS       = -free -warn
+FSHAREDFLAGS =
+LIBDIR       =
+endif
 endif
 
 ifeq ($(OS),Linux)
@@ -56,16 +76,6 @@ RPATH_OPTION = -R
 else
 RPATH_OPTION = -rpath
 endif
-
-# GNU gfortran flags
-FFLAGS   =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-FSHAREDFLAGS   =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
-LIBDIR   =  /usr/lib/:$(CVODELIB)
-
-# Intel ifort flags
-#FORT_COMP = ifort
-#FFLAGS   = -free -warn
-#LIBDIR =
 
 OBJ = obj
 SRC = src

@@ -58,17 +58,22 @@ else
 ifeq ($(FORTC),"gnu")
 FORT_COMP    = gfortran
 FORT_LIB     = ""
-FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-FSHAREDFLAGS =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
-LIBDIR       =  /usr/lib/:$(CVODELIB)
 endif
 ifeq ($(FORTC),"intel")
 FORT_COMP    = ifort
 FORT_LIB     = ""
+endif
+endif
+
+ifeq ($(FORT_COMP),"gfortran")
+FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+FSHAREDFLAGS =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+LIBDIR       =  /usr/lib/:$(CVODELIB)
+endif
+ifeq ($(FORT_COMP),"ifort")
 FFLAGS       = -free -warn
 FSHAREDFLAGS =
 LIBDIR       =
-endif
 endif
 
 ifeq ($(OS),Linux)

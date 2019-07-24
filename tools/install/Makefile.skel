@@ -76,29 +76,33 @@ FSHAREDFLAGS =
 LIBDIR       =
 endif
 
+# set rpath flag
 ifeq ($(OS),Linux)
 RPATH_OPTION = -R
 else
 RPATH_OPTION = -rpath
 endif
 
+# other compiler flags
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
+
+# directories
 OBJ = obj
 SRC = src
 UNITTESTDIR = travis/unit_tests
 
+# executable
 AOUT = atchem2
 
-all: $(AOUT)
-
+# 
 UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
 SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
-
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
+# setup FRUIT
 fruit_code = $(FRUITDIR)/src/fruit.f90
 unittest_code = $(UNITTEST_SRCS) $(shell ls travis/unit_tests/*_test.f90 )
 unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90
@@ -110,24 +114,29 @@ $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
 	@cp travis/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
+# 
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
-
-unittests: $(fruit_driver)
-	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 # search travis/tests/ for all subdirectories, which should reflect the full list of tests
 TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
 
-tests:
-	@echo "Make: Running the following tests:" $(TESTS)
-	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+# ================================================================== #
+
+all: $(AOUT)
 
 indenttest:
 	@./travis/run_indent_test.sh
 
 styletest:
 	@./travis/run_style_test.sh
+
+unittests: $(fruit_driver)
+	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+
+tests:
+	@echo "Make: Running the following tests:" $(TESTS)
+	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
 alltests: indenttest styletest unittests tests
 

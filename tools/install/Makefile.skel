@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
@@ -12,28 +13,26 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/sh
-#
 # Makefile for AtChem2
 
-# choose fortran compiler:
+# choose fortran compiler
 # 1. "gnu" for gfortran
 # 2. "intel" for ifort
 FORTC = "gnu"
 
-# paths to the dependencies
+# set paths to the dependencies
 # N.B.: use the full path, not the relative path
 CVODELIB     = cvode/lib
 OPENLIBMDIR  = openlibm-0.4.1
 FRUITDIR     = fruit_3.4.3
 
 # default location of the chemical mechanism shared library (mechanism.so)
-# use the second argument of the build script to change $SHAREDLIBDIR
+# use the second argument of the build script to override $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
-## ================================================================== ##
-## DO NOT MODIFY BELOW THIS LINE
-## ================================================================== ##
+# ================================================================== #
+# DO NOT MODIFY BELOW THIS LINE
+# ================================================================== #
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
@@ -65,7 +64,7 @@ FORT_LIB     = ""
 endif
 endif
 
-## set compilation flags for each compiler
+# set compilation flags for each compiler
 ifeq ($(FORT_COMP),gfortran)
 FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
 FSHAREDFLAGS =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared

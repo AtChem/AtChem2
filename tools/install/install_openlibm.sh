@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -8,8 +9,6 @@
 # LICENSE.md at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
-
-#!/bin/sh
 
 # This script downloads and installs openlibm v0.4.1 into the directory
 # given by input argument $1. This is dependent on the existence of a

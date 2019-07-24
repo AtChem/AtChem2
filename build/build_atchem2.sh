@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -9,8 +10,6 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/sh
-#
 # Script to process the mechanism file (*.fac) and convert it to the
 # correct format for AtChem2.
 #

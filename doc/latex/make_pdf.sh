@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -9,8 +10,6 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/sh
-#
 # Compile the LaTeX source files of the AtChem2 manual into a pdf file
 
 pdflatex AtChem2-Manual.tex

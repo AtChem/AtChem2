@@ -11,20 +11,50 @@
 
 % -------------------- PREAMBLE -------------------- %
 \documentclass[11pt,a4paper]{report}
-\usepackage{times,graphicx,hyperref,color}
-\usepackage[version=4]{mhchem}
+\usepackage{helvet,graphicx,hyperref,color}
+\usepackage{fancyhdr,caption,natbib}
+\usepackage[nottoc]{tocbibind}
+\usepackage[version=3]{mhchem}
 
-\pagestyle{headings}
+\pagestyle{fancy}
+\setlength{\headheight}{13.6pt}
+\rhead{\leftmark}
+\lhead{}
+
+\renewcommand{\bibname}{References}
 \frenchspacing
 
-% ----- Title Page ----- %
-\title{User Manual for\\AtChem2 v1.1.1}
-\author{R. Sommariva, S. Cox}
-\date{\today}
+% shortcuts
+\newcommand{\maindir}{\texttt{Main Directory}}
+\newcommand{\depdir}{\texttt{Dependency Directory}}
 
 % -------------------- DOCUMENT -------------------- %
 \begin{document}
-\maketitle
+
+% -------------------------------- %
+% Vertical Line Title Page
+%
+% Template created by P. Wilson, modified by Vel
+% https://www.latextemplates.com/template/vertical-line-title-page
+%
+% License: CC BY-NC-SA 3.0 (https://creativecommons.org/licenses/by-nc-sa/3.0/)
+
+\begin{titlepage}
+  \raggedleft   % Right align the title page
+  \rule{1pt}{\textheight}  % Vertical line
+  \hspace{0.05\textwidth}
+  % Box for the title page text
+  \parbox[b]{0.75\textwidth}{
+    {\Huge\bfseries AtChem2\\[0.5\baselineskip] v1.2}\\[2\baselineskip]  % Title
+    {\LARGE\textit{User Manual}}\\[4\baselineskip]  % Subtitle
+    {\Large\textsc{R. Sommariva\\S. Cox}}  % Author(s)
+    \vspace{0.5\textheight}\\
+    {\noindent \today}\\[\baselineskip]  % Date
+    }
+
+\end{titlepage}
+
+% -------------------------------- %
 
 \tableofcontents
 
@@ -34,5 +64,8 @@
 \include{Execution}
 \include{Development}
 \include{Credits}
+
+\bibliographystyle{abbrvnat}
+\bibliography{References}
 
 \end{document}

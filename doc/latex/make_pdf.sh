@@ -10,9 +10,11 @@
 #
 # -----------------------------------------------------------------------------
 
-# Compile the LaTeX source files of the AtChem2 manual into a pdf file
-
+# Compile the LaTeX source files into a pdf file
+pdflatex AtChem2-Manual.tex
+bibtex AtChem2-Manual.aux
 pdflatex AtChem2-Manual.tex
 pdflatex AtChem2-Manual.tex
 
+# Move the AtChem2 manual to the doc/ directory
 mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf

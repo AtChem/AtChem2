@@ -4,22 +4,23 @@
 %
 % This file is part of the AtChem2 software package.
 %
-% This file is covered by the MIT license which can be found in the
-% file LICENSE.md at the top level of the AtChem2 distribution.
+% This file is covered by the MIT license which can be found in the file
+% LICENSE.md at the top level of the AtChem2 distribution.
 %
 % -----------------------------------------------------------------------------
+
 \chapter{Model Execution} \label{ch:execution}
 
 % -------------------------------------------------------------------- %
-\section{The Box-model} \label{sec:boxmodel}
+\section{The Model} \label{sec:model}
 
 AtChem2 is designed to build and run atmospheric chemistry box-models
 based upon the Master Chemical Mechanism
 (\href{http://mcm.leeds.ac.uk/MCM/}{MCM}). This page explains how to
-set up, compile and run an atmospheric chemistry box-model with
-AtChem2. The directory structure of AtChem2 is described in
-\hyperref[sec:structure]{Model Structure}. A working knowledge of the
-\textbf{unix shell} and its
+set up, compile and run an Atchem2 atmospheric chemistry model. The
+directory structure of AtChem2 is described in
+\hyperref[sec:model-structure]{Model Structure}. A working knowledge
+of the \textbf{unix shell} and its
 \href{https://swcarpentry.github.io/shell-novice/reference/}{basic
   commands} is \emph{required} to use the AtChem2 model.
 
@@ -36,7 +37,7 @@ or assembled manually. The user can modify the \texttt{.fac} file as
 required with a text editor. This mechanism file is converted into a
 shared library and a set of associated data files in the compilation
 step below. For more information on the chemical mechanism go to:
-\hyperref[sec:mechanism]{Chemical Mechanism}.
+\hyperref[sec:chemical-mechanism]{Chemical Mechanism}.
 
 \subsection{Configuration files} \label{subsec:configuration-files}
 
@@ -47,14 +48,14 @@ configuration files can be found in the corresponding wiki pages:
 
 \begin{itemize}
 \item model and solver parameters -- see
-  \hyperref[sec:parameters]{Model Parameters} and
-  \hyperref[sec:solver]{Solver Parameters}.
-\item environment variables -- see \hyperref[sec:envvar]{Environment
+  \hyperref[sec:model-parameters]{Model Parameters} and
+  \hyperref[sec:solver-parameters]{Solver Parameters}.
+\item environment variables -- see \hyperref[sec:environment-variables]{Environment
     Variables}.
-\item photolysis rates -- see \hyperref[sec:photolysis]{Photolysis
+\item photolysis rates -- see \hyperref[sec:photolysis-rates]{Photolysis
     Rates and JFAC}.
 \item initial concentrations of chemical species and lists of output
-  variables -- see \hyperref[sec:config]{Config Files}.
+  variables -- see \hyperref[sec:config-files]{Config Files}.
 \end{itemize}
 
 The model constraints -- chemical species, environment variables,
@@ -62,10 +63,40 @@ photolysis rates -- are located in the \texttt{model/constraints/}
 directory. For more information, go to:
 \hyperref[sec:constraints]{Constraints}.
 
-% -------------------------------------------------------------------- %
-\section{Building the model} \label{sec:build}
+\subsection{Output} \label{subsec:output}
 
-\subsection{Compilation} \label{subsec:compilation}
+The model output is saved by default in the directory
+\texttt{model/output/}. The location can be modified by changing the
+arguments of the \texttt{atchem2} executable (see above).
+
+The AtChem2 output files are space-delimited text files, with a header
+containing the names of the variables:
+
+\begin{itemize}
+\item values of environment variables and concentrations of chemical
+  species:\\ \texttt{environmentVariables.output},
+  \texttt{speciesConcentrations.output}.
+\item values of photolysis rates and related parameters:\\
+  \texttt{photolysisRates.output},
+  \texttt{photolysisRatesParameters.output}.
+\item loss and production rates of selected species (see
+  \hyperref[sec:config-files]{Config Files}):\\ \texttt{lossRates.output},
+  \texttt{productionRates.output}.
+\item Jacobian matrix (if requested, see
+  \hyperref[sec:model-parameters]{Model Parameters}):\\
+  \texttt{jacobian.output}.
+\item model diagnostic variables:\\ \texttt{finalModelState.output},
+  \texttt{initialConditionsSetting.output},
+  \texttt{mainSolverParameters.output}.
+\end{itemize}
+
+In addition, the reaction rates of all the reactions in the chemical
+mechanism are saved in the directory \texttt{reactionRates/}: one file
+for each model step, with the filename corresponding to the time in
+seconds.
+
+% -------------------------------------------------------------------- %
+\section{Build} \label{sec:build}
 
 The script \texttt{build\_atchem2.sh} in the \texttt{tools/} directory is used
 to process the chemical mechanism file (\texttt{.fac}) and to compile
@@ -74,12 +105,11 @@ the model. The script generates one Fortran file
 and four configuration files (\texttt{mechanism.prod},
 \texttt{mechanism.reac}, \texttt{mechanism.ro2},
 \texttt{mechanism.species}) in the \texttt{model/configuration/}
-directory. Go to the \hyperref[sec:mechanism]{Chemical Mechanism} for
+directory. Go to the \hyperref[sec:chemical-mechanism]{Chemical Mechanism} for
 more information.
 
-The script must be run from the \emph{AtChem2 main directory} and
-takes four arguments (see \hyperref[important-note-1]{Important Note
-  1}):
+The script must be run from the \maindir\ and takes four arguments
+(see Important Note 1):
 
 \begin{enumerate}
 \item the path to the chemical mechanism file -- no default
@@ -128,8 +158,7 @@ AtChem2/
 \end{verbatim}
 
 Each model can be built by passing the correct path to the
-\texttt{build\_atchem2.sh} script (see \hyperref[important-note-1]{Important
-  Note 1})). For example:
+\texttt{build\_atchem2.sh} script (see Important Note 1). For example:
 
 \begin{verbatim}
 ./build/build_atchem2.sh model_1/mechanism.fac model_1/configuration/
@@ -154,9 +183,9 @@ The user may want or need to change the Fortran code
 if the \texttt{.fac} file has also been changed, use the
 \texttt{build\_atchem2.sh} script, as explained above. Otherwise, if only the
 Fortran code has been changed, executing \texttt{make} from the
-\emph{main directory} is enough to recompile the model.
+\maindir\ is enough to recompile the model.
 
-\subsubsection{Important Note 1} \label{important-note-1}
+\subsubsection{Important Note 1}
 
 The arguments need to be passed to the \texttt{build/build\_atchem2.sh}
 executable in the exact order, as listed above. This means that if --
@@ -166,10 +195,11 @@ have the default values. To avoid mistakes, the user can choose to
 always specify all the arguments. Future versions of AtChem2 will
 adopt a simpler command-line interface.
 
-\subsection{Execution} \label{subsec:execution}
+% -------------------------------------------------------------------- %
+\section{Execute} \label{sec:execute}
 
 The compilation process creates an executable file called
-\texttt{atchem2} in the \emph{main directory}. The executable file
+\texttt{atchem2} in the \maindir. The executable file
 takes seven arguments, corresponding to the directories containing the
 model configuration and output:
 
@@ -193,7 +223,7 @@ model configuration and output:
 \end{enumerate}
 
 The model can be run by executing the \texttt{atchem2} command from
-the \emph{main directory}, in which case the executable will use the
+the \maindir, in which case the executable will use the
 default configuration and output directories. Otherwise, the
 configuration and output directories need to be specified. The
 \texttt{atchem2} executableuses the following flags to set the
@@ -235,38 +265,6 @@ models simultaneously. For example:
 As explained above, if the chemical mechanism (\texttt{.fac}) is
 changed, only the shared library needs to be recompiled. This allows
 the user to have only one base executable called \texttt{atchem2} in
-the \emph{main directory}: when running multiple models at the same
+the \maindir: when running multiple models at the same
 time the user can reuse this base executable while pointing each model
 to the correct shared library and configuration files.
-
-\subsection{Output} \label{subsec:output}
-
-The model output is saved by default in the directory
-\texttt{model/output/}. The location can be modified by changing the
-arguments of the \texttt{atchem2} executable (see above).
-
-The AtChem2 output files are space-delimited text files, with a header
-containing the names of the variables:
-
-\begin{itemize}
-\item values of environment variables and concentrations of chemical
-  species:\\ \texttt{environmentVariables.output},
-  \texttt{speciesConcentrations.output}.
-\item values of photolysis rates and related parameters:\\
-  \texttt{photolysisRates.output},
-  \texttt{photolysisRatesParameters.output}.
-\item loss and production rates of selected species (see
-  \hyperref[sec:config]{Config Files}):\\ \texttt{lossRates.output},
-  \texttt{productionRates.output}.
-\item Jacobian matrix (if requested, see
-  \hyperref[sec:parameters]{Model Parameters}):\\
-  \texttt{jacobian.output}.
-\item model diagnostic variables:\\ \texttt{finalModelState.output},
-  \texttt{initialConditionsSetting.output},
-  \texttt{mainSolverParameters.output}.
-\end{itemize}
-
-In addition, the reaction rates of all the reactions in the chemical
-mechanism are saved in the directory \texttt{reactionRates/}: one file
-for each model step, with the filename corresponding to the time in
-seconds.

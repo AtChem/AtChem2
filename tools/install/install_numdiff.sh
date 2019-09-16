@@ -24,7 +24,10 @@ if [ -z "$1" ] ; then
 fi
 cd $1
 wget http://ftp.igh.cnrs.fr/pub/nongnu/numdiff/numdiff-5.8.1.tar.gz
-
+if [ $? -ne 0 ] ; then
+  echo "wget of numdiff failed"
+  exit 1
+fi
 tar -zxf numdiff-5.8.1.tar.gz
 rm numdiff-5.8.1.tar.gz
 

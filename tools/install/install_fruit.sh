@@ -24,6 +24,10 @@ if [ -z "$1" ] ; then
 fi
 cd $1
 wget https://iweb.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
+if [ $? -ne 0 ] ; then
+  echo "wget of fruit failed"
+  exit 1
+fi
 
 unzip -q fruit_3.4.3.zip
 rm fruit_3.4.3.zip

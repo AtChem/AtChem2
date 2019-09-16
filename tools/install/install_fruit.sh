@@ -23,7 +23,7 @@ if [ -z "$1" ] ; then
   exit 1
 fi
 cd $1
-wget https://kent.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
+wget https://iweb.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
 
 unzip -q fruit_3.4.3.zip
 rm fruit_3.4.3.zip

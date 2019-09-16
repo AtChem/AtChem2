@@ -23,6 +23,10 @@ if [ -z "$1" ] ; then
 fi
 cd $1
 wget https://github.com/JuliaLang/openlibm/archive/v0.4.1.tar.gz
+if [ $? -ne 0 ] ; then
+  echo "wget of openlibm failed"
+  exit 1
+fi
 
 tar -zxf v0.4.1.tar.gz
 rm v0.4.1.tar.gz

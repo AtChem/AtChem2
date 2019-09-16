@@ -65,6 +65,10 @@ fi
 cd $cvode_dir
 
 wget https://computation.llnl.gov/projects/sundials/download/sundials-2.7.0.tar.gz
+if [ $? -ne 0 ] ; then
+  echo "wget of sundials failed"
+  exit 1
+fi
 tar -zxf sundials-2.7.0.tar.gz
 rm sundials-2.7.0.tar.gz
 cd sundials-2.7.0/

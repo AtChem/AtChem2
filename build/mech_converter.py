@@ -12,16 +12,19 @@
 #
 # -----------------------------------------------------------------------------
 
-# This program fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
+# This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
 # This only reads a file containing the 'reaction definitions' part.
 from __future__ import print_function
+import sys
 import re
 import os
-import sys
 import fix_mechanism_fac
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF', 'RO2']
 reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
+
+
+## ------------------------------------------------------------------ ##
 
 
 def tokenise_and_process(input_string, variablesDict):
@@ -39,6 +42,7 @@ def tokenise_and_process(input_string, variablesDict):
 
     assert isinstance(input_string, str), 'tokenise_and_process: input_string is not of type str: ' + str(input_string)
     assert isinstance(variablesDict, dict), 'tokenise_and_process: variablesDict is not of type dict: ' + str(variablesDict)
+
     # Generate start and end points of sections of symbols and nonsymbols
     symbol_regex = '[()\-+*@/ ]+'
     nonsymbol_regex = '[^()\-+*@/ ]+'
@@ -53,7 +57,7 @@ def tokenise_and_process(input_string, variablesDict):
     #
     # Recombine the lists in the right order, but replace the nonsymbols that aren't numbers, reserved words or reserved species
     # (and thus must be new species/intermediate values) with q(i) notation.
-
+    #
     # Loop while there are any substrings left
     while list_of_symbol_starts != [] or list_of_nonsymbol_starts != []:
         # We should use the next symbol if either
@@ -85,29 +89,30 @@ def tokenise_and_process(input_string, variablesDict):
     return new_rhs
 
 
-def convert(input_file, gen_dir, mech_dir, mcm_dir):
+def convert(input_file, mech_dir, mcm_dir):
     """
     This is the main function of this file. It takes as input an MCM file, and from it generates
     5 files for use by AtChem2's Fortran code:
 
-    - 'Generic Rate Coefficients' and 'Complex reactions' go to gen_dir/mechanism.f90 with little more than formatting
+    - 'Generic Rate Coefficients' and 'Complex reactions' go to mech_dir/mechanism.f90 with little more than formatting
       changes - each line is replicated in full but with each named rate converted to an element in the vector q.
-    - The rates defined in 'Reaction definitions' also go to gen_dir/mechanism.f90 as elements of the vector p.
+    - The rates defined in 'Reaction definitions' also go to mech_dir/mechanism.f90 as elements of the vector p.
     - The species involved as reactants (respectively products) in reactions in 'Reaction definitions' are split up into individual
       species, and their species and reactions numbers go to mechanism.reac (respectively mechanism.prod). Combining
-      mechanism.reac, mechanism.prod and the last section of gen_dir/mechanism.f90 gives the original information
+      mechanism.reac, mechanism.prod and the last section of mech_dir/mechanism.f90 gives the original information
       contained in 'Reaction definitions' but in the format that AtChem2 can parse.
     - The numbers and names of all species encountered go to mechanism.species.
     - The numbers and names of all RO2 species in 'Peroxy radicals' end up in mechanism.ro2.
 
     :param input_file: string containing a relative or absolute reference to the mcm file to be processed.
-    :param gen_dir: string containing a relative or absolute reference to the directory in which the function should
+    :param mech_dir: string containing a relative or absolute reference to the directory in which the function should
       place mechanism.f90. This is normally model/configuration.
     :param mech_dir: string containing a relative or absolute reference to the directory in which the function should
       place mechanism.{prod,reac,ro2,species}. This is normally model/configuration/ for the given model.
     :param mcm_dir: string containing a relative or absolute reference to the directory housing the reference file peroxy-radicals_v3.3.1.
       This is normally mcm/
     """
+
     # Work out the values of directory and filename of input_file, and check their existence.
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
@@ -173,22 +178,16 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
     # Check each of the RO2s from 'Peroxy radicals' are in the reference RO2 list. If not print a warning at the top of
     # mechanism.f90 for each errant species.
     # TODO: This will break the exected format when mechanism.f90 is replaced by a parsable format.
-    print('looping over inputted ro2s')
+    print('looping over inputted RO2s')
 
-    with open(os.path.join(gen_dir, 'mechanism.f90'), 'w') as mech_rates_file:
-        mech_rates_file.write("""! Note that this file is generated by tools/mech_converter.py
-! based upon the file tools/mcm_example.fac
-! Any manual edits to this file will be overwritten when
-! calling tools/mech_converter.py
-
+    with open(os.path.join(mech_dir, 'mechanism.f90'), 'w') as mech_rates_file:
+        mech_rates_file.write("""! Note that this file is generated by build/mech_converter.py based upon the file mcm/mechanism_test.fac
+! Any manual edits to this file will be overwritten when calling build/mech_converter.py
 """)
         for ro2_species in [element for  element in ro2List if element not in RO2List_reference]:
             print(' ****** Warning: ' + ro2_species + ' NOT found in RO2List ****** ')
             mech_rates_file.write('! ' + ro2_species +
                                   ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
-
-
-
 
 
     # Initialise list, dictionary and a counter.
@@ -259,8 +258,6 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
 
     # Save the number of such equations to be output to mechanism.{prod,reac}
     numberOfGenericComplex = reactionNumber
-
-
 
 
     # Initialise a few variables
@@ -384,8 +381,8 @@ def convert(input_file, gen_dir, mech_dir, mcm_dir):
               tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
 
 
-    # # Combine mechanism rates and RO2 sum files
-    with open(os.path.join(gen_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
+    # Combine mechanism rates and RO2 sum files
+    with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
         mech_rates_coeff_file.write("""
 module mechanism_mod
     use, intrinsic :: iso_c_binding
@@ -398,7 +395,7 @@ contains
            real(c_double), intent(inout) :: p(:), q(:)
         real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J(:), RO2
         """)
-# Write out Generic Rate Coefficients and Complex reactions
+        # Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:
             mech_rates_coeff_file.write(item)
         # Write out Reaction definitions
@@ -410,13 +407,11 @@ end module mechanism_mod
 """)
 
 
-
-
     # Finally, now that we have the full species list, we can output the RO2s to mechanism.ro2
     # loop over RO2 and write the necessary line to mechanism.ro2, using the species number of the RO2
     print('adding RO2 to model/configuration/mechanism.ro2')
     with open(os.path.join(mech_dir, 'mechanism.ro2'), 'w') as ro2_file:
-        ro2_file.write("""! Note that this file is generated by tools/mech_converter.py based upon the file tools/mcm_example.fac. Any manual edits to this file will be overwritten when calling tools/mech_converter.py
+        ro2_file.write("""! Note that this file is generated by build/mech_converter.py based upon the file mcm/mechanism_test.fac Any manual edits to this file will be overwritten when calling build/mech_converter.py
 """)
 
         for ro2List_i in ro2List:
@@ -431,31 +426,29 @@ end module mechanism_mod
                 ro2_file.write('0 ! error RO2 not in mechanism: ' + ro2List_i + '\n')
 
 
+## ------------------------------------------------------------------ ##
+
+
 def main():
     assert len(sys.argv) > 1, 'Please enter a filename as argument, pointing to the mcm mechanism file.'
     input_filename = sys.argv[1]
-    # output_dir defaults to '.' if not given
+    # mech_dir defaults to '.' if not given
     if len(sys.argv) <= 2:
-        output_dir = './model/configuration/'
+        mech_dir = './model/configuration/'
     else:
-        output_dir = sys.argv[2]
+        mech_dir = sys.argv[2]
     if len(sys.argv) <= 3:
-        param_dir = './model/configuration/'
-    else:
-        param_dir = sys.argv[3]
-    if len(sys.argv) <= 4:
         mcm_dir = './mcm/'
     else:
-        mcm_dir = sys.argv[4]
+        mcm_dir = sys.argv[3]
 
     # check the locations supplied exist
     assert os.path.isfile(input_filename), 'Failed to find file ' + input_filename
-    assert os.path.exists(output_dir), 'Failed to find directory ' + output_dir
-    assert os.path.exists(param_dir), 'Failed to find directory ' + param_dir
+    assert os.path.exists(mech_dir), 'Failed to find directory ' + mech_dir
     assert os.path.exists(mcm_dir), 'Failed to find directory ' + mcm_dir
 
     # call conversion function
-    convert(input_filename, output_dir, param_dir, mcm_dir)
+    convert(input_filename, mech_dir, mcm_dir)
 
 
 if __name__ == '__main__':

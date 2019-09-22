@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/spec_yes_env_yes/output
- Configuration dir is: travis/tests/spec_yes_env_yes/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/spec_yes_env_yes/model/constraints/species
- Environment Constraints dir is: travis/tests/spec_yes_env_yes/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/spec_yes_env_yes/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/spec_yes_env_yes/output
+ Reaction Rates directory is: travis/tests/spec_yes_env_yes/output/reactionRates
+ Configuration directory is: travis/tests/spec_yes_env_yes/model/configuration
+ Constraints directory is: travis/tests/spec_yes_env_yes/model/constraints
+ Environment Constraints directory is: travis/tests/spec_yes_env_yes/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/spec_yes_env_yes/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/spec_yes_env_yes/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/spec_yes_env_yes/model/configuration/mechanism.so
 
 -----------------------
@@ -70,7 +72,7 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:        3600
-              reaction rates output step size:        3600
+                   reaction rates output step size:        3600
                                     modelStartTime:        1200
                             jacobianOutputStepSize:      108000
                                           latitude:   0.530E+02
@@ -126,7 +128,7 @@ AtChem2 v1.2-dev
  6      BLHEIGHT          CONSTRAINED
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
- 9      ROOF                   OPEN
+ 9      ROOF                     OPEN
  Finished reading environment variables.
 
  Checking for constrained environment variables...

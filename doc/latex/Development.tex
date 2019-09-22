@@ -13,7 +13,7 @@
 % -------------------------------------------------------------------- %
 \section{General Information} \label{sec:information}
 
-Two versions of Atchem2 are available:
+Two versions of AtChem2 are available:
 
 \begin{enumerate}
 \item the stable version, which is indicated by a version number
@@ -34,7 +34,7 @@ behaviour or unexplained differences in the model results, so the
 development version is usually safe to use, although caution is
 advised.
 
-The roadmap for the development of Atchem2 can be found
+The roadmap for the development of AtChem2 can be found
 \href{https://github.com/AtChem/AtChem2/projects/1}{here}.
 
 Feedback, bug reports, comments and suggestions are welcome. Please
@@ -43,39 +43,9 @@ check \href{https://github.com/AtChem/AtChem2/issues}{this github
 
 If you want to contribute to the model development, the best way is to
 use \textbf{git}. The procedure to contribute code is described
-below. A basic level of
-\href{https://swcarpentry.github.io/git-novice/}{knowledge of git} is
-\emph{required}.
-
-\begin{enumerate}
-\item Fork the official repository (\texttt{AtChem/AtChem2}) to your
-  github account (\texttt{username/AtChem2}).
-\item Configure git so that \texttt{origin} is your fork
-  (\texttt{username/AtChem2}) and \texttt{upstream} is the official
-  repository (\texttt{AtChem/AtChem2}). The output of \texttt{git\
-    remote\ -v} should look like this:
-  \begin{verbatim}
-  origin  git@github.com:username/AtChem2.git (fetch)
-  origin  git@github.com:username/AtChem2.git (push)
-  upstream    git@github.com:AtChem/AtChem2.git (fetch)
-  upstream    git@github.com:AtChem/AtChem2.git (push)
-\end{verbatim}
-\item Create a new branch in your local repository. Make your edits on
-  the branch, commit and push. Before committing, it is advised to run
-  the \hyperref[sec:testsuite]{Test Suite} locally to verify whether
-  the changes could cause any problem.
-\item Submit a pull request, together with a brief description of the
-  proposed changes. One of the admins will review the edits and
-  approve them or ask for additional changes, as appropriate.
-\end{enumerate}
-
-Contributions can also be submitted via email or via the
-\href{https://github.com/AtChem/AtChem2/issues}{issues page} on
-github.com.
-
-A \hyperref[sec:style]{Style Guide} is available for code
-contributions. Note that style and indentation of the code are also
-checked by the \hyperref[sec:testsuite]{Test Suite}.
+on this \href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki page}.
+A basic level of \href{https://swcarpentry.github.io/git-novice/}{knowledge of git}
+is \emph{required}.
 
 % -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:testsuite}
@@ -135,8 +105,7 @@ The CI tester performs the following on each architecture:
   to PASS.
 \end{itemize}
 
-\subsection{Adding new unit
-  tests} \label{subsec:adding-new-unit-tests}
+\subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
 
 To add new unit tests, do the following:
 
@@ -185,8 +154,7 @@ your new tests have indeed been run and passed, check the output
 summary -- you should see a line associated to each of the
 \texttt{test*} subroutines in each file in the unit test suite.
 
-\subsection{Adding new behaviour
-  tests} \label{subsec:adding-new-behaviour-tests}
+\subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
 
 To add a new behaviour test called \texttt{\$TESTNAME} to the
 Testsuite, you should provide the following:
@@ -299,30 +267,29 @@ New tests will be picked up by the Makefile automatically when running
 \section{Style Guide} \label{sec:style}
 
 In order to make the code more readable, we attempt to use a
-consistent style of coding. Two scripts, \texttt{tools/fix\_style.py}
-and \texttt{tools/fix\_indent.py}, help with keeping the style of the
+consistent style of coding. Two scripts, \texttt{build/fix\_style.py}
+and \texttt{build/fix\_indent.py}, help with keeping the style of the
 Fortran code consistent:
 
 \begin{itemize}
-\item \texttt{tools/fix\_style.py} edits files in-place to try to be
+\item \texttt{build/fix\_style.py} edits files in-place to try to be
   consistent with the style guide (passing two arguments sends the
   output to the second argument, leaving the input file untouched, and
   is thus the safer option). This script is by no means infallible.;
   therefore, when using the script (by invoking \texttt{python\
-    tools/fix\_style.py\ filename}), it is strongly recommended to
+    build/fix\_style.py\ filename}), it is strongly recommended to
   have a
   backup of the file to revert to, in case this script wrongly edits.\\
   This script is also used in the \hyperref[sec:testsuite]{Test Suite}
   to check a few aspects of the styling. This works by running the
   script over the source file and outputting to a \texttt{.cmp} file:
   if the copy matches the original file, then the test passes.
-\item \texttt{tools/fix\_indent.py} works similarly, but checks and
+\item \texttt{build/fix\_indent.py} works similarly, but checks and
   corrects the indentation level of each line of code. This is also
   used within the \hyperref[sec:testsuite]{Test Suite}.
 \end{itemize}
 
-\subsection{Style
-  recommendations} \label{subsec:style-recommendations}
+\subsection{Style recommendations} \label{subsec:style-recommendations}
 
 \subsubsection{General principles} \label{general-principles}
 
@@ -343,8 +310,7 @@ Fortran code consistent:
   follow the rules below.
 \end{itemize}
 
-\subsubsection{Specific
-  recommendations} \label{specific-recommendations}
+\subsubsection{Specific recommendations} \label{specific-recommendations}
 
 \begin{itemize}
 \item All \textbf{keywords} are lowercase, e.g., \texttt{if\ then},

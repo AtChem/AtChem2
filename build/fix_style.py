@@ -14,9 +14,9 @@
 #
 # WARNING: Please note that this script is not infallible, and can break your code! Please use with caution,
 # and make sure you have a copy of your source file to revert to in the event of it breaking.
-#
 from __future__ import print_function
 
+## ------------------------------------------------------------------ ##
 
 def replace_any_case_with_lower_first(string, to_output):
     # Replaces the first word(s) with its lowercase if it matches string
@@ -62,6 +62,8 @@ def even_quotes(string):
     else:
         single = False
     return (double and single)
+
+## ------------------------------------------------------------------ ##
 
 import sys
 import re

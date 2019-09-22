@@ -1,5 +1,4 @@
 #!/bin/bash
-#set -e
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -12,9 +11,11 @@
 # -----------------------------------------------------------------------------
 
 function test_output_text {
-  # This file creates 2 temporary files, which hold the section of
-  # each of the input files (arg 1 and 2) defined by the args 3 and 4 for beginning
-  # and end line numbers. It then numdiffs these using test_output_file
+  # This function creates 2 temporary files, which hold the section of
+  # each of the input files (arg 1 and 2) defined by the args 3 and 4
+  # for beginning and end line numbers. It then numdiffs these using
+  # test_output_file
+  #
   # $1 first file for comparison
   # $2 second file for comparison
   # $3 start line number of section to compare
@@ -34,13 +35,14 @@ function test_output_text {
 }
 
 function test_output_file {
-  # numdiff with relative tolerance given by -r argument
+  # This function executes numdiff with relative tolerance given by
+  # the -r argument
   numdiff -a 1.e-12 -r 5.0e-05 $1 $2
 }
 
 function find_string {
-  # This function finds the line number of the first occurence of the string
-  # $1 in file $2
+  # This function finds the line number of the first occurence of the
+  # string $1 in file $2
   grep -n $1 $2 | grep -Eo '^[^:]+'
 }
 
@@ -80,7 +82,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./tools/build.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration $TESTS_DIR/$test/model/configuration mcm &> /dev/null
+  ./build/build_atchem2.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo Building $test test failed with exit code $exitcode
@@ -93,7 +95,7 @@ for test in $1; do
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...
   # This lists all words which will have their line skipped in the main output file. This is a space-delimited list.
-  # TODO: extend to multi-word exclusions
+  # TODO: extend to multi-word exclusions
   skip_text="Runtime"
   # Generate a table of line numbers to omit based on skip_text
   for item in $skip_text; do

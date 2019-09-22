@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -9,13 +10,13 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/sh
-
 # This script downloads and installs CVODE 2.9.0 into the directory
-# given by input argument $1. Using the fortran compiler executable
-# given by input argument $2.
-##
+# given by input argument $1.
+# The default fortran compiler is gfortran. A different compiler can be
+# specified by optional input argument $2.
+#
 # Example usage:
+#   ./install_cvode.sh /path/to/install/directory
 #   ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler
 
 # Query the operating system, and set LAPACK_LIBS to the default location
@@ -25,6 +26,7 @@ if [ "$OS" == 'Darwin' ]; then
 else
   LAPACK_LIBS=/usr/lib/liblapack.so:/usr/lib/libblas.so
 fi
+
 # Ensure a first argument is provided, and that it is an existing directory
 if [ -z "$1" ] ; then
   echo "Please provide an argument to tools/install/install_cvode.sh"
@@ -36,6 +38,7 @@ elif [ ! -d "$1" ]; then
   exit 1
 fi
 cvode_dir="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
+
 # If a second argument is provided, check that it is an existing file.
 # If it's not provided, then give it a default, so long as that also
 # exists.
@@ -57,6 +60,7 @@ else
     exit 1
   fi
 fi
+
 # Move to provided directory
 cd $cvode_dir
 
@@ -85,3 +89,5 @@ cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
     ..
 make -j8
 make install
+
+exit 0

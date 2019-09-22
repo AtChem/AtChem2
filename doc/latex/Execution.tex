@@ -67,7 +67,7 @@ directory. For more information, go to:
 
 \subsection{Compilation} \label{subsec:compilation}
 
-The script \texttt{build.sh} in the \texttt{tools/} directory is used
+The script \texttt{build\_atchem2.sh} in the \texttt{tools/} directory is used
 to process the chemical mechanism file (\texttt{.fac}) and to compile
 the model. The script generates one Fortran file
 (\texttt{mechanism.f90}), one shared library (\texttt{mechanism.so})
@@ -96,7 +96,7 @@ For example, if the \texttt{.fac} file is in the \texttt{model/}
 directory:
 
 \begin{verbatim}
-./tools/build.sh model/mechanism.fac model/configuration/
+./build/build_atchem2.sh model/mechanism.fac model/configuration/
                  model/configuration/ mcm/
 \end{verbatim}
 
@@ -128,13 +128,13 @@ AtChem2/
 \end{verbatim}
 
 Each model can be built by passing the correct path to the
-\texttt{build.sh} script (see \hyperref[important-note-1]{Important
+\texttt{build\_atchem2.sh} script (see \hyperref[important-note-1]{Important
   Note 1})). For example:
 
 \begin{verbatim}
-./tools/build.sh model_1/mechanism.fac model_1/configuration/
+./build/build_atchem2.sh model_1/mechanism.fac model_1/configuration/
                  model_1/configuration/ mcm/
-./tools/build.sh model_2/mechanism.fac model_2/configuration/
+./build/build_atchem2.sh model_2/mechanism.fac model_2/configuration/
                  model_2/configuration/ mcm/
 \end{verbatim}
 
@@ -146,19 +146,19 @@ configuration and the model constraints are read by the executable at
 runtime. However, if the user makes changes to the \texttt{.fac} file,
 then the shared library \texttt{model/configuration/mechanism.so}
 needs to be recompiled from the source file
-\texttt{model/configuration/mechanism.f90} using the \texttt{build.sh}
+\texttt{model/configuration/mechanism.f90} using the \texttt{build\_atchem2.sh}
 script.
 
 The user may want or need to change the Fortran code
 (\texttt{src/*.f90}), in which case the model needs to be recompiled:
 if the \texttt{.fac} file has also been changed, use the
-\texttt{build.sh} script, as explained above. Otherwise, if only the
+\texttt{build\_atchem2.sh} script, as explained above. Otherwise, if only the
 Fortran code has been changed, executing \texttt{make} from the
 \emph{main directory} is enough to recompile the model.
 
 \subsubsection{Important Note 1} \label{important-note-1}
 
-The arguments need to be passed to the \texttt{tools/build.sh}
+The arguments need to be passed to the \texttt{build/build\_atchem2.sh}
 executable in the exact order, as listed above. This means that if --
 for example -- the third argument needs to be specified, it is also
 necessary to specify the first and the second arguments, even if they
@@ -270,38 +270,3 @@ In addition, the reaction rates of all the reactions in the chemical
 mechanism are saved in the directory \texttt{reactionRates/}: one file
 for each model step, with the filename corresponding to the time in
 seconds.
-
-\subsection{Running on HPC} \label{subsec:running-on-hpc}
-
-Atchem2 can be set up to run on a High Performance Computing (HPC)
-system. Compilation and configuration are the same as for a normal
-workstation. Typically, a job scheduler is used to allocate computing
-resources on an HPC system. A \textbf{submission script} is therefore
-needed to submit the AtChem2 models for execution.
-
-The format and the syntax of the submission script depend on the
-specific software installed on the HPC system. For instructions on how
-to prepare a submission script for AtChem2, check the local
-documentation or ask the HPC system administrator.
-
-An \emph{example} submission script for the
-\href{https://en.wikipedia.org/wiki/Portable_Batch_System}{Portable
-  Batch System (PBS)} is shown below:
-
-\begin{verbatim}
-#PBS -o atchem2.log
-#PBS -e atchem2_error.log
-#PBS -N base_v1
-#PBS -l walltime=15:00:00
-#PBS -l vmem=10gb
-#PBS -m bea
-#PBS -l nodes=1:ppn=1
-
-cd ~/AtChem2/
-MODELDIR="base_model_v1"
-./atchem2 $MODELDIR/model/output/ $MODELDIR/model/output/reactionRates/
-          $MODELDIR/model/configuration/ $MODELDIR/mcm/
-          $MODELDIR/model/constraints/species
-          $MODELDIR/model/environment/species
-          $MODELDIR/photolysis/constraints/species
-\end{verbatim}

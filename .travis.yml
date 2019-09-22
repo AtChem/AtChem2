@@ -35,8 +35,8 @@
   install:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/usr/local/Cellar/gcc@4.9/4.9.4_1/lib/gcc/4.9 ; fi
     - cd $TRAVIS_BUILD_DIR
-    - cp tools/Makefile Makefile
-    - ./tools/build.sh ./tools/mcm_example.fac
+    - cp tools/install/Makefile.skel Makefile
+    - ./build/build_atchem2.sh ./mcm/mechanism_test.fac
 
   script:
     - ./atchem2

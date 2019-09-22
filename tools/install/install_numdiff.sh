@@ -1,3 +1,4 @@
+#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
@@ -9,11 +10,13 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/sh
-
-# This script downloads and installs NUMDIFF 5.8.1 into the directory
+# This script downloads and installs numdiff v5.8.1 into the directory
 # given by input argument $1. This is dependent on the existence of a
 # gcc installation.
+#
+# N.B.: numdiff may already be installed on the system (check with the
+# command `which numdiff`). In that case, it is not necessary to
+# execute this script.
 #
 # Example usage:
 #   ./install_numdiff.sh /path/to/install/directory

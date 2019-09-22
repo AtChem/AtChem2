@@ -3,13 +3,15 @@ AtChem2 v1.2-dev
 -------------
  Directories
 -------------
- Model dir is: model
- Output dir is: travis/tests/full/output
- Configuration dir is: travis/tests/full/model/configuration
- MCM dir is: mcm
- Species Constraints dir is: travis/tests/full/model/constraints/species
- Environment Constraints dir is: travis/tests/full/model/constraints/environment
- Photolysis Constraints dir is: travis/tests/full/model/constraints/photolysis
+ Model directory is: model
+ Output directory is: travis/tests/full/output
+ Reaction Rates directory is: travis/tests/full/output/reactionRates
+ Configuration directory is: travis/tests/full/model/configuration
+ Constraints directory is: travis/tests/full/model/constraints
+ Environment Constraints directory is: travis/tests/full/model/constraints/environment
+ Photolysis Constraints directory is: travis/tests/full/model/constraints/photolysis
+ Species Constraints directory is: travis/tests/full/model/constraints/species
+ MCM directory is: mcm
  Shared library is: travis/tests/full/model/configuration/mechanism.so
 
 -----------------------
@@ -68,7 +70,7 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                ratesOutputStepSize:        3600
-              reaction rates output step size:         900
+                   reaction rates output step size:         900
                                     modelStartTime:        3600
                             jacobianOutputStepSize:           0
                                           latitude:   0.529E+02
@@ -123,7 +125,7 @@ AtChem2 v1.2-dev
  6      BLHEIGHT              NOTUSED
  7      DILUTE                6.77E-6
  8      JFAC                  NOTUSED
- 9      ROOF                   OPEN
+ 9      ROOF                     OPEN
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -175,5 +177,5 @@ AtChem2 v1.2-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 10
+ Runtime = 9
  Deallocating memory.

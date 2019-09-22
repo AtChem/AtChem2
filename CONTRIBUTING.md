@@ -1,1 +1,1 @@
-For instructions on how to contribute to the development of AtChem2, please refer to the corresponding [wiki page](https://github.com/AtChem/AtChem2/wiki/3.-Model-Development).
+For instructions on how to contribute to the development of **AtChem2**, please refer to chapter 5 of the manual (in the `doc/` directory) and to the related [wiki page](https://github.com/AtChem/AtChem2/wiki/How-to-contribute).

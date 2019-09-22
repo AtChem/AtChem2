@@ -18,7 +18,7 @@
 # The workflow of this script is quite simple. For each line:
 #  * strip off the trailing newline
 #  * strip out the comment from the end of the line, relying on the fact that quotes
-#      are not able to span lines, to ensure we really grab a '!' marking the comment start, and not in a string literal.
+#    are not able to span lines, to ensure we really grab a '!' marking the comment start, and not in a string literal.
 #  * if the non-comment content is all whitespace, then skip to reappending the comment, otherwise:
 #  * if the previous line was e.g. the start of a procedure, then increase the indent on this line.
 #  * store whether this line ends in an ampersand
@@ -28,6 +28,8 @@
 #  * perform appropriate indentation, rejoin comment and newline, and output.
 #  * set up variables for next loop, passing on indent setting and whether this was an ampersand-ending line.
 from __future__ import print_function
+
+## ------------------------------------------------------------------ ##
 
 # strip newline characters from string
 def strip_newline(string):
@@ -50,6 +52,8 @@ def even_quotes(string):
     else:
         single = False
     return (double and single)
+
+## ------------------------------------------------------------------ ##
 
 import sys
 import re
@@ -135,7 +139,7 @@ with open(out_filename, 'w') as output_file:
                     start_select = True
 
                 # if at a 'case' statement, check whether it's the first one, via start_select
-                # - if so, don't change the indent, as we just want it to be indented next time
+                # if so, don't change the indent, as we just want it to be indented next time
                 # otherwise, unindent by one
                 if re.match('^\s*case\s*', to_output, flags=re.IGNORECASE):
                     if start_select:

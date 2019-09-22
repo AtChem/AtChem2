@@ -47,7 +47,7 @@ ignored by the build scripts. For example:
 \end{verbatim}
 
 The mechanism file is processed by a Python script (\texttt{mech\_converter.py}),
-as explained in Sect.~\ref{subsec:build-process}. The Python script
+as explained in Sect.~\ref{subsec:build-process}. Note, that the Python script
 expects the \texttt{.fac} file to have four sections:
 
 \begin{itemize}
@@ -108,9 +108,9 @@ the \texttt{.fac} file, but it is left empty:
 RO2 = ;
 \end{verbatim}
 
-\textbf{IMPORTANT:} note that \cf{HO2} is a peroxy radical but it is
-not an organic molecule, and therefore it \emph{should not} be
-included in the \cf{RO2} sum.
+\textbf{IMPORTANT NOTE:} \cf{HO2} is a peroxy radical, but it is not an
+organic molecule, and therefore it \emph{should not} be included in
+the \cf{RO2} sum.\\
 
 The \cf{RO2} sum is automatically generated from the mechanism file
 during the build process (Sect.~\ref{subsec:build-process}) using a
@@ -122,13 +122,13 @@ versions of the MCM are also included in the \texttt{mcm/} directory:
 instructions on how to set up Atchem2 to use the previous versions of
 the MCM can be found in the file \texttt{mcm/INFO.md}.
 
-\subsection{The MCM extraction tool} \label{subsec:mcm-extraction-tool}
+\subsection{MCM extraction tool} \label{subsec:mcm-extraction-tool}
 
 The MCM website provides a convenient tool that can be used to
 download the whole MCM (or subsets of it) in FACSIMILE
 format. Only a brief overview will be given here: for more information
-go to the \href{http://mcm.leeds.ac.uk/}{MCM website}. First, select
-the species of interest using the \href{http://mcm.leeds.ac.uk/MCM/roots.htt}{MCM browser}
+go to the \href{http://mcm.leeds.ac.uk/}{MCM website}. First, select the species
+of interest using the \href{http://mcm.leeds.ac.uk/MCM/roots.htt}{MCM browser}
 and add the selection to the \emph{Mark List}. Proceed to the
 \href{http://mcm.leeds.ac.uk/MCM/extract.htt}{MCM extraction tool}
 and select the option \emph{FACSIMILE input format, suitable for
@@ -139,8 +139,7 @@ in the generated the generated \texttt{.fac} file: :
 
 \begin{verbatim}
 [x] Include inorganic reactions?
-[x] Include generic rate coefficients?
-    FACSIMILE, FORTRAN and KPP formats only
+[x] Include generic rate coefficients? FACSIMILE, FORTRAN and KPP formats only
 \end{verbatim}
 
 Click on \emph{Extract} to download the generated \texttt{.fac} file
@@ -151,15 +150,18 @@ AtChem2. If modifications are required (e.g., if you want to add,
 delete, or change some chemical reactions) open the \texttt{.fac} file
 with a text editor and edit the chemical mechanism as needed.
 
-\subsection{The build process} \label{subsec:build-process}
+\subsection{Build process} \label{subsec:build-process}
 
-AtChem2 uses a Python script (\texttt{build/mech\_converter.py},
-automatically called by \texttt{build/build\_atchem2.sh} during the build
-process) to convert the chemical mechanism into a format that can be
-read by the Fortran code.
+AtChem2 is built using the set of scripts in the \texttt{build/}
+directory. Here, we only outline the build process; detailed
+instructions on how to build the model can be found in
+Sect.~\ref{sec:build}.
 
-The script generates one Fortran file, one shared library, and four
-configuration files from the \texttt{.fac} file:
+The Python script \texttt{mech\_converter.py}, which is automatically
+called by the \texttt{build\_atchem2.sh} script, converts the chemical
+mechanism into a format that can be read by the Fortran code (see
+Sect.~\ref{subsec:facsimile-format}). The Python script generates
+seven files from the \texttt{.fac} file:
 
 \begin{itemize}
 \item \textbf{mechanism.f90} contains the equations, in Fortran code,

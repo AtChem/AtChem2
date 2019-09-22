@@ -14,16 +14,16 @@
 % -------------------------------------------------------------------- %
 \section{Chemical Mechanism} \label{sec:chemical-mechanism}
 
-The \textbf{chemical mechanism} is the core element of an atmospheric
-chemistry model. In AtChem2, the mechanism file is written in
-FACSIMILE format and has the extension \texttt{.fac}. The FACSIMILE
-format is used to describe chemical reactions in the commercial
+The chemical mechanism is the core element of an atmospheric chemistry
+model. In AtChem2, the mechanism file is written in FACSIMILE format
+and has the extension \texttt{.fac}. The FACSIMILE format is used to
+describe chemical reactions in the commercial
 \href{http://www.mcpa-software.com/}{FACSIMILE Kinetic Modelling Software};
-for historical reasons, the software and the format have been often
-used in conjunction with the MCM. The
+for historical reasons, the software and the format have been
+often used in conjunction with the MCM. The
 \href{http://mcm.leeds.ac.uk/MCM/extract.htt}{extraction tool} on the
 MCM website can generate \texttt{.fac} files directly in FACSIMILE
-format (see Sect.~\ref{subsec:mcm-extraction-tool}).
+format (see Sect.~\ref{subsec:mcm-extraction}).
 
 \subsection{FACSIMILE format} \label{subsec:facsimile-format}
 
@@ -47,7 +47,7 @@ ignored by the build scripts. For example:
 \end{verbatim}
 
 The mechanism file is processed by a Python script (\texttt{mech\_converter.py}),
-as explained in Sect.~\ref{subsec:build-process}. Note, that the Python script
+as explained in Sect.~\ref{subsec:build-process}. Note that the Python script
 expects the \texttt{.fac} file to have four sections:
 
 \begin{itemize}
@@ -81,7 +81,7 @@ chemistry scheme and the methane oxidation scheme -- is included in
 the \texttt{mcm/} directory (\texttt{mechanism\_test.fac}) as an
 example and for testing purposes.
 
-\subsection{\cf{RO2} sum} \label{subsec:ro2-sum}
+\subsection{The \cf{RO2} sum} \label{subsec:ro2-sum}
 
 The sum of organic peroxy radicals (\cf{RO2}) is a key component of
 the Master Chemical Mechanism: its purpose is to reduce the number of
@@ -122,7 +122,7 @@ versions of the MCM are also included in the \texttt{mcm/} directory:
 instructions on how to set up Atchem2 to use the previous versions of
 the MCM can be found in the file \texttt{mcm/INFO.md}.
 
-\subsection{MCM extraction tool} \label{subsec:mcm-extraction-tool}
+\subsection{MCM extraction} \label{subsec:mcm-extraction}
 
 The MCM website provides a convenient tool that can be used to
 download the whole MCM (or subsets of it) in FACSIMILE
@@ -139,7 +139,8 @@ in the generated the generated \texttt{.fac} file: :
 
 \begin{verbatim}
 [x] Include inorganic reactions?
-[x] Include generic rate coefficients? FACSIMILE, FORTRAN and KPP formats only
+[x] Include generic rate coefficients?
+    FACSIMILE, FORTRAN and KPP formats only
 \end{verbatim}
 
 Click on \emph{Extract} to download the generated \texttt{.fac} file
@@ -150,7 +151,7 @@ AtChem2. If modifications are required (e.g., if you want to add,
 delete, or change some chemical reactions) open the \texttt{.fac} file
 with a text editor and edit the chemical mechanism as needed.
 
-\subsection{Build process} \label{subsec:build-process}
+\subsection{The build process} \label{subsec:build-process}
 
 AtChem2 is built using the set of scripts in the \texttt{build/}
 directory. Here, we only outline the build process; detailed
@@ -160,36 +161,34 @@ Sect.~\ref{sec:build}.
 The Python script \texttt{mech\_converter.py}, which is automatically
 called by the \texttt{build\_atchem2.sh} script, converts the chemical
 mechanism into a format that can be read by the Fortran code (see
-Sect.~\ref{subsec:facsimile-format}). The Python script generates
-seven files from the \texttt{.fac} file:
+Sect.~\ref{subsec:facsimile-format}). The Python script generates a
+number of files from the chemical mechanism (\texttt{.fac}) file:
 
 \begin{itemize}
-\item \textbf{mechanism.f90} contains the equations, in Fortran code,
-  to calculate the rate coefficients of each reaction. By default, it
-  is placed in \texttt{model/configuration/}.
-\item \textbf{mechanism.so} is the compiled version of
-  \texttt{mechanism.f90}. By default, it is placed in
-  \texttt{model/configuration/}.
-\item \textbf{mechanism.species} contains the list of chemical species
-  in the mechanism. By default, it is saved in
-  \texttt{model/configuration/}. The file has no header. The first
-  column is the \emph{ID number} of each species, the second column is
-  the name of the species:
+\item \texttt{mechanism.f90} contains the equations, in Fortran code,
+  to calculate the rate coefficients of each reaction of the chemical
+  mechanism.
+\item \texttt{mechanism.so} is the shared library, i.e. the
+  pre-compiled version of the chemical mechanism.
+\item \texttt{mechanism.species} contains the list of chemical species
+  in the chemical mechanism. The file has no header. The first column
+  is the \emph{ID number} of the species, the second column is the
+  name of the species:
   \begin{verbatim}
   1 O
   2 O3
   3 NO
   4 NO2
-\end{verbatim}
-\item \textbf{mechanism.reac} and \textbf{mechanism.prod} contain the
+  \end{verbatim}
+\item \texttt{mechanism.reac} and \texttt{mechanism.prod} contain the
   reactants and the products (respectively) in each reaction of the
-  mechanism. By default, it is saved in \texttt{model/configuration/}.
-  The files have a 1 line header with the number of species, the
-  number of reactions and the number of equations in the Generic Rate
-  Coefficients and Complex Reactions sections. The first column is the
+  chemical mechanism. The files have a 1 line header with the number
+  of species, the number of reactions and the number of equations in
+  the Generic Rate Coefficients and Complex Reactions sections (see
+  Sect.~\ref{subsec:facsimile-format}). The first column is the
   \emph{ID number} of the reaction, the second column is the \emph{ID
-    number} of the species (from \texttt{mechanism.species}) which are
-  reactants/products in that reaction:
+    number} of the species which are reactants/products in that
+  reaction:
   \begin{verbatim}
   29 71 139 numberOfSpecies numberOfReactions numberOfGenericComplex
   1 1
@@ -197,48 +196,27 @@ seven files from the \texttt{.fac} file:
   3 1
   3 2
 \end{verbatim}
-\item \textbf{mechanism.ro2} contains the organic peroxy radicals
-  (RO2). By default, it is saved in \texttt{model/configuration/}. The
-  file has a comment line header (Fortran style). The first column is
-  the \emph{ID number} of the peroxy radical (from
+\item \texttt{mechanism.ro2} contains the organic peroxy radicals
+  (RO2). The file has a comment line header in Fortran style. The
+  first column is the \emph{ID number} of the peroxy radical (from
   \texttt{mechanism.species}), the second column is the name of the
-  peroxy radical as Fortran comment:
+  peroxy radical as a Fortran comment:
   \begin{verbatim}
   ! Note that this file is generated by build/mech_converter.py
-  ! based upon the file mcm/mechanism_test.fac. Any manual edits to
+  ! based upon the file mcm/mechanism_test.fac Any manual edits to
   ! this file will be overwritten when calling build/mech_converter.py
   23 !CH3O2
   26 !C2H5O2
   28 !IC3H7O2
   29 !NC3H7O2
-\end{verbatim}
+  \end{verbatim}
 \end{itemize}
 
-The locations of the files generated during the build process can be
-modified by changing the second and the third argument of the script
-\texttt{build/build\_atchem2.sh}. For more information and detailed
-instructions go to: \hyperref[ch:execution]{Model Execution}.
-
-\subsection{Example mechanism file} \label{subsec:example-mechanism-file}
-
-\begin{verbatim}
-* ------------------------------------------------------------------- *;
-* SIMPLE CHEMICAL MECHANISM                                           *;
-* Chemical mechanism for ethanol - from MCM v3.3.1                    *;
-* ------------------------------------------------------------------- *;
-*;
-* Generic Rate Coefficients ;
-*;
-* Complex reactions ;
-*;
-* Peroxy radicals. ;
-RO2 = HOCH2CH2O2 ;
-*;
-* Reaction definitions. ;
-% 3.0D-12*EXP(20/TEMP)*0.05 : C2H5OH + OH = C2H5O ;
-% 3.0D-12*EXP(20/TEMP)*0.9 : C2H5OH + OH = CH3CHO + HO2 ;
-% 3.0D-12*EXP(20/TEMP)*0.05 : C2H5OH + OH = HOCH2CH2O2 ;
-\end{verbatim}
+The directory containing the files generated by the build script is
+the \sharedir\ and, by default, it is \texttt{model/configuration/}:
+the location of the \sharedir\ can be changed using the second
+argument of the build script, as explained in more detail in
+Sect.~\ref{sec:build} (see also Sect.~\ref{subsec:model-directory}).
 
 % -------------------------------------------------------------------- %
 \section{Model Parameters} \label{sec:model-parameters}

@@ -40,7 +40,15 @@ echo "* mcm data files directory [ default = ./mcm/ ]:" $3
 
 echo ''
 echo "call mech_converter.py"
-python ./build/mech_converter.py $1 $2 $3
+python ./build/mech_converter.py $1 $2 $3 $4
+
+echo ''
+echo "call dilute.py to add dilution term to scheme.fac"
+cp $1 ./tools/backup_scheme.fac
+python ./dilute.py $1
+
+echo "call mech_converter.py again"
+python ./build/mech_converter.py $1 $2 $3 $4
 
 echo ''
 if [ -z $2 ]; then
@@ -56,5 +64,9 @@ fi
 echo ''
 echo "make base executable"
 make
+
+echo ''
+echo "restore original mechanism file"
+mv ./tools/backup_scheme.fac $1
 
 exit 0

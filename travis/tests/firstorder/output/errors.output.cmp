@@ -1,2 +1,4 @@
-Number of fixed constrained species: 0
-Total number of constrained species: 0
+ Error in setConcentrations
+Can't find species: O          in species list
+ Error in setConcentrations
+Can't find species: O3         in species list

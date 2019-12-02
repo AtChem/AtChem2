@@ -17,14 +17,14 @@ range of possibile configurations.
   - `short_no_pre`: Solver Type = SPGMR.
 
 - `spec*`: chemical mechanism of CH4 (71 reactions, 30 species), with constraints.
-  - `spec_no_env_yes1`:
-  - `spec_no_env_yes2`:
-  - `spec_yes_env_no`:
-  - `spec_yes_env_no_with_jfac`:
-  - `spec_yes_env_no_with_jfac_fail1`:
-  - `spec_yes_env_no_with_jfac_fixed`:
-  - `spec_yes_env_no_with_photo`:
-  - `spec_yes_env_yes`:
-  - `spec_yes_plus_fixed_env_no`:
+  - `spec_no_env_yes1`: Temp and Press set, BLHEIGHT constrained
+  - `spec_no_env_yes2`: Temp and Press constrained, BLHEIGHT not used
+  - `spec_yes_env_no`: change runtime and starttime and output times. change rtol and atol parameters, two species constrained.
+  - `spec_yes_env_no_with_jfac`: constrained to J$, calculate JFAC from J4. three species constrained.
+  - `spec_yes_env_no_with_jfac_fail1`: same but J4 file is missing
+  - `spec_yes_env_no_with_jfac_fixed`: JFAC set to 0.9, not constrained to J4.
+  - `spec_yes_env_no_with_photo`: JFAC not used, constrained to two species. nchange output reaction rates
+  - `spec_yes_env_yes`: BLHEIGHT and two species constrained, jacobian output. change runtime and starttime and output times. Change rtol.
+  - `spec_yes_plus_fixed_env_no`: same as spec_yes_env_no, but different solver and model parameters. Two species set to constant and two constrained.
 
-- `full`: complete MCM (17224 reactions, 5833 species), no constraints.
+- `full`: complete MCM (17224 reactions, 5833 species), no constraints. Temp, H2O, DEC and DILUTE set to constant values. One species initialized. Change3d atol and rtol, and all model parameters.

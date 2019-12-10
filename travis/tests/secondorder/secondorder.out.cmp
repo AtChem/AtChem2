@@ -31,16 +31,16 @@ AtChem2 v1.2-dev
  Finished reading species names.
 
  Reading initial concentrations...
-      1 O                1.000E+02
-      2 O3               0.000E+00
+      1 A                1.000E+02
+      2 B                0.000E+00
  Finished reading initial concentrations.
 
 ----------------------------------------
  Species requiring detailed rate output
 ----------------------------------------
  Reading which species require detailed rate output...
-      1 O         
-      2 O3        
+      1 A         
+      2 B         
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
@@ -87,8 +87,8 @@ AtChem2 v1.2-dev
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 2 species:
-      1 O         
-      2 O3        
+      1 A         
+      2 B         
 
 ------------
  Photolysis
@@ -1673,5 +1673,5 @@ AtChem2 v1.2-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 1
 
- Runtime = 0
+ Runtime = 3
  Deallocating memory.

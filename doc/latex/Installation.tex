@@ -98,7 +98,7 @@ used, others are optional. We suggest to use a single directory for
 all the dependencies; the \emph{dependencies directory} can be located
 anywhere and called as you prefer. In the documentation, we will
 assume that the \emph{dependencies directory} is
-\texttt{\$HOME/atchem-libraries/}.
+\texttt{\$HOME/atchem-lib/}.
 
 Before installing the dependencies, make sure that Fortran, Python,
 cmake and (optionally) Ruby are installed on your system, as explained
@@ -142,15 +142,15 @@ installed using the \texttt{install\_cvode.sh} script in the
   script (change the path of the \emph{dependencies directory} as
   needed):
   \begin{verbatim}
-  ./tools/install/install_cvode.sh ~/atchem-libraries/
+  ./tools/install/install_cvode.sh ~/atchem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working CVODE
 installation at
-\texttt{\textasciitilde{}/atchem-libraries/cvode/}. The path to the
+\texttt{\textasciitilde{}/atchem-lib/cvode/}. The path to the
 CVODE library is
-\texttt{\textasciitilde{}/atchem-libraries/cvode/lib/}.
+\texttt{\textasciitilde{}/atchem-lib/cvode/lib/}.
 
 \subsubsection{openlibm} \label{openlibm}
 
@@ -170,13 +170,13 @@ the \texttt{install\_openlibm.sh} script in the
 \item Run the installation script (change the path of the
   \emph{dependencies directory} as needed):
   \begin{verbatim}
-  ./tools/install/install_openlibm.sh ~/atchem-libraries/
+  ./tools/install/install_openlibm.sh ~/atchem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working openlibm
 installation at
-\texttt{\textasciitilde{}/atchem-libraries/openlibm-0.4.1/}.
+\texttt{\textasciitilde{}/atchem-lib/openlibm-0.4.1/}.
 
 \subsection{Optional dependencies} \label{subsec:optional-dependencies}
 
@@ -200,14 +200,14 @@ example in the \emph{dependencies directory}. Use the script
 \item Run the installation script (change the path of the
   \emph{dependencies directory} as needed):
   \begin{verbatim}
-  ./tools/install/install_numdiff.sh ~/atchem-libraries/
+  ./tools/install/install_numdiff.sh ~/atchem-lib/
   \end{verbatim}
 \item Move to your \texttt{\$HOME} directory (\texttt{cd\
     \textasciitilde{}}). Open the \texttt{.bash\_profile} file (or the
   \texttt{.profile} file, depending on your configuration) with a text
   editor. Add the following line at the bottom of the file (change the
   path of the \emph{dependencies directory} as needed):
-  \texttt{PATH=\$PATH:\$HOME/atchem-libraries/numdiff/bin}
+  \texttt{PATH=\$PATH:\$HOME/atchem-lib/numdiff/bin}
 \item Close the terminal.
 \item Open the terminal and execute \texttt{which\ numdiff} to check
   that the program has been installed correctly.
@@ -232,13 +232,13 @@ directory.
 \item Run the installation script (change the path of the
   \emph{dependencies directory} as needed):
   \begin{verbatim}
-  ./tools/install/install_fruit.sh ~/atchem-libraries/
+  ./tools/install/install_fruit.sh ~/atchem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working FRUIT
 installation at
-\texttt{\textasciitilde{}/atchem-libraries/fruit\_3.4.3/}.
+\texttt{\textasciitilde{}/atchem-lib/fruit\_3.4.3/}.
 
 % -------------------------------------------------------------------- %
 \section{Install} \label{sec:install}
@@ -251,7 +251,7 @@ To install AtChem2:
   \hyperref[sec:dependencies]{Dependencies} and take note of the name
   and path of the \emph{dependencies directory} (in the following
   instructions, we will assume that the \emph{dependencies directory}
-  is \texttt{\textasciitilde{}/atchem-libraries/}).
+  is \texttt{\textasciitilde{}/atchem-lib/}).
 \item Copy the \texttt{Makefile} in the \texttt{tools/} directory to
   the \emph{main directory} (\texttt{cp\ tools/Makefile\ ./}).
 \item From the the \emph{main directory}, open the \texttt{Makefile}
@@ -263,9 +263,9 @@ To install AtChem2:
   \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}). For
   example:
   \begin{verbatim}
-  CVODELIB = $(HOME)/atchem-libraries/cvode/lib
-  OPENLIBMDIR = $(HOME)/atchem-libraries/openlibm-0.4.1
-  FRUITDIR = $(HOME)/atchem-libraries/fruit_3.4.3
+  CVODELIB = $(HOME)/atchem-lib/cvode/lib
+  OPENLIBMDIR = $(HOME)/atchem-lib/openlibm-0.4.1
+  FRUITDIR = $(HOME)/atchem-lib/fruit_3.4.3
   \end{verbatim}
 \item Execute \texttt{./build/build\_atchem2.sh\
     ./mcm/mechanism\_test.fac}. This command compiles the model and

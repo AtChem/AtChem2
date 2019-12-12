@@ -86,8 +86,8 @@ example and for testing purposes.
 The sum of organic peroxy radicals (\cf{RO2}) is a key component of
 the Master Chemical Mechanism: its purpose is to reduce the number of
 self and cross reactions between the $>$1000 organic peroxy radicals,
-as described in the MCM protocol papers \citep{Jenkin_1997,
-  Saunders_2003}. Since AtChem2 is designed primarily to run models
+as described in the MCM protocol papers \citep{jenkin_1997,
+  saunders_2003}. Since AtChem2 is designed primarily to run models
 based upon the MCM, the \texttt{.fac} file must contain a section with
 the \cf{RO2} sum (Sect.~\ref{subsec:facsimile-format}). This section
 must have a header and has the following format:
@@ -119,7 +119,7 @@ complete list of all organic peroxy radicals in version 3.3.1 of the
 MCM (\texttt{mcm/peroxy-radicals\_v3.3.1}), which is the version used
 by default. Complete lists of all organic peroxy radicals from other
 versions of the MCM are also included in the \texttt{mcm/} directory:
-instructions on how to set up Atchem2 to use the previous versions of
+instructions on how to set up AtChem2 to use the previous versions of
 the MCM can be found in the file \texttt{mcm/INFO.md}.
 
 \subsection{MCM extraction} \label{subsec:mcm-extraction}
@@ -355,7 +355,7 @@ complete explanation of these parameters can be found in the
 
 The \textbf{environment variables} define the physical parameters of
 the model, such as temperature, pressure, humidity, latitude,
-longitude, position of the sun, etc\ldots{} These variables are set in
+longitude, position of the sun, etc\ldots. These variables are set in
 the text file\\
 \texttt{model/configuration/environmentVariables.config}.
 
@@ -572,7 +572,7 @@ parametrization.
 
 AtChem2 implements the parametrization of photolysis rates used by the
 Master Chemical Mechanism. It is described in the MCM protocol papers:
-\citep{Jenkin_1997} and \citep{Saunders_2003}.
+\citet{jenkin_1997} and \citet{saunders_2003}.
 
 The MCM parametrization calculates the photolysis rate of a reaction
 (\texttt{J}) with the equation:
@@ -599,13 +599,13 @@ longitude, time of the day and sun declination (see
 \hyperref[sec:model-parameters]{Model Parameters} and
 \hyperref[sec:environment-variables]{Environment Variables}). The
 calculation is detailed in ``The Atmosphere and UV-B Radiation at
-Ground Level'' \citep{Madronich_1993}.
+Ground Level'' \citep{madronich_1993}.
 
 \subsection{JFAC calculation} \label{subsec:jfac-calculation}
 
 Measurements of ambient photolysis rates typically show short-term
 variability, due to the changing meteorological conditions (clouds,
-rain, etc\ldots{}). This information is retained in the constrained
+rain, etc\ldots). This information is retained in the constrained
 photolysis rates, but it is lost in the calculated ones. To account
 for this, the calculated photolysis rates can be scaled by a
 correction factor (\texttt{JFAC}), as explained below.

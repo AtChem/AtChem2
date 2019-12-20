@@ -10,14 +10,25 @@
 #
 # -----------------------------------------------------------------------------
 
+# Script to generate the AtChem2 manual
+
+# Convert svg figures to png
+cd figures/
+for fig in *.svg; do
+    convert $fig $fig.png
+done
+cd ../
+
 # Compile LaTeX source files to pdf file
+cd latex/
 pdflatex AtChem2-Manual.tex
 bibtex AtChem2-Manual.aux
 pdflatex AtChem2-Manual.tex
 pdflatex AtChem2-Manual.tex
 
 # Move pdf file to doc/ directory
-mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
+cd ../
+mv -f latex/AtChem2-Manual.pdf AtChem2-Manual.pdf
 
 echo "\n"
 echo "||----------------------------------------||"

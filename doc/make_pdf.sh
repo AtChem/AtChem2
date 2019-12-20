@@ -14,8 +14,9 @@
 
 # Convert svg figures to png
 cd figures/
-for fig in *.svg; do
-    convert $fig $fig.png
+for FIG in *.svg; do
+    convert $FIG $FIG.png
+    mv $FIG.png ${FIG%%.*}.png
 done
 cd ../
 
@@ -30,7 +31,8 @@ pdflatex AtChem2-Manual.tex
 cd ../
 mv -f latex/AtChem2-Manual.pdf AtChem2-Manual.pdf
 
-echo "\n"
+echo ""
 echo "||----------------------------------------||"
 echo "||==> AtChem2-Manual.pdf saved to doc/    ||"
-echo "||----------------------------------------||\n"
+echo "||----------------------------------------||"
+echo ""

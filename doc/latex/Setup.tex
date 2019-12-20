@@ -400,16 +400,10 @@ Sect.~\ref{sec:constraints} for more information). Some environment
 variables can be calculated by the model (\texttt{CALC}) and some can
 be deactivated if they are not needed (\texttt{NOTUSED}).
 
-By default, most environment variables are set to \texttt{NOTUSED}, or
-to the following fixed values:
-
-\begin{itemize}
-\item Temperature = 25 $\degc$ = 298.15 K
-\item Pressure = 1 atm = 1013.25 mbar
-\item Relative Humidity = 50\%
-\item Day, Month, Year = 21 June 2010
-\item Sun Declination = 0.41 rad
-\end{itemize}
+By default, the environment variables are set to \texttt{NOTUSED} or
+to a fixed value. The AtChem2 environment variables are described
+below, together with their possible settings, units, and default
+values.
 
 \subsection{TEMP} \label{subsec:temp}
 
@@ -478,9 +472,9 @@ Default fixed value = 0.41
 
 Boundary Layer Height. It is required only if the model includes
 non-chemical processes, such as emission or deposition of chemical
-species. The unit can be cm, m or km, depending on how these processes
-are parametrized in the chemical mechanism (see Sect.~\ref{subsec:facsimile-format}
-for details).
+species. The unit is typically cm or m, depending on how these
+processes are parametrized in the chemical mechanism (see
+Sect.~\ref{subsec:facsimile-format} for details).
 
 \begin{itemize}
 \item fixed value
@@ -493,7 +487,7 @@ Default = NOTUSED (-1)
 \subsection{DILUTE} \label{subsec:dilute}
 
 Dilution rate (s-1). It is required only if the model includes
-dilution of the chemical species. %% TODO: update after merging PR#409
+dilution of the chemical species. %% TODO: update after merging PR #408
 
 \begin{itemize}
 \item fixed value
@@ -539,11 +533,12 @@ Default value = OPEN
 \section{Photolysis Rates} \label{sec:photolysis-rates}
 
 The photolysis rates are identified in
-\hyperref[sec:chemical-mechanism]{FACSIMILE format} as \verb|J<n>|,
-where \texttt{n} is an integer determined by the
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{MCM naming
-  convention}. The photolysis rates are calculated by AtChem2 using
-the
+\hyperref[sec:chemical-mechanism]{FACSIMILE format} with the notation
+\verb|J<n>|, where \texttt{n} is an integer assigned by the MCM
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming
+  convention}.
+
+The photolysis rates are calculated in AtChem2 using the
 \href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt}{MCM
   parametrization}, as explained in more detail below. Each photolysis
 rate can also be set to a constant value or to constrained values.
@@ -561,6 +556,12 @@ The following rules apply:
 \item If no photolysis rate is set to constant or to constrained, the
   model calculates all the photolysis rates.
 \end{enumerate}
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{photolysis.png}
+  \caption{} \label{fig:}
+\end{figure}
 
 The environment variable \texttt{ROOF} can also be used to turn the
 photolysis rates ON/OFF, which is useful for simulations of some

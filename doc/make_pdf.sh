@@ -12,10 +12,10 @@
 
 # Script to generate the AtChem2 manual
 
-# Convert svg figures to png
+# Convert svg figures to png format using Inkscape
 cd figures/
 for FIG in *.svg; do
-    convert $FIG $FIG.png
+    inkscape -e $FIG.png $FIG
     mv $FIG.png ${FIG%%.*}.png
 done
 cd ../

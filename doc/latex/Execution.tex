@@ -15,85 +15,195 @@
 \section{The Model} \label{sec:model}
 
 AtChem2 is designed to build and run atmospheric chemistry box-models
-based upon the Master Chemical Mechanism
-(\href{http://mcm.leeds.ac.uk/MCM/}{MCM}). This page explains how to
-set up, compile and run an AtChem2 atmospheric chemistry model. The
-directory structure of AtChem2 is described in
-\hyperref[sec:model-structure]{Model Structure}. A working knowledge
-of the \textbf{unix shell} and its
-\href{https://swcarpentry.github.io/shell-novice/reference/}{basic
-  commands} is \emph{required} to use the AtChem2 model.
+based upon the Master Chemical Mechanism (\href{http://mcm.leeds.ac.uk/MCM/}{MCM}).
+Other chemical mechanisms can be used, as long as they are provided in
+the correct format, as explained in Sect.~\ref{sec:chemical-mechanism}.
 
-There are two sets of inputs to AtChem2 -- the mechanism file, and
+This chapter explains how to set up, compile and run an AtChem2
+atmospheric chemistry model. The directory structure of AtChem2 is
+described in Sect.~\ref{sec:model-structure}.
+A working knowledge of the \textbf{unix shell} and its
+\href{https://swcarpentry.github.io/shell-novice/reference/}{basic commands}
+is \emph{required} to use the AtChem2 model.
+
+There are two sets of inputs to AtChem2 -- the mechanism file, and the
 configuration files.
 
 \subsection{Mechanism file} \label{subsec:mechanism-file}
 
-The model requires a chemical mechanism in FACSIMILE format
-(\texttt{.fac}). The \textbf{mechanism file} can be downloaded from
-the MCM website using the
-\href{http://mcm.leeds.ac.uk/MCM/extract.htt}{extraction tool}
-or assembled manually. The user can modify the \texttt{.fac} file as
-required with a text editor. This mechanism file is converted into a
-shared library and a set of associated data files in the compilation
-step below. For more information on the chemical mechanism go to:
-\hyperref[sec:chemical-mechanism]{Chemical Mechanism}.
+AtChem2 requires a chemical mechanism in
+\hyperref[subsec:facsimile-format]{FACSIMILE format} (\texttt{.fac}).
+The mechanism file can be downloaded from the MCM website
+ using the \href{http://mcm.leeds.ac.uk/MCM/extract.htt}{extraction tool}
+or it can be assembled manually. The user can modify the downloaded
+\texttt{.fac} file with a text editor.
+
+The mechanism file is converted into a shared library (\texttt{.so})
+and a number of related files during the build process (see
+Sect.~\ref{subsec:build-process}).
 
 \subsection{Configuration files} \label{subsec:configuration-files}
 
-The \textbf{model configuration} is set via a number of text files
-located in the \texttt{model/configuration/} directory. The text files
-can be modified with a text editor. Detailed information on the
-configuration files can be found in the corresponding wiki pages:
+The model configuration is set via a number of text files located in
+the \texttt{model/configuration/} directory:
 
 \begin{itemize}
-\item model and solver parameters -- see
+\item model and solver parameters -- go to
   \hyperref[sec:model-parameters]{Model Parameters} and
   \hyperref[sec:solver-parameters]{Solver Parameters}.
-\item environment variables -- see \hyperref[sec:environment-variables]{Environment
-    Variables}.
-\item photolysis rates -- see \hyperref[sec:photolysis-rates]{Photolysis
-    Rates and JFAC}.
-\item initial concentrations of chemical species and lists of output
-  variables -- see \hyperref[sec:config-files]{Config Files}.
+\item environment variables settings -- go to
+  \hyperref[sec:environment-variables]{Environment Variables}.
+\item photolysis rates settings -- go to
+  \hyperref[sec:photolysis-rates]{Photolysis Rates}.
+\item initialization of chemical species, model output settings -- go
+  to \hyperref[sec:config-files]{Config Files}.
 \end{itemize}
 
-The model constraints -- chemical species, environment variables,
-photolysis rates -- are located in the \texttt{model/constraints/}
-directory. For more information, go to:
-\hyperref[sec:constraints]{Constraints}.
+All the configuration files can be modified with a text
+editor. Detailed information on the configuration files can be found
+in the \hyperref[ch:setup]{Model Setup} chapter. The model constraints
+-- chemical species, environment variables, photolysis rates -- are
+located in the \texttt{model/constraints/} directory: for more
+information go to Sect.~\ref{sec:constraints}.
 
-\subsection{Output} \label{subsec:output}
+% -------------------------------------------------------------------- %
+\section{Constraints} \label{sec:constraints}
 
-The model output is saved by default in the directory
-\texttt{model/output/}. The location can be modified by changing the
-arguments of the \texttt{atchem2} executable (see above).
-
-The AtChem2 output files are space-delimited text files, with a header
-containing the names of the variables:
+AtChem2 can be run in two modes:
 
 \begin{itemize}
-\item values of environment variables and concentrations of chemical
-  species:\\ \texttt{environmentVariables.output},
-  \texttt{speciesConcentrations.output}.
-\item values of photolysis rates and related parameters:\\
-  \texttt{photolysisRates.output},
-  \texttt{photolysisRatesParameters.output}.
-\item loss and production rates of selected species (see
-  \hyperref[sec:config-files]{Config Files}):\\ \texttt{lossRates.output},
-  \texttt{productionRates.output}.
-\item Jacobian matrix (if requested, see
-  \hyperref[sec:model-parameters]{Model Parameters}):\\
-  \texttt{jacobian.output}.
-\item model diagnostic variables:\\ \texttt{finalModelState.output},
-  \texttt{initialConditionsSetting.output},
-  \texttt{mainSolverParameters.output}.
+\item unconstrained: all variables are calculated by the model from
+  the initial conditions, which are set in the model
+  \hyperref[sec:config-files]{configuration files}.
+\item constrained: one or more variables are constrained, meaning that
+  the solver forces their value to a given value at each time
+  step. The variables that are not constrained are calculated by the
+  model.
 \end{itemize}
 
-In addition, the reaction rates of all the reactions in the chemical
-mechanism are saved in the directory \texttt{reactionRates/}: one file
-for each model step, with the filename corresponding to the time in
-seconds.
+The constrained values must be provided as separate files for each
+constrained variable. The format of the constraint files is described
+below. By default, the files with the constraining data are in
+\texttt{model/constraints/species/} for the chemical species,
+\texttt{model/constraints/environment/} for the environment variables,
+and \texttt{model/constraints/photolysis/} for the photolysis
+rates. The default directories can be modified by changing the
+arguments of the \texttt{atchem2} executable (see
+\hyperref[sec:execute]{Execute}).
+
+\subsection{Constrained variables} \label{subsec:constrained-variables}
+
+\subsubsection{Environment variables}
+
+All environment variables, except \texttt{ROOF}, can be
+constrained. To do so, set the variable to \texttt{CONSTRAINED} in
+\texttt{model/configuration/environmentVariables.config} and create
+the file with the constraining data. The name of the file must be the
+same as the name of the variable, e.g., \texttt{TEMP} (without
+extension). See also: \hyperref[sec:environment-variables]{Environment Variables}.
+
+\subsubsection{Chemical species}
+
+Any chemical species in the chemical mechanism can be constrained. To
+do so, add the name of the species to
+\texttt{model/configuration/speciesConstrained.config} and create the
+file with the constraining data. The name of the file must be the same
+as the name of the chemical species, e.g., \texttt{CH3OH} (without
+extension). See also: \hyperref[sec:config-files]{Config Files}.
+
+\subsubsection{Photolysis rates}
+
+Any of the photolysis rates in the chemical mechanism can be
+constrained. The photolysis rates are identified as \verb|J<n>|, where
+\texttt{n} is an integer (see
+\hyperref[sec:photolysis-rates]{Photolysis Rates and JFAC}). To
+constrain a photolysis rate add its name (\texttt{Jn}) to\\
+\texttt{model/configuration/photolysisConstrained.config} and create
+the file with the constraining data. The name of the file must be the
+same as the name of the photolysis rate, e.g., \texttt{J4} (without
+extension). See also \hyperref[sec:config-files]{Config Files}.
+
+\subsection{Constraint files} \label{subsec:constraint-files}
+
+The files with the constraining data are text files with two columns
+separated by spaces. The first column is the time in \textbf{seconds}
+from midnight of day/month/year (see \hyperref[sec:model-parameters]{Model
+  Parameters}), the second column is the value of the variable in the
+appropriate unit. For the chemical species the unit is
+\textbf{molecules cm-3} and for the photolysis rates the unit is
+\textbf{s-1}; for the environment variables see the related
+\hyperref[sec:environment-variables]{section}. For example:
+
+\begin{verbatim}
+-900   73.21
+0      74.393
+900    72.973
+1800   72.63
+2700   72.73
+3600   69.326
+4500   65.822
+5400   63.83
+6300   64.852
+7200   64.739
+\end{verbatim}
+
+The time in the first column of a constraint file can be negative.
+AtChem2 interprets the negative timestamps as ``seconds \emph{before}
+midnight of day/month/year'' (see \hyperref[sec:model-parameters]{Model
+  Parameters}). This can be useful to allow correct interpolation of
+the variables at the beginning of the model run (see below).
+
+\textbf{Important.} The constraints must cover the same amount of
+time, or preferably more, as the intended model runtime. For example:
+if the model starts at 42300 seconds and stops at 216000 seconds, the
+first and the last data points in a constraint file must have a
+timestamp of 42300 (or lower) and 21600 (or higher), respectively.
+
+\subsection{Interpolation} \label{subsec:interpolation}
+
+Constraints can be provided at different timescales. Typically, the
+constraining data come from direct measurements and it is a very
+common for different instruments to sample at different
+frequencies. For example, ozone and nitrogen oxides can be measured
+once every minute, but most organic compounds can be measured only
+once every hour.
+
+The user can average the constraints so that they are all at the same
+timescale or can use the data with the original timestamps. Both
+approaches have advantages and disadvantages in terms of how much
+pre-processing work is required, and in terms of model accuracy and
+integration speed. Whether all the constraints have the same timescale
+or not, the solver interpolates between data points using the
+interpolation method selected in the
+\texttt{model/configuration/model.parameters} file (see
+\hyperref[sec:model-parameters]{Model Parameters}). The default
+interpolation method is piecewise linear, but piecewise constant
+interpolation is also available.
+
+The photolysis rates and the environment variables are evaluated by
+the solver when needed -- each is interpolated individually, only when
+constrained. This happens each time the function
+\texttt{mechanism\_rates()} is called from \texttt{FCVFUN()}, and
+therefore is controlled by \textbf{CVODE} as it completes the
+integration. In a similar way, the interpolation routine for the
+chemical species is called once for each of the constrained species in
+\texttt{FCVFUN()}, plus once when setting the initial conditions of
+each of the constrained species.
+
+As mentioned above, the model start and stop time \emph{must be}
+within the time interval of the constrained data to avoid
+interpolation errors or model crash. If data is not supplied for the
+full runtime interval, then the \emph{final} value will be used for
+all times both \emph{before the first data point} and \emph{after the
+  last data point}. This behaviour is likely to change in future
+versions, at least to avoid the situation where the last value is used
+for all times before the first (see issue
+\href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).
+
+A warning is printed for all evaluations outside of the supplied time
+interval. Users may find it useful to supply data that covers a short
+time \emph{beyond} the final model time, which may be used by the
+solver.
 
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
@@ -268,3 +378,36 @@ the user to have only one base executable called \texttt{atchem2} in
 the \maindir: when running multiple models at the same
 time the user can reuse this base executable while pointing each model
 to the correct shared library and configuration files.
+
+% -------------------------------------------------------------------- %
+\section{Output} \label{sec:output}
+
+The model output is saved by default in the directory
+\texttt{model/output/}. The location can be modified by changing the
+arguments of the \texttt{atchem2} executable (see above).
+
+The AtChem2 output files are space-delimited text files, with a header
+containing the names of the variables:
+
+\begin{itemize}
+\item values of environment variables and concentrations of chemical
+  species:\\ \texttt{environmentVariables.output},
+  \texttt{speciesConcentrations.output}.
+\item values of photolysis rates and related parameters:\\
+  \texttt{photolysisRates.output},
+  \texttt{photolysisRatesParameters.output}.
+\item loss and production rates of selected species (see
+  \hyperref[sec:config-files]{Config Files}):\\ \texttt{lossRates.output},
+  \texttt{productionRates.output}.
+\item Jacobian matrix (if requested, see
+  \hyperref[sec:model-parameters]{Model Parameters}):\\
+  \texttt{jacobian.output}.
+\item model diagnostic variables:\\ \texttt{finalModelState.output},
+  \texttt{initialConditionsSetting.output},
+  \texttt{mainSolverParameters.output}.
+\end{itemize}
+
+In addition, the reaction rates of all the reactions in the chemical
+mechanism are saved in the directory \texttt{reactionRates/}: one file
+for each model step, with the filename corresponding to the time in
+seconds.

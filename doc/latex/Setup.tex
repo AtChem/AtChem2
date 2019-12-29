@@ -669,15 +669,15 @@ directory \texttt{model/constraints/environment/}~\footnote{This
 
 The configuration files contain the settings for the environment
 variables, the initial conditions of the chemical species, the model
-constraints and the desired model output. These files complement the
-settings of the model (in \texttt{model.parameters}) and of the solver
-(in \texttt{solver.parameters}), which are described in
+constraints and the model output. These files complement the settings
+of the model (in \texttt{model.parameters}) and of the solver (in
+\texttt{solver.parameters}), which are described in
 Sect.~\ref{sec:model-parameters} and Sect.~\ref{sec:solver-parameters}.
 
 The configuration files have the extension \texttt{.config} and, by
 default, are in the \texttt{model/configuration/} directory. This
 directory also contains the files generated during the
-\hyperref[subsec:build-process]{build process} which describe the
+\hyperref[subsec:build-process]{build process} which describes the
 chemical mechanism. The location of the configuration and mechanism
 files can be modified by the user (Sect.~\ref{subsec:model-directory}
 and Sect.~\ref{subsec:build-process}, provided that all these files
@@ -752,9 +752,9 @@ column, with one species per line.
 
 The frequency of this output is controlled by the \textbf{step size}
 parameter in \texttt{model.parameters} (Sect.~\ref{sec:model-parameters}).
-The constrained species can be listed in this file; there is no need
-to list the photolysis rates, the environment variables and the
-\cf{RO2} sum, which are always output (see Sect.~\ref{subsec:output}).
+The constrained chemical species can be listed in this file; there is
+no need to list the photolysis rates, the environment variables and
+the \cf{RO2} sum, which are always output (see Sect.~\ref{sec:output}).
 
 \subsection{photolysisConstant.config} \label{subsec:photolysisconstant}
 
@@ -767,7 +767,7 @@ photolysis rates are named according to the MCM
 \href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}.
 If no photolysis rate is set to constant, the file should be empty.
 
-If one or more photolysis rates is set to a constant value, the others
+If one or more photolysis rate is set to a constant value, the others
 (i.e., those not listed in \texttt{photolysisConstants.config}) are
 set to zero (Fig.~\ref{fig:photol}). For more information go to
 Sect.~\ref{sec:photolysis-rates}.
@@ -780,31 +780,16 @@ one column, with one photolysis rate per line (e.g., \texttt{J1}). The
 photolysis rates are named according to the MCM
 \href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}.
 
-If no photolysis rate is constrained, the file should beempty. If a
+If no photolysis rate is constrained, the file should be empty. If a
 photolysis rate is constrained, there must be a corresponding data
 file in the \texttt{model/constraints/photolysis/} directory
 (Sect.~\ref{subsec:constrained-variables}). The photolysis rates that
 are not listed in \texttt{photolysisConstrained.config} are calculated
-by AtChem2 using the MCM parametrization (Fig.~\ref{fig:photol}). For
-more information go to Sect.~\ref{sec:photolysis-rates}.
+using the MCM parametrization (Fig.~\ref{fig:photol}). For more
+information go to Sect.~\ref{sec:photolysis-rates}.
 
 \subsection{speciesConstant.config} \label{subsec:speciesconstant}
-
-This file (called \texttt{constrainedFixedSpecies.config} in v1.0 and
-earlier) lists the chemical species that are set to constant. The file has
-two columns: the first column is the list of constant chemical species, the
-second column is the corresponding concentration in \textbf{molecules cm-3}).
-If no chemical species is constant, the file should be empty.
-
-When a chemical species is set to a constant value, it does not need
-to be initialized: the values set in \texttt{speciesConstant.config}
-override those set in \texttt{initialConcentrations.config}.
-
-\subsection{speciesConstrained.config} \label{subsec:speciesconstrained}
-
-This file (called \texttt{constrainedSpecies.config} in v1.0 and
-earlier) lists the chemical species that are constrained. The file has
-one column, with one species per line. If no chemical species is
+hemical species is
 constrained, the file should be empty. If a chemical species is
 constrained, there must be a corresponding data file in the
 \texttt{model/constraints/species/} directory

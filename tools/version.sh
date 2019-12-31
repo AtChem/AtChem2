@@ -12,7 +12,7 @@
 
 # Script to update the version number of AtChem2.
 #
-# N.B.: the script MUST be run from the base directory of AtChem2.
+# N.B.: the script MUST be run from the main directory of AtChem2.
 
 VERS_OLD="v1.2-dev"
 VERS_NEW="v1.2"

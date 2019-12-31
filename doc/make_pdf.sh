@@ -11,6 +11,8 @@
 # -----------------------------------------------------------------------------
 
 # Script to generate the AtChem2 manual
+#
+# N.B.: the script MUST be run from the doc/ directory of AtChem2.
 
 # Convert svg figures to png format using Inkscape
 cd figures/

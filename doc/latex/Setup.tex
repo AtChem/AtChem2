@@ -14,16 +14,16 @@
 % -------------------------------------------------------------------- %
 \section{Chemical Mechanism} \label{sec:chemical-mechanism}
 
-The chemical mechanism is the core element of an atmospheric chemistry
-model. In AtChem2, the mechanism file is written in FACSIMILE format
-and has the extension \texttt{.fac}. The FACSIMILE format is used to
-describe chemical reactions in the commercial
+The chemical mechanism is the core of an atmospheric chemistry
+model. In AtChem2, the chemical mechanism file is written in FACSIMILE
+format and has the extension \texttt{.fac}. The FACSIMILE format is
+used to describe chemical reactions in the commercial
 \href{http://www.mcpa-software.com/}{FACSIMILE Kinetic Modelling Software};
-for historical reasons, the software and the format have been
-often used in conjunction with the MCM. The
+for historical reasons, the software and the format have often
+been used in conjunction with the MCM. The
 \href{http://mcm.leeds.ac.uk/MCM/extract.htt}{extraction tool} on the
-MCM website can generate \texttt{.fac} files directly in FACSIMILE
-format (see Sect.~\ref{subsec:mcm-extraction}).
+MCM website can generate \texttt{.fac} files in FACSIMILE format that
+can be directly used in AtChem2 (Sect.~\ref{subsec:mcm-extraction}).
 
 \subsection{The FACSIMILE format} \label{subsec:facsimile-format}
 
@@ -39,11 +39,11 @@ are the reactants, \texttt{C} and \texttt{D} are the products. A
 reaction starts with the \texttt{\%} character and ends with the
 \texttt{;} character. Comments can be inserted in the \texttt{.fac}
 file to document and annotate the chemical mechanism: in FACSIMILE
-format, comments are enclosed between the characters \texttt{*} and
-\texttt{;} and are ignored by the build scripts.
+format, comments are enclosed between the \texttt{*} and \texttt{;}
+characters and are ignored by the compilation scripts.
 
-The rate coefficient (\texttt{k}) can be a constant number or, more
-commonly, can be calculated as a function of other variables, such as
+The rate coefficient (\texttt{k}) is a constant number or, more
+commonly, is calculated as a function of other variables, such as
 temperature (\texttt{TEMP}), air density (\texttt{M}), water vapour
 (\texttt{H2O}) and other environment variables
 (Sect.~\ref{sec:environment-variables}). A basic chemical mechanism,
@@ -59,11 +59,11 @@ with comments and calculated rate coefficients, looks like this:
 
 The photolysis rate of \cf{NO2} (\texttt{J\_NO2}) in the example above
 is calculated by AtChem2 as function of latitude, longitude and solar
-zenith angle, as explained in detail in Sect.~\ref{sec:photolysis-rates}.
+zenith angle (Sect.~\ref{subsec:calculated-photolysis-rates}).
 Complex mathematical expressions can be used to calculate the rate
-coefficient, in which case they have to be defined before the chemical
-reactions that use them (typically, combination and dissociation
-reactions). For example:
+coefficients, in which case they have to be defined before the
+chemical reactions that use them (typically, these are combination and
+dissociation reactions). For example:
 
 \begin{verbatim}
 * Formation of nitric acid (HNO3) in the gas-phase ;
@@ -82,7 +82,7 @@ KMT08 = (K80*K8I)*F8/(K80+K8I) ;
 \end{verbatim}
 
 Chemical reactions can be written in FACSIMILE format without
-reactants or products. This feature is useful to implement simple
+reactants or products. This feature can be used to implement simple
 descriptions of non-chemical processes in a box-model. For example,
 dry deposition to the surface and direct emission of a chemical
 species can be parametrized as:
@@ -97,33 +97,35 @@ species can be parametrized as:
 
 More sophisticated approaches to describe non-chemical processes can
 be implemented either by defining complex mathematical expressions to
-calculate the corresponding ``rate coefficients'' (as shown above) or
-by writing the appropriate Fortran function(s) into the source code.
+calculate the corresponding ``rate coefficients'' (as explained above)
+or by writing the appropriate Fortran function(s) into the source
+code.
 
 The \texttt{.fac} file is processed by a Python script
-(\texttt{mech\_converter.py}, see Sect.~\ref{subsec:build-process});
-the script expects the chemical mechanism to have four sections:
+(\texttt{mech\_converter.py}, see Sect.~\ref{subsec:build-process}),
+which expects the chemical mechanism to have four sections:
 
 \begin{description}
 \item[Generic rate coefficients] : contains the definitions of the
   generic rate coefficients used when experimental kinetic data are
   not available.
-\item[Complex reactions] : contains the mathematical expressions to
-  calculate complex rate coefficients (e.g., for combination and
+\item[Complex reactions] : contains the mathematical expressions used
+  to calculate complex rate coefficients (e.g., for combination and
   dissociation reactions).
 \item[Peroxy radicals] : contains the calculation of the \cf{RO2} sum
   -- go to Sect.~\ref{subsec:ro2-sum} for details.
-\item[Reaction definitions] : contains the chemical reactions (and
+\item[Reaction definitions] : contains the chemical reactions (and the
   parametrized non-chemical processes) in FACSIMILE format.
 \end{description}
 
 For \texttt{mech\_converter.py} to work, the beginning of each section
 must be delimited by a header constituted by a single comment line.
 The header must always be present, even though the corresponding
-sections can be empty. A minimal \texttt{.fac} file
-(\texttt{mechanism\_skel.fac}) and an example chemical mechanism
-downloaded from the MCM website (\texttt{mechanism\_test.fac}) are
-included in the \texttt{mcm/} directory for reference and testing.
+sections can be empty (e.g., if a mechanism other than the MCM is
+used). A minimal \texttt{.fac} file (\texttt{mechanism\_skel.fac}) and
+an example chemical mechanism downloaded from the MCM website
+(\texttt{mechanism\_test.fac}) are included in the \texttt{mcm/}
+directory for reference and testing.
 
 \subsection{The \cf{RO2} sum} \label{subsec:ro2-sum}
 
@@ -131,16 +133,17 @@ The sum of organic peroxy radicals (\cf{RO2}) is a key feature of the
 Master Chemical Mechanism. Organic peroxy radicals react with
 \cf{HO2}, with themselves and with other \cf{RO2}: given that there
 are over 1000 peroxy radicals in the MCM, the number of possible self
-and cross reactions is of the order of $10^6$, which presents a
-significant computational challenge. The \cf{RO2} sum is used in the
-MCM to keep the number of peroxy radicals permutation reactions to a
-reasonable number, as explained in the MCM protocol papers
+and cross reactions of these species is of the order of $10^6$, which
+presents a significant computational challenge. The \cf{RO2} sum is
+used in the MCM to reduce the number of peroxy radicals permutation
+reactions, as explained in the MCM protocol papers
 \citep{jenkin_1997, saunders_2003}.
 
 AtChem2 is designed primarily to run models based upon the MCM, and
 therefore the \texttt{.fac} file must contain a section with the
-calculation of the \cf{RO2} sum (Sect.~\ref{subsec:facsimile-format}).
-This section must have a header and has the following format:
+calculation of the \cf{RO2} sum, as explained in
+Sect.~\ref{subsec:facsimile-format}. This section must have a header
+and has the following format:
 
 \begin{verbatim}
 * Peroxy radicals. ;
@@ -161,36 +164,37 @@ RO2 = ;
 The \cf{RO2} sum is automatically generated from the chemical
 mechanism during the build process using the list of \cf{RO2}
 extracted from the MCM database (Sect.~\ref{subsec:build-process}).
+Note that the hydroperoxyl radical (\cf{HO2}) is a peroxy radical but
+is not an organic molecule, and therefore it \emph{should not be}
+included in the \cf{RO2} sum.
+
 AtChem2 includes the complete list of all organic peroxy radicals in
 the MCM v3.3.1 (\texttt{mcm/peroxy-radicals\_v3.3.1}), which is the
 version used by default. Complete lists of all organic peroxy radicals
 in the other versions of the MCM are also included in the
 \texttt{mcm/} directory. Instructions on how to set up AtChem2 to use
 the previous versions of the MCM can be found in the file
-\texttt{mcm/INFO.md}. The value of the \cf{RO2} sum is always output
-together with the environment variables (in
-\texttt{model/output/environmentVariables.output}).
+\texttt{mcm/INFO.md}.
 
 It is important to ensure that the \cf{RO2} sum is accurate, because
-many reactions in the MCM use the value of this parameter to calculate
-the reaction rate correctly. The hydroperoxyl radical (\cf{HO2}) is a
-peroxy radical but is not an organic molecule, and therefore it
-\emph{should not} be included in the \cf{RO2} sum.
+many reactions in the MCM use this parameter to calculate the reaction
+rate. AtChem2 outputs the value of the \cf{RO2} sum to the
+\texttt{environmentVariables.output} file (Sect.~\ref{sec:output}).
 
 \subsection{MCM extraction} \label{subsec:mcm-extraction}
 
 The MCM website provides a convenient tool that can be used to
-download the whole Master Chemical Mechanism (or subsets of it) in
-FACSIMILE format. Only a brief overview of the process will be given
-here: for more information go to the \href{http://mcm.leeds.ac.uk/}{MCM website}.
+download the whole Master Chemical Mechanism -- or subsets of it -- in
+FACSIMILE format. Only a brief overview of the process is given here:
+for more information go to the \href{http://mcm.leeds.ac.uk/}{MCM website}.
 
 First, select the species of interest using the
 \href{http://mcm.leeds.ac.uk/MCM/roots.htt}{MCM browser} and add the
-selection to the \emph{Mark List}. Then proceed to the
+selection to the ``Mark List''. Then proceed to the
 \href{http://mcm.leeds.ac.uk/MCM/extract.htt}{MCM extraction tool} and
-select the option \emph{FACSIMILE input format, suitable for inserting
-  into a FACSIMILE model.}. Make sure that the following options are
-selected, so that the required headers (Sect.~\ref{subsec:facsimile-format})
+select the option ``FACSIMILE input format, suitable for inserting
+into a FACSIMILE model''. Make sure that the following options are
+selected, so that all the required headers (Sect.~\ref{subsec:facsimile-format})
 will be included in the generated \texttt{.fac} file: :
 
 \begin{verbatim}
@@ -199,24 +203,25 @@ will be included in the generated \texttt{.fac} file: :
     FACSIMILE, FORTRAN and KPP formats only
 \end{verbatim}
 
-Click on \emph{Extract} to download the \texttt{.fac} file into a
-directory of choice -- such as the \texttt{model/} directory, as
-discussed in Sect.~\ref{sec:model-structure}. The downloaded
-\texttt{.fac} file is a simple text file and can be used directly in
-AtChem2. If modifications are required (e.g., if you want to add,
-delete, or change some chemical reactions) open the \texttt{.fac} file
-with a text editor and edit the chemical mechanism as needed.
+Click on the ``Extract'' button to download the \texttt{.fac} file
+into a directory of choice -- such as the \texttt{model/} directory,
+as discussed in Sect.~\ref{subsec:model-directory}. The downloaded
+\texttt{.fac} file is a simple text file and is ready to be used in
+AtChem2. If modifications are required (e.g., if some chemical
+reactions have to be added, deleted or modified) open the
+\texttt{.fac} file with a text editor and edit the chemical mechanism
+as needed.
 
 \subsection{The build process} \label{subsec:build-process}
 
 AtChem2 is built using the scripts in the \texttt{build/}
 directory. Here, we only outline the build process; detailed
-instructions on how to compile the model can be found in
+instructions on how to build the model can be found in
 Sect.~\ref{sec:build}.
 
-The Python script \texttt{mech\_converter.py}, which is automatically
-called by the \texttt{build\_atchem2.sh} script, converts the chemical
-mechanism from the FACSIMILE fortmat into a format that can be read by
+The Python script \texttt{mech\_converter.py} -- automatically called
+by the \texttt{build\_atchem2.sh} script -- converts the chemical
+mechanism from the FACSIMILE format into a format that can be read by
 the Fortran code. In doing so, the Python script generates a number of
 files:
 
@@ -224,7 +229,7 @@ files:
 \item \texttt{mechanism.f90} contains the equations, in Fortran code,
   to calculate the rate coefficients of each reaction of the chemical
   mechanism.
-\item \texttt{mechanism.so} is the shared library, i.e. the
+\item \texttt{mechanism.so} is the \textbf{shared library}, i.e. the
   pre-compiled version of the chemical mechanism.
 \item \texttt{mechanism.species} contains the list of chemical species
   in the chemical mechanism. The file has no header. The first column
@@ -238,13 +243,14 @@ files:
   \end{verbatim}
 \item \texttt{mechanism.reac} and \texttt{mechanism.prod} contain the
   reactants and the products (respectively) in each reaction of the
-  chemical mechanism. The files have a one line header with the number
-  of species, the number of reactions and the number of equations in
-  the \emph{Generic rate coefficients} and \emph{Complex reactions}
-  sections (Sect.~\ref{subsec:facsimile-format}). The first column is
-  the \emph{ID number} of the reaction, the second column is the
-  \emph{ID number} of the chemical species which are
-  reactants/products in that reaction:
+  chemical mechanism. The files have a one line header showing the
+  number of species, the number of reactions and the number of
+  equations in the \emph{Generic rate coefficients} and
+  \emph{Complex reactions} sections (Sect.~\ref{subsec:facsimile-format}).
+  The first column is the \emph{ID number} of the reaction, the second
+  column is the \emph{ID number} of the chemical species (from
+  \texttt{mechanism.species}) which are reactants/products in that
+  reaction:
   \begin{verbatim}
   29 71 139 numberOfSpecies numberOfReactions numberOfGenericComplex
   1 1
@@ -270,9 +276,9 @@ files:
 \end{itemize}
 
 The directory containing the files generated by the build script is
-the \sharedir\ which, by default, is \texttt{model/configuration/}:
-the location of the \sharedir\ can be changed using the second
-argument of the build script, as explained in more detail in
+called \sharedir: by default, the \sharedir\ is in
+\texttt{model/configuration/}, but its location can be changed using
+the second argument of the build script, as explained in
 Sect.~\ref{sec:build} (see also Sect.~\ref{subsec:model-directory}).
 
 % -------------------------------------------------------------------- %
@@ -287,21 +293,21 @@ in the \texttt{model/configuration/} directory.
   the model run is determined by the number of steps and by the step
   size (in seconds). The step size controls the frequency of the model
   output for the chemical species listed in \texttt{outputSpecies.config}
-  (Sect.~\ref{sec:config-files}), as well as for all the environment
+  (Sect.~\ref{subsec:outputspecies}), as well as for the environment
   variables, the photolysis rates and the diagnostic variables. The
-  step size is not related to the integration step
-  which is controlled by CVODE.\\
-  For example, a model runtime of 2 hours, with output every 5
+  step size is not related to the integration step which is controlled
+  by CVODE.\\
+  For example: a model runtime of 2 hours, with output every 5
   minutes, requires 24 steps with a step size of 300 seconds (24x300 =
   7200 sec = 2 hours).
 \item \textbf{species interpolation method} and
   \textbf{conditions interpolation method}. Interpolation method used
   for the constrained chemical species, and for the constrained
-  environment variables and the photolysis rates, respectively
-  (Sect.~\ref{sec:constraints}). Two interpolation methods are
-  currently implemented in AtChem2: piecewise constant and piecewise
-  linear. The default option is \texttt{2} (piecewise linear
-  interpolation).
+  environment variables and the photolysis rates, respectively. Two
+  interpolation methods are currently implemented in AtChem2:
+  piecewise constant and piecewise linear
+  (Sect.~\ref{subsec:interpolation}). The default option is \texttt{2}
+  (piecewise linear interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the
   model output for the production and loss rates of selected chemical
   species, i.e. those listed in \texttt{outputRates.config}
@@ -316,25 +322,27 @@ in the \texttt{model/configuration/} directory.
   \begin{verbatim}
   model start time + (number of steps * step size)
   \end{verbatim}
-  \emph{N.B.:} when one or more variables are constrained, the time
+  \textit{N.B.}: when one or more variables are constrained, the time
   interval between the model start time and the model stop time
   \emph{must be} equal to or less than the time interval of the
-  constrained data (Sect.~\ref{sec:constraints}).
+  constrained data (Sect.~\ref{subsec:constraint-files} and
+  Sect.~\ref{subsec:interpolation}).
 \item \textbf{jacobian output step size}. Frequency (in seconds) of
   the model output for the Jacobian matrix. If this parameter is set
   to \texttt{0} (default option), the Jacobian matrix is not
-  output. Note that the \texttt{jacobian.output} file generated by the
+  output.\\
+  \textit{N.B.}: the \texttt{jacobian.output} file generated by the
   model can be very large, especially if the chemical mechanism has
   many reactions and/or the model runtime is long.
 \item \textbf{latitude} and \textbf{longitude}. Geographical
   coordinates (in degrees). Latitude North is positive and latitude
   South is negative; longitude East is negative and longitude West is
-  positive~\footnote{The preferred convention is that longitude East
-    is positive and longitude West is negative. The current version of
+  positive~\footnote{The standard convention is that longitude East is
+    positive and longitude West is negative. The current version of
     AtChem2 uses the opposite convention to maintain compatibility
     with previous versions.}. Latitude and longitude are used to
   calculate the Earth-Sun angles, which are needed for the calculation
-  of the photolysis rates (Sect.~\ref{sec:photolysis-rates}).
+  of the photolysis rates (Sect.~\ref{subsec:calculated-photolysis-rates}).
 \item \textbf{day} and \textbf{month} and \textbf{year}. Start date of
   the model simulation. The model time is in UTC (GMT timezone) and is
   calculated in seconds since midnight of the start date.
@@ -358,8 +366,9 @@ The solver parameters control the behaviour of the ordinary
 differential equations (ODE) solver; they are set in the
 \texttt{solver.parameters} file which, by default, is in the
 \texttt{model/configuration/} directory. A complete explanation of
-these parameters can be found in the documentation of
-\href{https://computation.llnl.gov/projects/sundials/sundials-software}{CVODE}.
+these parameters can be found in the documentation of the
+\href{https://computation.llnl.gov/projects/sundials/sundials-software}{CVODE}
+library.
 
 \begin{itemize}
 \item \textbf{atol} (positive real) and \textbf{rtol} (positive real):
@@ -395,14 +404,14 @@ of the sun, etc\ldots. These variables are set in the
 The environment variables can have a fixed (constant) value or can be
 constrained to measured values (\texttt{CONSTRAINED}), in which case
 the corresponding data file must be present in the
-\texttt{model/constraints/environment/} directory (see
-Sect.~\ref{sec:constraints} for more information). Some environment
-variables can be calculated by the model (\texttt{CALC}) and some can
-be deactivated if they are not needed (\texttt{NOTUSED}).
+\texttt{model/constraints/environment/} directory
+(Sect.~\ref{subsec:constraint-files}). Some environment variables can
+be calculated by the model (\texttt{CALC}) and some can be deactivated
+if they are not needed (\texttt{NOTUSED}).
 
-By default, the environment variables are set to \texttt{NOTUSED} or
+By default, the environment variables are set either to \texttt{NOTUSED} or
 to a fixed value. The AtChem2 environment variables are described
-below, together with their possible settings, units, and default
+below, together with their possible settings, units, and their default
 values.
 
 \subsection{TEMP} \label{subsec:temp}
@@ -443,7 +452,7 @@ Default = NOTUSED (-1)
 
 \subsection{H2O} \label{subsec:h2o}
 
-Water Concentration (molecules cm-3). If it is set to \texttt{CALC},
+Water Concentration (molecule cm$^{-3}$). If it is set to \texttt{CALC},
 then \hyperref[subsec:rh]{RH} has to be set to a fixed value or
 \texttt{CONSTRAINED}.
 
@@ -473,8 +482,8 @@ Default fixed value = 0.41
 Boundary Layer Height. It is required only if the model includes
 non-chemical processes, such as emission or deposition of chemical
 species. The unit is typically cm or m, depending on how these
-processes are parametrized in the chemical mechanism (see
-Sect.~\ref{subsec:facsimile-format} for details).
+processes are parametrized in the chemical mechanism -- go to
+Sect.~\ref{subsec:facsimile-format} for details.
 
 \begin{itemize}
 \item fixed value
@@ -486,8 +495,8 @@ Default = NOTUSED (-1)
 
 \subsection{DILUTE} \label{subsec:dilute}
 
-Dilution rate (s-1). It is required only if the model includes
-dilution of the chemical species. %% TODO: update after merging PR #408
+Dilution rate (s$^{-1}$). It is required only if the model includes
+dilution of the chemical species. %% TODO: update after merging PR#408
 
 \begin{itemize}
 \item fixed value
@@ -504,7 +513,7 @@ account for the presence of clouds. \texttt{JFAC} can have a value
 between \texttt{0} (photolysis rates are set to zero) and \texttt{1}
 (photolysis rates are not corrected). JFAC is \emph{not applied} to
 constant or constrained photolysis rates. For more information go to
-Sect.~\ref{sec:photolysis-rates}.
+Sect.~\ref{subsec:jfac-calculation}.
 
 \begin{itemize}
 \item fixed value
@@ -516,40 +525,48 @@ Default fixed value = 1
 
 \subsection{ROOF} \label{subsec:roof}
 
-Flag to switch the photolysis rates. It is used mostly in simulations
-of environmental chamber experiments, where the roof of the chamber
-can be opened/closed or the lights can be turned on/off.
+Flag to switch the photolysis rates on/off. It is needed mostly for simulations
+of some environmental chamber experiments, where the roof of the chamber
+can be opened/closed or the lamps can be turned on/off.
 
 When \texttt{ROOF} is set to \texttt{CLOSED} all the photolysis rates
 are set to zero, including those that are constant or constrained:
 this is different than setting \texttt{JFAC} to \texttt{0}, which only
-applies to the calculated photolysis rates (see above and
-Sect.~\ref{sec:photolysis-rates}). \texttt{ROOF} is the only
-environment variable that cannot be set to \texttt{CONSTRAINED}.
+applies to the calculated photolysis rates (Fig.~\ref{fig:photol}).
+\texttt{ROOF} is the only environment variable that cannot be set to
+\texttt{CONSTRAINED}.
 
 Default value = OPEN
 
 % -------------------------------------------------------------------- %
 \section{Photolysis Rates} \label{sec:photolysis-rates}
 
-The photolysis rates are identified in \hyperref[sec:chemical-mechanism]{FACSIMILE format}
-with the notation \verb|J<n>|, where \texttt{n} is an integer assigned
-by the MCM to each photolysis reaction (or class of reactions).
-By default, AtChem2 calculates the photolysis rates using the
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt}{MCM parametrization},
-described below. Each photolysis rate can also be set to a constant
-value or to constrained values. The following rules apply (for more
-detail, see Fig.~\ref{fig:photol}):
+The photolysis rates are identified in
+\hyperref[subsec:facsimile-format]{FACSIMILE format} with the notation
+\verb|J<n>|, where \texttt{n} is an integer assigned by the MCM to
+each photolysis reaction (or to a group of photolysis reactions). By
+default, AtChem2 calculates the photolysis rates using the MCM
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt}{parametrization},
+which is described in Sect.~\ref{subsec:calculated-photolysis-rates}.
+Each photolysis rate can also be set to a constant value or
+constrained to measured data. The following rules apply:
 
 \begin{enumerate}
 \item If a photolysis rate is set as constant, it assumes the given
-  value. The other photolysis rates are set to zero.
-\item If a photolysis rate is set to constrained, it assumes the
-  values given in the corresponding constraint file. All other
-  photolysis rates are calculated.
-\item If no photolysis rate is set to constant or to constrained, the
+  value; the other photolysis rates are set to zero.
+\item If a photolysis rate is constrained, it assumes the values in
+  the corresponding constraint file; the other photolysis rates are
+  calculated.
+\item If no photolysis rate is set to constant or constrained, the
   model calculates all photolysis rates.
 \end{enumerate}
+
+Fig.~\ref{fig:photol} shows in detail how AtChem2 combines constant,
+constrained and calculated photolysis rates, as well as the usage of
+the correction factor JFAC (Sect.~\ref{subsec:jfac-calculation}).
+Additionally, the environment variable \texttt{ROOF} can be used to
+turn the photolysis rates ON or OFF, as explained in
+Sect.~\ref{subsec:roof}.
 
 \begin{figure}[htb]
   \centering
@@ -557,45 +574,41 @@ detail, see Fig.~\ref{fig:photol}):
   \caption{Treatment of photolysis rates in AtChem2.} \label{fig:photol}
 \end{figure}
 
-Additionally, the environment variable \texttt{ROOF}
-(Sect.~\ref{sec:environment-variables}) can be used to turn the
-photolysis rates ON/OFF, which is useful for simulations of some
-environmental chamber experiments.
-
 \subsection{Constant photolysis rates} \label{subsec:constant-photolysis-rates}
 
 The typical scenario for constant photolysis rates is a lamp or solar
 simulator in an environmental chamber. All the photolysis rates used
 in the mechanism need to be given a value (in
-\texttt{model/configuration/photolysisConstant.config}) otherwise they
-are set to zero (Fig.~\ref{fig:photol}). This approach allows the user
-to model individual photolysis processes and/or to account for lamps
-that emit only in certain spectral windows. The format of the
+\texttt{photolysisConstant.config}) otherwise they are automatically
+set to zero (Fig.~\ref{fig:photol}). This approach allows the user to
+model individual photolysis processes and/or to account for lamps that
+emit only in certain spectral windows. The format of the
 \texttt{photolysisConstant.config} file is described in
 Sect.~\ref{sec:config-files}.
 
 \subsection{Constrained photolysis rates} \label{subsec:constrained-photolysis-rates}
 
-All photolysis rates can be constrained to measured values. In this
+All photolysis rates can be constrained to measured data. In this
 case, the name of the constrained photolysis rate (e.g., \texttt{J2})
-must be listed in the file
-\texttt{model/configuration/photolysisConstrained.config}
+must be listed in \texttt{photolysisConstrained.config}
 (Sect.~\ref{sec:config-files}) and a corresponding file with the
-constraint data must be present in the directory
-\texttt{model/constraints/photolysis/}
-(Sect.~\ref{subsec:constrained-variables}). It is not always possible
-to measure -- and therefore constrain -- all the required photolysis
-rates. The photolysis rates that are not constrained (i.e., those not
-listed in \texttt{photolysisConstrained.config}) are calculated using
-the MCM parametrization (Fig.~\ref{fig:photol}).
+constraint data must be present in the
+\texttt{model/constraints/photolysis/} directory
+(Sect.~\ref{subsec:constrained-variables}).
+
+It is not always possible to measure -- and therefore constrain -- all
+the required photolysis rates. The photolysis rates that are not
+constrained (i.e., not listed in \texttt{photolysisConstrained.config})
+are calculated using the MCM parametrization, described in the next
+section.
 
 \subsection{Calculated photolysis rates} \label{subsec:calculated-photolysis-rates}
 
 AtChem2 implements the parametrization of photolysis rates used by the
-Master Chemical Mechanism. The MCM parametrization is described in
-detail in the protocol papers \citep{jenkin_1997, saunders_2003}.
-Briefly, the photolysis rate of a reaction (\texttt{J}) is calculated
-as a function of the solar zenith angle with the equation:
+Master Chemical Mechanism, which is described in the MCM protocol
+papers \citep{jenkin_1997, saunders_2003}. Briefly, the photolysis
+rate (\texttt{J}) of a reaction is calculated as a function of the
+solar zenith angle with the equation:
 
 \begin{verbatim}
 J = l * (cosX)^m * exp(-n * secX) * tau
@@ -605,22 +618,23 @@ where \texttt{l}, \texttt{m}, \texttt{n} are empirical parameters,
 \texttt{cosX} is the cosine of the solar zenith angle, \texttt{secX}
 is the inverse of \texttt{cosX} (i.e., \texttt{secX\ =\ 1/cosX}) and
 \texttt{tau} is the transmission factor. The empirical parameters are
-different for each version of the MCM. AtChem2 includes the empirical
-parameters for the MCM v3.3.1 (\texttt{mcm/photolysis-rates\_v3.3.1}).
-The transmission factor \texttt{tau} can be used to account for the
-loss of natural or artificial light in some environmental chambers and
-is by default set to 1 (i.e., perfect trasmittance of light). It is
-possible to use previous versions of the MCM parametrization and to
-change the value of \texttt{tau}: see the file \texttt{mcm/INFO.md}
-for instructions.
+different for each version of the MCM \citep{sommariva_2019}. AtChem2
+includes the empirical parameters for the MCM v3.3.1
+(\texttt{mcm/photolysis-rates\_v3.3.1}). It is possible to use
+previous versions of the MCM parametrization and to change the value
+of \texttt{tau}: see the file \texttt{mcm/INFO.md} for
+instructions. The transmission factor \texttt{tau} can be used to
+account for the loss of natural or artificial light in some
+environmental chambers and is by default set to 1 (i.e., perfect
+trasmittance).  
 
 The solar zenith angle (SZA) is the angle between the local vertical
-and the center of the Sun. The SZA is calculated by AtChem2 using the
-environment variables latitude, longitude, sun declination
-(Sect.~\ref{sec:environment-variables}), and the time of the day
-(Sect.~\ref{sec:model-parameters}). The calculation of the sun
-declination -- if not constrained or set to a constant values -- and
-of the solar zenith angle is described in \citet{madronich_1993}.
+and the center of the Sun, in radians. The SZA is calculated by
+AtChem2 using the environment variables latitude, longitude, sun
+declination (Sect.~\ref{sec:environment-variables}), and the time of
+the day. The calculation of the sun declination -- if not constrained
+or set to a constant values -- and of the solar zenith angle is
+described in \citet{madronich_1993}.
 
 \subsection{JFAC calculation} \label{subsec:jfac-calculation}
 
@@ -628,14 +642,14 @@ Measurements of ambient photolysis rates typically show short-term
 variability due to the changing meteorological conditions, such as
 clouds, rain, aerosol, etc\ldots. This information is retained in the
 constrained photolysis rates, but it is lost in the calculated
-ones. To account for this, the calculated photolysis rates can be
-scaled by a constant or time dependent correction factor, the
-environment variable \texttt{JFAC} (Sect.~\ref{sec:environment-variables}).
+ones. To account for ambient variability, the calculated photolysis
+rates can be scaled by a constant or time-dependent correction factor,
+the environment variable \texttt{JFAC} (Sect.~\ref{subsec:jfac}).
 
 \texttt{JFAC} is defined as the ratio between a measured and a
-calculated photolysis rate. Typically, \texttt{J4} (the photolysis
-rate of \cf{NO2}) is used for this purpose, as it is one of the most
-frequently measured photolysis rates:
+calculated photolysis rate. Typically, \texttt{J4} -- the photolysis
+rate of \cf{NO2} -- is used for this purpose, because it is one of the
+most frequently measured photolysis rates:
 
 \begin{verbatim}
 JFAC = j(NO2)/J4
@@ -645,62 +659,80 @@ where \texttt{j(NO2)} is measured and \texttt{J4} is calculated with
 the MCM parametrization (Sect.~\ref{subsec:calculated-photolysis-rates}).
 
 \texttt{JFAC} is by default set to 1, meaning that the calculated
-photolyis rates are not scaled; it can be set to any value between 0
+photolysis rates are not scaled; it can be set to any value between 0
 and 1 (Sect.~\ref{subsec:jfac}) or it can be constrained
 (Sect.~\ref{subsec:constrained-variables}). Note that only the
 photolysis rates calculated with the MCM parametrization are scaled by
-\texttt{JFAC}, the constrained and the constant photolysis rates are
-not (Fig.~\ref{fig:photol}).
+\texttt{JFAC}, while the constrained and the constant photolysis rates
+are never scaled (Fig.~\ref{fig:photol}).
 
-
-\texttt{JFAC} can also be calculated at runtime. To do so,
-\texttt{JFAC} should be set to the name of the photolysis rate to be
-used as reference (e.g., \texttt{J4}) in the file
-\texttt{model/configuration/environmentVariables.config} and there
-should be a corresponding file with the constraint data in the
-directory \texttt{model/constraints/environment/}~\footnote{This
-  option is not working well in the current version of AtChem2,
-  especially when \texttt{J4} is very variable. Therefore, we suggest
-  to calculate \texttt{JFAC} offline and to constrain it (see issue
+\texttt{JFAC} can also be calculated by AtChem2 at runtime. To do so,
+\texttt{JFAC} should be set to the name of the photolysis rate used as
+reference (e.g., \texttt{J4}) in \texttt{environmentVariables.config}.
+The same photolysis rate should also be constrained (i.e., listed in
+\texttt{photolysisConstrained.config}) and the corresponding
+constraint file should be present in the
+\texttt{model/constraints/environment/} directory~\footnote{\textit{N.B.}:
+  this feature does not work well in the current version of AtChem2,
+  especially when \texttt{J4} is very variable. Therefore, it is
+  recommended to calculate \texttt{JFAC} offline and to constrain it
+  (see issue
   \href{https://github.com/AtChem/AtChem2/issues/16}{\#16})}.
 
 % -------------------------------------------------------------------- %
 \section{Config Files} \label{sec:config-files}
 
-The configuration files contain the settings for the environment
-variables, the initial conditions of the chemical species, the model
-constraints and the model output. These files complement the settings
-of the model (in \texttt{model.parameters}) and of the solver (in
+The configuration files contain the settings of the environment
+variables, the chemical species, and the photolysis rates, as well as
+the model constraints and the model output. All the configuration
+files have the extension \texttt{.config} and, by default, are located
+in the \texttt{model/configuration/} directory. This directory also
+contains the files with the settings of the model (in
+\texttt{model.parameters}) and of the solver (in
 \texttt{solver.parameters}), which are described in
 Sect.~\ref{sec:model-parameters} and Sect.~\ref{sec:solver-parameters}.
 
-The configuration files have the extension \texttt{.config} and, by
-default, are in the \texttt{model/configuration/} directory. This
-directory also contains the files generated during the
-\hyperref[subsec:build-process]{build process} which describes the
-chemical mechanism. The location of the configuration and mechanism
-files can be modified by the user (Sect.~\ref{subsec:model-directory}
-and Sect.~\ref{subsec:build-process}, provided that all these files
-are kept in the same directory.
+Usually, the \texttt{model/configuration/} directory is also the
+\sharedir, which contains the files generated during the
+\hyperref[subsec:build-process]{build process} that describe the chemical
+mechanism. The location of these directories can be modified by the
+user, as explained in Sect.~\ref{sec:build} (see also
+Sect.~\ref{subsec:model-directory}).   
 
-The content and format of the \texttt{.config} file are described
+The content and the format of each \texttt{.config} file are described
 below. Note that the names of some files have changed with the release
-of AtChem2 v1.1 (November 2018).
+of AtChem2 version 1.1 (November 2018).
 
 \subsection{environmentVariables.config} \label{subsec:environmentvariables}
 
-This file contains the settings for the environment variables, which
-are described in detail in Sect.~\ref{sec:environment-variables}. If
-an environment variable is constrained, there must be a corresponding
-data file in the \texttt{model/constraints/environment/} directory
-(see Sect.~\ref{sec:constraints}).
+This file contains the settings for the environment variables
+(Sect.~\ref{sec:environment-variables}. The file has three columns:
+the first two are the \emph{ID number} and the name of each
+environment variable. The third column -- the only one that should be
+modified by the user -- is the corresponding setting:
+
+\begin{verbatim}
+1 TEMP            298.15
+2 PRESS           1013.25
+3 RH              NOTUSED
+4 H2O             3.91e+17
+5 DEC             0.41
+6 BLHEIGHT        NOTUSED
+7 DILUTE          NOTUSED
+8 JFAC            NOTUSED
+9 ROOF            OPEN
+\end{verbatim}
+
+If an environment variable is constrained, there must be a
+corresponding data file in the \texttt{model/constraints/environment/}
+directory (Sect.~\ref{sec:constraints}).
 
 \subsection{initialConcentrations.config} \label{subsec:initialconcentrations}
 
-This file contains the initial concentrations of the chemical species.
-The file has two columns: the first column is the list of initialized
-species, and the second column is the corresponding concentration at
-\texttt{t\ =\ 0} in \textbf{molecules cm-3}. For example:
+This file contains the initial concentrations of the chemical species
+(in molecule cm$^{-3}$). The file has two columns: the first
+column is the list of initialized species, and the second column is
+the corresponding concentration at \texttt{t\ =\ 0}. For example:
 
 \begin{verbatim}
 NO      378473308.14
@@ -709,92 +741,100 @@ O3      1.213e+12
 CH4     4.938e+13
 \end{verbatim}
 
-The chemical species that are not listed in \texttt{initialConcentrations.config}
-are automatically initialized to the default value \texttt{0}. It is
-not necessary to initialize the chemical species that are set to
-constant or constrained (i.e., those listed in \texttt{speciesConstant.config}
-and in \texttt{speciesConstrained.config}). The environment variables are set
-in \texttt{environmentVariables.config} (Sect.~\ref{subsec:environmentvariables})
-and should not be included in this file.
+The chemical species that are not listed in
+\texttt{initialConcentrations.config} are automatically initialized to
+a default value of \texttt{0}. It is not necessary to initialize the
+chemical species that are set to constant or constrained -- i.e.,
+those listed in \texttt{speciesConstant.config} and in
+\texttt{speciesConstrained.config} (see below).
 
 \subsection{outputRates.config} \label{subsec:outputrates}
 
-This file lists the chemical species for which detailed production
-rates and loss rates are required. In v1.0 and earlier, these species
-were listed in two different files called \texttt{productionRatesOutput.config}
-and \texttt{lossRatesOutput.config}. The file has one column, with one
-species per line. The frequency of this output is controlled by the
-\textbf{rates output step size} parameter in \texttt{model.parameters}
-(Sect.~\ref{sec:model-parameters}).
+This file lists the chemical species for which detailed production and
+loss rates are required. In version 1.0 and earlier, these species
+were listed in two different files called
+\texttt{productionRatesOutput.config} and \texttt{lossRatesOutput.config}.
+The file has one column, with one species per line. The frequency of
+this output is controlled by the \textbf{rates output step size}
+parameter in \texttt{model.parameters} (Sect.~\ref{sec:model-parameters}).
 
 The corresponding output files -- called \texttt{productionRates.output}
 and \texttt{lossRates.output} -- are designed to facilitate the
-analysis of production and destruction rates for selected species of
-interests (rather than processing the files saved in the
-\texttt{model/output/reactionRates/} directory). The format of these
-output files is illustrated in Fig.~\ref{fig:ropa}.
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.95\textwidth]{output-rates.png}
-  \caption{Format of the file \texttt{productionRates.output}. The file
-    \texttt{lossRates.output} has a similar format.} \label{fig:ropa}
-\end{figure}
+analysis of theproduction and destruction rates for selected species of
+interests (rather than processing all the files saved in the
+\texttt{model/output/reactionRates/} directory). For more information
+go to Sect.~\ref{sec:output}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 
-This file (called \texttt{concentrationOutput.config} in v1.0 and
-earlier) lists the chemical species for which the calculated
+This file (called \texttt{concentrationOutput.config} in version 1.0
+and earlier) lists the chemical species for which the calculated
 concentration is required. The current version of AtChem2 limits the
 number of species that can be output to 100, although the user can
 modify the Fortran code to increase this number. The file has one
-column, with one species per line.
+column, with one species per line.  %% TODO: how to change the number
 
 The frequency of this output is controlled by the \textbf{step size}
 parameter in \texttt{model.parameters} (Sect.~\ref{sec:model-parameters}).
-The constrained chemical species can be listed in this file; there is
-no need to list the photolysis rates, the environment variables and
-the \cf{RO2} sum, which are always output (see Sect.~\ref{sec:output}).
+The constrained chemical species can be listed in this file, but there
+is no need to list the photolysis rates, the environment variables and
+the \cf{RO2} sum, which are always output separately
+(Sect.~\ref{sec:output}).
 
 \subsection{photolysisConstant.config} \label{subsec:photolysisconstant}
 
-This file lists the photolysis rates that are set to constant. The file has
-three columns: the first column is the number that identifies the
-photolysis rate (e.g., \texttt{1}), the second column is the value of
-the photolysis rate in \textbf{s-1} (e.g., \texttt{1e-5}), the third
-column is the name of the photolysis rate (e.g., \texttt{J1}). The
-photolysis rates are named according to the MCM
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}.
-If no photolysis rate is set to constant, the file should be empty.
+This file lists the photolysis rates that are set to constant. The
+file has three columns: the first column is the number that identifies
+the photolysis rate (e.g., \texttt{1}), the second column is the value
+of the photolysis rate in s$^{-1}$ (e.g., \texttt{1e-5}), the third column
+is the name of the photolysis rate (e.g., \texttt{J1}). The photolysis
+rates are named according to the MCM
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming
+  convention}.  If no photolysis rate is set to constant, the file
+should be empty.
 
 If one or more photolysis rate is set to a constant value, the others
 (i.e., those not listed in \texttt{photolysisConstants.config}) are
-set to zero (Fig.~\ref{fig:photol}). For more information go to
-Sect.~\ref{sec:photolysis-rates}.
+set to zero (Fig.~\ref{fig:photol}).
 
 \subsection{photolysisConstrained.config} \label{subsec:photolysisconstrained}
 
-This file (called \texttt{constrainedPhotoRates.config} in v1.0 and
+This file (called \texttt{constrainedPhotoRates.config} in version 1.0 and
 earlier) lists the photolysis rates that are constrained. The file has
 one column, with one photolysis rate per line (e.g., \texttt{J1}). The
 photolysis rates are named according to the MCM
 \href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}.
+If no photolysis rate is constrained, the file should be empty.
 
-If no photolysis rate is constrained, the file should be empty. If a
-photolysis rate is constrained, there must be a corresponding data
-file in the \texttt{model/constraints/photolysis/} directory
+If a photolysis rate is constrained, there must be a corresponding
+data file in the \texttt{model/constraints/photolysis/} directory
 (Sect.~\ref{subsec:constrained-variables}). The photolysis rates that
 are not listed in \texttt{photolysisConstrained.config} are calculated
-using the MCM parametrization (Fig.~\ref{fig:photol}). For more
-information go to Sect.~\ref{sec:photolysis-rates}.
+using the MCM parametrization (Fig.~\ref{fig:photol}).
 
 \subsection{speciesConstant.config} \label{subsec:speciesconstant}
-hemical species is
-constrained, the file should be empty. If a chemical species is
-constrained, there must be a corresponding data file in the
-\texttt{model/constraints/species/} directory
-(Sect.~\ref{subsec:constrained-variables}).
 
-When a chemical species is constrained, it does not need to be
-initialized: the values set in \texttt{speciesConstrained.config}
+This file (called \texttt{constrainedFixedSpecies.config} in version 1.0)
+lists the chemical species that are set to constant. The file has two
+columns: the first column is the list of constant species, the second
+column is the corresponding concentration (in molecule cm$^{-3}$).
+If no chemical species is set to constant, the file should be
+empty.
+
+When a chemical species is set to constant, it does not need to be
+initialized: the values set in \texttt{speciesConstant.config}
 override those set in \texttt{initialConcentrations.config}.
+
+\subsection{speciesConstrained.config} \label{subsec:speciesconstrained}
+
+This file (called \texttt{constrainedSpecies.config} in version 1.0) lists
+the chemical species that are constrained. The file has one column,
+with one species per line. If no chemical species is constrained, the
+file should be empty.
+
+If a chemical species is constrained, there must be a corresponding
+data file in the \texttt{model/constraints/species/} directory
+(Sect.~\ref{subsec:constrained-variables}). When a chemical species is
+constrained, it does not need to be initialized: the values set in
+\texttt{speciesConstrained.config} override those set in
+\texttt{initialConcentrations.config}.

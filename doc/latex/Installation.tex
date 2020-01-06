@@ -74,15 +74,14 @@ code can be obtained in two ways:
     to the directory where you want to install AtChem2.
   \item Open the terminal. Move to the directory where the archive
     file was downloaded.
-  \item Execute \verb|tar -zxfv v1.0.tar.gz| or
-    \verb|unzip -v master.zip| (depending on which archive was
-    downloaded) to unpack the archive file.
+  \item Execute \verb|tar -zxfv *.tar.gz| or \verb|unzip -v *.zip|
+    (depending on which archive was downloaded) to unpack the archive
+    file.
   \end{enumerate}
 \end{itemize}
 
 The AtChem2 source code is now in a directory called \texttt{AtChem2}
-(if git was used) or \texttt{AtChem2-1.0}  
-(if the stable version was
+(if git was used) or \texttt{AtChem2-1.x} (if the stable version was
 downloaded) or \texttt{AtChem2-master} (if the development version was
 downloaded). This directory, which can be given any name, is the
 \maindir\ of the model. In this manual, the \maindir\ is assumed to
@@ -289,7 +288,7 @@ To install AtChem2:
   \texttt{atchem2}) using the example mechanism file
   \texttt{mechanism\_test.fac} included in the \texttt{mcm/}
   directory.
-\item Execute \verb|./atchem2| from the \maindir\. This command runs
+\item Execute \verb|./atchem2| from the \maindir. This command runs
   the model executable using the default configuration. If the model
   run completes successfully, a message similar to this will be
   printed to the terminal:
@@ -437,15 +436,15 @@ included the build scripts, which have been moved to the
 The plotting scripts in \texttt{tools/plot/} are very simple and are
 only intended to give the user a quick overview of the model output
 for validation and diagnostic purposes. It is recommended to use a
-proper data analysis software package (IDL, Igor, MATLAB, Origin, R,
-etc\ldots) to process and analyze the model results.
+proper data analysis software package (e.g., IDL, Igor, MATLAB,
+Origin, R, etc\ldots) to process and analyze the model results.
 
 The plotting scripts are written in different programming languages:
 gnuplot, Octave~\footnote{GNU Octave is an open source implementation
-  of MATLAB. The script \texttt{plot-atchem2.m} is compatible with
-  both Octave and MATLAB}, Python (v2 and v3), and R. One or more of
-these environments is probably already installed on your system: check
-the local documentation or ask the system administrator. All plotting
+  of MATLAB. The script \texttt{plot-atchem2.m} should work with both
+  Octave and MATLAB}, Python (v2 and v3), and R. One or more of these
+environments is probably already installed on your system: check the
+local documentation or ask the system administrator. All plotting
 scripts require one argument -- the directory containing the model
 output -- and create one file called \texttt{atchem2\_output.pdf} in
 the given directory. To run a plotting script, open the terminal and

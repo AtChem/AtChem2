@@ -75,6 +75,9 @@ pass_counter=0
 
 # loop over each test
 for test in $1; do
+  if [ $test -eq "full" ] ; then
+     continue
+  fi
   # reinitialise variables
   this_test_failures=""
   list_of_skip_line_numbers=""

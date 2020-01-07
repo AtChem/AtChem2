@@ -404,7 +404,7 @@ def convert(input_file, mech_dir, mcm_dir):
     if dilute:
         for _ in speciesList:
             i += 1
-            mech_rates_list.append('p(' + str(i) + ') = ' + str(dilute) + ' ! DILUTE\n')
+            mech_rates_list.append('p(' + str(i) + ') = DILUTE ! DILUTE\n')
 
     # Combine mechanism rates and RO2 sum files
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:

@@ -75,7 +75,7 @@ pass_counter=0
 
 # loop over each test
 for test in $1; do
-  if [ $test -eq "full" ] ; then
+  if [ $test == "full" ] ; then
      continue
   fi
   # reinitialise variables

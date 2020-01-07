@@ -355,7 +355,8 @@ def convert(input_file, mech_dir, mcm_dir):
     if dilute:
         for spec in speciesList:
             reactionNumber += 1
-            mech_reac_list.extend(str(reactionNumber) + ' ' + str(speciesList.index(spec) + 1) + '\n')
+            mech_reac_list.append(str(reactionNumber) + ' ' + str(speciesList.index(spec) + 1) + '\n')
+            print('appending', str(reactionNumber) + ' ' + str(speciesList.index(spec) + 1) + '\n')
 
     with open(os.path.join(mech_dir, 'mechanism.prod'), 'w') as prod_file:
         # Output number of species and number of reactions
@@ -405,6 +406,7 @@ def convert(input_file, mech_dir, mcm_dir):
         for _ in speciesList:
             i += 1
             mech_rates_list.append('p(' + str(i) + ') = ' + str(dilute) + ' ! DILUTE\n')
+            print('appending', 'p(' + str(i) + ') = ' + str(dilute) + ' ! DILUTE\n')
 
     # Combine mechanism rates and RO2 sum files
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:

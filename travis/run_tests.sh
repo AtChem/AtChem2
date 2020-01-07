@@ -85,7 +85,7 @@ for test in $1; do
   # increment test_counter
   test_counter=$((test_counter+1))
   echo "set up and make" $TESTS_DIR/$test
-  ./build/build_atchem2.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration/ mcm/ # &> /dev/null
+  ./build/build_atchem2.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo Building $test test failed with exit code $exitcode
@@ -93,7 +93,7 @@ for test in $1; do
   fi
   # Run atchem2 with the argument pointing to the output directory
   echo Running   $TESTS_DIR/$test ...
-  ./atchem2 --shared_lib=$TESTS_DIR/$test/model/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints # > $TESTS_DIR/$test/$test.out
+  ./atchem2 --shared_lib=$TESTS_DIR/$test/model/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
   echo Comparing $TESTS_DIR/$test ...

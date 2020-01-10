@@ -106,7 +106,8 @@ def convert(input_file, mech_dir, mcm_dir):
 
     :param input_file: string containing a relative or absolute reference to the mcm file to be processed.
     :param mech_dir: string containing a relative or absolute reference to the directory in which the function should
-      place mechanism.f90. This is normally model/configuration.
+      place mechanism.f90, and where the environmentVariables.config file should be read from.
+      This is normally model/configuration.
     :param mech_dir: string containing a relative or absolute reference to the directory in which the function should
       place mechanism.{prod,reac,ro2,species}. This is normally model/configuration/ for the given model.
     :param mcm_dir: string containing a relative or absolute reference to the directory housing the reference file peroxy-radicals_v3.3.1.
@@ -189,6 +190,19 @@ def convert(input_file, mech_dir, mcm_dir):
             mech_rates_file.write('! ' + ro2_species +
                                   ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
 
+    # Identify whether dilution is in use
+    dilute = False
+    with open(mech_dir + '/environmentVariables.config') as env_var_file:
+        environmentVariables = env_var_file.readlines()
+        for x in environmentVariables:
+            x = x.split()
+
+            try:
+                if x[1] == "DILUTE" and x[2] != "NOTUSED":
+                    dilute = x[2]
+
+            except IndexError:
+                continue
 
     # Initialise list, dictionary and a counter.
     mechanism_rates_coeff_list = []
@@ -337,6 +351,12 @@ def convert(input_file, mech_dir, mcm_dir):
                 # Write the products to mechanism.prod
                 mech_prod_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in productNums])
 
+    # Write out species for reactions to implement DILUTE factor if it's not NOTUSED.
+    if dilute:
+        for spec in speciesList:
+            reactionNumber += 1
+            mech_reac_list.extend(str(reactionNumber) + ' ' + str(speciesList.index(spec) + 1) + '\n')
+
     with open(os.path.join(mech_dir, 'mechanism.prod'), 'w') as prod_file:
         # Output number of species and number of reactions
         prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) + ' ' + str(numberOfGenericComplex) + ' numberOfSpecies numberOfReactions numberOfGenericComplex\n')
@@ -380,6 +400,11 @@ def convert(input_file, mech_dir, mcm_dir):
             mech_rates_list.append('p(' + str(i) + ') = ' + \
               tokenise_and_process(string, variablesDict) + '  !' + reaction_definitions[rate_counter])
 
+    # Write out further reactions to implement DILUTE factor if it's not NOTUSED.
+    if dilute:
+        for _ in speciesList:
+            i += 1
+            mech_rates_list.append('p(' + str(i) + ') = ' + str(dilute) + ' ! DILUTE\n')
 
     # Combine mechanism rates and RO2 sum files
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:

@@ -12,7 +12,11 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
+## This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
+##
+## Acknowledgements: B. Nelson, M. Newland
+## ---------------------------------------------- ##
+
 # This only reads a file containing the 'reaction definitions' part.
 from __future__ import print_function
 import sys

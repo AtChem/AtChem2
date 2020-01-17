@@ -207,7 +207,7 @@ directory.
   following line to the bottom of the file (change the path to the
   \depdir\ as needed):
   \begin{verbatim}
-  PATH=$PATH:$HOME/atchem-lib/numdiff/bin
+  export PATH=$PATH:$HOME/atchem-lib/numdiff/bin
   \end{verbatim}
 \item Close the terminal.
 \item Reopen the terminal. Execute \verb|which numdiff| to check that
@@ -233,8 +233,8 @@ directory.
   configuration) with a text editor. Add the following lines to the
   bottom of the file:
   \begin{verbatim}
-  GEM_HOME=$HOME/.gem
-  PATH=$PATH:$GEM_HOME/bin
+  GEM_HOME=$HOME/.gem                          
+  export PATH=$PATH:$GEM_HOME/bin
   \end{verbatim}
 \item Close the terminal.
 \item Reopen the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
@@ -273,9 +273,9 @@ To install AtChem2:
     \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}}.  For
   example (change the path to the \depdir\ as needed):
   \begin{verbatim}
-  CVODELIB = $(HOME)/atchem-lib/cvode/lib
-  OPENLIBMDIR = $(HOME)/atchem-lib/openlibm-0.4.1
-  FRUITDIR = $(HOME)/atchem-lib/fruit_3.4.3
+  CVODELIB = $HOME/atchem-lib/cvode/lib
+  OPENLIBMDIR = $HOME/atchem-lib/openlibm-0.4.1
+  FRUITDIR = $HOME/atchem-lib/fruit_3.4.3
   \end{verbatim}
   If FRUIT has not been installed (it is optional), leave the default
   value for \texttt{\$FRUITDIR}.
@@ -483,11 +483,14 @@ This approach gives the user the flexibility to run different versions
 of the same model (in terms of configuration and/or chemical
 mechanism) or different models (e.g., for separate projects) at the
 same time, without having to recompile the source code and create a
-different executable each time. Sensitivity studies and batch model
+different executable every time. Sensitivity studies and batch model
 runs are therefore easy to do, since all the parts of the model that
 have to be modified are contained in the same directory. Further
 information can be found in Sect.~\ref{subsec:build-process}.
 
-Whenever the \texttt{model/} directory and its subdirectories
-\texttt{configuration/}, \texttt{constraints/}, \texttt{output/} are
-mentioned in this manual, it is  
+\textit{N.B.}: whenever the \texttt{model/} directory is mentioned in
+this manual, it is implied that its name and location may be different
+than the default name (\texttt{model/}) and location (\maindir). All
+scripts that require this information, as well as the \texttt{atchem2}
+executable, allow the user to specify the path to the \texttt{model/}
+directory and to its subdirectories, as needed.

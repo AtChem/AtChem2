@@ -17,7 +17,7 @@
 AtChem2 can be installed on Linux/Unix and macOS operating systems. A
 working knowledge of the \textbf{unix shell} and its
 \href{https://swcarpentry.github.io/shell-novice/reference/}{basic commands}
-\emph{is required} to install and use the model. AtChem2 requires the
+is \emph{required} to install and use the model. AtChem2 requires the
 following tools:
 
 \begin{itemize}
@@ -270,7 +270,7 @@ To install AtChem2:
   the paths of CVODE, openlibm and FRUIT, respectively. Use full
   paths, because using relative paths may cause compilation
   errors~\footnote{See issue
-    \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}}.  For
+    \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}.  For
   example (change the path to the \depdir\ as needed):
   \begin{verbatim}
   CVODELIB = $HOME/atchem-lib/cvode/lib
@@ -443,8 +443,8 @@ Origin, R, etc\ldots) to process and analyze the model results.
 
 The plotting scripts are written in different programming languages:
 gnuplot, Octave~\footnote{GNU Octave is an open source implementation
-  of MATLAB. The script \texttt{plot-atchem2.m} should work with both
-  Octave and MATLAB}, Python (v2 and v3), and R. One or more of these
+  of MATLAB. The script \texttt{plot-atchem2.m} works with both Octave
+  and MATLAB.}, Python (v2 and v3), and R. One or more of these
 environments is probably already installed on your system: check the
 local documentation or ask the system administrator. All plotting
 scripts require one argument -- the directory containing the model
@@ -490,7 +490,7 @@ runs are therefore easy to do, since all the parts of the model that
 have to be modified are contained in the same directory. Further
 information can be found in Sect.~\ref{subsec:build-process}.
 
-\textit{N.B.}: whenever the \texttt{model/} directory is mentioned in
+\emph{N.B.}: whenever the \texttt{model/} directory is mentioned in
 this manual, it is implied that its name and location may be different
 than the default name (\texttt{model/}) and location (\maindir). All
 scripts that require this information, as well as the \texttt{atchem2}

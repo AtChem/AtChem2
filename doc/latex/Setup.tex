@@ -141,10 +141,11 @@ $10^6$, which presents a significant computational challenge. The
 radicals permutation reactions; more details can be found in the MCM
 protocol papers \citep{jenkin_1997, saunders_2003}.
 
-AtChem2 is designed primarily to run models based upon the MCM, and
-therefore the \texttt{.fac} file must contain the \textbf{Peroxy radicals}
-section, as explained in Sect.~\ref{subsec:facsimile-format}. This
-section must have a header and has the following format:
+AtChem2 is designed primarily to run models based upon the Master
+Chemical Mechanism and, therefore, the \texttt{.fac} file must contain
+the \textbf{Peroxy radicals} section, as explained in
+Sect.~\ref{subsec:facsimile-format}. This section must have a header
+and has the following format:
 
 \begin{verbatim}
 * Peroxy radicals. ;
@@ -574,7 +575,7 @@ applies to the calculated photolysis rates (Fig.~\ref{fig:photol}).
 
 Photolysis rates are the rate coefficients of photolysis reactions,
 and are identified in FACSIMILE \hyperref[subsec:facsimile-format]{format}
-with the notation \verb|J<i>| -- where \texttt{i} is an integer
+with the notation \verb|J<i>| -- where \texttt{i} is the ID number
 assigned by the MCM to each photolysis reaction (or to a group of
 photolysis reactions). AtChem2 implements the MCM parametrization
 (Sect.~\ref{subsec:calculated-photolysis-rates}) to calculate the
@@ -601,7 +602,8 @@ the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.8\textwidth]{photolysis-rates.png}
-  \caption{Treatment of photolysis rates in AtChem2.} \label{fig:photol}
+  \caption{Treatment of photolysis rates in AtChem2.}
+  \label{fig:photol}
 \end{figure}
 
 \subsection{Constant photolysis rates} \label{subsec:constant-photolysis-rates}
@@ -685,7 +687,7 @@ correction factor, the environment variable \texttt{JFAC}
 \end{equation}
 
 where $j_{meas}$ and $j_{calc}$ are the measured and calculated (with
-the MCM parametrisation, Sect.~\ref{subsec:calculated-photolysis-rates})
+the MCM parametrization, Sect.~\ref{subsec:calculated-photolysis-rates})
 photolysis rates of a reference species. \cf{NO2} is often used as a
 reference because $j$(\cf{NO2}) is one of the most frequently measured
 photolysis rates, in which case: \verb|JFAC = j(NO2)/J4|.
@@ -745,15 +747,15 @@ should be modified by the user, contains the settings of the
 environment variables. For example:
 
 \begin{verbatim}
-1 TEMP            293
-2 PRESS           1013
-3 RH              CONSTRAINED
-4 H2O             CALC
-5 DEC             CALC
-6 BLHEIGHT        8e+4
-7 DILUTE          NOTUSED
-8 JFAC            CONSTRAINED
-9 ROOF            OPEN
+1   TEMP         293
+2   PRESS        1013
+3   RH           CONSTRAINED
+4   H2O          CALC
+5   DEC          CALC
+6   BLHEIGHT     8e+4
+7   DILUTE       NOTUSED
+8   JFAC         CONSTRAINED
+9   ROOF         OPEN
 \end{verbatim}
 
 If an environment variable is constrained, there must be a
@@ -768,19 +770,19 @@ is the list of initialized species, the second column is the
 corresponding concentration at \texttt{t\ =\ 0}. For example:
 
 \begin{verbatim}
+O3      1.213e+12
 NO      378473308.14
 NO2     86893908168.9
-O3      1.213e+12
 CH4     4.938e+13
 \end{verbatim}
 
 Not all chemical species need to be initialized: those that are not
 listed in \texttt{initialConcentrations.config} are automatically set
-to an initial concentration of $0.0e+00$ molecule cm$^{-3}$. It is
+to an initial concentration of 0.0E+00 molecule cm$^{-3}$. It is
 \emph{not necessary} to initialize the chemical species that are set
 to constant or constrained (i.e., those listed in
-\texttt{speciesConstant.config} or in
-\texttt{speciesConstrained.config} -- see below).
+\texttt{speciesConstant.config} or in \texttt{speciesConstrained.config}
+-- see below).
 
 \subsection{outputRates.config} \label{subsec:outputrates}
 
@@ -788,71 +790,90 @@ This file lists the chemical species for which detailed production and
 loss rates are required. In version 1.0 and earlier, these species
 were listed in two files called \texttt{productionRatesOutput.config}
 and \texttt{lossRatesOutput.config}. The file has one column, with one
-species per line.
+species per line. For example:
+
+\begin{verbatim}
+OH
+HO2
+CH3O2
+\end{verbatim}
 
 The frequency of this output is controlled by the
 \textbf{rates output step size} parameter in \texttt{model.parameters}
 (Sect.~\ref{sec:model-parameters}). The corresponding output files --
 called \texttt{productionRates.output} and \texttt{lossRates.output}
 -- are designed to facilitate the analysis of the production and
-destruction rates of selected species of interests, rather than
-processing all the files saved in the
-\texttt{model/output/reactionRates/} directory. For more information
-go to Sect.~\ref{sec:output}.
+destruction rates of selected species of interests (rather than
+processing all the files saved in the \texttt{model/output/reactionRates/}
+directory). For more information go to Sect.~\ref{sec:output}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 
 This file (called \texttt{concentrationOutput.config} in version 1.0
 and earlier) lists the chemical species for which the calculated
-concentration -- molecule cm$^{-3}$ -- is required. The current
-version of AtChem2 limits the number of species that can be output to
-100, although the user can modify the Fortran
-code~\footnote{Subroutine \texttt{outputSpeciesOfInterest()} in
-  \texttt{src/outputFunctions.f90} controls the output of the chemical
-  species.} to increase this number. The file has one column, with one
-species per line.
+concentration -- in molecule cm$^{-3}$ -- is required. The file has
+one column, with one species per line. For example:
+
+\begin{verbatim}
+O3
+NO
+NO2
+CH4
+OH
+HO2
+CH3O2
+\end{verbatim}
 
 The frequency of this output is controlled by the \textbf{step size}
 parameter in \texttt{model.parameters} (Sect.~\ref{sec:model-parameters}).
 The constrained chemical species can be listed in
-\texttt{outputSpecies.config}, which is sometimes useful for
-diagnostic and debugging. Note that the photolysis rates, the
-environment variables and the \cf{RO2} sum are always output by the
-model (Sect.~\ref{sec:output}) and therefore there is not an
-equivalent config file for the output of these variables.
+\texttt{outputSpecies.config}, which can be useful for diagnostic and
+debugging purposes. Note that the photolysis rates, the environment
+variables and the \cf{RO2} sum are always output by the model
+(Sect.~\ref{sec:output}) and therefore there is not an equivalent
+\texttt{.config} file for the output of these variables.
 
 \subsection{photolysisConstant.config} \label{subsec:photolysisconstant}
 
 This file lists the photolysis rates that are set to constant
 (Sect.~\ref{subsec:constant-photolysis-rates}). The file has three
-columns: the first column is the number that identifies the photolysis
-rate (e.g., \texttt{1}), the second column is the value of the
-photolysis rate in s$^{-1}$ (e.g., \texttt{1e-5}), the third column is
-the name of the photolysis rate (e.g., \texttt{J1}). The photolysis
-rates are named according to the MCM
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}
-(Sect.~\ref{sec:photolysis-rates}).
+columns: the first column is the ID number of the photolysis rate, the
+second column is the value of the photolysis rate (in s$^{-1}$), the
+third column is the name of the photolysis rate. The ID numbers and
+the names of the photolysis rates follow the
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{MCM designation}.
+For example:
 
-If no photolysis rate is set to constant, the file should be empty.
-The photolysis rates that are not listed in \texttt{photolysisConstants.config}
-are automatically set to zero (Fig.~\ref{fig:photol}).
+\begin{verbatim}
+1     2.5e-5     J1
+4     8.7e-3     J4
+\end{verbatim}
+
+The photolysis rates that are not listed in
+\texttt{photolysisConstants.config} are automatically set to zero
+(Fig.~\ref{fig:photol}). If no photolysis rate is set to constant, the
+file should be empty.
 
 \subsection{photolysisConstrained.config} \label{subsec:photolysisconstrained}
 
 This file (called \texttt{constrainedPhotoRates.config} in version 1.0
 and earlier) lists the photolysis rates that are constrained
-(Sect.~\ref{subsec:constrained-photolysis-rates}). The file has one
-column, with one photolysis rate per line (e.g., \texttt{J1}). The
-photolysis rates are named according to the MCM
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{naming convention}
-(Sect.~\ref{sec:photolysis-rates}). If a photolysis rate is
-constrained, there must be a corresponding data file in the
-\texttt{model/constraints/photolysis/} directory
-(Sect.~\ref{subsec:constrained-variables}).
+(Sect.~\ref{subsec:constrained-photolysis-rates}). The file has one column, with
+one photolysis rate per line. The names of the photolysis rates follow the
+\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{MCM designation}.
+For example:
 
-If no photolysis rate is constrained, the file should be empty. The
-photolysis rates that are not listed in \texttt{photolysisConstrained.config}
-are calculated using the MCM parametrization (Fig.~\ref{fig:photol}).
+\begin{verbatim}
+J1
+J4
+\end{verbatim}
+
+If a photolysis rate is constrained, there must be a corresponding
+constraint file in the \texttt{model/constraints/photolysis/}
+directory (Sect.~\ref{subsec:constrained-variables}). The photolysis
+rates that are not listed in \texttt{photolysisConstrained.config} are
+calculated using the MCM parametrization (Fig.~\ref{fig:photol}). If
+no photolysis rate is constrained, the file should be empty.
 
 \subsection{speciesConstant.config} \label{subsec:speciesconstant}
 
@@ -860,23 +881,35 @@ This file (called \texttt{constrainedFixedSpecies.config} in version
 1.0 and earlier) lists the chemical species that are set to
 constant. The file has two columns: the first column is the list of
 constant species, the second column is the corresponding concentration
--- in molecule cm$^{-3}$.
+-- in molecule cm$^{-3}$. For example:
 
-If no chemical species is set to constant, the file should be empty.
+\begin{verbatim}
+CH4     4.4e+13
+CO      2.5e+12
+H2      1.2e+13
+\end{verbatim}
+
 The chemical species that are set to a constant value do not need to
 be initialized: the values set in \texttt{speciesConstant.config}
-override those set in \texttt{initialConcentrations.config}.
+override those set in \texttt{initialConcentrations.config}. If no
+chemical species is set to constant, the file should be empty.
 
 \subsection{speciesConstrained.config} \label{subsec:speciesconstrained}
 
 This file (called \texttt{constrainedSpecies.config} in version 1.0
 and earlier) lists the chemical species that are constrained. The file
 has one column, with one species per line. If a chemical species is
-constrained, there must be a corresponding data file in the
+constrained, there must be a corresponding constraint file in the
 \texttt{model/constraints/species/} directory
-(Sect.~\ref{subsec:constrained-variables}).
+(Sect.~\ref{subsec:constrained-variables}). For example:
 
-If no chemical species is constrained, the file should be empty. The
-chemical species that are constrained do not need to be initialized:
-the values set in \texttt{speciesConstrained.config} override those
-set in \texttt{initialConcentrations.config}.
+\begin{verbatim}
+CH4
+CO
+H2
+\end{verbatim}
+
+The chemical species that are constrained do not need to be
+initialized: the values set in \texttt{speciesConstrained.config}
+override those set in \texttt{initialConcentrations.config}. If no
+chemical species is constrained, the file should be empty.

@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="1060"
-   height="750"
-   viewBox="0 0 1060 750"
+   width="1100"
+   height="800"
+   viewBox="0 0 1100 800"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -22,6 +22,51 @@
   <defs
      id="defs4">
     <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4374"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4376"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4262"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4264"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4218"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="matrix(-0.8,0,0,-0.8,-10,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path4220"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
        inkscape:stockid="Arrow1Lend"
        orient="auto"
        refY="0"
@@ -31,7 +76,7 @@
        inkscape:isstock="true">
       <path
          id="path4355"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="matrix(-0.8,0,0,-0.8,-10,0)"
          inkscape:connector-curvature="0" />
@@ -43,11 +88,12 @@
        refX="0"
        id="Arrow1Lend-7"
        style="overflow:visible"
-       inkscape:isstock="true">
+       inkscape:isstock="true"
+       inkscape:collect="always">
       <path
          inkscape:connector-curvature="0"
          id="path4355-0"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="matrix(-0.8,0,0,-0.8,-10,0)" />
     </marker>
@@ -58,11 +104,12 @@
        refX="0"
        id="Arrow1Lend-3-9"
        style="overflow:visible"
-       inkscape:isstock="true">
+       inkscape:isstock="true"
+       inkscape:collect="always">
       <path
          inkscape:connector-curvature="0"
          id="path4355-6-20"
-         d="M 0,0 5,-5 -12.5,0 5,5 0,0 z"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
          style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
          transform="matrix(-0.8,0,0,-0.8,-10,0)" />
     </marker>
@@ -74,17 +121,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.82"
-     inkscape:cx="307.86387"
-     inkscape:cy="527.9937"
+     inkscape:zoom="0.76"
+     inkscape:cx="509.85733"
+     inkscape:cy="397.23181"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1336"
-     inkscape:window-height="721"
-     inkscape:window-x="30"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1366"
+     inkscape:window-height="768"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
      inkscape:showpageshadow="false" />
   <metadata
      id="metadata7">
@@ -95,265 +142,321 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-302.3622)">
+     transform="translate(0,-252.3622)">
+    <g
+       id="g4702"
+       transform="translate(206.1706,-109.44102)">
+      <text
+         transform="scale(0.99868085,1.0013209)"
+         sodipodi:linespacing="125%"
+         id="text3344"
+         y="559.44086"
+         x="98.943123"
+         style="font-style:normal;font-weight:normal;font-size:40.10214615px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:25.06384468px"
+           y="559.44086"
+           x="98.943123"
+           id="tspan3346"
+           sodipodi:role="line">Processing Layer</tspan><tspan
+           id="tspan3370"
+           style="font-size:20.05107307px"
+           y="585.77417"
+           x="98.943123"
+           sodipodi:role="line">- conversion of the chemical mechanism</tspan><tspan
+           id="tspan3160"
+           style="font-size:20.05107307px"
+           y="610.83801"
+           x="98.943123"
+           sodipodi:role="line">  to Fortran format</tspan><tspan
+           id="tspan3390"
+           style="font-size:20.05107307px"
+           y="635.90186"
+           x="98.943123"
+           sodipodi:role="line">- sum of organic peroxy radicals (RO2)</tspan><tspan
+           id="tspan3158"
+           style="font-size:20.05107307px"
+           y="660.9657"
+           x="98.943123"
+           sodipodi:role="line">- parametrization of photolysis rates</tspan><tspan
+           id="tspan4686"
+           style="font-size:20.05107307px"
+           y="686.02954"
+           x="98.943123"
+           sodipodi:role="line">- dilution mechanism (optional)</tspan></text>
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:4.00004768;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         y="528.11206"
+         x="85.812607"
+         height="175.99994"
+         width="430.99994"
+         id="rect3460" />
+    </g>
+    <g
+       id="g4688"
+       transform="translate(-139.38294,-100.56624)">
+      <text
+         transform="scale(0.99685602,1.0031539)"
+         sodipodi:linespacing="125%"
+         id="text3352"
+         y="954.58557"
+         x="387.14713"
+         style="font-style:normal;font-weight:normal;font-size:40.18470764px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           style="font-size:25.11544037px"
+           y="954.58557"
+           x="387.14713"
+           id="tspan3354"
+           sodipodi:role="line">Mathematical Layer</tspan><tspan
+           id="tspan3392"
+           style="font-size:20.09235382px"
+           y="980.97314"
+           x="387.14713"
+           sodipodi:role="line">- interpolation of constraints</tspan><tspan
+           id="tspan3396"
+           style="font-size:20.09235382px"
+           y="1006.0886"
+           x="387.14713"
+           sodipodi:role="line">- integration of the ODE system</tspan></text>
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:4.00011873;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         y="925.45428"
+         x="373.90802"
+         height="100.99984"
+         width="340.99985"
+         id="rect3460-7" />
+    </g>
+    <g
+       id="g4712"
+       transform="translate(111.63339,317.53539)">
+      <text
+         transform="scale(1.0019974,0.99800658)"
+         sodipodi:linespacing="125%"
+         id="text3374"
+         y="352.97778"
+         x="534.93512"
+         style="font-style:normal;font-weight:normal;font-size:40.2665596px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           id="tspan3380"
+           style="font-size:25.16659927px"
+           y="352.97778"
+           x="534.93512"
+           sodipodi:role="line">Configuration Layer</tspan><tspan
+           id="tspan3384"
+           style="font-size:20.1332798px"
+           y="379.41907"
+           x="534.93512"
+           sodipodi:role="line">- initial conditions</tspan><tspan
+           id="tspan3386"
+           style="font-size:20.1332798px"
+           y="404.58566"
+           x="534.93512"
+           sodipodi:role="line">- model constraints</tspan><tspan
+           id="tspan3089"
+           style="font-size:20.1332798px"
+           y="429.75229"
+           x="534.93512"
+           sodipodi:role="line">- input and output variables</tspan><tspan
+           id="tspan3083"
+           style="font-size:20.1332798px"
+           y="454.91888"
+           x="534.93512"
+           sodipodi:role="line">- model and solver parameters</tspan></text>
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:4.00004196;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         y="320.19159"
+         x="523.98865"
+         height="150.99994"
+         width="335.99994"
+         id="rect3460-5" />
+    </g>
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif"
-       x="100.54111"
-       y="582.16937"
-       id="text3344"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3346"
-         x="100.54111"
-         y="582.16937"
-         style="font-size:25px">Processing Layer</tspan><tspan
-         sodipodi:role="line"
-         x="100.54111"
-         y="609.24152"
-         style="font-size:20px"
-         id="tspan3370">- conversion of the chemical mechanism</tspan><tspan
-         sodipodi:role="line"
-         x="100.54111"
-         y="634.24152"
-         style="font-size:20px"
-         id="tspan3160">  to Fortran format</tspan><tspan
-         sodipodi:role="line"
-         x="100.54111"
-         y="659.24152"
-         style="font-size:20px"
-         id="tspan3390">- sum of organic peroxy radicals (RO2)</tspan><tspan
-         sodipodi:role="line"
-         x="100.54111"
-         y="684.24152"
-         style="font-size:20px"
-         id="tspan3158">- parametrization of photolysis rates</tspan></text>
-    <rect
-       id="rect3460"
-       width="385.65085"
-       height="156.45573"
-       x="85.577011"
-       y="548.13434"
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif"
-       x="386.31055"
-       y="957.16925"
-       id="text3352"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         id="tspan3354"
-         x="386.31055"
-         y="957.16925"
-         style="font-size:25px">Mathematical Layer</tspan><tspan
-         sodipodi:role="line"
-         x="386.31055"
-         y="984.24139"
-         style="font-size:20px"
-         id="tspan3392">- interpolation of constraints</tspan><tspan
-         sodipodi:role="line"
-         x="386.31055"
-         y="1009.2414"
-         style="font-size:20px"
-         id="tspan3396">- integration of the ODE system</tspan></text>
-    <rect
-       id="rect3460-7"
-       width="303.48438"
-       height="100.43559"
-       x="373.78223"
-       y="926.14429"
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif"
-       x="536.06519"
-       y="616.93909"
-       id="text3374"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="536.06519"
-         y="616.93909"
-         style="font-size:25px"
-         id="tspan3380">Configuration Layer</tspan><tspan
-         sodipodi:role="line"
-         x="536.06519"
-         y="644.01123"
-         style="font-size:20px"
-         id="tspan3384">- initial conditions</tspan><tspan
-         sodipodi:role="line"
-         x="536.06519"
-         y="669.01123"
-         style="font-size:20px"
-         id="tspan3386">- model constraints</tspan><tspan
-         sodipodi:role="line"
-         x="536.06519"
-         y="694.01123"
-         style="font-size:20px"
-         id="tspan3089">- input and output variables</tspan><tspan
-         sodipodi:role="line"
-         x="536.06519"
-         y="719.01123"
-         style="font-size:20px"
-         id="tspan3083">- model and solver parameters</tspan></text>
-    <rect
-       id="rect3460-5"
-       width="301.09125"
-       height="154.65225"
-       x="521.17383"
-       y="583.53601"
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <text
-       xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif"
-       x="924.45032"
-       y="735.67963"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="919.81671"
+       y="1011.3893"
        id="text3398"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3400"
-         x="924.45032"
-         y="735.67963"
-         style="font-size:30px">OUTPUT</tspan></text>
+         x="919.81671"
+         y="1011.3893"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">OUTPUT</tspan></text>
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend)"
-       d="m 258.58537,892.3622 c 15.78313,38.45583 39.76976,63.11178 105.19513,88.85366"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="m 130.81768,773.30594 c 6.30872,55.17092 33.5022,78.21284 89.22417,100.4689"
        id="path4346"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend-7)"
-       d="m 94.21676,433.60488 c -1.042649,37.66475 15.35495,64.87505 51.84537,104.32784"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4218)"
+       d="m 165.91373,390.817 c 15.16951,59.52684 36.08319,76.69827 109.9216,111.58737"
        id="path4346-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend-3-9)"
-       d="m 688.27655,988.99211 c 106.03821,14.67189 121.91793,1.55649 168.26827,-59.70732"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4374)"
+       d="m 389.07873,941.46399 c 36.93786,30.36361 127.18998,46.16036 242.31545,8.53224"
        id="path4346-0-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <g
+       id="g4695"
+       transform="translate(-81.306715,-124.86389)">
+      <text
+         transform="scale(0.99614938,1.0038655)"
+         sodipodi:linespacing="125%"
+         id="text3374-7"
+         y="811.65417"
+         x="147.80513"
+         style="font-style:normal;font-weight:normal;font-size:40.15621948px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"><tspan
+           id="tspan3380-4"
+           style="font-size:25.09763718px"
+           y="811.65417"
+           x="147.80513"
+           sodipodi:role="line">Logic Layer</tspan><tspan
+           id="tspan3388-4"
+           style="font-size:20.07810974px"
+           y="838.02301"
+           x="147.80513"
+           sodipodi:role="line">- system of coupled ODE</tspan><tspan
+           id="tspan3152"
+           style="font-size:20.07810974px"
+           y="863.12067"
+           x="147.80513"
+           sodipodi:role="line">- boundary conditions</tspan></text>
+      <rect
+         style="fill:none;stroke:#000000;stroke-width:4.00005817;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         y="782.64966"
+         x="135.21263"
+         height="100.99994"
+         width="270.99991"
+         id="rect3460-5-8" />
+    </g>
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:sans-serif"
-       x="147.62347"
-       y="812.16937"
-       id="text3374-7"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="58.283215"
+       y="414.22986"
+       id="text3348-3-5"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="147.62347"
-         y="812.16937"
-         style="font-size:25px"
-         id="tspan3380-4">Logic Layer</tspan><tspan
-         sodipodi:role="line"
-         x="147.62347"
-         y="839.24152"
+         x="58.283215"
+         y="414.22986"
          style="font-size:20px"
-         id="tspan3388-4">- system of coupled ODE</tspan><tspan
-         sodipodi:role="line"
-         x="147.62347"
-         y="864.24152"
-         style="font-size:20px"
-         id="tspan3152">- boundary conditions</tspan></text>
-    <rect
-       id="rect3460-5-8"
-       width="246.86191"
-       height="104.69118"
-       x="135.15443"
-       y="779.0166"
-       style="fill:none;stroke:#000000;stroke-width:4;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
-    <g
-       id="g4038"
-       transform="translate(-25.502216,147.19189)">
-      <text
-         sodipodi:linespacing="125%"
-         id="text3398-8"
-         y="234.25916"
-         x="49.117466"
-         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-         xml:space="preserve"><tspan
-           id="tspan3143"
-           style="font-size:25px"
-           y="234.25916"
-           x="49.117466"
-           sodipodi:role="line">Chemical Mechanism</tspan></text>
-      <text
-         sodipodi:linespacing="125%"
-         id="text3348-3-5"
-         y="267.03796"
-         x="83.785431"
-         style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
-         xml:space="preserve"><tspan
-           id="tspan3111-1"
-           style="font-size:20px"
-           y="267.03796"
-           x="83.785431"
-           sodipodi:role="line" /></text>
-    </g>
+         id="tspan3111-1" /></text>
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend-7)"
-       d="M 72.394316,670.95976 C 5.5640308,735.91709 39.224045,796.49783 121.76017,836.3988"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend-7)"
+       d="m 493.44695,608.88354 c -29.79451,50.01748 -65.24298,76.87964 -153.90094,103.00709"
        id="path4346-9-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
-    <ellipse
-       transform="matrix(0.93171069,0,0,0.73426519,-617.99058,83.953083)"
-       sodipodi:ry="66.864822"
-       sodipodi:rx="150.36482"
-       sodipodi:cy="404.36221"
-       sodipodi:cx="827.5"
-       style="fill:none;stroke:#000000;stroke-width:2.41803718;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
-       id="path8180"
-       cx="827.5"
-       cy="404.36221"
-       rx="150.36482"
-       ry="66.864822" />
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none;font-family:Sans"
-       x="809.51221"
-       y="885.92316"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none"
+       x="644.67737"
+       y="918.22076"
        id="text3949"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan3951"
-         x="809.51221"
-         y="885.92316"
-         style="font-size:25px;font-style:oblique;font-weight:bold;fill:#000080;-inkscape-font-specification:Sans Bold Oblique">atchem</tspan><tspan
+         x="644.67737"
+         y="918.22076"
+         style="font-style:oblique;font-weight:bold;font-size:27.5px;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080">atchem2</tspan><tspan
          sodipodi:role="line"
-         x="809.51221"
-         y="917.17316"
-         style="font-size:25px;font-style:oblique;font-weight:bold;fill:#000080;-inkscape-font-specification:Sans Bold Oblique"
+         x="644.67737"
+         y="952.59576"
+         style="font-style:oblique;font-weight:bold;font-size:27.5px;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080"
          id="tspan4036">executable</tspan></text>
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend-3-9)"
-       d="m 919.69514,887.03578 c 39.73544,-37.514 56.05727,-66.50875 65.82926,-137.7561"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend-3-9)"
+       d="m 822.4175,919.67489 c 82.33728,-8.17467 113.18163,1.71123 160.2031,50.29445"
        id="path4346-0-2-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lend-3-9)"
-       d="m 681.52155,749.22805 c 15.28529,67.60311 39.08626,105.04051 114.58536,135.34147"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4262)"
+       d="m 841.31676,802.83811 c 8.28079,42.45265 -2.46299,56.62531 -52.75685,86.43817"
        id="path4346-0-2-4-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <ellipse
+       style="fill:none;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path8180"
+       cx="162.57578"
+       cy="321.28641"
+       rx="147.56378"
+       ry="56.575661" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="107.95122"
-       y="419.67926"
-       id="text3417"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="29.860931"
+       y="320.38617"
+       id="text3398-8"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
+         x="29.860931"
+         y="320.38617"
+         style="font-size:25px"
+         id="tspan3143">Chemical Mechanism</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="127.36459"
+       y="364.61438"
+       id="text3417"
+       sodipodi:linespacing="125%"><tspan
+         style="font-size:37.5px;fill:#800000"
+         sodipodi:role="line"
          id="tspan3419"
-         x="107.95122"
-         y="419.67926">.fac</tspan></text>
+         x="127.36459"
+         y="364.61438">.fac</tspan></text>
+    <ellipse
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:3,3;stroke-dashoffset:0;stroke-opacity:1"
+       id="path10669"
+       cx="525.89929"
+       cy="699.35681"
+       rx="509.87546"
+       ry="333.71841" />
+    <text
+       sodipodi:linespacing="0%"
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:serif;-inkscape-font-specification:Serif;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       x="977.24323"
+       y="312.6181"
+       id="text3045-8"><tspan
+         sodipodi:role="line"
+         x="977.24323"
+         y="312.6181"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:50%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan4066-0">AtChem2</tspan><tspan
+         sodipodi:role="line"
+         x="977.24323"
+         y="332.6181"
+         style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:50%;font-family:sans-serif;-inkscape-font-specification:'sans-serif Italic';text-align:center;writing-mode:lr-tb;text-anchor:middle"
+         id="tspan16387">-------------</tspan></text>
   </g>
 </svg>

@@ -273,9 +273,9 @@ To install AtChem2:
     \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}.  For
   example (change the path to the \depdir\ as needed):
   \begin{verbatim}
-  CVODELIB = $HOME/atchem-lib/cvode/lib
-  OPENLIBMDIR = $HOME/atchem-lib/openlibm-0.4.1
-  FRUITDIR = $HOME/atchem-lib/fruit_3.4.3
+  CVODELIB = $(HOME)/atchem-lib/cvode/lib
+  OPENLIBMDIR = $(HOME)/atchem-lib/openlibm-0.4.1
+  FRUITDIR = $(HOME)/atchem-lib/fruit_3.4.3
   \end{verbatim}
   If FRUIT has not been installed (it is optional), leave the default
   value for \texttt{\$FRUITDIR}.
@@ -488,7 +488,7 @@ same time, without having to recompile the source code and create a
 different executable every time. Sensitivity studies and batch model
 runs are therefore easy to do, since all the parts of the model that
 have to be modified are contained in the same directory. Further
-information can be found in Sect.~\ref{subsec:build-process}.
+information can be found in Sect.~\ref{subsec:build-process}.\\
 
 \emph{N.B.}: whenever the \texttt{model/} directory is mentioned in
 this manual, it is implied that its name and location may be different

@@ -48,14 +48,15 @@ contains
     integer i
 
     write(*,*) new_line('A')//' This is the help message.'
-
+    write(*,*)
     write(*, '(A)', advance='no') ' Usage: ./atchem '
     write(*, '(3A)', advance='no') '[', trim(valid_flags(1)%flag_switch), '] '
     do i=2, size(valid_flags)
       write(*, '(5A)', advance='no') '[', trim(valid_flags(i)%flag_switch), '=', &
-                                    trim(valid_flags(i)%flag_switch(3:))//'_dir', '] '
+                                     trim(valid_flags(i)%flag_switch(3:))//'_dir', '] '
     end do
 
+    write(*,*)
     write(*,*) new_line('A')//' Possible input flags are: '
     do i=1, size(valid_flags)
       write(*,*) trim(valid_flags(i)%flag_switch)

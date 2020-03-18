@@ -58,25 +58,26 @@ contains
 
     write(*,*)
     write(*,*) new_line('A')//' Possible input flags are: '
+    write(*,*)
     do i=1, size(valid_flags)
       write(*,*) trim(valid_flags(i)%flag_switch)
       write(*,*) '     ', valid_flags(i)%flag_help//new_line('A')
     end do
 
-    write(*,*) 'In essence, the directories default to sit in the following tree. '
+    write(*,*) 'In essence, the directories default to sit in the following tree.'
     write(*,*) 'Modification via the input parameters cascades to lower directories, but is overwritten by explicit input.'
     write(*,*)
-    write(*,*) '     +--------------------------------+--------------------+-------------------+'
-    write(*,*) '                                      |                    |                   |'
-    write(*,*) '                                  model_dir             mcm_dir        shared_lib_dir'
+    write(*,*) '                                      +--------------------+--------------------+'
+    write(*,*) '                                      |                    |                    |'
+    write(*,*) '                                  model_dir             mcm_dir         shared_lib_dir'
     write(*,*) '                                      | '
-    write(*,*) '     +--------------------------------+--------------------------+'
-    write(*,*) '     |                                |                          |'
-    write(*,*) ' output_dir                   configuration_dir           constraints_dir'
-    write(*,*) '                                                                 |'
-    write(*,*) '                                        +------------------------+----------------------+'
-    write(*,*) '                                        |                        |                      |'
-    write(*,*) '                               env_constraints_dir     photo_constraints_dir    species_constraints_dir'
+    write(*,*) '     +--------------------------------+--------------------------------+'
+    write(*,*) '     |                                |                                |'
+    write(*,*) ' output_dir                    constraints_dir                 configuration_dir' 
+    write(*,*) '                                      |'
+    write(*,*) '             +------------------------+------------------------+'
+    write(*,*) '             |                        |                        |'
+    write(*,*) '    env_constraints_dir     photo_constraints_dir   species_constraints_dir'
     write(*,*)
   end subroutine print_help
 

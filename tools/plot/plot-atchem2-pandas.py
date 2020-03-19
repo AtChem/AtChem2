@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> Python3 version [requires pandas & matplotlib]
+## --> Python version [requires pandas & matplotlib]
 ##
 ## Acknowledgements: M. Panagi, M. Fabre'
 ##
@@ -18,8 +18,9 @@
 ## - directory with the model output
 ##
 ## USAGE:
-##   python3 ./tools/plot/plot-atchem2_v3.py ./model/output/
+##   python ./tools/plot/plot-atchem2-pandas.py ./model/output/
 ## ---------------------------------------------- ##
+from __future__ import print_function
 import os, sys
 import pandas as pd
 import matplotlib.pyplot as plt

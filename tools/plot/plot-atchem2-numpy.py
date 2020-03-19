@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> Python2 version [requires numpy & matplotlib]
+## --> Python version [requires numpy & matplotlib]
 ##
 ## Acknowledgements: M. Panagi
 ##
@@ -18,15 +18,16 @@
 ## - directory with the model output
 ##
 ## USAGE:
-##   python2 ./tools/plot/plot-atchem2_v2.py ./model/output/
+##   python ./tools/plot/plot-atchem2-numpy.py ./model/output/
 ## ---------------------------------------------- ##
+from __future__ import print_function
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
 os.chdir(sys.argv[1])
-print os.getcwd()
+print(os.getcwd())
 
 with open('speciesConcentrations.output') as f:
     var1 = f.readline().split()
@@ -121,4 +122,4 @@ with PdfPages('atchem2_output.pdf') as pdf:
 
 ## ---------------------------- ##
 
-print "\n===> atchem2_output.pdf created in directory:", sys.argv[1], "\n\n"
+print("\n===> atchem2_output.pdf created in directory:", sys.argv[1], "\n\n")

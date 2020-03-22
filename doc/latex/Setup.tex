@@ -84,7 +84,10 @@ KMT08 = (K80*K8I)*F8/(K80+K8I) ;
 \end{verbatim}
 
 Chemical reactions can be written in FACSIMILE format without
-reactants or products. This feature can be used to implement simple
+reactants or products~\footnote{Reactions without reactants are not
+  supported in the current version of AtChem2: see issue
+  \href{https://github.com/AtChem/AtChem2/issues/413}{\#413} for a
+  workaround.}. This feature can be used to implement simple
 descriptions of non-chemical processes in a box-model. For example,
 dilution (Sect.~\ref{subsec:dilute}), deposition to a surface, and
 direct emission of a chemical species can be parametrized as:
@@ -187,8 +190,8 @@ many reactions in the MCM depend on this parameter. This means that
 the \cf{RO2} sum must include only organic peroxy
 radicals~\footnote{The hydroperoxyl radical (\cf{HO2}) is a peroxy
   radical but is not an organic molecule, and therefore it
-  \emph{should not} be included in the \cf{RO2} sum.} and that all the
-organic peroxy radicals in the chemical mechanism must be
+  \emph{must not} be included in the \cf{RO2} sum.} and that all
+the organic peroxy radicals in the chemical mechanism must be
 included. The \cf{RO2} sum is output, by default, to the file
 \texttt{environmentVariables.output} (Sect.~\ref{sec:output}).
 
@@ -351,11 +354,11 @@ in the \texttt{model/configuration/} directory.
   coordinates (in degrees). Latitude North is positive and latitude
   South is negative; longitude East is negative and longitude West is
   positive~\footnote{The standard geographical convention is that
-    longitude East is positive and longitude West is negative. The
-    current version of AtChem2 uses the opposite convention for
-    backward compatibility reasons. This may change in future
-    versions.}. Latitude and longitude are used to calculate the solar
-  angles, which are needed for the calculation of the photolysis rates
+    longitude East is positive and longitude West is negative. AtChem2
+    uses the opposite convention for backward compatibility
+    reasons. This may change in future versions of AtChem2.}. Latitude
+  and longitude are used to calculate the solar angles, which are
+  needed for the calculation of the photolysis rates
   (Sect.~\ref{subsec:calculated-photolysis-rates}).
 \item \textbf{day} and \textbf{month} and \textbf{year}. Start date of
   the model simulation. The model time is in UTC (GMT timezone) and is
@@ -380,7 +383,7 @@ differential equations (ODE) solver; they are set in the
 \texttt{solver.parameters} file which, by default, is in the
 \texttt{model/configuration/} directory. A complete explanation of
 these parameters can be found in the documentation of
-\href{https://computation.llnl.gov/projects/sundials/sundials-software}{CVODE}.
+\href{https://computation.llnl.gov/projects/sundials/}{CVODE}.
 
 \begin{itemize}
 \item \textbf{atol} (positive real) and \textbf{rtol} (positive real):
@@ -600,7 +603,7 @@ the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.9\textwidth]{photolysis-rates.png}
+  \includegraphics[width=0.85\textwidth]{photolysis-rates.png}
   \caption{Treatment of photolysis rates in AtChem2.}
   \label{fig:photol}
 \end{figure}
@@ -609,11 +612,11 @@ the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 
 The typical scenario for constant photolysis rates is a lamp or solar
 simulator in an environmental chamber. All the photolysis rates in the
-chemical mechanism must be given a value in the \texttt{photolysisConstant.config}
-file, otherwise they are automatically set to zero (Fig.~\ref{fig:photol}).
-This approach allows the user to model individual photolysis processes
-and/or to account for lamps that emit only in certain spectral
-windows.
+chemical mechanism must be given a value in the
+\texttt{photolysisConstant.config} file, otherwise they are
+automatically set to zero (Fig.~\ref{fig:photol}).  This approach
+allows the user to model individual photolysis processes and/or to
+account for lamps that emit only in certain spectral windows.
 
 The format of \texttt{photolysisConstant.config} is described in
 Sect.~\ref{subsec:photolysisconstant}. If the file is empty, the
@@ -706,7 +709,7 @@ addition, the reference photolysis rate must be constrained -- i.e.
 it must be listed in \texttt{photolysisConstrained.config}
 (Sect.~\ref{subsec:photolysisconstrained}) and the corresponding
 constraint file must be present in the
-\texttt{model/constraints/environment/} directory~\footnote{The
+\texttt{model/constraints/photolysis/} directory~\footnote{The
   calculation of \texttt{JFAC} at runtime does not work well in the
   current version of AtChem2, especially in situations when the
   reference photolysis rate is very variable. Therefore, it is

@@ -81,8 +81,11 @@ variable, with the format described below. By default, the files with
 the constraint data are located in \texttt{model/constraints/species/}
 for the chemical species, \texttt{model/constraints/environment/} for
 the environment variables, \texttt{model/constraints/photolysis/} for
-the photolysis rates. The default directories can be changed, as
-explained Sect.~\ref{sec:build} (see also Sect.~\ref{subsec:model-directory}).
+the photolysis rates~\footnote{Although \texttt{JFAC} is an
+  environment variable, the \texttt{JFAC} constraint file must be in
+  the \texttt{constraints/photolysis/} directory.}. The default
+directories can be changed, as explained Sect.~\ref{sec:build} (see
+also Sect.~\ref{subsec:model-directory}).
 
 \subsection{Constrained variables} \label{subsec:constrained-variables}
 
@@ -246,7 +249,7 @@ users the flexibility to organize the modelling work as they prefer.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.8\textwidth]{model-setup.png}
+  \includegraphics[width=0.85\textwidth]{model-setup.png}
   \caption{Example of a modelling setup, with an AtChem2 installation
     and a project directory containing two box-models.}
   \label{fig:setup}
@@ -260,9 +263,9 @@ campaign or to a set of related experiments. The project directory
 contains two different \texttt{model/} directories (\texttt{model\_1/}
 and \texttt{model\_2/}), each with their own chemical mechanism,
 configuration, constraints and output. In this case, the user can
-build each model with the following commands~\footnote{Note that the
-  third argument is not specified in this example, so the default
-  value (\texttt{\textasciitilde/AtChem2/mcm/}) will be used.}:
+build each model with the following commands~\footnote{The third
+  argument is not specified in this example, so the default value
+  (\texttt{\textasciitilde/AtChem2/mcm/}) will be used.}:
 
 \begin{verbatim}
 ./build/build_atchem2.sh ~/Project_A/model_1/mechanism.fac
@@ -487,6 +490,6 @@ While the model is running, diagnostic information is printed to the
 terminal: this can be redirected to a log file using standard unix
 commands. On HPC systems the submission script can usually take care
 of redirecting the terminal printout to a log file (see the related
-\href{https://github.com/AtChem/AtChem2/wiki/Running-on-HPC}{wiki}
-page). A successful model run completes with a message similar to the
-one shown in Sect.~\ref{sec:install}.
+\href{https://github.com/AtChem/AtChem2/wiki/Running-on-HPC}{wiki page}).
+A successful model run completes with a message similar to the one
+shown in Sect.~\ref{sec:install}.

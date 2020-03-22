@@ -24,7 +24,9 @@ following tools:
 \item Fortran -- the model compiles with GNU \texttt{gfortran}
   (version 4.8.5) and with Intel \texttt{ifort} (version 17.0)\\
   $\hookrightarrow$ default compiler: \texttt{gfortran}
-\item Python
+\item Python~\footnote{All Python scripts used in AtChem2 work equally
+    with Python v2 and v3. Support for Python v2 may be removed in
+    future versions of AtChem2.}
 \item cmake
 \item Ruby (optional)
 \end{itemize}
@@ -49,8 +51,8 @@ dependencies go to Sect.~\ref{sec:dependencies}.
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
 
-Two versions of AtChem2 are available: the
-\href{https://github.com/AtChem/AtChem2/releases}{stable version} and
+Two versions of AtChem2 are available for download: the
+\href{https://github.com/AtChem/AtChem2/releases/}{stable version} and
 the development version, also known as \texttt{master\ branch} (see
 Sect.~\ref{sec:general-information} for details). The source code can
 be obtained in two ways:
@@ -69,7 +71,7 @@ be obtained in two ways:
 \item with the \textbf{archive file}:
   \begin{enumerate}
   \item Download the archive file (\texttt{.tar.gz} or \texttt{.zip}) of the
-    \href{https://github.com/AtChem/AtChem2/releases}{stable} or of the
+    \href{https://github.com/AtChem/AtChem2/releases/}{stable} or of the
     \href{https://github.com/AtChem/AtChem2/archive/master.zip}{development}
     version to the directory where you want to install AtChem2.
   \item Open the terminal. Move to the directory where the archive
@@ -116,7 +118,7 @@ local documentation or ask the system administrator.
 \subsubsection{CVODE}
 
 AtChem2 uses the CVODE library which is part of the open source
-\href{https://computation.llnl.gov/projects/sundials}{SUNDIALS} suite
+\href{https://computation.llnl.gov/projects/sundials/}{SUNDIALS suite}
 \citep{hindmarsh_2005}, to solve the system of ordinary differential
 equations (ODE). The version of CVODE currently used in AtChem2 is
 v2.9.0 (part of SUNDIALS v2.7.0) and it can be installed using the
@@ -178,11 +180,11 @@ complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{numdiff}
 
-numdiff is a \href{https://www.nongnu.org/numdiff/}{program} used to
-compare files containing numerical fields. It is needed only if you
-want to run the \hyperref[sec:test-suite]{Test Suite}, a series of
-tests used to ensure that the model works properly and that changes to
-the code do not result in unintended behaviour. Installation of
+numdiff is an open source \href{https://www.nongnu.org/numdiff/}{tool}
+used to compare files containing numerical fields. It is needed only
+if you want to run the \hyperref[sec:test-suite]{Test Suite}, a series
+of tests used to ensure that the model works properly and that changes
+to the code do not result in unintended behaviour. Installation of
 numdiff is recommended if you want to contribute to the development of
 AtChem2.
 
@@ -265,11 +267,11 @@ To install AtChem2:
   \end{verbatim}
 \item Open the \texttt{Makefile} with a text editor. Set the variables
   \texttt{\$CVODELIB}, \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR} to
-  the paths of CVODE, openlibm and FRUIT, respectively. Use full
-  paths, because using relative paths may cause compilation
-  errors~\footnote{See issue
-    \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}. For
-  example (change the path to the \depdir\ as needed):
+  the paths of CVODE, openlibm and FRUIT, as indicated in
+  Sect.~\ref{subsec:required-dependencies}. Use full paths, because
+  using relative paths may cause compilation errors~\footnote{See
+    issue \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}.
+  For example (change the path to the \depdir\ as needed):
   \begin{verbatim}
   CVODELIB = $(HOME)/atchem-lib/cvode/lib
   OPENLIBMDIR = $(HOME)/atchem-lib/openlibm-0.4.1
@@ -433,21 +435,24 @@ In earlier versions of AtChem2, the \texttt{tools/} directory also
 included the build scripts, which have been moved to the
 \texttt{build/} directory in AtChem2 version 1.2.
 
-The plotting scripts in \texttt{tools/plot/} are very simple and are
-only intended to give the user a quick overview of the model output
-for validation and diagnostic purposes. It is recommended to use a
-proper data analysis software package (e.g., IDL, Igor, MATLAB,
-Origin, R, etc\ldots) to process and analyze the model results.
+The plotting scripts in \texttt{tools/plot/} are very simple and
+produce identical outputs. They are only intended to give the user a
+quick overview of the model results for validation and diagnostic
+purposes. It is recommended to use a proper data analysis software
+package (e.g., IDL, Igor, MATLAB, Origin, R, etc\ldots) to process and
+analyze the model results.
 
 The plotting scripts are written in different programming languages:
 gnuplot, Octave~\footnote{GNU Octave is an open source implementation
   of MATLAB. The script \texttt{plot-atchem2.m} works with both Octave
-  and MATLAB.}, Python (v2 and v3), and R. One or more of these
-environments is probably already installed on your system: check the
-local documentation or ask the system administrator. All plotting
-scripts require one argument -- the directory containing the model
-output -- and create one file called \texttt{atchem2\_output.pdf} in
-the given directory.
+  and MATLAB.}, Python, and R. One or more of these environments is
+probably already installed on your system: check the local
+documentation or ask the system administrator. All plotting scripts
+require one argument -- the directory containing the model output --
+and produce the same output~\footnote{See issue
+  \href{https://github.com/AtChem/AtChem2/issues/269}{\#269} for a
+  list of known problems of the plotting scripts.}: one file called
+\texttt{atchem2\_output.pdf} in the given directory.
 
 To run a plotting script, open the terminal and execute one of the
 following commands from the \maindir\ (change the path to the model
@@ -456,8 +461,8 @@ output directory as needed):
 \begin{itemize}
 \item \verb|gnuplot -c tools/plot/plot-atchem2.gp model/output/|
 \item \verb|octave tools/plot/plot-atchem2.m model/output/|
-\item \verb|python2 tools/plot/plot-atchem2_v2.py model/output/|
-\item \verb|python3 tools/plot/plot-atchem2_v3.py model/output/|
+\item \verb|python tools/plot/plot-atchem2-numpy.py model/output/|
+\item \verb|python tools/plot/plot-atchem2-pandas.py model/output/|
 \item \verb|Rscript --vanilla tools/plot/plot-atchem2.r model/output/|
 \end{itemize}
 

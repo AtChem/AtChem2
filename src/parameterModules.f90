@@ -12,7 +12,6 @@
 !
 ! -----------------------------------------------------------------------------
 
-
 ! ******************************************************************** !
 ! ATCHEM2 -- FILE parameterModules
 !
@@ -20,7 +19,6 @@
 ! modules that handle the setting and storing of solver and model
 ! parameters from file.
 ! ******************************************************************** !
-
 
 ! ******************************************************************** !
 ! MODULE solver_params
@@ -195,15 +193,15 @@ contains
     write (*, '(A)') ' Model parameters:'
     write (*, '(A)') ' -----------------'
     write (*, 400) 'number of steps: ', maxNumTimesteps
-    write (*, 300) 'step size (seconds): ', timestepSize
+    write (*, 300) 'step size: ', timestepSize
     write (*, 500) 'species interpolation method: ', adjustl( interpolationMethodName(speciesInterpolationMethod) )
     write (*, 500) 'conditions interpolation method: ', adjustl( interpolationMethodName(conditionsInterpolationMethod) )
-    write (*, 400) 'ratesOutputStepSize: ', ratesOutputStepSize
-    write (*, 400) 'reaction rates output step size: ', irOutStepSize
-    write (*, 400) 'modelStartTime: ', modelStartTime
-    write (*, 400) 'jacobianOutputStepSize: ', jacobianOutputStepSize
+    write (*, 400) 'rates output step size, ROPA/RODA: ', ratesOutputStepSize
+    write (*, 400) 'model start time: ', modelStartTime
+    write (*, 400) 'jacobian output step size: ', jacobianOutputStepSize
     write (*, 300) 'latitude: ', latitude
     write (*, 300) 'longitude: ', longitude
+    write (*, 400) 'reaction rates output step size: ', irOutStepSize
     write (*, '(A52, I3, A, I2, A, I4) ') 'day/month/year: ', startDay, '/', startMonth, '/', startYear
     write (*, '(A)') ' -----------------'
     write (*,*)

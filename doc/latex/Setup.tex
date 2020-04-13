@@ -325,9 +325,9 @@ in the \texttt{model/configuration/} directory.
   piecewise constant and piecewise linear (Sect.~\ref{subsec:interpolation}).
   The default option is \texttt{2} (piecewise linear interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the
-  model output for the production and loss rates of selected chemical
-  species, i.e. those listed in \texttt{outputRates.config}
-  (Sect.~\ref{sec:config-files}).
+  model output for the rate of the production and destruction analysis
+  (ROPA/RODA) of selected chemical species, i.e. those listed in
+  \texttt{outputRates.config} (Sect.~\ref{sec:config-files}).
 \item \textbf{model start time}. Start time of the model (in seconds)
   calculated from midnight of the \textbf{day}, \textbf{month},
   \textbf{year} parameters -- see below. For example, a start time of
@@ -371,8 +371,9 @@ in the \texttt{model/configuration/} directory.
   one file for each model step, with the name of the file
   corresponding to the time in seconds. This parameter is different
   from \textbf{rates output step size} (see above), which sets the
-  frequency of a formatted output of reaction rates for selected
-  species of interest. For more information, go to Sect.~\ref{sec:config-files}.
+  frequency of a formatted output of the production and loss rates for
+  a limited number of species of interest. For more information, go to
+  Sect.~\ref{sec:config-files}.
 \end{itemize}
 
 % -------------------------------------------------------------------- %
@@ -799,14 +800,14 @@ HO2
 CH3O2
 \end{verbatim}
 
-The frequency of this output is controlled by the
-\textbf{rates output step size} parameter in \texttt{model.parameters}
+The frequency of this output is controlled by the \textbf{rates output
+  step size} parameter in \texttt{model.parameters}
 (Sect.~\ref{sec:model-parameters}). The corresponding output files --
 called \texttt{productionRates.output} and \texttt{lossRates.output}
--- are designed to facilitate the analysis of the production and
-destruction rates of selected species of interests (rather than
+-- are designed to facilitate the rate of production and destruction
+analysis (ROPA/RODA) of selected species of interests, rather than
 processing all the files saved in the \texttt{model/output/reactionRates/}
-directory). For more information go to Sect.~\ref{sec:output}.
+directory. For more information go to Sect.~\ref{sec:output}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 

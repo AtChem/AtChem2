@@ -18,7 +18,6 @@
 ! This module implements the argument parser for the atchem2
 ! executable.
 ! ******************************************************************** !
-
 module argparse_mod
 
   type flag

@@ -67,13 +67,13 @@ AtChem2 v1.2-dev
  Model parameters:
  -----------------
                                    number of steps:           3
-                               step size (seconds):   0.300E+03
+                               step size:   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
-                               ratesOutputStepSize:         600
+                               rates output step size, ROPA/RODA:         600
                    reaction rates output step size:         300
                                     modelStartTime:       43200
-                            jacobianOutputStepSize:         300
+                            jacobian output step size:         300
                                           latitude:   0.529E+02
                                          longitude:   0.000E+00
                                     day/month/year:  19/11/2008

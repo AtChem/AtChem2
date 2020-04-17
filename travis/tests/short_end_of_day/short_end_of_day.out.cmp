@@ -71,11 +71,11 @@ AtChem2 v1.2-dev
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
                                rates output step size, ROPA/RODA:         600
-                   reaction rates output step size:         300
-                                    modelStartTime:       84600
+                                    model start time:       84600
                             jacobian output step size:         300
                                           latitude:   0.529E+02
                                          longitude:   0.000E+00
+                   reaction rates output step size:         300
                                     day/month/year:  31/12/2008
  -----------------
 

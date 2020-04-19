@@ -50,14 +50,14 @@ information on the configuration files can be found in the
 corresponding section:
 
 \begin{itemize}
-\item model and solver parameters -- go to
+\item Model and solver parameters settings-- go to
   \hyperref[sec:model-parameters]{Model Parameters} and
   \hyperref[sec:solver-parameters]{Solver Parameters}.
-\item environment variables settings -- go to
+\item Environment variables settings -- go to
   \hyperref[sec:environment-variables]{Environment Variables}.
-\item photolysis rates settings -- go to
+\item Photolysis rates settings -- go to
   \hyperref[sec:photolysis-rates]{Photolysis Rates}.
-\item model initialization, input and output -- go to
+\item Model initialization, input and output -- go to
   \hyperref[sec:config-files]{Config Files}.
 \end{itemize}
 
@@ -67,10 +67,10 @@ corresponding section:
 AtChem2 can be run in two modes:
 
 \begin{itemize}
-\item unconstrained: all variables are calculated by the model from
+\item Unconstrained: all variables are calculated by the model from
   the initial conditions, which are set in the
   \hyperref[subsec:configuration-files]{configuration files}.
-\item constrained: one or more variables are constrained, meaning that
+\item Constrained: one or more variables are constrained, meaning that
   the solver forces their value to a given value at each time
   step. The variables that are not constrained are calculated by the
   model.
@@ -442,20 +442,20 @@ the start date~\footnote{Note that the \textbf{start date} is
   midnight of the start date (Sect.~\ref{sec:model-parameters}).}:
 
 \begin{itemize}
-\item environment variables and \cf{RO2} sum:\\
+\item Environment variables and \cf{RO2} sum:\\
   \texttt{environmentVariables.output}
-\item concentrations of the chemical species:\\
+\item Concentrations of the chemical species:\\
   \texttt{speciesConcentrations.output}
-\item photolysis rates:\\
+\item Photolysis rates:\\
   \texttt{photolysisRates.output}
-\item latitude, longitude, solar angles and related parameters:\\
+\item Latitude, longitude, solar angles and related parameters:\\
   \texttt{photolysisRatesParameters.output}
-\item loss and production rates of selected species:\\
+\item Loss and production rates of selected species:\\
   \texttt{lossRates.output}\\
   \texttt{productionRates.output}
 \item Jacobian matrix (optional, see Sect.~\ref{sec:model-parameters}):\\
   \texttt{jacobian.output}
-\item error messages and diagnostic variables:\\
+\item Error messages and diagnostic variables:\\
   \texttt{errors.output}\\
   \texttt{finalModelState.output}\\
   \texttt{mainSolverParameters.output}

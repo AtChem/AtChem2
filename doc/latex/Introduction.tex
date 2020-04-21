@@ -11,40 +11,58 @@
 
 \chapter{Introduction} \label{ch:introduction}
 
-\textbf{AtChem2} is a modelling software designed to build and run
-atmospheric chemistry box-models using the Master Chemical Mechanism
-(\href{http://mcm.leeds.ac.uk/MCM/}{MCM}). It can also be used with
-other chemical mechanisms, as long as they are provided in the correct
-format (see \hyperref[sec:chemical-mechanism]{Chemical Mechanism}).
+\textbf{AtChem2} is an open source modelling tool for atmospheric chemistry.
+Is is designed to build and run zero-dimensional box-models using the
+Master Chemical Mechanism (\href{http://mcm.leeds.ac.uk/MCM/}{MCM}).
+The \textbf{MCM} is a near-explicit chemical mechanism which describes
+the gas-phase oxidation of primary emitted Volatile Organic Compounds
+(VOC) to carbon dioxide (\cf{CO2}) and water (\cf{H2O}). The MCM
+protocol is detailed in \citet{jenkin_1997} and subsequent updates
+\citep{saunders_2003, jenkin_2003, bloss_2005, jenkin_2015}. Although
+it is meant to be used with the MCM, AtChem2 can easily be adapted to
+use any other chemical mechanism, as long as it is provided in the
+correct format.
 
-AtChem2 was developed from \textbf{AtChem-online} with the objective
-to create a software able to run large atmospheric chemistry
-models. AtChem-online is a
-\href{https://atchem.leeds.ac.uk/webapp/}{web tool} developed at the
-University of Leeds as part of the
-\href{https://www.eurochamp.org/}{EUROCHAMP project}. It was designed
-to facilitate the use of the MCM in the simulation of environmental
-chamber experiments. A tutorial for AtChem-online, with examples and
-exercises, is available on the
-\href{http://mcm.leeds.ac.uk/MCMv3.3.1/atchem/tutorial_intro.htt}{MCM
-  website}. A help page with detailed instructions and description of
-the model parameters and variables is available
-\href{https://atchem.leeds.ac.uk/webapp/run/help.html}{here}.
+AtChem2 is a development of \textbf{AtChem-online}, a modelling tool
+created to facilitate the use of the MCM in the simulation of
+laboratory and environmental chamber experiments within the
+\href{https://www.eurochamp.org/}{EUROCHAMP} community
+\citep{martin_2009}. AtChem-online runs as a web service provided by
+the University of Leeds and can be accessed at
+\href{https://atchem.leeds.ac.uk/webapp/}{https://atchem.leeds.ac.uk/webapp/}:
+it can be used with only a text editor, file compression software, and a web
+browser. A tutorial -- with examples and exercises -- is available on the MCM
+\href{http://mcm.leeds.ac.uk/MCMv3.3.1/atchem/tutorial_intro.htt}{website}.
 
-The latest stable version of AtChem2 can be found at the
-\href{https://github.com/AtChem/AtChem2/releases}{releases page}. The
-development version can be downloaded from the
-\href{https://github.com/AtChem/AtChem2/archive/master.zip}{master
-  branch} or obtained via \textbf{git}. To install and run AtChem2
-follow the instructions in the \hyperref[sec:install]{Installation}
-and \hyperref[sec:dependencies]{Dependencies} sections.
+AtChem-online is easy to use even for inexperienced users but has a
+number of limitations, mostly related to its nature as a web
+application. AtChem2 runs offline and is capable of running long
+simulations of computationally intensive models, as well as batch
+simulations for sensitivity studies, two tasks that are not possibile
+with AtChem-online. In addition, AtChem2 implements a continuous
+integration workflow, coupled with a comprehensive suite of tests and
+version control software (\href{https://git-scm.com/}{git}), which
+makes the codebase robust, reliable and traceable.
 
-AtChem2 is open source, under \textbf{MIT license}. For information on
-how to cite the model in publications, see the \verb|CITATION.md|
-file. The contributors and funders of \textbf{AtChem-online} and
-\textbf{AtChem2} are listed in the
-\hyperref[ch:credits]{Acknowledgements and Credits} chapter.
+AtChem2 is open source -- released under \textbf{MIT license} -- and is hosted
+at \href{https://github.com/AtChem/AtChem2}{https://github.com/AtChem/AtChem2}.
+This document (\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual
+and contains all the information required to install, set up and use AtChem2.
+A summary of the instructions, and additional information, can
+be found on the \href{https://github.com/AtChem/AtChem2/wiki/}{wiki}.
 
-Bug reports, suggestions and contributions are welcome. In order to
-contribute to the model development, please follow the instructions in
-the \hyperref[ch:development]{Model Development} chapter.
+% -------------------------------------------------------------------- %
+\section{How to cite} \label{sec:how-to-cite}
+
+AtChem2 is free to use, compatible with the terms of the MIT license;
+a copy of the license can be found in the \texttt{LICENSE.md} file.
+
+If the model is used in a publication, please include a citation to
+the following paper:\\
+
+R.~Sommariva, S.~Cox, C.~Martin, K.~Boro{\'n}ska, J.~Young, P.~K. Jimack,
+M.~J. Pilling, V.~N. Matthaios, B.~S. Nelson, M.~J. Newland, M.~Panagi,
+W.~J. Bloss, P.~S. Monks, and A.~R. Rickard.
+\textbf{AtChem (version 1), an open-source box model for the Master Chemical Mechanism}.
+\textit{Geoscientific Model Development}, 13, 1, 169--183, 2020.
+doi: \href{https://doi.org/10.5194/gmd-13-169-2020}{10.5194/gmd-13-169-2020}.

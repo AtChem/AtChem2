@@ -208,16 +208,6 @@ done
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
-if [[ "$style_test_passed" -gt 0 ]]; then
-  echo "Style test       FAILED"
-else
-  echo "Style test       PASSED"
-fi
-if [[ "$indent_test_passed" -gt 0 ]]; then
-  echo "Indent test      FAILED"
-else
-  echo "Indent test      PASSED"
-fi
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "Tests            FAILED"
   echo "$fail_counter/$test_counter tests FAILED"
@@ -225,11 +215,3 @@ else
   echo "Tests            PASSED"
   echo "  ($test_counter/$test_counter tests PASSED)"
 fi
-if [[ "$style_test_passed" -gt 0 ]] || [[ "$indent_test_passed" -gt 0 ]] || [[ "$fail_counter" -gt 0 ]]; then
-  echo "Testsuite FAILED"
-  echo "The diff is in $RESULTS_FILE"
-  exit 1
-else
-  echo "Testsuite PASSED"
-  exit 0
-fi ;

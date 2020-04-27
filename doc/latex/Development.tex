@@ -62,14 +62,12 @@ against known outputs. The \href{https://codecov.io/}{Codecov} service
 is used to verify that the Test Suite covers a significant fraction of
 the codebase ($>$90\%) and a wide range of common configurations.
 
-There are five types of tests, which can be executed from the
+There are four types of tests, which can be executed from the
 \maindir\ using the \verb|make| command (note that the
-\hyperref[subsec:optional-dependencies]{optional dependecies} need to
+\hyperref[subsec:optional-dependencies]{optional dependencies} need to
 be installed):
 
 \begin{itemize}
-\item \textbf{Build} test: checks that the model compiles and runs
-  using the example chemical mechanism and default configuration.
 \item \textbf{Indent} and \textbf{Style} tests: check that the
   indentation and coding style of the Fortran code are consistent with
   the guidelines -- \verb|make indenttest| and \verb|make styletest|.
@@ -81,10 +79,10 @@ be installed):
 \end{itemize}
 
 The command \verb|make alltests| runs all the tests in the Test Suite
-in succession. Each test outputs the results to the terminal and a log
-file (\texttt{tests/testsuite.log}) is generated for the indent, style
-and behaviour tests. If all tests are successfully passed the
-following message is printed to the terminal:
+in succession. Each test outputs the results to the terminal and, in
+case of failure, a log file (\texttt{tests/testsuite.log}) is
+generated for the indent, style and behaviour tests. If all tests are
+successfully passed the following message is printed to the terminal:
 
 \begin{verbatim}
 Style test       PASSED

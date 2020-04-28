@@ -43,7 +43,7 @@ function test_output_file {
 function find_string {
   # This function finds the line number of the first occurence of the
   # string $1 in file $2
-  grep -n $1 $2 | grep -Eo '^[^:]+'
+  grep -n $1 $2 | grep -Eo "^[^:]+"
 }
 
 # The basic workflow of this function is to loop over each test in $1, and for
@@ -103,7 +103,7 @@ for test in $1; do
     list_of_skip_line_numbers="$list_of_skip_line_numbers $skip_line_number"
   done
   # Add one past the last line number
-  list_of_skip_line_numbers="$list_of_skip_line_numbers $(($(grep -c '' $TESTS_DIR/$test/$test.out)+1))"
+  list_of_skip_line_numbers="$list_of_skip_line_numbers $(($(grep -c "" $TESTS_DIR/$test/$test.out)+1))"
   # Sort the list in numerical order
   sorted_list_of_skip_line_numbers=$(echo $list_of_skip_line_numbers | tr " " "\n" | sort -n)
 
@@ -115,14 +115,14 @@ for test in $1; do
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
     this_file_failures=$(test_output_text $TESTS_DIR/$test/$test.out $TESTS_DIR/$test/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
     exitcode=$?
-    echo 'Checking' $TESTS_DIR/$test/output/$test.out 'between lines' $(($old_skip_line_number+1)) 'and' $(($skip_line_number-1))
+    echo "Checking" $TESTS_DIR/$test/output/$test.out "between lines" $(($old_skip_line_number+1)) "and" $(($skip_line_number-1))
     if [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
 Differences found in $TESTS_DIR/$test/$test.out. Add $old_skip_line_number to the line numbers shown:
 $this_file_failures"
     elif [ $exitcode -eq -1 ]; then
-      echo 'Numdiff gave an error. Aborting.'
+      echo "Numdiff gave an error. Aborting."
       exit 1
     fi
     old_skip_line_number=$skip_line_number
@@ -131,7 +131,7 @@ $this_file_failures"
   # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/output/*.output.cmp; do
-    echo 'Checking' $filename
+    echo "Checking" $filename
     this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
     exitcode=$?
     if [ $exitcode -eq 0 ]; then
@@ -141,7 +141,7 @@ $this_file_failures"
 
 $this_file_failures"
     else
-      echo 'Numdiff gave an error. Aborting.'
+      echo "Numdiff gave an error. Aborting."
       exit 1
     fi
   done
@@ -151,7 +151,7 @@ $this_file_failures"
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/output/reactionRates/* ; do
     if [ ${filename: -4} == ".cmp" ] ; then
-      echo 'Checking' $filename
+      echo "Checking" $filename
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then
@@ -161,7 +161,7 @@ $this_file_failures"
 
 $this_file_failures"
       else
-        echo 'Numdiff gave an error. Aborting.'
+        echo "Numdiff gave an error. Aborting."
         exit 1
       fi
     fi
@@ -174,7 +174,7 @@ $this_file_failures"
     # guard against empty filelist
     #[ -e "$filename" ] || continue
     if [ ${filename: -4} == ".cmp" ] ; then
-      echo 'Checking' $filename
+      echo "Checking" $filename
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then
@@ -184,7 +184,7 @@ $this_file_failures"
 
 $this_file_failures"
       else
-        echo 'Numdiff gave an error. Aborting.'
+        echo "Numdiff gave an error. Aborting."
         exit 1
       fi
     fi

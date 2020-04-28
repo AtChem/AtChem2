@@ -33,16 +33,16 @@
 #    By default, it is ./mcm/
 
 set -e
-echo ''
+echo ""
 echo "* facsimile mechanism file:" $1
 echo "* fortran mechanism directory [ default = ./model/configuration/ ]:" $2
 echo "* mcm data files directory [ default = ./mcm/ ]:" $3
 
-echo ''
+echo ""
 echo "call mech_converter.py"
 python ./build/mech_converter.py $1 $2 $3
 
-echo ''
+echo ""
 if [ -z $2 ]; then
   echo "make sharedlib"
   make sharedlib
@@ -53,7 +53,7 @@ else
   echo "=> shared library directory:" $2
 fi
 
-echo ''
+echo ""
 echo "make base executable"
 make
 

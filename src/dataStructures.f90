@@ -19,7 +19,6 @@
 ! variables and functions.
 ! ******************************************************************** !
 
-
 ! ******************************************************************** !
 ! MODULE types_mod
 ! Defines the integer and real data types available to the progrem.

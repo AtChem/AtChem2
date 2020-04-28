@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1100"
+   height="800"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="photolysis-rates.svg"
+   inkscape:export-filename="../../Reports/papers/atchem_paper/atchem-photolysis.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5529"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5527"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5447"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5445"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5341"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path5339"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5271"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5269"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5207"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5205"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5149"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path5147"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5097"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5095"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5051"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path5049"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker5011"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend"
+       inkscape:collect="always">
+      <path
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         id="path5009"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Mend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow1Mend"
+       style="overflow:visible"
+       inkscape:isstock="true"
+       inkscape:collect="always">
+      <path
+         id="path4718"
+         d="M 0,0 5,-5 -12.5,0 5,5 0,0 Z"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1pt;stroke-opacity:1"
+         transform="matrix(-0.4,0,0,-0.4,-4,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.5"
+     inkscape:cx="534.90013"
+     inkscape:cy="402.08302"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1336"
+     inkscape:window-height="721"
+     inkscape:window-x="30"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:showpageshadow="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3883"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-252.36218)">
+    <g
+       id="g4693"
+       transform="translate(30.854714,-8)">
+      <text
+         id="text2985"
+         y="326.64413"
+         x="150.86188"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           id="tspan2989"
+           y="326.64413"
+           x="150.86188"
+           sodipodi:role="line">Is any</tspan><tspan
+           id="tspan2997"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           y="356.64413"
+           x="150.86188"
+           sodipodi:role="line">photolysis rate</tspan><tspan
+           id="tspan3144"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           y="386.64413"
+           x="150.86188"
+           sodipodi:role="line">constant?</tspan></text>
+      <rect
+         transform="matrix(0.87535512,0.48348053,-0.86536069,0.50114956,0,0)"
+         y="201.85728"
+         x="370.64838"
+         height="148.81181"
+         width="150.63922"
+         id="rect3885"
+         style="fill:none;stroke:#000000;stroke-width:2.16034007;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="412.02731"
+       y="309.1431"
+       id="text3005"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         x="412.02731"
+         y="309.1431"
+         id="tspan3055"
+         style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Oblique'">Set the specified photolysis rates</tspan><tspan
+         sodipodi:role="line"
+         x="412.02731"
+         y="339.1431"
+         style="font-size:24px;line-height:1.25;font-family:sans-serif"
+         id="tspan4921">to the given values.</tspan><tspan
+         sodipodi:role="line"
+         x="412.02731"
+         y="369.1431"
+         style="font-size:24px;line-height:1.25;font-family:sans-serif"
+         id="tspan4927">The remaining photolysis rates</tspan><tspan
+         sodipodi:role="line"
+         x="412.02731"
+         y="399.1431"
+         style="font-size:24px;line-height:1.25;font-family:sans-serif"
+         id="tspan4931">are set to zero.</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:2.12219191;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3979"
+       width="418.81927"
+       height="136.01793"
+       x="402.00635"
+       y="277.18686" />
+    <g
+       id="g4686"
+       transform="translate(21.777426,2)">
+      <text
+         id="text3019-1"
+         y="765.11841"
+         x="29.63839"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3077-4"
+           y="765.11841"
+           x="29.63839"
+           sodipodi:role="line">All photolysis rates are</tspan><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3107"
+           y="795.11841"
+           x="29.63839"
+           sodipodi:role="line">calculated.</tspan></text>
+      <rect
+         y="733.89612"
+         x="16.365517"
+         height="74.550064"
+         width="300.04965"
+         id="rect4009"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4680"
+       transform="translate(11.25033,-8)">
+      <text
+         id="text3001"
+         y="933.80035"
+         x="61.815876"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3079"
+           y="933.80035"
+           x="61.815876"
+           sodipodi:role="line">JFAC is applied to</tspan><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3111"
+           y="963.80035"
+           x="61.815876"
+           sodipodi:role="line">all photolysis rates.</tspan></text>
+      <rect
+         y="904.2951"
+         x="51.277004"
+         height="75.768288"
+         width="251.28087"
+         id="rect4009-4"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g13133"
+       transform="translate(20,-8)">
+      <text
+         id="text3023"
+         y="347.0694"
+         x="897.3656"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           y="347.0694"
+           x="897.3656"
+           id="tspan3025"
+           sodipodi:role="line"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif">JFAC is</tspan><tspan
+           id="tspan5188"
+           y="377.0694"
+           x="897.3656"
+           sodipodi:role="line"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif">not used.</tspan></text>
+      <rect
+         y="315.32721"
+         x="885.99579"
+         height="75.589867"
+         width="131.25522"
+         id="rect4047"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       d="m 184.16777,419.88748 c 0,79.1111 0,79.1111 0,79.1111"
+       id="path4083"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5011)"
+       d="m 188.16777,810.42601 c 0,79.1111 0,79.1111 0,79.1111"
+       id="path4083-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5051)"
+       d="m 188.16777,650.85819 c 0,79.1111 0,79.1111 0,79.1111"
+       id="path4083-5-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5149)"
+       d="m 312.04751,345.20573 c 82.91823,0 82.91823,0 82.91823,0"
+       id="path4083-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5097)"
+       d="m 324.31809,577.75998 c 79.1111,0 79.1111,0 79.1111,0"
+       id="path4083-1-7"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5447)"
+       d="m 549.46675,650.62031 c 0,79.1111 0,79.1111 0,79.1111"
+       id="path4083-5-5-1"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5529)"
+       d="m 549.93554,871.78681 c 0,79.1111 0,79.1111 0,79.1111"
+       id="path4083-5-5-1-5"
+       inkscape:connector-curvature="0" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5207)"
+       d="m 820.07431,345.22569 c 79.1111,0 79.1111,0 79.1111,0"
+       id="path4083-1-7-1-2"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g4674"
+       transform="translate(39.999996,6)">
+      <text
+         id="text3031"
+         y="981.47247"
+         x="370.63333"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan4332"
+           y="981.47247"
+           x="370.63333"
+           sodipodi:role="line">JFAC is applied only to the</tspan><tspan
+           id="tspan5200"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           y="1011.4725"
+           x="370.63333"
+           sodipodi:role="line">calculated photolysis rates.</tspan></text>
+      <rect
+         y="952.27942"
+         x="355.8573"
+         height="75.143883"
+         width="355.56769"
+         id="rect4288"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="155.81682"
+       y="468.02814"
+       id="text4341"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4343"
+         x="155.81682"
+         y="468.02814"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">N</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="346.4632"
+       y="335.55765"
+       id="text4345"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4347"
+         x="346.4632"
+         y="335.55765"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">Y</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="155.81682"
+       y="694.95996"
+       id="text4341-2"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4343-2"
+         x="155.81682"
+         y="694.95996"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">N</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="346.4632"
+       y="568.33502"
+       id="text4345-1"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4347-6"
+         x="346.4632"
+         y="568.33502"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">Y</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="517.76984"
+       y="694.89221"
+       id="text4341-7"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4343-6"
+         x="517.76984"
+         y="694.89221"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">N</tspan></text>
+    <g
+       id="g4700"
+       transform="translate(39.593547,-2)">
+      <text
+         id="text2993"
+         y="549.29144"
+         x="146.12305"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           y="549.29144"
+           x="146.12305"
+           id="tspan2995"
+           sodipodi:role="line">Is any</tspan><tspan
+           id="tspan2999"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           y="579.29144"
+           x="146.12305"
+           sodipodi:role="line">photolysis rate</tspan><tspan
+           id="tspan3146"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;text-align:center;text-anchor:middle"
+           y="609.29144"
+           x="146.12305"
+           sodipodi:role="line">constrained?</tspan></text>
+      <rect
+         transform="matrix(0.88625674,0.46319434,-0.87695614,0.48057043,0,0)"
+         y="459.31857"
+         x="618.04364"
+         height="155.18428"
+         width="157.23666"
+         id="rect3885-7"
+         style="fill:none;stroke:#000000;stroke-width:2.19250035;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g4707"
+       transform="translate(60,-2)">
+      <text
+         id="text3019"
+         y="547.77826"
+         x="486.72363"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           y="547.77826"
+           x="486.72363"
+           id="tspan3021"
+           sodipodi:role="line">Are all</tspan><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3124"
+           y="577.77826"
+           x="486.72363"
+           sodipodi:role="line">photolysis rates</tspan><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           id="tspan3077"
+           y="607.77826"
+           x="486.72363"
+           sodipodi:role="line">constrained?</tspan></text>
+      <rect
+         transform="matrix(0.88663027,0.46247893,-0.87735402,0.47984364,0,0)"
+         y="268.6315"
+         x="813.49835"
+         height="155.41933"
+         width="157.4799"
+         id="rect3885-7-4"
+         style="fill:none;stroke:#000000;stroke-width:2.19369769;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g13140"
+       transform="translate(20,-8)">
+      <text
+         id="text3019-1-2"
+         y="561.54919"
+         x="747.2464"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:2.13499999;stroke-miterlimit:4;stroke-dasharray:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;stroke-width:2.13499999;stroke-miterlimit:4;stroke-dasharray:none"
+           id="tspan3077-4-4"
+           y="561.54919"
+           x="747.2464"
+           sodipodi:role="line">Set all photolysis</tspan><tspan
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;stroke-width:2.13499999;stroke-miterlimit:4;stroke-dasharray:none"
+           id="tspan3107-5"
+           y="591.54919"
+           x="747.2464"
+           sodipodi:role="line">rates to the constrained</tspan><tspan
+           id="tspan12685"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif;stroke-width:2.13499999;stroke-miterlimit:4;stroke-dasharray:none"
+           y="621.54919"
+           x="747.2464"
+           sodipodi:role="line">values.</tspan></text>
+      <rect
+         y="529.9425"
+         x="736.31348"
+         height="105.31883"
+         width="309.71356"
+         id="rect4009-5"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5341)"
+       d="m 683.44445,575.59535 c 65.54978,0 65.54978,0 65.54978,0"
+       id="path4083-1-7-17"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       x="701.44489"
+       y="568.33502"
+       id="text4345-1-1"
+       sodipodi:linespacing="0%"><tspan
+         sodipodi:role="line"
+         id="tspan4347-6-1"
+         x="701.44489"
+         y="568.33502"
+         style="font-size:32px;line-height:1.25;font-family:sans-serif">Y</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker5271)"
+       d="m 969.96825,521.33308 c 0,-132.28305 0,-132.28305 0,-132.28305"
+       id="path4083-5-52"
+       inkscape:connector-curvature="0" />
+    <g
+       id="g4668"
+       transform="translate(27.626827,4)">
+      <text
+         id="text3005-7"
+         y="764.10382"
+         x="382.29535"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         xml:space="preserve"
+         sodipodi:linespacing="0%"><tspan
+           style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Oblique'"
+           id="tspan3055-6"
+           y="764.10382"
+           x="382.29535"
+           sodipodi:role="line">Set the specified photolysis rates</tspan><tspan
+           id="tspan4921-1"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           y="794.10382"
+           x="382.29535"
+           sodipodi:role="line">to the constrained values.</tspan><tspan
+           id="tspan4927-4"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           y="824.10382"
+           x="382.29535"
+           sodipodi:role="line">The remaining photolysis rates</tspan><tspan
+           id="tspan4931-2"
+           style="font-size:24px;line-height:1.25;font-family:sans-serif"
+           y="854.10382"
+           x="382.29535"
+           sodipodi:role="line">are calculated.</tspan></text>
+      <rect
+         y="732.15771"
+         x="368.23047"
+         height="135.9977"
+         width="426.90714"
+         id="rect3979-3"
+         style="fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

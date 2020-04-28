@@ -25,9 +25,9 @@ for file in src/*.f90 ; do
     failed_style="$failed_style
 
 $this_style_file_failures"
-    echo $file 'FAILED'
+    echo $file "FAILED"
   elif [ $exitcode -ne 0 ]; then
-    echo 'diff gave an error on' $file '. Aborting.'
+    echo "diff gave an error on" $file ". Aborting."
     exit 1
   fi
 done

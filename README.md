@@ -2,7 +2,7 @@ AtChem2  [![Build Status](https://travis-ci.org/AtChem/AtChem2.svg?branch=master
 =======
 
 
-**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed for use with the **Master Chemical Mechanism (MCM)**, but it can be used with any general set of chemical reactions. The MCM is a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere. The MCM is available at http://mcm.york.ac.uk/ (previously at http://mcm.leeds.ac.uk/). The latest stable version of AtChem2 can be downloaded [here](https://github.com/AtChem/AtChem2/releases).
+**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM), but it can be used with any general set of chemical reactions. The MCM is a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere. The MCM is available at http://mcm.leeds.ac.uk/. The latest stable version of AtChem2 can be [downloaded here](https://github.com/AtChem/AtChem2/releases).
 
 AtChem2 is _open source_, under the [MIT license](https://opensource.org/licenses/MIT).
 
@@ -35,7 +35,7 @@ From the _Main Directory_, execute the command:
 ```
 to compile AtChem2 using the example chemical mechanism and the default model configuration. The build script converts the chemical mechanism from the FACSIMILE format (`.fac`) to a Fortran compatible format, and generates the shared library `mechanism.so` and other related files in the `model/configuration/` directory. At completion of the build process, an executable file called `atchem2` is created in the _Main Directory_.
 
-Set the initial conditions, the required outputs and the other model parameters by editing the files in the `model/configuration/` directory. If required, copy the constraints files into the relevant subdirectory in `model/constraints/`. To run the model, execute the command:
+Set the initial conditions, the required outputs and the other model parameters by editing the files in the `model/configuration/` directory. If required, copy the constraint files to the relevant subdirectory in `model/constraints/`. To run the model, execute the command:
 ```./atchem2```
 
 The build script and the `atchem2` executable accept several command line arguments to customize the location of the configuration, input and output directories, and of the shared library. More information on AtChem2, and detailed instructions on its installation, configuration and use can be found in the manual (`doc/AtChem2-Manual.pdf`). A summary of the main commands, and additional information, is available on the [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki).

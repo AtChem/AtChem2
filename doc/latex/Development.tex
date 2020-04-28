@@ -191,16 +191,16 @@ test requires the following files and directory structure:
 |  |  |- model.parameters
 |  |  |- outputSpecies.config
 |  |  |- outputRates.config
-|  |  |- photolysisConstant.config (*)
-|  |  |- photolysisConstrained.config (*)
+|  |  |- photolysisConstant.config    [*]
+|  |  |- photolysisConstrained.config [*]
 |  |  |- solver.parameters
-|  |  |- speciesConstrained.config (*)
-|  |  |- speciesConstant.config (*)
+|  |  |- speciesConstrained.config    [*]
+|  |  |- speciesConstant.config       [*]
 |  |  |- initialConcentrations.config
-|  |- constraints
-|     |- environment/ (**)
-|     |- photolysis/ (**)
-|     |- species/ (**)
+|  |- constraints     [**]
+|     |- environment/ [**]
+|     |- photolysis/  [**]
+|     |- species/     [**]
 |- output
 |  |- reactionRates/
 |  |- concentration.output.cmp
@@ -217,9 +217,9 @@ test requires the following files and directory structure:
 |- $TESTNAME.out.cmp
 \end{verbatim}
 
-The files marked with \texttt{(*)} and the directories marked with
-\texttt{(**)} are optional -- depending on the configuration used in
-the test. If present, the directories marked with \texttt{(**)} should
+The files marked with \texttt{[*]} and the directories marked with
+\texttt{[**]} are optional -- depending on the configuration used in
+the test. If present, the directories marked with \texttt{[**]} should
 contain the relevant constraint files, according to the corresponding
 configuration files in \texttt{model/configuration/} (see
 Sect.~\ref{sec:constraints} for details).

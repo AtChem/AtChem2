@@ -1,5 +1,9 @@
 # AtChem2 - CHANGELOG
 
+## v1.2 ( 2020)
+
+- 
+
 ## v1.1.1 (January 2019)
 
 - add `doc/` directory containing the documentation in markdown format

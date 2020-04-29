@@ -416,10 +416,11 @@ def convert(input_file, mech_dir, mcm_dir):
         mech_rates_coeff_file.write("""
 module mechanism_mod
     use, intrinsic :: iso_c_binding
+    implicit none
+
 contains
 
     subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J, RO2) bind(c,name='update_p')
-        implicit none
 
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
            real(c_double), intent(inout) :: p(:), q(:)

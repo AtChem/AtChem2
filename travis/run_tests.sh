@@ -214,9 +214,9 @@ else
   echo "Style test       PASSED"
 fi
 if [[ "$indent_test_passed" -gt 0 ]]; then
-  echo "Indent test FAILED"
+  echo "Indent test      FAILED"
 else
-  echo "Indent test PASSED"
+  echo "Indent test      PASSED"
 fi
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "Tests            FAILED"

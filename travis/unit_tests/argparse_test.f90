@@ -8,8 +8,6 @@ contains
   subroutine test_split_string
     use types_mod
     use argparse_mod
-    implicit none
-
     character(100) :: string_in, string_out1, string_out2
 
     string_in = 'this=that'
@@ -35,14 +33,11 @@ contains
 
     call assert_true( trim(string_out1) == '', "split_string =this!that 1" )
     call assert_true( trim(string_out2) == 'this!that', "split_string =this!that 2" )
-
   end subroutine test_split_string
 
   subroutine test_check_name_value_pair_validity
     use types_mod
     use argparse_mod
-    implicit none
-
     logical :: name_valid, value_valid
 
     call check_name_value_pair_validity( '--test', 'hello', name_valid, value_valid )
@@ -74,7 +69,6 @@ contains
 
     call assert_true( name_valid .eqv. .true., "check_name_value_pair_validity --help=test name")
     call assert_true( value_valid .eqv. .true., "check_name_value_pair_validity --help=test value")
-
   end subroutine test_check_name_value_pair_validity
 
 end module argparse_test

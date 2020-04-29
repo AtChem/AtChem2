@@ -8,8 +8,6 @@ contains
 
   subroutine test_calcTheta
     use date_mod, only : currentYear, currentDayOfYear
-    implicit none
-
     real(kind=DP) :: theta, pi, threshold
 
     threshold = 1.0e-8_DP
@@ -38,12 +36,9 @@ contains
     currentDayOfYear = 365_DI
     theta = calcTheta()
     call assert_true( theta == 2.0_DP*pi*365_DI/366_DI, "calcTheta(), last day of 2004" )
-
   end subroutine test_calcTheta
 
   subroutine test_decFromTheta
-    implicit none
-
     real(kind=DP) :: dec, pi, theta
 
     pi = 4.0_DP * atan( 1.0_DP )
@@ -63,14 +58,11 @@ contains
     theta = pi*3.0_DP/2.0_DP
     dec = decFromTheta( theta )
     call assert_true( dec == -5.5100999999999921E-002_DP, "decFromTheta( theta ), theta = 3pi/2" )
-
   end subroutine test_decFromTheta
 
   subroutine test_calcDec
     use types_mod
     use date_mod, only : currentYear, currentDayOfYear
-    implicit none
-
     real(kind=DP) :: dec0, dec364over365, dec365over366, threshold
 
     threshold = 1.0e-6_DP
@@ -95,14 +87,11 @@ contains
     call assert_true( calcDec() == dec0, "calcDec(), first day of 2004" )
     currentDayOfYear = 365_DI
     call assert_true( abs( calcDec() - dec365over366 ) < threshold, "calcDec(), last day of 2004" )
-
   end subroutine test_calcDec
 
   subroutine test_calcEQT
     use types_mod
     use date_mod, only : currentYear, currentDayOfYear
-    implicit none
-
     real(kind=DP) :: eqt0, threshold
 
     threshold = 1.0e-8_DP
@@ -125,7 +114,6 @@ contains
     call assert_true( abs( calcEQT() - eqt0 ) < threshold, "calcEQT(), first day of 2004" )
     currentDayOfYear = 365_DI
     call assert_true( abs( calcEQT() + 1.0710769160677822E-002 ) < threshold, "calcEQT(), last day of 2004" )
-
   end subroutine test_calcEQT
 
   ! TODO:  subroutine test_calcZenith

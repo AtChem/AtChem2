@@ -18,6 +18,8 @@
 ! This module contains functions that control output to file.
 ! ******************************************************************** !
 module output_functions_mod
+  implicit none
+
 contains
 
   ! ----------------------------------------------------------------- !
@@ -25,7 +27,6 @@ contains
   pure function ro2Sum( y ) result ( ro2 )
     use types_mod
     use env_vars_mod, only : ro2Numbers
-    implicit none
 
     real(kind=DP), intent(in) :: y(*)
     real(kind=DP) :: ro2
@@ -45,7 +46,6 @@ contains
   subroutine outputEnvVar( t )
     use types_mod
     use env_vars_mod, only : envVarNames, numEnvVars, currentEnvVarValues, ro2
-    implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: i
@@ -68,7 +68,6 @@ contains
   subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: t, prev, this
     integer(kind=NPI), intent(in) :: array(:)
@@ -111,7 +110,6 @@ contains
     use types_mod
     use zenith_data_mod, only : latitude, longitude, secx, cosx, lha, sinld, &
                                 cosld, eqtime
-    implicit none
 
     real(kind=DP), intent(in) :: t
     logical :: first_time = .true.
@@ -134,7 +132,6 @@ contains
                                      constantPhotoNames, numConstantPhotoRates, &
                                      constrainedPhotoNames, numConstrainedPhotoRates, &
                                      unconstrainedPhotoNames, numUnconstrainedPhotoRates
-    implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: i
@@ -189,7 +186,6 @@ contains
     use types_mod
     use reaction_structure_mod, only : clhs, crhs
     use storage_mod, only : maxSpecLength, maxReactionStringLength
-    implicit none
 
     character(len=maxSpecLength) :: reactants(10), products(10)
     character(len=maxSpecLength), intent(in) :: speciesNames(*)
@@ -251,7 +247,6 @@ contains
     use types_mod
     use species_mod, only : getSpeciesList
     use storage_mod, only : maxSpecLength, maxReactionStringLength
-    implicit none
 
     type(reaction_frequency_pair), intent(in) :: r(:,:)
     integer(kind=NPI), intent(in) :: arrayLen(:), rSpecies(:)
@@ -298,7 +293,7 @@ contains
           reaction = getReaction( speciesNames, r(i, j)%reaction )
           ! r contains the occurences of each of the detailed species in reactions.
           ! r should have row lengths as in arrayLen, so all accesss to r(i,j) should
-          !  be valid.
+          ! be valid.
           write (output_file_number, '(ES15.6E3, I14, A12, I15, ES15.6E3, A, A)') t, rSpecies(i), &
                                                                                   trim( speciesNames(rSpecies(i)) ), &
                                                                                   r(i, j)%reaction, &
@@ -319,7 +314,6 @@ contains
     use directories_mod, only : reactionRates_dir
     use reaction_rates_mod, only : reactionRates
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=QI), intent(in) :: time
     integer(kind=NPI) :: i
@@ -348,7 +342,6 @@ contains
     use types_mod
     use storage_mod, only : maxSpecLength
     use config_functions_mod, only : getSubsetOfConcs
-    implicit none
 
     real(kind=DP), intent(in) :: t
     character(len=maxSpecLength), intent(in) :: specOutReqNames(:)
@@ -382,7 +375,6 @@ contains
   ! modelOutput/finalModelState.output
   subroutine outputFinalModelState( names, concentrations )
     use types_mod
-    implicit none
 
     character(len=*), intent(in) :: names(:)
     real(kind=DP), intent(in) :: concentrations(:)

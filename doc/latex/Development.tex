@@ -279,11 +279,11 @@ source file and the output is sent to a \texttt{.cmp} file. If the
 \subsubsection{General principles}
 
 \begin{itemize}
-\item All code should be organized in a module structure, except the
-  main program. There is only one exception: due to a complicating
-  factor with linking to CVODE, the functions \texttt{FCVFUN()} and
-  \texttt{FCVJTIMES()} are placed within the main file
-  \texttt{atchem.f90}.
+\item All code should be organized in a \textbf{module structure},
+  except the main program. There is only one exception: due to a
+  complicating factor with linking to CVODE, the functions
+  \texttt{FCVFUN()} and \texttt{FCVJTIMES()} are placed within the
+  main file \texttt{atchem.f90}.
 \item All code should be written in free-form Fortran, and the source
   files should have the extension \texttt{.f90}.
 \item Always use two spaces to indent blocks.
@@ -321,8 +321,8 @@ source file and the output is sent to a \texttt{.cmp} file. If the
   functions) should begin with uppercase. An exception is
   \textbf{third-party functions}, which should be uppercase. Use
   either CamelCase or underscores to write multiple-word identifiers.
-\item All \textbf{procedures and modules} should include the
-  \texttt{implicit none} statement.
+\item All \textbf{modules} should include the \texttt{implicit none}
+  statement.
 \item All \textbf{variable declarations} should include the
   \texttt{::} notation.
 \item The \textbf{dummy arguments} of a procedure should include an

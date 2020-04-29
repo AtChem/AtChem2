@@ -22,12 +22,14 @@
 ! number of the environment variable using the name as a key.
 ! ******************************************************************** !
 module constraint_functions_mod
+  implicit none
+
 contains
 
+  !  TODO comment
   function calcPhotolysisRaw( l, m, n, tf ) result ( photolysis )
     use types_mod
     use zenith_data_mod, only : cosx, secx
-    implicit none
 
     real(kind=DP), intent(in) :: l, m, n, tf
     real(kind=DP) :: photolysis
@@ -43,7 +45,6 @@ contains
   function calcPhotolysis( i ) result ( photolysis )
     use types_mod
     use photolysis_rates_mod, only : cl, cmm, cnn, transmissionFactor
-    implicit none
 
     integer(kind=NPI), intent(in) :: i
     real(kind=DP) :: photolysis
@@ -67,7 +68,6 @@ contains
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
     use interpolation_functions_mod, only : getConstrainedPhotoRatesAtT
     use interpolation_method_mod, only : getConditionsInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(out) :: jFac
@@ -115,15 +115,14 @@ contains
   end subroutine calcJFac
 
   ! TODO: As the numbers of the constrained species will be constant, it may be possible
-  ! TODO: to speed this up by computing a vector of bools once then apply this as a mask
-  ! TODO: each time. Same for the removal.
+  !       to speed this up by computing a vector of bools once then apply this as a mask
+  !       each time. Same for the removal.
   ! ----------------------------------------------------------------- !
   ! Take in z, the vector of concentrations of unconstrained species,
   ! and add the concentrations of the constrained species. Return this
   ! in vector x.
   subroutine addConstrainedSpeciesToProbSpec( z, constrainedConcentrations, constrainedSpecs, x )
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: z(*), constrainedConcentrations(:)
     integer(kind=NPI), intent(in) :: constrainedSpecs(:)
@@ -163,7 +162,6 @@ contains
   ! in vector z.
   subroutine removeConstrainedSpeciesFromProbSpec( x, constrainedSpecs, z )
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: x(:)
     integer(kind=NPI), intent(in) :: constrainedSpecs(:)
@@ -206,7 +204,6 @@ contains
     use interpolation_method_mod, only : getConditionsInterpMethod
     use atmosphere_functions_mod, only : calcAirDensity, convertRHtoH2O
     use solar_functions_mod, only : calcDec, calcZenith
-    implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP) :: this_env_val
@@ -351,7 +348,6 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use env_vars_mod, only : envVarNames, numEnvVars
-    implicit none
 
     character(len=*), intent(in) :: name
     integer(kind=SI) :: envVarNum

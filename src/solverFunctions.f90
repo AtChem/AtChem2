@@ -19,6 +19,8 @@
 ! and manipulate the rate information towards solving the system.
 ! ******************************************************************** !
 module solver_functions_mod
+  implicit none
+
   ! Define interface of call-back routine.
   abstract interface
     subroutine called_proc( i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15 ) bind ( c )
@@ -37,7 +39,6 @@ contains
   subroutine resid( nr, time, y, dy, lhs, lcoeff, rhs, rcoeff )
     use types_mod
     use reaction_rates_mod, only : reactionRates
-    implicit none
 
     integer(kind=NPI), intent(in) :: nr ! number of reactions
     real(kind=DP), intent(in) :: time, y(:) ! concentration array
@@ -104,7 +105,6 @@ contains
   subroutine jfy( nr, y, t )
     use types_mod
     use reaction_structure_mod ! access crhs, clhs, clcoeff, crcoeff
-    implicit none
 
     integer(kind=NPI), intent(in) :: nr
     real(kind=DP), intent(in) :: y(:), t
@@ -184,8 +184,6 @@ contains
     use constraint_functions_mod, only : calcPhotolysis, getEnvVarsAtT, getEnvVarNum
     use atmosphere_functions_mod, only : calcAtmosphere
     use species_mod, only : getNumberOfGenericComplex
-    implicit none
-
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(in) :: y(:)

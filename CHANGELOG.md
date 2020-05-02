@@ -1,8 +1,25 @@
 # AtChem2 - CHANGELOG
 
-## v1.2 ( 2020)
+## v1.2 (May 2020)
 
-- 
+- implement argument parser and named arguments for the  `atchem2` executable
+- streamline the build procedure, rename and tidy the build scripts, move to `build/` directory
+- implement the pre-compilation of the chemical mechanism into a shared library (`mechanism.so`)
+- implement a dilution mechanism and redefine the `DILUTE` environment variable
+- convert the documentation to LaTeX format
+- rewrite the user manual (`doc/AtChem2-Manual.pdf`) and reorganize the [wiki](https://github.com/AtChem/AtChem2/wiki)
+- add to `doc/` the pdf of the poster presented at the **ACM 2018** conference
+- change the reference in `CITATION.md` to the GMD paper (https://www.geosci-model-dev.net/13/169/2020/)
+- fix the `photolysisConstant.config` header and remove the `initialConditionsSetting.output` file
+- change all the Python scripts to be independent of the Python version
+- rename the Python plotting script to `plot-atchem2-numpy.py`
+- add the Python plotting script `plot-atchem2-pandas.py` (uses `pandas` instead of `numpy`)
+- improve the documentation of the behaviour and unit tests
+- remove the behaviour test `full`
+- add script to set the version of AtChem2
+- minor improvements to the install scripts
+- tidy and improve comments of source files and scripts
+- minor fixes and updates
 
 ## v1.1.1 (January 2019)
 

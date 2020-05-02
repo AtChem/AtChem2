@@ -12,13 +12,22 @@
 #
 # -----------------------------------------------------------------------------
 
-## This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
-##
-## Acknowledgements: B. Nelson, M. Newland
-## ---------------------------------------------- ##
-
-# This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
-# This only reads a file containing the 'reaction definitions' part.
+# This script converts a chemical mechanism file in FACSIMILE format
+# (.fac) into a Fortran-compatible format. The script generates five files in
+# the model configuration directory:
+# - mechanism.species
+# - mechanism.reac
+# - mechanism.prod
+# - mechanism.ro2
+# - mechanism.f90
+#
+# Acknowledgements: B. Nelson, M. Newland
+#
+# ARGUMENTS:
+# - path to the .fac file
+# - path to the model configuration directory [default: model/configuration/]
+# - path to the MCM data files directory [default: mcm/]
+# ---------------------------------------------- #
 from __future__ import print_function
 import sys
 import re

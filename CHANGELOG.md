@@ -11,6 +11,7 @@
 - add the poster presented at the ACM 2018 conference (`doc/AtChem_poster_ACM2018.pdf`)
 - change the reference in `CITATION.md` to the GMD paper (https://www.geosci-model-dev.net/13/169/2020/)
 - fix the header of `photolysisConstant.config` and remove the `initialConditionsSetting.output` file
+- fix a bug in `mech_converter.py` affecting chemical reactions with no reactants
 - change all Python scripts to be independent of the Python version
 - rename plotting script `plot-atchem2.py` to `plot-atchem2-numpy.py`
 - new Python plotting script `plot-atchem2-pandas.py` (uses `pandas` instead of `numpy`)

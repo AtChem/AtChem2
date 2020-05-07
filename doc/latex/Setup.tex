@@ -513,7 +513,14 @@ dilution of the chemical species. When \texttt{DILUTE} is set to a
 fixed value, the chemical mechanism is automatically modified during
 the \hyperref[subsec:build-process]{build process}: for each species
 in the chemical mechanism, a loss ``reaction'' is added to the
-mechanism with a ``rate coefficient'' equal to the dilution rate. For
+mechanism with a ``rate coefficient'' equal to the dilution
+rate~\footnote{The behaviour of the \texttt{DILUTE} environment
+  variable was changed with the release of version 1.2 (May 2020). In
+  previous versions of AtChem2, the user had to manually add to the
+  chemical mechanism a ``reaction'' using \texttt{DILUTE} for each
+  species for which dilution was required; in addition,
+  \texttt{DILUTE} could be constrained. The new approach makes the use
+  of \texttt{DILUTE} both more intuitive and more accurate.}. For
 example, the following ``reactions'' are added to the ``Tropospheric
 O3-NOx cycle'' mechanism shown in Sect.~\ref{subsec:facsimile-format}:
 

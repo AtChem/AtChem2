@@ -19,6 +19,8 @@
 ! external files, apart from model.parameters and solver.parameters.
 ! ******************************************************************** !
 module input_functions_mod
+  implicit none
+
 contains
 
   ! ----------------------------------------------------------------- !
@@ -29,7 +31,6 @@ contains
     use directories_mod, only : configuration_dir
     use species_mod, only : setNumberOfSpecies, setNumberOfReactions, setNumberOfGenericComplex
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=NPI) :: numSpec, numReac, numGenericComplex
     character(len=maxFilepathLength) :: fileLocation
@@ -59,7 +60,6 @@ contains
     use types_mod
     use directories_mod, only : configuration_dir
     use reaction_structure_mod
-    implicit none
 
     integer(kind=NPI) :: lhs_size, rhs_size
     integer(kind=NPI) :: k, l, count
@@ -126,7 +126,6 @@ contains
     use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use species_mod, only : getNumberOfSpecies
-    implicit none
 
     character(len=maxSpecLength), allocatable :: speciesName(:)
     integer(kind=NPI) :: j, dummy
@@ -159,7 +158,6 @@ contains
     use species_mod, only : getNumberOfSpecies, getSpeciesList
     use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
-    implicit none
 
     real(kind=DP), allocatable, intent(out) :: speciesConcs(:)
     real(kind=DP), allocatable :: concentration(:)
@@ -216,7 +214,6 @@ contains
   subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputConcentrations )
     use types_mod
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=maxSpecLength), intent(in) :: concSpeciesNames(:), refSpeciesNames(:)
     real(kind=DP), intent(in) :: inputConcentrations(:)
@@ -262,7 +259,6 @@ contains
     return
   end subroutine setConcentrations
 
-
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
   ! mcm/photolysis-rates_v3.3.1 so that we know the numbers
@@ -274,7 +270,6 @@ contains
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
     use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
@@ -318,11 +313,10 @@ contains
     return
   end subroutine readPhotolysisNumbers
 
-
   ! -----------------------------------------------------------------
-  !  Set all the photolysis rates to their constant values from file
-  !  Any photolysis rates not in the file will be set to zero when
-  !  evaluated for j.
+  ! Set all the photolysis rates to their constant values from file
+  ! Any photolysis rates not in the file will be set to zero when
+  ! evaluated for j.
   subroutine readPhotolysisConstants()
     use types_mod
     use photolysis_rates_mod, only : allocate_photolysis_constants_variables, &
@@ -330,7 +324,6 @@ contains
                                      constantPhotoNames, numConstantPhotoRates
     use directories_mod, only : configuration_dir
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
@@ -463,7 +456,6 @@ contains
 
   end subroutine readPhotolysisConstraints
 
-
   ! -----------------------------------------------------------------
   ! Returns an array of the numbers of unconstrained photolysis rates,
   ! and a logical indicating whether there are any such rates
@@ -472,7 +464,6 @@ contains
     use types_mod
     use photolysis_rates_mod, only : photoNumbers, totalNumPhotos, constrainedPhotoNumbers, numConstrainedPhotoRates, &
                                      unconstrainedPhotoNumbers, numUnconstrainedPhotoRates, existUnconstrainedPhotos
-    implicit none
 
     integer(kind=NPI) :: i, j, counter
     logical :: this_number_unconstrained
@@ -517,13 +508,11 @@ contains
     return
   end subroutine findUnconstrainedPhotos
 
-
   ! -----------------------------------------------------------------
   ! Given an NPI array and an NPI integer, returns a logical denoting
   ! whether the integer is present at least once in the array
   pure function isInNPIArray( a, array ) result ( isInArray )
     use types_mod
-    implicit none
 
     integer(kind=NPI), intent(in) :: a, array(:)
     integer(kind=NPI) :: i
@@ -541,7 +530,6 @@ contains
     return
   end function isInNPIArray
 
-
   ! -----------------------------------------------------------------
   ! Read in the photolysis rates from the MCM file. If the rate is not
   ! present in the constrained rates list, read in that rate's
@@ -555,7 +543,6 @@ contains
                                      allocate_unconstrained_photolysis_rates_variables
     use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=NPI) :: i, index, this_ck, this_ck_pos
     integer(kind=IntErr) :: ierr
@@ -613,7 +600,6 @@ contains
     return
   end subroutine readUnconstrainedPhotolysisRates
 
-
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstant.config doesn't exist/is
@@ -628,7 +614,6 @@ contains
 
     use directories_mod, only : mcm_dir
     use storage_mod, only : maxFilepathLength
-    implicit none
 
     integer(kind=NPI) :: i
     integer(kind=IntErr) :: ierr
@@ -673,7 +658,6 @@ contains
     return
   end subroutine readAllPhotolysisRates
 
-
   ! -----------------------------------------------------------------
   ! Read in contents of model/configuration/outputRates.config, which
   ! contains a list of the species we want to write to
@@ -682,7 +666,6 @@ contains
   subroutine readDetailedRatesSpeciesNames( filename, r )
     use types_mod
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=*), intent(in) :: filename
     character(len=maxSpecLength), allocatable, intent(out) :: r(:)
@@ -710,7 +693,6 @@ contains
   ! of each line to an element of parameterArray
   function getParametersFromFile( input_file ) result ( parameterArray )
     use types_mod
-    implicit none
 
     character(len=*), intent(in) :: input_file
     real(kind=DP), allocatable :: parameterArray(:)
@@ -738,7 +720,6 @@ contains
     use directories_mod, only : mcm_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
-    implicit none
 
     character(len=maxFilepathLength) :: filename
     character(len=maxPhotoRateNameLength) :: name
@@ -775,7 +756,6 @@ contains
     return
   end subroutine readJFacCalculationParameters
 
-
   ! -----------------------------------------------------------------
   ! This function reads in data from environmentVariables.config, and
   ! sets envVarTypesNum for each one. In the case of a constrained
@@ -790,7 +770,6 @@ contains
     use constraints_mod, only : maxNumberOfEnvVarDataPoints
     use storage_mod, only : maxFilepathLength, maxEnvVarNameLength
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound
-    implicit none
 
     integer(kind=NPI) :: k
     integer(kind=SI) :: i
@@ -957,7 +936,6 @@ contains
     use species_mod, only : getNumberOfSpecies
     use directories_mod, only : configuration_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
-    implicit none
 
     character(len=maxSpecLength), allocatable :: r(:)
     character(len=maxFilepathLength) :: filename
@@ -993,7 +971,6 @@ contains
     return
   end function readSpeciesOfInterest
 
-
   ! ----------------------------------------------------------------- !
   ! Read photolysis rates from file, either by
   !  (a) constant values, or
@@ -1006,7 +983,6 @@ contains
     use photolysis_rates_mod
     use directories_mod, only : configuration_dir
     use storage_mod, only : maxPhotoRateNameLength, maxFilepathLength
-    implicit none
 
     character(len=maxFilepathLength) :: filename
     logical :: file_exists
@@ -1078,10 +1054,10 @@ contains
     return
   end subroutine readPhotoRates
 
-
   ! ----------------------------------------------------------------- !
   ! Read constraint data for all constrained species from file, either
-  ! (a) constant values, or (b) non-constant fixed values.
+  !  (a) constant values, or
+  !  (b) non-constant fixed values.
   subroutine readSpeciesConstraints( t, y )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -1094,7 +1070,6 @@ contains
     use config_functions_mod, only : getIndexWithinList
     use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
     use interpolation_method_mod , only : getSpeciesInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t
     real(kind=DP), intent(inout) :: y(:)
@@ -1275,7 +1250,6 @@ contains
     use env_vars_mod, only : ro2Numbers
     use storage_mod, only : maxFilepathLength
     use directories_mod, only : configuration_dir
-    implicit none
 
     integer(kind=NPI) :: j, numberOfRO2Species
     character(len=maxFilepathLength) :: fileLocation
@@ -1285,7 +1259,6 @@ contains
 
     ! Read in ro2 species numbers from model/configuration/mechanism.ro2
     ! to ro2Numbers
-
     call inquire_or_abort( fileLocation, 'readSpecies()')
     numberOfRO2Species = count_lines_in_file( fileLocation, .true. )
     allocate(ro2Numbers(numberOfRO2Species))
@@ -1307,7 +1280,6 @@ contains
   ! skip_first_line_in ignores the first line if it exists.
   function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
     use types_mod
-    implicit none
 
     character(len=*), intent(in) :: filename
     logical, intent(in), optional :: skip_first_line_in
@@ -1341,13 +1313,12 @@ contains
   end function count_lines_in_file
 
   ! ----------------------------------------------------------------- !
-  ! REad in from filename and fille output_vector with the contents of
+  ! Read in from filename and fille output_vector with the contents of
   ! the first column of the input. Optional argument skip_first_line_in
   ! ignores the first line if it exists.
   subroutine read_in_single_column_string_file( filename, output_vector, skip_first_line_in )
     use types_mod
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=*), intent(in) :: filename
     character(len=*), intent(out) :: output_vector(:)
@@ -1384,7 +1355,6 @@ contains
   ! Inquire whether the file exists. If it doesn't abort, and print a
   ! message showing the calling subroutine's name.
   subroutine inquire_or_abort( filename, calling_subroutine )
-    implicit none
 
     character(len=*) :: filename, calling_subroutine
     logical :: file_exists

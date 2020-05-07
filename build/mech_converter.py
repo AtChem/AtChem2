@@ -12,13 +12,22 @@
 #
 # -----------------------------------------------------------------------------
 
-## This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
-##
-## Acknowledgements: B. Nelson, M. Newland
-## ---------------------------------------------- ##
-
-# This script fixes the input file of errant newlines, then output the reactants, products, species list, and rates.
-# This only reads a file containing the 'reaction definitions' part.
+# This script converts a chemical mechanism file in FACSIMILE format
+# (.fac) into a Fortran-compatible format. The script generates five files in
+# the model configuration directory:
+# - mechanism.species
+# - mechanism.reac
+# - mechanism.prod
+# - mechanism.ro2
+# - mechanism.f90
+#
+# Acknowledgements: B. Nelson, M. Newland
+#
+# ARGUMENTS:
+# - path to the .fac file
+# - path to the model configuration directory [default: model/configuration/]
+# - path to the MCM data files directory [default: mcm/]
+# ---------------------------------------------- #
 from __future__ import print_function
 import sys
 import re
@@ -96,7 +105,7 @@ def tokenise_and_process(input_string, variablesDict):
 
 def convert(input_file, mech_dir, mcm_dir):
     """
-    This is the main function of this file. It takes as input an MCM file, and from it generates
+    This is the main function of this file. It takes as input an MCM .fac file, and from it generates
     5 files for use by AtChem2's Fortran code:
 
     - 'Generic Rate Coefficients' and 'Complex reactions' go to mech_dir/mechanism.f90 with little more than formatting
@@ -287,7 +296,7 @@ def convert(input_file, mech_dir, mcm_dir):
     # SpeciesList generated here.
     # - copy comment lines across
     # - other lines are split into their consituent parts:
-    #   - rateConstants are the reaction rates - these are processed via reformatting and tokenisation to use the vector q where needed.
+    #   - rateConstants are the reaction rates; these are processed via reformatting and tokenisation to use the vector q where needed.
     #   - the reactants and products of each species are collected up, numbered as necessary, and their placements output to mechanism.{prod,reac,species}
     mech_reac_list = []
     mech_prod_list = []
@@ -322,7 +331,7 @@ def convert(input_file, mech_dir, mcm_dir):
             products = [item.strip() for item in re.split('[+]', productsList)]
 
             # Ignore empty reactantsList
-            if not reactantsList == '':
+            if not reactantsList.strip() == '':
                 # Compare each reactant against known species.
                 reactantNums = []
                 for x in reactants:
@@ -339,7 +348,8 @@ def convert(input_file, mech_dir, mcm_dir):
                 # Write the reactants to mech_reac_list
                 mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in reactantNums])
 
-            if not productsList == '':
+            # Ignore empty productsList
+            if not productsList.strip() == '':
                 # Compare each product against known species.
                 productNums = []
                 for x in products:
@@ -416,10 +426,11 @@ def convert(input_file, mech_dir, mcm_dir):
         mech_rates_coeff_file.write("""
 module mechanism_mod
     use, intrinsic :: iso_c_binding
+    implicit none
+
 contains
 
     subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J, RO2) bind(c,name='update_p')
-        implicit none
 
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
            real(c_double), intent(inout) :: p(:), q(:)

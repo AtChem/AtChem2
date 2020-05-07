@@ -45,10 +45,10 @@ PROGRAM ATCHEM2
 
   ! interface to linux API
   interface
+
     function dlopen( filename, mode ) bind ( c, name="dlopen" )
       ! void *dlopen(const char *filename, int mode);
       use iso_c_binding
-      implicit none
       type(c_ptr) :: dlopen
       character(c_char), intent(in) :: filename(*)
       integer(c_int), value :: mode
@@ -57,7 +57,6 @@ PROGRAM ATCHEM2
     function dlsym( handle, name ) bind ( c, name="dlsym" )
       ! void *dlsym(void *handle, const char *name);
       use iso_c_binding
-      implicit none
       type(c_funptr) :: dlsym
       type(c_ptr), value :: handle
       character(c_char), intent(in) :: name(*)
@@ -66,7 +65,6 @@ PROGRAM ATCHEM2
     function dlclose( handle ) bind ( c, name="dlclose" )
       ! int dlclose(void *handle);
       use iso_c_binding
-      implicit none
       integer(c_int) :: dlclose
       type(c_ptr), value :: handle
     end function
@@ -124,7 +122,6 @@ PROGRAM ATCHEM2
       use reaction_structure_mod
       use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
       use constraint_functions_mod
-      implicit none
 
       ! Fortran routine for right-hand side function.
       real(kind=DP), intent(in) :: t, y(*)
@@ -573,7 +570,7 @@ END PROGRAM ATCHEM2
 
 
 ! -------------------------------------------------------- !
-!  Fortran routine for right-hand side function.
+! Fortran routine for right-hand side function.
 subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
   use constraints_mod, only : getNumberOfConstrainedSpecies, numberOfVariableConstrainedSpecies, dataFixedY, &
@@ -599,7 +596,7 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   numReac = ipar(2)
   dummy = rpar(1)
   ! TODO: these should be the same size on every call? If so, then better to allocate once and re-use
-  ! TODO: rather than re-allocating each time.
+  !       rather than re-allocating each time.
   allocate (dy(np), z(np), constrainedConcs(numConSpec))
 
   ! for each constrained species...

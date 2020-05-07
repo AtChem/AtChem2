@@ -20,6 +20,8 @@
 ! density, and convert from RH to H2O.
 ! ******************************************************************** !
 module atmosphere_functions_mod
+  implicit none
+
 contains
 
   ! -----------------------------------------------------------------
@@ -27,7 +29,6 @@ contains
   ! (mbar) and temperature (K).
   pure function calcAirDensity( press, temp ) result ( m )
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: press, temp
     real(kind=DP) :: m, press_pa
@@ -43,7 +44,6 @@ contains
   ! from number density of air (molecule cm-3).
   subroutine calcAtmosphere( m, o2, n2 )
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: m
     real(kind=DP), intent(out) :: o2, n2
@@ -60,7 +60,6 @@ contains
   ! from "Humidity Conversion Formulas" by Vaisala (2013).
   pure function convertRHtoH2O( rh, temp, press ) result ( h2o )
     use types_mod
-    implicit none
 
     real(kind=DP), intent(in) :: rh, temp, press
     real(kind=DP) :: h2o, h2o_ppu, temp_c, wvp
@@ -89,7 +88,6 @@ contains
   ! --> CURRENTLY UNUSED, BUT IT MAY BE USEFUL <--
   subroutine temperature( temp, h2o, ttime )
     use types_mod
-    implicit none
 
     real(kind=DP) :: temp, ttime, rh, h2o, sin, h2o_factor, exponent
 

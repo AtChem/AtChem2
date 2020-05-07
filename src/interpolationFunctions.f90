@@ -18,6 +18,8 @@
 ! This module contains just the getConstrainedQuantAtT() method.
 ! ******************************************************************** !
 module interpolation_functions_mod
+  implicit none
+
 contains
 
   ! -----------------------------------------------------------------
@@ -29,7 +31,6 @@ contains
     use types_mod
     use constraints_mod, only : dataX, dataY, speciesNumberOfPoints
     use interpolation_method_mod , only : getSpeciesInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: ind
@@ -47,7 +48,6 @@ contains
     use types_mod
     use photolysis_rates_mod, only : photoX, photoY, photoNumberOfPoints
     use interpolation_method_mod , only : getConditionsInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: ind
@@ -65,7 +65,6 @@ contains
     use types_mod
     use env_vars_mod, only : envVarX, envVarY, envVarNumberOfPoints
     use interpolation_method_mod , only : getConditionsInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t
     integer(kind=NPI) :: ind
@@ -84,7 +83,6 @@ contains
     use types_mod
     use interpolation_method_mod, only : getSpeciesInterpMethod, getConditionsInterpMethod, &
                                          setSpeciesInterpMethod, setConditionsInterpMethod
-    implicit none
 
     real(kind=DP), intent(in) :: t, x(:,:), y(:,:)
     integer(kind=NPI), intent(in) :: dataNumberOfPoints

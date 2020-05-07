@@ -46,7 +46,6 @@ contains
   ! solver.parameters file
   subroutine set_solver_parameters( input_parameters )
     use types_mod
-    implicit none
 
     real(kind=DP) :: input_parameters(*)
 
@@ -135,7 +134,6 @@ contains
     use zenith_data_mod, only : latitude, longitude
     use date_mod, only : startDay, startMonth, startYear
     use interpolation_method_mod, only : setSpeciesInterpMethod, setConditionsInterpMethod
-    implicit none
 
     real(kind=DP) :: input_parameters(*)
 

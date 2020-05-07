@@ -10,7 +10,9 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script ...
+# This script executes the style test on the Fortran files to ensure
+# that they conform to the coding guidelines, described in the manual
+# (doc/AtChem2-Manual.pdf)
 
 RESULTS_FILE=travis/tests/testsuite.log
 

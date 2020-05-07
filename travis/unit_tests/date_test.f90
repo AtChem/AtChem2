@@ -1,3 +1,14 @@
+! -----------------------------------------------------------------------------
+!
+! Copyright (c) 2017 Sam Cox, Roberto Sommariva
+!
+! This file is part of the AtChem2 software package.
+!
+! This file is covered by the MIT license which can be found in the file
+! LICENSE.md at the top level of the AtChem2 distribution.
+!
+! -----------------------------------------------------------------------------
+
 module date_test
   use fruit
   use types_mod
@@ -8,7 +19,6 @@ contains
 
   subroutine test_isLeapYear
     use types_mod
-    implicit none
 
     call assert_true( isLeapYear(2004_DI) ,  "2004 is a leap year" )
     call assert_true( isLeapYear(2000_DI) ,  "2000 is a leap year" )
@@ -16,12 +26,10 @@ contains
     call assert_false( isLeapYear(2001_DI) , "2001 is not a leap year" )
     call assert_true( isLeapYear(1600_DI) ,  "1600 is a leap year" )
     call assert_false( isLeapYear(1900_DI) , "1900 is not a leap year" )
-
   end subroutine test_isLeapYear
 
   subroutine test_applyLeapDay
     use types_mod
-    implicit none
     integer(kind=DI) :: monthList(12)
 
     monthList = refMonthList
@@ -42,12 +50,10 @@ contains
     monthList = refMonthList
     call applyLeapDay( monthList, 1900_DI)
     call assert_true( sum(monthList) == sum(refMonthList) , "do not apply leap day to 1900" )
-
   end subroutine test_applyLeapDay
 
   subroutine test_calcDayOfYear
     use types_mod
-    implicit none
     integer(kind=DI) :: monthList(12)
 
     monthList = refMonthList
@@ -68,12 +74,10 @@ contains
     monthList = refMonthList
     call applyLeapDay( monthList, 2001_DI)
     call assert_true( calcDayOfYear(monthList, 6_DI, 12_DI) == 162_DI , "June 12 2001 is day 162" )
-
   end subroutine test_calcDayOfYear
 
   subroutine test_calcInitialDateParameters
     use types_mod
-    implicit none
 
     startDay = 1_DI
     startMonth = 1_DI
@@ -110,12 +114,10 @@ contains
     startYear = 2001_DI
     call calcInitialDateParameters()
     call assert_true( startDayOfYear == 162 , "Initial June 12 2001 is day 162")
-
   end subroutine test_calcInitialDateParameters
 
   subroutine test_calcCurrentDateParameters
     use types_mod
-    implicit none
 
     ! early in the day
     startDay = 1_DI
@@ -241,8 +243,6 @@ contains
     call calcCurrentDateParameters( (1.0_DP + 365.0_DP + 365.0_DP + 366.0_DP) * 86400.0_DP-1.0_DP)
     call assert_true( currentYear == 2004_DI , "Current year, starting at Dec 31 2001, &
     &with (1+365+365+366*86400-1 seconds, is 2004")
-
   end subroutine test_calcCurrentDateParameters
-
 
 end module date_test

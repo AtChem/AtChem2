@@ -1,3 +1,14 @@
+! -----------------------------------------------------------------------------
+!
+! Copyright (c) 2017 Sam Cox, Roberto Sommariva
+!
+! This file is part of the AtChem2 software package.
+!
+! This file is covered by the MIT license which can be found in the file
+! LICENSE.md at the top level of the AtChem2 distribution.
+!
+! -----------------------------------------------------------------------------
+
 module config_test
   use fruit
   use types_mod
@@ -9,7 +20,6 @@ contains
     use types_mod
     use config_functions_mod, only : matchNameToNumber
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=maxSpecLength) :: masterSpeciesList(10), testSpeciesList(6)
     character(len=35) :: testNumber
@@ -31,7 +41,6 @@ contains
   subroutine test_getIndexWithinList
     use types_mod
     use config_functions_mod, only : getIndexWithinList
-    implicit none
 
     character(len=2) :: list(5)
 
@@ -43,13 +52,11 @@ contains
     call assert_true(getIndexWithinList( list, 'f' ) == 0_NPI, "getIndexWithinList, f = 0")
     call assert_true(getIndexWithinList( list, 'z' ) == 0_NPI, "getIndexWithinList, z = 0")
     call assert_true(getIndexWithinList( list, ' 0' ) == 0_NPI, "getIndexWithinList,  0 = 0")
-
   end subroutine test_getIndexWithinList
 
   subroutine test_findReactionsWithProductOrReactant
     use types_mod
     use config_functions_mod, only : findReactionsWithProductOrReactant
-    implicit none
 
     integer(kind=NPI) :: speciesList(3), chs(2, 7), lens(3), i, j, lenAnswer(3)
     type(reaction_frequency_pair) :: r(3, 10), rAnswer(3, 10)
@@ -98,7 +105,6 @@ contains
         call assert_true( rAnswer(i,j) == r(i,j), "test_findReactionsWithProductOrReactant r" )
       enddo
     enddo
-
   end subroutine test_findReactionsWithProductOrReactant
 
   subroutine test_getSubsetOfConcs
@@ -106,7 +112,6 @@ contains
     use config_functions_mod, only : getSubsetOfConcs
     use species_mod, only : setSpeciesList, setNumberOfSpecies
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=maxSpecLength) :: fullListOfSpecies(10), speciesSubset(6)
     real(kind=DP) :: fullListOfConcs(10), concsSubset(6), concsAnswer(6)
@@ -129,4 +134,5 @@ contains
       call assert_true( concsSubset(i) == concsAnswer(i), "test_getSubsetOfConcs" )
     enddo
   end subroutine test_getSubsetOfConcs
+
 end module config_test

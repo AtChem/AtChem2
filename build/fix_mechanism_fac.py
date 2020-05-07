@@ -9,8 +9,13 @@
 #
 # -----------------------------------------------------------------------------
 
-# This file contains functions to fix the contents of a .fac file by removing the incorrect newline characters.
-# Call with a single parameter containing the file to fix.
+# This script contains functions to fix the contents of a chemical
+# mechanism file in FACSIMILE format (.fac ) by removing the incorrect
+# newline characters.
+#
+# ARGUMENT:
+# - path to the .fac file
+# ---------------------------------------------- #
 from __future__ import print_function
 from functools import reduce
 import sys
@@ -21,12 +26,15 @@ import re
 
 
 def fix_fac_full_contents(filename):
-    # Given a filename, return the contents of the file, but with incorrect newline characters removed, and the affected
-    # lines concatenated correctly. This will probably fail if a line is REALLY long, stretching over two full lines,
-    # but should probably then give an error as output.
+    # Given a filename, return the contents of the file, but with
+    # incorrect newline characters removed, and the affected lines
+    # concatenated correctly. This will probably fail if a line is
+    # REALLY long, stretching over two full lines, but should probably
+    # then give an error as output.
     #
-    # Using splitlines rather than readlines(), we take out the errant carriage returns, and for any line with such on
-    # it, we return to members of the list.
+    # Using splitlines rather than readlines(), we take out the errant
+    # carriage returns, and for any line with such on it, we return to
+    # members of the list.
     with open(filename, 'r') as file_open:
         contents = file_open.read().splitlines()
 
@@ -96,11 +104,12 @@ def fix_fac_full_contents(filename):
 
 
 def fix_fac_full_file(filename):
-    # Given a filename, overwrite the contents of the file with the same contents, but with incorrect newline characters
-    # removed, and the affected lines concatenated correctly. This will probably fail if a line is REALLY long,
+    # Given a filename, overwrite the contents of the file with the same contents,
+    # but with incorrect newline characters removed, and the affected lines
+    # concatenated correctly. This will probably fail if a line is REALLY long,
     # stretching over two full lines, but should probably then give an error as output.
-    # All the heavy lifting is done by fix_fac_contents - here we just provide a simple wrapper to write back to the
-    # same file.
+    # All the heavy lifting is done by fix_fac_contents - here we just provide a
+    # simple wrapper to write back to the same file.
     print('Running fix_fac_file on ' + str(filename))
     contents = fix_fac_full_contents(filename)
     contents = [item + '\n' for item in contents]

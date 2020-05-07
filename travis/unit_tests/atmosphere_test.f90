@@ -1,3 +1,14 @@
+! -----------------------------------------------------------------------------
+!
+! Copyright (c) 2017 Sam Cox, Roberto Sommariva
+!
+! This file is part of the AtChem2 software package.
+!
+! This file is covered by the MIT license which can be found in the file
+! LICENSE.md at the top level of the AtChem2 distribution.
+!
+! -----------------------------------------------------------------------------
+
 module atmosphere_test
   use fruit
   use types_mod
@@ -8,8 +19,6 @@ contains
   subroutine test_calcAirDensity
     use types_mod
     use atmosphere_functions_mod
-    implicit none
-
     real(kind=DP) :: density, press, temp
 
     press = 0.0_DP
@@ -28,8 +37,6 @@ contains
   subroutine test_calcAtmosphere
     use types_mod
     use atmosphere_functions_mod
-    implicit none
-
     real(kind=DP) :: m, o2, n2
 
     m = 1.0_DP
@@ -57,8 +64,6 @@ contains
   subroutine test_convertRHtoH2O
     use types_mod
     use atmosphere_functions_mod
-    implicit none
-
     real(kind=DP) :: rh, temp, press, ad, h2o
 
     rh = 50.0_DP
@@ -88,13 +93,10 @@ contains
     h2o = convertRHtoH2O( rh, temp, press )
 
     call assert_equals( h2o, 0.0_DP, "convertRHtoH2O: 0% relative humidity" )
-
   end subroutine test_convertRHtoH2O
 
-  subroutine test_zero_equal
+  subroutine test_zero_equal ! TODO: remove this?
     use types_mod
-    implicit none
-
     call assert_true( 0.0_DP == 0.0_DP, "Zero equality - sanity check!" )
   end subroutine test_zero_equal
 

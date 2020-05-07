@@ -19,6 +19,7 @@
 ! executable.
 ! ******************************************************************** !
 module argparse_mod
+  implicit none
 
   type flag
     character(100) :: flag_switch
@@ -41,9 +42,8 @@ module argparse_mod
 
 contains
 
+  !  TODO comment
   subroutine print_help()
-    implicit none
-
     integer i
 
     write(*,*) new_line('A')//' This is the help message.'
@@ -82,7 +82,6 @@ contains
 
   ! split a string into 2 either side of a delimiter token
   subroutine split_string( instring, string1, string2, delim )
-    implicit none
     character(100) :: instring
     character :: delim
     character(100), intent(out) :: string1, string2
@@ -112,10 +111,8 @@ contains
 
   end subroutine split_string
 
-
+  !  TODO comment
   subroutine check_name_value_pair_validity( name, value, name_valid, value_valid )
-    implicit none
-
     character(len=*), intent(in) :: name, value
     logical, intent(out) :: name_valid, value_valid
 
@@ -147,9 +144,8 @@ contains
 
   end subroutine check_name_value_pair_validity
 
-
+  !  TODO comment
   function array_contains( array, value ) result ( index )
-    implicit none
     character(len=*), intent(in) :: array(:), value
     integer :: index
     integer :: i
@@ -167,9 +163,8 @@ contains
     return
   end function array_contains
 
-
+  !  TODO comment
   function flag_array_contains( array, value ) result ( index )
-    implicit none
     type(flag), intent(in) :: array(:)
     character(len=*), intent(in) :: value
     integer :: index
@@ -188,9 +183,8 @@ contains
     return
   end function flag_array_contains
 
-
+  !  TODO comment
   function read_value_or_default( output_name, default, names, values ) result ( out )
-    implicit none
     character(len=*), intent(in) :: output_name, default, names(:), values(:)
     character(len=100) :: out
     integer :: loc
@@ -212,7 +206,6 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use directories_mod
-    implicit none
 
     integer(kind=QI) :: cmd_arg_count, i
     character(len=100), allocatable :: input_strings(:), names(:), values(:)

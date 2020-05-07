@@ -19,6 +19,8 @@
 ! variables and functions.
 ! ******************************************************************** !
 
+! TODO: several procedures in this file lack comments
+
 ! ******************************************************************** !
 ! MODULE types_mod
 ! Defines the integer and real data types available to the progrem.
@@ -50,13 +52,14 @@ module types_mod
   end interface
 
 contains
+
   function reaction_frequency_pair_equals( a, b ) result ( res )
-    implicit none
     type(reaction_frequency_pair), intent(in) :: a, b
     logical :: res
 
     res = ( ( a%reaction == b%reaction ) .and. ( a%frequency == b%frequency ) )
   end function reaction_frequency_pair_equals
+
 end module types_mod
 
 ! ******************************************************************** !
@@ -114,14 +117,11 @@ module date_mod
   integer(kind=DI), parameter :: refMonthList(12) = [31_DI, 28_DI, 31_DI, 30_DI, 31_DI, 30_DI, &
                                                      31_DI, 31_DI, 30_DI, 31_DI, 30_DI, 31_DI]
 
-
 contains
 
   ! -----------------------------------------------------------------
   ! Determine whether year is a leap year
   pure function isLeapYear( year ) result ( result )
-    implicit none
-
     integer(kind=DI), intent(in) :: year
     logical :: result
 
@@ -134,8 +134,6 @@ contains
   ! Return a copy of inMonthList which has the number of days in
   ! February set to 29 if year is a leap year
   subroutine applyLeapDay( monthList, year )
-    implicit none
-
     integer(kind=DI), intent(inout) :: monthList(12)
     integer(kind=DI), intent(in) :: year
 
@@ -150,8 +148,6 @@ contains
   ! based on which day of the day it is, and which month it is. So
   ! Jan 1 = 0, Jan 2 = 1 etc.
   pure function calcDayOfYear( monthList, month, day ) result ( result )
-    implicit none
-
     integer(kind=DI), intent(in) :: monthList(12), month, day
     integer(kind=DI) :: result
 
@@ -163,8 +159,6 @@ contains
   ! -----------------------------------------------------------------
   ! Set startDayOfYear from startDay, startMonth, and startYear
   subroutine calcInitialDateParameters()
-    implicit none
-
     integer(kind=DI) :: monthList(12)
 
     ! Number of days in each month; year is set in model.parameters.
@@ -183,8 +177,6 @@ contains
   ! Set currentMonth, currentDayOfMonth, currentYear and
   ! currentDayOfYear from the start date/time and the current time
   subroutine calcCurrentDateParameters( t )
-    implicit none
-
     real(kind=DP), intent(in) :: t
     integer(kind=DI) :: monthList(12)
     integer(kind=QI) :: completedDays, countingDays
@@ -285,7 +277,6 @@ contains
   ! Methods for numberOfConstrainedSpecies
 
   pure function getNumberOfConstrainedSpecies() result ( n )
-    implicit none
     integer(kind=NPI) :: n
     n = numberOfConstrainedSpecies
   end function getNumberOfConstrainedSpecies
@@ -293,7 +284,6 @@ contains
   ! -----------------------------------------------------------------
   ! Also allocate constrainedConcs and constrainedSpecies.
   subroutine setNumberOfConstrainedSpecies( n )
-    implicit none
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
     allocate (constrainedConcs(n), constrainedSpecies(n))
@@ -304,19 +294,16 @@ contains
   ! Methods for constrainedConcs
 
   pure function getConstrainedConcs() result ( r )
-    implicit none
     real(kind=DP) :: r(numberOfConstrainedSpecies)
     r = constrainedConcs(:)
   end function getConstrainedConcs
 
   subroutine setConstrainedConcs( r )
-    implicit none
     real(kind=DP) :: r(:)
     constrainedConcs(:) = r(:)
   end subroutine setConstrainedConcs
 
   subroutine deallocateConstrainedConcs()
-    implicit none
     deallocate (constrainedConcs)
   end subroutine deallocateConstrainedConcs
 
@@ -324,7 +311,6 @@ contains
   ! Methods for constrainedSpecies
 
   pure function getConstrainedSpecies() result ( r )
-    implicit none
     integer(kind=NPI) :: r(numberOfConstrainedSpecies)
     r = constrainedSpecies(:)
   end function getConstrainedSpecies
@@ -332,20 +318,17 @@ contains
   ! -----------------------------------------------------------------
   ! Query the contrained species list for the given index
   pure function getOneConstrainedSpecies( i ) result ( r )
-    implicit none
     integer(kind=NPI), intent(in) :: i
     integer(kind=NPI) :: r
     r = constrainedSpecies(i)
   end function getOneConstrainedSpecies
 
   subroutine setConstrainedSpecies( n, r )
-    implicit none
     integer(kind=NPI) :: n, r
     constrainedSpecies(n) = r
   end subroutine setConstrainedSpecies
 
   subroutine deallocateConstrainedSpecies()
-    implicit none
     deallocate (constrainedSpecies)
   end subroutine deallocateConstrainedSpecies
 
@@ -374,7 +357,6 @@ module species_mod
 contains
 
   pure function getNumberOfSpecies() result ( n )
-    implicit none
     integer(kind=NPI) :: n
     n = numSpecies
   end function getNumberOfSpecies
@@ -382,43 +364,36 @@ contains
   ! -----------------------------------------------------------------
   ! Also allocate speciesList
   subroutine setNumberOfSpecies( n )
-    implicit none
     integer(kind=NPI) :: n
     numSpecies = n
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
   pure function getNumberOfReactions() result ( n )
-    implicit none
     integer(kind=NPI) :: n
     n = numReactions
   end function getNumberOfReactions
 
   subroutine setNumberOfReactions( n )
-    implicit none
     integer(kind=NPI) :: n
     numReactions = n
   end subroutine setNumberOfReactions
 
   pure function getNumberOfGenericComplex() result ( n )
-    implicit none
     integer(kind=NPI) :: n
     n = numGenericComplex
   end function getNumberOfGenericComplex
 
   subroutine setNumberOfGenericComplex( n )
-    implicit none
     integer(kind=NPI) :: n
     numGenericComplex = n
   end subroutine setNumberOfGenericComplex
 
   subroutine deallocateSpeciesList
-    implicit none
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
 
   pure function getSpeciesList() result ( sl )
-    implicit none
     character(len=maxSpecLength), allocatable :: sl(:)
     integer(kind=NPI) :: i
     allocate (sl(numSpecies) )
@@ -428,7 +403,6 @@ contains
   end function getSpeciesList
 
   subroutine setSpeciesList( sl )
-    implicit none
     character(len=maxSpecLength) :: sl(:)
     integer(kind=NPI) :: i
     do i = 1, numSpecies
@@ -455,25 +429,21 @@ module interpolation_method_mod
 contains
 
   pure function getSpeciesInterpMethod() result ( n )
-    implicit none
     integer(kind=SI) :: n
     n = speciesInterpMethod
   end function getSpeciesInterpMethod
 
   subroutine setSpeciesInterpMethod( n )
-    implicit none
     integer(kind=SI) :: n
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
   pure function getConditionsInterpMethod() result ( n )
-    implicit none
     integer(kind=SI) :: n
     n = conditionsInterpMethod
   end function getConditionsInterpMethod
 
   subroutine setConditionsInterpMethod( n )
-    implicit none
     integer(kind=SI) :: n
     conditionsInterpMethod = n
   end subroutine setConditionsInterpMethod
@@ -522,44 +492,32 @@ module photolysis_rates_mod
 contains
 
   subroutine allocate_photolysis_constants_variables()
-    implicit none
-
     allocate (constantPhotoNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
               constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
   subroutine allocate_photolysis_numbers_variables()
-    implicit none
-
     allocate (photoNumbers(totalNumPhotos))
   end subroutine allocate_photolysis_numbers_variables
 
 
   subroutine allocate_constrained_photolysis_rates_variables()
-    implicit none
-
     allocate (constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_rates_variables
 
   subroutine allocate_constrained_photolysis_data()
-    implicit none
-
     allocate (photoX(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
               photoY(numConstrainedPhotoRates, maxNumberOfPhotoDataPoints), &
               photoNumberOfPoints(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_data
 
   subroutine allocate_unconstrained_photolysis_rates_variables()
-    implicit none
-
     allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates), &
               cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
               transmissionFactor(numUnconstrainedPhotoRates))
   end subroutine allocate_unconstrained_photolysis_rates_variables
 
   subroutine allocate_photolysis_j( size_of_j )
-    implicit none
-
     integer(kind=NPI), intent(in) :: size_of_j
     allocate (j(size_of_j))
     j(:) = 0.0_DP

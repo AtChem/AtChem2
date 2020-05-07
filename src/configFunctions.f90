@@ -19,6 +19,8 @@
 ! in order to extract the required species etc based on some criterion.
 ! ******************************************************************** !
 module config_functions_mod
+  implicit none
+
 contains
 
   ! -----------------------------------------------------------------
@@ -32,7 +34,6 @@ contains
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use storage_mod, only : maxSpecLength
-    implicit none
 
     character(len=maxSpecLength), contiguous, intent(in) :: masterSpeciesList(:), testSpeciesList(:)
     integer(kind=NPI), intent(out) :: returnArray(:)
@@ -63,7 +64,6 @@ contains
   ! found, return 0.
   pure function getIndexWithinList( masterList, target ) result ( id )
     use types_mod
-    implicit none
 
     character(len=*), contiguous, intent(in) :: masterList(:)
     character(len=*), intent(in) :: target
@@ -90,7 +90,6 @@ contains
   ! arrayLen is used to keep track of how many are present in each row.
   subroutine findReactionsWithProductOrReactant( rSpecies, chs, r, arrayLen )
     use types_mod
-    implicit none
 
     integer(kind=NPI), intent(in) :: rSpecies(:), chs(:,:)
     type(reaction_frequency_pair), intent(inout) :: r(:,:)
@@ -144,7 +143,6 @@ contains
     use types_mod
     use species_mod, only : getSpeciesList
     use storage_mod, only : maxSpecLength
-    implicit none
 
     real(kind=DP), intent(in) :: masterConcList(:)
     character(len=maxSpecLength), intent(in) :: subsetOfSpecies(:)

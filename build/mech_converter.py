@@ -331,7 +331,7 @@ def convert(input_file, mech_dir, mcm_dir):
             products = [item.strip() for item in re.split('[+]', productsList)]
 
             # Ignore empty reactantsList
-            if not reactantsList == '':
+            if not reactantsList.strip() == '':
                 # Compare each reactant against known species.
                 reactantNums = []
                 for x in reactants:
@@ -349,7 +349,7 @@ def convert(input_file, mech_dir, mcm_dir):
                 mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) + '\n' for z in reactantNums])
 
             # Ignore empty productsList
-            if not productsList == '':
+            if not productsList.strip() == '':
                 # Compare each product against known species.
                 productNums = []
                 for x in products:

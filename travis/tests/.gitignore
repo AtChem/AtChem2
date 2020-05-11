@@ -1,14 +1,14 @@
-# Ignore output files from test runs
+# Ignore output/log files and mechanism files of the test runs
 *.output
 *.out
 */output/reactionRates/*
-*/model/configuration/mechanism.prod
-*/model/configuration/mechanism.reac
-*/model/configuration/mechanism.ro2
-*/model/configuration/mechanism.species
-*/model/configuration/mechanism.f90
-*/model/configuration/mechanism.o
-*/model/configuration/mechanism.so
+mechanism.prod
+mechanism.reac
+mechanism.ro2
+mechanism.species
+mechanism.f90
+mechanism.o
+mechanism.so
 testsuite.log
 
 # Except configuration and reference files

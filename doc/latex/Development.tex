@@ -191,16 +191,16 @@ test requires the following files and directory structure:
 |  |  |- model.parameters
 |  |  |- outputSpecies.config
 |  |  |- outputRates.config
-|  |  |- photolysisConstant.config (*)
-|  |  |- photolysisConstrained.config (*)
+|  |  |- photolysisConstant.config    [*]
+|  |  |- photolysisConstrained.config [*]
 |  |  |- solver.parameters
-|  |  |- speciesConstrained.config (*)
-|  |  |- speciesConstant.config (*)
+|  |  |- speciesConstrained.config    [*]
+|  |  |- speciesConstant.config       [*]
 |  |  |- initialConcentrations.config
-|  |- constraints
-|     |- environment/ (**)
-|     |- photolysis/ (**)
-|     |- species/ (**)
+|  |- constraints     [**]
+|     |- environment/ [**]
+|     |- photolysis/  [**]
+|     |- species/     [**]
 |- output
 |  |- reactionRates/
 |  |- concentration.output.cmp
@@ -217,19 +217,12 @@ test requires the following files and directory structure:
 |- $TESTNAME.out.cmp
 \end{verbatim}
 
-The files marked with \texttt{(*)} and the directories marked with
-\texttt{(**)} are optional -- depending on the configuration used in
-the test. If present, the directories marked with \texttt{(**)} should
+The files marked with \texttt{[*]} and the directories marked with
+\texttt{[**]} are optional -- depending on the configuration used in
+the test. If present, the directories marked with \texttt{[**]} should
 contain the relevant constraint files, according to the corresponding
-configuration files in \texttt{model/configuration/}. In addition,
-these directories should contain a \texttt{.gitignore} file with the
-following content:
-\begin{verbatim}
-# Ignore nothing in this directory
-
-# Except this file
-!.gitignore
-\end{verbatim}
+configuration files in \texttt{model/configuration/} (see
+Sect.~\ref{sec:constraints} for details).
 
 The file \texttt{\$TESTNAME.out.cmp} should contain the exact copy of
 the expected terminal printout. Each behaviour test is briefly
@@ -254,12 +247,12 @@ to check and correct the Fortran code:
   at the indentation level of each line of code.
 \end{itemize}
 
-These scripts are in the \texttt{build/} directory and can be invoked
+These scripts are in the \texttt{tools/} directory and can be invoked
 from the \maindir\ with the following commands:
 
 \begin{verbatim}
-python build/fix_style.py src/filename.f90
-python build/fix_indent.py src/filename.f90
+python tools/fix_style.py src/filename.f90
+python tools/fix_indent.py src/filename.f90
 \end{verbatim}
 
 It is important to keep in mind that these scripts are \emph{not

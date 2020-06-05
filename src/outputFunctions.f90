@@ -294,7 +294,7 @@ contains
           ! r contains the occurences of each of the detailed species in reactions.
           ! r should have row lengths as in arrayLen, so all accesss to r(i,j) should
           ! be valid.
-          write (output_file_number, '(ES15.6E3, I14, A12, I15, ES15.6E3, A, A)') t, rSpecies(i), &
+          write (output_file_number, '(ES15.6E3, I14, A50, I15, ES15.6E3, A, A)') t, rSpecies(i), &
                                                                                   trim( speciesNames(rSpecies(i)) ), &
                                                                                   r(i, j)%reaction, &
                                                                                   r(i, j)%frequency * p(r(i, j)%reaction), &
@@ -356,7 +356,7 @@ contains
     end if
 
     if ( first_time .eqv. .true. ) then
-      write (50, '(100A15) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
+      write (50, '(1000A50) ') 't', (trim( specOutReqNames(i) ), i = 1, size( specOutReqNames ))
       first_time = .false.
     end if
 
@@ -365,7 +365,7 @@ contains
         arrayOfConcs(i) = 0.0_DP
       end if
     end do
-    write (50, '(100 (ES15.6E3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
+    write (50, '(1000 (ES50.6E3)) ') t, (arrayOfConcs(i), i = 1, size( arrayOfConcs ))
 
     return
   end subroutine outputSpeciesOfInterest

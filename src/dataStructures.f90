@@ -71,7 +71,7 @@ module storage_mod
   implicit none
   save
 
-  integer(kind=DI), parameter :: maxSpecLength=10
+  integer(kind=DI), parameter :: maxSpecLength=50
   integer(kind=DI), parameter :: maxPhotoRateNameLength=6
   integer(kind=DI), parameter :: maxEnvVarNameLength=9
   integer(kind=DI), parameter :: maxEnvVarLength=15

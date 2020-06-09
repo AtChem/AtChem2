@@ -26,9 +26,6 @@
     # if cached dirs exist, then continue. Otherwise, do the install from Homebrew
     - if [[ "$TRAVIS_OS_NAME" == "osx" && ! -d /usr/local/Cellar/gcc@4.9/4.9.4_2/bin ]] ; then brew update ; brew install gcc@4.9 gettext ;  fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=$PWD/cvode/lib:$PWD/openlibm-0.4.1 ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ls /usr/local/Cellar/ ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ls /usr/local/Cellar/gcc@4.9/ ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ls $PWD /usr/local/Cellar/gcc@4.9/4.9.4_2 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then ./tools/install/install_cvode.sh $PWD /usr/local/Cellar/gcc@4.9/4.9.4_2/bin/gfortran-4.9 ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran ; fi
     - ./tools/install/install_openlibm.sh $PWD

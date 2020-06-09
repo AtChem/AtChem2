@@ -67,7 +67,7 @@ endif
 # set compilation flags for each compiler
 ifeq ($(FORT_COMP),gfortran)
 FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-FSHAREDFLAGS =  -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+FSHAREDFLAGS =  -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
 LIBDIR       =  /usr/lib/:$(CVODELIB)
 endif
 ifeq ($(FORT_COMP),ifort)

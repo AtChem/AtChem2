@@ -294,7 +294,7 @@ contains
           ! r contains the occurences of each of the detailed species in reactions.
           ! r should have row lengths as in arrayLen, so all accesss to r(i,j) should
           ! be valid.
-          write (output_file_number, '(ES15.6E3, I14, A50, I15, ES15.6E3, A, A)') t, rSpecies(i), &
+          write (output_file_number, '(ES15.6E3, I14, A52, I15, ES15.6E3, A, A)') t, rSpecies(i), &
                                                                                   trim( speciesNames(rSpecies(i)) ), &
                                                                                   r(i, j)%reaction, &
                                                                                   r(i, j)%frequency * p(r(i, j)%reaction), &

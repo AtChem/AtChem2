@@ -14,8 +14,8 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-VERS_OLD="v1.2-dev"
-VERS_NEW="v1.2"
+VERS_OLD="v1.2"
+VERS_NEW="v1.3-dev"
 
 find ./ -type f ! -name "version.sh" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 

@@ -14,11 +14,10 @@
 #
 # N.B.: the script MUST be run from the doc/ directory of AtChem2.
 
-# Convert svg figures to png format using Inkscape
+# Convert svg figures to png format using Inkscape (v1.x)
 cd figures/
 for FIG in *.svg; do
-    inkscape -e $FIG.png $FIG
-    mv $FIG.png ${FIG%%.*}.png
+    inkscape --export-type="png" $FIG
 done
 cd ../
 

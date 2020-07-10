@@ -239,6 +239,7 @@ contains
     orderedEnvVarNames(8) = 'JFAC'
     orderedEnvVarNames(9) = 'DILUTE'
     orderedEnvVarNames(10) = 'ROOF'
+    orderedEnvVarNames(11) = 'ASA'
 
     pressure_set = .false.
     rh_set = .false.
@@ -254,7 +255,7 @@ contains
       select case ( envVarTypesNum(envVarNum) )
         case ( 1 ) ! CALC
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOF' )
+            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOF', 'ASA' )
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
@@ -310,7 +311,7 @@ contains
               temp_set = .true.
             case ( 'H2O' )
               this_env_val = 3.91e+17_DP
-            case ( 'RH', 'BLHEIGHT', 'DILUTE' )
+            case ( 'RH', 'BLHEIGHT', 'DILUTE', 'ASA' )
               this_env_val = -1.0_DP
             case ( 'DEC' )
               this_env_val = 0.41_DP
@@ -330,7 +331,7 @@ contains
 
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
-        case ( 'PRESS', 'TEMP', 'M', 'RH', 'H2O', 'BLHEIGHT', 'JFAC', 'DILUTE', 'ROOF' )
+        case ( 'PRESS', 'TEMP', 'M', 'RH', 'H2O', 'BLHEIGHT', 'JFAC', 'DILUTE', 'ROOF', 'ASA' )
         case ( 'DEC' )
           call calcZenith( t, this_env_val )
         case default

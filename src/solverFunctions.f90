@@ -193,7 +193,7 @@ contains
     real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
-    real(kind=DP) :: n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen
+    real(kind=DP) :: n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen, asa
 
     ro2 = ro2sum( y )
     dummy = y(1)
@@ -224,6 +224,8 @@ contains
           dilute = this_env_val
         case ( 'ROOF' )
           roofOpen = this_env_val
+        case ( 'ASA' )
+          asa = this_env_val
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop
@@ -254,7 +256,7 @@ contains
     !TODO: is this necessary a second time?
     ro2 = ro2sum( y )
 
-    call proc( p, q, temp, n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen, j, ro2 )
+    call proc( p, q, temp, n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen, asa, j, ro2 )
 
     return
   end subroutine mechanism_rates

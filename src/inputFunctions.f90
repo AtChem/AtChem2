@@ -845,7 +845,7 @@ contains
             write (stderr,*) 'readEnvVar(): Invalid option given to ROOF in environmentVariables.config.'
             stop
           end if
-        case ('TEMP', 'RH', 'H2O', 'PRESS', 'BLHEIGHT', 'DILUTE', 'DEC')
+        case ('PRESS', 'TEMP', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'DILUTE')
           select case ( trim( envVarTypes(i) ) )
             case ('CALC')
               envVarTypesNum(i) = 1_SI

@@ -303,14 +303,14 @@ contains
 
         case default ! DEFAULT VALUES
           select case ( this_env_var_name )
+            case ( 'PRESS' )
+              this_env_val = 1013.25_DP
             case ( 'TEMP' )
               this_env_val = 298.15_DP
               temp_set = .true.
             case ( 'H2O' )
               this_env_val = 3.91e+17_DP
-            case ( 'PRESS' )
-              this_env_val = 1013.25_DP
-            case ( 'BLHEIGHT', 'RH', 'DILUTE' )
+            case ( 'RH', 'BLHEIGHT', 'DILUTE' )
               this_env_val = -1.0_DP
             case ( 'DEC' )
               this_env_val = 0.41_DP
@@ -330,7 +330,7 @@ contains
 
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
-        case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF' )
+        case ( 'PRESS', 'TEMP', 'M', 'RH', 'H2O', 'BLHEIGHT', 'JFAC', 'DILUTE', 'ROOF' )
         case ( 'DEC' )
           call calcZenith( t, this_env_val )
         case default

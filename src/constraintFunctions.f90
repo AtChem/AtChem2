@@ -219,15 +219,15 @@ contains
     ! others (e.g., pressure, temperature and RH before H2O, and DEC
     ! before JFAC). Currently, this relies on
     ! environmentVariables.config having exactly the lines relating to
-    ! these 10 variables.
+    ! these variables.
     !
     ! To add another environment variable, the user would need to add
     ! that line to environmentVariables.config, and then add this as
-    ! element 11 in the orderedEnvVarNames initialisation below.  Its
+    ! element 12 in the orderedEnvVarNames initialisation below.  Its
     ! treatment needs defining in each of cases 1-3 and default below.
 
-    if ( size( envVarNames ) /= 10 ) then
-      write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
+    if ( size( envVarNames ) /= 11 ) then
+      write(stderr,*) 'size( envVarNames ) /= 11 in getEnvVarsAtT().'
     end if
     orderedEnvVarNames(1) = 'PRESS'
     orderedEnvVarNames(2) = 'TEMP'

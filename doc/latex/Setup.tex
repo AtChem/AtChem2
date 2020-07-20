@@ -509,6 +509,20 @@ Sect.~\ref{subsec:facsimile-format} for details.
 
 Default = NOTUSED (-1)
 
+\subsection{ASA} \label{subsec:asa}
+
+Aerosol Surface Area. It is required only if the model includes
+heterogeneous chemical reactions. The unit is area (cm$^2$,
+$\micro$m$^2$ or nm$^2$) per cm$^3$.
+
+\begin{itemize}
+\item fixed value
+\item constrainedprobably
+\item not used
+\end{itemize}
+
+Default = NOTUSED (-1)
+
 \subsection{DILUTE} \label{subsec:dilute}
 
 Dilution rate (s$^{-1}$). It is required only if the model includes
@@ -766,6 +780,7 @@ environment variables. For example:
 7   DILUTE       NOTUSED
 8   JFAC         CONSTRAINED
 9   ROOF         OPEN
+10  ASA          2e-5
 \end{verbatim}
 
 If an environment variable is constrained, there must be a

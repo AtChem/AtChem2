@@ -31,17 +31,17 @@ AtChem2 v1.3-dev
  Finished reading species names.
 
  Reading initial concentrations...
-      1 CH4              4.750E+13
-      2 NO2              2.640E+11
-      3 O3               1.320E+12
+      1 CH4                                                      4.750E+13
+      2 NO2                                                      2.640E+11
+      3 O3                                                       1.320E+12
  Finished reading initial concentrations.
 
 ----------------------------------------
  Species requiring detailed rate output
 ----------------------------------------
  Reading which species require detailed rate output...
-      1 OH        
-      2 HO2       
+      1 OH                                                
+      2 HO2                                               
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
@@ -68,12 +68,12 @@ AtChem2 v1.3-dev
  Model parameters:
  -----------------
                                    number of steps:           3
-                               step size:   0.300E+03
+                                         step size:   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
-                               rates output step size, ROPA/RODA:        3600
-                                    model start time:           0
-                            jacobian output step size:           0
+                 rates output step size, ROPA/RODA:        3600
+                                  model start time:           0
+                         jacobian output step size:           0
                                           latitude:   0.530E+02
                                          longitude:  -0.100E+01
                    reaction rates output step size:         300
@@ -88,9 +88,9 @@ AtChem2 v1.3-dev
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 3 species:
-      1 CH4       
-      2 NO2       
-      3 O3        
+      1 CH4                                               
+      2 NO2                                               
+      3 O3                                                
 
 ------------
  Photolysis
@@ -119,7 +119,7 @@ AtChem2 v1.3-dev
  Environment variables
 -----------------------
  Reading environment variables...
- Number of environment variables: 10
+ Number of environment variables: 11
  1      TEMP                      293
  2      PRESS                    1013
  3      RH                    NOTUSED
@@ -129,6 +129,7 @@ AtChem2 v1.3-dev
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
  9      ROOF                     OPEN
+ 10     ASA                   NOTUSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -147,15 +148,15 @@ AtChem2 v1.3-dev
  Setting size of constraint arrays, n = 4
  Reading in the names of variable-concentration constrained species...
  Finished reading the names of variable-concentration constrained species
-      1 CH4       
-      2 O3        
+      1 CH4                                               
+      2 O3                                                
  maximum number of species constraint data points: 9
  Reading concentration data for variable-concentration constrained species...
- CH4       ...
- O3        ...
+ CH4                                               ...
+ O3                                                ...
  Reading in the names and concentration of the fixed constrained species (in file speciesConstant.config)...
-      1 HNO3             4.730E+13
-      2 SO2              5.120E+10
+      1 HNO3                                                     4.730E+13
+      2 SO2                                                      5.120E+10
  Finished reading in the names and concentration of fixed-concentration species.
  Finished reading constrained species.
  Initialising concentrations of constrained species...

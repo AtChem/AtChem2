@@ -219,15 +219,15 @@ contains
     ! others (e.g., pressure, temperature and RH before H2O, and DEC
     ! before JFAC). Currently, this relies on
     ! environmentVariables.config having exactly the lines relating to
-    ! these 10 variables.
+    ! these variables.
     !
     ! To add another environment variable, the user would need to add
     ! that line to environmentVariables.config, and then add this as
-    ! element 11 in the orderedEnvVarNames initialisation below.  Its
+    ! element 12 in the orderedEnvVarNames initialisation below.  Its
     ! treatment needs defining in each of cases 1-3 and default below.
 
-    if ( size( envVarNames ) /= 10 ) then
-      write(stderr,*) 'size( envVarNames ) /= 10 in getEnvVarsAtT().'
+    if ( size( envVarNames ) /= 11 ) then
+      write(stderr,*) 'size( envVarNames ) /= 11 in getEnvVarsAtT().'
     end if
     orderedEnvVarNames(1) = 'PRESS'
     orderedEnvVarNames(2) = 'TEMP'
@@ -239,6 +239,7 @@ contains
     orderedEnvVarNames(8) = 'JFAC'
     orderedEnvVarNames(9) = 'DILUTE'
     orderedEnvVarNames(10) = 'ROOF'
+    orderedEnvVarNames(11) = 'ASA'
 
     pressure_set = .false.
     rh_set = .false.
@@ -254,7 +255,7 @@ contains
       select case ( envVarTypesNum(envVarNum) )
         case ( 1 ) ! CALC
           select case ( this_env_var_name )
-            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOF' )
+            case ( 'PRESS', 'TEMP', 'RH', 'BLHEIGHT', 'DILUTE', 'ROOF', 'ASA' )
               write (stderr,*) 'getEnvVarsAtT(): No calculation available for ' // trim( this_env_var_name )
               stop
             case ( 'M' )
@@ -303,14 +304,14 @@ contains
 
         case default ! DEFAULT VALUES
           select case ( this_env_var_name )
+            case ( 'PRESS' )
+              this_env_val = 1013.25_DP
             case ( 'TEMP' )
               this_env_val = 298.15_DP
               temp_set = .true.
             case ( 'H2O' )
               this_env_val = 3.91e+17_DP
-            case ( 'PRESS' )
-              this_env_val = 1013.25_DP
-            case ( 'BLHEIGHT', 'RH', 'DILUTE' )
+            case ( 'RH', 'BLHEIGHT', 'DILUTE', 'ASA' )
               this_env_val = -1.0_DP
             case ( 'DEC' )
               this_env_val = 0.41_DP
@@ -330,7 +331,7 @@ contains
 
       ! Copy this_env_var_name to the correct output variable
       select case ( this_env_var_name )
-        case ( 'TEMP', 'RH', 'H2O', 'PRESS', 'M', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF' )
+        case ( 'PRESS', 'TEMP', 'M', 'RH', 'H2O', 'BLHEIGHT', 'JFAC', 'DILUTE', 'ROOF', 'ASA' )
         case ( 'DEC' )
           call calcZenith( t, this_env_val )
         case default

@@ -23,10 +23,10 @@ module solver_functions_mod
 
   ! Define interface of call-back routine.
   abstract interface
-    subroutine called_proc( i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15 ) bind ( c )
+    subroutine called_proc( i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16 ) bind ( c )
       use, intrinsic :: iso_c_binding
       real(c_double), intent(inout) :: i(:), i2(:)
-      real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14(:), i15
+      real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15(:), i16
     end subroutine called_proc
   end interface
 
@@ -193,7 +193,7 @@ contains
     real(kind=DP) :: temp, press, dummy, this_env_val, photoRateAtT
     integer(kind=NPI) :: i
     character(len=maxEnvVarNameLength) :: this_env_var_name
-    real(kind=DP) :: n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen
+    real(kind=DP) :: n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen, asa
 
     ro2 = ro2sum( y )
     dummy = y(1)
@@ -204,26 +204,28 @@ contains
       this_env_var_name = envVarNames(i)
       this_env_val = currentEnvVarValues(getEnvVarNum(this_env_var_name))
       select case ( this_env_var_name )
+        case ( 'PRESS' )
+          press = this_env_val
         case ( 'TEMP' )
           temp = this_env_val
+        case ( 'M' )
+          m = this_env_val
         case ( 'RH' )
           rh = this_env_val
         case ( 'H2O' )
           h2o = this_env_val
-        case ( 'DEC' )
-          dec = this_env_val
-        case ( 'PRESS' )
-          press = this_env_val
-        case ( 'M' )
-          m = this_env_val
         case ( 'BLHEIGHT' )
           blheight = this_env_val
-        case ( 'DILUTE' )
-          dilute = this_env_val
+        case ( 'DEC' )
+          dec = this_env_val
         case ( 'JFAC' )
           jfac = this_env_val
+        case ( 'DILUTE' )
+          dilute = this_env_val
         case ( 'ROOF' )
           roofOpen = this_env_val
+        case ( 'ASA' )
+          asa = this_env_val
         case default
           write(stderr,*) 'getEnvVarsAtT(): invalid environment name ' // trim( this_env_var_name )
           stop
@@ -254,7 +256,7 @@ contains
     !TODO: is this necessary a second time?
     ro2 = ro2sum( y )
 
-    call proc( p, q, temp, n2, o2, m, rh, h2o, dec, blheight, dilute, jfac, roofOpen, j, ro2 )
+    call proc( p, q, temp, n2, o2, m, rh, h2o, blheight, dec, jfac, dilute, roofOpen, asa, j, ro2 )
 
     return
   end subroutine mechanism_rates

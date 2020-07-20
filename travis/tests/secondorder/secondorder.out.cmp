@@ -31,16 +31,16 @@ AtChem2 v1.3-dev
  Finished reading species names.
 
  Reading initial concentrations...
-      1 A                1.000E+02
-      2 B                0.000E+00
+      1 A                                                        1.000E+02
+      2 B                                                        0.000E+00
  Finished reading initial concentrations.
 
 ----------------------------------------
  Species requiring detailed rate output
 ----------------------------------------
  Reading which species require detailed rate output...
-      1 A         
-      2 B         
+      1 A                                                 
+      2 B                                                 
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
@@ -67,12 +67,12 @@ AtChem2 v1.3-dev
  Model parameters:
  -----------------
                                    number of steps:        1500
-                               step size:   0.100E+01
+                                         step size:   0.100E+01
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
-                               rates output step size, ROPA/RODA:           1
-                                    model start time:           0
-                            jacobian output step size:           1
+                 rates output step size, ROPA/RODA:           1
+                                  model start time:           0
+                         jacobian output step size:           1
                                           latitude:   0.529E+02
                                          longitude:   0.000E+00
                    reaction rates output step size:         100
@@ -87,8 +87,8 @@ AtChem2 v1.3-dev
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 2 species:
-      1 A         
-      2 B         
+      1 A                                                 
+      2 B                                                 
 
 ------------
  Photolysis
@@ -117,7 +117,7 @@ AtChem2 v1.3-dev
  Environment variables
 -----------------------
  Reading environment variables...
- Number of environment variables: 10
+ Number of environment variables: 11
  1      TEMP                   281.95
  2      PRESS                 1013.25
  3      RH                    NOTUSED
@@ -127,6 +127,7 @@ AtChem2 v1.3-dev
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
  9      ROOF                   CLOSED
+ 10     ASA                   NOTUSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...
@@ -1673,5 +1674,5 @@ AtChem2 v1.3-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 1
 
- Runtime = 3
+ Runtime = 0
  Deallocating memory.

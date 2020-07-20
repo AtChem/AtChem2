@@ -34,7 +34,7 @@ import re
 import os
 import fix_mechanism_fac
 
-reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'DEC', 'BLHEIGHT', 'DILUTE', 'JFAC', 'ROOF', 'RO2']
+reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC', 'DILUTE', 'ROOF', 'ASA', 'RO2']
 reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 
 
@@ -429,11 +429,11 @@ module mechanism_mod
 
 contains
 
-    subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J, RO2) bind(c,name='update_p')
+    subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J, RO2) bind(c,name='update_p')
 
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
            real(c_double), intent(inout) :: p(:), q(:)
-        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, DEC, BLHEIGHT, DILUTE, JFAC, ROOFOPEN, J(:), RO2
+        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(:), RO2
         """)
         # Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:

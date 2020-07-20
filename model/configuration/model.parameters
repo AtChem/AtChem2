@@ -1,13 +1,13 @@
-48			number of steps
-900			step size (seconds)
-2			species interpolation method (pw constant = 1, pw linear = 2)
-2			conditions interpolation method (pw constant = 1, pw linear = 2)
-3600			rates output step size, ROPA/RODA (seconds)
-0			model start time (seconds)
-0			jacobian output step size (seconds)
-51.51			latitude (degrees)
-0.13			longitude (degrees)
-21			day
-06			month
-2010			year
-1800			reaction rates output step size (seconds)
+48           number of steps
+900          step size (seconds)
+2            species interpolation method (pw constant = 1, pw linear = 2)
+2            conditions interpolation method (pw constant = 1, pw linear = 2)
+3600         rates output step size, ROPA/RODA (seconds)
+0            model start time (seconds)
+0            jacobian output step size (seconds)
+51.51        latitude (degrees)
+0.13         longitude (degrees)
+21           day
+06           month
+2010         year
+1800         reaction rates output step size (seconds)

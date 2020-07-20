@@ -31,16 +31,16 @@ AtChem2 v1.3-dev
  Finished reading species names.
 
  Reading initial concentrations...
-      1 CH3OH            3.100E+09
-      2 NO2              6.200E+09
+      1 CH3OH                                                    3.100E+09
+      2 NO2                                                      6.200E+09
  Finished reading initial concentrations.
 
 ----------------------------------------
  Species requiring detailed rate output
 ----------------------------------------
  Reading which species require detailed rate output...
-      1 HO2       
-      2 OH        
+      1 HO2                                               
+      2 OH                                                
  Finished reading which species require detailed rate output.
  Species requiring detailed rate output (number of species found): 2
 
@@ -67,12 +67,12 @@ AtChem2 v1.3-dev
  Model parameters:
  -----------------
                                    number of steps:          10
-                               step size:   0.300E+03
+                                         step size:   0.300E+03
                       species interpolation method: piecewise linear 
                    conditions interpolation method: piecewise linear 
-                               rates output step size, ROPA/RODA:         600
-                                    model start time:       84600
-                            jacobian output step size:         300
+                 rates output step size, ROPA/RODA:         600
+                                  model start time:       84600
+                         jacobian output step size:         300
                                           latitude:   0.529E+02
                                          longitude:   0.000E+00
                    reaction rates output step size:         300
@@ -87,7 +87,7 @@ AtChem2 v1.3-dev
  Reading concentration output from file...
  Finished reading concentration output from file.
  Output required for concentration of 1 species:
-      1 O3        
+      1 O3                                                
 
 ------------
  Photolysis
@@ -116,7 +116,7 @@ AtChem2 v1.3-dev
  Environment variables
 -----------------------
  Reading environment variables...
- Number of environment variables: 10
+ Number of environment variables: 11
  1      TEMP                   281.95
  2      PRESS                 1013.25
  3      RH                    NOTUSED
@@ -126,6 +126,7 @@ AtChem2 v1.3-dev
  7      DILUTE                NOTUSED
  8      JFAC                  NOTUSED
  9      ROOF                   CLOSED
+ 10     ASA                   NOTUSED
  Finished reading environment variables.
 
  Checking for constrained environment variables...

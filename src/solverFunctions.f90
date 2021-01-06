@@ -25,8 +25,8 @@ module solver_functions_mod
   abstract interface
     subroutine called_proc( i, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16 ) bind ( c )
       use, intrinsic :: iso_c_binding
-      real(c_double), intent(inout) :: i(:), i2(:)
-      real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15(:), i16
+      real(c_double), intent(inout) :: i(*), i2(*)
+      real(c_double), intent(in) :: i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15(*), i16
     end subroutine called_proc
   end interface
 

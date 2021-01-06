@@ -432,8 +432,8 @@ contains
     subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J, RO2) bind(c,name='update_p')
 
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
-           real(c_double), intent(inout) :: p(:), q(:)
-        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(:), RO2
+           real(c_double), intent(inout) :: p(*), q(*)
+        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2
         """)
         # Write out Generic Rate Coefficients and Complex reactions
         for item in mechanism_rates_coeff_list:

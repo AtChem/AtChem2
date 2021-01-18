@@ -22,12 +22,12 @@ following tools:
 
 \begin{itemize}
 \item Fortran -- the model compiles with GNU \texttt{gfortran}
-  (version 4.8.5) and with Intel \texttt{ifort} (version 17.0)\\
+  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
   $\hookrightarrow$ default compiler: \texttt{gfortran}
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
-    with Python v2 and v3. Support for Python v2 may be removed in
-    future versions of AtChem2.}
-\item cmake
+  with Python v2 and v3. Support for Python v2 will be removed in
+  future versions of AtChem2.}
+\item make and cmake
 \item Ruby (optional)
 \end{itemize}
 
@@ -38,9 +38,9 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
+\item BLAS and LAPACK
 \item CVODE
 \item openlibm
-\item BLAS and LAPACK
 \item numdiff (optional)
 \item FRUIT (optional)
 \end{itemize}
@@ -99,9 +99,10 @@ for all the dependencies of AtChem2: the \depdir\ can be located
 anywhere and given any name. In this manual, the \depdir\ is
 assumed to be: \texttt{\$HOME/atchem-lib/}.
 
-Before installing the dependencies, make sure that a Fortran compiler,
-Python, cmake and (optionally) Ruby are installed on the operating
-system, as explained in Sect.~\ref{sec:requirements}.
+Before installing the dependencies, make sure that a Fortran compiler
+(e.g., \texttt{gfortran}), Python, make, cmake and (optionally) Ruby
+are installed on the operating system, as explained in
+Sect.~\ref{sec:requirements}.
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 

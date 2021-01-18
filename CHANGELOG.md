@@ -1,5 +1,14 @@
 # AtChem2 - CHANGELOG
 
+## v1.2.1 (January 2021)
+
+- new environment variable `ASA` (aerosol surface area)
+- fix bug in the C-binding for `gfortran` version 9 and above
+- remove tabs from the configuration files
+- update the Travis configuration file
+- tidy the comments and printout messages of various source files
+- update the manual
+
 ## v1.2 (May 2020)
 
 - implement argument parser and named arguments for the  `atchem2` executable
@@ -20,7 +29,7 @@
 - new script to set the version of AtChem2 before a release (`tools/version.sh`)
 - minor improvements to the install procedure
 - move the example chemical mechanism file to the `mcm`/ directory, and add a minimal .fac file (`mechanism_skel.fac`)
-- tidy and improve comments of various source files and scripts
+- tidy and improve comments in various source files and scripts
 - minor fixes and updates
 
 ## v1.1.1 (January 2019)

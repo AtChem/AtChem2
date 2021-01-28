@@ -26,27 +26,51 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
+      # ubuntu only
       - name: Run on ubuntu
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          echo Running on a Linux machine ${{ matrix.os }}
-          which gfortran
-          gfortran --version
-          ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran
-          ./tools/install/install_openlibm.sh $PWD
-          ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
-          ./tools/install/install_fruit.sh $PWD
+        run: echo Running on a Linux machine ${{ matrix.os }}
+        
+      - name: which gfortran
+        if: matrix.os == 'ubuntu-latest'
+        run: which gfortran
+          
+      - name: gfortran version
+        if: matrix.os == 'ubuntu-latest'
+        run: gfortran --version
 
-      # Runs a set of commands using the runners shell
+      - name: install liblapack-dev
+        if: matrix.os == 'ubuntu-latest'
+        run: apt-get install liblapack-dev
+      
+      # macOS only
       - name: Run on macOS
         if: matrix.os == 'macos-latest'
-        run: |
-          echo Running on a macOS ${{ matrix.os }}
-          which gfortran
-          gfortran --version
-          brew install gettext
-          ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran
-          ./tools/install/install_openlibm.sh $PWD
-          ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
-          ./tools/install/install_fruit.sh $PWD
+        run: echo Running on a macOS ${{ matrix.os }}
+      
+      - name: which gfortran (macOS)
+        if: matrix.os == 'macos-latest'
+        run: which gfortran
+      
+      - name: gfortran version (macOS)
+        if: matrix.os == 'macos-latest'
+        run: gfortran --version
+      
+      - name: Install gettext
+        if: matrix.os == 'macos-latest'
+        run: brew install gettext
+      
+      # both OSs
+      - name: Install cvode
+        run: ./tools/install/install_cvode.sh $PWD /usr/bin/gfortran
+      
+      - name: Install openlibm
+        run: ./tools/install/install_openlibm.sh $PWD
+      
+      - name: Install numdiff
+        run: ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
+      
+      - name: Install fruit
+        run: ./tools/install/install_fruit.sh $PWD
+
+      

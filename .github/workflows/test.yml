@@ -80,6 +80,8 @@ jobs:
 
       - name: Build AtChem2
         run: |
+          echo $PWD
+          ls $PWD
           cd $GITHUB_WORKSPACE
           echo $pwd
           cp tools/install/Makefile.skel Makefile
@@ -104,4 +106,3 @@ jobs:
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean
           make tests
-          

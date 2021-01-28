@@ -105,6 +105,7 @@ jobs:
           make indenttest
           make styletest
           make clean
+          gem list
           make unittests
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean

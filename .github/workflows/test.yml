@@ -91,6 +91,7 @@ jobs:
       
       - name: Run AtChem2
         run: |
+          export PATH=$PATH:$PWD/numdiff/bin
           if [ $RUNNER_OS != 'Linux' ] ; then 
             install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ; 
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ; 

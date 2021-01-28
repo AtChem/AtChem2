@@ -73,4 +73,13 @@ jobs:
       - name: Install fruit
         run: ./tools/install/install_fruit.sh $PWD
 
+      - name: Build AtChem2
+        run: |
+          cd $GITHUB_WORKSPACE
+          echo $pwd
+          cp tools/install/Makefile.skel Makefile
+          ./build/build_atchem2.sh ./mcm/mechanism_test.fac
       
+      - name: Run AtChem2
+        run:
+          ./atchem2

@@ -54,7 +54,7 @@ jobs:
       
       - name: gfortran version (macOS)
         if: matrix.os == 'macos-latest'
-        run: gfortran-8 --version
+        run: alias gfortran='gfortran-8'
       
       - name: Install gettext (macOS)
         if: matrix.os == 'macos-latest'
@@ -62,7 +62,7 @@ jobs:
       
       # both OSs
       - name: Install cvode
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-8)
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran)
       
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD

@@ -43,7 +43,7 @@ OS := $(shell uname -s)
 
 # if on GitHub Actions
 ifeq ($(GITHUB_ACTIONS),true)
-ifeq ($(RUNNER_OS),linux)
+ifeq ($(RUNNER_OS),Linux)
 # if linux, pass gfortran
 FORT_COMP    = gfortran
 FORT_LIB     = ""

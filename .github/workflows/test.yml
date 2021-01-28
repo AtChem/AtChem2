@@ -83,12 +83,8 @@ jobs:
           cd $GITHUB_WORKSPACE
           echo $pwd
           cp tools/install/Makefile.skel Makefile
-          if [ $RUNNER_OS == 'macOS' ] ; then
-            alias gfortran='gfortran-8' ;
-          fi
-          echo $RUNNER_OS
           which gfortran-8
-          which gfortran
+          ls /usr/local/lib
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
       
       - name: Run AtChem2

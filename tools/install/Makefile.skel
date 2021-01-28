@@ -41,15 +41,15 @@ SHAREDLIBDIR = model/configuration
 # detect operating system
 OS := $(shell uname -s)
 
-# if on Travis
-ifeq ($(TRAVIS),true)
-ifeq ($(TRAVIS_OS_NAME),linux)
+# if on GitHub Actions
+ifeq ($(GITHUB_ACTIONS),true)
+ifeq ($(RUNNER_OS),linux)
 # if linux, pass gfortran
 FORT_COMP    = gfortran
 FORT_LIB     = ""
 else
 # if macOS, pass homebrew gfortran
-FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_2/bin/gfortran-4.9
+FORT_COMP    = /usr/local/bin/gfortran-8
 FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_2/lib/gcc/4.9
 endif
 # if not on Travis, set the fortran compiler

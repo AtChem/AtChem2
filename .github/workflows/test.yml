@@ -43,6 +43,10 @@ jobs:
       #   if: matrix.os == 'ubuntu-latest'
       #   run: sudo apt-get install liblapack-dev
       
+      - name: Install cvode
+        if: matrix.os == 'ubuntu-latest'
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran)
+
       # macOS only
       - name: Run on macOS
         if: matrix.os == 'macos-latest'
@@ -52,18 +56,19 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: which gfortran-8
       
-      - name: gfortran version (macOS)
-        if: matrix.os == 'macos-latest'
-        run: alias gfortran='gfortran-8'
+      # - name: gfortran version (macOS)
+      #   if: matrix.os == 'macos-latest'
+      #   run: alias gfortran='gfortran-8'
       
       # - name: Install gettext (macOS)
       #   if: matrix.os == 'macos-latest'
       #   run: brew install gettext
+  
+      - name: Install cvode (macOS)
+        if: matrix.os == 'macos-latest'
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-8)
       
       # both OSs
-      - name: Install cvode
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran)
-      
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
       

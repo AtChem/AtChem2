@@ -84,9 +84,6 @@ jobs:
           ls $PWD
           cd $GITHUB_WORKSPACE
           echo $PWD
-          ls  -al /var/lib
-          echo
-          ls -al /var/lib/gems
           cp tools/install/Makefile.skel Makefile
           which gfortran-8
           ls /usr/local/lib

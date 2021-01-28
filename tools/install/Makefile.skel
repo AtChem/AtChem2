@@ -52,7 +52,7 @@ else
 FORT_COMP    = /usr/local/bin/gfortran-8
 FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_2/lib/gcc/4.9
 endif
-# if not on Travis, set the fortran compiler
+# if not on GitHub Actions, set the fortran compiler
 else
 ifeq ($(FORTC),"gnu")
 FORT_COMP    = gfortran

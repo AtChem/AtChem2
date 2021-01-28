@@ -101,12 +101,12 @@ jobs:
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
           ./atchem2
-          if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
           make indenttest
           make styletest
           make clean
           gem list
           make unittests
-          if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean
           make tests

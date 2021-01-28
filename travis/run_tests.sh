@@ -205,7 +205,7 @@ $this_file_failures"
   echo "$this_test_failures"
 done
 
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
+if [[ "$RUNNER_OS" == "linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$fail_counter" -gt 0 ]]; then

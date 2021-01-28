@@ -14,13 +14,13 @@
 require 'rubygems'
 require 'fruit_processor'
 
-if ENV['TRAVIS'] == nil
+if ENV['GITHUB_ACTIONS'] == nil
   load "fruit_3.4.3/rake_base.rb"
 else
-  if ENV['TRAVIS_OS_NAME'] == 'linux'
-    load "/home/travis/build/AtChem/AtChem2/fruit_3.4.3/rake_base.rb"
+  if ENV['RUNNER_OS'] == 'Linux'
+    load "/home/runner/work/AtChem2/AtChem2/fruit_3.4.3/rake_base.rb"
   else
-    load "/Users/travis/build/AtChem/AtChem2/fruit_3.4.3/rake_base.rb"
+    load "/Users/runner/work/AtChem2/AtChem2/fruit_3.4.3/rake_base.rb"
   end
 end
 

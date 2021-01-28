@@ -76,7 +76,7 @@ jobs:
         run: ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
       
       - name: Install fruit
-        run: ./tools/install/install_fruit.sh $PWD
+        run: sudo ./tools/install/install_fruit.sh $PWD
 
       - name: Build AtChem2
         run: |

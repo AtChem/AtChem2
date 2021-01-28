@@ -39,7 +39,14 @@ rm fruit_3.4.3.zip
 
 cd fruit_3.4.3
 gem install rake
+if [ $? -ne 0 ] ; then
+  echo "gem install rake failed"
+  exit 1
+fi
 cd fruit_processor_gem
 rake install
-
+if [ $? -ne 0 ] ; then
+  echo "rake install failed"
+  exit 1
+fi
 exit 0

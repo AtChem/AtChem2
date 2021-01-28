@@ -41,7 +41,7 @@ jobs:
 
       - name: install liblapack-dev
         if: matrix.os == 'ubuntu-latest'
-        run: apt-get install liblapack-dev
+        run: sudo apt-get install liblapack-dev
       
       # macOS only
       - name: Run on macOS

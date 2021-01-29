@@ -61,17 +61,15 @@ jobs:
         run: |
           ./atchem2
           if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+          export PATH=$PATH:$PWD/numdiff/bin
+          make unittests
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          make clean
+          make tests
 
       - name: Indent and style tests
         run: |
           make indenttest
           make styletest
           make clean
-      
-      - name: Run tests
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
-          make clean
-          make tests
+          

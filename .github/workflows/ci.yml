@@ -28,7 +28,13 @@ jobs:
           fetch-depth: 2
 
       - name: Check Fortran value
-        run: echo ${{ matrix.fortran }}
+        run: |
+          echo ${{ matrix.fortran }}
+          echo gfortran-${{ matrix.fortran }}
+          $(which gfortran)
+          ls -al /usr/bin
+          ls -al /usr/local/bin
+
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'

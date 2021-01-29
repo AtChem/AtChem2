@@ -39,9 +39,8 @@ jobs:
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        with: 
-          env:
-            FORT_VERSION: ${{ matrix.fortran }}
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only

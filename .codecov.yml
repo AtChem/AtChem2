@@ -6,4 +6,4 @@ coverage:
         paths: "src/"
       unittests:  # declare a new status context "unittests"
         target: 100%  # we always want 100% coverage here
-        paths: "travis/unit_tests/"  # only include coverage in "travis/unit_tests" folder
+        paths: "test/unit_tests/"  # only include coverage in "test/unit_tests" folder

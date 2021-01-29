@@ -22,7 +22,7 @@ if [ -z "$1" ] ; then
   exit 1
 fi
 cd $1
-wget https://github.com/JuliaLang/openlibm/archive/v0.4.1.tar.gz
+wget https://github.com/JuliaMath/openlibm/archive/v0.4.1.tar.gz
 if [ $? -ne 0 ] ; then
   echo "wget of openlibm failed"
   exit 1

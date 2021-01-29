@@ -27,43 +27,11 @@ jobs:
       - uses: actions/checkout@v2
 
       # ubuntu only
-      - name: Run on ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: echo Running on a Linux machine ${{ matrix.os }}
-        
-      - name: which gfortran
-        if: matrix.os == 'ubuntu-latest'
-        run: which gfortran
-          
-      - name: gfortran version
-        if: matrix.os == 'ubuntu-latest'
-        run: gfortran --version
-
-      # - name: install liblapack-dev
-      #   if: matrix.os == 'ubuntu-latest'
-      #   run: sudo apt-get install liblapack-dev
-      
-      - name: Install cvode
+      - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran)
 
       # macOS only
-      - name: Run on macOS
-        if: matrix.os == 'macos-latest'
-        run: echo Running on a macOS ${{ matrix.os }}
-      
-      - name: which gfortran (macOS)
-        if: matrix.os == 'macos-latest'
-        run: which gfortran-8
-      
-      # - name: gfortran version (macOS)
-      #   if: matrix.os == 'macos-latest'
-      #   run: alias gfortran='gfortran-8'
-      
-      # - name: Install gettext (macOS)
-      #   if: matrix.os == 'macos-latest'
-      #   run: brew install gettext
-  
       - name: Install cvode (macOS)
         if: matrix.os == 'macos-latest'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-8)
@@ -73,37 +41,36 @@ jobs:
         run: ./tools/install/install_openlibm.sh $PWD
       
       - name: Install numdiff
-        run: ./tools/install/install_numdiff.sh $PWD ; export PATH=$PATH:$PWD/numdiff/bin
+        run: ./tools/install/install_numdiff.sh $PWD
       
       - name: Install fruit
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       - name: Build AtChem2
         run: |
-          echo $PWD
-          ls $PWD
-          cd $GITHUB_WORKSPACE
-          echo $PWD
           cp tools/install/Makefile.skel Makefile
-          which gfortran-8
-          ls /usr/local/lib
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
-      
-      - name: Run AtChem2
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
           if [ $RUNNER_OS != 'Linux' ] ; then 
             install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ; 
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ; 
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ; 
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
+      
+      - name: Run AtChem2
+        run: |
           ./atchem2
           if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+
+      - name: Indent and style tests
+        run: |
           make indenttest
           make styletest
           make clean
-          gem list
+      
+      - name: Run tests
+        run: |
+          export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean

@@ -1,4 +1,4 @@
-AtChem2  [![Build Status](https://travis-ci.org/AtChem/AtChem2.svg?branch=master)](https://travis-ci.org/AtChem/AtChem2)  [![codecov](https://codecov.io/gh/AtChem/AtChem2/branch/master/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
+AtChem2  ![CI](https://github.com/AtChem/AtChem2/workflows/CI/badge.svg)  [![codecov](https://codecov.io/gh/AtChem/AtChem2/branch/master/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
 =======
 
 

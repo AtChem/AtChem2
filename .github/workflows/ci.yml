@@ -60,9 +60,8 @@ jobs:
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       - name: Build AtChem2
-        with: 
-          env:
-            FORT_VERSION: ${{ matrix.fortran }}
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
@@ -86,9 +85,8 @@ jobs:
           if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
       
       - name: Run tests
-        with: 
-          env:
-            FORT_VERSION: ${{ matrix.fortran }}
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
         run: |
           # Run unit tests
           export PATH=$PATH:$PWD/numdiff/bin

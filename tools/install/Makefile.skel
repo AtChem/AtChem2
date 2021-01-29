@@ -45,11 +45,11 @@ OS := $(shell uname -s)
 ifeq ($(GITHUB_ACTIONS),true)
 ifeq ($(RUNNER_OS),Linux)
 # if linux, pass gfortran
-FORT_COMP    = gfortran
+FORT_COMP    = gfortran-$(FORT_VERSION)
 FORT_LIB     = ""
 else
 # if macOS, pass homebrew gfortran
-FORT_COMP    = /usr/local/bin/gfortran-8
+FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
 FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_2/lib/gcc/4.9
 endif
 # if not on GitHub Actions, set the fortran compiler

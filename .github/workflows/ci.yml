@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [7, 8]
+        fortran: [8, 9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -39,12 +39,15 @@ jobs:
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran)
+        with: 
+          env:
+            FORT_VERSION: ${{ matrix.fortran }}
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only
       - name: Install cvode (macOS)
         if: matrix.os == 'macos-latest'
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-8)
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
       
       # both OSs
       - name: Install openlibm
@@ -57,6 +60,9 @@ jobs:
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       - name: Build AtChem2
+        with: 
+          env:
+            FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
@@ -80,6 +86,9 @@ jobs:
           if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
       
       - name: Run tests
+        with: 
+          env:
+            FORT_VERSION: ${{ matrix.fortran }}
         run: |
           # Run unit tests
           export PATH=$PATH:$PWD/numdiff/bin

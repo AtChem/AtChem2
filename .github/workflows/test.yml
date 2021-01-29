@@ -1,5 +1,3 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
 # Controls when the action will run. 
@@ -15,7 +13,7 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+    # The type of runner that the job will run on - we use a matrix to run on two OSs
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -57,19 +55,28 @@ jobs:
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
       
-      - name: Run AtChem2
-        run: |
-          ./atchem2
-          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
-          make clean
-          make tests
-
       - name: Indent and style tests
         run: |
           make indenttest
           make styletest
           make clean
+
+      - name: Run AtChem2
+        run: |
+          # Run Atchem2
+          ./atchem2
+          # Upload 'build' coverage to codecov
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+      
+      - name: Run tests
+        run: |
+          # Run unit tests
+          export PATH=$PATH:$PWD/numdiff/bin
+          make unittests
+          # Upload 'unittests' coverage to codecov
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          make clean
+          # Run full build tests - this will upload 'tests' coverage to codecov for each test
+          make tests
+
           

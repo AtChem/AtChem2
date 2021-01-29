@@ -56,19 +56,14 @@ jobs:
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ; 
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
-          echo $PWD
-          ls
       
       - name: Indent and style tests
         run: |
           make indenttest
           make styletest
-          make clean
 
       - name: Run AtChem2
         run: |
-          echo $PWD
-          ls
           # Run Atchem2
           ./atchem2
           # Upload 'build' coverage to codecov

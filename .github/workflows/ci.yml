@@ -31,7 +31,8 @@ jobs:
         run: |
           echo ${{ matrix.fortran }}
           echo gfortran-${{ matrix.fortran }}
-          $(which gfortran)
+          echo $(which gfortran)
+          echo $(which gfortran-${{ matrix.fortran }})
           ls -al /usr/bin
           ls -al /usr/local/bin
 

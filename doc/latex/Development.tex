@@ -52,11 +52,11 @@ The coding guidelines for Fortran are detailed in Sect.\ref{sec:style-guide}.
 % -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:test-suite}
 
-AtChem2 uses \href{https://travis-ci.org/}{Travis CI} for
+AtChem2 uses \href{https://github.com/features/actions/}{GitHub Actions} for
 \textbf{continuous integration} testing. This programming approach
 ensures that changes to the code do not modify the behaviour and the
 results of the software in an unintended fashion. The Test Suite is in
-the \texttt{travis/} directory and consists of a series of tests and
+the \texttt{test/} directory and consists of a series of tests and
 short model runs that check the model functionality and calculations
 against known outputs. The \href{https://codecov.io/}{Codecov} service
 is used to verify that the Test Suite covers a significant fraction of
@@ -94,7 +94,7 @@ Testsuite PASSED
 
 The Test Suite is automatically run every time a Pull Request (PR) is
 created or updated on the main github repository (\texttt{AtChem/AtChem2}).
-The Pull Request triggers a build on Travis CI which runs the entire
+The Pull Request triggers a build on GitHub Actions which runs the entire
 Test Suite on two architectures (Linux and macOS) with one compiler
 (GNU \texttt{gfortran}). The CI tester performs the following tasks on
 each architecture:
@@ -121,11 +121,11 @@ each architecture:
 Every test must pass to allow the full CI to pass. This is indicated
 by the message ``All checks have passed'' on the github PR page. Pull
 Requests should only be merged into the \texttt{master\ branch} once
-Travis CI has completed with passes on both architectures.
+GitHub Actions has completed with passes on both architectures.
 
 \subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
 
-The unit tests are in the \texttt{travis/unit\_tests} directory and
+The unit tests are in the \texttt{test/unit\_tests} directory and
 require the FRUIT optional dependency (which requires Ruby,
 Sect.~\ref{subsec:optional-dependencies}). To add new unit tests,
 follow the procedure outlined below:
@@ -176,7 +176,7 @@ summary -- there should be a line associated to each of the
 \subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
 
 Each behaviour test (\texttt{\$TESTNAME}) is contained in its own
-subdirectory inside the \texttt{travis/tests/} directory. A behaviour
+subdirectory inside the \texttt{test/tests/} directory. A behaviour
 test requires the following files and directory structure:
 
 \begin{verbatim}
@@ -226,9 +226,9 @@ Sect.~\ref{sec:constraints} for details).
 
 The file \texttt{\$TESTNAME.out.cmp} should contain the exact copy of
 the expected terminal printout. Each behaviour test is briefly
-described in the \texttt{travis/tests/INFO.md} file, which should be
+described in the \texttt{test/tests/INFO.md} file, which should be
 updated after a new test is added. New tests added to the
-\texttt{travis/tests/} directory are automatically picked up by the
+\texttt{test/tests/} directory are automatically picked up by the
 \texttt{Makefile} when running \verb|make test| or \verb|make alltests|
 from the \maindir.
 

@@ -50,7 +50,7 @@ FORT_LIB     = ""
 else
 # if macOS, pass homebrew gfortran
 FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
-FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_2/lib/gcc/4.9
+FORT_LIB     = ""
 endif
 # if not on GitHub Actions, set the fortran compiler
 else

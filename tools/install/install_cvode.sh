@@ -21,7 +21,7 @@
 
 # Query the operating system, and set LAPACK_LIBS to the default location
 OS=$(uname -s)
-if [ "$OS" == 'Darwin' ]; then
+if [ "$OS" = 'Darwin' ]; then
   LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
 else
   LAPACK_LIBS=/usr/lib/liblapack.so:/usr/lib/libblas.so

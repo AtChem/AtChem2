@@ -36,7 +36,7 @@ rm numdiff-5.8.1.tar.gz
 
 cd numdiff-5.8.1/
 OS=$(uname -s)
-if [ "$OS" == 'Darwin' ]; then
+if [ "$OS" = 'Darwin' ]; then
   ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
 else
   ./configure --prefix=$1/numdiff

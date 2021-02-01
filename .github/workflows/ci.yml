@@ -35,7 +35,9 @@ jobs:
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
+        run: |
+          sudo ln -f -s /usr/bin/gfortran-${{ matrix.fortran }} /usr/bin/gfortran
+          ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # ubuntu only
       - name: Check for gcov

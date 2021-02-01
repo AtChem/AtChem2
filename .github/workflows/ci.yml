@@ -90,6 +90,7 @@ jobs:
       
       - name: Run tests
         # Set FORT_VERSION for use inside the Makefile
+        if: matrix.fortran == '8'
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |

@@ -35,17 +35,7 @@ jobs:
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo ln -f -s /usr/bin/gfortran-${{ matrix.fortran }} /usr/bin/gfortran
-          ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
-
-      # ubuntu only
-      - name: Check for gcov
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          which gcov
-          gcov --version
-          ls -al /usr/bin/gcov*
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only
       - name: Install cvode (macOS)
@@ -86,7 +76,7 @@ jobs:
           # Run Atchem2
           ./atchem2
           # Upload 'build' coverage to codecov
-          if [[ "$RUNNER_OS" == "Linux" && ${{ matrix.fortran }} == '8' ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
+          if [[ "$RUNNER_OS" == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
       
       - name: Run tests
         # Set FORT_VERSION for use inside the Makefile
@@ -98,7 +88,7 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           # Upload 'unittests' coverage to codecov
-          if [[ "$RUNNER_OS" == "Linux" && ${{ matrix.fortran }} == '8' ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          if [[ "$RUNNER_OS" == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean
           # Run full build tests - this will upload 'tests' coverage to codecov for each test
           make tests

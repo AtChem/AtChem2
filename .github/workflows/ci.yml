@@ -1,0 +1,88 @@
+name: CI
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on - we use a matrix to run on two OSs
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        fortran: [8, 9]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      # ubuntu only
+      - name: Install cvode (ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
+
+      # macOS only
+      - name: Install cvode (macOS)
+        if: matrix.os == 'macos-latest'
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
+      
+      # both OSs
+      - name: Install openlibm
+        run: ./tools/install/install_openlibm.sh $PWD
+      
+      - name: Install numdiff
+        run: ./tools/install/install_numdiff.sh $PWD
+      
+      - name: Install fruit
+        run: sudo ./tools/install/install_fruit.sh $PWD
+
+      - name: Build AtChem2
+        # Set FORT_VERSION for use inside the Makefile (called from build_atchem2.sh)
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
+        run: |
+          cp tools/install/Makefile.skel Makefile
+          ./build/build_atchem2.sh ./mcm/mechanism_test.fac
+          if [ $RUNNER_OS != 'Linux' ] ; then 
+            install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ; 
+            install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ; 
+            install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ; 
+            install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
+          fi
+      
+      - name: Indent and style tests
+        run: |
+          make indenttest
+          make styletest
+
+      - name: Run AtChem2
+        run: |
+          # Run Atchem2
+          ./atchem2
+          # Upload 'build' coverage to codecov
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F build ; fi
+      
+      - name: Run tests
+        # Set FORT_VERSION for use inside the Makefile
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
+        run: |
+          # Run unit tests
+          export PATH=$PATH:$PWD/numdiff/bin
+          make unittests
+          # Upload 'unittests' coverage to codecov
+          if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          make clean
+          # Run full build tests - this will upload 'tests' coverage to codecov for each test
+          make tests

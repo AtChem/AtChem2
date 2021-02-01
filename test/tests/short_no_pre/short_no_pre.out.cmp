@@ -1,0 +1,180 @@
+AtChem2 v1.2.1
+
+-------------
+ Directories
+-------------
+ Model directory is: model
+ Output directory is: test/tests/short_no_pre/output
+ Reaction Rates directory is: test/tests/short_no_pre/output/reactionRates
+ Configuration directory is: test/tests/short_no_pre/model/configuration
+ Constraints directory is: test/tests/short_no_pre/model/constraints
+ Environment Constraints directory is: test/tests/short_no_pre/model/constraints/environment
+ Photolysis Constraints directory is: test/tests/short_no_pre/model/constraints/photolysis
+ Species Constraints directory is: test/tests/short_no_pre/model/constraints/species
+ MCM directory is: mcm
+ Shared library is: test/tests/short_no_pre/model/configuration/mechanism.so
+
+-----------------------
+ Species and reactions
+-----------------------
+ Number of Species   = 104
+ Number of Reactions = 324
+
+ Size of lhs = 510
+ Size of rhs = 558
+
+ Reading reactants (lhs) from mechanism.reac...
+ Reading products (rhs) from mechanism.prod...
+ Finished reading lhs and rhs data.
+
+ Reading species names from mechanism.species...
+ Finished reading species names.
+
+ Reading initial concentrations...
+      1 CH3OH                                                    3.100E+09
+      2 NO2                                                      6.200E+09
+ Finished reading initial concentrations.
+
+----------------------------------------
+ Species requiring detailed rate output
+----------------------------------------
+ Reading which species require detailed rate output...
+      1 HO2                                               
+      2 OH                                                
+ Finished reading which species require detailed rate output.
+ Species requiring detailed rate output (number of species found): 2
+
+ Reading ro2 numbers from mechanism.ro2...
+ Finished reading ro2 numbers.
+ Reading solver parameters from file...
+ ------------------
+ Solver parameters:
+ ------------------
+            atol:   1.000E-03
+            rtol:   1.000E-04
+       deltaMain:   1.000E-04
+        lookBack:         100
+         maxStep:   1.000E+02
+ preconBandUpper:         750
+ preconBandLower:         750
+      solverType: SPGMR                         
+ ------------------
+
+ Finished reading solver parameters from file.
+
+ Reading model parameters from file...
+ -----------------
+ Model parameters:
+ -----------------
+                                   number of steps:           3
+                                         step size:   0.300E+03
+                      species interpolation method: piecewise linear 
+                   conditions interpolation method: piecewise linear 
+                 rates output step size, ROPA/RODA:         600
+                                  model start time:       43200
+                         jacobian output step size:         300
+                                          latitude:   0.529E+02
+                                         longitude:   0.000E+00
+                   reaction rates output step size:         300
+                                    day/month/year:  19/11/2008
+ -----------------
+
+ Finished reading model parameters from file.
+
+---------------------
+ Species of Interest
+---------------------
+ Reading concentration output from file...
+ Finished reading concentration output from file.
+ Output required for concentration of 1 species:
+      1 O3                                                
+
+------------
+ Photolysis
+------------
+ Reading photolysis numbers from file...
+      1
+ ...
+     61
+ Finished reading photolysis numbers.
+ Number of photolysis numbers: 35
+ Looking for photolysis constants file...
+ No photolysis constants file found.
+ No photolysis constants applied, so trying constrained photolysis rates file...
+ Looking for photolysis constraints file...
+ Checking that photolysis constraints exist in file...
+ Photolysis constraint file is empty, so all photolysis rates will be calculated.
+ Reading all photolysis rates from file...
+      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
+ ...
+     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
+ Finished reading all photolysis rates.
+ Number of all photolysis rates: 35
+
+
+-----------------------
+ Environment variables
+-----------------------
+ Reading environment variables...
+ Number of environment variables: 11
+ 1      TEMP                   281.95
+ 2      PRESS                 1013.25
+ 3      RH                    NOTUSED
+ 4      H2O                  3.06e+17
+ 5      DEC                     -0.34
+ 6      BLHEIGHT              NOTUSED
+ 7      DILUTE                NOTUSED
+ 8      JFAC                  NOTUSED
+ 9      ROOF                   CLOSED
+ 10     ASA                   NOTUSED
+ Finished reading environment variables.
+
+ Checking for constrained environment variables...
+ Finished checking for constrained environment variables.
+
+
+-------------
+ Constraints
+-------------
+ Counting the variable-concentration species to be constrained (in file speciesConstrained.config)...
+ Finished counting the names of variable-concentration constrained species.
+ Number of names of variable-concentration constrained species: 0
+ Counting the fixed-concentration species to be constrained (in file speciesConstant.config)...
+ Finished counting the names of fixed-concentration constrained species.
+ Number of names of fixed-concentration constrained species: 0
+ Setting size of constraint arrays, n = 0
+ Skipped reading the names of variable-concentration constrained species
+ Reading concentration data for variable-concentration constrained species...
+ Reading in the names and concentration of the fixed constrained species (in file speciesConstant.config)...
+ Finished reading in the names and concentration of fixed-concentration species.
+ Finished reading constrained species.
+ Initialising concentrations of constrained species...
+ Finished initialising concentrations of constrained species.
+
+---------------
+ Problem stats
+---------------
+                        neq = 104
+ numberOfConstrainedSpecies = 0
+                         t0 =       4.320E+04
+
+ setting maxnumsteps ier = 0
+ setting maxstep ier = 0
+
+-----------
+ Model run
+-----------
+ time = 43500
+ time = 43800
+ time = 44100
+
+------------------
+ Final statistics
+------------------
+ No. steps = 10   No. f-s = 14   No. J-s = 0   No. LU-s = 0
+ No. nonlinear iterations = 10
+ No. nonlinear convergence failures = 0
+ No. error test failures = 0
+
+ Runtime = 0
+ Deallocating memory.

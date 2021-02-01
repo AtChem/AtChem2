@@ -41,18 +41,18 @@ SHAREDLIBDIR = model/configuration
 # detect operating system
 OS := $(shell uname -s)
 
-# if on Travis
-ifeq ($(TRAVIS),true)
-ifeq ($(TRAVIS_OS_NAME),linux)
+# if on GitHub Actions
+ifeq ($(GITHUB_ACTIONS),true)
+ifeq ($(RUNNER_OS),Linux)
 # if linux, pass gfortran
-FORT_COMP    = gfortran
+FORT_COMP    = gfortran-$(FORT_VERSION)
 FORT_LIB     = ""
 else
 # if macOS, pass homebrew gfortran
-FORT_COMP    = /usr/local/Cellar/gcc@4.9/4.9.4_2/bin/gfortran-4.9
-FORT_LIB     = /usr/local/Cellar/gcc@4.9/4.9.4_2/lib/gcc/4.9
+FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
+FORT_LIB     = ""
 endif
-# if not on Travis, set the fortran compiler
+# if not on GitHub Actions, set the fortran compiler
 else
 ifeq ($(FORTC),"gnu")
 FORT_COMP    = gfortran
@@ -68,13 +68,13 @@ endif
 ifeq ($(FORT_COMP),gfortran)
 FFLAGS       =  -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
 FSHAREDFLAGS =  -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
-LIBDIR       =  /usr/lib/:$(CVODELIB)
 endif
 ifeq ($(FORT_COMP),ifort)
 FFLAGS       = -free -warn
 FSHAREDFLAGS =
-LIBDIR       =
 endif
+
+LIBDIR       =  /usr/lib/:$(CVODELIB)
 
 # set rpath flag
 ifeq ($(OS),Linux)
@@ -102,24 +102,24 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # setup FRUIT
-UNITTESTDIR = travis/unit_tests
+UNITTESTDIR = test/unit_tests
 fruit_code = $(FRUITDIR)/src/fruit.f90
-unittest_code = $(UNITTEST_SRCS) $(shell ls travis/unit_tests/*_test.f90 )
+unittest_code = $(UNITTEST_SRCS) $(shell ls test/unit_tests/*_test.f90 )
 unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90
 all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
 fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
 # copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
-	@cp travis/fruit_generator.rb $(UNITTESTDIR)
+	@cp test/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
 # build fruit_driver.exe from the individual unit tests
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
-# search travis/tests/ for all subdirectories, which should reflect the full list of tests
-TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g')
+# search test/tests/ for all subdirectories, which should reflect the full list of tests
+TESTS := $(shell ls -d test/tests/*/ | sed 's,test/tests/,,g' | sed 's,/,,g')
 
 # ================================================================== #
 # Makefile rules
@@ -127,17 +127,17 @@ TESTS := $(shell ls -d travis/tests/*/ | sed 's,travis/tests/,,g' | sed 's,/,,g'
 all: $(AOUT)
 
 indenttest:
-	@./travis/run_indent_test.sh
+	@./test/run_indent_test.sh
 
 styletest:
-	@./travis/run_style_test.sh
+	@./test/run_style_test.sh
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 tests:
 	@echo "Make: Running the following tests:" $(TESTS)
-	@./travis/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+	@./test/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
 alltests: indenttest styletest unittests tests
 
@@ -150,7 +150,7 @@ clean:
 	rm -f *.gcda *.gcno *.xml
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
-	rm -f travis/tests/*/*.out travis/tests/*/*.output travis/tests/*/reactionRates/*[0-9]
+	rm -f test/tests/*/*.out test/tests/*/*.output test/tests/*/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
 	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
 

@@ -110,7 +110,7 @@ file must be the same as the name of the chemical species -- e.g.,
 \subsubsection{Photolysis rates}
 
 Any photolysis rate in the chemical mechanism can be constrained. The
-photolysis rates are identified as \verb|J<i>|, where \texttt{i} is
+photolysis rates are identified as \texttt{J<i>}, where \texttt{i} is
 the ID number assigned by the MCM to each photolysis reaction
 (Sect.~\ref{sec:photolysis-rates}). To constrain a photolysis rate add
 its name to \texttt{photolysisConstrained.config} and create a file
@@ -298,7 +298,7 @@ want, or need, to change the Fortran code (\texttt{src/*.f90}), in
 which case the model needs to be recompiled. If the \texttt{.fac} file
 has also been changed, the \texttt{build\_atchem2.sh} script must be
 used; otherwise -- if only the Fortran code has been changed --
-executing the \verb|make| command from the \maindir\ is enough to
+executing the command \verb|make| from the \maindir\ is enough to
 recompile the model.
 
 % -------------------------------------------------------------------- %

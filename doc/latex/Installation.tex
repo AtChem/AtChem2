@@ -27,7 +27,7 @@ following tools:
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
   with Python v2 and v3. Support for Python v2 will be removed in
   future versions of AtChem2.}
-\item make and cmake
+\item make, cmake
 \item Ruby (optional)
 \end{itemize}
 
@@ -38,7 +38,7 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item BLAS and LAPACK
+\item BLAS, LAPACK
 \item CVODE
 \item openlibm
 \item numdiff (optional)
@@ -58,15 +58,19 @@ Sect.~\ref{sec:general-information} for details). The source code can
 be obtained in two ways:
 
 \begin{itemize}
-\item with \textbf{git}:
+\item with \textbf{git} (This method will download the development
+  version and it is recommended if you want to contribute to the model
+  development):
   \begin{enumerate}
   \item Open the terminal. Move to the directory where you want to
     install AtChem2.
-  \item Execute \verb|git clone https://github.com/AtChem/AtChem2.git|
-    (if using HTTPS) or \verb|git clone git@github.com:AtChem/AtChem2.git|
-    (if using SSH). This method will download the development version
-    and it is recommended if you want to contribute to the model
-    development.
+  \item Execute:
+    \begin{itemize}
+      \item if using HTTPS:
+        \verb|git clone https://github.com/AtChem/AtChem2.git|
+      \item if using SSH:
+        \verb|git clone git@github.com:AtChem/AtChem2.git|
+    \end{itemize}
   \end{enumerate}
 \item with the \textbf{archive file}:
   \begin{enumerate}

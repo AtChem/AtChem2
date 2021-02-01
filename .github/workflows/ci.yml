@@ -95,7 +95,7 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           # Upload 'unittests' coverage to codecov
-          if [[ "$RUNNER_OS" == "Linux" && ${{ matrix.fortran }} == '8' ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+          # if [[ "$RUNNER_OS" == "Linux" && ${{ matrix.fortran }} == '8' ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean
           # Run full build tests - this will upload 'tests' coverage to codecov for each test
           make tests

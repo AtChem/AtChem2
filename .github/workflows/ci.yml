@@ -84,7 +84,8 @@ jobs:
           # Run Atchem2
           ./atchem2
           # Upload 'build' coverage to codecov
-          if [[ "$RUNNER_OS" == "Linux" ]]; then ln -f -s /usr/bin/gcov-{{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
+          echo  ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov
+          if [[ "$RUNNER_OS" == "Linux" ]]; then ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
       
       - name: Run tests
         # Set FORT_VERSION for use inside the Makefile

@@ -43,7 +43,7 @@ jobs:
         run: |
           which gcov
           gcov --version
-          ls $(which gcov)
+          ls /usr/bin/gcov*
 
       # macOS only
       - name: Install cvode (macOS)

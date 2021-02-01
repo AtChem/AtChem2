@@ -17,7 +17,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-latest, macos-latest]
         fortran: [8, 9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -78,6 +78,10 @@ jobs:
 
       - name: Run AtChem2
         run: |
+          ls /home/runner/work/AtChem2/AtChem2/cvode/lib/
+          echo $PATH
+          echo $LD_PATH
+          echo $LD_LIBRARY_PATH
           # Run Atchem2
           ./atchem2
           # Upload 'build' coverage to codecov

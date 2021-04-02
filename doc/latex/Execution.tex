@@ -110,7 +110,7 @@ file must be the same as the name of the chemical species -- e.g.,
 \subsubsection{Photolysis rates}
 
 Any photolysis rate in the chemical mechanism can be constrained. The
-photolysis rates are identified as \verb|J<i>|, where \texttt{i} is
+photolysis rates are identified as \texttt{J<i>}, where \texttt{i} is
 the ID number assigned by the MCM to each photolysis reaction
 (Sect.~\ref{sec:photolysis-rates}). To constrain a photolysis rate add
 its name to \texttt{photolysisConstrained.config} and create a file
@@ -122,11 +122,11 @@ name of the file must be the same as the name of the photolysis rate
 
 The files with the constraint data are text files with two columns and
 no header: the first column is the time in seconds from midnight of
-the start date (Sect.~\ref{sec:model-parameters}), the second column
-is the value of the variable in the appropriate unit. For the chemical
-species the unit is molecule cm$^{-3}$ and for the photolysis rates
-the unit is s$^{-1}$; for the units of the environment variables, see
-Sect.~\ref{sec:environment-variables}. For example:
+the start date (in UTC, Sect.~\ref{sec:model-parameters}), the second
+column is the value of the variable in the appropriate unit. For the
+chemical species the unit is molecule cm$^{-3}$ and for the photolysis
+rates the unit is s$^{-1}$; for the units of the environment
+variables, see Sect.~\ref{sec:environment-variables}. For example:
 
 \begin{verbatim}
 -900   73.21
@@ -147,7 +147,8 @@ start date''. Having data points with negative time can be useful to
 allow correct interpolation of the variables at the beginning of the
 model run. This is because the model constraints \emph{must cover} the
 same amount of time, or preferably more, as the intended model runtime
-(Sect.~\ref{subsec:interpolation}).
+to avoid interpolation errors -- see Sect.~\ref{subsec:interpolation}
+for details.
 
 For example: if the model starts at 41400 seconds (day 1 at 11:30) and
 stops at 225900 seconds (day 3 at 14:45), then the first and the last
@@ -186,20 +187,41 @@ chemical species is called once for each of the constrained species in
 each of the constrained species.
 
 As mentioned in Sect.~\ref{subsec:constraint-files}, the model start
-and stop time \emph{must be} within the time interval of the
-constrained data to avoid interpolation errors or model crashes. If
-data is not supplied for the entire runtime interval, the final value
-of the constrained variable will be used for all times
+and stop times \emph{must be} within the time interval of all the
+constrained data to avoid interpolation errors or model crashes.
+
+\begin{verbatim}
+                  start            stop
+model run           |----------------|
+constraint 1    |---------------------------|
+constraint 2       |------------------|
+constraint 3     |-----------------------|
+\end{verbatim}
+
+If constrained data are not supplied for the entire runtime interval,
+the final value of the constrained variable will be used for all times
 \emph{before the first} data point and \emph{after the last} data
-point. If this situation occurs, a warning is printed to the terminal
-for all data evaluations outside of the supplied time
-interval~\footnote{This behaviour is likely to change in future
-  versions of AtChem2, at least to avoid the situation where the last
-  value is used for all times before the first data point (see issue
-  \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}. In any
-case, and to avoid errors, it is good practice to always provide
-constraint data that include a short period before the start time and
-a short period after the stop time.
+point. When this situation occurs, a warning is printed to the
+terminal for all data evaluations outside of the supplied time
+interval:
+
+\begin{verbatim}
+ error in piecewise linear interpolation
+  4.3205895E+05 720  3.0000000E+04
+ error in piecewise linear interpolation
+  4.3205895E+05 720  0.0000000E+00
+\end{verbatim}
+
+Changing the \textbf{model start time} and/or the \textbf{number of steps}
+in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters})
+is usually enough to solve the problem~\footnote{This behaviour is
+  likely to change in future versions of AtChem2, at least to avoid
+  the situation where the last value is used for all times before the
+  first data point (see issue
+  \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}.
+In any case, and to avoid errors, it is good practice to always
+provide constraint data that include a short period before the start
+time and a short period after the stop time.
 
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
@@ -298,7 +320,7 @@ want, or need, to change the Fortran code (\texttt{src/*.f90}), in
 which case the model needs to be recompiled. If the \texttt{.fac} file
 has also been changed, the \texttt{build\_atchem2.sh} script must be
 used; otherwise -- if only the Fortran code has been changed --
-executing the \verb|make| command from the \maindir\ is enough to
+executing the command \verb|make| from the \maindir\ is enough to
 recompile the model.
 
 % -------------------------------------------------------------------- %

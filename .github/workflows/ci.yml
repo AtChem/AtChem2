@@ -37,7 +37,7 @@ jobs:
 
       # macOS only
       - name: Install gfortran-8 on macOS
-        if: matrix.os == 'macos-latest' && matrix.gfortran == 8
+        if: matrix.os == 'macos-latest' && matrix.fortran == 8
         run: brew install gcc@8
 
       # ubuntu only

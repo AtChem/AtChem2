@@ -24,6 +24,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
         fortran: [9]
+        include:
+        - os: macos-latest
+          fortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -31,6 +34,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
+
+      # macOS only
+      - name: Install gfortran-8 on macOS
+        if: matrix.os == 'macos-latest' && matrix.gfortran == 8
+        run: brew install gcc@8
 
       # ubuntu only
       - name: Install cvode (ubuntu)

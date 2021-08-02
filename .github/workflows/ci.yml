@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [9]
+        fortran: [8, 9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -32,6 +32,18 @@ jobs:
         with:
           fetch-depth: 2
 
+      # Install gfortran 8 since both Ubuntu and macOS don't supply it
+      # macOS only
+      - name: Install gfortran-8 on macOS
+        if: matrix.os == 'macos-latest' && matrix.fortran == 8
+        run: brew install gcc@8
+
+      # ubuntu only
+      - name: Install gfortran-8 on ubuntu
+        if: matrix.os == 'ubuntu-latest' && matrix.fortran == 8
+        run: sudo apt-get install gfortran-8
+
+      # Install cvode
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
@@ -42,6 +54,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
       
+      # Install all dependencies
       # both OSs
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
@@ -52,6 +65,7 @@ jobs:
       - name: Install fruit
         run: sudo ./tools/install/install_fruit.sh $PWD
 
+      # Build AtChem2 and run all tests
       - name: Build AtChem2
         # Set FORT_VERSION for use inside the Makefile (called from build_atchem2.sh)
         env:

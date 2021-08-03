@@ -463,7 +463,15 @@ end module mechanism_mod
             # This code only executes if the break is NOT called, i.e. if the loop runs to completion without the RO2 being
             # found in the species list
             else:
-                ro2_file.write('0 ! error RO2 not in mechanism: ' + ro2List_i + '\n')
+                error_message = ' ****** Warning: RO2 species "' + str(ro2List_i.strip()) + '" NOT found in the mechanism. Please check the RO2 section of your mechansm file for incorrect species names! ******'
+                error_message = ''.join([
+                  ' ****** ',
+                  'Error: RO2 species "',
+                  str(ro2List_i.strip()),
+                  '" NOT found in the mechanism. Please check the RO2 section',
+                  ' of your mechanism file for incorrect species names!',
+                  ' ******'])
+                raise RuntimeError(error_message)
 
 
 ## ------------------------------------------------------------------ ##
@@ -492,4 +500,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except RuntimeError as e:
+        print(str(e))
+        sys.exit(os.EX_DATAERR)

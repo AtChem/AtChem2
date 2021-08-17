@@ -58,9 +58,7 @@ jobs:
       # ubuntu only
       - name: Install cvode (ubuntu)
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
-          pushd /home/runner/work/AtChem2/AtChem2/sundials-2.7.0/build/LapackTest && make && popd
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only
       - name: Install cvode (macOS)

@@ -24,7 +24,7 @@ OS=$(uname -s)
 if [ "$OS" = 'Darwin' ]; then
   LAPACK_LIBS=/usr/lib/liblapack.dylib\:/usr/lib/libblas.dylib
 else
-  LAPACK_LIBS=/usr/lib/liblapack.so\:/usr/lib/libblas.so
+  LAPACK_LIBS=/usr/lib/x86_64-linux-gnu/libopenblas.so
 fi
 
 # Ensure a first argument is provided, and that it is an existing directory
@@ -87,6 +87,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
     -DBUILD_IDAS:BOOL=OFF \
     -DBUILD_KINSOL:BOOL=OFF \
     -DLAPACK_ENABLE:BOOL=ON \
+    -DLAPACK_LIRBARIES=$LAPACK_LIBS \
     -DFCMIX_ENABLE:BOOL=ON \
     -DEXAMPLES_ENABLE:BOOL=OFF \
     -DCMAKE_MACOSX_RPATH:BOOL=ON \

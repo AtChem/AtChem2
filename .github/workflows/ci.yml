@@ -54,6 +54,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: sudo apt-get install libopenblas-base libopenblas-dev
 
+      # Check OpenBLAS symbols
+      # ubuntu only
+      - name: Check OpenBLAS symbols
+        if: matrix.os == 'ubuntu-latest'
+        run: nm -gD /usr/lib/x86_64-linux-gnu/libopenblas.so | grep -e '\sdgbtrs_$\|\sdcopy_$\|\sdscal_$\|\sdgetrf_$\|\sdgbtrf_$\|\sdgetrs_$'
+
       # Install cvode
       # ubuntu only
       - name: Install cvode (ubuntu)

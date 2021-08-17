@@ -22,8 +22,10 @@
 # Query the operating system, and set LAPACK_LIBS to the default location
 OS=$(uname -s)
 if [ "$OS" = 'Darwin' ]; then
+  LINKER_FLAGS="-Wl,undefined,error"
   LAPACK_LIBS=/usr/local/Cellar/openblas/0.3.17/lib/libopenblas.dylib
 else
+  LINKER_FLAGS="-Wl,--no-undefined"
   LAPACK_LIBS=/usr/lib/x86_64-linux-gnu/libopenblas.so
 fi
 
@@ -80,7 +82,7 @@ cd build
 cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
     -DCMAKE_C_COMPILER:FILEPATH=gcc \
     -DCMAKE_Fortran_COMPILER=$FORT_COMP \
-    -DCMAKE_SHARED_LINKER_FLAGS="-Wl,--no-undefined" \
+    -DCMAKE_SHARED_LINKER_FLAGS=${LINKER_FLAGS} \
     -DBUILD_ARKODE:BOOL=OFF \
     -DBUILD_CVODE:BOOL=ON \
     -DBUILD_CVODES:BOOL=OFF \

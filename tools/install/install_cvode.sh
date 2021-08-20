@@ -19,14 +19,6 @@
 #   ./install_cvode.sh /path/to/install/directory
 #   ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler
 
-# Query the operating system, and set LAPACK_LIBS to the default location
-OS=$(uname -s)
-if [ "$OS" = 'Darwin' ]; then
-  LAPACK_LIBS=/usr/lib/liblapack.dylib:/usr/lib/libblas.dylib
-else
-  LAPACK_LIBS=/usr/lib/liblapack.so:/usr/lib/libblas.so
-fi
-
 # Ensure a first argument is provided, and that it is an existing directory
 if [ -z "$1" ] ; then
   echo "Please provide an argument to tools/install/install_cvode.sh"
@@ -86,8 +78,7 @@ cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
     -DBUILD_IDA:BOOL=OFF \
     -DBUILD_IDAS:BOOL=OFF \
     -DBUILD_KINSOL:BOOL=OFF \
-    -DLAPACK_ENABLE:BOOL=ON \
-    -DLAPACK_LIBRARIES=$LAPACK_LIBS \
+    -DLAPACK_ENABLE:BOOL=OFF \
     -DFCMIX_ENABLE:BOOL=ON \
     -DEXAMPLES_ENABLE:BOOL=OFF \
     -DCMAKE_MACOSX_RPATH:BOOL=ON \

@@ -21,8 +21,8 @@ function test_output_text {
   # $3 start line number of section to compare
   # $4 end line number of section to compare
   # $5 name of test
-  file1=test/tests/$5/output/temporary_file.tmp
-  file2=test/tests/$5/output/temporary_file.tmp.cmp
+  file1=tests/tests/$5/output/temporary_file.tmp
+  file2=tests/tests/$5/output/temporary_file.tmp.cmp
   ndselect -b $3 -e $4 -o $file1 $1
   ndselect -b $3 -e $4 -o $file2 $2
   # Save output of test_output_file
@@ -62,7 +62,7 @@ function find_string {
 # $skip_test. This requires extra machinery to handle splitting the file into
 # sections between the skipped lines, and to numdiff those sections.
 
-TESTS_DIR=test/tests
+TESTS_DIR=tests/tests
 RESULTS_FILE=$TESTS_DIR/testsuite.log
 export DYLD_LIBRARY_PATH=$2
 

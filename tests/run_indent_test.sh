@@ -10,23 +10,23 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script executes the style test on the Fortran files to ensure
+# This script executes the indent test on the Fortran files to ensure
 # that they conform to the coding guidelines, described in the manual
 # (doc/AtChem2-Manual.pdf)
 
-RESULTS_FILE=test/tests/testsuite.log
+RESULTS_FILE=tests/tests/testsuite.log
 
-echo "Running style script on:"
+echo "Running indent script on:"
 for file in src/*.f90 ; do
   echo $file
-  python ./tools/fix_style.py $file $file.cmp &>/dev/null
-  this_style_file_failures=$(diff -q $file $file.cmp)
+  python ./tools/fix_indent.py $file $file.cmp &>/dev/null
+  this_indent_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
   rm $file.cmp
   if [ $exitcode -eq 1 ]; then
-    failed_style="$failed_style
+    failed_indent="$failed_indent
 
-$this_style_file_failures"
+$this_indent_file_failures"
     echo $file "FAILED"
   elif [ $exitcode -ne 0 ]; then
     echo "diff gave an error on" $file ". Aborting."
@@ -35,14 +35,14 @@ $this_style_file_failures"
 done
 
 echo ""
-if [ -z "$failed_style" ]; then
-  echo "Style test PASSED"
-  style_test_passed=0
+if [ -z "$failed_indent" ]; then
+  echo "Indent test PASSED"
+  indent_test_passed=0
 else
-  echo "Style test FAILED"
-  echo "$failed_style" >> $RESULTS_FILE
-  style_test_passed=1
+  echo "Indent test FAILED"
+  echo "$failed_indent" >> $RESULTS_FILE
+  indent_test_passed=1
 fi
-echo "Style script finished"
+echo "Indent script finished"
 echo ""
-exit $style_test_passed
+exit $indent_test_passed

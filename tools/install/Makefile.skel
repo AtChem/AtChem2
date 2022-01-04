@@ -102,24 +102,24 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # setup FRUIT
-UNITTESTDIR = test/unit_tests
+UNITTESTDIR = tests/unit_tests
 fruit_code = $(FRUITDIR)/src/fruit.f90
-unittest_code = $(UNITTEST_SRCS) $(shell ls test/unit_tests/*_test.f90 )
+unittest_code = $(UNITTEST_SRCS) $(shell ls tests/unit_tests/*_test.f90 )
 unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90
 all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
 fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
 # copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
-	@cp test/fruit_generator.rb $(UNITTESTDIR)
+	@cp tests/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
 # build fruit_driver.exe from the individual unit tests
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
-# search test/tests/ for all subdirectories, which should reflect the full list of tests
-TESTS := $(shell ls -d test/tests/*/ | sed 's,test/tests/,,g' | sed 's,/,,g')
+# search tests/tests/ for all subdirectories, which should reflect the full list of tests
+TESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')
 
 # ================================================================== #
 # Makefile rules
@@ -127,19 +127,19 @@ TESTS := $(shell ls -d test/tests/*/ | sed 's,test/tests/,,g' | sed 's,/,,g')
 all: $(AOUT)
 
 indenttest:
-	@./test/run_indent_test.sh
+	@./tests/run_indent_test.sh
 
 styletest:
-	@./test/run_style_test.sh
+	@./tests/run_style_test.sh
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
-tests:
+modeltests:
 	@echo "Make: Running the following tests:" $(TESTS)
-	@./test/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+	@./tests/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-alltests: indenttest styletest unittests tests
+alltests: indenttest styletest unittests modeltests
 
 sharedlib:
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)
@@ -150,7 +150,7 @@ clean:
 	rm -f *.gcda *.gcno *.xml
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
-	rm -f test/tests/*/*.out test/tests/*/*.output test/tests/*/reactionRates/*[0-9]
+	rm -f tests/tests/*/*.out tests/tests/*/*.output tests/tests/*/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
 	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
 

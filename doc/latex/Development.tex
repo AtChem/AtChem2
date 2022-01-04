@@ -92,24 +92,24 @@ Tests            PASSED
 Testsuite PASSED
 \end{verbatim}
 
-The Test Suite is automatically run every time a Pull Request (PR) is
-created or updated on the main github repository (\texttt{AtChem/AtChem2}).
-The Pull Request triggers a build on GitHub Actions which runs the entire
-Test Suite on two architectures (Linux and macOS) with one compiler
-(GNU \texttt{gfortran}). The CI tester performs the following tasks on
-each architecture:
+The Test Suite is automatically run every time a Pull Request (PR) is created
+or updated on the main github repository (\texttt{AtChem/AtChem2}).  The Pull
+Request triggers a build on GitHub Actions which runs the entire Test Suite on
+two architectures (Linux and macOS) using two versions (v8 and v9) of the GNU
+\texttt{gfortran} compiler. The CI tester performs the following tasks on each
+architecture:
 
 \begin{itemize}
 \item Install \texttt{gfortran}, CVODE, and \texttt{numdiff}:
   \begin{itemize}
-  \item Linux: use \texttt{apt-get} for \texttt{gfortran},
-    \texttt{numdiff}. % and \texttt{liplapack-dev} (a dependency of CVODE).
-    Install CVODE from source~\footnote{\texttt{apt-get} could
-      also be used to install SUNDIALS, but the repository does not
-      currently hold CVODE v2.9.}.
-  \item macOS: use \texttt{Homebrew} for \texttt{gfortran} and
-    \texttt{numdiff}. Install \texttt{cvode} from source.
+  \item Linux: use \texttt{apt-get} to install \texttt{gfortran}. Install
+    CVODE from source~\footnote{\texttt{apt-get} could also be used to install
+      SUNDIALS, but the repository does not currently hold CVODE v2.9.}.
+  \item macOS: use \texttt{Homebrew} to install \texttt{gfortran}. Install
+    CVODE from source.
   \end{itemize}
+\item Install the other dependencies (\texttt{openlibm}, \texttt{numdiff} and
+  FRUIT) using the scripts in the \texttt{tools/install/} directory.
 \item Build and run the example AtChem2 model using the default
   configuration. PASS if it exits with 0.
 \item Build and run the indent and style tests. PASS if all tests pass.

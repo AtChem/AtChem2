@@ -31,14 +31,14 @@ following tools:
 \item Ruby (optional)
 \end{itemize}
 
-Some or all of these tools may already be present on your operating
+Some or all of these tools may already be installed on the operating
 system. Use the \texttt{which} command to find out (e.g.,
 \verb|which python|, \verb|which cmake|, etc\ldots); otherwise, check
 the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item BLAS, LAPACK
+%\item BLAS, LAPACK
 \item CVODE
 \item openlibm
 \item numdiff (optional)
@@ -110,15 +110,15 @@ Sect.~\ref{sec:requirements}.
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
-\subsubsection{BLAS and LAPACK}
+% \subsubsection{BLAS and LAPACK}
 
-BLAS and LAPACK are standard Fortran libraries for linear
-algebra. They are needed to install and compile the CVODE library --
-see below. Usually they are located in the \texttt{/usr/lib/}
-directory (e.g., \texttt{/usr/lib/libblas/} and
-\texttt{/usr/lib/lapack/}). The location may be different, especially
-if you are using a High Performance Computing (HPC) system: check the
-local documentation or ask the system administrator.
+% BLAS and LAPACK are standard Fortran libraries for linear
+% algebra. They are needed to install and compile the CVODE library --
+% see below. Usually they are located in the \texttt{/usr/lib/}
+% directory (e.g., \texttt{/usr/lib/libblas/} and
+% \texttt{/usr/lib/lapack/}). The location may be different, especially
+% if you are using a High Performance Computing (HPC) system: check the
+% local documentation or ask the system administrator.
 
 \subsubsection{CVODE}
 
@@ -135,9 +135,9 @@ directory.
 \item Open the installation script (\texttt{tools/install/install\_cvode.sh})
   with a text editor:
   \begin{itemize}
-  \item If LAPACK and BLAS are not in the default location (see
-    above), change the \texttt{LAPACK\_LIBS} variable for your
-    architecture (Linux or macOS) as appropriate.
+  % \item If LAPACK and BLAS are not in the default location (see
+  %   above), change the \texttt{LAPACK\_LIBS} variable for your
+  %   architecture (Linux or macOS) as appropriate.
   \item If you are not using the \texttt{gcc} compiler
     (\texttt{gfortran}), change the line
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}

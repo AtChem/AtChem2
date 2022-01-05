@@ -1,6 +1,6 @@
-# Ignore compiler generated files, Makefile and executable in this directory
+# Ignore the executable, the Makefile, and the compiler-generated files in this directory
+atchem2
+Makefile
 *.gcda
 *.gcno
 *.xml
-Makefile
-atchem2

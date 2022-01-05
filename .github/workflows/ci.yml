@@ -1,6 +1,6 @@
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   pull_request:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-10.15]
         fortran: [8, 9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -35,7 +35,7 @@ jobs:
       # Install gfortran 8 since both Ubuntu and macOS don't supply it
       # macOS only
       - name: Install gfortran-8 on macOS
-        if: matrix.os == 'macos-latest' && matrix.fortran == 8
+        if: matrix.os == 'macos-10.15' && matrix.fortran == 8
         run: brew install gcc@8
 
       # ubuntu only
@@ -51,17 +51,17 @@ jobs:
 
       # macOS only
       - name: Install cvode (macOS)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-10.15'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
-      
+
       # Install all dependencies
       # both OSs
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
-      
+
       - name: Install numdiff
         run: ./tools/install/install_numdiff.sh $PWD
-      
+
       - name: Install fruit
         run: sudo ./tools/install/install_fruit.sh $PWD
 
@@ -73,13 +73,13 @@ jobs:
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
-          if [ $RUNNER_OS != 'Linux' ] ; then 
-            install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ; 
-            install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ; 
-            install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ; 
+          if [ $RUNNER_OS != 'Linux' ] ; then
+            install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ;
+            install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
+            install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
-      
+
       - name: Indent and style tests
         run: |
           make indenttest
@@ -91,7 +91,7 @@ jobs:
           ./atchem2
           # Upload 'build' coverage to codecov
           if [[ "$RUNNER_OS" == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
-      
+
       - name: Run tests
         # Set FORT_VERSION for use inside the Makefile
         env:

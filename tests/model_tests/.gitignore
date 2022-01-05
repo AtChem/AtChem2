@@ -1,13 +1,13 @@
 # Ignore output/log files and mechanism files of the test runs
+*/output/reactionRates/*
 *.output
 *.out
-*/output/reactionRates/*
+mechanism.f90
+mechanism.o
 mechanism.prod
 mechanism.reac
 mechanism.ro2
 mechanism.species
-mechanism.f90
-mechanism.o
 mechanism.so
 testsuite.log
 

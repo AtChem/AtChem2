@@ -180,40 +180,39 @@ subdirectory inside the \texttt{tests/tests/} directory. A behaviour
 test requires the following files and directory structure:
 
 \begin{verbatim}
-|- model
+|- $TESTNAME
 |  |- configuration
-|  |  |- $TESTNAME.fac
 |  |  |- environmentVariables.config
-|  |  |- mechanism.reac.cmp
-|  |  |- mechanism.prod.cmp
-|  |  |- mechanism.species.cmp
-|  |  |- mechanism.ro2.cmp
-|  |  |- model.parameters
-|  |  |- outputSpecies.config
-|  |  |- outputRates.config
-|  |  |- photolysisConstant.config    [*]
-|  |  |- photolysisConstrained.config [*]
-|  |  |- solver.parameters
-|  |  |- speciesConstrained.config    [*]
-|  |  |- speciesConstant.config       [*]
 |  |  |- initialConcentrations.config
-|  |- constraints     [**]
-|     |- environment/ [**]
-|     |- photolysis/  [**]
-|     |- species/     [**]
+|  |  |- mechanism.prod.cmp
+|  |  |- mechanism.reac.cmp
+|  |  |- mechanism.ro2.cmp
+|  |  |- mechanism.species.cmp
+|  |  |- model.parameters
+|  |  |- outputRates.config
+|  |  |- outputSpecies.config
+|  |  |- photolysisConstant.config     [*]
+|  |  |- photolysisConstrained.config  [*]
+|  |  |- solver.parameters
+|  |  |- speciesConstant.config        [*]
+|  |  |- speciesConstrained.config     [*]
+|  |- constraints      [**]
+|     |- environment/  [**]
+|     |- photolysis/   [**]
+|     |- species/      [**]
 |- output
 |  |- reactionRates/
-|  |- concentration.output.cmp
 |  |- environmentVariables.output.cmp
 |  |- errors.output.cmp
 |  |- finalModelState.output.cmp
-|  |- initialConditionsSetting.output.cmp
 |  |- jacobian.output.cmp
 |  |- lossRates.output.cmp
 |  |- mainSolverParameters.output.cmp
 |  |- photolysisRates.output.cmp
 |  |- photolysisRatesParameters.output.cmp
 |  |- productionRates.output.cmp
+|  |- speciesConcentrations.output.cmp
+|- $TESTNAME.fac
 |- $TESTNAME.out.cmp
 \end{verbatim}
 

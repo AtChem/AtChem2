@@ -128,8 +128,8 @@ contains
   ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
-    use photolysis_rates_mod, only : ck, constrainedPhotoNumbers, j, PR_type, &
-                                     constantPhotoNames, numConstantPhotoRates, &
+    use photolysis_rates_mod, only : ck, constrainedPhotoNumbers, constantPhotoNumbers, &
+                                     j, PR_type, constantPhotoNames, numConstantPhotoRates, &
                                      constrainedPhotoNames, numConstrainedPhotoRates, &
                                      unconstrainedPhotoNames, numUnconstrainedPhotoRates
 
@@ -145,7 +145,7 @@ contains
           write (58, '(100A15) ') 't', (trim( constantPhotoNames(i) ), i = 1_NPI, numConstantPhotoRates)
           firstTime = .false.
         end if
-        write (58, '(100 (ES15.6E3)) ') t, (j(ck(i)), i = 1_NPI, numConstantPhotoRates)
+        write (58, '(100 (ES15.6E3)) ') t, (j(constantPhotoNumbers(i)), i = 1_NPI, numConstantPhotoRates)
 
       case ( 2_SI )
         if ( firstTime .eqv. .true. ) then

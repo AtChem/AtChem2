@@ -338,7 +338,6 @@ contains
     end if
 
     open (10, file=filename, status='old', iostat=ierr)
-    read (10,*) ! Ignore first line
     do i = 1, numConstantPhotoRates
       read (10,*, iostat=ierr) constantPhotoNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
       if ( ierr /= 0 ) then
@@ -348,13 +347,13 @@ contains
     close (10, status='keep')
 
     if ( numConstantPhotoRates > 3 ) then
-      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(1), constantPhotoValues(1), constantPhotoNames(1)
+      write (*, '(I7, 1P e15.3, A)') constantPhotoNumbers(1), constantPhotoValues(1), constantPhotoNames(1)
       write (*, '(A)') ' ...'
-      write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(numConstantPhotoRates), &
+      write (*, '(I7, 1P e15.3, A)') constantPhotoNumbers(numConstantPhotoRates), &
                                             constantPhotoValues(numConstantPhotoRates), constantPhotoNames(numConstantPhotoRates)
     else
       do i = 1, numConstantPhotoRates
-        write (*, '(I7, 1P e15.3, 1P e15.3)') constantPhotoNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
+        write (*, '(I7, 1P e15.3, A)') constantPhotoNumbers(i), constantPhotoValues(i), constantPhotoNames(i)
       end do
     end if
     write (*, '(A)') ' Finished reading photolysis constants.'

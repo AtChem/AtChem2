@@ -6,12 +6,12 @@ AtChem2 v1.3-dev
  Model directory is: model
  Output directory is: tests/model_tests/env_model_1/output
  Reaction Rates directory is: tests/model_tests/env_model_1/output/reactionRates
- Configuration directory is: tests/model_tests/env_model_1/configuration/
- Constraints directory is: tests/model_tests/env_model_1/constraints/
- Environment Constraints directory is: tests/model_tests/env_model_1/constraints//environment
- Photolysis Constraints directory is: tests/model_tests/env_model_1/constraints//photolysis
- Species Constraints directory is: tests/model_tests/env_model_1/constraints//species
- MCM directory is: mcm/
+ Configuration directory is: tests/model_tests/env_model_1/configuration
+ Constraints directory is: tests/model_tests/env_model_1/constraints
+ Environment Constraints directory is: tests/model_tests/env_model_1/constraints/environment
+ Photolysis Constraints directory is: tests/model_tests/env_model_1/constraints/photolysis
+ Species Constraints directory is: tests/model_tests/env_model_1/constraints/species
+ MCM directory is: mcm
  Shared library is: tests/model_tests/env_model_1/configuration/mechanism.so
 
 -----------------------
@@ -123,7 +123,7 @@ AtChem2 v1.3-dev
  1      TEMP                      288
  2      PRESS                    1010
  3      RH                    NOTUSED
- 4      H2O                   1.7e+17
+ 4      H2O                   1.8e+17
  5      DEC                      CALC
  6      BLHEIGHT              NOTUSED
  7      DILUTE                NOTUSED

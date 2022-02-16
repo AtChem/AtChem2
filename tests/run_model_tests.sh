@@ -28,7 +28,7 @@ function test_output_text {
   # Save output of test_output_file
   temp_internal=$(test_output_file $file1 $file2)
   exitcode=$?
-  echo "$temp_internal"
+  echo $temp_internal
   # Clean up
   rm $file1 $file2
   return $exitcode
@@ -66,7 +66,8 @@ TESTS_DIR=tests/model_tests
 RESULTS_FILE=$TESTS_DIR/testsuite.log
 export DYLD_LIBRARY_PATH=$2
 
-echo "test/run_tests.sh: Tests to be run:" $1
+echo "Executing tests/run_model_tests.sh"
+echo "Tests to be run:" $1
 
 # initialise counters
 test_counter=0
@@ -81,19 +82,19 @@ for test in $1; do
   sorted_list_of_skip_line_numbers=""
   # increment test_counter
   test_counter=$((test_counter+1))
-  echo "set up and make" $TESTS_DIR/$test
-  ./build/build_atchem2.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration/ mcm/ &> /dev/null
+  echo "Set up and make" $TESTS_DIR/$test
+  ./build/build_atchem2.sh $TESTS_DIR/$test/$test.fac $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
-    echo Building $test test failed with exit code $exitcode
+    echo "Building" $test "test failed with exit code" $exitcode
     exit $exitcode
   fi
   # Run atchem2 with the argument pointing to the output directory
-  echo Running   $TESTS_DIR/$test ...
-  ./atchem2 --shared_lib=$TESTS_DIR/$test/model/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out
+  echo "Running" $TESTS_DIR/$test "..."
+  ./atchem2 --shared_lib=$TESTS_DIR/$test/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/constraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
-  echo Comparing $TESTS_DIR/$test ...
+  echo "Comparing" $TESTS_DIR/$test "..."
   # This lists all words which will have their line skipped in the main output file. This is a space-delimited list.
   # TODO: extend to multi-word exclusions
   skip_text="Runtime"
@@ -193,16 +194,16 @@ $this_file_failures"
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
   # Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then
-    echo "$test PASSED"
+    echo $test "PASSED"
     pass_counter=$((pass_counter+1))
   else
-    echo "$test FAILED"
-    echo "Test name: $test" >> $RESULTS_FILE
-    echo "$this_test_failures" >> $RESULTS_FILE
+    echo $test "FAILED"
+    echo "Test name:" $test >> $RESULTS_FILE
+    echo $this_test_failures >> $RESULTS_FILE
     fail_counter=$((fail_counter+1))
   fi
 
-  echo "$this_test_failures"
+  echo $this_test_failures
 done
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
@@ -210,8 +211,8 @@ if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "Tests            FAILED"
-  echo "$fail_counter/$test_counter tests FAILED"
+  echo $fail_counter/$test_counter "tests FAILED"
 else
   echo "Tests            PASSED"
-  echo "  ($test_counter/$test_counter tests PASSED)"
+  echo $test_counter/$test_counter "tests PASSED"
 fi

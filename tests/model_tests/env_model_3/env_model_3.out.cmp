@@ -6,12 +6,12 @@ AtChem2 v1.3-dev
  Model directory is: model
  Output directory is: tests/model_tests/env_model_3/output
  Reaction Rates directory is: tests/model_tests/env_model_3/output/reactionRates
- Configuration directory is: tests/model_tests/env_model_3/configuration/
- Constraints directory is: tests/model_tests/env_model_3/constraints/
- Environment Constraints directory is: tests/model_tests/env_model_3/constraints//environment
- Photolysis Constraints directory is: tests/model_tests/env_model_3/constraints//photolysis
- Species Constraints directory is: tests/model_tests/env_model_3/constraints//species
- MCM directory is: mcm/
+ Configuration directory is: tests/model_tests/env_model_3/configuration
+ Constraints directory is: tests/model_tests/env_model_3/constraints
+ Environment Constraints directory is: tests/model_tests/env_model_3/constraints/environment
+ Photolysis Constraints directory is: tests/model_tests/env_model_3/constraints/photolysis
+ Species Constraints directory is: tests/model_tests/env_model_3/constraints/species
+ MCM directory is: mcm
  Shared library is: tests/model_tests/env_model_3/configuration/mechanism.so
 
 -----------------------
@@ -129,7 +129,7 @@ AtChem2 v1.3-dev
  7      DILUTE                NOTUSED
  8      JFAC                        0
  Reading all photolysis rates from file...
- 0 not found in mcm//photolysis-rates_v3.3.1, so it will be treated as a constant.
+ 0 not found in mcm/photolysis-rates_v3.3.1, so it will be treated as a constant.
  9      ROOF                     OPEN
  10     ASA                   NOTUSED
  Finished reading environment variables.

@@ -2,21 +2,24 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1840"
    height="1000"
    viewBox="0 0 519.28889 282.22229"
    version="1.1"
    id="svg8"
-   inkscape:version="0.91 r13725"
-   sodipodi:docname="output-rates.svg">
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="output-rates.svg"
+   inkscape:export-filename="output-rates.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <marker
@@ -91,8 +94,8 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="0.44"
-     inkscape:cx="903.81324"
-     inkscape:cy="475.21753"
+     inkscape:cx="903.40909"
+     inkscape:cy="476.13636"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -102,12 +105,13 @@
      fit-margin-bottom="0"
      showborder="true"
      inkscape:showpageshadow="false"
-     inkscape:window-width="1336"
-     inkscape:window-height="721"
-     inkscape:window-x="30"
-     inkscape:window-y="24"
-     inkscape:window-maximized="1"
-     units="px">
+     inkscape:window-width="1284"
+     inkscape:window-height="1041"
+     inkscape:window-x="260"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     units="px"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid5542"
@@ -122,9 +126,9 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+           rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by/3.0/">
@@ -209,7 +213,7 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.35098314px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-267.21945"
        y="-96.53595"
        id="text845"><tspan
@@ -217,15 +221,15 @@
          id="tspan843"
          x="-267.21945"
          y="-96.53595"
-         style="font-size:11.28888988px;fill:#ff0000;fill-opacity:1;stroke-width:0.26458332">OH production rate</tspan><tspan
+         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583">OH production rate</tspan><tspan
          sodipodi:role="line"
          x="-267.21945"
          y="-82.424835"
-         style="font-size:11.28888988px;fill:#ff0000;fill-opacity:1;stroke-width:0.26458332"
+         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583"
          id="tspan873">at 39600 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.35098314px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-152.27776"
        y="-69.322746"
        id="text877"><tspan
@@ -233,15 +237,15 @@
          id="tspan875"
          x="-152.27776"
          y="-69.322746"
-         style="font-size:11.28888988px;fill:#ff0000;fill-opacity:1;stroke-width:0.26458332">OH production rate</tspan><tspan
+         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583">OH production rate</tspan><tspan
          sodipodi:role="line"
          x="-152.27776"
-         y="-55.211632"
-         style="font-size:11.28888988px;fill:#ff0000;fill-opacity:1;stroke-width:0.26458332"
+         y="-55.211636"
+         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583"
          id="tspan879">at 43200 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.35098314px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="-27.183983"
        y="-96.53595"
        id="text845-0"><tspan
@@ -249,17 +253,17 @@
          id="tspan843-9"
          x="-27.183983"
          y="-96.53595"
-         style="font-size:11.28888988px;fill:#0080ff;fill-opacity:1;stroke-width:0.26458332">HO<tspan
-   style="font-size:11.28888988px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
+         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583">HO<tspan
+   style="font-size:11.2889px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
    id="tspan3256">2</tspan> production rate</tspan><tspan
          sodipodi:role="line"
          x="-27.183983"
          y="-82.424835"
-         style="font-size:11.28888988px;fill:#0080ff;fill-opacity:1;stroke-width:0.26458332"
+         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583"
          id="tspan873-2">at 39600 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:6.35098314px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="77.956612"
        y="-65.8591"
        id="text877-5"><tspan
@@ -267,13 +271,13 @@
          id="tspan875-4"
          x="77.956612"
          y="-65.8591"
-         style="font-size:11.28888988px;fill:#0080ff;fill-opacity:1;stroke-width:0.26458332">HO<tspan
-   style="font-size:11.28888988px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
+         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583">HO<tspan
+   style="font-size:11.2889px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
    id="tspan3254">2</tspan> production rate</tspan><tspan
          sodipodi:role="line"
          x="77.956612"
          y="-51.74799"
-         style="font-size:11.28888988px;fill:#0080ff;fill-opacity:1;stroke-width:0.26458332"
+         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583"
          id="tspan879-0">at 43200 seconds</tspan></text>
   </g>
 </svg>

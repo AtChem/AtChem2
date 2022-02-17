@@ -2,23 +2,23 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="1100"
    height="800"
    viewBox="0 0 1100 800"
    id="svg2"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
    sodipodi:docname="atchem-structure.svg"
-   inkscape:export-filename="C:\LocalData\RS445\Work\Reports\papers\atchem_paper\atchem-structure.png"
+   inkscape:export-filename="atchem-structure.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs4">
     <marker
@@ -122,8 +122,8 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="0.76"
-     inkscape:cx="509.85733"
-     inkscape:cy="397.23181"
+     inkscape:cx="509.86842"
+     inkscape:cy="396.05263"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -131,8 +131,9 @@
      inkscape:window-height="768"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0"
-     inkscape:showpageshadow="false" />
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false"
+     inkscape:pagecheckerboard="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -141,9 +142,9 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+           rdf:resource="http://creativecommons.org/licenses/by/4.0/" />
       </cc:Work>
       <cc:License
          rdf:about="http://creativecommons.org/licenses/by/3.0/">
@@ -170,40 +171,39 @@
        transform="translate(206.1706,-109.44102)">
       <text
          transform="scale(0.99868085,1.0013209)"
-         sodipodi:linespacing="125%"
          id="text3344"
          y="559.44086"
          x="98.943123"
-         style="font-style:normal;font-weight:normal;font-size:40.10214615px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
-           style="font-size:25.06384468px"
+           style="font-size:25.0638px;line-height:1.25"
            y="559.44086"
            x="98.943123"
            id="tspan3346"
            sodipodi:role="line">Processing Layer</tspan><tspan
            id="tspan3370"
-           style="font-size:20.05107307px"
-           y="585.77417"
+           style="font-size:20.0511px;line-height:1.25"
+           y="613.88953"
            x="98.943123"
            sodipodi:role="line">- conversion of the chemical mechanism</tspan><tspan
            id="tspan3160"
-           style="font-size:20.05107307px"
-           y="610.83801"
+           style="font-size:20.0511px;line-height:1.25"
+           y="669.77844"
            x="98.943123"
            sodipodi:role="line">  to Fortran format</tspan><tspan
            id="tspan3390"
-           style="font-size:20.05107307px"
-           y="635.90186"
+           style="font-size:20.0511px;line-height:1.25"
+           y="725.66742"
            x="98.943123"
            sodipodi:role="line">- sum of organic peroxy radicals (RO2)</tspan><tspan
            id="tspan3158"
-           style="font-size:20.05107307px"
-           y="660.9657"
+           style="font-size:20.0511px;line-height:1.25"
+           y="781.5564"
            x="98.943123"
            sodipodi:role="line">- parametrization of photolysis rates</tspan><tspan
            id="tspan4686"
-           style="font-size:20.05107307px"
-           y="686.02954"
+           style="font-size:20.0511px;line-height:1.25"
+           y="837.44537"
            x="98.943123"
            sodipodi:role="line">- dilution mechanism (optional)</tspan></text>
       <rect
@@ -219,25 +219,24 @@
        transform="translate(-139.38294,-100.56624)">
       <text
          transform="scale(0.99685602,1.0031539)"
-         sodipodi:linespacing="125%"
          id="text3352"
          y="954.58557"
          x="387.14713"
-         style="font-style:normal;font-weight:normal;font-size:40.18470764px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
-           style="font-size:25.11544037px"
+           style="font-size:25.1154px;line-height:1.25"
            y="954.58557"
            x="387.14713"
            id="tspan3354"
            sodipodi:role="line">Mathematical Layer</tspan><tspan
            id="tspan3392"
-           style="font-size:20.09235382px"
-           y="980.97314"
+           style="font-size:20.0924px;line-height:1.25"
+           y="1009.1463"
            x="387.14713"
            sodipodi:role="line">- interpolation of constraints</tspan><tspan
            id="tspan3396"
-           style="font-size:20.09235382px"
-           y="1006.0886"
+           style="font-size:20.0924px;line-height:1.25"
+           y="1065.1504"
            x="387.14713"
            sodipodi:role="line">- integration of the ODE system</tspan></text>
       <rect
@@ -253,35 +252,34 @@
        transform="translate(111.63339,317.53539)">
       <text
          transform="scale(1.0019974,0.99800658)"
-         sodipodi:linespacing="125%"
          id="text3374"
          y="352.97778"
          x="534.93512"
-         style="font-style:normal;font-weight:normal;font-size:40.2665596px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            id="tspan3380"
-           style="font-size:25.16659927px"
+           style="font-size:25.1666px;line-height:1.25"
            y="352.97778"
            x="534.93512"
            sodipodi:role="line">Configuration Layer</tspan><tspan
            id="tspan3384"
-           style="font-size:20.1332798px"
-           y="379.41907"
+           style="font-size:20.1333px;line-height:1.25"
+           y="407.64966"
            x="534.93512"
            sodipodi:role="line">- initial conditions</tspan><tspan
            id="tspan3386"
-           style="font-size:20.1332798px"
-           y="404.58566"
+           style="font-size:20.1333px;line-height:1.25"
+           y="463.76776"
            x="534.93512"
            sodipodi:role="line">- model constraints</tspan><tspan
            id="tspan3089"
-           style="font-size:20.1332798px"
-           y="429.75229"
+           style="font-size:20.1333px;line-height:1.25"
+           y="519.88586"
            x="534.93512"
            sodipodi:role="line">- input and output variables</tspan><tspan
            id="tspan3083"
-           style="font-size:20.1332798px"
-           y="454.91888"
+           style="font-size:20.1333px;line-height:1.25"
+           y="576.00397"
            x="534.93512"
            sodipodi:role="line">- model and solver parameters</tspan></text>
       <rect
@@ -294,16 +292,15 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="919.81671"
        y="1011.3893"
-       id="text3398"
-       sodipodi:linespacing="125%"><tspan
+       id="text3398"><tspan
          sodipodi:role="line"
          id="tspan3400"
          x="919.81671"
          y="1011.3893"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">OUTPUT</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:30px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">OUTPUT</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
        d="m 130.81768,773.30594 c 6.30872,55.17092 33.5022,78.21284 89.22417,100.4689"
@@ -327,25 +324,24 @@
        transform="translate(-81.306715,-124.86389)">
       <text
          transform="scale(0.99614938,1.0038655)"
-         sodipodi:linespacing="125%"
          id="text3374-7"
          y="811.65417"
          x="147.80513"
-         style="font-style:normal;font-weight:normal;font-size:40.15621948px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
            id="tspan3380-4"
-           style="font-size:25.09763718px"
+           style="font-size:25.0976px;line-height:1.25"
            y="811.65417"
            x="147.80513"
            sodipodi:role="line">Logic Layer</tspan><tspan
            id="tspan3388-4"
-           style="font-size:20.07810974px"
-           y="838.02301"
+           style="font-size:20.0781px;line-height:1.25"
+           y="866.17621"
            x="147.80513"
            sodipodi:role="line">- system of coupled ODE</tspan><tspan
            id="tspan3152"
-           style="font-size:20.07810974px"
-           y="863.12067"
+           style="font-size:20.0781px;line-height:1.25"
+           y="922.14056"
            x="147.80513"
            sodipodi:role="line">- boundary conditions</tspan></text>
       <rect
@@ -358,16 +354,15 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="58.283215"
        y="414.22986"
-       id="text3348-3-5"
-       sodipodi:linespacing="125%"><tspan
+       id="text3348-3-5"><tspan
          sodipodi:role="line"
          x="58.283215"
          y="414.22986"
-         style="font-size:20px"
-         id="tspan3111-1" /></text>
+         style="font-size:20px;line-height:1.25"
+         id="tspan3111-1"> </tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend-7)"
        d="m 493.44695,608.88354 c -29.79451,50.01748 -65.24298,76.87964 -153.90094,103.00709"
@@ -376,20 +371,19 @@
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000080;fill-opacity:1;stroke:none"
        x="644.67737"
        y="918.22076"
-       id="text3949"
-       sodipodi:linespacing="125%"><tspan
+       id="text3949"><tspan
          sodipodi:role="line"
          id="tspan3951"
          x="644.67737"
          y="918.22076"
-         style="font-style:oblique;font-weight:bold;font-size:27.5px;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080">atchem2</tspan><tspan
+         style="font-style:oblique;font-weight:bold;font-size:27.5px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080">atchem2</tspan><tspan
          sodipodi:role="line"
          x="644.67737"
-         y="952.59576"
-         style="font-style:oblique;font-weight:bold;font-size:27.5px;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080"
+         y="971.81238"
+         style="font-style:oblique;font-weight:bold;font-size:27.5px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Bold Oblique';fill:#000080"
          id="tspan4036">executable</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Lend-3-9)"
@@ -412,24 +406,22 @@
        ry="56.575661" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="29.860931"
        y="320.38617"
-       id="text3398-8"
-       sodipodi:linespacing="125%"><tspan
+       id="text3398-8"><tspan
          sodipodi:role="line"
          x="29.860931"
          y="320.38617"
-         style="font-size:25px"
+         style="font-size:25px;line-height:1.25"
          id="tspan3143">Chemical Mechanism</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="127.36459"
        y="364.61438"
-       id="text3417"
-       sodipodi:linespacing="125%"><tspan
-         style="font-size:37.5px;fill:#800000"
+       id="text3417"><tspan
+         style="font-size:37.5px;line-height:1.25;fill:#800000"
          sodipodi:role="line"
          id="tspan3419"
          x="127.36459"
@@ -442,7 +434,6 @@
        rx="509.87546"
        ry="333.71841" />
     <text
-       sodipodi:linespacing="0%"
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:0%;font-family:serif;-inkscape-font-specification:Serif;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
        x="977.24323"

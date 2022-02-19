@@ -74,7 +74,7 @@ jobs:
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
           if [ $RUNNER_OS != 'Linux' ] ; then
-            install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;

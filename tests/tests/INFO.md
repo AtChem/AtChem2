@@ -1,4 +1,4 @@
-The directory `test/tests/` contains the **behaviour tests** for
+The directory `tests/tests/` contains the **behaviour tests** for
 AtChem2. These tests check the overall behaviour of the model for a
 range of possibile configurations.
 

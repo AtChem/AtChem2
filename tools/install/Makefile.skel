@@ -20,10 +20,10 @@
 # 2. "intel" for ifort
 FORTC = "gnu"
 
-# set paths to the dependencies
-# N.B.: use the full path, not the relative path
+# set the dependencies paths
+# N.B.: use the FULL PATHS, not the relative paths
 CVODELIB     = cvode/lib
-OPENLIBMDIR  = openlibm-0.4.1
+OPENLIBMDIR  = openlibm-0.8.1
 FRUITDIR     = fruit_3.4.3
 
 # default location of the chemical mechanism shared library (mechanism.so)
@@ -74,8 +74,6 @@ FFLAGS       = -free -warn
 FSHAREDFLAGS =
 endif
 
-LIBDIR       =  /usr/lib/:$(CVODELIB)
-
 # set rpath flag
 ifeq ($(OS),Linux)
 RPATH_OPTION = -R
@@ -84,7 +82,7 @@ RPATH_OPTION = -rpath
 endif
 
 # set other compiler flags
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),$(LIBDIR):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
+LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIB):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # object files and source files directories
 OBJ = obj
@@ -119,7 +117,11 @@ $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
 # search tests/tests/ for all subdirectories, which should reflect the full list of tests
-TESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')
+OLDTESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')
+
+# search tests/model_tests/ for all subdirectories, which should reflect the full list of tests
+MODELTESTSDIR = tests/model_tests
+MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g' | sed 's,/,,g')
 
 # ================================================================== #
 # Makefile rules
@@ -135,11 +137,15 @@ styletest:
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
-modeltests:
-	@echo "Make: Running the following tests:" $(TESTS)
-	@./tests/run_tests.sh "$(TESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+oldtests:
+	@echo "Make: Running the following tests:" $(OLDTESTS)
+	@./tests/run_tests.sh "$(OLDTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-alltests: indenttest styletest unittests modeltests
+modeltests:
+	@echo "Make: Running the following tests:" $(MODELTESTS)
+	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+
+alltests: indenttest styletest unittests oldtests modeltests
 
 sharedlib:
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)
@@ -151,10 +157,12 @@ clean:
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
 	rm -f tests/tests/*/*.out tests/tests/*/*.output tests/tests/*/reactionRates/*[0-9]
+	rm -f $(MODELTESTSDIR)/*/*.out $(MODELTESTSDIR)/*/output/*.output $(MODELTESTSDIR)/*/output/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
 	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
 
-# dependencies:
+# ================================================================== #
+# Dependencies
 atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o
 argparse.o : argparse.f90 dataStructures.o
 constraintFunctions.o : constraintFunctions.f90 dataStructures.o

@@ -10,7 +10,7 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script downloads and installs numdiff v5.8.1 into the directory
+# This script downloads and installs numdiff v5.9.0 into the directory
 # given by input argument $1. This is dependent on the existence of a
 # gcc installation.
 #
@@ -26,15 +26,15 @@ if [ -z "$1" ] ; then
   exit 1
 fi
 cd $1
-wget http://ftp.igh.cnrs.fr/pub/nongnu/numdiff/numdiff-5.8.1.tar.gz
+wget https://savannah.nongnu.org/download/numdiff/numdiff-5.9.0.tar.gz
 if [ $? -ne 0 ] ; then
   echo "wget of numdiff failed"
   exit 1
 fi
-tar -zxf numdiff-5.8.1.tar.gz
-rm numdiff-5.8.1.tar.gz
+tar -zxf numdiff-5.9.0.tar.gz
+rm numdiff-5.9.0.tar.gz
 
-cd numdiff-5.8.1/
+cd numdiff-5.9.0/
 OS=$(uname -s)
 if [ "$OS" = 'Darwin' ]; then
   ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib

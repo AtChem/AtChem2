@@ -10,7 +10,7 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script downloads and installs openlibm v0.4.1 into the directory
+# This script downloads and installs openlibm v0.8.1 into the directory
 # given by input argument $1. This is dependent on the existence of a
 # gcc installation.
 #
@@ -22,16 +22,16 @@ if [ -z "$1" ] ; then
   exit 1
 fi
 cd $1
-wget https://github.com/JuliaMath/openlibm/archive/v0.4.1.tar.gz
+wget https://github.com/JuliaMath/openlibm/archive/v0.8.1.tar.gz
 if [ $? -ne 0 ] ; then
   echo "wget of openlibm failed"
   exit 1
 fi
 
-tar -zxf v0.4.1.tar.gz
-rm v0.4.1.tar.gz
+tar -zxf v0.8.1.tar.gz
+rm v0.8.1.tar.gz
 
-cd openlibm-0.4.1/
+cd openlibm-0.8.1/
 make -j
 
 exit 0

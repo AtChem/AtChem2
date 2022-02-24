@@ -74,7 +74,7 @@ jobs:
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./mcm/mechanism_test.fac
           if [ $RUNNER_OS != 'Linux' ] ; then
-            install_name_tool -change libopenlibm.dylib.1 $PWD/openlibm-0.4.1/libopenlibm.dylib.1 atchem2 ;
+            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
@@ -104,4 +104,5 @@ jobs:
           if [[ "$RUNNER_OS" == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
           make clean
           # Run full build tests - this will upload 'tests' coverage to codecov for each test
-          make tests
+          make oldtests
+          make modeltests

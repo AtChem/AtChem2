@@ -1,4 +1,4 @@
-The directory `test/unit_tests/` contains the **unit tests** for
+The directory `tests/unit_tests/` contains the **unit tests** for
 AtChem2. These tests check the output of individual subroutines and
 functions of the model.
 

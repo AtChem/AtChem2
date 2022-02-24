@@ -14,8 +14,8 @@
 # given by input argument $1. This is dependent on the existence of a
 # Ruby installation.
 #
-# N.B.: before running the script add the following lines to
-# .bash_profile (or .profile), then restart the shell:
+# N.B.: before running the script add the following lines to .bash_profile
+# (or .profile), then source the file or restart the shell:
 #   GEM_HOME=$HOME/.gem
 #   PATH=$PATH:$GEM_HOME/bin
 #

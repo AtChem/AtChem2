@@ -4,15 +4,15 @@ AtChem2 v1.3-dev
  Directories
 -------------
  Model directory is: model
- Output directory is: tests/tests/firstorder/output
- Reaction Rates directory is: tests/tests/firstorder/output/reactionRates
- Configuration directory is: tests/tests/firstorder/model/configuration
- Constraints directory is: tests/tests/firstorder/model/constraints
- Environment Constraints directory is: tests/tests/firstorder/model/constraints/environment
- Photolysis Constraints directory is: tests/tests/firstorder/model/constraints/photolysis
- Species Constraints directory is: tests/tests/firstorder/model/constraints/species
+ Output directory is: tests/model_tests/firstorder/output
+ Reaction Rates directory is: tests/model_tests/firstorder/output/reactionRates
+ Configuration directory is: tests/model_tests/firstorder/configuration
+ Constraints directory is: tests/model_tests/firstorder/constraints
+ Environment Constraints directory is: tests/model_tests/firstorder/constraints/environment
+ Photolysis Constraints directory is: tests/model_tests/firstorder/constraints/photolysis
+ Species Constraints directory is: tests/model_tests/firstorder/constraints/species
  MCM directory is: mcm
- Shared library is: tests/tests/firstorder/model/configuration/mechanism.so
+ Shared library is: tests/model_tests/firstorder/configuration/mechanism.so
 
 -----------------------
  Species and reactions
@@ -100,7 +100,8 @@ AtChem2 v1.3-dev
  Finished reading photolysis numbers.
  Number of photolysis numbers: 35
  Looking for photolysis constants file...
- No photolysis constants file found.
+ Checking that photolysis constants exist in file...
+ Photolysis constants file is empty.
  No photolysis constants applied, so trying constrained photolysis rates file...
  Looking for photolysis constraints file...
  Checking that photolysis constraints exist in file...

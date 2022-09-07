@@ -10,30 +10,35 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script downloads and installs numdiff v5.9.0 into the directory
-# given by input argument $1. This is dependent on the existence of a
-# gcc installation.
+# -----------------------------------------------------------------------------
+# This script downloads and installs numdiff into the directory given
+# by input argument $1.
 #
-# N.B.: numdiff may already be installed on the system (check with the
-# command `which numdiff`). In that case, it is not necessary to
-# execute this script.
+# Website: https://www.nongnu.org/numdiff/
+# Version: 5.9.0
+# Requirements: GCC, make
 #
-# Example usage:
+# Usage:
 #   ./install_numdiff.sh /path/to/install/directory
+# -----------------------------------------------------------------------------
 
+# download numdiff archive to given directory (argument $1)
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to tools/install/install_numdiff.sh"
+  echo "Please provide an argument to ./install_numdiff.sh"
   exit 1
 fi
 cd $1
 wget https://savannah.nongnu.org/download/numdiff/numdiff-5.9.0.tar.gz
 if [ $? -ne 0 ] ; then
-  echo "wget of numdiff failed"
+  echo "wget numdiff --- failed"
   exit 1
 fi
+
+# unpack numdiff archive
 tar -zxf numdiff-5.9.0.tar.gz
 rm numdiff-5.9.0.tar.gz
 
+# compile numdiff
 cd numdiff-5.9.0/
 OS=$(uname -s)
 if [ "$OS" = 'Darwin' ]; then

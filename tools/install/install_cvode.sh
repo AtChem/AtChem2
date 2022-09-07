@@ -63,7 +63,7 @@ fi
 
 # download SUNDIALS archive to given directory (argument $1)
 cd $cvode_dir
-wget https://github.com/LLNL/sundials/archive/v2.7.0.tar.gz
+wget -O sundials-2.7.0.tar.gz https://github.com/LLNL/sundials/archive/v2.7.0.tar.gz
 if [ $? -ne 0 ] ; then
   echo "wget sundials --- failed"
   exit 1

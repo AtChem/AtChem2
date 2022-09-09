@@ -10,43 +10,51 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script downloads and installs FRUIT v3.4.3 into the directory
-# given by input argument $1. This is dependent on the existence of a
-# Ruby installation.
+# -----------------------------------------------------------------------------
+# This script downloads and installs FRUIT into the directory given by
+# input argument $1.
 #
-# N.B.: before running the script add the following lines to .bash_profile
-# (or .profile), then source the file or restart the shell:
+# Website: https://sourceforge.net/projects/fortranxunit/
+# Version: 3.4.3
+# Requirements: Ruby
+#
+# N.B. Before running the script, ensure that the RubyGems paths are
+# set in ~/.bash_profile (or ~/.profile):
 #   GEM_HOME=$HOME/.gem
 #   PATH=$PATH:$GEM_HOME/bin
 #
-# Example usage:
+# Usage:
 #   ./install_fruit.sh /path/to/install/directory
+# -----------------------------------------------------------------------------
 
+# download FRUIT archive to given directory (argument $1)
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to tools/install/install_fruit.sh"
+  echo "Please provide an argument to ./install_fruit.sh"
   exit 1
 fi
 cd $1
-
-wget https://iweb.dl.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
+wget https://downloads.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
 if [ $? -ne 0 ] ; then
-  echo "wget of fruit failed"
+  echo "wget fruit --- failed"
   exit 1
 fi
 
+# unpack FRUIT archive
 unzip -q fruit_3.4.3.zip
 rm fruit_3.4.3.zip
 
-cd fruit_3.4.3
+# compile FRUIT
+cd fruit_3.4.3/
 gem install rake
 if [ $? -ne 0 ] ; then
-  echo "gem install rake failed"
+  echo "gem install rake --- failed"
   exit 1
 fi
-cd fruit_processor_gem
+cd fruit_processor_gem/
 rake install
 if [ $? -ne 0 ] ; then
-  echo "rake install failed"
+  echo "rake install --- failed"
   exit 1
 fi
+
 exit 0

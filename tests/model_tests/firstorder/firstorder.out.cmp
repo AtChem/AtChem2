@@ -4,15 +4,15 @@ AtChem2 v1.3-dev
  Directories
 -------------
  Model directory is: model
- Output directory is: tests/tests/secondorder/output
- Reaction Rates directory is: tests/tests/secondorder/output/reactionRates
- Configuration directory is: tests/tests/secondorder/model/configuration
- Constraints directory is: tests/tests/secondorder/model/constraints
- Environment Constraints directory is: tests/tests/secondorder/model/constraints/environment
- Photolysis Constraints directory is: tests/tests/secondorder/model/constraints/photolysis
- Species Constraints directory is: tests/tests/secondorder/model/constraints/species
+ Output directory is: tests/model_tests/firstorder/output
+ Reaction Rates directory is: tests/model_tests/firstorder/output/reactionRates
+ Configuration directory is: tests/model_tests/firstorder/configuration
+ Constraints directory is: tests/model_tests/firstorder/constraints
+ Environment Constraints directory is: tests/model_tests/firstorder/constraints/environment
+ Photolysis Constraints directory is: tests/model_tests/firstorder/constraints/photolysis
+ Species Constraints directory is: tests/model_tests/firstorder/constraints/species
  MCM directory is: mcm
- Shared library is: tests/tests/secondorder/model/configuration/mechanism.so
+ Shared library is: tests/model_tests/firstorder/configuration/mechanism.so
 
 -----------------------
  Species and reactions
@@ -20,8 +20,8 @@ AtChem2 v1.3-dev
  Number of Species   = 2
  Number of Reactions = 1
 
- Size of lhs = 2
- Size of rhs = 2
+ Size of lhs = 1
+ Size of rhs = 1
 
  Reading reactants (lhs) from mechanism.reac...
  Reading products (rhs) from mechanism.prod...
@@ -100,7 +100,8 @@ AtChem2 v1.3-dev
  Finished reading photolysis numbers.
  Number of photolysis numbers: 35
  Looking for photolysis constants file...
- No photolysis constants file found.
+ Checking that photolysis constants exist in file...
+ Photolysis constants file is empty.
  No photolysis constants applied, so trying constrained photolysis rates file...
  Looking for photolysis constraints file...
  Checking that photolysis constraints exist in file...
@@ -1669,10 +1670,10 @@ AtChem2 v1.3-dev
 ------------------
  Final statistics
 ------------------
- No. steps = 67   No. f-s = 85   No. J-s = 72   No. LU-s = 18
- No. nonlinear iterations = 81
+ No. steps = 54   No. f-s = 77   No. J-s = 56   No. LU-s = 17
+ No. nonlinear iterations = 73
  No. nonlinear convergence failures = 0
- No. error test failures = 1
+ No. error test failures = 3
 
  Runtime = 0
  Deallocating memory.

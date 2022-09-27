@@ -1,5 +1,15 @@
 # AtChem2 - CHANGELOG
 
+## post v1.2.1
+
+- move implementation of continuous integration from Travis CI to GitHub Actions
+- remove unit testing from CodeCov
+- add optimisation to gfortran compiler
+- test version 8 and 9 of gfortran
+- error handling for RO2 sum in `build/mech_converter.py`
+- disable support for LAPACK and BLAS
+- update the manual
+
 ## v1.2.1 (January 2021)
 
 - new environment variable `ASA` (aerosol surface area)

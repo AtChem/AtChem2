@@ -10,13 +10,17 @@
 #
 # -----------------------------------------------------------------------------
 
-# Script to update the version number of AtChem2.
+# Script to change the version number of AtChem2.
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
 VERS_OLD="v1.2.1"
 VERS_NEW="v1.3-dev"
 
-find ./ -type f ! -name "version.sh" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
+find ./ -type f ! -name "update_version_number.sh" ! -name "CHANGELOG.md" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
-echo "AtChem2 version number changed to:" $VERS_NEW
+echo ""
+echo "==> AtChem2 version number changed to:" $VERS_NEW
+echo ""
+
+exit 0

@@ -13,8 +13,11 @@
 # This script executes the indent test on the Fortran files to ensure
 # that they conform to the coding guidelines, described in the manual
 # (doc/AtChem2-Manual.pdf)
+#
+# N.B.: the script MUST be run from the main directory of AtChem2.
 
-RESULTS_FILE=tests/tests/testsuite.log
+LOG_FILE=tests/testsuite.log
+TMP_LOG=tests/tmp.log
 
 echo "Running indent script on:"
 for file in src/*.f90 ; do
@@ -36,13 +39,14 @@ done
 
 echo ""
 if [ -z "$failed_indent" ]; then
-  echo "Indent test PASSED"
+  echo "Indent test PASSED" >> $TMP_LOG
   indent_test_passed=0
 else
-  echo "Indent test FAILED"
-  echo "$failed_indent" >> $RESULTS_FILE
+  echo "Indent test FAILED" >> $TMP_LOG
+  echo "$failed_indent" >> $LOG_FILE
   indent_test_passed=1
 fi
 echo "Indent script finished"
 echo ""
+
 exit $indent_test_passed

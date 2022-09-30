@@ -13,8 +13,11 @@
 # This script executes the style test on the Fortran files to ensure
 # that they conform to the coding guidelines, described in the manual
 # (doc/AtChem2-Manual.pdf)
+#
+# N.B.: the script MUST be run from the main directory of AtChem2.
 
-RESULTS_FILE=tests/tests/testsuite.log
+LOG_FILE=tests/testsuite.log
+TMP_LOG=tests/tmp.log
 
 echo "Running style script on:"
 for file in src/*.f90 ; do
@@ -36,13 +39,14 @@ done
 
 echo ""
 if [ -z "$failed_style" ]; then
-  echo "Style test PASSED"
+  echo "Style test PASSED" >> $TMP_LOG
   style_test_passed=0
 else
-  echo "Style test FAILED"
-  echo "$failed_style" >> $RESULTS_FILE
+  echo "Style test FAILED" >> $TMP_LOG
+  echo "$failed_style" >> $LOG_FILE
   style_test_passed=1
 fi
 echo "Style script finished"
 echo ""
+
 exit $style_test_passed

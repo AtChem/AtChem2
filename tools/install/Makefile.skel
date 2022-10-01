@@ -136,11 +136,13 @@ indenttest:
 	@echo ""
 	@echo "Make: Running the indent test."
 	@./tests/run_indent_test.sh
+	@cat tests/tmp.log
 
 styletest:
 	@echo ""
 	@echo "Make: Running the style test."
 	@./tests/run_style_test.sh
+	@cat tests/tmp.log
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)

@@ -19,6 +19,8 @@
 LOG_FILE=tests/style.log
 
 echo "Running style script on:" > $LOG_FILE
+echo "" >> $LOG_FILE
+
 for file in src/*.f90 ; do
   echo $file >> $LOG_FILE
   python ./tools/fix_style.py $file $file.cmp &>/dev/null
@@ -36,13 +38,16 @@ $this_style_file_failures"
   fi
 done
 
+echo "" >> $LOG_FILE
 if [ -z "$failed_style" ]; then
-  echo "Style test PASSED"
+  echo "==> Style test PASSED"
   style_test_passed=0
 else
-  echo "Style test FAILED"
+  echo "==> Style test FAILED"
   echo "$failed_style" >> $LOG_FILE
   style_test_passed=1
 fi
+echo "Style script finished" >> $LOG_FILE
+echo ""
 
 exit $style_test_passed

@@ -133,7 +133,7 @@ indenttest:
 	@./tests/run_indent_test.sh
 
 styletest:
-	@echo "Make: Running the indent test"
+	@echo "Make: Running the style test"
 	@./tests/run_style_test.sh
 
 unittests: $(fruit_driver)

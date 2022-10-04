@@ -19,6 +19,8 @@
 LOG_FILE=tests/indent.log
 
 echo "Running indent script on:" > $LOG_FILE
+echo "" >> $LOG_FILE
+
 for file in src/*.f90 ; do
   echo $file >> $LOG_FILE
   python ./tools/fix_indent.py $file $file.cmp &>/dev/null
@@ -36,13 +38,16 @@ $this_indent_file_failures"
   fi
 done
 
+echo "" >> $LOG_FILE
 if [ -z "$failed_indent" ]; then
-  echo "Indent test PASSED"
+  echo "==> Indent test PASSED"
   indent_test_passed=0
 else
-  echo "Indent test FAILED"
+  echo "==> Indent test FAILED"
   echo "$failed_indent" >> $LOG_FILE
   indent_test_passed=1
 fi
+echo "Indent script finished" >> $LOG_FILE
+echo ""
 
 exit $indent_test_passed

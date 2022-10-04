@@ -129,14 +129,12 @@ MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g'
 all: $(AOUT)
 
 indenttest:
-	@rm -f tests/tmp.log
+	@echo "Make: Running the indent test"
 	@./tests/run_indent_test.sh
-	@cat tests/tmp.log
 
 styletest:
-	@rm -f tests/tmp.log
+	@echo "Make: Running the indent test"
 	@./tests/run_style_test.sh
-	@cat tests/tmp.log
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)

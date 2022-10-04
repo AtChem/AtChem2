@@ -16,12 +16,11 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-LOG_FILE=tests/testsuite.log
-TMP_LOG=tests/tmp.log
+LOG_FILE=tests/indent.log
 
-echo "Running indent script on:"
+echo "Running indent script on:" > $LOG_FILE
 for file in src/*.f90 ; do
-  echo $file
+  echo $file >> $LOG_FILE
   python ./tools/fix_indent.py $file $file.cmp &>/dev/null
   this_indent_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
@@ -30,23 +29,20 @@ for file in src/*.f90 ; do
     failed_indent="$failed_indent
 
 $this_indent_file_failures"
-    echo $file "FAILED"
+    echo $file "FAILED" >> $LOG_FILE
   elif [ $exitcode -ne 0 ]; then
-    echo "diff gave an error on" $file ". Aborting."
+    echo "diff gave an error on" $file ". Aborting." >> $LOG_FILE
     exit 1
   fi
 done
 
-echo ""
 if [ -z "$failed_indent" ]; then
-  echo "Indent test PASSED" >> $TMP_LOG
+  echo "Indent test PASSED"
   indent_test_passed=0
 else
-  echo "Indent test FAILED" >> $TMP_LOG
+  echo "Indent test FAILED"
   echo "$failed_indent" >> $LOG_FILE
   indent_test_passed=1
 fi
-echo "Indent script finished"
-echo ""
 
 exit $indent_test_passed

@@ -16,12 +16,11 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-LOG_FILE=tests/testsuite.log
-TMP_LOG=tests/tmp.log
+LOG_FILE=tests/style.log
 
-echo "Running style script on:"
+echo "Running style script on:" > $LOG_FILE
 for file in src/*.f90 ; do
-  echo $file
+  echo $file >> $LOG_FILE
   python ./tools/fix_style.py $file $file.cmp &>/dev/null
   this_style_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
@@ -30,23 +29,20 @@ for file in src/*.f90 ; do
     failed_style="$failed_style
 
 $this_style_file_failures"
-    echo $file "FAILED"
+    echo $file "FAILED" >> $LOG_FILE
   elif [ $exitcode -ne 0 ]; then
-    echo "diff gave an error on" $file ". Aborting."
+    echo "diff gave an error on" $file ". Aborting." >> $LOG_FILE
     exit 1
   fi
 done
 
-echo ""
 if [ -z "$failed_style" ]; then
-  echo "Style test PASSED" >> $TMP_LOG
+  echo "Style test PASSED"
   style_test_passed=0
 else
-  echo "Style test FAILED" >> $TMP_LOG
+  echo "Style test FAILED"
   echo "$failed_style" >> $LOG_FILE
   style_test_passed=1
 fi
-echo "Style script finished"
-echo ""
 
 exit $style_test_passed

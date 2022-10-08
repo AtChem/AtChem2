@@ -20,7 +20,7 @@ format and has the extension \texttt{.fac}. The format is used to
 describe chemical reactions in the commercial FACSIMILE Kinetic
 Modelling Software; for historical reasons, the software and the
 format have often been used in conjunction with the MCM. The
-\href{http://mcm.leeds.ac.uk/MCM/extract.htt}{extraction tool} on the
+\href{http://mcm.york.ac.uk/extract.htt}{extraction tool} on the
 MCM website can generate \texttt{.fac} files in FACSIMILE format that
 can be directly used in AtChem2 (Sect.~\ref{subsec:mcm-extraction}).
 
@@ -201,12 +201,12 @@ included. The \cf{RO2} sum is output, by default, to the file
 The MCM website provides a convenient tool that can be used to
 download the whole Master Chemical Mechanism -- or subsets of it -- in
 FACSIMILE format. Only a brief overview of the process is given here:
-for more information go to the \href{http://mcm.leeds.ac.uk/}{MCM website}.
+for more information go to the \href{http://mcm.york.ac.uk}{MCM website}.
 
 First, select the species of interest using the
-\href{http://mcm.leeds.ac.uk/MCM/roots.htt}{MCM browser} and add the
+\href{http://mcm.york.ac.uk/roots.htt}{MCM browser} and add the
 selection to the ``Mark List''. Then proceed to the
-\href{http://mcm.leeds.ac.uk/MCM/extract.htt}{MCM extraction tool} and
+\href{http://mcm.york.ac.uk/extract.htt}{MCM extraction tool} and
 select the option ``FACSIMILE input format, suitable for inserting
 into a FACSIMILE model''. Make sure that the following options are
 selected, so that all the required headers
@@ -273,7 +273,7 @@ files:
   2 1
   3 1
   3 2
-\end{verbatim}
+  \end{verbatim}
 \item \texttt{mechanism.ro2} contains the organic peroxy radicals
   (\cf{RO2}). The file has a one line header formatted as a Fortran
   comment. The first column is the ID number of the peroxy
@@ -383,7 +383,7 @@ differential equations (ODE) solver; they are set in the
 \texttt{solver.parameters} file which, by default, is in the
 \texttt{model/configuration/} directory. A complete explanation of
 these parameters can be found in the documentation of
-\href{https://computation.llnl.gov/projects/sundials/}{CVODE}.
+\href{https://computing.llnl.gov/projects/sundials/cvode}{CVODE}.
 
 \begin{itemize}
 \item \textbf{atol} (positive real) and \textbf{rtol} (positive real):
@@ -866,7 +866,7 @@ columns: the first column is the ID number of the photolysis rate, the
 second column is the value of the photolysis rate (in s$^{-1}$), the
 third column is the name of the photolysis rate. The ID numbers and
 the names of the photolysis rates follow the
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{MCM designation}.
+\href{http://mcm.york.ac.uk/parameters/photolysis.htt}{MCM designation}.
 For example:
 
 \begin{verbatim}
@@ -886,7 +886,7 @@ This file (called \texttt{constrainedPhotoRates.config} in version 1.0
 and earlier) lists the photolysis rates that are constrained
 (Sect.~\ref{subsec:constrained-photolysis-rates}). The file has one column, with
 one photolysis rate per line. The names of the photolysis rates follow the
-\href{http://mcm.leeds.ac.uk/MCM/parameters/photolysis.htt}{MCM designation}.
+\href{http://mcm.york.ac.uk/parameters/photolysis.htt}{MCM designation}.
 For example:
 
 \begin{verbatim}

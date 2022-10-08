@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-10.15]
+        os: [ubuntu-latest, macos-11]
         fortran: [8, 9]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -35,7 +35,7 @@ jobs:
       # Install gfortran 8 since both Ubuntu and macOS don't supply it
       # macOS only
       - name: Install gfortran-8 on macOS
-        if: matrix.os == 'macos-10.15' && matrix.fortran == 8
+        if: matrix.os == 'macos-11' && matrix.fortran == 8
         run: brew install gcc@8
 
       # ubuntu only
@@ -51,7 +51,7 @@ jobs:
 
       # macOS only
       - name: Install cvode (macOS)
-        if: matrix.os == 'macos-10.15'
+        if: matrix.os == 'macos-11'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # Install all dependencies

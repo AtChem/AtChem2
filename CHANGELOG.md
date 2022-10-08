@@ -9,6 +9,9 @@
 - error handling for RO2 sum in `build/mech_converter.py`
 - disable support for LAPACK and BLAS
 - update the manual
+- fix bug in constant photolysis rates
+- new test suite
+
 
 ## v1.2.1 (January 2021)
 

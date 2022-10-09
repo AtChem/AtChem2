@@ -23,7 +23,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [10,9,8]
+        fortran: [8,9,10]
+        # do not use gfortra 8 on macos
+        exclude:
+          - os: macos-latest
+            gfortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -34,9 +38,9 @@ jobs:
 
       # Install gfortran 8 since both Ubuntu and macOS don't supply it
       # macOS only
-      - name: Install gfortran-8 on macOS
-        if: matrix.os == 'macos-latest' && matrix.fortran == 8
-        run: brew install gcc@8
+      #- name: Install gfortran-8 on macOS
+      #  if: matrix.os == 'macos-latest' && matrix.fortran == 8
+      #  run: brew install gcc@8
 
       # ubuntu only
       - name: Install gfortran-8 on ubuntu

@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [8,9,10]
+        fortran: [10,9,8]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

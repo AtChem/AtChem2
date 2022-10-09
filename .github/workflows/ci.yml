@@ -27,7 +27,7 @@ jobs:
         # do not use gfortra 8 on macos
         exclude:
           - os: macos-latest
-            gfortran: 8
+            fortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

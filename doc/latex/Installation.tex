@@ -24,10 +24,10 @@ following tools:
 \item Fortran -- the model compiles with GNU \texttt{gfortran}
   (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
   $\hookrightarrow$ default compiler: \texttt{gfortran}
+\item \texttt{make}
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
   with Python v2 and v3. Support for Python v2 will be removed in
   future versions of AtChem2.}
-\item make, cmake
 \item Ruby (optional)
 \end{itemize}
 
@@ -39,7 +39,7 @@ AtChem2 has the following dependencies:
 
 \begin{itemize}
 %\item BLAS, LAPACK
-\item CVODE
+\item CVODE -- requires \texttt{cmake}
 \item openlibm
 \item numdiff (optional)
 \item FRUIT (optional)
@@ -310,11 +310,10 @@ To install AtChem2:
   \end{verbatim}
 \end{enumerate}
 
-When AtChem2 is run for the first time on a macOS system, it may abort
-with an error message concerning \texttt{rpath}: if this happens, see
-the \textbf{Note for macOS users} on the
-\href{https://github.com/AtChem/AtChem2/wiki/How-to-install-AtChem2}{wiki}
-for a solution.
+When AtChem2 is run for the first time on \textbf{macOS}, it may abort
+with an error message concerning \texttt{rpath}: if this happens,
+a solution can be found on the
+\href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
 AtChem2 is now ready to be used. Optionally, the Test Suite can be run
 to check that the model has been installed correctly: go to

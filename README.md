@@ -25,7 +25,7 @@ Directory structure
 Installation, Setup and Execution
 ---------------------------------
 
-AtChem2 requires a **Fortran** compiler (GNU `gfortran` or Intel `ifort`), the **CVODE** (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)) and **openlibm** libraries, and **Python**. Compilation of CVODE also requires **cmake**. Optionally, **numdiff**, **FRUIT**, and **Ruby** are required to run the Test Suite. AtChem2 compiles and runs on Unix/Linux and macOS systems. A working knowledge of the **unix shell** is required to install and use AtChem2.
+AtChem2 requires a **Fortran** compiler (GNU `gfortran` or Intel `ifort`), the **CVODE** (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)) and **openlibm** libraries, **make**, and **Python**. Compilation of CVODE also requires **cmake**. Optionally, **numdiff**, **FRUIT**, and **Ruby** are required to run the Test Suite. AtChem2 compiles and runs on Unix/Linux and macOS systems. A working knowledge of the **unix shell** is required to install and use AtChem2.
 
 The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases). After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIB`, `OPENLIBMDIR` and `FRUITDIR` in `Makefile` to the paths of CVODE, openlibm and (if installed) FRUIT. To compile the model using the example chemical mechanism, execute the command:
 
@@ -41,4 +41,4 @@ Set the initial conditions, the required outputs and the other model parameters 
 
 The `atchem2` executable accepts several command line arguments to customize the location of the configuration, input and output directories, and of the shared library. More information on AtChem2, and detailed instructions on its installation, configuration and use can be found in the manual (`doc/AtChem2-Manual.pdf`) and in the GMD paper (see `CITATION.md`).
 
-A summary of the main commands, and additional information, is available on the [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki), together with a list of [known issues](https://github.com/AtChem/AtChem2/wiki/Known-Issues) and the suggested workarounds.
+The [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki) contains a summary of the instructions to install, compile, run and contribute to the development of Atchem2, together with additional information, a list of [known issues](https://github.com/AtChem/AtChem2/wiki/Known-Issues), and the suggested solutions or workarounds.

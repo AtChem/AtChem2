@@ -16,9 +16,9 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-LOG_FILE=tests/style.log
+LOG_FILE=tests/styletest.log
 
-echo "Running style script on:" > $LOG_FILE
+echo "Executing style script on:" > $LOG_FILE
 echo "" >> $LOG_FILE
 
 for file in src/*.f90 ; do
@@ -38,7 +38,6 @@ $this_style_file_failures"
   fi
 done
 
-echo "" >> $LOG_FILE
 if [ -z "$failed_style" ]; then
   echo "==> Style test PASSED"
   style_test_passed=0
@@ -47,7 +46,7 @@ else
   echo "$failed_style" >> $LOG_FILE
   style_test_passed=1
 fi
-echo "Style script finished" >> $LOG_FILE
-echo ""
+echo "" >> $LOG_FILE
+echo "Execution of style script finished." >> $LOG_FILE
 
 exit $style_test_passed

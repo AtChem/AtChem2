@@ -16,9 +16,9 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-LOG_FILE=tests/indent.log
+LOG_FILE=tests/indenttest.log
 
-echo "Running indent script on:" > $LOG_FILE
+echo "Executing indent script on:" > $LOG_FILE
 echo "" >> $LOG_FILE
 
 for file in src/*.f90 ; do
@@ -38,7 +38,6 @@ $this_indent_file_failures"
   fi
 done
 
-echo "" >> $LOG_FILE
 if [ -z "$failed_indent" ]; then
   echo "==> Indent test PASSED"
   indent_test_passed=0
@@ -47,7 +46,7 @@ else
   echo "$failed_indent" >> $LOG_FILE
   indent_test_passed=1
 fi
-echo "Indent script finished" >> $LOG_FILE
-echo ""
+echo "" >> $LOG_FILE
+echo "Execution of indent script finished." >> $LOG_FILE
 
 exit $indent_test_passed

@@ -58,16 +58,17 @@ function find_string {
 # $this_file_failures holds the output of the numdiff for each file
 #
 # We also allow some lines of the screen output to be skipped - e.g. the runtime line,
-# since this is machine-dependent. Multiple such lines can be skipped by appending to
+# since this is machine-dependent. Multiple such lines can be skipped by appending to
 # $skip_test. This requires extra machinery to handle splitting the file into
 # sections between the skipped lines, and to numdiff those sections.
 
-TESTS_DIR=tests/model_tests
-RESULTS_FILE=$TESTS_DIR/testsuite.log
 export DYLD_LIBRARY_PATH=$2
 
-echo "Executing tests/run_model_tests.sh"
-echo "Tests to be run:" $1
+TESTS_DIR=tests/model_tests
+LOG_FILE=tests/modeltests.log
+
+echo "Executing model tests script." > $LOG_FILE
+echo "Model tests to run:" $1 >> $LOG_FILE
 
 # initialise counters
 test_counter=0
@@ -82,19 +83,20 @@ for test in $1; do
   sorted_list_of_skip_line_numbers=""
   # increment test_counter
   test_counter=$((test_counter+1))
-  echo "Set up and make" $TESTS_DIR/$test
+  echo "" >> $LOG_FILE
+  echo "Set up and make" $TESTS_DIR/$test >> $LOG_FILE
   ./build/build_atchem2.sh $TESTS_DIR/$test/$test.fac $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
-    echo "Building" $test "test failed with exit code" $exitcode
+    echo "Building" $test "test failed with exit code" $exitcode >> $LOG_FILE
     exit $exitcode
   fi
   # Run atchem2 with the argument pointing to the output directory
-  echo "Running" $TESTS_DIR/$test "..."
+  echo "Running" $TESTS_DIR/$test "..." >> $LOG_FILE
   ./atchem2 --shared_lib=$TESTS_DIR/$test/configuration/mechanism.so --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/constraints > $TESTS_DIR/$test/$test.out
 
   # Now begin the process of diffing the screen output file
-  echo "Comparing" $TESTS_DIR/$test "..."
+  echo "Comparing" $TESTS_DIR/$test "..." >> $LOG_FILE
   # This lists all words which will have their line skipped in the main output file. This is a space-delimited list.
   # TODO: extend to multi-word exclusions
   skip_text="Runtime"
@@ -116,14 +118,14 @@ for test in $1; do
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
     this_file_failures=$(test_output_text $TESTS_DIR/$test/$test.out $TESTS_DIR/$test/$test.out.cmp $(($old_skip_line_number+1)) $(($skip_line_number-1)) $test)
     exitcode=$?
-    echo "Checking" $TESTS_DIR/$test/output/$test.out "between lines" $(($old_skip_line_number+1)) "and" $(($skip_line_number-1))
+    echo "Checking" $TESTS_DIR/$test/output/$test.out "between lines" $(($old_skip_line_number+1)) "and" $(($skip_line_number-1)) >> $LOG_FILE
     if [ $exitcode -eq 1 ]; then
       this_test_failures="$this_test_failures
 
 Differences found in $TESTS_DIR/$test/$test.out. Add $old_skip_line_number to the line numbers shown:
 $this_file_failures"
     elif [ $exitcode -eq -1 ]; then
-      echo "Numdiff gave an error. Aborting."
+      echo "Numdiff gave an error. Aborting." >> $LOG_FILE
       exit 1
     fi
     old_skip_line_number=$skip_line_number
@@ -132,7 +134,7 @@ $this_file_failures"
   # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/output/*.output.cmp; do
-    echo "Checking" $filename
+    echo "Checking" $filename >> $LOG_FILE
     this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
     exitcode=$?
     if [ $exitcode -eq 0 ]; then
@@ -142,7 +144,7 @@ $this_file_failures"
 
 $this_file_failures"
     else
-      echo "Numdiff gave an error. Aborting."
+      echo "Numdiff gave an error. Aborting." >> $LOG_FILE
       exit 1
     fi
   done
@@ -152,7 +154,7 @@ $this_file_failures"
   # then add the numdiff output to $this_test_failures via $this_file_failures,.
   for filename in $TESTS_DIR/$test/output/reactionRates/* ; do
     if [ ${filename: -4} == ".cmp" ] ; then
-      echo "Checking" $filename
+      echo "Checking" $filename >> $LOG_FILE
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then
@@ -162,7 +164,7 @@ $this_file_failures"
 
 $this_file_failures"
       else
-        echo "Numdiff gave an error. Aborting."
+        echo "Numdiff gave an error. Aborting." >> $LOG_FILE
         exit 1
       fi
     fi
@@ -175,7 +177,7 @@ $this_file_failures"
     # guard against empty filelist
     #[ -e "$filename" ] || continue
     if [ ${filename: -4} == ".cmp" ] ; then
-      echo "Checking" $filename
+      echo "Checking" $filename >> $LOG_FILE
       this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
       exitcode=$?
       if [ $exitcode -eq 0 ]; then
@@ -185,34 +187,38 @@ $this_file_failures"
 
 $this_file_failures"
       else
-        echo "Numdiff gave an error. Aborting."
+        echo "Numdiff gave an error. Aborting." >> $LOG_FILE
         exit 1
       fi
     fi
   done
 
-  # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures to $RESULTS_FILE.
-  # Increment the counters as necessary.
+  # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures
+  # to logfile (modeltests.log)). Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then
-    echo $test "PASSED"
+    echo $test "PASSED" >> $LOG_FILE
+    echo "*" $test
     pass_counter=$((pass_counter+1))
   else
-    echo $test "FAILED"
-    echo "Test name:" $test >> $RESULTS_FILE
-    echo $this_test_failures >> $RESULTS_FILE
+    echo $test "FAILED" >> $LOG_FILE
+    echo "*" $test
     fail_counter=$((fail_counter+1))
   fi
 
-  echo $this_test_failures
+  echo $this_test_failures >> $LOG_FILE
 done
 
 if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$fail_counter" -gt 0 ]]; then
-  echo "Tests            FAILED"
-  echo $fail_counter/$test_counter "tests FAILED"
+  echo "==> Model tests FAILED [" $fail_counter/$test_counter "]"
+  model_tests_passed=1
 else
-  echo "Tests            PASSED"
-  echo $test_counter/$test_counter "tests PASSED"
+  echo "==> Model tests PASSED [" $test_counter/$test_counter "]"
+  model_tests_passed=0
 fi
+echo "" >> $LOG_FILE
+echo "Execution of model tests script finished." >> $LOG_FILE
+
+exit $model_tests_passed

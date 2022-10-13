@@ -38,7 +38,6 @@ $this_indent_file_failures"
   fi
 done
 
-echo "" >> $LOG_FILE
 if [ -z "$failed_indent" ]; then
   echo "==> Indent test PASSED"
   indent_test_passed=0

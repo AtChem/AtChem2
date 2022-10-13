@@ -128,6 +128,7 @@ AtChem2 v1.3-dev
  6      BLHEIGHT              NOTUSED
  7      DILUTE                NOTUSED
  8      JFAC                       J4
+STOP 2
  Reading all photolysis rates from file...
  9      ROOF                     OPEN
  10     ASA                   NOTUSED

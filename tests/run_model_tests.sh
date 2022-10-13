@@ -10,6 +10,8 @@
 #
 # -----------------------------------------------------------------------------
 
+# ==================================================================== #
+
 function test_output_text {
   # This function creates 2 temporary files, which hold the section of
   # each of the input files (arg 1 and 2) defined by the args 3 and 4
@@ -46,6 +48,8 @@ function find_string {
   grep -n $1 $2 | grep -Eo "^[^:]+"
 }
 
+# ==================================================================== #
+
 # The basic workflow of this function is to loop over each test in $1, and for
 # each test, compare the screen output and the other output files with previously held results.
 # A mismatch generates a test failure. Numdiff is used to cope with small numerical
@@ -69,6 +73,7 @@ LOG_FILE=tests/modeltests.log
 
 echo "Executing model tests script." > $LOG_FILE
 echo "Model tests to run:" $1 >> $LOG_FILE
+echo "" >> $LOG_FILE
 
 # initialise counters
 test_counter=0
@@ -111,8 +116,8 @@ for test in $1; do
   sorted_list_of_skip_line_numbers=$(echo $list_of_skip_line_numbers | tr " " "\n" | sort -n)
 
   # Loop over the list of line numbers. Numdiff the section between the last
-  # skipped line and the next skipped line. Save to $this_file_failures, and append to $this_test_failures
-  # if there is a difference.
+  # skipped line and the next skipped line. Save to $this_file_failures, and
+  # append to $this_test_failures if there is a difference.
   # $old_skip_line_number keeps track of the previously skipped line
   old_skip_line_number=0
   for skip_line_number in $sorted_list_of_skip_line_numbers; do
@@ -131,8 +136,8 @@ $this_file_failures"
     old_skip_line_number=$skip_line_number
   done
 
-  # Loop over all files in output directory, and numdiff these. If the numdiff gives differences,
-  # then add the numdiff output to $this_test_failures via $this_file_failures,.
+  # Loop over all files in output directory, and numdiff these. If the numdiff
+  # gives differences, add the numdiff output to $this_test_failures via $this_file_failures.
   for filename in $TESTS_DIR/$test/output/*.output.cmp; do
     echo "Checking" $filename >> $LOG_FILE
     this_file_failures=$(test_output_file ${filename: 0: ${#filename}-4} $filename)
@@ -151,7 +156,7 @@ $this_file_failures"
 
   # Loop over all files (that don't end in .cmp) in the reactionRates
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
-  # then add the numdiff output to $this_test_failures via $this_file_failures,.
+  # then add the numdiff output to $this_test_failures via $this_file_failures.
   for filename in $TESTS_DIR/$test/output/reactionRates/* ; do
     if [ ${filename: -4} == ".cmp" ] ; then
       echo "Checking" $filename >> $LOG_FILE
@@ -172,7 +177,7 @@ $this_file_failures"
 
   # Loop over all files (that fit mechanism.*.cmp) in the model/configuration
   # subdirectory of output directory, and numdiff these. If the numdiff gives differences,
-  # then add the numdiff output to $this_test_failures via $this_file_failures,.
+  # then add the numdiff output to $this_test_failures via $this_file_failures.
   for filename in $TESTS_DIR/$test/model/configuration/mechanism.* ; do
     # guard against empty filelist
     #[ -e "$filename" ] || continue
@@ -194,13 +199,15 @@ $this_file_failures"
   done
 
   # Pass if $this_test_failures is empty. Otherwise, append all of $this_test_failures
-  # to logfile (modeltests.log)). Increment the counters as necessary.
+  # to logfile (modeltests.log). Increment the counters as necessary.
   if [ -z "$this_test_failures" ]; then
-    echo $test "PASSED" >> $LOG_FILE
+    echo "-> model test:" $test "PASSED" >> $LOG_FILE
+    echo "" >> $LOG_FILE
     echo "*" $test
     pass_counter=$((pass_counter+1))
   else
-    echo $test "FAILED" >> $LOG_FILE
+    echo "-> model test:" $test "FAILED" >> $LOG_FILE
+    echo "" >> $LOG_FILE
     echo "*" $test
     fail_counter=$((fail_counter+1))
   fi

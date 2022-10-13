@@ -38,7 +38,6 @@ $this_style_file_failures"
   fi
 done
 
-echo "" >> $LOG_FILE
 if [ -z "$failed_style" ]; then
   echo "==> Style test PASSED"
   style_test_passed=0

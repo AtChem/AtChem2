@@ -1,4 +1,4 @@
-AtChem2  ![CI](https://github.com/AtChem/AtChem2/workflows/CI/badge.svg)  [![codecov](https://codecov.io/gh/AtChem/AtChem2/branch/master/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
+AtChem2  [![CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml)
 =======
 
 

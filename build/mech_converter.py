@@ -103,7 +103,7 @@ def tokenise_and_process(input_string, variablesDict):
     return new_rhs
 
 
-def convert(input_file, mech_dir, mcm_dir):
+def convert_to_fortran(input_file, mech_dir, mcm_dir):
     """
     This is the main function of this file. It takes as input a chemical mechanism file (.fac), and from it generates
     5 files for use by AtChem2's Fortran code:
@@ -489,13 +489,20 @@ def main():
     else:
         mcm_dir = sys.argv[3]
 
-    # check the locations supplied exist
+    # check that the locations supplied exist
     assert os.path.isfile(input_filename), 'Failed to find file ' + input_filename
     assert os.path.exists(mech_dir), 'Failed to find directory ' + mech_dir
     assert os.path.exists(mcm_dir), 'Failed to find directory ' + mcm_dir
 
-    # call conversion function
-    convert(input_filename, mech_dir, mcm_dir)
+    # check that the mechanism file is in FACSIMILE format
+    if input_filename.split(".")[1] == "kpp":
+        # input_file = convert_kpp(input_filename)
+        print ('KPP format is not supported yet')
+    else:
+        input_file = input_filename
+
+    # call conversion to Fortran function
+    convert_to_fortran(input_file, mech_dir, mcm_dir)
 
 
 if __name__ == '__main__':

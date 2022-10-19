@@ -43,13 +43,13 @@ def fix_fac_full_contents(filename):
     print(str(filename) + ': file read in ' + str(orig_contents_len) + ' items')
     contents_count = 0
 
-    # This variable will hold the indices to be deleted once their contents have been concatenated onto the
-    # previous element.
+    # This variable will hold the indices to be deleted once their contents have
+    # been concatenated onto the previous element.
     to_delete = []
 
-    # Firstly wait until we reach a line containing 'Reaction definitions'.
-    # Then ignore comment lines. Then correct the lines which don't start with a % - they should be concatenated
-    # onto the previous entry
+    # First, wait until we reach a line containing 'Reaction definitions'.
+    # Then ignore comment lines.
+    # Then correct the lines which don't start with a '%': they should be concatenated onto the previous entry.
     in_reaction_definition_section = False
     for i in range(len(contents)):
         if not in_reaction_definition_section:

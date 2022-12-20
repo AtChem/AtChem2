@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [8,9,10]
+        fortran: [9,10]
         # do not use gfortra 8 on macos
         exclude:
           - os: macos-latest

@@ -152,7 +152,7 @@ contains
 
     ! Set negative cosx to zero and calculate the inverse
     ! (secx=1/cosx). The MCM photolysis parameterisation
-    ! (http://mcm.leeds.ac.uk/MCM/parameters/photolysis_param.htt)
+    ! (http://mcm.york.ac.uk/parameters/photolysis_param.htt)
     ! requires cosx and secx to calculate the photolysis rates.
     if ( cosx <= cosx_threshold ) then
       cosx = 0.0_DP

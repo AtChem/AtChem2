@@ -1,3 +1,17 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+# Peter Jimack, Mike Pilling
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
 name: CI
 
 # Controls when the action will run.
@@ -19,15 +33,16 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on - we use a matrix to run on two OSs
+    # runner images are described here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        fortran: [9,10]
-        # do not use gfortra 8 on macos
-        exclude:
-          - os: macos-latest
-            fortran: 8
+        fortran: [9, 10]
+        # do not use gfortran 8 on macos
+        #exclude:
+        #  - os: macos-latest
+        #    fortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -43,9 +58,9 @@ jobs:
       #  run: brew install gcc@8
 
       # ubuntu only
-      - name: Install gfortran-8 on ubuntu
-        if: matrix.os == 'ubuntu-latest' && matrix.fortran == 8
-        run: sudo apt-get install gfortran-8
+      #- name: Install gfortran-8 on ubuntu
+      #  if: matrix.os == 'ubuntu-latest' && matrix.fortran == 8
+      #  run: sudo apt-get install gfortran-8
 
       # Install cvode
       # ubuntu only

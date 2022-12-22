@@ -1,8 +1,5 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
-# Peter Jimack, Mike Pilling
-#
 # Copyright (c) 2017 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
@@ -47,7 +44,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 2
 

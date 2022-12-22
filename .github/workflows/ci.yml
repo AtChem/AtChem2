@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------------
 
-name: CI
+name: AtChem2-CI
 
 # Controls when the action will run.
 on:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest] #, macos-latest]
         fortran: [9, 10]
         # do not use gfortran 8 on macos
         #exclude:

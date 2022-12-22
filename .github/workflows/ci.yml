@@ -34,7 +34,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest] #, macos-latest]
+        os: [macos-latest]
         fortran: [9, 10]
         # do not use gfortran 8 on macos
         #exclude:

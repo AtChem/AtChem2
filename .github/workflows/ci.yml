@@ -34,8 +34,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-11]
-        fortran: [9, 10, 11]
+        os: [ubuntu-22.04, macos-11, macos-12]
+        fortran: [8, 9, 10, 11]
         # do not use gfortran 8 on macos
         #exclude:
         #  - os: macos-latest
@@ -48,16 +48,21 @@ jobs:
         with:
           fetch-depth: 2
 
-      # Install gfortran 8 since both Ubuntu and macOS don't supply it
+      # Install gfortran if not supplied on this OS image.
       # macOS only
-      #- name: Install gfortran-8 on macOS
-      #  if: matrix.os == 'macos-latest' && matrix.fortran == 10
-      #  run: brew install gcc@10
+      - name: Install gfortran-8 on any macOS
+        if: startsWith(matrix.os, 'macos') && matrix.fortran == 8
+        run: brew install gcc@8
+
+      # macOS-12 only
+      - name: Install gfortran-9 and gfortran-10 on macOS-12
+        if: matrix.os == 'macos-12' && (matrix.fortran == 9 or matrix.fortran == 10)
+        run: brew install gcc@${{ matrix.fortran }}
 
       # ubuntu only
-      #- name: Install gfortran-8 on ubuntu
-      #  if: matrix.os == 'ubuntu-latest' && matrix.fortran == 8
-      #  run: sudo apt-get install gfortran-8
+      - name: Install gfortran-8 on ubuntu
+        if: startsWith(matrix.os, 'ubuntu') && matrix.fortran == 8
+        run: sudo apt-get install gfortran-8
 
       # Install cvode
       # ubuntu only

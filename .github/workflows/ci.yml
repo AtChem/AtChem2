@@ -67,7 +67,7 @@ jobs:
 
       # macOS only
       - name: Install cvode (macOS)
-        if: matrix.os == 'macos-latest'
+        if: matrix.os == 'macos-11'
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # Install all dependencies

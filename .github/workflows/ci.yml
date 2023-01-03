@@ -62,12 +62,12 @@ jobs:
       # Install cvode
       # ubuntu only
       - name: Install cvode (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'ubuntu')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only
       - name: Install cvode (macOS)
-        if: matrix.os == 'macos-11'
+        if: startsWith(matrix.os, 'macos')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # Install all dependencies

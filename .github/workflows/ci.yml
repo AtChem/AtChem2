@@ -35,11 +35,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
-        fortran: [9, 10, 11]
-        # do not use gfortran 8 on macos
-        #exclude:
-        #  - os: macos-latest
-        #    fortran: 8
+        fortran: [8, 9, 10, 11]
+        # do not use gfortran 8 on ubuntu
+        exclude:
+          - os: ubuntu-22.04
+            fortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

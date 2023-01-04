@@ -35,13 +35,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
-        fortran: [8, 9, 10, 11]
-        # do not use gfortran 8 on ubuntu
-        exclude:
-          - os: macos-11
-            fortran: 8
-          - os: macos-12
-            fortran: 8
+        fortran: [9, 10, 11]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -51,22 +45,10 @@ jobs:
           fetch-depth: 2
 
       # Install gfortran if not supplied on this OS image.
-      # macOS only
-      - name: Install gfortran-8 on any macOS
-        if: startsWith(matrix.os, 'macos') && matrix.fortran == 8
-        run: brew install gcc@8
-
       # macOS-12 only
-      - name: Install gfortran-9 and gfortran-10 on macOS-12
+      - name: Install gfortran-9 or gfortran-10 on macOS-12 if required
         if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
         run: brew install gcc@${{ matrix.fortran }}
-
-      # ubuntu only
-      - name: Install gfortran-8 on ubuntu
-        if: startsWith(matrix.os, 'ubuntu') && matrix.fortran == 8
-        run: |
-          sudo apt-get update
-          sudo apt-get install gfortran-8 -y
 
       # Install cvode
       # ubuntu only

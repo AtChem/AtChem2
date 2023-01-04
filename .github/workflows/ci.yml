@@ -41,7 +41,7 @@ jobs:
           - os: macos-11
             fortran: 8
           - os: macos-12
-              fortran: 8
+            fortran: 8
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

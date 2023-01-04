@@ -64,7 +64,9 @@ jobs:
       # ubuntu only
       - name: Install gfortran-8 on ubuntu
         if: startsWith(matrix.os, 'ubuntu') && matrix.fortran == 8
-        run: sudo apt-get install gfortran-8
+        run: |
+          sudo apt-get update
+          sudo apt-get install gfortran-8
 
       # Install cvode
       # ubuntu only

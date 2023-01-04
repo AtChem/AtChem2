@@ -1,4 +1,15 @@
-name: CI
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
+name: AtChem2-CI
 
 # Controls when the action will run.
 on:
@@ -19,39 +30,35 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on - we use a matrix to run on two OSs
+    # runner images are described here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-10.15]
-        fortran: [8, 9]
+        os: [ubuntu-22.04, macos-11, macos-12]
+        fortran: [9, 10, 11]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
-      # Install gfortran 8 since both Ubuntu and macOS don't supply it
-      # macOS only
-      - name: Install gfortran-8 on macOS
-        if: matrix.os == 'macos-10.15' && matrix.fortran == 8
-        run: brew install gcc@8
-
-      # ubuntu only
-      - name: Install gfortran-8 on ubuntu
-        if: matrix.os == 'ubuntu-latest' && matrix.fortran == 8
-        run: sudo apt-get install gfortran-8
+      # Install gfortran if not supplied on this OS image.
+      # macOS-12 only
+      - name: Install gfortran-9 or gfortran-10 on macOS-12 if required
+        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+        run: brew install gcc@${{ matrix.fortran }}
 
       # Install cvode
       # ubuntu only
       - name: Install cvode (ubuntu)
-        if: matrix.os == 'ubuntu-latest'
+        if: startsWith(matrix.os, 'ubuntu')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # macOS only
       - name: Install cvode (macOS)
-        if: matrix.os == 'macos-10.15'
+        if: startsWith(matrix.os, 'macos')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # Install all dependencies
@@ -72,7 +79,7 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-          ./build/build_atchem2.sh ./mcm/mechanism_test.fac
+          ./build/build_atchem2.sh ./model/mechanism.fac
           if [ $RUNNER_OS != 'Linux' ] ; then
             install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;

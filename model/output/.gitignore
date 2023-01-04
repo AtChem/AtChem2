@@ -1,6 +1,2 @@
-# Ignore everything in this directory
-*
-
-# Except this file and reactionRates directory
-!.gitignore
-!reactionRates
+# Ignore output files in this directory
+*.output

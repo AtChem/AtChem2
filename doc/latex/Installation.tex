@@ -16,7 +16,7 @@
 
 AtChem2 can be installed on Linux/Unix and macOS operating systems. A
 working knowledge of the \textbf{unix shell} and its
-\href{https://swcarpentry.github.io/shell-novice/reference/}{basic commands}
+\href{https://swcarpentry.github.io/shell-novice/}{basic commands}
 is \emph{required} to install and use the model. AtChem2 requires the
 following tools:
 
@@ -24,22 +24,22 @@ following tools:
 \item Fortran -- the model compiles with GNU \texttt{gfortran}
   (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
   $\hookrightarrow$ default compiler: \texttt{gfortran}
+\item \texttt{make}
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
   with Python v2 and v3. Support for Python v2 will be removed in
   future versions of AtChem2.}
-\item make, cmake
 \item Ruby (optional)
 \end{itemize}
 
-Some or all of these tools may already be present on your operating
+Some or all of these tools may already be installed on the operating
 system. Use the \texttt{which} command to find out (e.g.,
 \verb|which python|, \verb|which cmake|, etc\ldots); otherwise, check
 the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item BLAS, LAPACK
-\item CVODE
+%\item BLAS, LAPACK
+\item CVODE -- requires \texttt{cmake}
 \item openlibm
 \item numdiff (optional)
 \item FRUIT (optional)
@@ -52,7 +52,7 @@ dependencies go to Sect.~\ref{sec:dependencies}.
 \section{Download} \label{sec:download}
 
 Two versions of AtChem2 are available for download: the
-\href{https://github.com/AtChem/AtChem2/releases/}{stable version} and
+\href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the development version, also known as \texttt{master\ branch} (see
 Sect.~\ref{sec:general-information} for details). The source code can
 be obtained in two ways:
@@ -110,20 +110,20 @@ Sect.~\ref{sec:requirements}.
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
-\subsubsection{BLAS and LAPACK}
+% \subsubsection{BLAS and LAPACK}
 
-BLAS and LAPACK are standard Fortran libraries for linear
-algebra. They are needed to install and compile the CVODE library --
-see below. Usually they are located in the \texttt{/usr/lib/}
-directory (e.g., \texttt{/usr/lib/libblas/} and
-\texttt{/usr/lib/lapack/}). The location may be different, especially
-if you are using a High Performance Computing (HPC) system: check the
-local documentation or ask the system administrator.
+% BLAS and LAPACK are standard Fortran libraries for linear
+% algebra. They are needed to install and compile the CVODE library --
+% see below. Usually they are located in the \texttt{/usr/lib/}
+% directory (e.g., \texttt{/usr/lib/libblas/} and
+% \texttt{/usr/lib/lapack/}). The location may be different, especially
+% if you are using a High Performance Computing (HPC) system: check the
+% local documentation or ask the system administrator.
 
 \subsubsection{CVODE}
 
 AtChem2 uses the CVODE library which is part of the open source
-\href{https://computation.llnl.gov/projects/sundials/}{SUNDIALS suite}
+\href{https://computing.llnl.gov/projects/sundials}{SUNDIALS suite}
 \citep{hindmarsh_2005}, to solve the system of ordinary differential
 equations (ODE). The version of CVODE currently used in AtChem2 is
 v2.9.0 (part of SUNDIALS v2.7.0) and it can be installed using the
@@ -135,9 +135,9 @@ directory.
 \item Open the installation script (\texttt{tools/install/install\_cvode.sh})
   with a text editor:
   \begin{itemize}
-  \item If LAPACK and BLAS are not in the default location (see
-    above), change the \texttt{LAPACK\_LIBS} variable for your
-    architecture (Linux or macOS) as appropriate.
+  % \item If LAPACK and BLAS are not in the default location (see
+  %   above), change the \texttt{LAPACK\_LIBS} variable for your
+  %   architecture (Linux or macOS) as appropriate.
   \item If you are not using the \texttt{gcc} compiler
     (\texttt{gfortran}), change the line
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}
@@ -158,7 +158,7 @@ later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
 
-openlibm is a \href{https://openlibm.org/}{portable version} of the
+openlibm is a \href{https://openlibm.org}{portable version} of the
 open source \textbf{libm} library. Installing openlibm and linking
 against it allows reproducible results by ensuring the same
 implementation of several mathematical functions across platforms.
@@ -287,12 +287,11 @@ To install AtChem2:
 \item Compile AtChem2 with the \texttt{build\_atchem2.sh} script in
   the \texttt{build/} directory:
   \begin{verbatim}
-  ./build/build_atchem2.sh ./mcm/mechanism_test.fac
+  ./build/build_atchem2.sh ./model/mechanism.fac
   \end{verbatim}
   This command compiles the model and creates an executable (called
-  \texttt{atchem2}) using the example mechanism file
-  \texttt{mechanism\_test.fac} included in the \texttt{mcm/}
-  directory.
+  \texttt{atchem2}) using the example mechanism file \texttt{mechanism.fac} in
+  the \texttt{model/} directory.
 \item Execute \verb|./atchem2| from the \maindir. This command runs
   the model executable using the default configuration. If the model
   run completes successfully, the following message (or similar) will
@@ -311,11 +310,10 @@ To install AtChem2:
   \end{verbatim}
 \end{enumerate}
 
-When AtChem2 is run for the first time on a macOS system, it may abort
-with an error message concerning \texttt{rpath}: if this happens, see
-the \textbf{Note for macOS users} on the
-\href{https://github.com/AtChem/AtChem2/wiki/How-to-install-AtChem2}{wiki}
-for a solution.
+When AtChem2 is run for the first time on \textbf{macOS}, it may abort
+with an error message concerning \texttt{rpath}: if this happens,
+a solution can be found on the
+\href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
 AtChem2 is now ready to be used. Optionally, the Test Suite can be run
 to check that the model has been installed correctly: go to
@@ -341,7 +339,7 @@ following commands from the \maindir:
 \begin{itemize}
 \item \verb|make alltests|: runs all the tests (requires numdiff and
   FRUIT).
-\item \verb|make tests|: runs only the build and behaviour tests
+\item \verb|make modeltests|: runs only the build and behaviour tests
   (requires numdiff).
 \item \verb|make unittests|: runs only the unit tests (requires
   FRUIT).
@@ -397,7 +395,7 @@ one.
     \hline
     \texttt{tools/}                  & \texttt{tools/}                         & various scripts and plotting tools.\\
     \hline
-    \texttt{travis/}~$(\dag)$        & \texttt{test/}~$(\ddag)$                & scripts and files for the Test Suite.\\
+    \texttt{travis/}~$(\dag)$        & \texttt{tests/}~$(\ddag)$               & scripts and files for the Test Suite.\\
   \end{tabular}
 \end{table}
 
@@ -405,7 +403,7 @@ In AtChem2 version 1.1 (and later versions) the directories
 \texttt{build/}, \texttt{mcm/}, \texttt{obj/} and \texttt{src/}
 contain the build scripts, the MCM data files, the files generated by
 the compiler, the source code; the directory
-\texttt{test/}~\footnote{Called \texttt{travis/} in version 1.2 and
+\texttt{tests/}~\footnote{Called \texttt{travis/} in version 1.2 and
   earlier.} contains the files and the scripts necessary to run the
 \hyperref[sec:test-suite]{Test Suite}.
 

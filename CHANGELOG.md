@@ -1,5 +1,19 @@
 # AtChem2 - CHANGELOG
 
+## post v1.2.1
+
+- move implementation of continuous integration from Travis CI to GitHub Actions
+- remove unit testing from CodeCov
+- optimisation of gfortran compiler
+- error handling for RO2 sum in `build/mech_converter.py`
+- disable (provisionally) support for LAPACK and BLAS
+- fix bug in input and output of constant photolysis rates
+- update the scripts in the `tools/` directory and the `.gitignore` files
+- move and rename the example mechanism `mcm/mechanism_test.fac` to `model/mechanism.fac`.
+- update the manual and the `*.md` files
+- improving logging and reporting of the Test Suite
+- new version of the Test Suite (work in progress...)
+
 ## v1.2.1 (January 2021)
 
 - new environment variable `ASA` (aerosol surface area)

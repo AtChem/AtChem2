@@ -1,4 +1,4 @@
-# Ignore FRUIT files in this directory
-fruit_generator.rb
+# Ignore fruit-generated files in this directory
 fruit_driver.exe
+fruit_generator.rb
 *_gen.f90

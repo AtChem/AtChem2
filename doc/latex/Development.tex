@@ -45,20 +45,20 @@ of open issues and known bugs can be found on the related
 \href{https://github.com/AtChem/AtChem2/issues}{github page}. The
 preferred way to contribute to the development of AtChem2 is to use
 \textbf{git}: instructions on how to set up git and submit
-contributions can be found on the
+contributions to the AtChem2 repository can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki}.
 The coding guidelines for Fortran are detailed in Sect.\ref{sec:style-guide}.
 
 % -------------------------------------------------------------------- %
 \section{Test Suite} \label{sec:test-suite}
 
-AtChem2 uses \href{https://github.com/features/actions/}{GitHub Actions} for
+AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions} for
 \textbf{continuous integration} testing. This programming approach
 ensures that changes to the code do not modify the behaviour and the
 results of the software in an unintended fashion. The Test Suite is in
-the \texttt{test/} directory and consists of a series of tests and
+the \texttt{tests/} directory and consists of a series of tests and
 short model runs that check the model functionality and calculations
-against known outputs. The \href{https://codecov.io/}{Codecov} service
+against known outputs. The \href{https://codecov.io}{Codecov} service
 is used to verify that the Test Suite covers a significant fraction of
 the codebase ($>$90\%) and a wide range of common configurations.
 
@@ -75,7 +75,7 @@ be installed):
   the expected outputs -- \verb|make unittests|.
 \item \textbf{Behaviour} tests: build and run a number of models with
   different configurations and check that they generate the expected
-  outputs -- \verb|make tests|.
+  outputs -- \verb|make modeltests|.
 \end{itemize}
 
 The command \verb|make alltests| runs all the tests in the Test Suite
@@ -92,24 +92,24 @@ Tests            PASSED
 Testsuite PASSED
 \end{verbatim}
 
-The Test Suite is automatically run every time a Pull Request (PR) is
-created or updated on the main github repository (\texttt{AtChem/AtChem2}).
-The Pull Request triggers a build on GitHub Actions which runs the entire
-Test Suite on two architectures (Linux and macOS) with one compiler
-(GNU \texttt{gfortran}). The CI tester performs the following tasks on
-each architecture:
+The Test Suite is automatically run every time a Pull Request (PR) is created
+or updated on the main github repository (\texttt{AtChem/AtChem2}).  The Pull
+Request triggers a build on GitHub Actions which runs the entire Test Suite on
+two architectures (Linux and macOS) using different versions of the GNU
+\texttt{gfortran} compiler. The CI tester performs the following tasks on each
+architecture:
 
 \begin{itemize}
 \item Install \texttt{gfortran}, CVODE, and \texttt{numdiff}:
   \begin{itemize}
-  \item Linux: use \texttt{apt-get} for \texttt{gfortran},
-    \texttt{numdiff}, and \texttt{liplapack-dev} (a dependency of
-    CVODE). Install CVODE from source~\footnote{\texttt{apt-get} could
-      also be used to install SUNDIALS, but the repository does not
-      currently hold CVODE v2.9.}.
-  \item macOS: use \texttt{Homebrew} for \texttt{gfortran} and
-    \texttt{numdiff}. Install \texttt{cvode} from source.
+  \item Linux: use \texttt{apt-get} to install \texttt{gfortran}. Install
+    CVODE from source~\footnote{\texttt{apt-get} could also be used to install
+      SUNDIALS, but the repository does not currently hold CVODE v2.9.}.
+  \item macOS: use \texttt{Homebrew} to install \texttt{gfortran}. Install
+    CVODE from source.
   \end{itemize}
+\item Install the other dependencies (\texttt{openlibm}, \texttt{numdiff} and
+  FRUIT) using the scripts in the \texttt{tools/install/} directory.
 \item Build and run the example AtChem2 model using the default
   configuration. PASS if it exits with 0.
 \item Build and run the indent and style tests. PASS if all tests pass.
@@ -125,7 +125,7 @@ GitHub Actions has completed with passes on both architectures.
 
 \subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
 
-The unit tests are in the \texttt{test/unit\_tests} directory and
+The unit tests are in the \texttt{tests/unit\_tests/} directory and
 require the FRUIT optional dependency (which requires Ruby,
 Sect.~\ref{subsec:optional-dependencies}). To add new unit tests,
 follow the procedure outlined below:
@@ -176,44 +176,43 @@ summary -- there should be a line associated to each of the
 \subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
 
 Each behaviour test (\texttt{\$TESTNAME}) is contained in its own
-subdirectory inside the \texttt{test/tests/} directory. A behaviour
+subdirectory inside the \texttt{tests/tests/} directory. A behaviour
 test requires the following files and directory structure:
 
 \begin{verbatim}
-|- model
+|- $TESTNAME
 |  |- configuration
-|  |  |- $TESTNAME.fac
 |  |  |- environmentVariables.config
-|  |  |- mechanism.reac.cmp
-|  |  |- mechanism.prod.cmp
-|  |  |- mechanism.species.cmp
-|  |  |- mechanism.ro2.cmp
-|  |  |- model.parameters
-|  |  |- outputSpecies.config
-|  |  |- outputRates.config
-|  |  |- photolysisConstant.config    [*]
-|  |  |- photolysisConstrained.config [*]
-|  |  |- solver.parameters
-|  |  |- speciesConstrained.config    [*]
-|  |  |- speciesConstant.config       [*]
 |  |  |- initialConcentrations.config
-|  |- constraints     [**]
-|     |- environment/ [**]
-|     |- photolysis/  [**]
-|     |- species/     [**]
+|  |  |- mechanism.prod.cmp
+|  |  |- mechanism.reac.cmp
+|  |  |- mechanism.ro2.cmp
+|  |  |- mechanism.species.cmp
+|  |  |- model.parameters
+|  |  |- outputRates.config
+|  |  |- outputSpecies.config
+|  |  |- photolysisConstant.config     [*]
+|  |  |- photolysisConstrained.config  [*]
+|  |  |- solver.parameters
+|  |  |- speciesConstant.config        [*]
+|  |  |- speciesConstrained.config     [*]
+|  |- constraints      [**]
+|     |- environment/  [**]
+|     |- photolysis/   [**]
+|     |- species/      [**]
 |- output
 |  |- reactionRates/
-|  |- concentration.output.cmp
 |  |- environmentVariables.output.cmp
 |  |- errors.output.cmp
 |  |- finalModelState.output.cmp
-|  |- initialConditionsSetting.output.cmp
 |  |- jacobian.output.cmp
 |  |- lossRates.output.cmp
 |  |- mainSolverParameters.output.cmp
 |  |- photolysisRates.output.cmp
 |  |- photolysisRatesParameters.output.cmp
 |  |- productionRates.output.cmp
+|  |- speciesConcentrations.output.cmp
+|- $TESTNAME.fac
 |- $TESTNAME.out.cmp
 \end{verbatim}
 
@@ -224,13 +223,12 @@ contain the relevant constraint files, according to the corresponding
 configuration files in \texttt{model/configuration/} (see
 Sect.~\ref{sec:constraints} for details).
 
-The file \texttt{\$TESTNAME.out.cmp} should contain the exact copy of
-the expected terminal printout. Each behaviour test is briefly
-described in the \texttt{test/tests/INFO.md} file, which should be
-updated after a new test is added. New tests added to the
-\texttt{test/tests/} directory are automatically picked up by the
-\texttt{Makefile} when running \verb|make test| or \verb|make alltests|
-from the \maindir.
+The file \texttt{\$TESTNAME.out.cmp} should contain the exact copy of the
+expected terminal printout. Each behaviour test is briefly described in the
+\texttt{tests/tests/INFO.md} file, which should be updated after a new test is
+added. New tests added to the \texttt{tests/tests/} directory are
+automatically picked up by the \texttt{Makefile} when running
+\verb|make modeltests| or \verb|make alltests| from the \maindir.
 
 % -------------------------------------------------------------------- %
 \section{Style Guide} \label{sec:style-guide}

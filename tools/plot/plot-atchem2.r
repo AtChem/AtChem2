@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> R version
+## --> version for R
 ##
 ## ARGUMENT:
 ## - directory with the model output
@@ -18,7 +18,7 @@
 ## USAGE:
 ##   Rscript --vanilla ./tools/plot/plot-atchem2.r ./model/output/
 ## ---------------------------------------------- ##
-cmd_args <- commandArgs(trailingOnly = TRUE)
+cmd_args <- commandArgs(trailingOnly=TRUE)
 setwd(cmd_args[1])
 getwd()
 
@@ -37,28 +37,28 @@ nc4 <- ncol(df4)
 cairo_pdf("atchem2_output.pdf", onefile=T, width=11, height=7)
 
 ## speciesConcentrations.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3))
 for (i in 2:nc1) {
   plot(df1[[1]], df1[[i]], type="l",
        main=colnames(df1[i]), xlab="seconds", ylab="")
 }
 
 ## environmentVariables.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3))
 for (i in 2:nc2) {
   plot(df2[[1]], df2[[i]], type="l",
        main=colnames(df2[i]), xlab="seconds", ylab="")
 }
 
 ## photolysisRates.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3))
 for (i in 2:nc3) {
   plot(df3[[1]], df3[[i]], type="l",
        main=colnames(df3[i]), xlab="seconds", ylab="")
 }
 
 ## photolysisRatesParameters.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3))
 for (i in 2:nc4) {
   plot(df4[[1]], df4[[i]], type="l",
        main=colnames(df4[i]), xlab="seconds", ylab="")
@@ -68,4 +68,4 @@ dev.off()
 
 ## ---------------------------- ##
 
-cat("\n===> atchem2_output.pdf created in directory:", cmd_args[1], "\n\n")
+cat("\n==> atchem2_output.pdf created in directory:", cmd_args[1], "\n\n")

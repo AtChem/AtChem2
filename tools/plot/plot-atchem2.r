@@ -64,7 +64,7 @@ for (i in 2:nc4) {
        main=colnames(df4[i]), xlab="seconds", ylab="")
 }
 
-dev.off()
+invisible(dev.off())
 
 ## ---------------------------- ##
 

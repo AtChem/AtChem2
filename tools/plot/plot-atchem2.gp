@@ -70,4 +70,4 @@ set nomultiplot
 
 ## ---------------------------- ##
 
-print "\n==> atchem2_output.pdf created in directory: ", ARG1, "\n\n"
+print('\n==> atchem2_output.pdf created in directory: ', ARG1, '\n\n')

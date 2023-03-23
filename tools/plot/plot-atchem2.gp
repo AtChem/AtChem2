@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> gnuplot version
+## --> version for gnuplot
 ##
 ## ARGUMENT:
 ## - directory with the model output
@@ -33,73 +33,41 @@ stats df4 skip 1 noout; nc4 = STATS_columns
 
 ## ---------------------------- ##
 
-set terminal pdf size 11,7
+set terminal pdfcairo size 11,7
 set output 'atchem2_output.pdf'
 
 ## speciesConcentrations.output
-set multiplot layout 3,2
-j = 1
+set multiplot layout 3,3
 do for [i=2:nc1] {
-    plot df1 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'seconds'; set ylabel ''
-    if (j == 6) {
-        unset multiplot
-        set multiplot layout 3,2
-        j = 1
-    } else {
-        j = j + 1
-    }
+    plot df1 using 1:i with lines title columnheader(i) lt rgb 'black'
+    set xlabel 'seconds'; set ylabel ''
 }
-unset multiplot
+set nomultiplot
 
 ## environmentVariables.output
-set multiplot layout 3,2
-j = 1
-do for [i=2:nc2] {
-    plot df2 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'seconds'; set ylabel ''
-    if (j == 6) {
-        unset multiplot
-        set multiplot layout 3,2
-        j = 1
-    } else {
-        j = j + 1
-    }
+set multiplot layout 3,3
+do for [i=2:nc1] {
+    plot df2 using 1:i with lines title columnheader(i) lt rgb 'black'
+    set xlabel 'seconds'; set ylabel ''
 }
-unset multiplot
+set nomultiplot
 
 ## photolysisRates.output
-set multiplot layout 3,2
-j = 1
-do for [i=2:nc3] {
-    plot df3 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'seconds'; set ylabel ''
-    if (j == 6) {
-        unset multiplot
-        set multiplot layout 3,2
-        j = 1
-    } else {
-        j = j + 1
-    }
+set multiplot layout 3,3
+do for [i=2:nc1] {
+    plot df3 using 1:i with lines title columnheader(i) lt rgb 'black'
+    set xlabel 'seconds'; set ylabel ''
 }
-unset multiplot
+set nomultiplot
 
 ## photolysisRatesParameters.output
-set multiplot layout 3,2
-j = 1
-do for [i=2:nc4] {
-    plot df4 using 1:i with lines title '' lt rgb 'black'
-    set title ''; set xlabel 'seconds'; set ylabel ''
-    if (j == 6) {
-        unset multiplot
-        set multiplot layout 3,2
-        j = 1
-    } else {
-        j = j + 1
-    }
+set multiplot layout 3,3
+do for [i=2:nc1] {
+    plot df4 using 1:i with lines title columnheader(i) lt rgb 'black'
+    set xlabel 'seconds'; set ylabel ''
 }
-unset multiplot
+set nomultiplot
 
 ## ---------------------------- ##
 
-print "\n===> atchem2_output.pdf created in directory: ", ARG1, "\n\n"
+print "\n==> atchem2_output.pdf created in directory: ", ARG1, "\n\n"

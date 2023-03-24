@@ -18,8 +18,13 @@
 ## USAGE:
 ##   gnuplot -c ./tools/plot/plot-atchem2.gp ./model/output/
 ## ---------------------------------------------- ##
-cd ARG1
-pwd
+if (ARGC < 1) {
+    print "Please provide the model output directory as an argument."
+    exit
+} else {
+    output_dir = ARGV[1]
+    cd output_dir
+}
 
 df1 = 'speciesConcentrations.output'
 df2 = 'environmentVariables.output'
@@ -46,7 +51,7 @@ set nomultiplot
 
 ## environmentVariables.output
 set multiplot layout 3,3
-do for [i=2:nc1] {
+do for [i=2:nc2] {
     plot df2 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
 }
@@ -54,7 +59,7 @@ set nomultiplot
 
 ## photolysisRates.output
 set multiplot layout 3,3
-do for [i=2:nc1] {
+do for [i=2:nc3] {
     plot df3 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
 }
@@ -62,7 +67,7 @@ set nomultiplot
 
 ## photolysisRatesParameters.output
 set multiplot layout 3,3
-do for [i=2:nc1] {
+do for [i=2:nc4] {
     plot df4 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
 }
@@ -70,4 +75,4 @@ set nomultiplot
 
 ## ---------------------------- ##
 
-print('\n==> atchem2_output.pdf created in directory: ', ARG1, '\n\n')
+print "\n==> atchem2_output.pdf created in directory: ", output_dir, "\n"

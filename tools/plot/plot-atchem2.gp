@@ -43,35 +43,63 @@ set output 'atchem2_output.pdf'
 
 ## speciesConcentrations.output
 set multiplot layout 3,3
+j = 1
 do for [i=2:nc1] {
     plot df1 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
+    if (j == 9) {
+        unset multiplot; set multiplot layout 3,3
+        j = 1
+    } else {
+        j = j + 1
+    }
 }
-set nomultiplot
+unset multiplot
 
 ## environmentVariables.output
 set multiplot layout 3,3
+j = 1
 do for [i=2:nc2] {
     plot df2 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
+    if (j == 9) {
+        unset multiplot; set multiplot layout 3,3
+        j = 1
+    } else {
+        j = j + 1
+    }
 }
-set nomultiplot
+unset multiplot
 
 ## photolysisRates.output
 set multiplot layout 3,3
+j = 1
 do for [i=2:nc3] {
     plot df3 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
+    if (j == 9) {
+        unset multiplot; set multiplot layout 3,3
+        j = 1
+    } else {
+        j = j + 1
+    }
 }
-set nomultiplot
+unset multiplot
 
 ## photolysisRatesParameters.output
 set multiplot layout 3,3
+j = 1
 do for [i=2:nc4] {
     plot df4 using 1:i with lines title columnheader(i) lt rgb 'black'
     set xlabel 'seconds'; set ylabel ''
+    if (j == 9) {
+        unset multiplot; set multiplot layout 3,3
+        j = 1
+    } else {
+        j = j + 1
+    }
 }
-set nomultiplot
+unset multiplot
 
 ## ---------------------------- ##
 

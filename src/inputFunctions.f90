@@ -135,7 +135,7 @@ contains
     fileLocation=trim( configuration_dir ) // '/mechanism.species'
     ! Read in species number and name from model/configuration/mechanism.species
     ! to speciesName and sdummy (to be thrown).
-    allocate(speciesName(getNumberOfSpecies()))
+    allocate (speciesName(getNumberOfSpecies()))
     call inquire_or_abort( fileLocation, 'readSpecies()')
     open (10, file=fileLocation) ! input file
     do j = 1, size ( speciesName )
@@ -179,7 +179,7 @@ contains
       write (51, '(A, I0)') '(number of species initial concentrations are set for) = ', numLines
       write (51, '(A, I0)') '(number of species) = ', nsp
     end if
-    allocate (concSpeciesNames(numLines), concentration(numLines) )
+    allocate (concSpeciesNames(numLines), concentration(numLines))
 
     open (10, file=trim( filename ), status='old') ! input file for lhs of equations
     i = 0
@@ -483,7 +483,7 @@ contains
         numUnconstrainedPhotoRates = numUnconstrainedPhotoRates + 1
       end if
     end do
-    allocate ( unconstrainedPhotoNumbers(numUnconstrainedPhotoRates))
+    allocate (unconstrainedPhotoNumbers(numUnconstrainedPhotoRates))
     counter = 0_NPI
     write (*,*) 'maxval(photoNumbers):', maxval(photoNumbers)
     do j = 1, totalNumPhotos
@@ -671,7 +671,7 @@ contains
     integer(kind=NPI) :: length, j
 
     length = count_lines_in_file ( trim( filename ), .false. )
-    allocate (r(length) )
+    allocate (r(length))
     call read_in_single_column_string_file( trim( filename ), r, .false. )
 
     if ( length > 3 ) then
@@ -787,11 +787,11 @@ contains
     numEnvVars = int( count_lines_in_file( trim( configuration_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
 
     ! Allocate storage for current values of env vars used for output
-    allocate (currentEnvVarValues(numEnvVars) )
+    allocate (currentEnvVarValues(numEnvVars))
 
     write (*, '(A, I0)') ' Number of environment variables: ', numEnvVars
-    allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
-    allocate (envVarFixedValues(numEnvVars) )
+    allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars))
+    allocate (envVarFixedValues(numEnvVars))
 
     envVarNames(1) = 'M'
     envVarTypes(1) = 'CALC'
@@ -943,7 +943,7 @@ contains
     filename = trim( configuration_dir ) // '/outputSpecies.config'
     write (*, '(A)') ' Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
-    allocate (r(length) )
+    allocate (r(length))
     call read_in_single_column_string_file( trim( filename ), r )
     write (*, '(A)') ' Finished reading concentration output from file.'
 
@@ -1094,7 +1094,7 @@ contains
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    allocate ( constrainedNames(numberOfConstrainedSpecies) )
+    allocate (constrainedNames(numberOfConstrainedSpecies))
     call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     ! fill constrainedNames and constrainedSpecies with the names and
@@ -1139,12 +1139,12 @@ contains
       write (*, '(A, I0)') ' maximum number of species constraint data points: ', maxNumberOfConstraintDataPoints
     end if
 
-    allocate ( dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
-    allocate ( dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints))
+    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints))
 
     ! Read concentration data for variable constrained species
     write (*, '(A)') ' Reading concentration data for variable-concentration constrained species...'
-    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+numberOfFixedConstrainedSpecies) )
+    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+numberOfFixedConstrainedSpecies))
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       do i = 1, numberOfVariableConstrainedSpecies
         if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
@@ -1260,7 +1260,7 @@ contains
     ! to ro2Numbers
     call inquire_or_abort( fileLocation, 'readSpecies()')
     numberOfRO2Species = count_lines_in_file( fileLocation, .true. )
-    allocate(ro2Numbers(numberOfRO2Species))
+    allocate (ro2Numbers(numberOfRO2Species))
 
     open (10, file=fileLocation) ! input file
     ! skip first line

@@ -396,7 +396,7 @@ contains
   pure function getSpeciesList() result ( sl )
     character(len=maxSpecLength), allocatable :: sl(:)
     integer(kind=NPI) :: i
-    allocate (sl(numSpecies) )
+    allocate (sl(numSpecies))
     do i = 1, numSpecies
       sl(i) = speciesList(i)
     end do

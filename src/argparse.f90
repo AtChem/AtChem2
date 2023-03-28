@@ -216,8 +216,8 @@ contains
     ! count possible arguments
     cmd_arg_count = command_argument_count()
     ! read in possible arguments
-    allocate( input_strings(cmd_arg_count), names(cmd_arg_count), values(cmd_arg_count), &
-              names_valid(cmd_arg_count), values_valid(cmd_arg_count) )
+    allocate (input_strings(cmd_arg_count), names(cmd_arg_count), values(cmd_arg_count), &
+              names_valid(cmd_arg_count), values_valid(cmd_arg_count))
 
     if ( cmd_arg_count > 0 ) then
       do i=1, cmd_arg_count

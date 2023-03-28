@@ -19,7 +19,7 @@
 %%   octave ./tools/plot/plot-atchem2.m ./model/output/
 %% ---------------------------------------------- %%
 if length(argv) < 1
-    error('Please provide the model output directory as an argument.');
+    error('[!] Please provide the model output directory as an argument.');
 else
     output_dir = argv{1};
     cd(output_dir);

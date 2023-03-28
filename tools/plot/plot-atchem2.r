@@ -20,7 +20,7 @@
 ## ---------------------------------------------- ##
 cmd_args <- commandArgs(trailingOnly=TRUE)
 if (length(cmd_args) < 1) {
-    stop("Please provide the model output directory as an argument.")
+    stop("[!] Please provide the model output directory as an argument.")
 } else {
     output_dir <- cmd_args[1]
     setwd(output_dir)
@@ -43,29 +43,37 @@ cairo_pdf("atchem2_output.pdf", onefile=T, width=11, height=7)
 ## speciesConcentrations.output
 par(mfrow=c(3,3))
 for (i in 2:nc1) {
-    plot(df1[[1]], df1[[i]], type="l", col="black",
-         main=colnames(df1[i]), xlab="seconds", ylab="")
+  plot(df1[[1]], df1[[i]], type="l", col="black",
+       main=colnames(df1[i]), xlab="seconds", ylab="", yaxt="no")
+  ticks <- pretty(df1[[i]])
+  axis(2, at=ticks, labels=format(ticks, scientific=TRUE, digits=3), las=1)
 }
 
 ## environmentVariables.output
 par(mfrow=c(3,3))
 for (i in 2:nc2) {
-    plot(df2[[1]], df2[[i]], type="l", col="black",
-         main=colnames(df2[i]), xlab="seconds", ylab="")
+  plot(df2[[1]], df2[[i]], type="l", col="black",
+       main=colnames(df2[i]), xlab="seconds", ylab="", yaxt="no")
+  ticks <- pretty(df2[[i]])
+  axis(2, at=ticks, labels=format(ticks, scientific=TRUE, digits=3), las=1)
 }
 
 ## photolysisRates.output
 par(mfrow=c(3,3))
 for (i in 2:nc3) {
-    plot(df3[[1]], df3[[i]], type="l", col="black",
-         main=colnames(df3[i]), xlab="seconds", ylab="")
+  plot(df3[[1]], df3[[i]], type="l", col="black",
+       main=colnames(df3[i]), xlab="seconds", ylab="", yaxt="no")
+  ticks <- pretty(df3[[i]])
+  axis(2, at=ticks, labels=format(ticks, scientific=TRUE, digits=3), las=1)
 }
 
 ## photolysisRatesParameters.output
 par(mfrow=c(3,3))
 for (i in 2:nc4) {
-    plot(df4[[1]], df4[[i]], type="l", col="black",
-         main=colnames(df4[i]), xlab="seconds", ylab="")
+  plot(df4[[1]], df4[[i]], type="l", col="black",
+       main=colnames(df4[i]), xlab="seconds", ylab="", yaxt="no")
+  ticks <- pretty(df4[[i]])
+  axis(2, at=ticks, labels=format(ticks, scientific=TRUE, digits=3), las=1)
 }
 
 invisible(dev.off())

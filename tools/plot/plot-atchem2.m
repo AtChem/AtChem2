@@ -65,6 +65,8 @@ for i = 2:1:nc1
     subplot(3,3,j);
     plot(df1(:,1), df1(:,i), '-k');
     title(var1{i+1}), xlabel('seconds'), ylabel('');
+    set(gca, 'YTickLabel', sprintfc('%.1e', get(gca, 'YTick')));
+    ytickformat('%.1e');
     if (j == 9 || i == nc1)
         print(pdf_file, '-dpdf', '-fillpage', '-append');
         j = 1; clf;
@@ -79,6 +81,8 @@ for i = 2:1:nc2
     subplot(3,3,j);
     plot(df2(:,1), df2(:,i), '-k');
     title(var2{i+1}), xlabel('seconds'), ylabel('');
+    set(gca, 'YTickLabel', sprintfc('%.1e', get(gca, 'YTick')));
+    ytickformat('%.1e');
     if (j == 9 || i == nc2)
         print(pdf_file, '-dpdf', '-fillpage', '-append');
         j = 1; clf;
@@ -93,6 +97,8 @@ for i = 2:1:nc3
     subplot(3,3,j);
     plot(df3(:,1), df3(:,i), '-k');
     title(var3{i+1}), xlabel('seconds'), ylabel('');
+    set(gca, 'YTickLabel', sprintfc('%.1e', get(gca, 'YTick')));
+    ytickformat('%.1e');
     if (j == 9 || i == nc3)
         print(pdf_file, '-dpdf', '-fillpage', '-append');
         j = 1; clf;
@@ -107,6 +113,8 @@ for i = 2:1:nc4
     subplot(3,3,j);
     plot(df4(:,1), df4(:,i), '-k');
     title(var4{i+1}), xlabel('seconds'), ylabel('');
+    set(gca, 'YTickLabel', sprintfc('%.1e', get(gca, 'YTick')));
+    ytickformat('%.1e');
     if (j == 9 || i == nc4)
         print(pdf_file, '-dpdf', '-fillpage', '-append');
         j = 1; clf;

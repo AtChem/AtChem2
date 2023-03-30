@@ -36,6 +36,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
+      fail-fast: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:

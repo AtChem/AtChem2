@@ -2,8 +2,6 @@ The directory `tests/tests/` contains the **behaviour tests** for
 AtChem2. These tests check the overall behaviour of the model for a
 range of possibile configurations.
 
-- `firstorder`, `secondorder`, `static`: generic chemical mechanism (1 or 2 reaction, 2 species). These are manufactured ODE systems with known solutions.
-
 - `short*`: chemical mechanism of CH3OH, C2H5OH, BUT2OL (324 reactions, 105 species), no constraints:
   - `short`: change values of TEMP, H2O, DEC. Set ROOF to CLOSED. Two species initialized, one species output, inverted order of outputRates. Start time = 19/11/08 12:00, runtime= 15 min. Change latitude and longitude. Change output reaction rates and jacobian to 300 seconds.
   - `short_dense`: set Solver Type = Dense.

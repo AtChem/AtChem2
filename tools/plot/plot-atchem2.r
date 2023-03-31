@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
-## --> R version
+## --> version for R
 ##
 ## ARGUMENT:
 ## - directory with the model output
@@ -18,9 +18,13 @@
 ## USAGE:
 ##   Rscript --vanilla ./tools/plot/plot-atchem2.r ./model/output/
 ## ---------------------------------------------- ##
-cmd_args <- commandArgs(trailingOnly = TRUE)
-setwd(cmd_args[1])
-getwd()
+cmd_args <- commandArgs(trailingOnly=TRUE)
+if (length(cmd_args) < 1) {
+    stop("[!] Please provide the model output directory as an argument.")
+} else {
+    output_dir <- cmd_args[1]
+    setwd(output_dir)
+}
 
 df1 <- read.table("speciesConcentrations.output", header=T)
 df2 <- read.table("environmentVariables.output", header=T)
@@ -37,35 +41,43 @@ nc4 <- ncol(df4)
 cairo_pdf("atchem2_output.pdf", onefile=T, width=11, height=7)
 
 ## speciesConcentrations.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3), mar=c(5,5,4,2))
 for (i in 2:nc1) {
-  plot(df1[[1]], df1[[i]], type="l",
-       main=colnames(df1[i]), xlab="seconds", ylab="")
+  plot(df1[[1]], df1[[i]], type="l", col="black",
+       main=colnames(df1[i]), xlab="seconds", ylab="", yaxt="n")
+  ticks <- pretty(df1[[i]])
+  axis(2, at=ticks, labels=format(sprintf("%.1e",ticks), scientific=TRUE), las=1)
 }
 
 ## environmentVariables.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3), mar=c(5,5,4,2))
 for (i in 2:nc2) {
-  plot(df2[[1]], df2[[i]], type="l",
-       main=colnames(df2[i]), xlab="seconds", ylab="")
+  plot(df2[[1]], df2[[i]], type="l", col="black",
+       main=colnames(df2[i]), xlab="seconds", ylab="", yaxt="n")
+  ticks <- pretty(df2[[i]])
+  axis(2, at=ticks, labels=format(sprintf("%.1e",ticks), scientific=TRUE), las=1)
 }
 
 ## photolysisRates.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3), mar=c(5,5,4,2))
 for (i in 2:nc3) {
-  plot(df3[[1]], df3[[i]], type="l",
-       main=colnames(df3[i]), xlab="seconds", ylab="")
+  plot(df3[[1]], df3[[i]], type="l", col="black",
+       main=colnames(df3[i]), xlab="seconds", ylab="", yaxt="n")
+  ticks <- pretty(df3[[i]])
+  axis(2, at=ticks, labels=format(sprintf("%.1e",ticks), scientific=TRUE), las=1)
 }
 
 ## photolysisRatesParameters.output
-par(mfrow=c(3,2))
+par(mfrow=c(3,3), mar=c(5,5,4,2))
 for (i in 2:nc4) {
-  plot(df4[[1]], df4[[i]], type="l",
-       main=colnames(df4[i]), xlab="seconds", ylab="")
+  plot(df4[[1]], df4[[i]], type="l", col="black",
+       main=colnames(df4[i]), xlab="seconds", ylab="", yaxt="n")
+  ticks <- pretty(df4[[i]])
+  axis(2, at=ticks, labels=format(sprintf("%.1e",ticks), scientific=TRUE), las=1)
 }
 
-dev.off()
+invisible(dev.off())
 
 ## ---------------------------- ##
 
-cat("\n===> atchem2_output.pdf created in directory:", cmd_args[1], "\n\n")
+cat("\n==> atchem2_output.pdf created in directory:", output_dir, "\n\n")

@@ -15,8 +15,9 @@
 ! ******************************************************************** !
 ! ATCHEM2 -- MODULE solarFunctions
 !
-! This module contains functions that calculate quantities related to
-! relative positions of the Earth and Sun.
+! This module contains functions that calculate the variables
+! describing the position of the Sun relative to Earth: solar zenith
+! angle, sun declination, etc...
 ! ******************************************************************** !
 module solar_functions_mod
   implicit none
@@ -24,9 +25,9 @@ module solar_functions_mod
 contains
 
   ! -----------------------------------------------------------------
-  ! Calculate the day angle (radians). Equations taken from "The
-  ! Atmosphere and UV-B Radiation at Ground Level" by S. Madronich
-  ! (Environmental UV Photobiology, 1993).
+  ! Calculate the day angle (radians). Equation from "The Atmosphere
+  ! and UV-B Radiation at Ground Level" by S. Madronich (Environmental
+  ! UV Photobiology, 1993).
   pure function calcTheta() result ( theta )
     use types_mod
     use date_mod, only : currentYear, currentDayOfYear
@@ -49,9 +50,9 @@ contains
   end function calcTheta
 
   ! -----------------------------------------------------------------
-  ! Calculate the sun declination (radians). Equations taken from "The
-  ! Atmosphere and UV-B Radiation at Ground Level" by S. Madronich
-  ! (Environmental UV Photobiology, 1993).
+  ! Calculate the sun declination (radians) from theta, the day
+  ! angle. Equation from "The Atmosphere and UV-B Radiation at Ground
+  ! Level" by S. Madronich (Environmental UV Photobiology, 1993).
   pure function decFromTheta( theta ) result ( dec )
     use types_mod
 
@@ -73,8 +74,9 @@ contains
   end function decFromTheta
 
   ! -----------------------------------------------------------------
-  ! Calculate the sun declination (radians). Firstly update theta
-  ! (day angle) to today's value, then calculate dec from that.
+  ! Calculate the sun declination (radians). First update theta (day
+  ! angle) to today's value, then calculate dec (sun declination) from
+  ! the updated value of theta.
   pure function calcDec() result ( dec )
     use types_mod
 
@@ -112,9 +114,9 @@ contains
 
   ! -----------------------------------------------------------------
   ! Calculate the local hour angle (radians) and the solar zenith
-  ! angle (radians). Equations taken from "The Atmosphere and UV-B
-  ! Radiation at Ground Level" by S. Madronich (Environmental UV
-  ! Photobiology, 1993).
+  ! angle (radians). Equations from "The Atmosphere and UV-B Radiation
+  ! at Ground Level" by S. Madronich (Environmental UV Photobiology,
+  ! 1993).
   subroutine calcZenith( t, dec )
     use types_mod
     use zenith_data_mod, only : eqtime, lha, latitude, longitude, sinld, cosld, &
@@ -130,10 +132,9 @@ contains
     ! meridian and the Sun's meridian. Time must be in GMT/UTC and
     ! longitude in degrees.
     !
-    ! TODO: currentFracDay is wrong because t/86400 is not the
-    ! fractional time of day (eg: 12:00 = 0.5). This is only used to
-    ! calculate currentFracHour. The error in the calculation of LHA
-    ! is very small but it needs to be fixed
+    !TODO: currentFracDay is wrong because t/86400 is not the fractional time of day (eg: 12:00 = 0.5).
+    !      This is only used to calculate currentFracHour.
+    !      The error in the calculation of LHA is very small but it needs to be fixed
     eqtime = calcEQT()
 
     ! Calculate the fraction of the day in units of hours - convert from

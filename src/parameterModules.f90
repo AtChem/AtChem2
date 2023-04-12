@@ -16,8 +16,8 @@
 ! ATCHEM2 -- FILE parameterModules
 !
 ! This file contains solver_params_mod and model_params_mod, two
-! modules that handle the setting and storing of solver and model
-! parameters from file.
+! modules that handle setting and storing of the solver and model
+! parameters from the corresponding files.
 ! ******************************************************************** !
 
 ! ******************************************************************** !
@@ -64,7 +64,7 @@ contains
     deltaMain = input_parameters(3)
     ! From CVODE docs: MAXL is the maximum Krylov subspace
     ! dimension. Used in FCVSPGMR().
-    ! TODO: Rename to MAXL?
+    !TODO: Rename to MAXL?
     lookBack = nint( input_parameters(4), NPI )
     ! From CVODE docs: Maximum absolute step size. Passed via
     ! FCVSETRIN().

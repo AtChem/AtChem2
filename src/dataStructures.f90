@@ -13,13 +13,11 @@
 ! -----------------------------------------------------------------------------
 
 ! ******************************************************************** !
-! ATCHEM2 -- dataStructures file
+! ATCHEM2 -- FILE dataStructures
 !
 ! This file contains numerous modules that hold logically separate
 ! variables and functions.
 ! ******************************************************************** !
-
-! TODO: several procedures in this file lack comments
 
 ! ******************************************************************** !
 ! MODULE types_mod

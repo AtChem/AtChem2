@@ -18,7 +18,7 @@
 # Version: 3.4.3
 # Requirements: Ruby
 #
-# N.B. Before running the script, ensure that the RubyGems paths are
+# N.B.: before running the script, ensure that the RubyGems paths are
 # set in ~/.bash_profile (or ~/.profile):
 #   GEM_HOME=$HOME/.gem
 #   PATH=$PATH:$GEM_HOME/bin

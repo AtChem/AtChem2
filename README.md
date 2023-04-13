@@ -1,12 +1,14 @@
-AtChem2  [![CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml)
+AtChem2 ![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue) ![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue) ![AtChem2-CI](https://github.com/AtChem/AtChem2/workflows/AtChem2-CI/badge.svg)
 =======
 
 
-**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM), but it can be used with any general set of chemical reactions as long as they are provided in the correct format. The MCM is a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere. The MCM is available at http://mcm.york.ac.uk/.
+**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM, http://mcm.york.ac.uk/), but it can be used with any general set of chemical reactions as long as they are provided in the correct format. The MCM is a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere.
 
 AtChem2 is _open source_, under the [MIT license](https://opensource.org/licenses/MIT).
 
-**_Please see the file `CITATION.md` for information on how to cite the model in publications._**
+**_Please, see the file `CITATION.md` for information on how to cite the model in publications._**
+
+<a href='https://ko-fi.com/I3I1JSFJF' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 
 Directory structure

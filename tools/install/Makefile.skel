@@ -112,6 +112,7 @@ fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
 # copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
+	@echo ""
 	@cp tests/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
@@ -143,6 +144,7 @@ styletest:
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+	@echo ""
 
 oldtests:
 	@echo ""

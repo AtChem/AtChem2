@@ -15,13 +15,13 @@
 ! ******************************************************************** !
 ! ATCHEM2 -- FILE dataStructures
 !
-! This file contains numerous modules that hold logically separate
-! variables and functions.
+! This file contains modules that hold logically separate data types,
+! variables, arrays and procedures.
 ! ******************************************************************** !
 
 ! ******************************************************************** !
 ! MODULE types_mod
-! Defines the integer and real data types available to the progrem.
+! Define integer and real data types.
 ! ******************************************************************** !
 module types_mod
   use, intrinsic :: iso_fortran_env
@@ -34,7 +34,7 @@ module types_mod
   integer, parameter :: DI = INT16
   integer, parameter :: QI = INT32
   integer, parameter :: LONG = INT64
-  integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as that's what the CVODE functions take
+  integer, parameter :: NPI = INT64 ! Must be INT32 or INT64, as required by CVODE functions
   integer, parameter :: IntErr = INT32
   integer, parameter :: SP = selected_real_kind( p = 6, r = 37 )
   integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
@@ -51,6 +51,8 @@ module types_mod
 
 contains
 
+  ! -----------------------------------------------------------------
+  ! Equality operator for reaction_frequency_pair type
   function reaction_frequency_pair_equals( a, b ) result ( res )
     type(reaction_frequency_pair), intent(in) :: a, b
     logical :: res
@@ -62,7 +64,7 @@ end module types_mod
 
 ! ******************************************************************** !
 ! MODULE storage_mod
-! Defines the maximum length of different string types
+! Define the maximum length of different string types.
 ! ******************************************************************** !
 module storage_mod
   use types_mod
@@ -80,25 +82,26 @@ end module storage_mod
 
 ! ******************************************************************** !
 ! MODULE directories_mod
-! Holds the locations of relevant input and output directories
+! Define the model input and output directories.
 ! ******************************************************************** !
 module directories_mod
   use storage_mod, only : maxFilepathLength
   implicit none
   save
 
-  character(len=maxFilepathLength) :: model_dir, output_dir, reactionRates_dir, configuration_dir, mcm_dir, shared_library, &
-                                      constraints_dir, spec_constraints_dir, env_constraints_dir, photo_constraints_dir
+  character(len=maxFilepathLength) :: model_dir, output_dir, reactionRates_dir, &
+                                      configuration_dir, mcm_dir, shared_library, &
+                                      constraints_dir, spec_constraints_dir, &
+                                      env_constraints_dir, photo_constraints_dir
 
 end module directories_mod
 
 ! ******************************************************************** !
 ! MODULE date_mod
-! Holds variables defining the start time and date of the simulation
-! and the current time and date in the simulation -  used for
-! calculation of solar functions and photolysis rates.
-! Also contains functions to set the initial time and date parameters
-! and convert the current time into a date/time format.
+! Define variables and procedures to handle date and time
+! calculations, including start and current date/time of the
+! simulation, day of the year, leap years, and conversion of the
+! current time into a date/time format.
 ! ******************************************************************** !
 module date_mod
   use types_mod
@@ -144,7 +147,7 @@ contains
   ! -----------------------------------------------------------------
   ! Return the number of days of the year that have been completed,
   ! based on which day of the day it is, and which month it is. So
-  ! Jan 1 = 0, Jan 2 = 1 etc.
+  ! Jan 1 = 0, Jan 2 = 1 etc...
   pure function calcDayOfYear( monthList, month, day ) result ( result )
     integer(kind=DI), intent(in) :: monthList(12), month, day
     integer(kind=DI) :: result
@@ -159,12 +162,12 @@ contains
   subroutine calcInitialDateParameters()
     integer(kind=DI) :: monthList(12)
 
-    ! Number of days in each month; year is set in model.parameters.
+    ! Number of days in each month; year is set in model.parameters
     monthList = refMonthList
     ! Alter February length if a leap year
     call applyLeapDay( monthList, startYear )
 
-    ! Day of year; day and month are set in model.parameters.
+    ! Day of year; day and month are set in model.parameters
     ! January 1 = 0, January 2 = 1, etc...
     startDayOfYear = calcDayOfYear( monthList, startMonth, startDay )
 
@@ -191,20 +194,21 @@ contains
       countingDays = completedDays
 
       do while ( countingDays > 0 )
-        ! Check whether this year is a leap year, and reset current month list as appropriate
+        ! Check whether this year is a leap year, and reset current
+        ! month list as appropriate
         monthList = refMonthList
         ! Alter February length if a leap year
         call applyLeapDay( monthList, currentYear )
 
         ! Increment day of the month
         currentDayOfMonth = currentDayOfMonth + 1_DI
-        ! If incrementing causes us to tick over into the next month, then update
-        ! the month and reset the currentDayOfMonth counter
+        ! If incrementing causes us to tick over into the next month,
+        ! then update the month and reset the currentDayOfMonth counter
         if ( currentDayOfMonth > monthList(currentMonth) ) then
           currentMonth = currentMonth + 1_DI
           currentDayOfMonth = 1_DI
-          ! If incrementing the month causes us to tick into the next year, then
-          ! update the year and reset the currentMonth counter
+          ! If incrementing the month causes us to tick into the next
+          ! year, then update the year and reset the currentMonth counter
           if ( currentMonth > 12_DI ) then
             currentYear = currentYear + 1_DI
             currentMonth = 1_DI
@@ -226,7 +230,7 @@ end module date_mod
 
 ! ******************************************************************** !
 ! MODULE env_vars_mod
-! Holds variable controlling the environment variables and related data
+! Define variables and arrays for the environment variables.
 ! ******************************************************************** !
 module env_vars_mod
   use types_mod
@@ -248,7 +252,8 @@ end module env_vars_mod
 
 ! ******************************************************************** !
 ! MODULE constraints_mod
-! Holds variable controlling the species constraints and related data
+! Define variables and procedures to handle constrained species and
+! concentrations, and related data.
 ! ******************************************************************** !
 module constraints_mod
   use types_mod
@@ -271,16 +276,13 @@ module constraints_mod
 
 contains
 
-  ! *****************************************************************
-  ! Methods for numberOfConstrainedSpecies
-
+  ! -----------------------------------------------------------------
+  ! Methods for number of constrained species
   pure function getNumberOfConstrainedSpecies() result ( n )
     integer(kind=NPI) :: n
     n = numberOfConstrainedSpecies
   end function getNumberOfConstrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! Also allocate constrainedConcs and constrainedSpecies.
   subroutine setNumberOfConstrainedSpecies( n )
     integer(kind=NPI) :: n
     numberOfConstrainedSpecies = n
@@ -288,9 +290,8 @@ contains
     write (*, '(A, I0)') ' Setting size of constraint arrays, n = ', n
   end subroutine setNumberOfConstrainedSpecies
 
-  ! *****************************************************************
-  ! Methods for constrainedConcs
-
+  ! -----------------------------------------------------------------
+  ! Methods for constrained concentrations
   pure function getConstrainedConcs() result ( r )
     real(kind=DP) :: r(numberOfConstrainedSpecies)
     r = constrainedConcs(:)
@@ -305,16 +306,13 @@ contains
     deallocate (constrainedConcs)
   end subroutine deallocateConstrainedConcs
 
-  ! *****************************************************************
-  ! Methods for constrainedSpecies
-
+  ! -----------------------------------------------------------------
+  ! Methods for constrained species
   pure function getConstrainedSpecies() result ( r )
     integer(kind=NPI) :: r(numberOfConstrainedSpecies)
     r = constrainedSpecies(:)
   end function getConstrainedSpecies
 
-  ! -----------------------------------------------------------------
-  ! Query the contrained species list for the given index
   pure function getOneConstrainedSpecies( i ) result ( r )
     integer(kind=NPI), intent(in) :: i
     integer(kind=NPI) :: r
@@ -334,8 +332,8 @@ end module constraints_mod
 
 ! ******************************************************************** !
 ! MODULE species_mod
-! Holds variables and functions to control the the problem in terms of
-! the names/numbers of species and reactions
+! Define variables and procedures for the names and numbers of
+! species, reactions and rate coefficients.
 ! ******************************************************************** !
 module species_mod
   use types_mod
@@ -354,19 +352,21 @@ module species_mod
 
 contains
 
+  ! -----------------------------------------------------------------
+  ! Methods for number of species
   pure function getNumberOfSpecies() result ( n )
     integer(kind=NPI) :: n
     n = numSpecies
   end function getNumberOfSpecies
 
-  ! -----------------------------------------------------------------
-  ! Also allocate speciesList
   subroutine setNumberOfSpecies( n )
     integer(kind=NPI) :: n
     numSpecies = n
     allocate (speciesList(n))
   end subroutine setNumberOfSpecies
 
+  ! -----------------------------------------------------------------
+  ! Methods for number of reactions
   pure function getNumberOfReactions() result ( n )
     integer(kind=NPI) :: n
     n = numReactions
@@ -377,6 +377,8 @@ contains
     numReactions = n
   end subroutine setNumberOfReactions
 
+  ! -----------------------------------------------------------------
+  ! Methods for number of generic and complex rate coefficients
   pure function getNumberOfGenericComplex() result ( n )
     integer(kind=NPI) :: n
     n = numGenericComplex
@@ -387,6 +389,8 @@ contains
     numGenericComplex = n
   end subroutine setNumberOfGenericComplex
 
+  ! -----------------------------------------------------------------
+  ! Methods for list of species
   subroutine deallocateSpeciesList
     deallocate (speciesList)
   end subroutine deallocateSpeciesList
@@ -412,7 +416,8 @@ end module species_mod
 
 ! ******************************************************************** !
 ! MODULE interpolation_method_mod
-! get and set interpolation methods
+! Define procedures to handle the interpolation methods for species
+! and conditions.
 ! ******************************************************************** !
 module interpolation_method_mod
   use types_mod
@@ -426,6 +431,8 @@ module interpolation_method_mod
 
 contains
 
+  ! -----------------------------------------------------------------
+  ! Methods for interpolation of species
   pure function getSpeciesInterpMethod() result ( n )
     integer(kind=SI) :: n
     n = speciesInterpMethod
@@ -436,6 +443,8 @@ contains
     speciesInterpMethod = n
   end subroutine setSpeciesInterpMethod
 
+  ! -----------------------------------------------------------------
+  ! Methods for interpolation of conditions
   pure function getConditionsInterpMethod() result ( n )
     integer(kind=SI) :: n
     n = conditionsInterpMethod
@@ -450,7 +459,7 @@ end module interpolation_method_mod
 
 ! ******************************************************************** !
 ! MODULE reaction_structure_mod
-! Arrays containing the encoded reactions
+! Define arrays for the encoded reactions.
 ! ******************************************************************** !
 module reaction_structure_mod
   use types_mod
@@ -464,7 +473,8 @@ end module reaction_structure_mod
 
 ! ******************************************************************** !
 ! MODULE photolysis_rates_mod
-! Controls many aspects of the photolysis rates.
+! Define variables and procedures for the photolysis rates and
+! related parameters.
 ! ******************************************************************** !
 module photolysis_rates_mod
   use types_mod
@@ -472,9 +482,10 @@ module photolysis_rates_mod
   implicit none
   save
 
-  integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates, numConstrainedPhotoRates, numUnconstrainedPhotoRates
-  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoNumbers(:), constrainedPhotoNumbers(:), &
-                                    unconstrainedPhotoNumbers(:), ck(:)
+  integer(kind=NPI) :: totalNumPhotos, numConstantPhotoRates, numConstrainedPhotoRates, &
+                       numUnconstrainedPhotoRates
+  integer(kind=NPI), allocatable :: photoNumbers(:), constantPhotoNumbers(:), &
+                                    constrainedPhotoNumbers(:), unconstrainedPhotoNumbers(:), ck(:)
   real(kind=DP), allocatable :: cl(:), cmm(:), cnn(:), transmissionFactor(:)
   real(kind=DP), allocatable :: j(:), constantPhotoValues(:)
   character(len=maxPhotoRateNameLength), allocatable :: photoRateNames(:), constantPhotoNames(:), &
@@ -489,18 +500,25 @@ module photolysis_rates_mod
 
 contains
 
+  ! -----------------------------------------------------------------
+  ! Method for constant photolysis rates
   subroutine allocate_photolysis_constants_variables()
-    allocate (constantPhotoNumbers(numConstantPhotoRates), constantPhotoValues(numConstantPhotoRates), &
+    allocate (constantPhotoNumbers(numConstantPhotoRates), &
+              constantPhotoValues(numConstantPhotoRates), &
               constantPhotoNames(numConstantPhotoRates))
   end subroutine allocate_photolysis_constants_variables
 
+  ! -----------------------------------------------------------------
+  ! Method for number of photolysis rates
   subroutine allocate_photolysis_numbers_variables()
     allocate (photoNumbers(totalNumPhotos))
   end subroutine allocate_photolysis_numbers_variables
 
-
+  ! -----------------------------------------------------------------
+  ! Methods for constrained photolysis rates
   subroutine allocate_constrained_photolysis_rates_variables()
-    allocate (constrainedPhotoNames(numConstrainedPhotoRates), constrainedPhotoNumbers(numConstrainedPhotoRates))
+    allocate (constrainedPhotoNames(numConstrainedPhotoRates), &
+              constrainedPhotoNumbers(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_rates_variables
 
   subroutine allocate_constrained_photolysis_data()
@@ -509,12 +527,17 @@ contains
               photoNumberOfPoints(numConstrainedPhotoRates))
   end subroutine allocate_constrained_photolysis_data
 
+  ! -----------------------------------------------------------------
+  ! Method for unconstrained photolysis rates
   subroutine allocate_unconstrained_photolysis_rates_variables()
-    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), cmm(numUnconstrainedPhotoRates), &
-              cnn(numUnconstrainedPhotoRates), unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
+    allocate (ck(numUnconstrainedPhotoRates), cl(numUnconstrainedPhotoRates), &
+              cmm(numUnconstrainedPhotoRates), cnn(numUnconstrainedPhotoRates), &
+              unconstrainedPhotoNames(numUnconstrainedPhotoRates), &
               transmissionFactor(numUnconstrainedPhotoRates))
   end subroutine allocate_unconstrained_photolysis_rates_variables
 
+  ! -----------------------------------------------------------------
+  ! Initialize photolysis rates array
   subroutine allocate_photolysis_j( size_of_j )
     integer(kind=NPI), intent(in) :: size_of_j
     allocate (j(size_of_j))
@@ -525,7 +548,8 @@ end module photolysis_rates_mod
 
 ! ******************************************************************** !
 ! MODULE zenith_data_mod
-! solar zenith angle and photolysis rates parameters
+! Define variables for latitude, longitude, solar zenith angle and
+! other parameters related to photolysis.
 ! ******************************************************************** !
 module zenith_data_mod
   use types_mod
@@ -535,15 +559,15 @@ module zenith_data_mod
   real(kind=DP) :: latitude, longitude
   real(kind=DP) :: lha, sinld, cosld, cosx, secx, eqtime
   real(kind=DP), parameter :: cosx_threshold = 1.0d-2
-  ! cosx_below_threshold contains whether or not cosx is currently
-  ! below cosx_threshold
+  ! cosx_below_threshold indicates whether cosx is currently below or
+  ! above cosx_threshold
   logical :: cosx_below_threshold = .false.
 
 end module zenith_data_mod
 
 ! ******************************************************************** !
 ! MODULE reaction_rates_mod
-! rates of production and loss
+! Define array for the reaction rates.
 ! ******************************************************************** !
 module reaction_rates_mod
   use types_mod

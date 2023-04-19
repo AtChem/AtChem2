@@ -12,6 +12,7 @@
 #
 # -----------------------------------------------------------------------------
 
+# -------------------------------------------------------------------- #
 # This script converts a chemical mechanism file in FACSIMILE format
 # (.fac) into a Fortran-compatible format. The script generates five files in
 # the model configuration directory:
@@ -21,26 +22,29 @@
 # - mechanism.ro2
 # - mechanism.f90
 #
+# The script includes two functions:
+# - tokenise_and_process
+# - convert_to_fortran
+#
 # Acknowledgements: B. Nelson, M. Newland
 #
 # ARGUMENTS:
 # - path to the .fac file
 # - path to the model configuration directory [default: model/configuration/]
 # - path to the MCM data files directory [default: mcm/]
-# ---------------------------------------------- #
+# -------------------------------------------------------------------- #
 from __future__ import print_function
-import sys
-import re
-import os
+import os, sys, re
 import fix_mechanism_fac
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC', 'DILUTE', 'ROOF', 'ASA', 'RO2']
 reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 
 
-## ------------------------------------------------------------------ ##
+## ------------------------------------------------------------ ##
 
 
+# ----------------------------------------------------
 def tokenise_and_process(input_string, variablesDict):
     """
     This function takes in a single string, and a dictionary of known variables from previous lines,
@@ -103,6 +107,7 @@ def tokenise_and_process(input_string, variablesDict):
     return new_rhs
 
 
+# ----------------------------------------------------
 def convert_to_fortran(input_file, mech_dir, mcm_dir):
     """
     This is the main function of this file. It takes as input a chemical mechanism file (.fac), and from it generates
@@ -473,7 +478,7 @@ end module mechanism_mod
                 raise RuntimeError(error_message)
 
 
-## ------------------------------------------------------------------ ##
+## ------------------------------------------------------------ ##
 
 
 def main():
@@ -504,7 +509,7 @@ def main():
     # call conversion to Fortran function
     convert_to_fortran(input_file, mech_dir, mcm_dir)
 
-
+# Call the main function if executed as script
 if __name__ == '__main__':
     try:
         main()

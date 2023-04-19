@@ -9,22 +9,27 @@
 #
 # -----------------------------------------------------------------------------
 
+# -------------------------------------------------------------------- #
 # This script contains functions to fix the contents of a chemical
 # mechanism file in FACSIMILE format (.fac ) by removing the incorrect
 # newline characters.
 #
+# The script includes two functions:
+# - fix_fac_full_contents
+# - fix_fac_full_file
+#
 # ARGUMENT:
 # - path to the .fac file
-# ---------------------------------------------- #
+# -------------------------------------------------------------------- #
 from __future__ import print_function
 from functools import reduce
-import sys
-import re
+import sys, re
 
 
-## ------------------------------------------------------------------ ##
+## ------------------------------------------------------------ ##
 
 
+# ----------------------------------------------------
 def fix_fac_full_contents(filename):
     # Given a filename, return the contents of the file, but with
     # incorrect newline characters removed, and the affected lines
@@ -103,6 +108,7 @@ def fix_fac_full_contents(filename):
     return final_list
 
 
+# ----------------------------------------------------
 def fix_fac_full_file(filename):
     # Given a filename, overwrite the contents of the file with the same contents,
     # but with incorrect newline characters removed, and the affected lines
@@ -118,18 +124,20 @@ def fix_fac_full_file(filename):
     return
 
 
-## ------------------------------------------------------------------ ##
+## ------------------------------------------------------------ ##
 
 
 def main():
-    # Pass argument from command line as path to file.
+    # Pass argument from command line as path to file
     if len(sys.argv) > 1:
         fix_fac_full_contents(sys.argv[1])
     else:
         print('******************************')
-        print("Please pass a filename as argument. This script will then fix this file to remove incorrect newlines.")
+        print('Please pass a filename as script argument.')
+        print('The script will then fix the file to remove incorrect newlines.')
         print('******************************')
     return
 
+# Call the main function if executed as script
 if __name__ == '__main__':
     main()

@@ -90,9 +90,9 @@ def fix_fac_full_contents(input_file):
             else:
                 if not re.match(r'%', contents[i]):
                     # print 'fail'
-                    # print contents[i - 1], 'XX', contents[i], 'XX', contents[i + 1]
-                    contents[i - 1] += ' ' + contents[i]
-                    # print contents[i - 1]
+                    # print contents[i-1], 'XX', contents[i], 'XX', contents[i+1]
+                    contents[i-1] += ' ' + contents[i]
+                    # print contents[i-1]
                     contents_count += 1
                     to_delete.append(i)
     print(str(contents_count) + ' corrections made - now removing old.')
@@ -127,7 +127,7 @@ def fix_fac_full_contents(input_file):
         # Get index of line with error
         line_lengths = [len(line) for line in interim_contents]
         error_line = line_lengths.index(max(line_lengths)) + end_of_header_index + 1
-        exit('The inputted file is broken near to line ' + str(error_line) \
+        exit('The inputted file is broken near line ' + str(error_line) \
              + ' in a way that this script cannot handle.' \
              + ' Please manually fix this error and re-run this script.')
 

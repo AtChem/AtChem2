@@ -25,26 +25,26 @@
 #  * strip off the trailing newline
 #  * strip out the comment from the end of the line, relying on the fact that
 #    quotes cannot span lines, to ensure we really grab a '!' marking the
-#    comment start, and not one inside a string literal.
+#    comment start, and not one inside a string literal
 #  * if the non-comment content is all whitespace, then skip to reappending the
 #    comment, otherwise:
 #    * if the previous line was e.g. the start of a procedure, then increase the
-#      indent on this line.
+#      indent on this line
 #    * store whether this line ends in an ampersand
 #    * if the previous line ended in an ampersand, then we don't know where to
-#      align to, so leave untouched.
+#      align to, so leave untouched
 #    * otherwise, the presence of 'end', 'else' or 'contains' means that this
-#      line should be unindented.
+#      line should be unindented
 #    * if this line is the start of e.g. a procedure, store that the next line
-#      (that isn't following an ampersand) should be indented.
-#  * perform appropriate indentation, rejoin comment and newline, and output.
+#      (that isn't following an ampersand) should be indented
+#  * perform appropriate indentation, rejoin comment and newline, and output
 #  * set up variables for next loop, passing on indent setting and whether this
-#    line ended with an ampersand.
+#    line ended with an ampersand
 # -------------------------------------------------------------------- #
 from __future__ import print_function
 import sys, re
 
-## ------------------------------------------------------------ ##
+# ============================================================ #
 
 # Strip newline characters from string
 def strip_newline(string):
@@ -69,7 +69,7 @@ def even_quotes(string):
         single = False
     return (double and single)
 
-## ------------------------------------------------------------ ##
+# ============================================================ #
 
 # Handle input arguments. If only one is provided, use this for both
 # input and output. Error if none provided.
@@ -84,6 +84,7 @@ else:
 with open(filename, 'r') as input_file:
     lines = input_file.readlines()
 
+# -------------------------------------------------
 # Loop for fixing indent
 with open(out_filename, 'w') as output_file:
     # Set up variables for first time
@@ -119,7 +120,7 @@ with open(out_filename, 'w') as output_file:
 
         # Keep track of the indentation level
         if next_line_indent_more:
-            indent = indent+1
+            indent = indent + 1
             next_line_indent_more = False
 
         # Check that this line ends with ampersand
@@ -133,23 +134,31 @@ with open(out_filename, 'w') as output_file:
                 if re.match('^\s*end\s*', to_output, flags=re.IGNORECASE) \
                   or re.match('^\s*else\s*', to_output, flags=re.IGNORECASE) \
                   or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE):
-                    indent = indent-1
+                    indent = indent - 1
 
-                # Handle the fact that each case of a select structure doesn't end in an 'end',
-                # so the 'end select' needs to go back twice
+                # Handle the fact that each case of a 'select' structure doesn't
+                # end in an 'end', so the 'end select' needs to go back twice
                 if re.match('^\s*end select\s*', to_output, flags=re.IGNORECASE):
                     indent = indent - 1
 
-                # Match if-then, do, subroutine, function, module, else, contains, program, interface,
-                # select, case, type (definition, not instantiation) to set the next line indent higher
-                if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE) or re.match('^\s*else\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*do\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*subroutine\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*function\s*', to_output, flags=re.IGNORECASE) \
-                    or ( re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) and not re.match('^\s*module procedure \s*', to_output, flags=re.IGNORECASE) ) \
-                    or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*abstract interface\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*select\s*', to_output, flags=re.IGNORECASE) \
-                    or re.match('^\s*case\s*', to_output, flags=re.IGNORECASE) or re.match('^\s*type\s+', to_output, flags=re.IGNORECASE):
+                # Match 'if-then-else', 'do', 'subroutine', 'function', 'module', 'contains',
+                # 'program', 'interface', 'select', 'case', 'type' (definition, not instantiation)
+                # to set the next line indent higher
+                if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*else\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*do\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*subroutine\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*function\s*', to_output, flags=re.IGNORECASE) \
+                  or (re.match('^\s*module\s*', to_output, flags=re.IGNORECASE) \
+                      and not re.match('^\s*module procedure \s*', to_output, flags=re.IGNORECASE)) \
+                  or re.match('^\s*contains\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*program\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*interface\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*abstract interface\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*pure function\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*select\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*case\s*', to_output, flags=re.IGNORECASE) \
+                  or re.match('^\s*type\s+', to_output, flags=re.IGNORECASE):
                     next_line_indent_more = True
 
                 # Set start_select when we enter a 'select' structure
@@ -163,7 +172,7 @@ with open(out_filename, 'w') as output_file:
                     if start_select:
                         start_select = False
                     else:
-                        indent = indent-1
+                        indent = indent - 1
 
             # This line does not start with 'end'
             else:
@@ -185,9 +194,10 @@ with open(out_filename, 'w') as output_file:
         else:
             previous_line_ends_ampersand = False
 
-        # add amended line to output
+        # Add amended line to output
         outputs.append(to_output + add_newline(comment))
 
-    # write output to file
+    # -------------------------------------------------
+    # Write output to file
     output_file.writelines(outputs)
     print('Complete! Now run a find and replace by hand with regex "&\s*\\n" to catch alignment of the lines following ampersands.')

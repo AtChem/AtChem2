@@ -22,7 +22,7 @@
 from __future__ import print_function
 import sys, re
 
-## ------------------------------------------------------------ ##
+# ============================================================ #
 
 # Replace the first word(s) with its lowercase if it matches string
 def replace_any_case_with_lower_first(string, to_output):
@@ -74,7 +74,7 @@ def even_quotes(string):
         single = False
     return (double and single)
 
-## ------------------------------------------------------------ ##
+# ============================================================ #
 
 # Handle input arguments. If only one is provided, use this for both
 # input and output. Error if none provided.
@@ -89,6 +89,7 @@ else:
 with open(filename, 'r') as input_file:
     lines = input_file.readlines()
 
+# -------------------------------------------------
 # Loop for fixing style
 with open(out_filename, 'w') as output_file:
     # Set up variable for the first time
@@ -129,7 +130,7 @@ with open(out_filename, 'w') as output_file:
                 is_first_line_of_multiline = True
             currently_on_multiline = True
 
-        # Replace .LT. etc with symbols
+        # Replace '.LT.' etc with symbols
         to_output = re.sub('\s*\.LT\.\s*', ' < ',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.LE\.\s*', ' <= ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.GT\.\s*', ' > ',  to_output, flags=re.IGNORECASE)
@@ -137,12 +138,12 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('\s*\.EQ\.\s*', ' == ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.NE\.\s*', ' /= ', to_output, flags=re.IGNORECASE)
 
-        # Put one space after each comma, except where followed by * or :
+        # Put one space after each comma, except where followed by '*' or ':'
         to_output = re.sub(',\s*', ', ', to_output)
         to_output = re.sub(', \*', ',*', to_output)
         to_output = re.sub(', \:', ',:', to_output)
 
-        # Replace, e.g. ( Len =  by (LEN=, etc...
+        # Replace, e.g. '( Len ='  by '(LEN=', etc...
         to_output = re.sub('\(LEN\s*=',  '(len=',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('\(KIND\s*=', '(kind=',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('STATUS\s*=', 'status=', to_output, flags=re.IGNORECASE)
@@ -153,9 +154,11 @@ with open(out_filename, 'w') as output_file:
         # Any ending bracket followed by a double-quote, should have a
         # single space
         to_output = re.sub('\)(?=")', ')', to_output)
+
         # Any ending bracket should be followed by exactly one space
         # if it's to be followed by a letter, digit, or single-quote
         to_output = re.sub("\)(?=[\w\d])", ') ', to_output)
+
         # Any ending bracket already followed by whitespace should be
         # followed by exactly one space
         to_output = re.sub('\)[ \t]+', ') ', to_output)
@@ -170,7 +173,7 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('ADJUSTL\(','adjustl(',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('ADJUSTR\(','adjustr(',   to_output, flags=re.IGNORECASE)
 
-        # A comma followed by any letter, digit, ( ' or - should have a space trailing
+        # A comma followed by any letter, digit, (, ', or -, should have a space trailing
         to_output = re.sub(",(?=[a-zA-Z0-9('-])", ', ', to_output)
 
         # These are modifiers so should be lowercase
@@ -181,7 +184,7 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub(',\s*PRIVATE\s*',    ', private',    to_output, flags=re.IGNORECASE)
         to_output = re.sub(',\s*PUBLIC\s*',     ', public',     to_output, flags=re.IGNORECASE)
 
-        # Place all :: with exactly one space either side
+        # Place all '::' with exactly one space either side
         to_output = re.sub('\s*::\s*', ' :: ', to_output)
 
         # If it's a CALL etc... line, then make the first opening bracket be preceded by no whitespace, and last
@@ -241,7 +244,7 @@ with open(out_filename, 'w') as output_file:
         to_output = replace_any_case_with_lower('allocatable', to_output)
         to_output = replace_any_case_with_lower('intrinsic', to_output)
 
-        # Replace these value and relational operators with lowercase
+        # Change boolean and relational operators to lowercase
         to_output = re.sub('\.true\.',  '.true.',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.false\.', '.false.', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.eqv\.',   '.eqv.',   to_output, flags=re.IGNORECASE)
@@ -252,13 +255,12 @@ with open(out_filename, 'w') as output_file:
         # If it's a INTEGER, REAL or CHARACTER line, then make the first
         # opening bracket be preceded by no whitespace, first closing
         # bracket to be preceded by one space unless there's a comma
-        if (re.match('\s*integer\s*\(', to_output)
-          or re.match('\s*real\s*\(', to_output)
+        if (re.match('\s*integer\s*\(', to_output) or re.match('\s*real\s*\(', to_output) \
           or re.match('\s*character\s*\(', to_output)):
             to_output = re.sub('\s*\(', '(', to_output, 1)
             to_output = re.sub('\)[^,]\s*', ') ', to_output, 1)
 
-        # Match IF-THENs, give one space and lowercase
+        # Match IF-THENs, give one space and change to lowercase
         if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE):
             to_output = re.sub('IF\s*', 'if ', to_output, flags=re.IGNORECASE)
             to_output = re.sub('\s*THEN', ' then', to_output, flags=re.IGNORECASE)
@@ -270,11 +272,12 @@ with open(out_filename, 'w') as output_file:
                 to_output = re.sub(r"\s*\)(?=[^\)]*$)", r" )", to_output)
             is_inside_procedure = False
 
-        # Convert any ( ) to ()
+        # Change '( )' to '()'
         to_output = re.sub('\s*\(\s+\)\s*', '()', to_output)
 
-        # Separate ')result' to ') result'
-        if re.match('^\s*FUNCTION', to_output, flags=re.IGNORECASE) or re.match('^\s*PURE FUNCTION', to_output, flags=re.IGNORECASE):
+        # Change ')result' to ') result'
+        if re.match('^\s*FUNCTION', to_output, flags=re.IGNORECASE) \
+          or re.match('^\s*PURE FUNCTION', to_output, flags=re.IGNORECASE):
             to_output = re.sub('\)result \(', ') result (', to_output, flags=re.IGNORECASE)
 
         # End multiline environment if this line doesn't end with an ampersand
@@ -284,6 +287,7 @@ with open(out_filename, 'w') as output_file:
         # Add amended line to output
         outputs.append(to_output + add_newline(comment))
 
+    # -------------------------------------------------
     # Write output to file
     output_file.writelines(outputs)
     print('Complete! Now run a find and replace by hand with regex "[^\\n^  !]  " to catch incorrect multiple-spaces.')

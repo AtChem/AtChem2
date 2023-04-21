@@ -19,6 +19,10 @@
 # WARNING: this script is not infallible, and can break your code!
 # Please use with caution, and make sure you have a copy of your
 # source file to revert to in the event of it breaking.
+#
+# ARGUMENT(S):
+#   1. path to the fortran file to process
+#   2. optional output file (if not given, overwrites input file)
 # -------------------------------------------------------------------- #
 # The workflow of this script is straightforward. For each line in the
 # Fortran source file:

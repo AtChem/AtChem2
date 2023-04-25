@@ -48,11 +48,11 @@ def fix_fac_full_contents(input_file):
     concatenated correctly.
 
     WARNING: this will probably fail if a line is REALLY long,
-    stretching over two full lines, but should probably then give an
-    error as output.
+    stretching over two full lines, but in this case it should
+    then give an error as output.
 
     Args:
-        input_file (str): name of the .fac file to be fixed
+        input_file (str): name of the .fac file to be corrected
 
     Returns:
         fixed_file (list): corrected mechanism file, with each line as
@@ -117,7 +117,7 @@ def fix_fac_full_contents(input_file):
                                if elem == ";" else acc + [elem], re.split("(;)", element), []) \
                         for element in contents[end_of_header_index:]]
 
-    # Remove empty sub-strings
+    # Remove empty sub-strings.
     interim_contents = [[item for item in sublist if item] for sublist in interim_contents]
 
     # Look for any lines containing more than 2 elements. These are lines where

@@ -10,7 +10,7 @@ The `mcm/` directory contains:
 
 ---
 
-**MCM version**
+**How to set the MCM version**
 
 The default version of the Master Chemical Mechanism (MCM) is **v3.3.1**. This
 means that AtChem2 uses the list of RO2 in the file `peroxy-radicals_v3.3.1`

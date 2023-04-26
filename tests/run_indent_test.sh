@@ -49,4 +49,5 @@ fi
 echo "" >> $LOG_FILE
 echo "Execution of indent script finished." >> $LOG_FILE
 
+echo "==> Indent test logfile:" $LOG_FILE
 exit $indent_test_passed

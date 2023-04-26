@@ -49,4 +49,5 @@ fi
 echo "" >> $LOG_FILE
 echo "Execution of style script finished." >> $LOG_FILE
 
+echo "==> Style test logfile:" $LOG_FILE
 exit $style_test_passed

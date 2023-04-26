@@ -1,17 +1,20 @@
 # AtChem2 - CHANGELOG
 
-## post v1.2.1
+## v1.2.2 (2023)
 
 - move implementation of continuous integration from Travis CI to GitHub Actions
-- remove unit testing from CodeCov
-- optimisation of gfortran compiler
-- error handling for RO2 sum in `build/mech_converter.py`
+- remove unit testing from CodeCov ()
+- optimisation flag for `gfortran`, and compilation flags for `ifort`
 - disable (provisionally) support for LAPACK and BLAS
+- update the install scripts to use  openlibm v0.8.1 and numdiff v5.9.0
+- fix error handling for RO2 sum in `build/mech_converter.py`
+- update and tidy the `.py` and `.sh` scripts in the `tools/` directory
+- update several `.gitignore` files
+- add missing comments and tidy the fortran files
 - fix bug in input and output of constant photolysis rates
-- update the scripts in the `tools/` directory and the `.gitignore` files
-- move and rename the example mechanism `mcm/mechanism_test.fac` to `model/mechanism.fac`.
+- move and rename the example mechanism `mcm/mechanism_test.fac` to `model/mechanism.fac`
 - update the manual and the `*.md` files
-- improving logging and reporting of the Test Suite
+- improve logging and reporting of the Test Suite
 - new version of the Test Suite (work in progress...)
 
 ## v1.2.1 (January 2021)

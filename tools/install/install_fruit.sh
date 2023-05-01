@@ -35,25 +35,30 @@ fi
 cd $1
 wget https://downloads.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
 if [ $? -ne 0 ] ; then
-  echo "wget fruit --- failed"
+  echo "[fruit] wget --- failed"
   exit 1
 fi
 
 # unpack FRUIT archive
 unzip -q fruit_3.4.3.zip
+if [ $? -ne 0 ] ; then
+  echo "[fruit] unzip --- failed"
+  exit 1
+fi
 rm fruit_3.4.3.zip
 
-# compile FRUIT
+# compile and install FRUIT
 cd fruit_3.4.3/
 gem install rake
 if [ $? -ne 0 ] ; then
-  echo "gem install rake --- failed"
+  echo "[fruit] gem install rake --- failed"
   exit 1
 fi
+
 cd fruit_processor_gem/
 rake install
 if [ $? -ne 0 ] ; then
-  echo "rake install --- failed"
+  echo "[fruit] rake install --- failed"
   exit 1
 fi
 

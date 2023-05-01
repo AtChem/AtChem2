@@ -65,18 +65,21 @@ fi
 cd $cvode_dir
 wget -O sundials-2.7.0.tar.gz https://github.com/LLNL/sundials/archive/v2.7.0.tar.gz
 if [ $? -ne 0 ] ; then
-  echo "wget sundials --- failed"
+  echo "[sundials] wget --- failed"
   exit 1
 fi
 
 # unpack SUNDIALS archive
 tar -zxf sundials-2.7.0.tar.gz
+if [ $? -ne 0 ] ; then
+  echo "[sundials] untar --- failed"
+  exit 1
+fi
 rm sundials-2.7.0.tar.gz
 
-# compile CVODE
+# compile and install CVODE
 cd sundials-2.7.0/
-mkdir build/
-cd build/
+mkdir build/ && cd build/
 cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
       -DCMAKE_C_COMPILER:FILEPATH=gcc \
       -DCMAKE_Fortran_COMPILER=$FORT_COMP \
@@ -91,7 +94,21 @@ cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
       -DEXAMPLES_ENABLE:BOOL=OFF \
       -DCMAKE_MACOSX_RPATH:BOOL=ON \
       ..
+if [ $? -ne 0 ] ; then
+  echo "[cvode] cmake --- failed"
+  exit 1
+fi
+
 make -j8
+if [ $? -ne 0 ] ; then
+  echo "[cvode] make --- failed"
+  exit 1
+fi
+
 make install
+if [ $? -ne 0 ] ; then
+  echo "[cvode] make install --- failed"
+  exit 1
+fi
 
 exit 0

@@ -17,7 +17,8 @@
 VERS_OLD="v1.3-dev"
 VERS_NEW="v1.2.2"
 
-find ./ -type f ! -name "update_version_number.sh" ! -name "CHANGELOG.md" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
+# ignore the .git/ directory, exclude this script and the changelog file
+find ./ -not -path "./.git/*" -type f ! -name "update_version_number.sh" ! -name "CHANGELOG.md" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
 echo "==> AtChem2 version number changed to:" $VERS_NEW
 echo ""

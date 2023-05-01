@@ -1,99 +1,102 @@
 # AtChem2 - CHANGELOG
 
-## v1.2.2 (2023)
+## v1.2.2 (May 2023)
 
-- move implementation of continuous integration from Travis CI to GitHub Actions
-- remove unit testing from CodeCov ()
-- optimisation flag for `gfortran`, and compilation flags for `ifort`
-- disable (provisionally) support for LAPACK and BLAS
-- update the install scripts to use  openlibm v0.8.1 and numdiff v5.9.0
-- fix error handling for RO2 sum in `build/mech_converter.py`
+- move implementation of continuous integration from TravisCI to [GitHub Actions](https://docs.github.com/en/actions)
+- improve reporting of the testsuite results by using logfiles
+- begin implementation of the new testsuite ("behaviour tests" now referred to as "old tests")
+- remove unit testing from CodeCov (coverage reporting is broken)
+- disable (provisionally) CVODE support for LAPACK and BLAS
+- update the install scripts to use **openlibm v0.8.1** and **numdiff v5.9.0**, add add error handling
+- in the `Makefile`, add optimisation flag for `gfortran` and compilation flags for `ifort`
+- fix bug in the input and output of constant photolysis rates
+- add missing comments and tidy several fortran source files
+- fix error handling for the RO2 sum in `build/mech_converter.py`
 - update and tidy the `.py` and `.sh` scripts in the `tools/` directory
-- update several `.gitignore` files
-- add missing comments and tidy the fortran files
-- fix bug in input and output of constant photolysis rates
-- move and rename the example mechanism `mcm/mechanism_test.fac` to `model/mechanism.fac`
-- update the manual and the `*.md` files
-- improve logging and reporting of the Test Suite
-- new version of the Test Suite (work in progress...)
+- update some `.gitignore` files, and remove the extension from the `LICENSE` file (per convention)
+- move and rename the example chemical mechanism file (`mcm/mechanism_test.fac`) to `model/mechanism.fac`
+- move and rename the script to generate the user manual (`doc/make_pdf.sh`) to `tools/make_manual_pdf.sh`
+- rename the versioning script `version.sh` to `update_version_number.sh`
+- update the `*.md` files, and add _Buy Me a Coffee_ button to the `README.md` file
+- several updates to the user manual (including new MCM website at Uni. York) and other minor fixes
 
 ## v1.2.1 (January 2021)
 
-- new environment variable `ASA` (aerosol surface area)
-- fix bug in the C-binding for `gfortran` version 9 and above
-- remove tabs from the configuration files
-- update the Travis configuration file
+- add a new environment variable: `ASA` (aerosol surface area)
+- fix a bug in the C-binding for `gfortran` version 9 and above
+- remove tabs from all configuration files
+- update the configuration file for TravisCI
 - tidy the comments and printout messages of various source files
-- update the manual
+- update the user manual
 
 ## v1.2 (May 2020)
 
 - implement argument parser and named arguments for the  `atchem2` executable
-- streamline the build procedure, rename and tidy the build scripts, and move to the `build/` directory
+- streamline the build procedure, rename and tidy the build scripts, and move them to the `build/` directory
 - implement the pre-compilation of the chemical mechanism into a shared library (`mechanism.so`)
-- implement the dilution mechanism and redefine the `DILUTE` environment variable
+- implement the dilution mechanism, and redefine the `DILUTE` environment variable accordingly
 - convert the documentation to LaTeX format
-- rewrite the user manual (`doc/AtChem2-Manual.pdf`) and reorganize the [wiki pages](https://github.com/AtChem/AtChem2/wiki)
-- add the poster presented at the ACM 2018 conference (`doc/AtChem_poster_ACM2018.pdf`)
-- change the reference in `CITATION.md` to the GMD paper (https://www.geosci-model-dev.net/13/169/2020/)
+- rewrite the user manual (`doc/AtChem2-Manual.pdf`), and reorganize the wiki pages
+- include the poster presented at the ACM 2018 conference (`doc/AtChem_poster_ACM2018.pdf`)
+- change the reference in `CITATION.md` to the [GMD paper](https://www.geosci-model-dev.net/13/169/2020/)
 - fix the header of `photolysisConstant.config` and remove the `initialConditionsSetting.output` file
 - fix a bug in `mech_converter.py` affecting chemical reactions with no reactants
-- change all Python scripts to be independent of the Python version
+- ensure that all Python scripts are independent of the Python version
 - rename plotting script `plot-atchem2.py` to `plot-atchem2-numpy.py`
 - new Python plotting script `plot-atchem2-pandas.py` (uses `pandas` instead of `numpy`)
 - improve the documentation of the behaviour and unit tests
-- remove the behaviour test `full`
+- remove the behaviour test `full` (fails with the new dilution mechanism)
 - new script to set the version of AtChem2 before a release (`tools/version.sh`)
-- minor improvements to the install procedure
-- move the example chemical mechanism file to the `mcm`/ directory, and add a minimal .fac file (`mechanism_skel.fac`)
+- minor improvements to the installation procedure
+- move the example chemical mechanism file (`tools/mechanism_test.fac`) and add a minimal `.fac` file (`mechanism_skel.fac`) to the `mcm`/ directory
 - tidy and improve comments in various source files and scripts
-- minor fixes and updates
+- various minor fixes and updates
 
 ## v1.1.1 (January 2019)
 
 - add `doc/` directory containing the documentation in markdown format
 - add `CONTRIBUTING.md` file
-- fix the header of `lossRates.output` and `productionRates.output`
-- change name of environment variable `ROOFOPEN` to `ROOF`
+- fix the headers of `lossRates.output` and `productionRates.output`
+- change the name of the environment variable `ROOFOPEN` to `ROOF`
 
 ## v1.1 (November 2018)
 
 - implement a new directory structure
-- rename some configuration and output files
 - add `CHANGELOG.md` and `CITATION.md` files
 - simplify the installation procedure and remove `makefile.local`
 - restructure the handling and calculation of photolysis rates
 - fix the calculations of sun declination and solar zenith angle
 - improve handling of dates and numerical precision
+- rename some configuration and output files
 - check calculation of reaction rates and improve format of `instantaneousRates` files (now called `reactionRates`)
 - merge `outputLossRates.config` and `outputProductionRates.config` into `outputRates.config`
 - fix the output of `lossRates.output` and `productionRates.output`
 - implement code coverage testing with [Codecov](https://codecov.io/)
 - implement a unit testing framework (new requirements: **Ruby**, **FRUIT**)
 - add unit tests for atmosphere, configuration, date and solar functions
-- add exact solution tests
+- add exact solution behaviour tests
 - improve running and reporting of the testsuite
-- rework mechanism conversion procedure and Python scripts
+- rework the mechanism conversion procedure, and the related Python scripts
 - add plotting tools in R, Python, Matlab, gnuplot
-- extend the documentation on the [wiki](https://github.com/AtChem/AtChem2/wiki)
+- extend the documentation on the wiki
 - fix several minor bugs
 
 ## v1.0 (July 2017)
 
-- create a code repository on [github.com](https://github.com/)
+- create a code repository and organization on [github.com](https://github.com/AtChem/)
 - adopt the [MIT open source license](https://opensource.org/licenses/MIT)
 - upgrade to **CVODE** version 2.9
 - remove the web interface and all the code related to [AtChem-online web service](https://atchem.leeds.ac.uk/)
-- standardize the codebase to Fortran95, use a consistent modular structure for the source code
+- standardize the codebase to Fortran95, and use a consistent modular structure for the source code
 - adopt coding style guidelines and standardize the naming of variables, subroutines, source files
-- improve formatting of output files, screen output and error reporting
+- improve the formatting of output files, screen output, and error reporting
 - improve code comments and create a [wiki](https://github.com/AtChem/AtChem2/wiki) for the documentation
-- tidy and speed up the Python and shell scripts
-- create a user-friendly command line interface to install, compile and run the model
-- verify that the model compiles with both **gfortran** and **Intel** compilers
-- verify that the model runs on Linux/Unix and macOS machines
+- tidy up and improve the Python and shell scripts
+- create a user-friendly command-line interface to install, compile and run the model
+- verify that the model compiles with both **GNU gfortran** and **Intel ifort** compilers
+- verify that the model runs on both Linux/Unix and macOS machines
 - implement continuous integration with [TravisCI](https://travis-ci.org/) and develop a range of test scenarios (new dependency: **numdiff**)
 - improve the model stability and numerical accuracy (new dependency: **openlibm**)
-- correct the calculations of solar angles, water vapour concentration and of the sum of organic peroxy radicals (`RO2`)
-- remove air number density (`M`) as environment variable
+- correct the calculations of solar angles, water vapour concentration and peroxy radicals summation (`RO2`)
+- remove air number density (`M`) as environment variable (now calculated in module `atmosphereFunctions`)
 - fix several minor bugs

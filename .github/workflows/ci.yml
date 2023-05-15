@@ -49,7 +49,7 @@ jobs:
       # Install gfortran - if not supplied on this OS image
       # macOS-11 only
       - name: Install gfortran-9 on macOS-11
-        if: matrix.os == 'macos-11' && matrix.fortran == 9)
+        if: matrix.os == 'macos-11' && matrix.fortran == 9
         run: brew install gcc@${{ matrix.fortran }}
 
       # macOS-12 only

@@ -225,3 +225,5 @@ else
   echo "==> Tests PASSED [" $test_counter/$test_counter "]"
   model_tests_passed=0
 fi
+cat $LOG_FILE
+exit $model_tests_passed

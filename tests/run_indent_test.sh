@@ -13,12 +13,16 @@
 # This script executes the indent test on the Fortran files to ensure
 # that they conform to the coding guidelines, described in the manual
 # (doc/AtChem2-Manual.pdf)
+#
+# N.B.: the script MUST be run from the main directory of AtChem2.
 
-RESULTS_FILE=tests/tests/testsuite.log
+LOG_FILE=tests/indenttest.log
 
-echo "Running indent script on:"
+echo "Executing indent script on:" > $LOG_FILE
+echo "" >> $LOG_FILE
+
 for file in src/*.f90 ; do
-  echo $file
+  echo $file >> $LOG_FILE
   python ./tools/fix_indent.py $file $file.cmp &>/dev/null
   this_indent_file_failures=$(diff -q $file $file.cmp)
   exitcode=$?
@@ -27,22 +31,23 @@ for file in src/*.f90 ; do
     failed_indent="$failed_indent
 
 $this_indent_file_failures"
-    echo $file "FAILED"
+    echo $file "FAILED" >> $LOG_FILE
   elif [ $exitcode -ne 0 ]; then
-    echo "diff gave an error on" $file ". Aborting."
+    echo "diff gave an error on" $file ". Aborting." >> $LOG_FILE
     exit 1
   fi
 done
 
-echo ""
 if [ -z "$failed_indent" ]; then
-  echo "Indent test PASSED"
+  echo "==> Indent test PASSED"
   indent_test_passed=0
 else
-  echo "Indent test FAILED"
-  echo "$failed_indent" >> $RESULTS_FILE
+  echo "==> Indent test FAILED"
+  echo "$failed_indent" >> $LOG_FILE
   indent_test_passed=1
 fi
-echo "Indent script finished"
-echo ""
+echo "" >> $LOG_FILE
+echo "Execution of indent script finished." >> $LOG_FILE
+
+echo "==> Indent test logfile:" $LOG_FILE
 exit $indent_test_passed

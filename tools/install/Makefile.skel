@@ -129,23 +129,29 @@ MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g'
 all: $(AOUT)
 
 indenttest:
+	@echo ""
+	@echo "Make: Running the indent test."
 	@./tests/run_indent_test.sh
 
 styletest:
+	@echo ""
+	@echo "Make: Running the style test."
 	@./tests/run_style_test.sh
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
 
 oldtests:
-	@echo "Make: Running the following tests:" $(OLDTESTS)
+	@echo ""
+	@echo "Make: Running the old tests:" $(OLDTESTS)
 	@./tests/run_tests.sh "$(OLDTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
 modeltests:
-	@echo "Make: Running the following tests:" $(MODELTESTS)
+	@echo ""
+	@echo "Make: Running the model tests:" $(MODELTESTS)
 	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
 
-alltests: indenttest styletest unittests oldtests modeltests
+alltests: indenttest styletest modeltests oldtests unittests
 
 sharedlib:
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)

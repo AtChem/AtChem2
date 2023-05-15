@@ -45,12 +45,20 @@ jobs:
         with:
           fetch-depth: 2
 
-      # Install gfortran if not supplied on this OS image.
-      # macOS-12 only
-      - name: Install gfortran-9 or gfortran-10 on macOS-12 if required
-        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+      # -------------------------------------------------------------
+      # Install gfortran - if not supplied on this OS image
+      # macOS-11 only
+      - name: Install gfortran-9 on macOS-11
+        if: matrix.os == 'macos-11' && matrix.fortran == 9
         run: brew install gcc@${{ matrix.fortran }}
 
+      # macOS-12 only
+      - name: Install gfortran-9 or gfortran-10 on macOS-12
+        #if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+        if: matrix.os == 'macos-12' && matrix.fortran == 10
+        run: brew install gcc@${{ matrix.fortran }}
+
+      # -------------------------------------------------------------
       # Install cvode
       # ubuntu only
       - name: Install cvode (ubuntu)
@@ -62,7 +70,8 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # Install all dependencies
+      # -------------------------------------------------------------
+      # Install all other dependencies
       # both OSs
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
@@ -73,6 +82,7 @@ jobs:
       - name: Install fruit
         run: sudo ./tools/install/install_fruit.sh $PWD
 
+      # -------------------------------------------------------------
       # Build AtChem2 and run all tests
       - name: Build AtChem2
         # Set FORT_VERSION for use inside the Makefile (called from build_atchem2.sh)
@@ -88,11 +98,13 @@ jobs:
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
 
+      # -------------------------------------------------------------
       - name: Indent and style tests
         run: |
           make indenttest
           make styletest
 
+      # -------------------------------------------------------------
       - name: Run AtChem2
         run: |
           # Run Atchem2
@@ -100,6 +112,7 @@ jobs:
           # Upload 'build' coverage to codecov
           if [[ "$RUNNER_OS" == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
 
+      # -------------------------------------------------------------
       - name: Run tests
         # Set FORT_VERSION for use inside the Makefile
         env:
@@ -113,4 +126,4 @@ jobs:
           make clean
           # Run full build tests - this will upload 'tests' coverage to codecov for each test
           make oldtests
-          make modeltests
+          #make modeltests

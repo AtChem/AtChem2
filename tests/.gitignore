@@ -1,6 +1,5 @@
 # Ignore output/log files and mechanism files of the test runs
-*/output/reactionRates/*
-*.output
+*.log
 *.out
 mechanism.f90
 mechanism.o
@@ -9,7 +8,8 @@ mechanism.reac
 mechanism.ro2
 mechanism.species
 mechanism.so
-testsuite.log
+tests/*/output/*
+model_tests/*/output/*
 
 # Except configuration and reference files
 !*.cmp

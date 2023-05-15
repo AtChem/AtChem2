@@ -1,6 +1,9 @@
 The directory `tests/model_tests/` contains the **model tests** for AtChem2.
 These tests check the overall behaviour of the model for a range of possibile configurations.
 
+Tests `firstorder`, `secondorder`, `static` are generic chemical mechanism (1 or 2 reaction, 2 species).
+These are manufactured ODE systems with known solutions.
+
 The `env_model_*` tests check the configuration of the environment variables.
 They use a minimal inorganic chemical mechanism with a runtime of 4 hours (10 min timestep),
 starting at 2 pm on 02/02/2002.

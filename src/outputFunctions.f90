@@ -22,8 +22,8 @@ module output_functions_mod
 
 contains
 
-  ! ----------------------------------------------------------------- !
-  ! Returns the sum of all ro2 species' concentrations
+  ! -----------------------------------------------------------------
+  ! Returns the sum of all ro2 concentrations.
   pure function ro2Sum( y ) result ( ro2 )
     use types_mod
     use env_vars_mod, only : ro2Numbers
@@ -41,8 +41,8 @@ contains
     return
   end function ro2Sum
 
-  ! ----------------------------------------------------------------- !
-  ! Write each environment variable to file
+  ! -----------------------------------------------------------------
+  ! Write each environment variable to file.
   subroutine outputEnvVar( t )
     use types_mod
     use env_vars_mod, only : envVarNames, numEnvVars, currentEnvVarValues, ro2
@@ -63,8 +63,8 @@ contains
     return
   end subroutine outputEnvVar
 
-  ! ----------------------------------------------------------------- !
-  ! Write parameters output by CVODE solver to file
+  ! -----------------------------------------------------------------
+  ! Write parameters output by CVODE solver to file.
   subroutine outputSolverParameters( t, prev, this, array, solver_type )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -104,7 +104,7 @@ contains
     return
   end subroutine outputSolverParameters
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Write parameters used in calculation of photolysis rates to file.
   subroutine outputPhotoRateCalcParameters( t )
     use types_mod
@@ -124,7 +124,7 @@ contains
     return
   end subroutine outputPhotoRateCalcParameters
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Write photolysis rates to file.
   subroutine outputPhotolysisRates( t )
     use types_mod
@@ -180,8 +180,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! Given a list speciesNames, and an integer reactionNumber, return
-  ! reaction, a string containing the string representing that
-  ! reaction.
+  ! reaction, a string representing that reaction.
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     use types_mod
     use reaction_structure_mod, only : clhs, crhs
@@ -193,10 +192,9 @@ contains
     integer(kind=NPI), intent(in) :: reactionNumber
     character(len=maxReactionStringLength) :: reactantStr, productStr, reaction
 
-    ! Loop over reactants, and copy the reactant name for any reactant
-    ! used in reaction reactionNumber. use numReactants as a counter
-    ! of the number of reactants.  String these together with '+', and
-    ! append a '='
+    ! Loop over reactants, and copy the reactant name for any reactant used
+    ! in reaction reactionNumber. Use numReactants as a counter of the number
+    ! of reactants. String these together with '+', and append a '='.
     numReactants = 0
     do i = 1, size( clhs, 2 )
       if ( clhs(1, i) == reactionNumber ) then
@@ -216,9 +214,9 @@ contains
 
     ! Loop over products, and copy the product name for any product
     ! created in reaction reactionNumber. use numProducts as a counter
-    ! of the number of products.  String these together with '+', and
+    ! of the number of products. String these together with '+', and
     ! append this to reactantStr. Save the result in reaction, which
-    ! is returned
+    ! is returned.
     numProducts = 0
     do i = 1, size( crhs, 2 )
       if ( crhs(1, i) == reactionNumber ) then
@@ -240,7 +238,7 @@ contains
     return
   end function getReaction
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Write production and loss rates to file.
   subroutine outputRates( rSpecies, r, arrayLen, t, p, flag )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -306,7 +304,7 @@ contains
     return
   end subroutine outputRates
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Write reaction rates to file.
   subroutine outputreactionRates( time )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -336,8 +334,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! Print each element of arrayOfConcs, with size arrayOfConcsSize.
-  ! If any concentration is negative, then set it to zero before
-  ! printing.
+  ! If a concentration is negative, then set it to zero before printing.
   subroutine outputSpeciesOfInterest( t, specOutReqNames, allSpeciesConcs )
     use types_mod
     use storage_mod, only : maxSpecLength

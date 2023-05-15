@@ -15,9 +15,8 @@
 ! ******************************************************************** !
 ! ATCHEM2 -- MODULE atmosphereFunctions
 !
-! This module contains functions responsible for calculating quantities
-! relevant to the atmosphere: specifically, the air density, O2 and N2
-! density, and convert from RH to H2O.
+! This module contains functions that calculate variables relevant to
+! the atmosphere: air density, humidity, temperature, etc...
 ! ******************************************************************** !
 module atmosphere_functions_mod
   implicit none
@@ -41,7 +40,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! Calculate the number density of oxygen and nitrogen in the atmosphere
-  ! from number density of air (molecule cm-3).
+  ! from the number density of air (molecule cm-3).
   subroutine calcAtmosphere( m, o2, n2 )
     use types_mod
 
@@ -68,16 +67,16 @@ contains
     ! Eq.1 to calculate the water vapour pressure from relative
     ! humidity (see Vaisala paper).
     temp_c = temp - 273.15_DP
-    wvp = ( rh/100.0_DP ) * ( 6.116441_DP * 10.0_DP**((7.591386_DP * temp_c)/(temp_c + 240.7263_DP)) )
+    wvp = ( rh / 100.0_DP ) * ( 6.116441_DP * 10.0_DP**((7.591386_DP * temp_c)/(temp_c + 240.7263_DP)) )
 
     ! Calculate volume of water vapour per volume of dry air using
     ! Eq.18 (see Vaisala paper). We don't use ppm here, because doing
     ! so requires a multiplication by 1e6 then division by the same
     ! in the final line. This incurs possible rounding. Instead, we
     ! use 'parts per unit'
-    h2o_ppu = wvp / (press - wvp)
+    h2o_ppu = wvp / ( press - wvp )
 
-    ! convert ppv to molecule cm-3
+    ! convert ppu to molecule cm-3
     h2o = h2o_ppu * calcAirDensity(press, temp)
 
     return
@@ -85,7 +84,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! subroutine to calculate diurnal variations in temperature
-  ! --> CURRENTLY UNUSED, BUT IT MAY BE USEFUL <--
+  ! --> CURRENTLY NOT USED, BUT IT MAY BE USEFUL <--
   subroutine temperature( temp, h2o, ttime )
     use types_mod
 
@@ -95,7 +94,8 @@ contains
     temp = 298.00_DP
     rh = 23.0_DP * sin( ( 7.2722e-5_DP * ttime ) + 1.1781_DP ) + 66.5_DP
     h2o_factor = 10.0_DP / ( 1.38e-16_DP * temp ) * rh
-    exponent = -1.0_DP * ( 597.3_DP - 0.57_DP * ( temp - 273.16_DP ) ) * 18.0_DP / 1.986_DP * ( 1.0_DP / temp - 1.0_DP / 273.16_DP )
+    exponent = -1.0_DP * ( 597.3_DP - 0.57_DP * ( temp - 273.16_DP ) ) &
+         * 18.0_DP / 1.986_DP * ( 1.0_DP / temp - 1.0_DP / 273.16_DP )
     h2o = 6.1078_DP * exp( exponent ) * h2o_factor
 
     return

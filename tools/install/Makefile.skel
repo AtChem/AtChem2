@@ -13,10 +13,10 @@
 #
 # -----------------------------------------------------------------------------
 
-# Makefile for AtChem2
+# ==================== Makefile for AtChem2 ==================== #
 
-# choose fortran compiler
-# 1. "gnu" for gfortran
+# choose the Fortran compiler
+# 1. "gnu" for gfortran (DEFAULT)
 # 2. "intel" for ifort
 FORTC = "gnu"
 
@@ -30,9 +30,11 @@ FRUITDIR     = fruit_3.4.3
 # use the second argument of the build script to override $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
-# ================================================================== #
+
+# =========================================================================== #
 # DO NOT MODIFY BELOW THIS LINE
-# ================================================================== #
+# =========================================================================== #
+
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
@@ -43,45 +45,46 @@ OS := $(shell uname -s)
 
 # if on GitHub Actions
 ifeq ($(GITHUB_ACTIONS),true)
-ifeq ($(RUNNER_OS),Linux)
-# if linux, pass gfortran
-FORT_COMP    = gfortran-$(FORT_VERSION)
-FORT_LIB     = ""
-else
-# if macOS, pass homebrew gfortran
-FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
-FORT_LIB     = ""
-endif
+  ifeq ($(RUNNER_OS),Linux)
+    # if linux, pass gfortran
+    FORT_COMP    = gfortran-$(FORT_VERSION)
+    FORT_LIB     = ""
+  else
+    # if macOS, pass homebrew gfortran
+    FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
+    FORT_LIB     = ""
+  endif
 # if not on GitHub Actions, set the fortran compiler
 else
-ifeq ($(FORTC),"gnu")
-FORT_COMP    = gfortran
-FORT_LIB     = ""
-endif
-ifeq ($(FORTC),"intel")
-FORT_COMP    = ifort
-FORT_LIB     = ""
-endif
-endif
-
-# set compilation flags for each compiler
-ifeq ($(FORTC),"gnu")
-FFLAGS       =  -O2 -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-FSHAREDFLAGS =  -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
-endif
-ifeq ($(FORTC),"intel")
-FFLAGS       = -free -warn
-FSHAREDFLAGS =
+  ifeq ($(FORTC),"gnu")
+    FORT_COMP    = gfortran
+    FORT_LIB     = ""
+  endif
+  ifeq ($(FORTC),"intel")
+    FORT_COMP    = ifort
+    FORT_LIB     = ""
+  endif
 endif
 
-# set rpath flag
+# set the compilation flags for each compiler
+# N.B.: the code coverage files (*.gcda, *.gcno) can be generated only with the gnu compiler
+ifeq ($(FORTC),"gnu")
+  FFLAGS       = -O2 -fprofile-arcs -ftest-coverage -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+  FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+endif
+ifeq ($(FORTC),"intel")
+  FFLAGS       = -O2 -free -implicitnone -warn all -check all -fpic
+  FSHAREDFLAGS = -free -implicitnone -warn all -check all -fpic -shared
+endif
+
+# set the rpath flag
 ifeq ($(OS),Linux)
-RPATH_OPTION = -R
+  RPATH_OPTION = -R
 else
-RPATH_OPTION = -rpath
+  RPATH_OPTION = -rpath
 endif
 
-# set other compiler flags
+# set the cvode and openlibm compiler flags
 LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIB):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # object files and source files directories
@@ -109,6 +112,7 @@ fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
 # copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
+	@echo ""
 	@cp tests/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
 
@@ -140,6 +144,7 @@ styletest:
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+	@echo ""
 
 oldtests:
 	@echo ""

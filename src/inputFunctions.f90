@@ -15,15 +15,16 @@
 ! ******************************************************************** !
 ! ATCHEM2 -- MODULE inputFunctions
 !
-! This module contains functions controlling the reading of data from
-! external files, apart from model.parameters and solver.parameters.
+! This module contains functions that control the reading of data from
+! external files, except for the configuration files model.parameters
+! and solver.parameters which are handled by parameterModules.
 ! ******************************************************************** !
 module input_functions_mod
   implicit none
 
 contains
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read the top line of mechanism.reac to get the number of species
   ! and number of reactions in the system
   subroutine readNumberOfSpeciesAndReactions()
@@ -119,7 +120,7 @@ contains
     return
   end subroutine readReactions
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read in all species names and numbers from mechanism.species
   function readSpecies() result ( speciesName )
     use types_mod
@@ -135,7 +136,7 @@ contains
     fileLocation=trim( configuration_dir ) // '/mechanism.species'
     ! Read in species number and name from model/configuration/mechanism.species
     ! to speciesName and sdummy (to be thrown).
-    allocate(speciesName(getNumberOfSpecies()))
+    allocate (speciesName(getNumberOfSpecies()))
     call inquire_or_abort( fileLocation, 'readSpecies()')
     open (10, file=fileLocation) ! input file
     do j = 1, size ( speciesName )
@@ -150,9 +151,8 @@ contains
   ! -----------------------------------------------------------------
   ! Reads in concentration per species from model/configuration/initialConcentrations.config
   ! Checks that there aren't more inputs than species.
-  ! concSpeciesNames is filled with all species names of initial
-  ! concentrations, concentration is filled with corresponding
-  ! concentration VALUES
+  ! concSpeciesNames is filled with all species names with initial concentrations,
+  ! concentration is filled with corresponding concentration values.
   subroutine readAndSetInitialConcentrations( speciesConcs )
     use types_mod
     use species_mod, only : getNumberOfSpecies, getSpeciesList
@@ -179,7 +179,7 @@ contains
       write (51, '(A, I0)') '(number of species initial concentrations are set for) = ', numLines
       write (51, '(A, I0)') '(number of species) = ', nsp
     end if
-    allocate (concSpeciesNames(numLines), concentration(numLines) )
+    allocate (concSpeciesNames(numLines), concentration(numLines))
 
     open (10, file=trim( filename ), status='old') ! input file for lhs of equations
     i = 0
@@ -208,7 +208,7 @@ contains
     return
   end subroutine readAndSetInitialConcentrations
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Set the concentrations of all species - default to 0.0_DP.
   ! Called in readAndSetInitialConcentrations()
   subroutine setConcentrations( concSpeciesNames, inputConcentrations, refSpeciesNames, outputConcentrations )
@@ -260,9 +260,9 @@ contains
   end subroutine setConcentrations
 
   ! -----------------------------------------------------------------
-  ! This is called from readPhotoRates(). It reads photolysisNumbers from the first column of
-  ! mcm/photolysis-rates_v3.3.1 so that we know the numbers
-  ! of all the photolysis rates and how many there are.
+  ! This is called from readPhotoRates(). It reads photolysisNumbers
+  ! from the first column of mcm/photolysis-rates_v3.3.1 so that we know
+  ! the ID numbers of all photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -456,9 +456,8 @@ contains
   end subroutine readPhotolysisConstraints
 
   ! -----------------------------------------------------------------
-  ! Returns an array of the numbers of unconstrained photolysis rates,
-  ! and a logical indicating whether there are any such rates
-  ! (existUnconstrainedPhotos)
+  ! Returns an array of the numbers of unconstrained photolysis rates, and a
+  ! logical indicating whether there are any such rates (existUnconstrainedPhotos)
   subroutine findUnconstrainedPhotos()
     use types_mod
     use photolysis_rates_mod, only : photoNumbers, totalNumPhotos, constrainedPhotoNumbers, numConstrainedPhotoRates, &
@@ -483,7 +482,7 @@ contains
         numUnconstrainedPhotoRates = numUnconstrainedPhotoRates + 1
       end if
     end do
-    allocate ( unconstrainedPhotoNumbers(numUnconstrainedPhotoRates))
+    allocate (unconstrainedPhotoNumbers(numUnconstrainedPhotoRates))
     counter = 0_NPI
     write (*,*) 'maxval(photoNumbers):', maxval(photoNumbers)
     do j = 1, totalNumPhotos
@@ -568,7 +567,8 @@ contains
       end if
       this_ck_pos = scan(line, "0123456789")
       read(line(this_ck_pos:), '(I4)') this_ck
-      ! If this line is associated to an unconstrained photo rate, then write the line to the appropriate variables
+      ! If this line is associated to an unconstrained photo rate,
+      ! then write the line to the appropriate variables.
       if ( isInNPIArray( this_ck, unconstrainedPhotoNumbers ) .eqv. .true. ) then
         index = index + 1_NPI
         read (line,*, iostat=ierr) ck(index), cl(index), cmm(index), cnn(index), unconstrainedPhotoNames(index), &
@@ -658,10 +658,9 @@ contains
   end subroutine readAllPhotolysisRates
 
   ! -----------------------------------------------------------------
-  ! Read in contents of model/configuration/outputRates.config, which
-  ! contains a list of the species we want to write to
-  ! model/output/{production,loss}Rates.output Output the contents in
-  ! r, with i as the length of r.
+  ! Read in contents of model/configuration/outputRates.config, which  contains
+  ! a list of the species we want to write to model/output/{production,loss}Rates.output
+  ! Output the contents in r, with i as the length of r.
   subroutine readDetailedRatesSpeciesNames( filename, r )
     use types_mod
     use storage_mod, only : maxSpecLength
@@ -671,7 +670,7 @@ contains
     integer(kind=NPI) :: length, j
 
     length = count_lines_in_file ( trim( filename ), .false. )
-    allocate (r(length) )
+    allocate (r(length))
     call read_in_single_column_string_file( trim( filename ), r, .false. )
 
     if ( length > 3 ) then
@@ -756,11 +755,10 @@ contains
   end subroutine readJFacCalculationParameters
 
   ! -----------------------------------------------------------------
-  ! This function reads in data from environmentVariables.config, and
-  ! sets envVarTypesNum for each one. In the case of a constrained
-  ! variable, this also reads in the constraint data from
-  ! model/constraints/environment directory, the file named after the
-  ! environmental variable.
+  ! This function reads in data from environmentVariables.config, and sets
+  ! envVarTypesNum for each one. In the case of a constrained variable, this
+  ! also reads in the constraint data from the file named after the environment
+  ! variable in model/constraints/environment directory.
   subroutine readEnvVar()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -787,11 +785,11 @@ contains
     numEnvVars = int( count_lines_in_file( trim( configuration_dir ) // '/environmentVariables.config' ), SI ) + 1_SI
 
     ! Allocate storage for current values of env vars used for output
-    allocate (currentEnvVarValues(numEnvVars) )
+    allocate (currentEnvVarValues(numEnvVars))
 
     write (*, '(A, I0)') ' Number of environment variables: ', numEnvVars
-    allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars) )
-    allocate (envVarFixedValues(numEnvVars) )
+    allocate (envVarTypesNum(numEnvVars), envVarNames(numEnvVars), envVarTypes(numEnvVars))
+    allocate (envVarFixedValues(numEnvVars))
 
     envVarNames(1) = 'M'
     envVarTypes(1) = 'CALC'
@@ -868,7 +866,7 @@ contains
     write (*, '(A)') ' Finished reading environment variables.'
     write (*,*)
 
-    ! TODO: convert this to a command line input argument
+    !TODO: convert this to a command line input argument
     fileLocationPrefix = trim( env_constraints_dir ) // "/"
     ! If environment variable is constrained, read in constraint data
     write (*, '(A)') ' Checking for constrained environment variables...'
@@ -928,7 +926,7 @@ contains
     return
   end subroutine readEnvVar
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read outputSpecies.config to get species of interest
   function readSpeciesOfInterest() result ( r )
     use types_mod
@@ -943,7 +941,7 @@ contains
     filename = trim( configuration_dir ) // '/outputSpecies.config'
     write (*, '(A)') ' Reading concentration output from file...'
     length = count_lines_in_file( trim( filename ) )
-    allocate (r(length) )
+    allocate (r(length))
     call read_in_single_column_string_file( trim( filename ), r )
     write (*, '(A)') ' Finished reading concentration output from file.'
 
@@ -970,7 +968,7 @@ contains
     return
   end function readSpeciesOfInterest
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read photolysis rates from file, either by
   !  (a) constant values, or
   !  (b) constrained values, or
@@ -1053,7 +1051,7 @@ contains
     return
   end subroutine readPhotoRates
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read constraint data for all constrained species from file, either
   !  (a) constant values, or
   !  (b) non-constant fixed values.
@@ -1094,7 +1092,7 @@ contains
     write (*, '(A, I0)') ' Number of names of fixed-concentration constrained species: ', numberOfFixedConstrainedSpecies
 
     numberOfConstrainedSpecies = numberOfVariableConstrainedSpecies + numberOfFixedConstrainedSpecies
-    allocate ( constrainedNames(numberOfConstrainedSpecies) )
+    allocate (constrainedNames(numberOfConstrainedSpecies))
     call setNumberOfConstrainedSpecies( numberOfConstrainedSpecies )
 
     ! fill constrainedNames and constrainedSpecies with the names and
@@ -1139,12 +1137,12 @@ contains
       write (*, '(A, I0)') ' maximum number of species constraint data points: ', maxNumberOfConstraintDataPoints
     end if
 
-    allocate ( dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
-    allocate ( dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints) )
+    allocate (dataX(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints))
+    allocate (dataY(numberOfVariableConstrainedSpecies, maxNumberOfConstraintDataPoints))
 
     ! Read concentration data for variable constrained species
     write (*, '(A)') ' Reading concentration data for variable-concentration constrained species...'
-    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+numberOfFixedConstrainedSpecies) )
+    allocate (speciesNumberOfPoints(numberOfVariableConstrainedSpecies+numberOfFixedConstrainedSpecies))
     if ( numberOfVariableConstrainedSpecies > 0 ) then
       do i = 1, numberOfVariableConstrainedSpecies
         if ( i < 3 .or. i == numberOfVariableConstrainedSpecies ) then
@@ -1241,8 +1239,8 @@ contains
     return
   end subroutine readSpeciesConstraints
 
-  ! ----------------------------------------------------------------- !
-  ! Read in the contents of model/configuration/ro2-rates.list and add
+  ! -----------------------------------------------------------------
+  ! Read in the contents of model/configuration/mechanism.ro2 and add
   ! its contents to the variable ro2Numbers
   subroutine readRO2species()
     use types_mod
@@ -1260,7 +1258,7 @@ contains
     ! to ro2Numbers
     call inquire_or_abort( fileLocation, 'readSpecies()')
     numberOfRO2Species = count_lines_in_file( fileLocation, .true. )
-    allocate(ro2Numbers(numberOfRO2Species))
+    allocate (ro2Numbers(numberOfRO2Species))
 
     open (10, file=fileLocation) ! input file
     ! skip first line
@@ -1274,7 +1272,7 @@ contains
     return
   end subroutine readRO2species
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Given a filename, count the number of lines. Optional argument
   ! skip_first_line_in ignores the first line if it exists.
   function count_lines_in_file( filename, skip_first_line_in ) result ( counter )
@@ -1311,7 +1309,7 @@ contains
 
   end function count_lines_in_file
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Read in from filename and fille output_vector with the contents of
   ! the first column of the input. Optional argument skip_first_line_in
   ! ignores the first line if it exists.
@@ -1350,7 +1348,7 @@ contains
 
   end subroutine read_in_single_column_string_file
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Inquire whether the file exists. If it doesn't abort, and print a
   ! message showing the calling subroutine's name.
   subroutine inquire_or_abort( filename, calling_subroutine )

@@ -1,7 +1,6 @@
 AtChem2 ![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue) ![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue) ![AtChem2-CI](https://github.com/AtChem/AtChem2/workflows/AtChem2-CI/badge.svg)
 =======
 
-
 **AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM, http://mcm.york.ac.uk/), but it can be used with any general set of chemical reactions as long as they are provided in the correct format. The MCM is a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere.
 
 AtChem2 is _open source_, under the [MIT license](https://opensource.org/licenses/MIT).

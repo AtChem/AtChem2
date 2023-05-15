@@ -28,8 +28,8 @@ contains
   ! testspeciesList is in masterSpeciesList. When it finds a match, it
   ! adds the number of the line in masterSpeciesList to returnArray in
   ! the next available space, thus each element of returnArray
-  ! corresponds to the same element in testSpeciesList. If not found,
-  ! then abort.
+  ! corresponds to the same element in testSpeciesList.
+  ! If not found, then abort.
   subroutine matchNameToNumber( masterSpeciesList, testSpeciesList, returnArray )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
@@ -79,14 +79,13 @@ contains
 
   end function getIndexWithinList
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! At the end of this function, each row of r is associated to one of
   ! the species in rSpecies. Each element of the row corresponds to a
   ! reaction in which this species appears as a product or reactant.
   ! Each element consists of %reaction holding the reaction number, and
   ! %frequency holding the number of occurences of that species in that
-  ! reaction.
-  ! chs contains the product or reactant information.
+  ! reaction. chs contains the product or reactant information, and
   ! arrayLen is used to keep track of how many are present in each row.
   subroutine findReactionsWithProductOrReactant( rSpecies, chs, r, arrayLen )
     use types_mod

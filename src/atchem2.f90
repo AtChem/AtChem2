@@ -595,8 +595,8 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   np = ipar(1) + numConSpec
   numReac = ipar(2)
   dummy = rpar(1)
-  ! TODO: these should be the same size on every call? If so, then better to allocate once and re-use
-  !       rather than re-allocating each time.
+  !TODO: these should be the same size on every call? If so, then better to allocate once and re-use
+  !      rather than re-allocating each time.
   allocate (dy(np), z(np), constrainedConcs(numConSpec))
 
   ! for each constrained species...

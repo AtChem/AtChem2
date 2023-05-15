@@ -17,7 +17,7 @@
 !
 ! This module handles the addition and removal of constrained species
 ! from vectors of concentrations, and calculation of jFac. It also
-! handles calculation of environment variabe values at a given time t.
+! handles calculation of environment variables at a given time t.
 ! Also implements getEnvVarNum() as a helper function to return the
 ! number of the environment variable using the name as a key.
 ! ******************************************************************** !
@@ -26,7 +26,9 @@ module constraint_functions_mod
 
 contains
 
-  !  TODO comment
+  ! -----------------------------------------------------------------
+  ! Parametrization of photolysis rates as a function of solar zenith
+  ! angle, as per MCM protocol.
   function calcPhotolysisRaw( l, m, n, tf ) result ( photolysis )
     use types_mod
     use zenith_data_mod, only : cosx, secx
@@ -39,9 +41,10 @@ contains
     return
   end function calcPhotolysisRaw
 
-  ! ----------------------------------------------------------------- !
-  ! Calculate the photolysis rate of photolysis number i from the
-  ! photolysis equations, using the current zenith data values
+  ! -----------------------------------------------------------------
+  ! Calculate the photolysis rate number i from the photolysis rate
+  ! parametrization (calcPhotolysisRaw), using the current value of
+  ! the solar zenith angle.
   function calcPhotolysis( i ) result ( photolysis )
     use types_mod
     use photolysis_rates_mod, only : cl, cmm, cnn, transmissionFactor
@@ -54,7 +57,7 @@ contains
     return
   end function calcPhotolysis
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Calculate the value of jFac by comparing the constrained value of
   ! jFacSpecies to the value calculated from the photolysis equations.
   ! If the constrained rate is zero, or the value of cosx is below the
@@ -114,10 +117,10 @@ contains
     return
   end subroutine calcJFac
 
-  ! TODO: As the numbers of the constrained species will be constant, it may be possible
-  !       to speed this up by computing a vector of bools once then apply this as a mask
-  !       each time. Same for the removal.
-  ! ----------------------------------------------------------------- !
+  !TODO: As the numbers of the constrained species will be constant, it may be possible
+  !      to speed this up by computing a vector of bools once then apply this as a mask
+  !      each time. Same for the removal.
+  ! -----------------------------------------------------------------
   ! Take in z, the vector of concentrations of unconstrained species,
   ! and add the concentrations of the constrained species. Return this
   ! in vector x.
@@ -156,7 +159,7 @@ contains
     return
   end subroutine addConstrainedSpeciesToProbSpec
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Take in x, the vector of concentrations of all species, and remove
   ! the concentrations of the constrained species. Return the remainder
   ! in vector z.
@@ -189,7 +192,7 @@ contains
     return
   end subroutine removeConstrainedSpeciesFromProbSpec
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Return the values of all environment variables at time t, taking
   ! into account whether each variable is constrained, fixed value,
   ! calculated from a formula, or given a default value. Also take
@@ -343,7 +346,7 @@ contains
     return
   end subroutine getEnvVarsAtT
 
-  ! ----------------------------------------------------------------- !
+  ! -----------------------------------------------------------------
   ! Set envVarNum to the index of name within enVarNames
   function getEnvVarNum( name ) result ( envVarNum )
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit

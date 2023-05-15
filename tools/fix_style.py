@@ -9,29 +9,39 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script rewrites the source file provided as an argument, replacing it with a copy that better fits the
-# expected style. If two arguments are given, the output wil be written to the second, leaving the first untouched.
+# -------------------------------------------------------------------- #
+# This script rewrites the Fortran source file provided as an argument,
+# replacing it with a copy that better fits the expected style.
+# If two arguments are given, the output will be written to the second,
+# leaving the first untouched.
 #
-# WARNING: Please note that this script is not infallible, and can break your code! Please use with caution,
-# and make sure you have a copy of your source file to revert to in the event of it breaking.
+# WARNING: this script is not infallible, and can break your code!
+# Please use with caution, and make sure you have a copy of your
+# source file to revert to in the event of it breaking.
+#
+# ARGUMENT(S):
+#   1. path to the fortran file to process
+#   2. optional output file (if not given, overwrites input file)
+# -------------------------------------------------------------------- #
 from __future__ import print_function
+import sys, re
 
-## ------------------------------------------------------------------ ##
+# ============================================================ #
 
+# Replace the first word(s) with its lowercase if it matches string
 def replace_any_case_with_lower_first(string, to_output):
-    # Replaces the first word(s) with its lowercase if it matches string
     if re.match('^\s*'+string, to_output, flags=re.IGNORECASE):
         to_output = re.sub(string, string.lower(), to_output, 1, flags=re.IGNORECASE)
     return to_output
 
+# Replace the first word(s) with its lowercase if it matches string
 def replace_any_case_with_lower(string, to_output):
-    # Replaces the first word(s) with its lowercase if it matches string
     if re.search(string, to_output.upper(), flags=re.IGNORECASE):
         to_output = re.sub(string, string.lower(), to_output, 1, flags=re.IGNORECASE)
     return to_output
 
+# Set first bracket to be preceded by no whitespace, followed by one space
 def brackets_for_calls(string, to_output, is_first_line_of_multiline, is_inside_procedure, currently_on_multiline):
-    # Sets first bracket to be preceded by no whitespace, followed by one space
     if re.match('^\s*'+string, to_output, flags=re.IGNORECASE):
         is_inside_procedure = True
         to_output = replace_any_case_with_lower_first(string, to_output)
@@ -40,18 +50,23 @@ def brackets_for_calls(string, to_output, is_first_line_of_multiline, is_inside_
                 to_output = re.sub('\s*\(\s*(?=[a-zA-Z0-9\s\'\"\)])', '( ', to_output, 1)
     return to_output, is_inside_procedure, currently_on_multiline
 
+# Remove newline characters from string
 def strip_newline(string):
     string = re.sub('\n', '', string)
     return string
 
+# Append newline character to string
 def add_newline(string):
     string = string + '\n'
     return string
 
+# Concatenate two strings
 def add(string1, string2):
     string = add_newline(strip_newline(string1)+string2)
     return string
 
+# Check that there are an even number of both single- and
+# double-quotes in the given string
 def even_quotes(string):
     if string.count('"') % 2 == 0:
         double = True
@@ -63,12 +78,10 @@ def even_quotes(string):
         single = False
     return (double and single)
 
-## ------------------------------------------------------------------ ##
+# ============================================================ #
 
-import sys
-import re
-
-# handle input arguments. If only one is provided, use this for input and output. Error if none provided.
+# Handle input arguments. If only one is provided, use this for both
+# input and output. Error if none provided.
 assert len(sys.argv) >= 2, "Please enter a filename as argument."
 filename = sys.argv[1]
 if len(sys.argv) == 3:
@@ -76,24 +89,25 @@ if len(sys.argv) == 3:
 else:
     out_filename = filename
 
-# read in file contents
+# Read in file contents
 with open(filename, 'r') as input_file:
     lines = input_file.readlines()
 
-# loop for fixing style
+# -------------------------------------------------
+# Loop for fixing style
 with open(out_filename, 'w') as output_file:
-    # set up variable for the first time
+    # Set up variable for the first time
     currently_on_multiline = False
     previous_line_ends_ampersand = False
     is_inside_procedure = False
     outputs = []
     for line in lines:
-        # extract comment from end of line, to append later
+        # Extract comment from end of line, to append later
         line = strip_newline(line)
         split_line = line.split('!')
         to_output = split_line[0]
         if len(split_line) > 1:
-            # cycle over each combo of strings
+            # Cycle over each combo of strings until we split command from comment
             for i in range(len(split_line)):
                 to_output = '!'.join(split_line[0:i+1])
                 if even_quotes(to_output):
@@ -105,10 +119,11 @@ with open(out_filename, 'w') as output_file:
         else:
             comment = ''
 
+        # Check that the string contains only whitespace or is empty
         if to_output.isspace() or to_output == '':
             empty_line = True
 
-        # book-keeping for matching bracketed calls over multiple lines
+        # Book-keeping for matching bracketed calls over multiple lines
         this_line_ends_ampersand = False
         is_first_line_of_multiline = False
 
@@ -119,7 +134,7 @@ with open(out_filename, 'w') as output_file:
                 is_first_line_of_multiline = True
             currently_on_multiline = True
 
-        # Replace .LT. etc with symbols.
+        # Replace '.LT.' etc with symbols
         to_output = re.sub('\s*\.LT\.\s*', ' < ',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.LE\.\s*', ' <= ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.GT\.\s*', ' > ',  to_output, flags=re.IGNORECASE)
@@ -127,12 +142,12 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('\s*\.EQ\.\s*', ' == ', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\s*\.NE\.\s*', ' /= ', to_output, flags=re.IGNORECASE)
 
-        # put one space after each comma, except where followed by * or :
+        # Put one space after each comma, except where followed by '*' or ':'
         to_output = re.sub(',\s*', ', ', to_output)
         to_output = re.sub(', \*', ',*', to_output)
         to_output = re.sub(', \:', ',:', to_output)
 
-        # Replace e.g. ( Len =  by (LEN=, etc.
+        # Replace, e.g. '( Len ='  by '(LEN=', etc...
         to_output = re.sub('\(LEN\s*=',  '(len=',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('\(KIND\s*=', '(kind=',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('STATUS\s*=', 'status=', to_output, flags=re.IGNORECASE)
@@ -140,11 +155,16 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('FILE\s*=',   'file=',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('EXIST\s*=',  'exist=',  to_output, flags=re.IGNORECASE)
 
-        # Any ending bracket followed by a double-quote, should have a single space.
+        # Any ending bracket followed by a double-quote, should have a
+        # single space
         to_output = re.sub('\)(?=")', ')', to_output)
-        # Any ending bracket should be followed by exactly one space if it's to be followed by a letter, digit, or single-quote
+
+        # Any ending bracket should be followed by exactly one space
+        # if it's to be followed by a letter, digit, or single-quote
         to_output = re.sub("\)(?=[\w\d])", ') ', to_output)
-        # Any ending bracket already followed by whitespace should be followed by exactly one space
+
+        # Any ending bracket already followed by whitespace should be
+        # followed by exactly one space
         to_output = re.sub('\)[ \t]+', ') ', to_output)
 
         # These are math functions, so should be lower-case
@@ -157,7 +177,7 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('ADJUSTL\(','adjustl(',   to_output, flags=re.IGNORECASE)
         to_output = re.sub('ADJUSTR\(','adjustr(',   to_output, flags=re.IGNORECASE)
 
-        # A comma followed by any letter, digit, ( ' or - should have a space trailing.
+        # A comma followed by any letter, digit, (, ', or -, should have a space trailing
         to_output = re.sub(",(?=[a-zA-Z0-9('-])", ', ', to_output)
 
         # These are modifiers so should be lowercase
@@ -168,11 +188,11 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub(',\s*PRIVATE\s*',    ', private',    to_output, flags=re.IGNORECASE)
         to_output = re.sub(',\s*PUBLIC\s*',     ', public',     to_output, flags=re.IGNORECASE)
 
-        # Place all :: with exactly one space either side.
+        # Place all '::' with exactly one space either side
         to_output = re.sub('\s*::\s*', ' :: ', to_output)
 
-        # If it's a CALL etc line, then make the first opening bracket be preceded by no whitespace,
-        # last bracket to be preceded by one space (while handling the case where this is split over multiple lines)
+        # If it's a CALL etc... line, then make the first opening bracket be preceded by no whitespace, and last
+        # bracket to be preceded by one space (while handling the case where this is split over multiple lines)
         to_output, is_inside_procedure, currently_on_multiline = brackets_for_calls('CALL',          to_output, is_first_line_of_multiline, is_inside_procedure, currently_on_multiline)
         to_output, is_inside_procedure, currently_on_multiline = brackets_for_calls('SUBROUTINE',    to_output, is_first_line_of_multiline, is_inside_procedure, currently_on_multiline)
         to_output, is_inside_procedure, currently_on_multiline = brackets_for_calls('FUNCTION',      to_output, is_first_line_of_multiline, is_inside_procedure, currently_on_multiline)
@@ -228,7 +248,7 @@ with open(out_filename, 'w') as output_file:
         to_output = replace_any_case_with_lower('allocatable', to_output)
         to_output = replace_any_case_with_lower('intrinsic', to_output)
 
-        # Replace these value and relational operators with lowercase
+        # Change boolean and relational operators to lowercase
         to_output = re.sub('\.true\.',  '.true.',  to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.false\.', '.false.', to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.eqv\.',   '.eqv.',   to_output, flags=re.IGNORECASE)
@@ -236,37 +256,42 @@ with open(out_filename, 'w') as output_file:
         to_output = re.sub('\.or\.',    '.or.',    to_output, flags=re.IGNORECASE)
         to_output = re.sub('\.and\.',   '.and.',   to_output, flags=re.IGNORECASE)
 
-        # If it's a INTEGER, REAL or CHARACTER line, then make the first opening bracket be preceded by no whitespace,
-        # first closing bracket to be preceded by one space unless there's a comma.
-        if (re.match('\s*integer\s*\(', to_output)
-          or re.match('\s*real\s*\(', to_output)
+        # If it's a INTEGER, REAL or CHARACTER line, then make the first
+        # opening bracket be preceded by no whitespace, first closing
+        # bracket to be preceded by one space unless there's a comma
+        if (re.match('\s*integer\s*\(', to_output) or re.match('\s*real\s*\(', to_output) \
           or re.match('\s*character\s*\(', to_output)):
             to_output = re.sub('\s*\(', '(', to_output, 1)
             to_output = re.sub('\)[^,]\s*', ') ', to_output, 1)
 
-        # Match if-thens, give one space and lowercase
+        # Match IF-THENs, give one space and change to lowercase
         if re.search('\s*IF.+THEN', to_output, flags=re.IGNORECASE):
             to_output = re.sub('IF\s*', 'if ', to_output, flags=re.IGNORECASE)
             to_output = re.sub('\s*THEN', ' then', to_output, flags=re.IGNORECASE)
 
-        # add space before last bracket of procedure call or definition, handling multiple lines
+        # Add space before last bracket of procedure call or
+        # definition, handling multiple lines
         if is_inside_procedure and not this_line_ends_ampersand:
             if re.search('(?<=[a-zA-Z0-9])\)', to_output):
                 to_output = re.sub(r"\s*\)(?=[^\)]*$)", r" )", to_output)
             is_inside_procedure = False
 
-        # convert any ( ) to ()
+        # Change '( )' to '()'
         to_output = re.sub('\s*\(\s+\)\s*', '()', to_output)
 
-        # separate ')result' to ') result'
-        if re.match('^\s*FUNCTION', to_output, flags=re.IGNORECASE) or re.match('^\s*PURE FUNCTION', to_output, flags=re.IGNORECASE):
+        # Change ')result' to ') result'
+        if re.match('^\s*FUNCTION', to_output, flags=re.IGNORECASE) \
+          or re.match('^\s*PURE FUNCTION', to_output, flags=re.IGNORECASE):
             to_output = re.sub('\)result \(', ') result (', to_output, flags=re.IGNORECASE)
 
-        # end multiline environment if this doesn't end with an ampersand
+        # End multiline environment if this line doesn't end with an ampersand
         if not this_line_ends_ampersand:
             currently_on_multiline = False
 
+        # Add amended line to output
         outputs.append(to_output + add_newline(comment))
 
+    # -------------------------------------------------
+    # Write output to file
     output_file.writelines(outputs)
     print('Complete! Now run a find and replace by hand with regex "[^\\n^  !]  " to catch incorrect multiple-spaces.')

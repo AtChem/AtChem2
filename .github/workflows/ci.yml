@@ -36,6 +36,9 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
+        exclude:
+        - os: macos-12
+          fortran: 9
       fail-fast: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -54,8 +57,7 @@ jobs:
 
       # macOS-12 only
       - name: Install gfortran-9 or gfortran-10 on macOS-12
-        #if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
-        if: matrix.os == 'macos-12' && matrix.fortran == 10
+        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
         run: brew install gcc@${{ matrix.fortran }}
 
       # -------------------------------------------------------------

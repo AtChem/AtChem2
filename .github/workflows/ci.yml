@@ -54,7 +54,8 @@ jobs:
 
       # macOS-12 only
       - name: Install gfortran-9 or gfortran-10 on macOS-12
-        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+        #if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+        if: matrix.os == 'macos-12' && matrix.fortran == 10
         run: brew install gcc@${{ matrix.fortran }}
 
       # -------------------------------------------------------------

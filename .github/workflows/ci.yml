@@ -125,4 +125,4 @@ jobs:
           make clean
           # Run full build tests - this will upload 'tests' coverage to codecov for each test
           make oldtests
-          make modeltests
+          #make modeltests

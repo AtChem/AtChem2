@@ -7,13 +7,13 @@
 - begin implementation of the new testsuite ("behaviour tests" now referred to as "old tests")
 - remove unit testing from CodeCov (coverage reporting is broken)
 - disable (provisionally) CVODE support for LAPACK and BLAS
-- update the install scripts to use **openlibm v0.8.1** and **numdiff v5.9.0**, add add error handling
+- upgrade the install scripts to **openlibm v0.8.1** and **numdiff v5.9.0**, and add error handling
 - in the `Makefile`, add optimisation flag for `gfortran` and compilation flags for `ifort`
 - fix bug in the input and output of constant photolysis rates
 - add missing comments and tidy several fortran source files
 - fix error handling for the RO2 sum in `build/mech_converter.py`
 - update and tidy the `.py` and `.sh` scripts in the `tools/` directory
-- update some `.gitignore` files, and remove the extension from the `LICENSE` file (per convention)
+- update `.gitignore` files, and remove the extension from the `LICENSE` file (per convention)
 - move and rename the example chemical mechanism file (`mcm/mechanism_test.fac`) to `model/mechanism.fac`
 - move and rename the script to generate the user manual (`doc/make_pdf.sh`) to `tools/make_manual_pdf.sh`
 - rename the versioning script `version.sh` to `update_version_number.sh`
@@ -68,7 +68,7 @@
 - fix the calculations of sun declination and solar zenith angle
 - improve handling of dates and numerical precision
 - rename some configuration and output files
-- check calculation of reaction rates and improve format of `instantaneousRates` files (now called `reactionRates`)
+- check calculation of reaction rates and improve the format of `instantaneousRates/*` files (now called `reactionRates/*`)
 - merge `outputLossRates.config` and `outputProductionRates.config` into `outputRates.config`
 - fix the output of `lossRates.output` and `productionRates.output`
 - implement code coverage testing with [Codecov](https://codecov.io/)
@@ -85,7 +85,7 @@
 
 - create a code repository and organization on [github.com](https://github.com/AtChem/)
 - adopt the [MIT open source license](https://opensource.org/licenses/MIT)
-- upgrade to **CVODE** version 2.9
+- upgrade to **CVODE v2.9**
 - remove the web interface and all the code related to [AtChem-online web service](https://atchem.leeds.ac.uk/)
 - standardize the codebase to Fortran95, and use a consistent modular structure for the source code
 - adopt coding style guidelines and standardize the naming of variables, subroutines, source files

@@ -30,16 +30,24 @@ fi
 cd $1
 wget https://github.com/JuliaMath/openlibm/archive/v0.8.1.tar.gz
 if [ $? -ne 0 ] ; then
-  echo "wget openlibm --- failed"
+  echo "[openlibm] wget --- failed"
   exit 1
 fi
 
 # unpack openlibm archive
 tar -zxf v0.8.1.tar.gz
+if [ $? -ne 0 ] ; then
+  echo "[openlibm] untar --- failed"
+  exit 1
+fi
 rm v0.8.1.tar.gz
 
-# compile openlibm
+# compile and install openlibm
 cd openlibm-0.8.1/
 make -j
+if [ $? -ne 0 ] ; then
+  echo "[openlibm] make --- failed"
+  exit 1
+fi
 
 exit 0

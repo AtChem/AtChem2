@@ -1,6 +1,15 @@
-# AtChem2 - CHANGELOG
+AtChem2 - CHANGELOG
+===================
 
-## v1.2.2 (May 2023)
+
+post v1.2.2
+-----------
+
+- 
+
+
+v1.2.2 (May 2023)
+-----------------
 
 - move implementation of continuous integration from TravisCI to [GitHub Actions](https://docs.github.com/en/actions)
 - improve reporting of the testsuite results by using logfiles
@@ -20,7 +29,9 @@
 - update the `*.md` files, and add _Buy Me a Coffee_ button to the `README.md` file
 - several updates to the user manual (including new MCM website at Uni. York) and other minor fixes
 
-## v1.2.1 (January 2021)
+
+v1.2.1 (January 2021)
+---------------------
 
 - add a new environment variable: `ASA` (aerosol surface area)
 - fix a bug in the C-binding for `gfortran` version 9 and above
@@ -29,7 +40,9 @@
 - tidy the comments and printout messages of various source files
 - update the user manual
 
-## v1.2 (May 2020)
+
+v1.2 (May 2020)
+---------------
 
 - implement argument parser and named arguments for the  `atchem2` executable
 - streamline the build procedure, rename and tidy the build scripts, and move them to the `build/` directory
@@ -52,14 +65,18 @@
 - tidy and improve comments in various source files and scripts
 - various minor fixes and updates
 
-## v1.1.1 (January 2019)
+
+v1.1.1 (January 2019)
+---------------------
 
 - add `doc/` directory containing the documentation in markdown format
 - add `CONTRIBUTING.md` file
 - fix the headers of `lossRates.output` and `productionRates.output`
 - change the name of the environment variable `ROOFOPEN` to `ROOF`
 
-## v1.1 (November 2018)
+
+v1.1 (November 2018)
+--------------------
 
 - implement a new directory structure
 - add `CHANGELOG.md` and `CITATION.md` files
@@ -81,7 +98,9 @@
 - extend the documentation on the wiki
 - fix several minor bugs
 
-## v1.0 (July 2017)
+
+v1.0 (July 2017)
+----------------
 
 - create a code repository and organization on [github.com](https://github.com/AtChem/)
 - adopt the [MIT open source license](https://opensource.org/licenses/MIT)

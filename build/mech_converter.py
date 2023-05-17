@@ -546,7 +546,7 @@ end module mechanism_mod
 def main():
     assert len(sys.argv) > 1, \
         'Please enter the name of a chemical mechanism file (.fac ) as argument:'
-    file_name = sys.argv[1]
+    mech_filename = sys.argv[1]
     # mech_dir defaults to model/configuration/, if not given as argument
     if len(sys.argv) <= 2:
         mech_dir = './model/configuration/'
@@ -559,20 +559,12 @@ def main():
         mcm_dir = sys.argv[3]
 
     # Check that the files and directories exist
-    assert os.path.isfile(file_name), 'Failed to find file ' + file_name
+    assert os.path.isfile(mech_filename), 'Failed to find file ' + mech_filename
     assert os.path.exists(mech_dir), 'Failed to find directory ' + mech_dir
     assert os.path.exists(mcm_dir), 'Failed to find directory ' + mcm_dir
 
-    # Check that the mechanism file is in FACSIMILE format
-    if file_name.split(".")[1] == "kpp":
-        # convert from KPP to FACSIMILE
-        ##input_fac = convert_kpp(file_name)
-        exit('KPP format is not supported yet')
-    else:
-        input_fac = file_name
-
     # Call the conversion to Fortran function
-    convert_to_fortran(input_fac, mech_dir, mcm_dir)
+    convert_to_fortran(mech_filename, mech_dir, mcm_dir)
 
 # Call the main function if executed as script
 if __name__ == '__main__':

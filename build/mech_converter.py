@@ -35,7 +35,7 @@ import os
 import sys
 import re
 import fix_mechanism_fac
-#import convert_kpp
+import convert_kpp
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC',
                        'DILUTE', 'ROOF', 'ASA', 'RO2']
@@ -45,7 +45,7 @@ reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 # =========================== FUNCTIONS =========================== #
 
 
-def tokenise_and_process(input_string, variablesDict):
+def tokenise_and_process(input_string, vars_dict):
     """
     This function takes in a single string, and a dictionary of
     known variables from previous lines, and returns the same string
@@ -56,7 +56,7 @@ def tokenise_and_process(input_string, variablesDict):
     Args:
         input_string (str): a string which will be used as the basis
                             of the return string (new_rhs)
-        variablesDict (dict): a dictionary containing all the known
+        vars_dict (dict): a dictionary containing all the known
                               variables up to this point
 
     Returns:
@@ -67,8 +67,8 @@ def tokenise_and_process(input_string, variablesDict):
 
     assert isinstance(input_string, str), \
         'tokenise_and_process: input_string is not of type str: ' + str(input_string)
-    assert isinstance(variablesDict, dict), \
-        'tokenise_and_process: variablesDict is not of type dict: ' + str(variablesDict)
+    assert isinstance(vars_dict, dict), \
+        'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
 
     # Generate start and end points of sections of symbols and non-symbols.
     symbol_regex = r'[()\-+*@/ ]+'
@@ -109,7 +109,7 @@ def tokenise_and_process(input_string, variablesDict):
             # so substitute with the relevant element from q.
             if not re.match(r'^[0-9]', varname) and varname not in reservedSpeciesList \
                and varname not in reservedOtherList:
-                new_rhs += 'q(' + str(variablesDict[varname]) + ')'
+                new_rhs += 'q(' + str(vars_dict[varname]) + ')'
             # Otherwise, just print the substring as-is.
             else:
                 new_rhs += input_string[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
@@ -176,8 +176,8 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `convert_kpp.py` for more info)
     if input_filename.split('.')[1] == 'kpp':
-        ##input_fac = convert_kpp.kpp2fac(input_filename)
-        sys.exit('KPP format is not supported yet')  # TODO
+        #input_fac = convert_kpp.kpp2fac(input_filename)
+        sys.exit('KPP format is not supported yet')
     else:
         input_fac = input_filename
 
@@ -240,6 +240,8 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # => the RO2 reference list is specific to each version of the MCM
     # => RO2 lists for versions v3.1, v3.2, v3.3.1 of the MCM are available
     # => change the filename if using a version of the MCM other than the default (v3.3.1)
+    #
+    # TODO: implement a different way to set the mcm version (see issue #297)
     with open(os.path.join(mcm_vers, 'peroxy-radicals_v3.3.1'), 'r') as RO2List_file:
         RO2List_reference = [r.rstrip() for r in RO2List_file.readlines()]
 

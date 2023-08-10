@@ -187,7 +187,7 @@ with open(out_filename, 'w') as output_file:
         # then add correct indentation
         if not previous_line_ends_ampersand:
             if re.search(r'\S', to_output):
-                to_output = re.sub(r'^\s*(?=\S)', ' '*2*indent, to_output)
+                to_output = re.sub(r'^\s*(?=\S)', r' '*2*indent, to_output)
             elif re.search(r'\S', to_output+comment):
                 to_output = ''
                 comment = (' '*2*indent)+comment

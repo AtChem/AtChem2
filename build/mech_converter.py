@@ -35,7 +35,7 @@ import os
 import sys
 import re
 import fix_mechanism_fac
-import convert_kpp
+import kpp_conversion
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC',
                        'DILUTE', 'ROOF', 'ASA', 'RO2']
@@ -174,9 +174,9 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     print(input_directory)
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
-    # to FACSIMILE format (see documentation of `convert_kpp.py` for more info)
+    # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
     if input_filename.split('.')[1] == 'kpp':
-        #input_fac = convert_kpp.kpp2fac(input_filename)
+        #input_fac = kpp_conversion.kpp_to_facsimile(input_filename)
         sys.exit('KPP format is not supported yet')
     else:
         input_fac = input_filename

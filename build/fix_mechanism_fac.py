@@ -10,7 +10,6 @@
 # -----------------------------------------------------------------------------
 
 # -------------------------------------------------------------------- #
-
 # This script corrects the content of a chemical mechanism file in
 # FACSIMILE format (.fac ) by removing incorrect newline characters.
 #
@@ -134,6 +133,8 @@ def fix_fac_full_contents(input_file):
     # Reattach the header lines, and unwrap the list of lists in interim_contents.
     fixed_file = contents[:end_of_header_index] \
         + [item for sublist in interim_contents for item in sublist]
+
+    # Return the corrected mechanism file
     return fixed_file
 
 # ------------------------------------------------------------ #

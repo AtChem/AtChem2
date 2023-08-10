@@ -1,0 +1,9 @@
+#INLINE F90_RCONST
+RO2 = & 
+ C(ind_...) 
+...
+CALL mcm_constants(time, temp, M, N2, O2, RO2, H2O)
+#ENDINLINE
+
+#EQUATIONS
+{1.} A + B = C : k ;

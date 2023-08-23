@@ -129,9 +129,17 @@ jobs:
           # Run unit tests
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
+          mv tests/unit_tests/*.gc* .   #Needed to deal with gcc11 changing the way it handles gcda and gcna files
+
       #     # Upload `unittests` coverage to codecov
       #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
       #     make clean
       #     # Run full build tests - this will upload `tests` coverage to codecov for each test
       #     make oldtests
       #     #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          #token: ${{ secrets.CODECOV_TOKEN }}
+          #directory: ./tests/unit_tests/
+          gcov: true

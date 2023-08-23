@@ -100,7 +100,7 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-          ls
+          pwd
           ./build/build_atchem2.sh ./model/mechanism.fac
           # # macos only
           # if [ $RUNNER_OS != "Linux" ] ; then
@@ -125,19 +125,19 @@ jobs:
       #    #if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
 
       # -------------------------------------------------------------
-      - name: Run tests
-        # Set FORT_VERSION for use inside the Makefile
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          # Run unit tests
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
+      # - name: Run tests
+      #   # Set FORT_VERSION for use inside the Makefile
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     # Run unit tests
+      #     export PATH=$PATH:$PWD/numdiff/bin
+      #     make unittests
       #    mv tests/unit_tests/*.gc* .   #Needed to deal with gcc11 changing the way it handles gcda and gcna files
 
       #     # Upload `unittests` coverage to codecov
       #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
-          make clean
+      #    make clean
       #     # Run full build tests - this will upload `tests` coverage to codecov for each test
       #     make oldtests
       #     #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)

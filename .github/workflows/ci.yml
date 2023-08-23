@@ -72,7 +72,7 @@ jobs:
         run: brew install gcc@${{ matrix.fortran }}
 
       # gfortran on macos-12
-      - name: Install gfortran-9 & gfortran-10 (macos-12)
+      - name: Install gfortran-9 and gfortran-10 (macos-12)
         if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
         run: brew install gcc@${{ matrix.fortran }}
 
@@ -110,12 +110,12 @@ jobs:
       # -------------------------------------------------------------
       # (4) Run all tests: indent, style, unit, model
 
-      - name: Indent & Style tests
+      - name: Indent and Style tests
         run: |
           make indenttest
           make styletest
 
-      - name: Unit & Model tests
+      - name: Unit and Model tests
         # Set $FORT_VERSION for use with the `Makefile`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
@@ -128,25 +128,25 @@ jobs:
           #make modeltests # TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
-      # (5)
+      # (5) Recompile AtChem2 using the code coverage flags, then
+      # upload the gcov files to Codecov
 
-      - name: Run only one version
+      - name: Unit and Model tests (x Codecov)
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
         # Set $FORT_VERSION for use with the `Makefile`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-          pwd
-      #     # Run unit tests
-      #     export PATH=$PATH:$PWD/numdiff/bin
-      #     make unittests
-      #    mv tests/unit_tests/*.gc* .   #Needed to deal with gcc11 changing the way it handles gcda and gcna files
-
-
-      #    make clean
-      #     # Run full build tests - this will upload `tests` coverage to codecov for each test
-      #     make oldtests
-      #     #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
+          ./build/build_atchem2.sh ./model/mechanism.fac
+          # Run unit tests
+          export PATH=$PATH:$PWD/numdiff/bin
+          make unittests
+          # Needed to deal with gcc11 changing the way it handles gcda and gcna files
+          #mv tests/unit_tests/*.gc* ./
+          make clean
+          # Run full build tests - this will upload `tests` coverage to codecov for each test
+          make oldtests
+          #make modeltests
 
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3

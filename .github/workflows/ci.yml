@@ -29,12 +29,14 @@ on:
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# A workflow consists of one or more jobs that can run sequentially or
-# in parallel. This workflow contains a single job called `build`.
+# This workflow contains a single job called `testing`, which compiles
+# the AtChem2 model, runs the testsuite, and checks the testsuite code
+# coverage using Codecov.
 jobs:
-  build:
-    # Type of runner that the job will run on - we use a matrix to run on two OSs
-    # Runner images are described here: https://github.com/actions/runner-images
+  testing:
+    # The job runs on both linux (ubuntu) and macos runner images,
+    # with three versions of gnu fortran -- the runner images are
+    # described here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -46,43 +48,45 @@ jobs:
       fail-fast: false
 
     # -------------------------------------------------------------
-    # Sequence of tasks to be executed as part of the `build` job.
+    # Sequence of tasks to be executed as part of the `testing` job:
     # 1. checkout the repository
-    # 2. install gfortran (if needed) and AtChem2 dependencies
-    # 3. build
+    # 2. install gfortran (if needed), and AtChem2 dependencies
+    # 3. build AtChem2
+    # 4. run all tests (indent, style, unit, model)
+    # 5. rebuild AtChem2 and run unit, model tests for Codecov
     steps:
 
-      # Checkout the repository under $GITHUB_WORKSPACE, so the job can access it
+      # -------------------------------------------------------------
+      # (1) Checkout the repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
-      # # -------------------------------------------------------------
-      # # Install gfortran - if not supplied on the OS image
-      # # macos-11 only
-      # - name: Install gfortran-9 on macos-11
+      # -------------------------------------------------------------
+      # (2) Install gfortran (if not supplied with the runner image)
+      # and AtChem2 dependencies
+
+      # gfortran on macos-11
+      # - name: Install gfortran-9 (macos-11)
       #   if: matrix.os == 'macos-11' && matrix.fortran == 9
       #   run: brew install gcc@${{ matrix.fortran }}
 
-      # # macos-12 only
-      # - name: Install gfortran-9 or gfortran-10 on macos-12
+      # gfortran on macos-12
+      # - name: Install gfortran-9 & gfortran-10 (macos-12)
       #   if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
       #   run: brew install gcc@${{ matrix.fortran }}
 
-      # -------------------------------------------------------------
-      # Install AtChem2 dependencies
-
-      # CVODE -- ubuntu only
+      # CVODE on ubuntu
       - name: Install CVODE (ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # CVODE -- macos only
+      # CVODE on macos
       # - name: Install CVODE (macos)
       #   if: startsWith(matrix.os, 'macos')
       #   run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # Other dependencies: openlibm, numdiff, fruit -- ubuntu & macos
+      # openlibm, numdiff, fruit -- ubuntu & macos
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
 
@@ -93,15 +97,13 @@ jobs:
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
-      # Build AtChem2 and run all tests
+      # (3) Build AtChem2
       - name: Build AtChem2
         # Set FORT_VERSION for use inside the Makefile (called from build_atchem2.sh)
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-          pwd
-          ls
           ./build/build_atchem2.sh ./model/mechanism.fac
           # # macos only
           # if [ $RUNNER_OS != "Linux" ] ; then
@@ -111,37 +113,49 @@ jobs:
           #   install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           # fi
 
-      # # -------------------------------------------------------------
-      # - name: Indent and style tests
-      #   run: |
-      #     make indenttest
-      #     make styletest
+      # -------------------------------------------------------------
+      # (4) Run all tests
+
+      - name: Indent and style tests
+        run: |
+          make indenttest
+          make styletest
+
+      - name: Run unit tests
+        # Set FORT_VERSION for use inside the Makefile
+        env:
+          FORT_VERSION: ${{ matrix.fortran }}
+        run: |
+          # Run unit tests
+          export PATH=$PATH:$PWD/numdiff/bin
+          make unittests
+
+          # Run full build tests - this will upload `tests` coverage to codecov for each test
+          make oldtests
+          make modeltests
 
       # -------------------------------------------------------------
-      # - name: Run AtChem2
-      #   run: |
-      #    # Run Atchem2
-      #    ./atchem2
-      #    # Upload `build` coverage to codecov
-      #    #if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
+      # (5)
 
-      # -------------------------------------------------------------
-      # - name: Run tests
+      - name: Run only one version
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
       #   # Set FORT_VERSION for use inside the Makefile
       #   env:
       #     FORT_VERSION: ${{ matrix.fortran }}
-      #   run: |
+        run: |
+          pwd
       #     # Run unit tests
       #     export PATH=$PATH:$PWD/numdiff/bin
       #     make unittests
       #    mv tests/unit_tests/*.gc* .   #Needed to deal with gcc11 changing the way it handles gcda and gcna files
 
-      #     # Upload `unittests` coverage to codecov
-      #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+
       #    make clean
       #     # Run full build tests - this will upload `tests` coverage to codecov for each test
       #     make oldtests
       #     #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
+
+      
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3
       #   with:

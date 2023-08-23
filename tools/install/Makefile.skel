@@ -68,8 +68,14 @@ endif
 
 # set the compilation flags for each compiler
 # N.B.: the code coverage files (*.gcda, *.gcno) can be generated only with the gnu compiler
+CCOV = false
 ifeq ($(FORTC),"gnu")
-  FFLAGS       = -O2 -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+  FFLAGS       = -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+  ifeq ($(CCOV),true)
+    FFLAGS = $(FFLAGS) -fprofile-arcs -ftest-coverage
+  else
+    FFLAGS = $(FFLAGS) -O2
+  endif
   FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
 endif
 ifeq ($(FORTC),"intel")

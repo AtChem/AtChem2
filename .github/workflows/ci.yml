@@ -101,6 +101,7 @@ jobs:
         run: |
           cp tools/install/Makefile.skel Makefile
           pwd
+          ls
           ./build/build_atchem2.sh ./model/mechanism.fac
           # # macos only
           # if [ $RUNNER_OS != "Linux" ] ; then

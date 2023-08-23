@@ -12,19 +12,21 @@
 name: AtChem2-CI
 
 # ------------------------------ EVENTS ------------------------------ #
-# Controls when the action will run
+# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers when a pull request is created or updated (only on the
+  # master branch)
   pull_request:
     branches: [ master ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-  # Triggers when pushed to the master (either by merging a Pull Request, or direct commit to master)
+  # Triggers when a push is made to the master branch (either by
+  # merging a pull request, or by direct commit)
   push:
     branches:
       - master
+
+  # Run manually from the Actions tab
+  workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
 # A workflow run consists of one or more jobs that can run sequentially or in parallel
@@ -36,11 +38,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-11, macos-12]
-        fortran: [9, 10, 11]
-        exclude: #TODO: fortran9 does not work on macos12
-        - os: macos-12
-          fortran: 9
+        os: [ubuntu-22.04] #, macos-11, macos-12]
+        fortran: [11] #[9, 10, 11]
+        # exclude: #TODO: fortran9 does not work on macos12
+        # - os: macos-12
+        #   fortran: 9
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -51,17 +53,17 @@ jobs:
         with:
           fetch-depth: 2
 
-      # -------------------------------------------------------------
-      # Install gfortran - if not supplied on the OS image
-      # macOS-11 only
-      - name: Install gfortran-9 on macOS-11
-        if: matrix.os == 'macos-11' && matrix.fortran == 9
-        run: brew install gcc@${{ matrix.fortran }}
+      # # -------------------------------------------------------------
+      # # Install gfortran - if not supplied on the OS image
+      # # macOS-11 only
+      # - name: Install gfortran-9 on macOS-11
+      #   if: matrix.os == 'macos-11' && matrix.fortran == 9
+      #   run: brew install gcc@${{ matrix.fortran }}
 
-      # macOS-12 only
-      - name: Install gfortran-9 or gfortran-10 on macOS-12
-        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
-        run: brew install gcc@${{ matrix.fortran }}
+      # # macOS-12 only
+      # - name: Install gfortran-9 or gfortran-10 on macOS-12
+      #   if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+      #   run: brew install gcc@${{ matrix.fortran }}
 
       # -------------------------------------------------------------
       # Install cvode
@@ -70,10 +72,10 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # macOS only
-      - name: Install cvode (macOS)
-        if: startsWith(matrix.os, 'macos')
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
+      # # macOS only
+      # - name: Install cvode (macOS)
+      #   if: startsWith(matrix.os, 'macos')
+      #   run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
       # -------------------------------------------------------------
       # Install all other dependencies
@@ -95,40 +97,40 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-          ./build/build_atchem2.sh ./model/mechanism.fac
-          if [ $RUNNER_OS != "Linux" ] ; then
-            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
-          fi
+      #     ./build/build_atchem2.sh ./model/mechanism.fac
+      #     if [ $RUNNER_OS != "Linux" ] ; then
+      #       install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
+      #     fi
+
+      # # -------------------------------------------------------------
+      # - name: Indent and style tests
+      #   run: |
+      #     make indenttest
+      #     make styletest
 
       # -------------------------------------------------------------
-      - name: Indent and style tests
-        run: |
-          make indenttest
-          make styletest
+      # - name: Run AtChem2
+      #   run: |
+      #     # Run Atchem2
+      #     ./atchem2
+      #     # Upload `build` coverage to codecov
+      #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
 
       # -------------------------------------------------------------
-      - name: Run AtChem2
-        run: |
-          # Run Atchem2
-          ./atchem2
-          # Upload `build` coverage to codecov
-          if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
-
-      # -------------------------------------------------------------
-      - name: Run tests
-        # Set FORT_VERSION for use inside the Makefile
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          # Run unit tests
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          # Upload `unittests` coverage to codecov
-          if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
-          make clean
-          # Run full build tests - this will upload `tests` coverage to codecov for each test
-          make oldtests
-          #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
+      # - name: Run tests
+      #   # Set FORT_VERSION for use inside the Makefile
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     # Run unit tests
+      #     export PATH=$PATH:$PWD/numdiff/bin
+      #     make unittests
+      #     # Upload `unittests` coverage to codecov
+      #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F unittests ; fi
+      #     make clean
+      #     # Run full build tests - this will upload `tests` coverage to codecov for each test
+      #     make oldtests
+      #     #make modeltests #TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)

@@ -15,17 +15,17 @@ name: AtChem2 CI
 # Controls when the workflow is activated
 on:
   # Triggers when a pull request is created or updated (only on the
-  # master branch)
+  # master branch).
   pull_request:
     branches: [ master ]
 
   # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit)
+  # merging a pull request, or by direct commit).
   push:
     branches:
       - master
 
-  # Run manually from the Actions tab
+  # Run manually from the Actions tab.
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #

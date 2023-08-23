@@ -9,29 +9,29 @@
 #
 # -----------------------------------------------------------------------------
 
-name: AtChem2-CI
+name: AtChem2 CI
 
 # ------------------------------ EVENTS ------------------------------ #
-# Controls when the workflow will run
+# Controls when the workflow is activated.
 on:
   # Triggers when a pull request is created or updated (only on the
-  # master branch)
+  # master branch).
   pull_request:
     branches: [ master ]
 
   # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit)
+  # merging a pull request, or by direct commit).
   push:
     branches:
       - master
 
-  # Run manually from the Actions tab
+  # Run manually from the Actions tab.
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# A workflow run consists of one or more jobs that can run sequentially or in parallel
+# A workflow consists of one or more jobs that can run sequentially or
+# in parallel. This workflow contains a single job called `build`.
 jobs:
-  # This workflow contains a single job called `build`
   build:
     # Type of runner that the job will run on - we use a matrix to run on two OSs
     # Runner images are described here: https://github.com/actions/runner-images
@@ -46,8 +46,9 @@ jobs:
       fail-fast: false
 
     # -------------------------------------------------------------
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Sequence of tasks to be executed as part of the `build` job.
     steps:
+
       # Checkout the repository under $GITHUB_WORKSPACE, so the job can access it
       - uses: actions/checkout@v3
         with:
@@ -66,20 +67,19 @@ jobs:
       #   run: brew install gcc@${{ matrix.fortran }}
 
       # -------------------------------------------------------------
-      # Install cvode
-      # ubuntu only
+      # Install AtChem2 dependencies
+
+      # CVODE -- ubuntu only
       - name: Install cvode (ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # # macOS only
+      # CVODE -- macOS only
       # - name: Install cvode (macOS)
       #   if: startsWith(matrix.os, 'macos')
       #   run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
-      # -------------------------------------------------------------
-      # Install all other dependencies
-      # both OSs
+      # Other dependencies: openlibm, numdiff, fruit -- ubuntu & macOS
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
 
@@ -97,13 +97,14 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-      #     ./build/build_atchem2.sh ./model/mechanism.fac
-      #     if [ $RUNNER_OS != "Linux" ] ; then
-      #       install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
-      #       install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
-      #       install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
-      #       install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
-      #     fi
+          ./build/build_atchem2.sh ./model/mechanism.fac
+          # # macOS only
+          # if [ $RUNNER_OS != "Linux" ] ; then
+          #   install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+          #   install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
+          #   install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
+          #   install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
+          # fi
 
       # # -------------------------------------------------------------
       # - name: Indent and style tests
@@ -111,13 +112,13 @@ jobs:
       #     make indenttest
       #     make styletest
 
-      # -------------------------------------------------------------
-      # - name: Run AtChem2
-      #   run: |
-      #     # Run Atchem2
-      #     ./atchem2
-      #     # Upload `build` coverage to codecov
-      #     if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
+      -------------------------------------------------------------
+      - name: Run AtChem2
+        run: |
+          # Run Atchem2
+          ./atchem2
+          # Upload `build` coverage to codecov
+          #if [[ $RUNNER_OS == "Linux" ]]; then sudo ln -f -s /usr/bin/gcov-${{ matrix.fortran }} /usr/bin/gcov ; bash <(curl -s https://codecov.io/bash) -F build ; fi
 
       # -------------------------------------------------------------
       # - name: Run tests

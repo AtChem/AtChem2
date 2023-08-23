@@ -41,11 +41,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-11] #, macos-12]
-<<<<<<< HEAD
         fortran: [9, 10, 11]
-=======
-        fortran: [10, 11] # [9, 
->>>>>>> dd8aa25 (Reorganize ci.yml)
         # exclude: #TODO: fortran9 does not work on macos12
         # - os: macos-12
         #   fortran: 9

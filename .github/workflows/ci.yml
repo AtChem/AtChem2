@@ -98,6 +98,7 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
+          ls
           ./build/build_atchem2.sh ./model/mechanism.fac
           # macos only
           if [ $RUNNER_OS != "Linux" ] ; then

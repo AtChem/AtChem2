@@ -136,7 +136,6 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-          # Recompile
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
           make unittests CCOV=true

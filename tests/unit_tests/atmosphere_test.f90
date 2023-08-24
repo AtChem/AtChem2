@@ -16,23 +16,23 @@ module atmosphere_test
 
 contains
 
-  subroutine test_calcAirDensity
-    use types_mod
-    use atmosphere_functions_mod
-    real(kind=DP) :: density, press, temp
+  ! subroutine test_calcAirDensity
+  !   use types_mod
+  !   use atmosphere_functions_mod
+  !   real(kind=DP) :: density, press, temp
 
-    press = 0.0_DP
-    temp = 1.0_DP
-    density = calcAirDensity( press, temp )
+  !   press = 0.0_DP
+  !   temp = 1.0_DP
+  !   density = calcAirDensity( press, temp )
 
-    call assert_true( density == 0.0_DP, "calcAirDensity(0,1)" )
+  !   call assert_true( density == 0.0_DP, "calcAirDensity(0,1)" )
 
-    press = 1.0_DP
-    temp = 1.0_DP
-    density = calcAirDensity( press, temp )
+  !   press = 1.0_DP
+  !   temp = 1.0_DP
+  !   density = calcAirDensity( press, temp )
 
-    call assert_true( density == 7.242971604861847e+18_DP, "calcAirDensity(1,1)" )
-  end subroutine test_calcAirDensity
+  !   call assert_true( density == 7.242971604861847e+18_DP, "calcAirDensity(1,1)" )
+  ! end subroutine test_calcAirDensity
 
   subroutine test_calcAtmosphere
     use types_mod

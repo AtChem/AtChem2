@@ -143,8 +143,8 @@ jobs:
           make unittests CCOV=true
           ls
           # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          #mv tests/unit_tests/*.gc* ./
-          #make clean
+          mv tests/unit_tests/*.gc* ./
+          ls
           # Run full build tests - this will upload `tests` coverage to codecov for each test
           #make oldtests
           #make modeltests

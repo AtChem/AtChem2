@@ -41,7 +41,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, macos-11] #, macos-12]
-        fortran: [10, 11] # [9, 
+        fortran: [10, 11] # [9,
         # exclude: #TODO: fortran9 does not work on macos12
         # - os: macos-12
         #   fortran: 9
@@ -140,12 +140,12 @@ jobs:
           ./build/build_atchem2.sh ./model/mechanism.fac
           # Run unit tests
           export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
+          make unittests CCOV=true
           # Needed to deal with gcc11 changing the way it handles gcda and gcna files
           #mv tests/unit_tests/*.gc* ./
-          make clean
+          #make clean
           # Run full build tests - this will upload `tests` coverage to codecov for each test
-          make oldtests
+          #make oldtests
           #make modeltests
 
       # - name: Upload coverage reports to Codecov

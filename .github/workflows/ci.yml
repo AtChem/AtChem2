@@ -137,7 +137,8 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-          ./build/build_atchem2.sh ./model/mechanism.fac
+          #make clean
+          #./build/build_atchem2.sh ./model/mechanism.fac
           # Run unit tests
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests CCOV=true

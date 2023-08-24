@@ -139,9 +139,9 @@ jobs:
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
-          #./build/build_atchem2.sh ./model/mechanism.fac
           # Run unit tests
           make unittests CCOV=true
+          ls
           # Needed to deal with gcc11 changing the way it handles gcda and gcna files
           #mv tests/unit_tests/*.gc* ./
           #make clean

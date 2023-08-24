@@ -120,12 +120,10 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-          # Unit tests
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
-          # Model tests
-          make oldtests    # TODO: oldtests will eventually be merged into modeltests
-          #make modeltests # TODO: modeltests are temporarily deactivated (pass on linux, fail on macos)
+          make oldtests    # NB: oldtests will eventually be merged into modeltests
+          #make modeltests # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
       # (5) Recompile AtChem2 using the code coverage flags, then
@@ -137,15 +135,12 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-          # Recompile
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
-          # Run unit tests
           make unittests CCOV=true
           mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          # Run full build tests - this will upload `tests` coverage to codecov for each test
           make oldtests CCOV=true
-          #make modeltests CCOV=true
+          make modeltests CCOV=true
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3

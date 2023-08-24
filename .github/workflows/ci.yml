@@ -141,8 +141,8 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
           # Run unit tests
-          #make unittests CCOV=true
-          #mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
+          make unittests CCOV=true
+          mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
           # Run full build tests - this will upload `tests` coverage to codecov for each test
           make oldtests CCOV=true
           #make modeltests CCOV=true

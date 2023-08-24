@@ -148,7 +148,8 @@ jobs:
           # Run full build tests - this will upload `tests` coverage to codecov for each test
           make oldtests
           #make modeltests
-          find ./ -name "*.gc*"
+          ls
+          #find ./ -name "*.gc*"
 
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3

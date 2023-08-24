@@ -143,15 +143,15 @@ jobs:
           # Run unit tests
           make unittests CCOV=true
           # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          #mv tests/unit_tests/*.gc* ./
+          mv tests/unit_tests/*.gc* ./
           # Run full build tests - this will upload `tests` coverage to codecov for each test
           make oldtests CCOV=true
-          #make modeltests
+          #make modeltests CCOV=true
           find ./ -name "*.gc*"
 
-      # - name: Upload coverage reports to Codecov
-      #   uses: codecov/codecov-action@v3
-      #   with:
-      #     #token: ${{ secrets.CODECOV_TOKEN }}
-      #     #directory: ./tests/unit_tests/
-      #     gcov: true
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          #token: ${{ secrets.CODECOV_TOKEN }}
+          #directory: ./tests/unit_tests/
+          gcov: true

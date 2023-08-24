@@ -1,0 +1,279 @@
+AtChem2 v1.2.2
+
+-------------
+ Directories
+-------------
+ Model directory is: model
+ Output directory is: tests/model_tests/static/output
+ Reaction Rates directory is: tests/model_tests/static/output/reactionRates
+ Configuration directory is: tests/model_tests/static/configuration
+ Constraints directory is: tests/model_tests/static/constraints
+ Environment Constraints directory is: tests/model_tests/static/constraints/environment
+ Photolysis Constraints directory is: tests/model_tests/static/constraints/photolysis
+ Species Constraints directory is: tests/model_tests/static/constraints/species
+ MCM directory is: mcm
+ Shared library is: tests/model_tests/static/configuration/mechanism.so
+
+-----------------------
+ Species and reactions
+-----------------------
+ Number of Species   = 2
+ Number of Reactions = 2
+
+ Size of lhs = 2
+ Size of rhs = 2
+
+ Reading reactants (lhs) from mechanism.reac...
+ Reading products (rhs) from mechanism.prod...
+ Finished reading lhs and rhs data.
+
+ Reading species names from mechanism.species...
+ Finished reading species names.
+
+ Reading initial concentrations...
+      1 A                                                        1.000E+09
+      2 B                                                        1.000E+09
+ Finished reading initial concentrations.
+
+----------------------------------------
+ Species requiring detailed rate output
+----------------------------------------
+ Reading which species require detailed rate output...
+      1 A                                                 
+      2 B                                                 
+ Finished reading which species require detailed rate output.
+ Species requiring detailed rate output (number of species found): 2
+
+ Reading ro2 numbers from mechanism.ro2...
+ Finished reading ro2 numbers.
+ Reading solver parameters from file...
+ ------------------
+ Solver parameters:
+ ------------------
+            atol:   1.000E-03
+            rtol:   1.000E-04
+       deltaMain:   1.000E-04
+        lookBack:         100
+         maxStep:   1.000E+02
+ preconBandUpper:         750
+ preconBandLower:         750
+      solverType: SPGMR + Banded Preconditioner 
+ ------------------
+
+ Finished reading solver parameters from file.
+
+ Reading model parameters from file...
+ -----------------
+ Model parameters:
+ -----------------
+                                   number of steps:         100
+                                         step size:   0.300E+05
+                      species interpolation method: piecewise linear 
+                   conditions interpolation method: piecewise linear 
+                 rates output step size, ROPA/RODA:         600
+                                  model start time:       43200
+                         jacobian output step size:         300
+                                          latitude:   0.529E+02
+                                         longitude:   0.000E+00
+                   reaction rates output step size:         300
+                                    day/month/year:  19/11/2008
+ -----------------
+
+ Finished reading model parameters from file.
+
+---------------------
+ Species of Interest
+---------------------
+ Reading concentration output from file...
+ Finished reading concentration output from file.
+ Output required for concentration of 2 species:
+      1 A                                                 
+      2 B                                                 
+
+------------
+ Photolysis
+------------
+ Reading photolysis numbers from file...
+      1
+ ...
+     61
+ Finished reading photolysis numbers.
+ Number of photolysis numbers: 35
+ Looking for photolysis constants file...
+ Checking that photolysis constants exist in file...
+ Photolysis constants file is empty.
+ No photolysis constants applied, so trying constrained photolysis rates file...
+ Looking for photolysis constraints file...
+ Checking that photolysis constraints exist in file...
+ Photolysis constraint file is empty, so all photolysis rates will be calculated.
+ Reading all photolysis rates from file...
+      1      6.073E-05      1.743E+00      4.740E-01    J1      1.000E+00
+ ...
+     61      7.537E-04      4.990E-01      2.660E-01   J61      1.000E+00
+ Finished reading all photolysis rates.
+ Number of all photolysis rates: 35
+
+
+-----------------------
+ Environment variables
+-----------------------
+ Reading environment variables...
+ Number of environment variables: 11
+ 1      TEMP                   281.95
+ 2      PRESS                 1013.25
+ 3      RH                    NOTUSED
+ 4      H2O                  3.06e+17
+ 5      DEC                     -0.34
+ 6      BLHEIGHT              NOTUSED
+ 7      DILUTE                NOTUSED
+ 8      JFAC                  NOTUSED
+ 9      ROOF                   CLOSED
+ 10     ASA                   NOTUSED
+ Finished reading environment variables.
+
+ Checking for constrained environment variables...
+ Finished checking for constrained environment variables.
+
+
+-------------
+ Constraints
+-------------
+ Counting the variable-concentration species to be constrained (in file speciesConstrained.config)...
+ Finished counting the names of variable-concentration constrained species.
+ Number of names of variable-concentration constrained species: 0
+ Counting the fixed-concentration species to be constrained (in file speciesConstant.config)...
+ Finished counting the names of fixed-concentration constrained species.
+ Number of names of fixed-concentration constrained species: 0
+ Setting size of constraint arrays, n = 0
+ Skipped reading the names of variable-concentration constrained species
+ Reading concentration data for variable-concentration constrained species...
+ Reading in the names and concentration of the fixed constrained species (in file speciesConstant.config)...
+ Finished reading in the names and concentration of fixed-concentration species.
+ Finished reading constrained species.
+ Initialising concentrations of constrained species...
+ Finished initialising concentrations of constrained species.
+
+---------------
+ Problem stats
+---------------
+                        neq = 2
+ numberOfConstrainedSpecies = 0
+                         t0 =       4.320E+04
+
+ setting maxnumsteps ier = 0
+ setting maxstep ier = 0
+
+-----------
+ Model run
+-----------
+ time = 73200
+ time = 103200
+ time = 133200
+ time = 163200
+ time = 193200
+ time = 223200
+ time = 253200
+ time = 283200
+ time = 313200
+ time = 343200
+ time = 373200
+ time = 403200
+ time = 433200
+ time = 463200
+ time = 493200
+ time = 523200
+ time = 553200
+ time = 583200
+ time = 613200
+ time = 643200
+ time = 673200
+ time = 703200
+ time = 733200
+ time = 763200
+ time = 793200
+ time = 823200
+ time = 853200
+ time = 883200
+ time = 913200
+ time = 943200
+ time = 973200
+ time = 1003200
+ time = 1033200
+ time = 1063200
+ time = 1093200
+ time = 1123200
+ time = 1153200
+ time = 1183200
+ time = 1213200
+ time = 1243200
+ time = 1273200
+ time = 1303200
+ time = 1333200
+ time = 1363200
+ time = 1393200
+ time = 1423200
+ time = 1453200
+ time = 1483200
+ time = 1513200
+ time = 1543200
+ time = 1573200
+ time = 1603200
+ time = 1633200
+ time = 1663200
+ time = 1693200
+ time = 1723200
+ time = 1753200
+ time = 1783200
+ time = 1813200
+ time = 1843200
+ time = 1873200
+ time = 1903200
+ time = 1933200
+ time = 1963200
+ time = 1993200
+ time = 2023200
+ time = 2053200
+ time = 2083200
+ time = 2113200
+ time = 2143200
+ time = 2173200
+ time = 2203200
+ time = 2233200
+ time = 2263200
+ time = 2293200
+ time = 2323200
+ time = 2353200
+ time = 2383200
+ time = 2413200
+ time = 2443200
+ time = 2473200
+ time = 2503200
+ time = 2533200
+ time = 2563200
+ time = 2593200
+ time = 2623200
+ time = 2653200
+ time = 2683200
+ time = 2713200
+ time = 2743200
+ time = 2773200
+ time = 2803200
+ time = 2833200
+ time = 2863200
+ time = 2893200
+ time = 2923200
+ time = 2953200
+ time = 2983200
+ time = 3013200
+ time = 3043200
+
+------------------
+ Final statistics
+------------------
+ No. steps = 30001   No. f-s = 30005   No. J-s = 0   No. LU-s = 1501
+ No. nonlinear iterations = 30001
+ No. nonlinear convergence failures = 0
+ No. error test failures = 0
+
+ Runtime = 1
+ Deallocating memory.

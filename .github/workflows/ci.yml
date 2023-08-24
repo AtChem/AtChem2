@@ -40,8 +40,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-11] #, macos-12]
-        fortran: [10, 11] # [9,
+        os: [ubuntu-22.04] # , macos-11, macos-12]
+        fortran: [11] # [9, 10
         # exclude: #TODO: fortran9 does not work on macos12
         # - os: macos-12
         #   fortran: 9
@@ -137,6 +137,7 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
+          # Recompile
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
           make CCOV=true
@@ -147,7 +148,7 @@ jobs:
           # Run full build tests - this will upload `tests` coverage to codecov for each test
           make oldtests
           #make modeltests
-          find ./ -name "*.gc*
+          find ./ -name "*.gc*"
 
       # - name: Upload coverage reports to Codecov
       #   uses: codecov/codecov-action@v3

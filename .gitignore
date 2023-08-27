@@ -5,4 +5,3 @@ Makefile
 *.gcda
 *.gcno
 *.xml
-*.pyc

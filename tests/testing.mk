@@ -34,5 +34,5 @@ $(fruit_driver) : $(all_unittest_code)
 OLDTESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')
 
 # search tests/model_tests/ for all subdirectories, which should reflect the full list of tests
-MODELTESTSDIR = tests/model_tests
+MODELTESTDIR = tests/model_tests
 MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g' | sed 's,/,,g')

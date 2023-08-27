@@ -1,4 +1,3 @@
-#!/bin/sh
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
@@ -22,7 +21,7 @@ FORTC = "gnu"
 
 # set the dependencies paths
 # N.B.: use the FULL PATHS, not the relative paths
-CVODELIB     = cvode/lib
+CVODELIBDIR     = cvode/lib
 OPENLIBMDIR  = openlibm-0.8.1
 FRUITDIR     = fruit_3.4.3
 
@@ -30,15 +29,13 @@ FRUITDIR     = fruit_3.4.3
 # use the second argument of the build script to override $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
-
 # =========================================================================== #
 # DO NOT MODIFY BELOW THIS LINE
 # =========================================================================== #
 
-
 .SUFFIXES:
 .SUFFIXES: .f90 .o
-.PHONY: all test
+.PHONY: all indenttest styletest unittests oldtests modeltests alltests clean
 
 # detect operating system
 OS := $(shell uname -s)
@@ -54,7 +51,7 @@ ifeq ($(GITHUB_ACTIONS),true)
     FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
     FORT_LIB     = ""
   endif
-# if not on GitHub Actions, set the fortran compiler
+# if not on GitHub Actions, set the Fortran compiler
 else
   ifeq ($(FORTC),"gnu")
     FORT_COMP    = gfortran
@@ -67,19 +64,19 @@ else
 endif
 
 # set the compilation flags for each compiler
-# N.B.: the code coverage files (*.gcda, *.gcno) can be generated only with the gnu compiler
 CCOV = false
 ifeq ($(FORTC),"gnu")
   FFLAGS = -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-  ifeq ($(CCOV),true)
+  ifeq ($(CCOV),true)    # add gcov flags for code coverage testing
     FFLAGS += -fprofile-arcs -ftest-coverage
-  else
+  else    # add optimization flag for normal usage
     FFLAGS += -O2
   endif
-  FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+  FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic \
+                 -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
 endif
 ifeq ($(FORTC),"intel")
-  FFLAGS       = -O2 -free -implicitnone -warn all -check all -fpic
+  FFLAGS       = -free -implicitnone -warn all -check all -fpic -O2
   FSHAREDFLAGS = -free -implicitnone -warn all -check all -fpic -shared
 endif
 
@@ -90,8 +87,9 @@ else
   RPATH_OPTION = -rpath
 endif
 
-# set the cvode and openlibm compiler flags
-LDFLAGS = -L$(CVODELIB) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIB):$(OPENLIBMDIR) -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
+# set the CVODE and openlibm compiler flags
+LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIBDIR):$(OPENLIBMDIR) \
+          -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
 # object files and source files directories
 OBJ = obj
@@ -101,40 +99,21 @@ SRC = src
 AOUT = atchem2
 
 # source files
-UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
+UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 \
+                $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 \
+                $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 \
+                $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
 SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 
-# prerequisite is $(SRCS), so this will be rebuilt everytime any source file in $(SRCS) changes
+# prerequisite is $SRCS, so this will be rebuilt every time any source
+# file in $SRCS is changed
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
-# setup FRUIT
-UNITTESTDIR = tests/unit_tests
-fruit_code = $(FRUITDIR)/src/fruit.f90
-unittest_code = $(UNITTEST_SRCS) $(shell ls tests/unit_tests/*_test.f90 )
-unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90
-all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
-fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
+# setup to run the unit and model tests
+include tests/testing.mk
 
-# copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
-$(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
-	@echo ""
-	@cp tests/fruit_generator.rb $(UNITTESTDIR)
-	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
-
-# build fruit_driver.exe from the individual unit tests
-$(fruit_driver) : $(all_unittest_code)
-	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
-
-# search tests/tests/ for all subdirectories, which should reflect the full list of tests
-OLDTESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')
-
-# search tests/model_tests/ for all subdirectories, which should reflect the full list of tests
-MODELTESTSDIR = tests/model_tests
-MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g' | sed 's,/,,g')
-
-# ================================================================== #
-# Makefile rules
+# ==================== Makefile rules  ==================== #
 
 all: $(AOUT)
 
@@ -149,18 +128,18 @@ styletest:
 	@./tests/run_style_test.sh
 
 unittests: $(fruit_driver)
-	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR) ; $(fruit_driver)
+	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR); $(fruit_driver)
 	@echo ""
 
 oldtests:
 	@echo ""
 	@echo "Make: Running the old tests:" $(OLDTESTS)
-	@./tests/run_tests.sh "$(OLDTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+	@./tests/run_tests.sh "$(OLDTESTS)" "$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR)"
 
 modeltests:
 	@echo ""
 	@echo "Make: Running the model tests:" $(MODELTESTS)
-	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIB):$(OPENLIBMDIR)"
+	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR)"
 
 alltests: indenttest styletest modeltests oldtests unittests
 

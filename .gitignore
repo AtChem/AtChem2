@@ -1,7 +1,7 @@
 # Ignore the executable, the Makefile, the Python bytecode, and the compiler-generated files
 atchem2
 Makefile
+*.pyc
 *.gcda
 *.gcno
 *.xml
-*.pyc

@@ -21,9 +21,9 @@ FORTC = "gnu"
 
 # set the dependencies paths
 # N.B.: use the FULL PATHS, not the relative paths
-CVODELIBDIR     = cvode/lib
-OPENLIBMDIR  = openlibm-0.8.1
-FRUITDIR     = fruit_3.4.3
+CVODELIBDIR = cvode/lib
+OPENLIBMDIR = openlibm-0.8.1
+FRUITDIR    = fruit_3.4.3
 
 # default location of the chemical mechanism shared library (mechanism.so)
 # use the second argument of the build script to override $SHAREDLIBDIR
@@ -148,14 +148,16 @@ sharedlib:
 	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o
 
 clean:
-	rm -f *.o
-	rm -f *.gcda *.gcno *.xml
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
-	rm -f tests/tests/*/*.out tests/tests/*/*.output tests/tests/*/reactionRates/*[0-9]
-	rm -f $(MODELTESTSDIR)/*/*.out $(MODELTESTSDIR)/*/output/*.output $(MODELTESTSDIR)/*/output/reactionRates/*[0-9]
-	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(fruit_driver)
-	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species}
+	rm -rf build/__pycache__
+	rm -f *.gcda *.gcno *.xml build/*.pyc tests/*.log
+	rm -f doc/figures/*.png doc/latex/*.aux doc/latex/*.bbl doc/latex/*.blg doc/latex/*.log doc/latex/*.out doc/latex/*.toc
+	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} model/output/*.output model/output/reactionRates/*[0-9]
+	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
+	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
+	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
+
 
 # ================================================================== #
 # Dependencies

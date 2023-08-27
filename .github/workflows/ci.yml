@@ -123,7 +123,7 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests    # NB: oldtests will eventually be merged into modeltests
-          #make modeltests  # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
+          make modeltests  # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
       # (5) Recompile AtChem2 using the code coverage flags, then

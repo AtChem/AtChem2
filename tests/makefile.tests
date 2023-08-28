@@ -12,6 +12,16 @@
 #
 # -----------------------------------------------------------------------------
 
+# This is a secondary makefile, included in the main Makefile. It contains
+# the information needed to set up and run the AtChem2 Testsuite.
+
+# ==================== Unit Tests ==================== #
+
+# The following variables are defined in the main Makefile:
+# - $FRUITDIR is the path to FRUIT, the FORTRAN Unit Test Framework
+# - $UNITTEST_SRCS are the Fortran source files needed for the unit tests
+# - $FORT_COMP is the Fortran compiler
+
 # setup FRUIT
 UNITTESTDIR = tests/unit_tests
 fruit_code = $(FRUITDIR)/src/fruit.f90
@@ -20,15 +30,20 @@ unittest_code_gen = $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_dri
 all_unittest_code = $(fruit_code) $(unittest_code) $(unittest_code_gen)
 fruit_driver = $(UNITTESTDIR)/fruit_driver.exe
 
-# copy fruit_generator.rb to the unit tests directory and replace the path of FRUIT with $(FRUITDIR)
+# copy fruit_generator.rb to the unit tests directory and replace the
+# path to FRUIT with $(FRUITDIR)
 $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
 	@echo ""
 	@cp tests/fruit_generator.rb $(UNITTESTDIR)
-	@cd $(UNITTESTDIR); sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; ruby fruit_generator.rb
+	@cd $(UNITTESTDIR) && \
+         sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb && \
+         ruby fruit_generator.rb
 
 # build fruit_driver.exe from the individual unit tests
 $(fruit_driver) : $(all_unittest_code)
 	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
+
+# ==================== Model Tests  ==================== #
 
 # search tests/tests/ for all subdirectories, which should reflect the full list of tests
 OLDTESTS := $(shell ls -d tests/tests/*/ | sed 's,tests/tests/,,g' | sed 's,/,,g')

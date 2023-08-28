@@ -111,7 +111,7 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # setup to run the unit and model tests
-include tests/testing.mk
+include tests/makefile.tests
 
 # ==================== Makefile rules  ==================== #
 
@@ -158,9 +158,8 @@ clean:
 	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 
+# ==================== Dependencies ==================== #
 
-# ================================================================== #
-# Dependencies
 atchem2.o : atchem2.f90 inputFunctions.o configFunctions.o dataStructures.o
 argparse.o : argparse.f90 dataStructures.o
 constraintFunctions.o : constraintFunctions.f90 dataStructures.o

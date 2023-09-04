@@ -25,8 +25,9 @@ CVODELIBDIR = cvode/lib
 OPENLIBMDIR = openlibm-0.8.1
 FRUITDIR    = fruit_3.4.3
 
-# default location of the chemical mechanism shared library (mechanism.so)
-# use the second argument of the build script to override $SHAREDLIBDIR
+# default location of the chemical mechanism shared library (`mechanism.so`)
+# use the second argument of the build script (`build/build_atchem2.sh`) to
+# override $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
 # =========================================================================== #
@@ -35,7 +36,7 @@ SHAREDLIBDIR = model/configuration
 
 .SUFFIXES:
 .SUFFIXES: .f90 .o
-.PHONY: all indenttest styletest unittests oldtests modeltests alltests clean
+.PHONY: all sharedlib clean
 
 # detect operating system
 OS := $(shell uname -s)
@@ -63,7 +64,7 @@ else
   endif
 endif
 
-# set the compilation flags for each compiler
+# set the main compilation flags for each compiler
 CCOV = false
 ifeq ($(FORTC),"gnu")
   FFLAGS = -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
@@ -87,7 +88,7 @@ else
   RPATH_OPTION = -rpath
 endif
 
-# set the CVODE and openlibm compiler flags
+# set the CVODE and openlibm compilation flags
 LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIBDIR):$(OPENLIBMDIR) \
           -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
@@ -110,38 +111,12 @@ SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
-# setup to run the unit and model tests
+# secondary makefile for the Testsuite
 include tests/makefile.tests
 
 # ==================== Makefile rules  ==================== #
 
 all: $(AOUT)
-
-indenttest:
-	@echo ""
-	@echo "Make: Running the indent test."
-	@./tests/run_indent_test.sh
-
-styletest:
-	@echo ""
-	@echo "Make: Running the style test."
-	@./tests/run_style_test.sh
-
-unittests: $(fruit_driver)
-	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR); $(fruit_driver)
-	@echo ""
-
-oldtests:
-	@echo ""
-	@echo "Make: Running the old tests:" $(OLDTESTS)
-	@./tests/run_tests.sh "$(OLDTESTS)" "$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR)"
-
-modeltests:
-	@echo ""
-	@echo "Make: Running the model tests:" $(MODELTESTS)
-	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR)"
-
-alltests: indenttest styletest modeltests oldtests unittests
 
 sharedlib:
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)

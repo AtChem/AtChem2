@@ -215,8 +215,6 @@ $this_file_failures"
   echo $this_test_failures >> $LOG_FILE
 done
 
-#if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
-
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "==> Tests FAILED [" $fail_counter/$test_counter "]"

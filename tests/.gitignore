@@ -1,6 +1,7 @@
 # Ignore output/log files and mechanism files of the test runs
 *.log
 *.out
+*.output
 mechanism.f90
 mechanism.o
 mechanism.prod
@@ -8,8 +9,8 @@ mechanism.reac
 mechanism.ro2
 mechanism.species
 mechanism.so
-tests/*/output/*
-model_tests/*/output/*
+tests/*/output/reactionRates/*
+model_tests/*/output/reactionRates/*
 
 # Except configuration and reference files
 !*.cmp

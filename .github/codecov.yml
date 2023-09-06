@@ -1,6 +1,0 @@
-coverage:
-  status:
-    project:
-      src:
-        target: auto
-        paths: "src/"

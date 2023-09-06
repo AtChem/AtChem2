@@ -55,7 +55,7 @@ function find_string {
 # A mismatch generates a test failure. Numdiff is used to cope with small numerical
 # differences due to differing hardware, OS, and package versions.
 #
-# $2 is used to pass CVODELIB in from Makefile, in order to be able to set DYLD_LIBRARY_PATH on macOS.
+# $2 is used to pass $CVODELIBDIR in from Makefile, in order to be able to set DYLD_LIBRARY_PATH on macOS.
 #
 # $this_test_failures is used to keep a track of whether each test is passing: empty indicates
 # a pass, while non-empty indicates a failure.
@@ -215,8 +215,6 @@ $this_file_failures"
   echo $this_test_failures >> $LOG_FILE
 done
 
-if [[ "$RUNNER_OS" == "Linux" ]]; then bash <(curl -s https://codecov.io/bash) -F tests ; fi
-
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.
 if [[ "$fail_counter" -gt 0 ]]; then
   echo "==> Tests FAILED [" $fail_counter/$test_counter "]"
@@ -225,5 +223,5 @@ else
   echo "==> Tests PASSED [" $test_counter/$test_counter "]"
   model_tests_passed=0
 fi
-cat $LOG_FILE
+
 exit $model_tests_passed

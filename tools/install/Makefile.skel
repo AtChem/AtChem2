@@ -131,7 +131,7 @@ clean:
 	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} model/output/*.output model/output/reactionRates/*[0-9]
 	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
 	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
-	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
+	rm -f $(UNITTESTDIR)/fruit_basket_gen.f90 $(UNITTESTDIR)/fruit_driver_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 
 # ==================== Dependencies ==================== #
 

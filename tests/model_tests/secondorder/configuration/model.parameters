@@ -1,0 +1,13 @@
+1500        number of steps
+1.0    step size (seconds)
+2        Species Interpolation Method (pw constant = 1, pw linear = 2)
+2        Conditions Interpolation Method (pw constant = 1, pw linear = 2)
+1.0        rates output step size
+0        model start time
+1.0        jacobian output step size
+52.943e00     Latitude
+0.00e+00    Longitude
+19        day
+11        month
+2008        year
+100.0        Reaction Rates Output Step Size

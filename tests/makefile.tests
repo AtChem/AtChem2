@@ -20,7 +20,6 @@
 # - $UNITTEST_SRCS are the Fortran source files needed for the unit tests
 # - $FORT_COMP is the Fortran compiler
 
-
 # ==================== Unit tests ==================== #
 
 # setup FRUIT

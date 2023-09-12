@@ -9,6 +9,11 @@
 #
 # -----------------------------------------------------------------------------
 
+# Workflow for continuous integration (CI) of AtChem2,
+# using Github Actions and Codecov
+#
+# Acknowledgements: J. Allsopp
+# ----------------------------------------------------- #
 name: AtChem2 CI
 
 # ------------------------------ EVENTS ------------------------------ #
@@ -30,7 +35,7 @@ on:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `testing`, which compiles
-# the AtChem2 model, runs the testsuite, and checks the testsuite code
+# the AtChem2 model, runs the Testsuite, and checks the Testsuite code
 # coverage using Codecov
 jobs:
   testing:
@@ -99,6 +104,7 @@ jobs:
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh ./model/mechanism.fac
+
           # macos only
           if [ $RUNNER_OS != "Linux" ] ; then
             install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
@@ -139,11 +145,9 @@ jobs:
           make clean
           make unittests CCOV=true
           mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          make modeltests CCOV=true     # Run only the new model testsuite
+          make modeltests CCOV=true     # Run only the new model Testsuite
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         with:
-          #token: ${{ secrets.CODECOV_TOKEN }}
-          #directory: ./tests/unit_tests/
           gcov: true

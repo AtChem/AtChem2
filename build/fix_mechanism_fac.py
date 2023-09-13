@@ -48,16 +48,17 @@ def fix_fac_full_contents(input_file):
     concatenated correctly.
 
     WARNING: this will probably fail if a line is REALLY long,
-    stretching over two full lines, but in this case it should
-    then give an error as output.
+    stretching over two full lines, but in this case it should then
+    give an error as output.
 
     Args:
         input_file (str): name of the .fac file to be corrected
 
     Returns:
-        fixed_file (list): corrected mechanism file, with each line as
-                           a separate string
+        fixed_file (list): corrected mechanism file, with each line
+                           as a separate string
     """
+
     # Using splitlines() rather than readlines(), we take out the
     # errant carriage returns, and, for any line with such on it, we
     # return it to the list.
@@ -146,15 +147,18 @@ def fix_fac_full_file(input_file):
     the affected lines concatenated correctly.
 
     All the work is done by the fix_fac_contents() function -- see its
-    documentation for details. This function is just a simple wrapper
-    to write the output of fix_fac_contents() back to the same file.
+    documentation for details. This function is just a wrapper to
+    write the output of fix_fac_contents() back to the same .fac file.
 
     Args:
         input_file (str): name of the .fac file to be fixed
     """
-    print('Running fix_fac_full_file on ' + str(input_file))
+
+    print('Running fix_fac_full_file() on: ' + str(input_file))
+
     contents = fix_fac_full_contents(input_file)
     contents = [item + '\n' for item in contents]
+
     with open(input_file, 'w') as file_open:
         file_open.writelines(contents)
 
@@ -167,9 +171,9 @@ def main():
     if len(sys.argv) > 1:
         fix_fac_full_contents(sys.argv[1])
     else:
-        print('******************************************')
-        print('Please pass a filename as script argument.')
-        print('******************************************')
+        print('*****************************************************')
+        print('* Please pass a filename (.fac) as script argument. *')
+        print('*****************************************************')
 
 # Call the main function if executed as script
 if __name__ == '__main__':

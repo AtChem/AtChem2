@@ -47,9 +47,9 @@ reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
 
 def tokenise_and_process(input_string, vars_dict):
     """
-    This function takes in a single string, and a dictionary of
-    known variables from previous lines, and returns the same string
-    but with known variables replaced by a reference to their matching
+    This function takes in a single string, and a dictionary of known
+    variables from previous lines, and returns the same string but
+    with known variables replaced by a reference to their matching
     element in a vector q. This removes the dependence on potentially
     100+ named variables, and replaces them with a single vector.
 
@@ -124,10 +124,11 @@ def tokenise_and_process(input_string, vars_dict):
 
 def convert_to_fortran(input_file, mech_dir, mcm_vers):
     """
-    This function converts a chemical mechanism file into the Fortran-compatible
-    format used by the AtChem2 ODE solver. The function takes as input a file with
-    the chemical mechanism (either a .fac or .kpp file), and generates 5 Fortran
-    files (mechanism.*) in a given directory (mech_dir):
+    This function converts a chemical mechanism file into the
+    Fortran-compatible format used by the AtChem2 ODE solver. The
+    function takes as input a file with the chemical mechanism (either
+    a .fac or .kpp file), and generates 5 Fortran files (mechanism.*)
+    in a given directory (mech_dir):
 
     * Each species and reaction in the chemical mechanism is assigned
       an ID number.
@@ -328,7 +329,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
             cleaned_line = line2.strip().strip('%;').strip()
 
             # Process the assignment: split by '=' into variable names
-            # and values. The strip each.
+            # and values, then strip each.
             [lhs, rhs] = re.split(r'=', cleaned_line)
 
             variable_name = lhs.strip()

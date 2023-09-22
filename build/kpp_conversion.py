@@ -217,7 +217,7 @@ def write_fac_file(input_file):
         file_open.write('\n* Reaction definitions ;\n')
         file_open.writelines(contents4)
 
-    print(type(output_file))
+    # Filename of the .fac file
     return output_file
 
 

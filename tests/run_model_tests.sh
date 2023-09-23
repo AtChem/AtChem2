@@ -232,4 +232,5 @@ echo "" >> $LOG_FILE
 echo "Execution of model tests script finished." >> $LOG_FILE
 
 echo "==> Model tests logfile:" $LOG_FILE
+
 exit $model_tests_passed

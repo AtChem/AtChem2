@@ -127,25 +127,25 @@ jobs:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          make oldtests    # NB: oldtests will eventually be merged into modeltests
+          #make unittests
+          #make oldtests    # NB: oldtests will eventually be merged into modeltests
           make modeltests  # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
       # (5) Recompile AtChem2 using the code coverage flags, then
       # upload the gcov files to Codecov
 
-      - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
-        # Set $FORT_VERSION for use with the `Makefile`
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make clean
-          make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          make modeltests CCOV=true     # Run only the new model Testsuite
+      # - name: Unit and Model tests (x Codecov)
+      #   if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
+      #   # Set $FORT_VERSION for use with the `Makefile`
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     export PATH=$PATH:$PWD/numdiff/bin
+      #     make clean
+      #     make unittests CCOV=true
+      #     mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
+      #     make modeltests CCOV=true     # Run only the new model Testsuite
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11

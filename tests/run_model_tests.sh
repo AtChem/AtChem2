@@ -90,11 +90,12 @@ for test in $1; do
   test_counter=$((test_counter+1))
   echo "" >> $LOG_FILE
   echo "Set up and make" $TESTS_DIR/$test >> $LOG_FILE
-  if [ -f *.kpp ]; then   # mechanism in KPP format
-      ./build/build_atchem2.sh $TESTS_DIR/$test/$test.kpp $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
-  else   # default is mechanism in FACSIMILE format
-      ./build/build_atchem2.sh $TESTS_DIR/$test/$test.fac $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
+  if [ -f $TESTS_DIR/$test/$test.kpp ]; then   # chemical mechanism in KPP format
+      mechanism_file=$TESTS_DIR/$test/$test.kpp
+  else   # by default, the chemical mechanism is in FACSIMILE format
+      mechanism_file=$TESTS_DIR/$test/$test.fac
   fi
+  ./build/build_atchem2.sh $mechanism_file $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo "Building" $test "test failed with exit code" $exitcode >> $LOG_FILE

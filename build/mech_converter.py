@@ -14,8 +14,9 @@
 
 # -------------------------------------------------------------------- #
 # This script converts a chemical mechanism file -- in FACSIMILE (.fac)
-# or KPP (.kpp) format -- into the Fortran-compatible format used by AtChem2.
-# The script generates 5 files in the model configuration directory:
+# or KPP (.kpp) format -- into the Fortran-compatible format used by
+# AtChem2.  The script generates 5 files in the model configuration
+# directory:
 #
 # - mechanism.species
 # - mechanism.reac
@@ -559,7 +560,7 @@ end module mechanism_mod
 
 def main():
     assert len(sys.argv) > 1, \
-        'Please enter the name of a chemical mechanism file (.fac ) as argument:'
+        'Please enter the name of a chemical mechanism file (.fac) as argument:'
     mech_file = sys.argv[1]
     # config_dir defaults to model/configuration/, if not given as argument
     if len(sys.argv) <= 2:

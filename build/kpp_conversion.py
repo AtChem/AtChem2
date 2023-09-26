@@ -225,7 +225,7 @@ def write_fac_file(input_file):
 
 
 def main():
-    # Pass argument from command line - name of the .kpp file to convert
+    # Pass argument from command line -- name of the .kpp file to convert
     if len(sys.argv) > 1:
         write_fac_file(sys.argv[1])
     else:

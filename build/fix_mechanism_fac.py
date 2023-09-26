@@ -11,7 +11,7 @@
 
 # -------------------------------------------------------------------- #
 # This script corrects the content of a chemical mechanism file in
-# FACSIMILE format (.fac ) by removing incorrect newline characters.
+# FACSIMILE format (.fac) by removing incorrect newline characters.
 #
 # Due to a bug of the extraction tool on the MCM website, sometimes
 # the newline character is inserted in the wrong place. For example:
@@ -95,7 +95,7 @@ def fix_fac_full_contents(input_file):
                 # print contents[i-1]
                 contents_count += 1
                 to_delete.append(i)
-    print(str(contents_count) + ' corrections made - now removing old.')
+    print(str(contents_count) + ' corrections made -- now removing old.')
 
     # Remove old elements which have now been concatenated onto previous.
     for i in reversed(to_delete):
@@ -122,7 +122,7 @@ def fix_fac_full_contents(input_file):
 
     # Look for any lines containing more than 2 elements. These are lines where
     # more than one line is broken running together. At this point, the file is
-    # too broken to easily fix manually - get the user to fix it and run again.
+    # too broken to easily fix manually -- get the user to fix it and run again.
     if max((len(line) for line in interim_contents)) > 2:
         # Get index of line with error
         line_lengths = [len(line) for line in interim_contents]
@@ -167,7 +167,7 @@ def fix_fac_full_file(input_file):
 
 
 def main():
-    # Pass argument from command line - name of the .fac file to be fixed
+    # Pass argument from command line -- name of the .fac file to be fixed
     if len(sys.argv) > 1:
         fix_fac_full_contents(sys.argv[1])
     else:

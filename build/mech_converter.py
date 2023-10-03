@@ -71,9 +71,10 @@ def tokenise_and_process(input_string, vars_dict):
     assert isinstance(vars_dict, dict), \
         'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
 
-    # Generate start and end points of sections of symbols and non-symbols.
-    symbol_regex = r'[()\-+*@/ ]+'
-    nonsymbol_regex = r'[^()\-+*@/ ]+'
+    # Generate start and end points of sections of symbols and nonsymbols
+    symbol_regex = '[()\-+*@/, ]+'
+    nonsymbol_regex = '[^()\-+*@/, ]+'
+
     list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_nonsymbol_starts = [m.start(0) for m in re.finditer(nonsymbol_regex, input_string)]

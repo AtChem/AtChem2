@@ -90,7 +90,12 @@ for test in $1; do
   test_counter=$((test_counter+1))
   echo "" >> $LOG_FILE
   echo "Set up and make" $TESTS_DIR/$test >> $LOG_FILE
-  ./build/build_atchem2.sh $TESTS_DIR/$test/$test.fac $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
+  if [ -f $TESTS_DIR/$test/$test.kpp ]; then   # chemical mechanism in KPP format
+      mechanism_file=$TESTS_DIR/$test/$test.kpp
+  else   # by default, the chemical mechanism is in FACSIMILE format
+      mechanism_file=$TESTS_DIR/$test/$test.fac
+  fi
+  ./build/build_atchem2.sh $mechanism_file $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo "Building" $test "test failed with exit code" $exitcode >> $LOG_FILE
@@ -227,5 +232,4 @@ echo "" >> $LOG_FILE
 echo "Execution of model tests script finished." >> $LOG_FILE
 
 echo "==> Model tests logfile:" $LOG_FILE
-
 exit $model_tests_passed

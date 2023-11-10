@@ -1,11 +1,11 @@
 * Generic Rate Coefficients ;
+...
 
 * Complex reactions ;
+...
 
-* Peroxy radicals. ;
+* Peroxy radicals ;
+RO2 = ... ;
 
-RO2 =  ;
-
-* Reaction definitions. ;
-
+* Reaction definitions ;
 % k : A + B = C ;

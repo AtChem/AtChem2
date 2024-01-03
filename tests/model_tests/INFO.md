@@ -23,3 +23,5 @@ starting at 6:30 am on 9/11/2008.
 - `spec_model_1` is the base case
 
 - `spec_model_kpp` is the same as the base case but the mechanism is in KPP format.
+
+- `spec_model_stoich` is the same as the base case but the mechanism has been adjusted to include stoichometric coefficients (e.g. 'NO + NO = NO2 + NO2' becomes '2 NO = 2 NO2')

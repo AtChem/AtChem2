@@ -203,7 +203,7 @@ def write_fac_file(input_file):
     print('Running write_fac_file() on: ' + str(input_file))
 
     contents1, contents2, contents3, contents4 = kpp_to_facsimile(input_file)
-    output_file = input_file.split('.')[0] + '.fac'
+    output_file = input_file.rsplit('.', 1)[0] + '.fac'
 
     with open(output_file, 'w') as file_open:
         file_open.write('\n* Generic Rate Coefficients ;\n')

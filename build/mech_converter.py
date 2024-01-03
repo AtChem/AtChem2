@@ -205,7 +205,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
-    if input_filename.split('.')[1] == 'kpp':
+    if input_filename.split('.')[-1] == 'kpp':
         input_fac = kpp_conversion.write_fac_file(os.path.join(input_directory, input_filename))
     else:
         input_fac = input_filename

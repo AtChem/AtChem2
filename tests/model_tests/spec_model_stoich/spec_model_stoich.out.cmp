@@ -202,7 +202,7 @@ AtChem2 v1.3-dev
 ------------------
  Final statistics
 ------------------
- No. steps = 503   No. f-s = 619   No. J-s = 970   No. LU-s = 108
+ No. steps = 503   No. f-s = 619   No. J-s = 947   No. LU-s = 108
  No. nonlinear iterations = 618
  No. nonlinear convergence failures = 0
  No. error test failures = 30

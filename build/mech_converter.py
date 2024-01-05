@@ -481,7 +481,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
         for spec in speciesList:
             reactionNumber += 1
             mech_reac_list.append(str(reactionNumber) + ' ' \
-                                  + str(speciesList.index(spec) + 1) + '\n')
+                                  + str(speciesList.index(spec) + 1) + ' 1.0\n')
 
     with open(os.path.join(mech_dir, 'mechanism.prod'), 'w') as prod_file:
         # Output number of species and number of reactions.

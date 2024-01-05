@@ -121,6 +121,34 @@ def tokenise_and_process(input_string, vars_dict):
     # Return the reconstructed string.
     return new_rhs
 
+def separate_stoichiometry(input_species):
+    """
+    This function takes in a string of a species from the mechanism and 
+    separates the species name from any preceeding stoichiometric coefficient.
+    This assumes that no species names will begin with a number.
+
+    Args:
+        input_species(str): a string containing a species name with a possible
+                            preceeding coefficient (e.g. H2O2, 2H2O2, 2 H2O2, or 0.5H2O2)
+
+    Returns:
+        split_spec (tuple): a tuple of a float and a string. The first item 
+                            (float) is the stoichiometric coefficient and the 
+                            second (string) is the species name.
+    """
+    
+    #regex to match the potential coefficient and name sections of the input
+    in_pat = re.compile(r"^ *(\d*\.?\d*) *([a-zA-Z_].*) *$")
+    pat_match = in_pat.match(input_species)
+    if pat_match:
+        if pat_match[1]: #if there is a coefficient passed 
+            return (float(pat_match[1]), pat_match[2])
+        else: #if there is no coefficient then output an assumed coefficient of 1
+            return (1.0, pat_match[2])
+    else:
+        raise Exception(f"""Reaction species does not match the correct 
+                        format: '{input_species}'. Note that species names should 
+                        not begin with numerical characters.""")
 # ------------------------------------------------------------ #
 
 def convert_to_fortran(input_file, mech_dir, mcm_vers):
@@ -177,7 +205,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
-    if input_filename.split('.')[1] == 'kpp':
+    if input_filename.split('.')[-1] == 'kpp':
         input_fac = kpp_conversion.write_fac_file(os.path.join(input_directory, input_filename))
     else:
         input_fac = input_filename
@@ -399,39 +427,52 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
             # Ignore empty reactantsList.
             if not reactantsList.strip() == '':
-                # Compare each reactant against known species.
+                # Compare each reactant against known species and note the 
+                # stoichometric coefficients for each reactant.
                 reactantNums = []
+                reactantStoichs = []
                 for x in reactants:
+                    #split the reactant into the species name and the stoichometric coefficient
+                    x_coeff, x_name = separate_stoichiometry(x)
+                    # Add the stoichometric coefficient to reactantStoichs
+                    reactantStoichs.append(x_coeff)
                     # If the reactant is a known species then add its number to reactantNums.
-                    if x in speciesList:
-                        reactantNums.append(speciesList.index(x)+1)
+                    if x_name in speciesList:
+                        reactantNums.append(speciesList.index(x_name)+1)
                     else:
                         # Reactant x is not a known species. Add reactant to speciesList,
                         # then add this number to reactantNums to record this reaction.
-                        speciesList.append(x)
+                        speciesList.append(x_name)
                         reactantNums.append(len(speciesList))
 
                 # Write the reactants to mech_reac_list.
-                mech_reac_list.extend([str(reactionNumber) + ' ' + str(z) \
-                                       + '\n' for z in reactantNums])
+                mech_reac_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                                       y,z in zip(reactantStoichs, reactantNums)])
 
             # Ignore empty productsList.
             if not productsList.strip() == '':
-                # Compare each product against known species.
+                # Compare each product against known species and note the 
+                # stoichometric coefficients for each product.
                 productNums = []
+                productStoichs = []
                 for x in products:
+                    #split the product into the species name and the stoichometric coefficient
+                    x_coeff, x_name = separate_stoichiometry(x)
+                    # Add the stoichometric coefficient to productStoichs
+                    productStoichs.append(x_coeff)
+
                     # If the reactant is a known species then add its number to reactantNums.
-                    if x in speciesList:
-                        productNums.append(speciesList.index(x)+1)
+                    if x_name in speciesList:
+                        productNums.append(speciesList.index(x_name)+1)
                     else:
                         # Product x is not a known species. Add product to speciesList,
                         # then add this number to productNums to record this reaction.
-                        speciesList.append(x)
+                        speciesList.append(x_name)
                         productNums.append(len(speciesList))
 
                 # Write the products to mech_prod_list.
-                mech_prod_list.extend([str(reactionNumber) + ' ' + str(z) \
-                                       + '\n' for z in productNums])
+                mech_prod_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                                       y,z in zip(productStoichs, productNums)])
 
     # -------------------------------------------------
 

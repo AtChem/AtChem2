@@ -64,6 +64,7 @@ contains
 
     integer(kind=NPI) :: lhs_size, rhs_size
     integer(kind=NPI) :: k, l, count
+    real(kind=DP) :: m
     integer(kind=IntErr) :: ierr
 
     call inquire_or_abort( trim( configuration_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
@@ -82,16 +83,16 @@ contains
     ! read data for lhs of equations
     ! lhs(1, i) contains the reaction number
     ! lhs(2, i) contains the species number of the reactant
-    ! lhs(3, i) contains 1 as a constant factor (stoichiometric coefficient)
+    ! coeff(i) contains the stoichiometric coefficient
     count = 0
     read (10,*, iostat=ierr)
-    read (10,*, iostat=ierr) k, l
+    read (10,*, iostat=ierr) k, l, m
     do while ( ierr == 0 )
       count = count + 1
       clhs(1, count) = k
       clhs(2, count) = l
-      clcoeff(count) = 1.0_DP
-      read (10,*, iostat=ierr) k, l
+      clcoeff(count) = m
+      read (10,*, iostat=ierr) k, l, m
     end do
     close (10, status='keep')
 
@@ -101,17 +102,17 @@ contains
     ! read data for rhs of equations
     ! rhs(1, i) contains the reaction number
     ! rhs(2, i) contains the species number of the product
-    ! coeff(i) contains 1.0 as a constant factor (stoichiometric coefficient)
+    ! coeff(i) contains the stoichiometric coefficient
     count = 0
     ierr = 0
     read (11,*, iostat=ierr)
-    read (11,*, iostat=ierr) k, l
+    read (11,*, iostat=ierr) k, l, m
     do while ( ierr == 0 )
       count = count + 1
       crhs(1, count) = k
       crhs(2, count) = l
-      crcoeff(count) = 1.0_DP
-      read (11,*, iostat=ierr) k, l
+      crcoeff(count) = m
+      read (11,*, iostat=ierr) k, l, m
     end do
     close (11, status='keep')
 

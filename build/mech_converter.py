@@ -24,7 +24,7 @@
 # - mechanism.ro2
 # - mechanism.f90
 #
-# Acknowledgements: B. Nelson, M. Newland
+# Acknowledgements: B. Nelson, M. Newland, A. Mayhew
 #
 # ARGUMENTS:
 #   1. path to the mechanism .fac file

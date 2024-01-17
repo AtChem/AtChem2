@@ -1,2 +1,3 @@
 # Ignore auto-generated mechanism files in this directory
 mechanism.*
+customRateFuncs.o

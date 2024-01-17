@@ -24,7 +24,7 @@
 # - mechanism.ro2
 # - mechanism.f90
 #
-# Acknowledgements: B. Nelson, M. Newland
+# Acknowledgements: B. Nelson, M. Newland, A. Mayhew
 #
 # ARGUMENTS:
 #   1. path to the mechanism .fac file
@@ -71,9 +71,10 @@ def tokenise_and_process(input_string, vars_dict):
     assert isinstance(vars_dict, dict), \
         'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
 
-    # Generate start and end points of sections of symbols and non-symbols.
-    symbol_regex = r'[()\-+*@/ ]+'
-    nonsymbol_regex = r'[^()\-+*@/ ]+'
+    # Generate start and end points of sections of symbols and nonsymbols
+    symbol_regex = '[()\-+*@/, ]+'
+    nonsymbol_regex = '[^()\-+*@/, ]+'
+
     list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_nonsymbol_starts = [m.start(0) for m in re.finditer(nonsymbol_regex, input_string)]
@@ -302,6 +303,15 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
                 continue
 
     # -------------------------------------------------
+    # Read in the names of user-defined custom rate functions and add them
+    # to the list of reserved names so that they will be carried through the 
+    # rate definitions (in a similar manner to LOG10)
+    with open(mech_dir + '/customRateFuncs.f90') as custom_func_file:
+        func_def_pat = "function +([a-zA-Z0-9_]*) *\("
+        custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
+        
+        for n in custom_func_names:
+            reservedOtherList.append(n)
 
     # Initialise list, dictionary and a counter.
     mechanism_rates_coeff_list = []
@@ -551,6 +561,7 @@ contains
 
     subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J, RO2) bind(c,name='update_p')
 
+        use custom_functions_mod
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
            real(c_double), intent(inout) :: p(*), q(*)
         real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2

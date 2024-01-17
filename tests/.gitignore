@@ -9,6 +9,7 @@ mechanism.reac
 mechanism.ro2
 mechanism.species
 mechanism.so
+customRateFuncs.o
 tests/*/output/reactionRates/*
 model_tests/*/output/reactionRates/*
 

@@ -101,7 +101,7 @@ some are required, and without them the model cannot be installed or
 used, others are optional. It is recommended to use the same directory
 for all the dependencies of AtChem2: the \depdir\ can be located
 anywhere and given any name. In this manual, the \depdir\ is
-assumed to be: \texttt{\$HOME/atchem-lib/}.
+assumed to be: \texttt{\$HOME/AtChem-lib/}.
 
 Before installing the dependencies, make sure that a Fortran compiler
 (e.g., \texttt{gfortran}), Python, make, cmake and (optionally) Ruby
@@ -146,14 +146,14 @@ directory.
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
-  ./tools/install/install_cvode.sh ~/atchem-lib/
+  ./tools/install/install_cvode.sh ~/AtChem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working CVODE
-installation at \texttt{\textasciitilde/atchem-lib/cvode/}. Take note
+installation at \texttt{\textasciitilde/AtChem-lib/cvode/}. Take note
 of the path to the CVODE library
-(\texttt{\textasciitilde/atchem-lib/cvode/lib/}), as it will be needed
+(\texttt{\textasciitilde/AtChem-lib/cvode/lib/}), as it will be needed
 later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
@@ -172,12 +172,12 @@ directory.
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
-  ./tools/install/install_openlibm.sh ~/atchem-lib/
+  ./tools/install/install_openlibm.sh ~/AtChem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working openlibm
-installation at \texttt{\textasciitilde/atchem-lib/openlibm-0.8.1/}.
+installation at \texttt{\textasciitilde/AtChem-lib/openlibm-0.8.1/}.
 Take note of the path to openlibm, as it will be needed later to
 complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
@@ -204,7 +204,7 @@ directory.
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
-  ./tools/install/install_numdiff.sh ~/atchem-lib/
+  ./tools/install/install_numdiff.sh ~/AtChem-lib/
   \end{verbatim}
 \item Move to the \texttt{\$HOME} directory (\texttt{cd\ \textasciitilde}).
   Open the \texttt{.bash\_profile} file (or the \texttt{.profile}
@@ -212,7 +212,7 @@ directory.
   following line to the bottom of the file (change the path to the
   \depdir\ as needed):
   \begin{verbatim}
-  export PATH=$PATH:$HOME/atchem-lib/numdiff/bin
+  export PATH=$PATH:$HOME/AtChem-lib/numdiff/bin
   \end{verbatim}
 \item Close the terminal.
 \item Reopen the terminal. Execute \verb|which numdiff| to check that
@@ -246,12 +246,12 @@ directory.
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
-  ./tools/install/install_fruit.sh ~/atchem-lib/
+  ./tools/install/install_fruit.sh ~/AtChem-lib/
   \end{verbatim}
 \end{enumerate}
 
 If the installation is successful, there should be a working FRUIT
-installation at \texttt{\textasciitilde/atchem-lib/fruit\_3.4.3/}.
+installation at \texttt{\textasciitilde/AtChem-lib/fruit\_3.4.3/}.
 Take note of the path to FRUIT, as it will be needed later to complete
 the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
@@ -271,16 +271,16 @@ To install AtChem2:
   cp ./tools/install/Makefile.skel ./Makefile
   \end{verbatim}
 \item Open the \texttt{Makefile} with a text editor. Set the variables
-  \texttt{\$CVODELIB}, \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR} to
+  \texttt{\$CVODELIBDIR}, \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR} to
   the paths of CVODE, openlibm and FRUIT, as indicated in
   Sect.~\ref{subsec:required-dependencies}. Use full paths, because
   using relative paths may cause compilation errors~\footnote{See
     issue \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}.
   For example (change the path to the \depdir\ as needed):
   \begin{verbatim}
-  CVODELIB = $(HOME)/atchem-lib/cvode/lib
-  OPENLIBMDIR = $(HOME)/atchem-lib/openlibm-0.8.1
-  FRUITDIR = $(HOME)/atchem-lib/fruit_3.4.3
+  CVODELIBDIR = $(HOME)/AtChem-lib/cvode/lib
+  OPENLIBMDIR = $(HOME)/AtChem-lib/openlibm-0.8.1
+  FRUITDIR = $(HOME)/AtChem-lib/fruit_3.4.3
   \end{verbatim}
   If FRUIT has not been installed (it is optional), leave the default
   value for \texttt{\$FRUITDIR}.

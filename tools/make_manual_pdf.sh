@@ -10,7 +10,7 @@
 #
 # -----------------------------------------------------------------------------
 
-# Script to generate the AtChem2 manual pdf file.
+# Script to generate the pdf file of the AtChem2 manual.
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
@@ -28,7 +28,7 @@ pdflatex AtChem2-Manual.tex
 pdflatex AtChem2-Manual.tex
 
 # Move pdf file to doc/ directory
-#mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
+mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
 echo ""
 echo "||----------------------------------------||"

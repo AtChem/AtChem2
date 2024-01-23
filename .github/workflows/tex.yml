@@ -42,7 +42,11 @@ jobs:
           run: apk add inkscape
 
       - name: Compile the manual
-        run: ./tools/make_manual_pdf.sh
+        run: |
+          which inkscape
+          which pdflatex
+          which bibtex
+          #./tools/make_manual_pdf.sh
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

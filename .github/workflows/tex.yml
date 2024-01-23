@@ -26,9 +26,9 @@ on:
     branches: [ master ]
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `manual`
+# This workflow contains a single job called `pdf_manual`
 jobs:
-  manual:
+  pdf_manual:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,11 +36,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup latex and inkscape
-        run: |
-          sudo apt-get install inkscape
-          sudo apt-get install texlive
-          sudo apt-get install texlive-science
-
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme:small
+          run: |
+            echo ${{ github.workspace }}
+            tlmgr info  helvet graphicx hyperref fancyhdr caption natbib xcolor mhchem
+          # sudo apt-get install inkscape
+          # sudo apt-get install texlive
+          # sudo apt-get install texlive-science
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

@@ -30,10 +30,8 @@ pdflatex AtChem2-Manual.tex
 # Move pdf file to doc/ directory
 mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
-echo ""
 echo "||----------------------------------------||"
 echo "||    AtChem2-Manual.pdf saved to doc/    ||"
 echo "||----------------------------------------||"
-echo ""
 
 exit 0

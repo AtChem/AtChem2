@@ -21,11 +21,11 @@ for FIG in *.svg; do
 done
 
 # Compile LaTeX source files, generate pdf file
-cd ../latex/
-pdflatex AtChem2-Manual.tex
-bibtex AtChem2-Manual.aux
-pdflatex AtChem2-Manual.tex
-pdflatex AtChem2-Manual.tex
+# cd ../latex/
+# pdflatex AtChem2-Manual.tex
+# bibtex AtChem2-Manual.aux
+# pdflatex AtChem2-Manual.tex
+# pdflatex AtChem2-Manual.tex
 
 # Move pdf file to doc/ directory
 #mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf

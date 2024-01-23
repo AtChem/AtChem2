@@ -41,15 +41,16 @@ jobs:
           scheme: small
           run: |
             apk add inkscape
-            which pdflatex
-            which bibtex
+            ./tools/make_manual_pdf.sh
+            # which pdflatex
+            # which bibtex
 
-      - name: Compile the manual
-        run: |
-          #inkscape --version
-          which pdflatex
-          which bibtex
-          #./tools/make_manual_pdf.sh
+      # - name: Compile the manual
+      #   run: |
+      #     #inkscape --version
+      #     which pdflatex
+      #     which bibtex
+      #     #./tools/make_manual_pdf.sh
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

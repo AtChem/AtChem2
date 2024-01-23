@@ -43,9 +43,9 @@ jobs:
 
       - name: Compile the manual
         run: |
-          which inkscape
+          #inkscape --version
           which pdflatex
-          which bibtex
+          # which bibtex
           #./tools/make_manual_pdf.sh
 
       # - name: Upload PDF as Artifact

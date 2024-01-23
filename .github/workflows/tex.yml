@@ -55,7 +55,7 @@ jobs:
         run: |
           export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl
           echo $PATH
-          ls /usr/bin
+          #ls /usr/bin
           ls /opt/texlive/texdir/bin/x86_64-linuxmusl
           #inkscape --version
           #pdflatex --version

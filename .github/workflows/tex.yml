@@ -51,11 +51,11 @@ jobs:
       - name: Compile pdf file
         run: |
           export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl
-          echo $PATH 
+          echo $PATH
           which inkscape
           which pdflatex
           which bibtext
-          ./tools/make_manual_pdf.sh
+          #./tools/make_manual_pdf.sh
           echo "--> doc dir"
           ls doc/
           echo "--> figures dir"

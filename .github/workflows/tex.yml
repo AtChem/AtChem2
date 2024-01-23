@@ -35,17 +35,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup latex and inkscape
+      - name: Setup LaTeX and install Inkscape
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: small
-          run: |
-            echo ${{ github.workspace }}
-            apk add inkscape
-            which inkscape
-          # sudo apt-get install inkscape
-          # sudo apt-get install texlive
-          # sudo apt-get install texlive-science
+          run: apk add inkscape
+
+      - name: Compile the manual
+        run: ./tools/make_manual_pdf.sh
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

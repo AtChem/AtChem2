@@ -49,7 +49,15 @@ jobs:
             apk add inkscape
 
       - name: Compile pdf file
-        run: ./tools/make_manual_pdf.sh
+        run: |
+          export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl
+          ./tools/make_manual_pdf.sh
+          echo "doc dir"
+          ls doc/
+          echo "figures dir"
+          ls doc/figures
+          echo "latex dir"
+          ls doc/latex
 
 
       # - name: Upload PDF as Artifact

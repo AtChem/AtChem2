@@ -47,9 +47,9 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
-        # exclude: #TODO: fortran9 does not work on macos12
-        # - os: macos-12
-        #   fortran: 9
+        exclude: #TODO: fortran9 does not work on macos12
+        - os: macos-12
+          fortran: 9
       fail-fast: false
 
     # -------------------------------------------------------------

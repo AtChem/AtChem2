@@ -9,7 +9,7 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow for compilation of the AtChem2 manual
+# Workflow to generate automatically the AtChem2 manual
 # ----------------------------------------------------- #
 name: AtChem2 PDF
 
@@ -17,8 +17,13 @@ name: AtChem2 PDF
 # Controls when the workflow is activated
 on:
 
+  # Triggers when a pull request is created or updated (only on the
+  # master branch)
   pull_request:
     branches: [ master ]
+    # paths:
+    #   - 'doc/latex/**/*.tex'
+    #   - 'doc/figures/**/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
@@ -26,39 +31,33 @@ on:
     branches: [ master ]
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `pdf_manual`
+# This workflow contains a single job called `pdf_manual`, which sets
+# up a TeXLive environment, compiles the latex source files, and
+# generates the pdf file of the manual
 jobs:
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
 
-    # -------------------------------------------------------------
-    # Sequence of tasks to be executed as part of the `ci_testing` job:
     steps:
 
-      # 1. Checkout the repository under $GITHUB_WORKSPACE
+      # (1) Checkout the repository under $GITHUB_WORKSPACE
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2. Get TeXLive
-      - name: Setup LaTeX and in
+      # (2) Setup TeXLive and Inkscape (v1.x), then run the script to
+      # generate the pdf file of the manual
+      - name: Setup TexLive and compile the manual
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
           run: |
             # install inkscape
             apk add inkscape
-            # run script
+            # run script to generate the pdf file
             ./tools/make_manual_pdf.sh
-            echo "--> doc dir"
-            ls doc/
-            echo "--> figures dir"
-            ls doc/figures
-            echo "--> latex dir"
-            ls doc/latex
 
-
-      # - name: Upload PDF as Artifact
+      # - name: Upload PDF as artifact
       #   uses: actions/upload-artifact@v3
       #   with:
       #     name: AtChem2-Manual.pdf

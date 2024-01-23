@@ -39,10 +39,11 @@ jobs:
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: small
-          run: apk add inkscape
+          run: |
+            apk add inkscape
 
-      - name: Compile the manual
-        run: |
+#      - name: Compile the manual
+#        run: |
           #inkscape --version
           which pdflatex
           # which bibtex

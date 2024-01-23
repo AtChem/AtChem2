@@ -1,0 +1,8 @@
+# Ignore latex auxiliary files and png images in this directory
+figures/*.png
+latex/*.aux
+latex/*.bbl
+latex/*.blg
+latex/*.log
+latex/*.out
+latex/*.toc

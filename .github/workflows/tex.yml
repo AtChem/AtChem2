@@ -1,0 +1,49 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
+# Workflow for compilation of the AtChem2 manual
+# ----------------------------------------------------- #
+name: AtChem2 PDF
+
+# ------------------------------ EVENTS ------------------------------ #
+# Controls when the workflow is activated
+on:
+
+  pull_request:
+    branches: [ master ]
+
+  # Triggers when a push is made to the master branch (either by
+  # merging a pull request, or by direct commit)
+  push:
+    branches: [ master ]
+
+# ------------------------------ JOBS ------------------------------ #
+# This workflow contains a single job called `manual`
+jobs:
+  manual:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup latex and inkscape
+        run: |
+          sudo apt-get install inkscape
+          sudo apt-get install texlive
+          sudo apt-get install texlive-science
+
+
+      # - name: Upload PDF as Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: AtChem2-Manual.pdf
+      #     path: AtChem2-Manual.pdf

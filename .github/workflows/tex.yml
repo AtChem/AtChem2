@@ -47,26 +47,13 @@ jobs:
           scheme: full
           run: |
             apk add inkscape
-            which inkscape
-            which pdflatex
-            which bibtex
-
-      - name: Compile pdf file
-        run: |
-          export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl
-          echo $PATH
-          #ls /usr/bin
-          ls /opt/texlive/texdir/bin/x86_64-linuxmusl
-          #inkscape --version
-          #pdflatex --version
-          #bibtex --version
-          #./tools/make_manual_pdf.sh
-          #echo "--> doc dir"
-          #ls doc/
-          #echo "--> figures dir"
-          #ls doc/figures
-          #echo "--> latex dir"
-          #ls doc/latex
+            ./tools/make_manual_pdf.sh
+            echo "--> doc dir"
+            ls doc/
+            echo "--> figures dir"
+            ls doc/figures
+            echo "--> latex dir"
+            ls doc/latex
 
 
       # - name: Upload PDF as Artifact

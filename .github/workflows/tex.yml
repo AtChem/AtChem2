@@ -41,6 +41,7 @@ jobs:
           scheme: small
           run: |
             echo ${{ github.workspace }}
+            apk add inkscape
             which inkscape
           # sudo apt-get install inkscape
           # sudo apt-get install texlive

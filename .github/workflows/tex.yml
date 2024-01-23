@@ -41,7 +41,9 @@ jobs:
           scheme: small
           run: |
             apk add inkscape
+            ls doc/figures/
             ./tools/make_manual_pdf.sh
+            ls doc/figures/
             # which pdflatex
             # which bibtex
 

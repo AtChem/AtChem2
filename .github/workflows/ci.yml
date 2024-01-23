@@ -34,11 +34,11 @@ on:
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `testing`, which compiles
-# the AtChem2 model, runs the Testsuite, and checks the Testsuite code
-# coverage using Codecov
+# This workflow contains a single job called `ci_testing`, which
+# compiles the AtChem2 model, runs the Testsuite, and checks the
+# Testsuite code coverage using Codecov
 jobs:
-  testing:
+  ci_testing:
     # The job runs on both linux (ubuntu) and macos runner images,
     # with three versions of gnu fortran -- the runner images are
     # described here: https://github.com/actions/runner-images
@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
 
     # -------------------------------------------------------------
-    # Sequence of tasks to be executed as part of the `testing` job:
+    # Sequence of tasks to be executed as part of the `ci_testing` job:
     # 1. Checkout the repository
     # 2. Install gfortran, AtChem2 dependencies
     # 3. Compile AtChem2
@@ -98,8 +98,8 @@ jobs:
       # -------------------------------------------------------------
       # (3) Compile AtChem2 using the standard compilation flags
       - name: Build AtChem2
-        # Set $FORT_VERSION for use with the `Makefile`, called from
-        # the `build_atchem2.sh` script
+        # Set $FORT_VERSION for use with the `Makefile`, which is
+        # called by the `build_atchem2.sh` script
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |

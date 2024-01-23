@@ -40,13 +40,13 @@ jobs:
         with:
           scheme: small
           run: |
-            tlmgr install mhchem
+            #tlmgr install mhchem
             apk add inkscape
             ls doc/figures/
             ./tools/make_manual_pdf.sh
             ls doc/figures/
-            # which pdflatex
-            # which bibtex
+            which pdflatex
+            which bibtex
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

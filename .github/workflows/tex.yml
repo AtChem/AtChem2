@@ -41,7 +41,7 @@ jobs:
           scheme: small
           run: |
             echo ${{ github.workspace }}
-            tlmgr info  helvet graphicx hyperref fancyhdr caption natbib xcolor mhchem
+            which inkscape
           # sudo apt-get install inkscape
           # sudo apt-get install texlive
           # sudo apt-get install texlive-science

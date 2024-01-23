@@ -38,7 +38,7 @@ jobs:
       - name: Setup latex and inkscape
         uses: xu-cheng/texlive-action@v2
         with:
-          scheme:small
+          scheme: small
           run: |
             echo ${{ github.workspace }}
             tlmgr info  helvet graphicx hyperref fancyhdr caption natbib xcolor mhchem

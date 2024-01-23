@@ -48,8 +48,8 @@ jobs:
           run: |
             apk add inkscape
 
-       - name: Compile pdf file
-         run: ./tools/make_manual_pdf.sh
+      - name: Compile pdf file
+        run: ./tools/make_manual_pdf.sh
 
 
       # - name: Upload PDF as Artifact

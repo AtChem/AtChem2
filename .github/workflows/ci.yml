@@ -93,7 +93,7 @@ jobs:
         run: ./tools/install/install_numdiff.sh $PWD
 
       - name: Install FRUIT
-        run: ./tools/install/install_fruit.sh $PWD
+        run: sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
       # (3) Compile AtChem2 using the standard compilation flags

@@ -47,9 +47,9 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
-        exclude: #TODO: fortran9 does not work on macos12
-        - os: macos-12
-          fortran: 9
+        # exclude: #TODO: fortran9 does not work on macos12
+        # - os: macos-12
+        #   fortran: 9
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -93,7 +93,7 @@ jobs:
         run: ./tools/install/install_numdiff.sh $PWD
 
       - name: Install FRUIT
-        run: sudo ./tools/install/install_fruit.sh $PWD
+        run: ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
       # (3) Compile AtChem2 using the standard compilation flags

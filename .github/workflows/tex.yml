@@ -29,20 +29,28 @@ on:
 # This workflow contains a single job called `pdf_manual`
 jobs:
   pdf_manual:
+    # The job runs on the latest version of ubuntu linux
     runs-on: ubuntu-latest
 
+    # -------------------------------------------------------------
+    # Sequence of tasks to be executed as part of the `ci_testing` job:
     steps:
+
+      # 1. Checkout the repository under $GITHUB_WORKSPACE
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      # 2. Get TeXLive
       - name: Setup LaTeX and install Inkscape
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
           run: |
             apk add inkscape
-            ./tools/make_manual_pdf.sh
-            ls doc/latex/
+
+       - name: Compile pdf file
+         run: ./tools/make_manual_pdf.sh
+
 
       # - name: Upload PDF as Artifact
       #   uses: actions/upload-artifact@v3

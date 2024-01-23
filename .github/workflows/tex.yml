@@ -47,7 +47,10 @@ jobs:
           scheme: full
           run: |
             apk add inkscape
-
+            which inkscape
+            which pdflatex
+            which bibtext
+            
       - name: Compile pdf file
         run: |
           export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl

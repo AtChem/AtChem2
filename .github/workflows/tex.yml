@@ -53,19 +53,18 @@ jobs:
 
       - name: Compile pdf file
         run: |
-          export PATH=$PATH:/usr/bin
           export PATH=$PATH:/opt/texlive/texdir/bin/x86_64-linuxmusl
           echo $PATH
-          inkscape --version
+          #inkscape --version
           pdflatex --version
           bibtex --version
           #./tools/make_manual_pdf.sh
-          echo "--> doc dir"
-          ls doc/
-          echo "--> figures dir"
-          ls doc/figures
-          echo "--> latex dir"
-          ls doc/latex
+          #echo "--> doc dir"
+          #ls doc/
+          #echo "--> figures dir"
+          #ls doc/figures
+          #echo "--> latex dir"
+          #ls doc/latex
 
 
       # - name: Upload PDF as Artifact

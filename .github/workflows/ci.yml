@@ -47,7 +47,7 @@ jobs:
       matrix:
         os: [ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
-        exclude: #TODO: fortran9 does not work on macos12
+        exclude: # TODO: gfortran-9 does not work on macos-12
         - os: macos-12
           fortran: 9
       fail-fast: false
@@ -130,7 +130,7 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests    # NB: oldtests will eventually be merged into modeltests
-          #make modeltests  # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
+          #make modeltests  # TODO: temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
       # (5) Recompile AtChem2 using the code coverage flags, then
@@ -144,9 +144,11 @@ jobs:
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
+          # unit tests
           make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          make modeltests CCOV=true     # Run only the new model Testsuite
+          mv tests/unit_tests/*.gc* ./  # needed for GCC-11 handling of *.gcda, *.gcna files
+          # model tests
+          make modeltests CCOV=true     # run only the new Testsuite
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11

@@ -75,6 +75,7 @@ jobs:
 
       - name: Commit and Push
         run: |
-          git add doc/AtChem2-Manual.pdf
-          git commit -m "Update AtChem2-Manual.pdf"
-          git push
+          git branch
+          # git add doc/AtChem2-Manual.pdf
+          # git commit -m "Update AtChem2-Manual.pdf"
+          # git push

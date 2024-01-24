@@ -9,8 +9,9 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the AtChem2 manual
-# ----------------------------------------------------- #
+# Workflow to generate automatically the AtChem2 manual pdf file
+
+# -------------------------------------------------------------------- #
 name: AtChem2 PDF
 
 # ------------------------------ EVENTS ------------------------------ #
@@ -31,8 +32,8 @@ on:
     branches: [ master ]
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `pdf_manual`, which sets
-# up a TeXLive environment, compiles the latex source files, and
+# This workflow contains a single job called `pdf_manual` which sets
+# up a full TeXLive environment, compiles the latex source files, and
 # generates the pdf file of the manual
 jobs:
   pdf_manual:
@@ -41,11 +42,13 @@ jobs:
 
     steps:
 
-      # (1) Checkout the repository under $GITHUB_WORKSPACE
+      # -------------------------------------------------------------
+      # 1. Checkout the repository under $GITHUB_WORKSPACE
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # (2) Setup TeXLive and Inkscape (v1.x), then run the script to
+      # -------------------------------------------------------------
+      # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
       # generate the pdf file of the manual
       - name: Setup TexLive and compile the manual
         uses: xu-cheng/texlive-action@v2
@@ -57,9 +60,21 @@ jobs:
             # run script to generate the pdf file
             ./tools/make_manual_pdf.sh
 
-      # (3) Upload the generated pdf
-      - name: Upload PDF artifact
+      - name: Upload pdf file as artifact
         uses: actions/upload-artifact@v3
         with:
           name: AtChem2-Manual.pdf
           path: doc/AtChem2-Manual.pdf
+
+      # -------------------------------------------------------------
+      # 3.
+      - name: Configure git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      # - name: Commit and Push
+      #   run: |
+      #     git add doc/AtChem2-Manual.pdf
+      #     git commit -m "Update AtChem2-Manual.pdf"
+      #     git push

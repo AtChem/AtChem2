@@ -61,7 +61,7 @@ jobs:
             ./tools/make_manual_pdf.sh
 
       - name: Upload pdf file as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: AtChem2-Manual.pdf
           path: doc/AtChem2-Manual.pdf
@@ -70,8 +70,8 @@ jobs:
       # 3.
       - name: Configure git
         run: |
-          git config user.name "${{github.actor}}"
-          git config user.email "${{github.actor}}@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git config  --list
 
       # - name: Commit and Push

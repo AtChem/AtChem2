@@ -57,8 +57,9 @@ jobs:
             # run script to generate the pdf file
             ./tools/make_manual_pdf.sh
 
-      # - name: Upload PDF as artifact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: AtChem2-Manual.pdf
-      #     path: AtChem2-Manual.pdf
+      # (3) Upload the generated pdf
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: AtChem2-Manual.pdf
+          path: doc/AtChem2-Manual.pdf

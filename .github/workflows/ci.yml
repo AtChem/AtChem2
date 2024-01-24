@@ -9,11 +9,11 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow for continuous integration (CI) of AtChem2,
-# using Github Actions and Codecov
+# Workflow for the continuous integration (CI) of AtChem2, using
+# Github Actions and Codecov
 #
 # Acknowledgements: J. Allsopp
-# ----------------------------------------------------- #
+# -------------------------------------------------------------------- #
 name: AtChem2 CI
 
 # ------------------------------ EVENTS ------------------------------ #
@@ -34,9 +34,9 @@ on:
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `ci_testing`, which
-# compiles the AtChem2 model, runs the Testsuite, and checks the
-# Testsuite code coverage using Codecov
+# This workflow contains a single job called `ci_testing` which
+# compiles the AtChem2 model, runs the Testsuite, and checks the code
+# coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
   ci_testing:
     # The job runs on both linux (ubuntu) and macos runner images,
@@ -57,7 +57,7 @@ jobs:
     # 1. Checkout the repository
     # 2. Install gfortran, AtChem2 dependencies
     # 3. Compile AtChem2
-    # 4. Run all tests (indent, style, unit, model)
+    # 4. Run the Testsuite with default settings
     # 5. Recompile AtChem2, run unit and model tests for Codecov
     steps:
 
@@ -70,7 +70,7 @@ jobs:
 
       # -------------------------------------------------------------
       # (2) Install gfortran, if not supplied with the runner image,
-      # and the AtChem2 dependencies (CVODE, openlibm, numdiff, FRUIT)
+      # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
       # gfortran on macos-11
       - name: Install gfortran-9 (macos-11)
@@ -115,8 +115,8 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (4) Run all tests: indent, style, unit, model
-
+      # (4) Run the Testsuite using the standard compilation flags and
+      # default settings: indent, style, unit, model tests
       - name: Indent and Style tests
         run: |
           make indenttest
@@ -133,9 +133,8 @@ jobs:
           #make modeltests  # TODO: temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
-      # (5) Recompile AtChem2 using the code coverage flags, then
-      # upload the gcov files to Codecov
-
+      # (5) Recompile AtChem2 using the code coverage compilation
+      # flags, then upload the gcov files to Codecov
       - name: Unit and Model tests (x Codecov)
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
         # Set $FORT_VERSION for use with the `Makefile`

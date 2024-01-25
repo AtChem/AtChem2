@@ -45,7 +45,7 @@ jobs:
       # 1. Checkout the repository under $GITHUB_WORKSPACE
       - name: Checkout repo
         uses: actions/checkout@v4
-
+        run: echo ${{ github.head_ref }}
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
       # generate the pdf file of the manual

@@ -9,8 +9,7 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the AtChem2 manual pdf file
-
+# Workflow to generate automatically the pdf file of the AtChem2 manual
 # -------------------------------------------------------------------- #
 name: AtChem2 PDF
 
@@ -72,7 +71,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config  --list
+          git branch
 
       # - name: Commit and Push
       #   run: |

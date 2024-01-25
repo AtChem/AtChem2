@@ -42,9 +42,12 @@ jobs:
     steps:
 
       # -------------------------------------------------------------
-      # 1. Checkout the repository under $GITHUB_WORKSPACE
+      # 1. Checkout the repository from the branch associated with the
+      # current Pull Request
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
@@ -69,9 +72,9 @@ jobs:
       # 3.
       - name: Configure git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          echo ${{ github.head_ref }}
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git branch
 
       # - name: Commit and Push
       #   run: |

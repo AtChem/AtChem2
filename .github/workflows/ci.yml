@@ -45,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, macos-11, macos-12]
+        os: [ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
         fortran: [9, 10, 11]
         exclude: # TODO: gfortran-9 does not work on macos-12
         - os: macos-12
@@ -72,12 +72,16 @@ jobs:
       # (2) Install gfortran, if not supplied with the runner image,
       # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
-      # gfortran on macos-11
+      # gfortran on ubuntu
+      - name: Install gfortran-11 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+        run: sudo apt-get install gfortran-11
+
+      # gfortran on macos
       - name: Install gfortran-9 (macos-11)
         if: matrix.os == 'macos-11' && matrix.fortran == 9
         run: brew install gcc@${{ matrix.fortran }}
 
-      # gfortran on macos-12
       - name: Install gfortran-9 and gfortran-10 (macos-12)
         if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
         run: brew install gcc@${{ matrix.fortran }}

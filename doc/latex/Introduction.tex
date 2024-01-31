@@ -67,22 +67,30 @@ information, and a list of \emph{known issues} can be found on the
 % -------------------------------------------------------------------- %
 \section{Conventions} \label{sec:conventions}
 
-The following conventions are adopted in the manual and in the model
+The following conventions are adopted in the AtChem2 user manual and
 documentation:
 
 \begin{description}
-\item[\maindir] is the base directory of AtChem2.\\
-  By default, it is: \texttt{\$HOME/AtChem2/}.
+\item[\maindir] is the base directory of the AtChem2 model.\\
+  For example: \texttt{\$HOME/AtChem2/}.
 \item[\depdir] is the directory where the AtChem2 dependencies are installed.\\
-  By default, it is: \texttt{\$HOME/AtChem-lib/}.
+  For example: \texttt{\$HOME/AtChem-lib/}.
 \item[\sharedir] is the directory for the chemical mechanism shared
   library (\texttt{mechanism.so}).\\
-  By default, it is: \texttt{\$HOME/AtChem2/model/configuration/}.
+  By default, it is \texttt{model/configuration/} in the \maindir.
 \end{description}
 
-The user can change all of the above according to their personal
-preferences, workflow, etc... AtChem2 provides options to install, set
-up and run the model
+The user can change the locations and names of these directories
+according to their setup, workflow, personal preferences, etc... As
+long as the user specifies the correct paths to the libraries and
+directories needed by AtChem2, the model will compile and run.
+
+\textbf{Important Note}: AtChem2 runs in Coordinated Universal Time
+(UTC, i.e. GMT timezone) with no daylight saving. This is to simplify
+the calculation of the solar angles and, therefore, of the photolysis
+rates. The user must ensure that the input data and the model
+constraints are provided in UTC, and convert the output to Local Time
+(if necessary).
 
 % -------------------------------------------------------------------- %
 \section{License and citation} \label{sec:license-citation}
@@ -90,9 +98,9 @@ up and run the model
 AtChem2 is open source -- under \textbf{MIT license} -- and is hosted at:\\
 \href{https://github.com/AtChem/AtChem2}{https://github.com/AtChem/AtChem2}.
 
-AtChem2 is free to use, compatible with the MIT license terms (a copy
-of the license can be found in the \maindir\, \texttt{LICENSE} file).
-If used in a publication, please cite the GMD paper \citet{sommariva_2020}:\\
+AtChem2 is free to use, compatible with the MIT license terms. A copy
+of the license can be found in the \texttt{LICENSE} file. If used in a
+publication, please cite the GMD paper \citet{sommariva_2020}:\\
 
 R.~Sommariva, S.~Cox, C.~Martin, K.~Boro{\'n}ska, J.~Young, P.~K. Jimack,
 M.~J. Pilling, V.~N. Matthaios, B.~S. Nelson, M.~J. Newland, M.~Panagi,

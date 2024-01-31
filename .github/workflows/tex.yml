@@ -51,7 +51,7 @@ jobs:
         with:
           fetch-depth: 2
           ref: ${{ github.head_ref }}
-          token: ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to

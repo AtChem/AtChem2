@@ -30,8 +30,8 @@ on:
   push:
     branches: [ master ]
 
-    permissions:
-      contents: write
+  permissions:
+    contents: write
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets

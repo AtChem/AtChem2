@@ -30,9 +30,6 @@ on:
   push:
     branches: [ master ]
 
-permissions:
-  contents: write
-
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets
 # up a full TeXLive environment, compiles the latex source files, and
@@ -41,6 +38,8 @@ jobs:
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
+    # permissions:
+    #   contents: write
 
     steps:
 

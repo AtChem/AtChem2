@@ -39,9 +39,9 @@ on:
 # coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
   ci_testing:
-    # The job runs on both linux (ubuntu) and macos runner images,
-    # with three versions of gnu fortran -- the runner images are
-    # described here: https://github.com/actions/runner-images
+    # The job runs on two versions of linux (ubuntu) and macos runner
+    # images, with three versions of gnu fortran -- the runner images
+    # are described here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

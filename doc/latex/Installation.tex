@@ -38,7 +38,7 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item CVODE -- requires \texttt{cmake}
+\item CVODE -- requires \texttt{cmake}%, BLAS, LAPACK
 \item openlibm
 \item numdiff (optional)
 \item FRUIT (optional)
@@ -98,9 +98,9 @@ and path -- according to the user's preferences.
 AtChem2 has a number of dependencies (external tools and libraries):
 some are required, and without them the model cannot be installed or
 used, others are optional. It is recommended to use the same directory
-for all the dependencies of AtChem2: the \depdir\ can be located
-anywhere and given any name. In this manual, the \depdir\ is
-assumed to be: \texttt{\$HOME/AtChem-lib/}.
+for all the dependencies: this is the AtChem2 \depdir. In this manual,
+the \depdir\ is assumed to be: \texttt{\$HOME/AtChem-lib/} \ can be located
+anywhere and given any name.
 
 Before installing the dependencies, make sure that a Fortran compiler
 (e.g., \texttt{gfortran}), Python, make, cmake and (optionally) Ruby
@@ -112,11 +112,11 @@ Sect.~\ref{sec:requirements}.
 % \subsubsection{BLAS and LAPACK}
 
 % BLAS and LAPACK are standard Fortran libraries for linear
-% algebra. They are needed to install and compile the CVODE library --
-% see below. Usually they are located in the \texttt{/usr/lib/}
-% directory (e.g., \texttt{/usr/lib/libblas/} and
-% \texttt{/usr/lib/lapack/}). The location may be different, especially
-% if you are using a High Performance Computing (HPC) system: check the
+% algebra. Together with \texttt{cmake} hey are needed only to compile
+% the CVODE library -- see below. Usually they are located in the
+% \texttt{/usr/lib/} directory (e.g., \texttt{/usr/lib/libblas/} and
+% \texttt{/usr/lib/lapack/}). The location may be different,
+% especially on a High Performance Computing (HPC) system: check the
 % local documentation or ask the system administrator.
 
 \subsubsection{CVODE}

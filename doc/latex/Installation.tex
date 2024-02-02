@@ -22,8 +22,8 @@ following tools:
 
 \begin{itemize}
 \item Fortran -- the model compiles with GNU \texttt{gfortran}
-  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0 and above)\\
-  $\hookrightarrow$ default compiler: \texttt{gfortran}
+  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
+  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}
 \item \texttt{make}
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
   with Python v2 and v3. Support for Python v2 will be removed in
@@ -38,7 +38,6 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-%\item BLAS, LAPACK
 \item CVODE -- requires \texttt{cmake}
 \item openlibm
 \item numdiff (optional)
@@ -53,17 +52,16 @@ dependencies go to Sect.~\ref{sec:dependencies}.
 
 Two versions of AtChem2 are available for download: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
-the development version, also known as \texttt{master\ branch} (see
-Sect.~\ref{sec:general-information} for details). The source code can
-be obtained in two ways:
+the \emph{development version}, also known as \texttt{master\ branch}
+(see Sect.~\ref{sec:general-information} for details). The source code
+can be obtained in two ways:
 
 \begin{itemize}
-\item with \textbf{git} (This method will download the development
-  version and it is recommended if you want to contribute to the model
-  development):
+\item with \textbf{git} (This is the recommended method to contribute
+  to the model development):
   \begin{enumerate}
-  \item Open the terminal. Move to the directory where you want to
-    install AtChem2.
+  \item Open the terminal. Move to the directory where AtChem2 will be
+    installed.
   \item Execute:
     \begin{itemize}
       \item if using HTTPS:\\
@@ -77,7 +75,7 @@ be obtained in two ways:
   \item Download the archive file (\texttt{.tar.gz} or \texttt{.zip}) of the
     \href{https://github.com/AtChem/AtChem2/releases/}{stable} or of the
     \href{https://github.com/AtChem/AtChem2/archive/master.zip}{development}
-    version to the directory where you want to install AtChem2.
+    version to the directory where AtChem2 will be installed.
   \item Open the terminal. Move to the directory where the archive
     file was downloaded.
   \item Execute \verb|tar -zxfv *.tar.gz| or \verb|unzip -v *.zip|
@@ -87,11 +85,12 @@ be obtained in two ways:
 \end{itemize}
 
 The AtChem2 source code is now in a directory called \texttt{AtChem2}
-(if git was used) or \texttt{AtChem2-1.x} (if the stable version was
-downloaded) or \texttt{AtChem2-master} (if the development version was
-downloaded). This directory, which can be given any name, is the
-\maindir\ of the model. In this manual, the \maindir\ is assumed to
-be: \texttt{\$HOME/AtChem2}.
+(if git was used) or \texttt{AtChem2-1.x} (if the archive file of the
+stable version was downloaded) or \texttt{AtChem2-master} (if the
+archive file of the development version was downloaded). This
+directory is the AtChem2 \maindir. In this manual, the \maindir\ is
+assumed to be \texttt{\$HOME/AtChem2/}, but it can be given any name
+and path -- according to the user's preferences.
 
 % -------------------------------------------------------------------- %
 \section{Dependencies} \label{sec:dependencies}

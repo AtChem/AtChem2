@@ -52,10 +52,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          run: echo "ref::" ${{ github.ref }}
-          # fetch-depth: 2
-          # ref: ${{ github.head_ref }}
-          # token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
+          ref: ${{ github.ref }}
 
       # # -------------------------------------------------------------
       # # 2. Setup TeXLive and Inkscape (v1.x), then run the script to

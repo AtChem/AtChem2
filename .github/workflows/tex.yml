@@ -49,11 +49,12 @@ jobs:
       # -------------------------------------------------------------
       # 1. Checkout the repository from the branch associated with the
       # current Pull Request
-      # - name: Checkout repo
-      #   uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: 2
-      #     ref: ${{ github.head_ref }}
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       # # -------------------------------------------------------------
       # # 2. Setup TeXLive and Inkscape (v1.x), then run the script to

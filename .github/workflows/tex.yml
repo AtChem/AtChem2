@@ -38,8 +38,6 @@ jobs:
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
 
@@ -52,6 +50,11 @@ jobs:
           fetch-depth: 2
           ref: ${{ github.ref }}
 
+      - name: Check Token Permissions
+        run: |
+          echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/AtChem/AtChem2 | jq .permissions)"
+
+          
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
       # generate the pdf file of the manual
@@ -81,5 +84,6 @@ jobs:
       - name: Commit and Push
         run: |
           git add doc/AtChem2-Manual.pdf
-          git commit -m "Update AtChem2-Manual.pdf"
-          git push origin HEAD:${{ github.ref }}
+          git status
+          # git commit -m "Update AtChem2-Manual.pdf"
+          # git push origin HEAD:${{ github.ref }}

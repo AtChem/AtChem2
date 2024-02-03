@@ -77,10 +77,9 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git branch
 
-      # - name: Commit and Push
-      #   run: |
-      #     git add doc/AtChem2-Manual.pdf
-      #     git commit -m "Update AtChem2-Manual.pdf"
-      #     git push origin HEAD:${{ github.head_ref }}
+      - name: Commit and Push
+        run: |
+          git add doc/AtChem2-Manual.pdf
+          git commit -m "Update AtChem2-Manual.pdf"
+          git push #origin HEAD:${{ github.head_ref }}

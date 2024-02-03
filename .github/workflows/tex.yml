@@ -42,9 +42,9 @@ jobs:
     #   contents: write
 
     steps:
-      - name: Check Token Permissions
-        run: |
-          echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer $ACTIONS_RUNTIME_TOKEN" https://api.github.com/repos/AtChem/AtChem2 | jq .permissions)"
+      # - name: Check Token Permissions
+      #   run: |
+      #     echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer $ACTIONS_RUNTIME_TOKEN" https://api.github.com/repos/AtChem/AtChem2 | jq .permissions)"
 
       # -------------------------------------------------------------
       # 1. Checkout the repository from the branch associated with the
@@ -52,9 +52,10 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          run: echo "GitHub Head Ref: ${{ github.head_ref }}"
+          # fetch-depth: 2
+          # ref: ${{ github.head_ref }}
+          # token: ${{ secrets.GITHUB_TOKEN }}
 
       # # -------------------------------------------------------------
       # # 2. Setup TeXLive and Inkscape (v1.x), then run the script to

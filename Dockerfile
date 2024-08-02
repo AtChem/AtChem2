@@ -1,7 +1,7 @@
 FROM rockylinux:8.9
 
-COPY install.sh .
-COPY entrypoint.sh .
+COPY docker/install.sh .
+COPY docker/entrypoint.sh .
 
 RUN /install.sh
 

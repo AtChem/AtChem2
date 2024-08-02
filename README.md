@@ -57,7 +57,7 @@ The image can be downloaded via:
 docker pull ghcr.io/wacl-york/atchem2:1.2.2
 ```
 
-When running the container, changes to the model (e.g. those made to configurations, constraints and mechanisms) should be in a folder that matches the AtChem2 directory structure. This folder is then mounted as a volume to the container with the name `/inout/`. The mechanism to use is provided as a positional argument to the image.
+When running the container, changes to the model (e.g. those made to configurations, constraints and mechanisms) should be in a folder that matches the AtChem2 directory structure. This folder is then mounted as a volume to the container with the name `/inout/`. The mechanism to use is provided as a positional argument to the image and must be stored in `mcm`.
 
 #### Example host file structure:
 ```

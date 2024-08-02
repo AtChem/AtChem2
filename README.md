@@ -84,10 +84,6 @@ Some HPC systems use Singularity / Apptainer instead of Docker as their containe
 ```
 apptainer pull path/to/image/atchem2.sif docker://ghcr.io/wacl-york/atchem2:1.2.2
 ```
-
-> [!Note]
-> Currently the github package is set to "internal" so requires the --docker-login flag and a personal access token.
-
 #### Example Apptainer run command:
 
 ```

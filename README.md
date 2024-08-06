@@ -62,17 +62,16 @@ When running the container, changes to the model (e.g. those made to configurati
 #### Example host file structure:
 ```
 my_model_run
-├── mcm
-│   └── my_mech.fac
 └── model
     ├── configuration
     ├── constraints
+    └── my_mech.fac
 ```
 
 #### Example Docker run command:
 
 ```
-docker run -it --rm -v /path/to/my_model_run:/inout ghcr.io/wacl-york/atchem2:1.2.2 my_mech.fac
+docker run -it --rm -v /path/to/my_model_run:/inout ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
 ```
 
 Outputs will be copied to `my_model_run/model/output` on completion.
@@ -87,7 +86,7 @@ apptainer pull path/to/image/atchem2.sif docker://ghcr.io/wacl-york/atchem2:1.2.
 #### Example Apptainer run command:
 
 ```
-apptainer run --bind /path/to/my_model_run/:/inout/ path/to/image/atchem2.sif my_mech.fac
+apptainer run --bind /path/to/my_model_run/:/inout/ path/to/image/atchem2.sif ./model/my_mech.fac
 ```
 > [!Note]
 > The leading "/" is important when mounting the volume for apptainer, as the container opens in the users "~" directory whereas Docker opens at "/"

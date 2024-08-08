@@ -18,7 +18,7 @@
 # -----------------------------------------------------------------------------
 # This is the install script that is run when the container is built. It 
 # installs the necessary dependacies for installing AtChem2 (gcc-gfortran,
-# wget, cmake and python3.11) and places the model files into /atchem. 
+# wget, cmake and python3.11).
 #
 # It then runs the install scripts provided with the model (install_cvode.sh 
 # and install_openlibm.sh) to install additional dependancies required to build
@@ -37,12 +37,7 @@ dnf install -y which gcc-gfortran wget cmake python3.11
 
 # make directories
 mkdir /atchem-lib
-mkdir /atchem
-
-# Download the AtChem2 1.2.2 release and unpack into /atchem
-curl -L https://github.com/AtChem/AtChem2/archive/refs/tags/v1.2.2.tar.gz > atchem.tar.gz
-tar -xzf atchem.tar.gz -C /atchem --strip-components=1
-rm atchem.tar.gz
+# mkdir /atchem
 
 # move to /atchem so the dependacy installation scripts work correctly.
 cd atchem
@@ -57,4 +52,4 @@ sed -i 's,openlibm-0.8.1,/atchem-lib/openlibm-0.8.1,g' ./Makefile
 
 # Fix python command to match installed version
 sed -i "s/python/python3/g" ./build/build_atchem2.sh
-chmod +x /entrypoint.sh
+chmod +x docker/entrypoint.sh

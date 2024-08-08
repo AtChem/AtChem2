@@ -17,17 +17,14 @@
 # get base image
 FROM rockylinux:8.9
 
-# copy required bash scripts for installation and runtime.
-# eventually this can change to COPY . /atchem/ so it is version agnostic
-# but more testing required
-COPY docker/install.sh .
-COPY docker/entrypoint.sh .
+# copy the repo into the container
+COPY . /atchem/
 
 # run install script
-RUN /install.sh
+RUN /atchem/docker/install.sh
 
 # add lable for github container registry
 LABEL org.opencontainers.image.source=https://github.com/wacl-york/AtChem2
 
 # set entrypoint as the script that runs on `docker run`
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "atchem/docker/entrypoint.sh" ]

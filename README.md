@@ -57,7 +57,7 @@ The image can be downloaded via:
 docker pull ghcr.io/wacl-york/atchem2:1.2.2
 ```
 
-When running the container, changes to the model (e.g. those made to configurations, constraints and mechanisms) should be in a folder that matches the AtChem2 directory structure. This folder is then mounted as a volume to the container with the name `/inout/`. The mechanism to use is provided as a positional argument to the image and must be stored in `mcm`.
+When running the container, changes to the model (e.g. those made to configurations, constraints and mechanisms) should be in a folder that matches the AtChem2 directory structure. This folder is then mounted as a volume to the container with the name `/data_transfer/`. The mechanism to use is provided as a positional argument to the image and must be stored in `mcm`.
 
 #### Example host file structure:
 ```
@@ -71,7 +71,7 @@ my_model_run
 #### Example Docker run command:
 
 ```
-docker run -it --rm -v /path/to/my_model_run:/inout ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
+docker run -it --rm -v /path/to/my_model_run:/data_transfer ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
 ```
 
 Outputs will be copied to `my_model_run/model/output` on completion.
@@ -86,7 +86,7 @@ apptainer pull path/to/image/atchem2.sif docker://ghcr.io/wacl-york/atchem2:1.2.
 #### Example Apptainer run command:
 
 ```
-apptainer run --bind /path/to/my_model_run/:/inout/ path/to/image/atchem2.sif ./model/my_mech.fac
+apptainer run --bind /path/to/my_model_run/:/data_transfer/ path/to/image/atchem2.sif ./model/my_mech.fac
 ```
 > [!Note]
 > The leading "/" is important when mounting the volume for apptainer, as the container opens in the users "~" directory whereas Docker opens at "/"

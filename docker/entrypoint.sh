@@ -1,3 +1,4 @@
+#!/usr/bin/bash
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
@@ -14,15 +15,42 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/usr/bin/bash
-\command cp -rf /AtChem2-1.2.2/ ~/ # make a copy to home to allow for compatibility with singularity 
-\command cp -rf /inout/* ~/AtChem2-1.2.2/
+# -----------------------------------------------------------------------------
+# This script is run everytime the container is run. 
+#
+# First it copies the /atchem/ directory that is created during the build to 
+# the home directory of the user running the container. This is for
+# compatibility with singularity, where the user running the container is not
+# root, and therfore cannot modify the model files in place. 
+#
+# Next it moves the user configuration from /data_transfer/ and copies it into
+# the ~/atchem/ directory. This /data_transfer/ directory is created when the
+# the user mounts a volume when running the container (e.g `docker run -v...`)
+#
+# We then move to the ~/atchem directory and build the model using the mechanism
+# specified by the user as a runtime argument to `docker run`. 
+#
+# Then the model is run by executing the newly built atchem2 file. 
+#
+# On completion the atchem model output directory is copied to the data_transfer
+# directory and as such onto the host filesystem
+# -----------------------------------------------------------------------------
 
-cd ~/AtChem2-1.2.2/
+# make a copy to home to allow for compatibility with singularity 
+\command cp -rf /atchem/ ~/ 
 
+# Transfer in user config
+\command cp -rf /data_transfer/* ~/atchem/
+
+# move into atchem dir
+cd ~/atchem/
+
+# build model using user specified mechanism
 ./build/build_atchem2.sh $1
 echo $1
 
+# run model
 ./atchem2
 
-cp -r ~/AtChem2-1.2.2/model/output /inout/model/output/
+# copy outputs to data_transfer / host filesystem
+cp -r ~/atchem/model/output /data_transfer/model/output/

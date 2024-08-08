@@ -1,3 +1,4 @@
+#!/bin/bash
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
@@ -14,17 +15,40 @@
 #
 # -----------------------------------------------------------------------------
 
-#!/bin/bash
-dnf install -y which gcc-gfortran wget cmake python3.11
-# could make the version number a variable so this can work with other releases?
-curl -L https://github.com/AtChem/AtChem2/archive/refs/tags/v1.2.2.tar.gz > atchem.tar.gz
-tar -xzf atchem.tar.gz
-rm atchem.tar.gz
-mkdir /atchem-lib
-cd AtChem2-1.2.2
+# -----------------------------------------------------------------------------
+# This is the install script that is run when the container is built. It 
+# installs the necessary dependacies for installing AtChem2 (gcc-gfortran,
+# wget, cmake and python3.11) and places the model files into /atchem. 
+#
+# It then runs the install scripts provided with the model (install_cvode.sh 
+# and install_openlibm.sh) to install additional dependancies required to build
+# the model.
+# 
+# Next it produces the Makefile from the skeleton, and ammends the dependancy 
+# paths.
+# 
+# Finally it does some housekeeping, updating the build_atchem2.sh to be able
+# to find the python installation, and makes the docker entrypoint script 
+# executable. 
+# -----------------------------------------------------------------------------
 
-# Install dependancies
-./tools/install/install_cvode.sh /atchem-lib/ # would use version number variable here too...
+# Install dependancies from package repository
+dnf install -y which gcc-gfortran wget cmake python3.11
+
+# make directories
+mkdir /atchem-lib
+mkdir /atchem
+
+# Download the AtChem2 1.2.2 release and unpack into /atchem
+curl -L https://github.com/AtChem/AtChem2/archive/refs/tags/v1.2.2.tar.gz > atchem.tar.gz
+tar -xzf atchem.tar.gz -C /atchem --strip-components=1
+rm atchem.tar.gz
+
+# move to /atchem so the dependacy installation scripts work correctly.
+cd atchem
+
+# Install dependancies to /atchem-lib
+./tools/install/install_cvode.sh /atchem-lib/ 
 ./tools/install/install_openlibm.sh /atchem-lib/
 
 # Change atchem dependancy paths and create Makefile from skeleton

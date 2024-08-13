@@ -27,4 +27,4 @@ RUN /atchem/docker/install.sh
 LABEL org.opencontainers.image.source=https://github.com/wacl-york/AtChem2
 
 # set entrypoint as the script that runs on `docker run`
-ENTRYPOINT [ "atchem/docker/entrypoint.sh" ]
+ENTRYPOINT [ "/atchem/docker/entrypoint.sh" ]

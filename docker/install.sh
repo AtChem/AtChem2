@@ -24,7 +24,7 @@
 # and install_openlibm.sh) to install additional dependancies required to build
 # the model.
 # 
-# Next it produces the Makefile from the skeleton, and ammends the dependancy 
+# Next it produces the Makefile from the skeleton, and amends the dependancy 
 # paths.
 # 
 # Finally it does some housekeeping, updating the build_atchem2.sh to be able

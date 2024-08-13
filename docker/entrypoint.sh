@@ -21,7 +21,7 @@
 # First it copies the /atchem/ directory that is created during the build to 
 # the home directory of the user running the container. This is for
 # compatibility with singularity, where the user running the container is not
-# root, and therfore cannot modify the model files in place. 
+# root, and therefore cannot modify the model files in place. 
 #
 # Next it moves the user configuration from /data_transfer/ and copies it into
 # the ~/atchem/ directory. This /data_transfer/ directory is created when the

@@ -53,4 +53,4 @@ echo $1
 ./atchem2
 
 # copy outputs to data_transfer / host filesystem
-cp -r ~/atchem/model/output /data_transfer/model/output/
+\command cp -rf ~/atchem/model/output /data_transfer/model/

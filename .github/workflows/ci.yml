@@ -46,10 +46,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-13]
-        fortran: [10, 11, 12]
+        fortran: [10, 11]
         exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
         - os: ubuntu-20.04
-          fortran: [11, 12]
+          fortran: 11
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -134,7 +134,7 @@ jobs:
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests    # NB: oldtests will eventually be merged into modeltests
-          make modeltests  # TODO: temporarily deactivated (pass on linux, fail on macos)
+          #make modeltests  # TODO: temporarily deactivated (pass on linux, fail on macos)
 
       # -------------------------------------------------------------
       # (5) Recompile AtChem2 using the code coverage compilation

@@ -45,11 +45,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
-        fortran: [9, 10, 11]
-        exclude: # TODO: gfortran-9 does not work on macos-12
-        - os: macos-12
-          fortran: 9
+        os: [ubuntu-20.04, ubuntu-22.04] #, macos-12, macos-13]
+        fortran: [10, 11, 12]
+        # exclude: # TODO: gfortran-9 does not work on macos-12
+        # - os: macos-12
+        #   fortran: 9
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -64,7 +64,7 @@ jobs:
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
 
@@ -73,9 +73,13 @@ jobs:
       # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
       # gfortran on ubuntu
-      - name: Install gfortran-11 (ubuntu-20.04)
-        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
-        run: sudo apt-get install gfortran-11
+      # - name: Install gfortran-11 (ubuntu-20.04)
+      #   if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+      #   run: sudo apt-get install gfortran-11
+
+      # - name: Install gfortran-12 (ubuntu-20.04)
+      #   if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 12
+      #   run: sudo apt-get install gfortran-12
 
       # gfortran on macos
       - name: Install gfortran-9 (macos-11)
@@ -155,6 +159,6 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4 # https://github.com/marketplace/actions/codecov
         with:
           gcov: true

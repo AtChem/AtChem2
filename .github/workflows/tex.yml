@@ -45,7 +45,7 @@ jobs:
       # 1. Checkout the repository from the branch associated with the
       # current Pull Request
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
           ref: ${{ github.ref }}
@@ -58,7 +58,7 @@ jobs:
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
       # generate the pdf file of the manual
       - name: Setup TexLive and compile the manual
-        uses: xu-cheng/texlive-action@v2
+        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
         with:
           scheme: full
           run: |
@@ -68,7 +68,7 @@ jobs:
             ./tools/make_manual_pdf.sh
 
       - name: Upload pdf file as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
         with:
           name: AtChem2-Manual.pdf
           path: doc/AtChem2-Manual.pdf

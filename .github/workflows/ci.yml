@@ -151,12 +151,13 @@ jobs:
           make clean
           # unit tests
           make unittests CCOV=true
+          ls tests/unit_tests/
           mv tests/unit_tests/*.gc* ./  # needed for GCC-11 handling of *.gcda, *.gcna files
           # model tests
           make modeltests CCOV=true     # run only the new Testsuite
 
-      # - name: Upload coverage reports to Codecov
-      #   if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
-      #   uses: codecov/codecov-action@v4 # https://github.com/marketplace/actions/codecov
-      #   with:
-      #     gcov: true
+      - name: Upload coverage reports to Codecov
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
+        uses: codecov/codecov-action@v4 # https://github.com/marketplace/actions/codecov
+        with:
+          gcov: true

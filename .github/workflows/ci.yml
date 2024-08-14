@@ -155,7 +155,7 @@ jobs:
           # model tests
           make modeltests CCOV=true     # run only the new Testsuite
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload coverage reports to Codecov # TODO: update codecov action
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
         uses: codecov/codecov-action@v3 # https://github.com/marketplace/actions/codecov
         with:

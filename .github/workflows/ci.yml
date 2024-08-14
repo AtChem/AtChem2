@@ -47,9 +47,9 @@ jobs:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-13]
         fortran: [10, 11]
-        # exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
-        # - os: ubuntu-20.04
-        #   fortran: 11
+        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
+        - os: ubuntu-20.04
+          fortran: 12
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -73,9 +73,9 @@ jobs:
       # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
       # gfortran on ubuntu
-      #- name: Install gfortran-11 (ubuntu-20.04)
-      #  if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
-      #  run: sudo apt-get install gfortran-11
+      - name: Install gfortran-11 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+        run: sudo apt-get install gfortran-11
 
       # gfortran on macos
       - name: Install gfortran-10 (macos-12)

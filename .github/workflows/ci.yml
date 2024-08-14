@@ -81,7 +81,7 @@ jobs:
 
       # gfortran on macos
       - name: Install gfortran-10 (macos-12)
-        if: matrix.os == 'macos-12' && (matrix.fortran == 10 || matrix.fortran == 11)
+        if: matrix.os == 'macos-12' && (matrix.fortran == 10) # || matrix.fortran == 11)
         run: brew install gcc@${{ matrix.fortran }}
 
       - name: Install gfortran-10 and gfortran-11 (macos-13)
@@ -142,7 +142,7 @@ jobs:
       # (5) Recompile AtChem2 using the code coverage compilation
       # flags, then upload the gcov files to Codecov
       - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
         # Set $FORT_VERSION for use with the `Makefile`
         env:
           FORT_VERSION: ${{ matrix.fortran }}

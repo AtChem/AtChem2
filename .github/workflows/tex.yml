@@ -38,8 +38,6 @@ jobs:
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
 

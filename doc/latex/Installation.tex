@@ -18,34 +18,36 @@ AtChem2 can be installed and used on either Linux/Unix or macOS
 operating systems. A working knowledge of the \textbf{unix shell} and
 its \href{https://swcarpentry.github.io/shell-novice/}{basic commands}
 is \emph{required} to install and use the model. AtChem2 requires the
-following tools:
+following software tools:
 
 \begin{itemize}
-\item Fortran -- the model compiles with GNU \texttt{gfortran}
+\item bash, or a bash-compatible shell, and common utilities: wget,
+  tar, zip/unzip, make.
+\item a text editor (emacs, nano, vim, gedit, or similar).
+\item a Fortran compiler -- the model compiles with GNU \texttt{gfortran}
   (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
-  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}
-\item \texttt{make}
+  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}.
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
-  with Python v2 and v3. Support for Python v2 will be removed in
-  future versions of AtChem2.}
-\item Ruby (optional)
+    with Python v2 and v3. Support for Python v2 will be removed in
+    future versions of AtChem2.}
+\item Ruby, rake (both optional).
 \end{itemize}
 
 Some or all of these tools may already be installed on the operating
-system. Use the \texttt{which} command to find out (e.g.,
-\verb|which python|, \verb|which make|, etc\ldots); otherwise, check
+system: use the \texttt{which} command to find out (e.g.,
+\verb|which python|, \verb|which make|, etc\ldots). Otherwise, check
 the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item CVODE -- requires \texttt{cmake}%, BLAS, LAPACK
-\item openlibm
-\item numdiff (optional)
-\item FRUIT (optional)
+\item CVODE -- requires \texttt{gcc}, \texttt{cmake}. %, BLAS, LAPACK
+\item openlibm.
+\item numdiff (optional).
+\item FRUIT (optional).
 \end{itemize}
 
 For detailed instructions on the installation and configuration of the
-dependencies go to Sect.~\ref{sec:dependencies}.
+dependencies, go to Sect.~\ref{sec:dependencies}.
 
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
@@ -54,10 +56,10 @@ Two versions of AtChem2 are available for download: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the \emph{development version}, also known as \texttt{master\ branch}
 (see Sect.~\ref{sec:general-information} for details). The source code
-can be obtained in two ways:
+of AtChem2 can be obtained in two ways:
 
 \begin{itemize}
-\item with \textbf{git} (This is the recommended method to contribute
+\item with \textbf{git} (this is the recommended method to contribute
   to the model development):
   \begin{enumerate}
   \item Open the terminal. Move to the directory where AtChem2 will be
@@ -90,23 +92,24 @@ stable version was downloaded) or \texttt{AtChem2-master} (if the
 archive file of the development version was downloaded). This
 directory is the AtChem2 \maindir. In this manual, the \maindir\ is
 assumed to be \texttt{\$HOME/AtChem2/}, but it can be given any name
-and path -- according to the user's preferences.
+and path -- depending on the user's preferences.
 
 % -------------------------------------------------------------------- %
 \section{Dependencies} \label{sec:dependencies}
 
-AtChem2 has a number of dependencies (external tools and libraries):
-some are \emph{required}, and without them the model cannot be
-installed or used, others are \emph{optional}, and only needed to run
-the Testsuite. It is recommended to install all the AtChem2
-dependencies into the same directory, called \depdir. In this manual,
-the \depdir\ is assumed to be \texttt{\$HOME/AtChem-lib/}, but it can
-be given any name and path -- according to the user's preferences.
+AtChem2 has a number of dependencies (additional software tools and
+libraries): some are \emph{required}, and without them the model
+cannot be installed or used, others are \emph{optional}, and only
+needed to run the Testsuite. It is recommended to install all the
+AtChem2 dependencies into the same directory, called \depdir. In this
+manual, the \depdir\ is assumed to be \texttt{\$HOME/AtChem-lib/}, but
+it can be given any name and path -- depending on the user's
+preferences.
 
-Before installing the dependencies, make sure that a Fortran compiler
-(e.g., \texttt{gfortran}), Python, \texttt{make}, \texttt{cmake} and
-(optionally) Ruby are installed on the operating system, as explained
-in Sect.~\ref{sec:requirements}.
+Before installing the dependencies, make sure that the requirements
+listed in Sect.~\ref{sec:requirements} are met, and that the unix
+shell is bash or bash-compatible (type \verb|echo $SHELL| at the
+terminal to find out).
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
@@ -122,7 +125,7 @@ in Sect.~\ref{sec:requirements}.
 
 \subsubsection{CVODE}
 
-AtChem2 uses the CVODE library which is part of the open source
+AtChem2 uses the CVODE library, which is part of the open source
 \href{https://computing.llnl.gov/projects/sundials}{SUNDIALS suite}
 \citep{hindmarsh_2005}, to solve the system of ordinary differential
 equations (ODE). The version of CVODE currently used in AtChem2 is
@@ -133,13 +136,12 @@ directory.
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
 \item Open the installation script (\texttt{tools/install/install\_cvode.sh})
-  with a text editor:
+  with the text editor:
   \begin{itemize}
   % \item If LAPACK and BLAS are not in the default location (see
   %   above), change the \texttt{LAPACK\_LIBS} variable for your
   %   architecture (Linux or macOS) as appropriate.
-  \item If you are not using the \texttt{gcc} compiler
-    (\texttt{gfortran}), change the line
+  \item If using a compiler other than \texttt{gcc}, change the line
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}
     accordingly.
   \end{itemize}
@@ -152,15 +154,15 @@ directory.
 
 If the installation is successful, there should be a working CVODE
 installation at \texttt{\textasciitilde/AtChem-lib/cvode/}. Take note
-of the path to the CVODE library
-(\texttt{\textasciitilde/AtChem-lib/cvode/lib/}), as it will be needed
-later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
+of the path to CVODE (\texttt{\textasciitilde/AtChem-lib/cvode/lib/}),
+as it will be neededlater to complete the configuration of AtChem2
+(Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
 
 openlibm is a \href{https://openlibm.org}{portable version} of the
 open source \textbf{libm} library. Installing openlibm and linking
-against it allows reproducible results by ensuring the same
+against it, allows reproducible results by ensuring the same
 implementation of several mathematical functions across platforms.
 
 The current version of openlibm is 0.8.1 and it can be installed using
@@ -187,17 +189,17 @@ complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 numdiff is an open source \href{https://www.nongnu.org/numdiff/}{tool}
 used to compare files containing numerical fields. It is needed only
-if you want to run the \hyperref[sec:test-suite]{Test Suite}, a series
-of tests used to ensure that the model works properly and that changes
-to the code do not result in unintended behaviour. Installation of
-numdiff is recommended if you want to contribute to the development of
-AtChem2.
+to run the \hyperref[sec:test-suite]{Testsuite}, a battery of tests
+used during the development of AtChem2 to ensure that the model works
+properly and that changes to the source code do not result in
+unintended behaviour. Installation of numdiff is recommended for users
+who want to contribute to the development of AtChem2.
 
 Use \verb|which numdiff| to check if the program is already installed
-on your system. If not, ask the system administrator. Alternatively,
-numdiff can be installed locally (e.g., in the \depdir) using the
-script \texttt{install\_numdiff.sh} in the \texttt{tools/install/}
-directory.
+on the operating system. If not, ask the system administrator.
+Alternatively, numdiff can be installed locally (e.g., in the \depdir)
+using the script \texttt{install\_numdiff.sh} in the
+\texttt{tools/install/} directory.
 
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
@@ -315,25 +317,24 @@ with an error message concerning \texttt{rpath}: if this happens,
 a solution can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
-AtChem2 is now ready to be used. Optionally, the Test Suite can be run
+AtChem2 is now ready to be used. Optionally, the Testsuite can be run
 to check that the model has been installed correctly: go to
 Sect.~\ref{subsec:tests-optional} for more information. The directory
 structure and the organization of AtChem2 are described in
 Sect.~\ref{sec:model-structure} (see also Fig.~\ref{fig:atchem-arch}).
 For detailed instructions on how to set up, configure, build and
-execute an AtChem2 box-model go to Chapt.~\ref{ch:setup} and
+execute an AtChem2 box-model, go to Chapt.~\ref{ch:setup} and
 Chapt.~\ref{ch:execution}.
 
 \subsection{Tests (optional)} \label{subsec:tests-optional}
 
-The \hyperref[sec:test-suite]{Test Suite} can be used to verify that
+The \hyperref[sec:test-suite]{Testsuite} can be used to verify that
 AtChem2 has been installed correctly and works as intended. It is
-recommended to run the Test Suite if you want to contribute to the
-development of the AtChem2 model. Note that in order to run the Test
-Suite the \hyperref[subsec:optional-dependencies]{optional dependencies}
+recommended to run the Testsuite if you want to contribute to the
+development of the AtChem2 model. Note that in order to run the Testsuite the \hyperref[subsec:optional-dependencies]{optional dependencies}
 have to be installed.
 
-To run the Test Suite, open the terminal and execute one of the
+To run the Testsuite, open the terminal and execute one of the
 following commands from the \maindir:
 
 \begin{itemize}
@@ -353,8 +354,7 @@ a summary of the results to the terminal.
 
 AtChem2 is organized in several directories which contain the source
 code, the compilation files, the chemical mechanism, the model
-configuration and output, several scripts and utilities, and the Test
-Suite.
+configuration and output, several scripts and utilities, and the Testsuite.
 
 The directory structure of AtChem2 is derived from the directory
 structure of AtChem-online, but it was substantially changed with the
@@ -395,7 +395,7 @@ one.
     \hline
     \texttt{tools/}                  & \texttt{tools/}                         & various scripts and plotting tools.\\
     \hline
-    \texttt{travis/}~$(\dag)$        & \texttt{tests/}~$(\ddag)$               & scripts and files for the Test Suite.\\
+    \texttt{travis/}~$(\dag)$        & \texttt{tests/}~$(\ddag)$               & scripts and files for the Testsuite.\\
   \end{tabular}
 \end{table}
 
@@ -405,7 +405,7 @@ contain the build scripts, the MCM data files, the files generated by
 the compiler, the source code; the directory
 \texttt{tests/}~\footnote{Called \texttt{travis/} in version 1.2 and
   earlier.} contains the files and the scripts necessary to run the
-\hyperref[sec:test-suite]{Test Suite}.
+\hyperref[sec:test-suite]{Testsuite}.
 
 For the majority of the users, the most important directories are
 \texttt{doc/}, which contains the user manual and other documents,

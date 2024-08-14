@@ -31,8 +31,8 @@ There are two versions of AtChem2 in the main
 AtChem2 is under active development, which means that the
 \texttt{master\ branch} is sometimes a few steps ahead of the latest
 stable release. Any modification to the code is automatically run
-through the \hyperref[sec:test-suite]{Test Suite} before it is merged
-into the \texttt{master\ branch}. The Test Suite is designed to ensure
+through the \hyperref[sec:test-suite]{Testsuite} before it is merged
+into the \texttt{master\ branch}. The Testsuite is designed to ensure
 that changes to the code do not cause unintended behaviour or
 unexplained differences in the model results, so the development
 version is normally safe to use. However, it is recommended to use the
@@ -50,16 +50,16 @@ contributions to the AtChem2 repository can be found on the
 The coding guidelines for Fortran are detailed in Sect.\ref{sec:style-guide}.
 
 % -------------------------------------------------------------------- %
-\section{Test Suite} \label{sec:test-suite}
+\section{Testsuite} \label{sec:test-suite}
 
 AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions} for
 \textbf{continuous integration} testing. This programming approach
 ensures that changes to the code do not modify the behaviour and the
-results of the software in an unintended fashion. The Test Suite is in
+results of the software in an unintended fashion. The Testsuite is in
 the \texttt{tests/} directory and consists of a series of tests and
 short model runs that check the model functionality and calculations
 against known outputs. The \href{https://codecov.io}{Codecov} service
-is used to verify that the Test Suite covers a significant fraction of
+is used to verify that the Testsuite covers a significant fraction of
 the codebase ($>$90\%) and a wide range of common configurations.
 
 There are four types of tests, which can be executed from the
@@ -78,7 +78,7 @@ be installed):
   outputs -- \verb|make modeltests|.
 \end{itemize}
 
-The command \verb|make alltests| runs all the tests in the Test Suite
+The command \verb|make alltests| runs all the tests in the Testsuite
 in succession. Each test outputs the results to the terminal and, in
 case of failure, a log file (\texttt{tests/testsuite.log}) is
 generated for the indent, style and behaviour tests. If all tests are
@@ -92,9 +92,9 @@ Tests            PASSED
 Testsuite PASSED
 \end{verbatim}
 
-The Test Suite is automatically run every time a Pull Request (PR) is created
+The Testsuite is automatically run every time a Pull Request (PR) is created
 or updated on the main github repository (\texttt{AtChem/AtChem2}).  The Pull
-Request triggers a build on GitHub Actions which runs the entire Test Suite on
+Request triggers a build on GitHub Actions which runs the entire Testsuite on
 two architectures (Linux and macOS) using different versions of the GNU
 \texttt{gfortran} compiler. The CI tester performs the following tasks on each
 architecture:
@@ -260,7 +260,7 @@ edits. This can be done by passing two arguments to the script instead
 of one: the second argument sends the script output to another file,
 leaving the original file untouched.
 
-Both scripts are also used in the Test Suite to run the style and
+Both scripts are also used in the Testsuite to run the style and
 indent tests (Sec.~\ref{sec:test-suite}): each script is run over each
 source file and the output is sent to a \texttt{.cmp} file. If the
 \texttt{.cmp} file matches the original file, the test passes.

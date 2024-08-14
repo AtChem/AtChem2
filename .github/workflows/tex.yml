@@ -21,9 +21,9 @@ on:
   # master branch)
   pull_request:
     branches: [ master ]
-    # paths:
-    #   - 'doc/latex/**/*.tex'
-    #   - 'doc/figures/**/*.svg'
+    paths:
+      - 'doc/latex/**/*.tex'
+      - 'doc/figures/**/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
@@ -50,9 +50,9 @@ jobs:
           fetch-depth: 2
           ref: ${{ github.ref }}
 
-      - name: Check Token Permissions
-        run: |
-          echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/AtChem/AtChem2 | jq .permissions)"
+      # - name: Check Token Permissions
+      #   run: |
+      #     echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/AtChem/AtChem2 | jq .permissions)"
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
@@ -80,8 +80,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit and Push
-        run: |
-          git add doc/AtChem2-Manual.pdf
-          git commit -m "Update AtChem2-Manual.pdf"
-          # git push origin HEAD:${{ github.ref }}
+      # - name: Commit and Push
+      #   run: |
+      #     git add doc/AtChem2-Manual.pdf
+      #     git commit -m "Update AtChem2-Manual.pdf"
+      #     # git push origin HEAD:${{ github.ref }}

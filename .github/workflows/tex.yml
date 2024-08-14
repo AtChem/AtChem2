@@ -22,8 +22,8 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-      - '**/*.tex'
-      - '**/*.svg'
+      - 'doc/**/*.tex'
+      - 'doc/**/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
@@ -80,8 +80,9 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
 
-      # - name: Commit and Push
-      #   run: |
-      #     git add doc/AtChem2-Manual.pdf
-      #     git commit -m "Update AtChem2-Manual.pdf"
-      #     # git push origin HEAD:${{ github.ref }}
+      - name: Commit and Push
+        run: |
+          git add doc/AtChem2-Manual.pdf
+          git status
+          #git commit -m "Update AtChem2-Manual.pdf"
+          #git push origin HEAD:${{ github.ref }}

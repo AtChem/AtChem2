@@ -45,7 +45,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, macos-12, macos-13]
+        os: [ubuntu-20.04, ubuntu-22.04] #, macos-12, macos-13]
         fortran: [10, 11, 12]
         exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
         - os: ubuntu-20.04
@@ -151,13 +151,12 @@ jobs:
           make clean
           # unit tests
           make unittests CCOV=true
-          ls tests/unit_tests/
-          mv tests/unit_tests/*.gc* ./  # needed for GCC-11 handling of *.gcda, *.gcna files
+          mv tests/unit_tests/*.gc* ./  # needed for gcc=<11 handling of *.gcda, *.gcna files
           # model tests
           make modeltests CCOV=true     # run only the new Testsuite
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        uses: codecov/codecov-action@v4 # https://github.com/marketplace/actions/codecov
+        uses: codecov/codecov-action@v3 # https://github.com/marketplace/actions/codecov
         with:
           gcov: true

@@ -22,8 +22,8 @@ on:
   pull_request:
     branches: [ master ]
     paths:
-      - 'doc/**/*.tex'
-      - 'doc/**/*.svg'
+      - './doc/**/*.tex'
+      - './doc/**/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)

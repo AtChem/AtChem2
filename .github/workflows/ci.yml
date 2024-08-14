@@ -151,7 +151,7 @@ jobs:
           make clean
           # unit tests
           make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # needed for gcc=<11 handling of *.gcda, *.gcna files
+          mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
           # model tests
           make modeltests CCOV=true     # run only the new Testsuite
 

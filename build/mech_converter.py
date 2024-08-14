@@ -278,9 +278,6 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # Check that each of the RO2s from 'Peroxy radicals' are present
     # in the RO2 reference list from the MCM. If not, print a warning
     # at the top of mechanism.f90 for each errant species.
-    #
-    # TODO: This will break the expected format when mechanism.f90 is
-    #       replaced by a parsable format
     print('looping over inputted RO2s')
 
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'w') as mech_rates_file:

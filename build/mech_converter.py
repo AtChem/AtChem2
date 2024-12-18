@@ -72,8 +72,8 @@ def tokenise_and_process(input_string, vars_dict):
         'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
 
     # Generate start and end points of sections of symbols and nonsymbols
-    symbol_regex = '[()\-+*@/, ]+'
-    nonsymbol_regex = '[^()\-+*@/, ]+'
+    symbol_regex = r'[()\-+*@/, ]+'
+    nonsymbol_regex = r'[^()\-+*@/, ]+'
 
     list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, input_string)]
@@ -124,33 +124,31 @@ def tokenise_and_process(input_string, vars_dict):
 
 def separate_stoichiometry(input_species):
     """
-    This function takes in a string of a species from the mechanism and 
+    This function takes in a string of a species from the mechanism and
     separates the species name from any preceeding stoichiometric coefficient.
     This assumes that no species names will begin with a number.
 
     Args:
         input_species(str): a string containing a species name with a possible
-                            preceeding coefficient (e.g. H2O2, 2H2O2, 2 H2O2, or 0.5H2O2)
+                            stoichiometric coefficient (e.g. H2O2, 2H2O2, 2 H2O2, or 0.5H2O2)
 
     Returns:
-        split_spec (tuple): a tuple of a float and a string. The first item 
-                            (float) is the stoichiometric coefficient and the 
-                            second (string) is the species name.
+        split_spec (tuple): a tuple of a float and a string. The first (float) is the stoichiometric
+                            coefficient, and the second (string) is the species name.
     """
-    
+
     #regex to match the potential coefficient and name sections of the input
-    in_pat = re.compile(r"^ *(\d*\.?\d*) *([a-zA-Z_].*) *$")
+    in_pat = re.compile(r'^ *(\d*\.?\d*) *([a-zA-Z_].*) *$')
     pat_match = in_pat.match(input_species)
     if pat_match:
-        if pat_match[1]: #if there is a coefficient passed 
+        if pat_match[1]: #if there is a coefficient passed
             return (float(pat_match[1]), pat_match[2])
         else: #if there is no coefficient then output an assumed coefficient of 1
             return (1.0, pat_match[2])
     else:
-        raise Exception(f"""Reaction species does not match the correct 
-                        format: '{input_species}'. Note that species names should 
+        raise Exception(f"""Reaction species does not match the correct
+                        format: '{input_species}'. Note that species names should
                         not begin with numerical characters.""")
-# ------------------------------------------------------------ #
 
 def convert_to_fortran(input_file, mech_dir, mcm_vers):
     """
@@ -301,12 +299,12 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # -------------------------------------------------
     # Read in the names of user-defined custom rate functions and add them
-    # to the list of reserved names so that they will be carried through the 
+    # to the list of reserved names so that they will be carried through the
     # rate definitions (in a similar manner to LOG10)
     with open(mech_dir + '/customRateFuncs.f90') as custom_func_file:
-        func_def_pat = "function +([a-zA-Z0-9_]*) *\("
+        func_def_pat = r'function +([a-zA-Z0-9_]*) *\('
         custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
-        
+
         for n in custom_func_names:
             reservedOtherList.append(n)
 
@@ -434,7 +432,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
             # Ignore empty reactantsList.
             if not reactantsList.strip() == '':
-                # Compare each reactant against known species and note the 
+                # Compare each reactant against known species and note the
                 # stoichometric coefficients for each reactant.
                 reactantNums = []
                 reactantStoichs = []
@@ -453,12 +451,12 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
                         reactantNums.append(len(speciesList))
 
                 # Write the reactants to mech_reac_list.
-                mech_reac_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                mech_reac_list.extend([f'{reactionNumber} {z} {y}\n' for \
                                        y,z in zip(reactantStoichs, reactantNums)])
 
             # Ignore empty productsList.
             if not productsList.strip() == '':
-                # Compare each product against known species and note the 
+                # Compare each product against known species and note the
                 # stoichometric coefficients for each product.
                 productNums = []
                 productStoichs = []
@@ -478,7 +476,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
                         productNums.append(len(speciesList))
 
                 # Write the products to mech_prod_list.
-                mech_prod_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                mech_prod_list.extend([f'{reactionNumber} {z} {y}\n' for \
                                        y,z in zip(productStoichs, productNums)])
 
     # -------------------------------------------------

@@ -60,21 +60,21 @@ jobs:
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script to
       # generate the pdf file of the manual
-      # - name: Setup TexLive and compile the manual
-      #   uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
-      #   with:
-      #     scheme: full
-      #     run: |
-      #       # install inkscape
-      #       apk add inkscape
-      #       # run script to generate the pdf file
-      #       ./tools/make_manual_pdf.sh
+      - name: Setup TexLive and compile the manual
+        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+        with:
+          scheme: full
+          run: |
+            # install inkscape
+            apk add inkscape
+            # run script to generate the pdf file
+            ./tools/make_manual_pdf.sh
 
-      # - name: Upload pdf file as artifact
-      #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
-      #   with:
-      #     name: AtChem2-Manual.pdf
-      #     path: doc/AtChem2-Manual.pdf
+      - name: Upload pdf file as artifact
+        uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
+        with:
+          name: AtChem2-Manual.pdf
+          path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
       # 3.

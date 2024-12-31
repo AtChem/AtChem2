@@ -21,9 +21,9 @@ on:
   # master branch), and the .tex/.svg files modified
   pull_request:
     branches: [ master ]
-    paths:
-      - './doc/latex/*.tex'
-      - './doc/figures/*.svg'
+    #paths:
+    #  - './doc/latex/*.tex'
+    #  - './doc/figures/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
@@ -70,21 +70,20 @@ jobs:
             # run script to generate the pdf file
             ./tools/make_manual_pdf.sh
 
-      #- name: Upload pdf file as artifact
-      #  uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
-      #  with:
-      #    name: AtChem2-Manual.pdf
-      #    path: doc/AtChem2-Manual.pdf
+      - name: Upload pdf file as artifact
+        uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
+        with:
+          name: AtChem2-Manual.pdf
+          path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
       # 3.
       - name: Configure git
         run: |
+          #
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit and Push
-        run: |
+          #
           git add doc/AtChem2-Manual.pdf
           git status
           git commit -m "Update AtChem2-Manual.pdf"

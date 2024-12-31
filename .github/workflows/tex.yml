@@ -50,7 +50,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
-          fetch-depth: 2
+          #fetch-depth: 2
           ref: ${{ github.head_ref }}
 
       # - name: Check Token Permissions

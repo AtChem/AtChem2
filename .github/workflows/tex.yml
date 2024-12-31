@@ -18,7 +18,7 @@ name: AtChem2 PDF
 on:
 
   # Triggers when a pull request is created or updated (only on the
-  # master branch)
+  # master branch), and the .tex/.svg files modified
   pull_request:
     branches: [ master ]
     paths:
@@ -27,8 +27,8 @@ on:
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
-  push:
-    branches: [ master ]
+  #push:
+  #  branches: [ master ]
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets
@@ -39,6 +39,9 @@ jobs:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
 
+    #permissions:
+    #  contents: write
+
     steps:
 
       # -------------------------------------------------------------
@@ -48,7 +51,7 @@ jobs:
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
 
       # - name: Check Token Permissions
       #   run: |
@@ -67,11 +70,11 @@ jobs:
             # run script to generate the pdf file
             ./tools/make_manual_pdf.sh
 
-      - name: Upload pdf file as artifact
-        uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
-        with:
-          name: AtChem2-Manual.pdf
-          path: doc/AtChem2-Manual.pdf
+      #- name: Upload pdf file as artifact
+      #  uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
+      #  with:
+      #    name: AtChem2-Manual.pdf
+      #    path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
       # 3.
@@ -84,5 +87,5 @@ jobs:
         run: |
           git add doc/AtChem2-Manual.pdf
           git status
-          #git commit -m "Update AtChem2-Manual.pdf"
-          #git push origin HEAD:${{ github.ref }}
+          git commit -m "Update AtChem2-Manual.pdf"
+          git push origin HEAD:${{ github.head_ref }}

@@ -31,20 +31,19 @@ experiments within the \href{https://www.eurochamp.org}{EUROCHAMP}
 community \citep{martin_2009}. AtChem-online runs as a
 \href{https://atchem.york.ac.uk}{web service}, provided by the
 University of York: in order to use AtChem-online, a user needs only a
-text editor, file compression software, a web browser, and an internet
+text editor, a file compression tool, a web browser, and an internet
 connection. A tutorial -- with examples and exercises -- is available on
 the \href{https://mcm.york.ac.uk/MCM/atchemonline/intro}{MCM website}.
 
 AtChem-online is easy to use even for inexperienced users but has a
 number of limitations, mostly related to its nature as a web
-application. \textbf{AtChem2} was developed from AtChem-online with
-the objective to provide an \emph{offline} modelling tool capable of
-running long simulations of computationally intensive models, as well
-as batch simulations for sensitivity studies. In addition, AtChem2
-implements a continuous integration workflow, coupled with a
-comprehensive Testsuite and version control software
-(\href{https://git-scm.com}{git}), which makes it robust, reliable and
-traceable.
+application. \textbf{AtChem2} was developed from AtChem-online; the
+aim is to provide an \emph{offline} modelling tool capable of running
+long simulations of computationally intensive models, as well as batch
+simulations for sensitivity studies. In addition, AtChem2 implements a
+continuous integration workflow, coupled with a comprehensive
+Testsuite and version control (\href{https://git-scm.com}{git}) which
+makes it robust, reliable and traceable.
 
 The codebase of AtChem2 is structured into four components (or layers)
 -- as illustrated in Fig.~\ref{fig:atchem-arch} -- and is written
@@ -52,10 +51,10 @@ mostly in Fortran 90/95. Installation, compilation and execution of
 AtChem2 are semi-automated via a number of shell and Python scripts
 that require minimal input from the user. This document
 (\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual and contains
-all the information required to install, set up and use the current
-version of AtChem2. A summary of these instructions, additional
-information, and a list of \emph{known issues} can be found on the
-\href{https://github.com/AtChem/AtChem2/wiki}{AtChem2 wiki}.
+all the information required to install, configure, and use the
+current version of AtChem2. A summary of these instructions, with
+additional information and a list of \emph{known issues}, can be found
+on the \href{https://github.com/AtChem/AtChem2/wiki}{AtChem2 wiki}.
 
 \begin{figure}[htb]
   \centering
@@ -81,16 +80,16 @@ documentation:
 \end{description}
 
 The user can change the locations and names of these directories
-according to their setup, workflow, personal preferences, etc\ldots
-As long as the user specifies the correct paths to the libraries and
-directories needed by AtChem2, the model will compile and run.
+according to their setup, workflow, personal preferences, etc\ldots As
+long as the correct paths to the libraries and directories needed by
+AtChem2 are specified, the model will compile and run.\\
 
-\textbf{Important Note}: AtChem2 runs in Coordinated Universal Time
-(UTC, i.e. GMT timezone) with no daylight saving. This is to simplify
-the calculation of the solar angles and, therefore, of the photolysis
-rates. The user must ensure that the input data and the model
-constraints are provided in UTC, and convert the output to Local Time
-(if necessary).
+\textcolor{red}{\bf Important Note}: AtChem2 runs in
+\textbf{Coordinated Universal Time (UTC)}, with no daylight
+saving. This is to simplify the calculation of the solar angles and,
+therefore, of the photolysis rates. The user must ensure that the
+input data and the model constraints are provided in UTC (i.e. GMT
+timezone) and convert the output to Local Time, if needed.
 
 % -------------------------------------------------------------------- %
 \section{License and citation} \label{sec:license-citation}
@@ -98,9 +97,9 @@ constraints are provided in UTC, and convert the output to Local Time
 AtChem2 is open source -- under \textbf{MIT license} -- and is hosted at:\\
 \href{https://github.com/AtChem/AtChem2}{https://github.com/AtChem/AtChem2}.
 
-AtChem2 is free to use, compatible with the MIT license terms. A copy
-of the license can be found in the \texttt{LICENSE} file. If used in a
-publication, please cite the GMD paper \citet{sommariva_2020}:\\
+AtChem2 is free to use, compatible with the terms of the MIT
+license. A copy of the license can be found in the \texttt{LICENSE}
+file. If used in a publication, please cite the GMD paper \citep{sommariva_2020}:\\
 
 R.~Sommariva, S.~Cox, C.~Martin, K.~Boro{\'n}ska, J.~Young, P.~K. Jimack,
 M.~J. Pilling, V.~N. Matthaios, B.~S. Nelson, M.~J. Newland, M.~Panagi,

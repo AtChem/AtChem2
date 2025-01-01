@@ -54,7 +54,6 @@ jobs:
         with:
           fetch-depth: 2
           ref: ${{ github.ref }}
-        run: echo "------> ${{ github.ref }}"
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script
@@ -81,6 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          echo "------> ${{ github.ref }}"
           # configure git
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"

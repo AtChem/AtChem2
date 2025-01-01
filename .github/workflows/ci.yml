@@ -47,11 +47,11 @@ jobs:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04] #, macos-12, macos-13]
         fortran: [10, 11, 12]
-        # exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
-        # - os: ubuntu-20.04
-        #   fortran: 11
-        # - os: ubuntu-20.04
-        #   fortran: 12
+        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
+        - os: ubuntu-20.04
+          fortran: 11
+        - os: ubuntu-20.04
+          fortran: 12
       fail-fast: false
 
     # -------------------------------------------------------------

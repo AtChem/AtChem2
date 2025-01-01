@@ -54,7 +54,7 @@ jobs:
         with:
           fetch-depth: 2
           ref: ${{ github.ref }}
-          echo "------> ${{ github.ref }}"
+        run: echo "------> ${{ github.ref }}"
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive and Inkscape (v1.x), then run the script

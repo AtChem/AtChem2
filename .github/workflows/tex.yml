@@ -47,21 +47,24 @@ jobs:
     steps:
 
       # -------------------------------------------------------------
-      # 1. Checkout the repository from the branch associated with the
-      # current Pull Request
+      # 1. Checkout the repository from the branch associated with the current PR
       - name: Checkout repo
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
           ref: ${{ github.ref }}
 
+      - name: Check Token Permissions
+        run: |
+          echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }} | jq .permissions)"
+
       # -------------------------------------------------------------
-      # 2. Setup TeXLive and Inkscape (v1.x), then run the script
-      # `tools/make_manual_pdf.sh`
+      # 2. Setup TeXLive and Inkscape (v1.x), then run the script `make_manual_pdf.sh`
       - name: Setup TexLive and compile the manual
         uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
         with:
-          scheme: small
+          scheme: full
           run: |
             apk add inkscape
             ./tools/make_manual_pdf.sh
@@ -80,7 +83,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "------> ${{ github.ref }}"
           # configure git
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"

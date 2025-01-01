@@ -87,6 +87,6 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           # commit pdf file
-#          git add doc/AtChem2-Manual.pdf
-#          git commit -m "Update AtChem2-Manual.pdf"
-#          git push origin HEAD:${{ github.ref }}
+          git add doc/AtChem2-Manual.pdf
+          git commit -m "Update AtChem2-Manual.pdf"
+          git push #origin HEAD:${{ github.ref }}

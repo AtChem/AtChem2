@@ -32,7 +32,8 @@ on:
 
   # Run manually from the Actions tab
 #  workflow_dispatch:
-
+permissions:
+  contents: write
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets
 # up a full TeXLive environment, compiles the source files, and
@@ -41,8 +42,7 @@ jobs:
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+
 
     steps:
 

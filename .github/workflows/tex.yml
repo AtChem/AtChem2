@@ -21,14 +21,17 @@ on:
   # master branch), and the .tex/.svg files modified
   pull_request:
     branches: [ master ]
-    # paths:
-    #   - './doc/latex/*.tex'
-    #   - './doc/figures/*.svg'
+    paths:
+      - './doc/latex/*.tex'
+      - './doc/figures/*.svg'
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
-  #push:
-  #  branches: [ master ]
+#  push:
+#    branches: [ master ]
+
+  # Run manually from the Actions tab
+#  workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets
@@ -59,7 +62,7 @@ jobs:
       - name: Setup TexLive and compile the manual
         uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
         with:
-          scheme: full
+          scheme: small
           run: |
             # install inkscape
             apk add inkscape

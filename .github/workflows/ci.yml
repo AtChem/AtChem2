@@ -35,23 +35,23 @@ on:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `ci_testing` which
-# compiles the AtChem2 model, runs the Testsuite, and checks the code
+# compiles the AtChem2 model, runs the Testsuite, and checks code
 # coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
   ci_testing:
-    # The job runs on two versions of linux (ubuntu) and macos runner
-    # images, with three versions of gnu fortran -- the runner images
-    # are described here: https://github.com/actions/runner-images
+    # The job runs on two versions of linux (ubuntu) and macos, with
+    # three versions of gnu fortran -- the runner images are described
+    # here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04] #, macos-12, macos-13]
         fortran: [10, 11, 12]
-        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
-        - os: ubuntu-20.04
-          fortran: 11
-        - os: ubuntu-20.04
-          fortran: 12
+        # exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
+        # - os: ubuntu-20.04
+        #   fortran: 11
+        # - os: ubuntu-20.04
+        #   fortran: 12
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -60,11 +60,12 @@ jobs:
     # 2. Install gfortran, AtChem2 dependencies
     # 3. Compile AtChem2
     # 4. Run the Testsuite with default settings
-    # 5. Recompile AtChem2, run unit and model tests for Codecov
+    # 5. Recompile AtChem2, run Testsuite for Codecov
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
+
       - name: Checkout repo
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
@@ -75,9 +76,12 @@ jobs:
       # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
       # gfortran on ubuntu
-      # - name: Install gfortran-11 (ubuntu-20.04)
-      #   if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
-      #   run: sudo apt-get install gfortran-11
+      - name: Install gfortran-11 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+        run: sudo apt-get install gfortran-11
+      - name: Install gfortran-12 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 12
+        run: sudo apt-get install gfortran-12
 
       # gfortran on macos
       - name: Install gfortran-10 (macos-12)
@@ -103,9 +107,9 @@ jobs:
 
       # -------------------------------------------------------------
       # (3) Compile AtChem2 using the standard compilation flags
+
       - name: Build AtChem2
-        # Set $FORT_VERSION for use with the `Makefile`, which is
-        # called by the `build_atchem2.sh` script
+        # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
@@ -121,26 +125,28 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (4) Run the Testsuite using the standard compilation flags and
-      # default settings: indent, style, unit, model tests
+      # (4) Run the Testsuite using the standard compilation flags and default
+      # model settings: indent and style tests, unit and model tests
+
       - name: Indent and Style tests
         run: |
           make indenttest
           make styletest
 
       - name: Unit and Model tests
-        # Set $FORT_VERSION for use with the `Makefile`
+        # Set $FORT_VERSION for use with `Makefile`, then run tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests    # NB: oldtests will eventually be merged into modeltests
-          #make modeltests  # TODO: temporarily deactivated (pass on linux, fail on macos)
+          make modeltests
 
       # -------------------------------------------------------------
-      # (5) Recompile AtChem2 using the code coverage compilation
-      # flags, then upload the gcov files to Codecov
+      # (5) Recompile AtChem2 using the code coverage compilation flags, then
+      # upload the gcov files to Codecov
+
       - name: Unit and Model tests (x Codecov)
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
         # Set $FORT_VERSION for use with the `Makefile`

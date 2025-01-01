@@ -89,4 +89,4 @@ jobs:
           # commit pdf file
           git add doc/AtChem2-Manual.pdf
           git commit -m "Update AtChem2-Manual.pdf"
-          git push #origin HEAD:${{ github.ref }}
+          git push origin HEAD:${{ github.ref }}

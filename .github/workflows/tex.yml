@@ -32,8 +32,7 @@ on:
 
   # Run manually from the Actions tab
 #  workflow_dispatch:
-permissions:
-  contents: write
+
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which sets
 # up a full TeXLive environment, compiles the source files, and
@@ -43,6 +42,8 @@ jobs:
     # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
 
     steps:
 
@@ -52,41 +53,41 @@ jobs:
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
 
       - name: Check Token Permissions
         run: |
           echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
           https://api.github.com/repos/${{ github.repository }} | jq .permissions)"
 
-      # -------------------------------------------------------------
-      # 2. Setup TeXLive and Inkscape (v1.x), then run the script `make_manual_pdf.sh`
-      - name: Setup TexLive and compile the manual
-        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
-        with:
-          scheme: full
-          run: |
-            apk add inkscape
-            ./tools/make_manual_pdf.sh
+      # # -------------------------------------------------------------
+      # # 2. Setup TeXLive and Inkscape (v1.x), then run the script `make_manual_pdf.sh`
+      # - name: Setup TexLive and compile the manual
+      #   uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+      #   with:
+      #     scheme: full
+      #     run: |
+      #       apk add inkscape
+      #       ./tools/make_manual_pdf.sh
 
-      # -------------------------------------------------------------
-      # 3.
-      - name: Upload pdf file as artifact
-        uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
-        with:
-          name: AtChem2-Manual.pdf
-          path: doc/AtChem2-Manual.pdf
+      # # -------------------------------------------------------------
+      # # 3.
+      # - name: Upload pdf file as artifact
+      #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
+      #   with:
+      #     name: AtChem2-Manual.pdf
+      #     path: doc/AtChem2-Manual.pdf
 
-      # -------------------------------------------------------------
-      # 4.
-      - name: Add pdf to PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # configure git
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          # commit pdf file
-          git add doc/AtChem2-Manual.pdf
-          git commit -m "Update AtChem2-Manual.pdf"
-          git push origin HEAD:${{ github.ref }}
+      # # -------------------------------------------------------------
+      # # 4.
+      # - name: Add pdf to PR
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     # configure git
+      #     git config --local user.name "github-actions[bot]"
+      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
+      #     # commit pdf file
+      #     git add doc/AtChem2-Manual.pdf
+      #     git commit -m "Update AtChem2-Manual.pdf"
+      #     git push origin HEAD:${{ github.ref }}

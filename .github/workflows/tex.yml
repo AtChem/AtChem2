@@ -17,31 +17,27 @@ name: AtChem2 PDF
 # Controls when the workflow is activated
 on:
 
-  # Triggers when a pull request is created or updated (only on the
-  # master branch), and the .tex/.svg files modified
-  pull_request:
-    branches: [ master ]
-#    paths:
-#      - './doc/latex/*.tex'
-#      - './doc/figures/*.svg'
-
   # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit)
-#  push:
-#    branches: [ master ]
+  # merging a pull request, or by direct commit), and when any of the
+  # .tex/.svg files in `doc/` have been modified
+  push:
+    branches: [ master ]
+    paths:
+      - './doc/latex/*.tex'
+      - './doc/figures/*.svg'
 
   # Run manually from the Actions tab
-#  workflow_dispatch:
+  workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `pdf_manual` which sets
-# up a full TeXLive environment, compiles the source files, and
-# generates the pdf file of the manual
+# This workflow contains a single job called `pdf_manual` which runs
+# the script `make_manual_pdf.sh` to generate the pdf file of the
+# manual, and uploads it to the repo
 jobs:
   pdf_manual:
-    # The job runs on the latest version of linux (ubuntu)
+    # The job runs on the latest version of linux (ubuntu), and needs
+    # write permission to the repository
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
@@ -52,23 +48,17 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
-#          fetch-depth: 2
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.ref }}
 
-      - name: Check Token Permissions
-        run: |
-          echo "Token Permissions: $(curl -sSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }} | jq .permissions)"
-
-      # # -------------------------------------------------------------
-      # # 2. Setup TeXLive and Inkscape (v1.x), then run the script `make_manual_pdf.sh`
-      # - name: Setup TexLive and compile the manual
-      #   uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
-      #   with:
-      #     scheme: full
-      #     run: |
-      #       apk add inkscape
-      #       ./tools/make_manual_pdf.sh
+      # -------------------------------------------------------------
+      # 2. Setup TeXLive, install Inkscape (v1.x), and compile the pdf file
+      - name: Setup TexLive and compile the manual
+        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+        with:
+          scheme: full
+          run: |
+            apk add inkscape
+            ./tools/make_manual_pdf.sh
 
       # # -------------------------------------------------------------
       # # 3.
@@ -78,16 +68,16 @@ jobs:
       #     name: AtChem2-Manual.pdf
       #     path: doc/AtChem2-Manual.pdf
 
-      # # -------------------------------------------------------------
-      # # 4.
-      # - name: Add pdf to PR
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: |
-      #     # configure git
-      #     git config --local user.name "github-actions[bot]"
-      #     git config --local user.email "github-actions[bot]@users.noreply.github.com"
-      #     # commit pdf file
-      #     git add doc/AtChem2-Manual.pdf
-      #     git commit -m "Update AtChem2-Manual.pdf"
-      #     git push origin HEAD:${{ github.ref }}
+      # -------------------------------------------------------------
+      # 4.
+      - name: Add pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # configure git
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          # commit pdf file
+          git add doc/AtChem2-Manual.pdf
+          git commit -m "Update AtChem2-Manual.pdf"
+          #git push origin master

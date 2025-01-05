@@ -20,8 +20,8 @@ name: AtChem2 CI
 # Controls when the workflow is activated
 on:
 
-  # Triggers when a pull request is created or updated (only on the
-  # master branch)
+  # Triggers when a pull request targeting the master branch is
+  # created or updated
   pull_request:
     branches: [ master ]
 
@@ -44,7 +44,7 @@ jobs:
     # here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
+      matrix: # macos testing temporarily deactivated
         os: [ubuntu-20.04, ubuntu-22.04] #, macos-12, macos-13]
         fortran: [10, 11, 12]
         exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04

@@ -16,21 +16,24 @@
 
 AtChem2 can be installed and used on either Linux/Unix or macOS
 operating systems. A working knowledge of the \textbf{unix shell} and
-its \href{https://swcarpentry.github.io/shell-novice/}{basic commands}
+its \href{https://swcarpentry.github.io/shell-novice}{basic commands}
 is \emph{required} to install and use the model. AtChem2 requires the
 following software tools:
 
 \begin{itemize}
-\item bash, or a bash-compatible shell, and common utilities: wget,
-  tar, zip/unzip, make.
-\item a text editor (emacs, nano, vim, gedit, or similar).
+\item a terminal with bash or a bash-compatible shell (e.g., zsh is
+  the default shell in macOS), and common utilities: \texttt{wget},
+  \texttt{tar}, \texttt{zip}, \texttt{make}.
+\item a text editor: Emacs, vim, Gedit, Kate, TextEdit, SublimeText,
+  Atom, or similar.
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran}
-  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0)\\
+  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0 and above)\\
   $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}.
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
     with Python v2 and v3. Support for Python v2 will be removed in
     future versions of AtChem2.}
-\item Ruby, rake (both optional).
+\item Ruby, \texttt{rake} (both optional).
+\item git (optional)
 \end{itemize}
 
 Some or all of these tools may already be installed on the operating
@@ -40,7 +43,7 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item CVODE -- requires \texttt{gcc}, \texttt{cmake}. %, BLAS, LAPACK
+\item CVODE -- requires \texttt{gcc}, \texttt{cmake}. %BLAS, LAPACK
 \item openlibm.
 \item numdiff (optional).
 \item FRUIT (optional).
@@ -48,6 +51,9 @@ AtChem2 has the following dependencies:
 
 For detailed instructions on the installation and configuration of the
 dependencies, go to Sect.~\ref{sec:dependencies}.
+
+As an alternative, AtChem2 can be used as a \href{https://www.docker.com}{Docker}
+container. For details, see Sect.~\ref{sec:docker}.
 
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
@@ -58,33 +64,33 @@ the \emph{development version}, also known as \texttt{master\ branch}
 (see Sect.~\ref{sec:general-information} for details). The source code
 of AtChem2 can be obtained in two ways:
 
-\begin{itemize}
-\item with \textbf{git} (this is the recommended method to contribute
-  to the model development):
-  \begin{enumerate}
+\begin{enumerate}
+\item with \textbf{git} (this is the recommended method for users who
+  want to contribute to the model development):
+  \begin{itemize}
   \item Open the terminal. Move to the directory where AtChem2 will be
     installed.
-  \item Execute:
+  \item Execute one of the following commands:
     \begin{itemize}
       \item if using HTTPS:\\
         \verb|git clone https://github.com/AtChem/AtChem2.git|
       \item if using SSH:\\
         \verb|git clone git@github.com:AtChem/AtChem2.git|
     \end{itemize}
-  \end{enumerate}
+  \end{itemize}
 \item with the \textbf{archive file}:
-  \begin{enumerate}
+  \begin{itemize}
   \item Download the archive file (\texttt{.tar.gz} or \texttt{.zip}) of the
-    \href{https://github.com/AtChem/AtChem2/releases/}{stable} or of the
+    \href{https://github.com/AtChem/AtChem2/releases}{stable} or of the
     \href{https://github.com/AtChem/AtChem2/archive/master.zip}{development}
     version to the directory where AtChem2 will be installed.
   \item Open the terminal. Move to the directory where the archive
     file was downloaded.
   \item Execute \verb|tar -zxfv *.tar.gz| or \verb|unzip -v *.zip|
-    (depending on which archive file was downloaded) to unpack the
-    archive file.
-  \end{enumerate}
-\end{itemize}
+    (depending on which pf the archive files  was downloaded) to unpack
+    the archive file.
+  \end{itemize}
+\end{enumerate}
 
 The AtChem2 source code is now in a directory called \texttt{AtChem2}
 (if git was used) or \texttt{AtChem2-1.x} (if the archive file of the
@@ -92,7 +98,7 @@ stable version was downloaded) or \texttt{AtChem2-master} (if the
 archive file of the development version was downloaded). This
 directory is the AtChem2 \maindir. In this manual, the \maindir\ is
 assumed to be \texttt{\$HOME/AtChem2/}, but it can be given any name
-and path -- depending on the user's preferences.
+and path -- according to the user's preferences.
 
 % -------------------------------------------------------------------- %
 \section{Dependencies} \label{sec:dependencies}
@@ -100,16 +106,16 @@ and path -- depending on the user's preferences.
 AtChem2 has a number of dependencies (additional software tools and
 libraries): some are \emph{required}, and without them the model
 cannot be installed or used, others are \emph{optional}, and only
-needed to run the Testsuite. It is recommended to install all the
-AtChem2 dependencies into the same directory, called \depdir. In this
-manual, the \depdir\ is assumed to be \texttt{\$HOME/AtChem-lib/}, but
-it can be given any name and path -- depending on the user's
-preferences.
+needed to run the Testsuite (see Sect.~\ref{sec:test-suite}).  It is
+recommended to install all the AtChem2 dependencies into the same
+directory, called \depdir. In this manual, the \depdir\ is assumed to
+be \texttt{\$HOME/AtChem-lib/}, but it can be given any name and path
+-- according to the user's preferences.
 
 Before installing the dependencies, make sure that the requirements
 listed in Sect.~\ref{sec:requirements} are met, and that the unix
 shell is bash or bash-compatible (type \verb|echo $SHELL| at the
-terminal to find out).
+terminal to check the shell type).
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
@@ -141,9 +147,8 @@ directory.
   % \item If LAPACK and BLAS are not in the default location (see
   %   above), change the \texttt{LAPACK\_LIBS} variable for your
   %   architecture (Linux or macOS) as appropriate.
-  \item If using a compiler other than \texttt{gcc}, change the line
+  \item If using a compiler other than \texttt{gcc}, change the line:\\
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}
-    accordingly.
   \end{itemize}
 \item Run the installation script (change the path to the \depdir\ as
   needed):
@@ -154,16 +159,17 @@ directory.
 
 If the installation is successful, there should be a working CVODE
 installation at \texttt{\textasciitilde/AtChem-lib/cvode/}. Take note
-of the path to CVODE (\texttt{\textasciitilde/AtChem-lib/cvode/lib/}),
-as it will be neededlater to complete the configuration of AtChem2
+of the path to the CVODE library (\texttt{\textasciitilde/AtChem-lib/cvode/lib/}),
+as it will be needed later to complete the configuration of AtChem2
 (Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
 
-openlibm is a \href{https://openlibm.org}{portable version} of the
-open source \textbf{libm} library. Installing openlibm and linking
-against it, allows reproducible results by ensuring the same
-implementation of several mathematical functions across platforms.
+openlibm is a portable version of the open source
+\href{https://openlibm.org}{libm} mathematical library. Installing
+openlibm and linking against it, allows reproducible results by
+ensuring the same implementation of several mathematical functions
+across platforms.
 
 The current version of openlibm is 0.8.1 and it can be installed using
 the \texttt{install\_openlibm.sh} script in the \texttt{tools/install/}
@@ -187,13 +193,14 @@ complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{numdiff}
 
-numdiff is an open source \href{https://www.nongnu.org/numdiff/}{tool}
-used to compare files containing numerical fields. It is needed only
+numdiff is an open source \href{https://www.nongnu.org/numdiff}{file comparison tool}
+used to compare text files containing numerical fields. It is needed only
 to run the \hyperref[sec:test-suite]{Testsuite}, a battery of tests
 used during the development of AtChem2 to ensure that the model works
 properly and that changes to the source code do not result in
 unintended behaviour. Installation of numdiff is recommended for users
-who want to contribute to the development of AtChem2.
+who want to contribute to the development of AtChem2, but otherwise
+optional.
 
 Use \verb|which numdiff| to check if the program is already installed
 on the operating system. If not, ask the system administrator.
@@ -329,10 +336,12 @@ Chapt.~\ref{ch:execution}.
 \subsection{Tests (optional)} \label{subsec:tests-optional}
 
 The \hyperref[sec:test-suite]{Testsuite} can be used to verify that
-AtChem2 has been installed correctly and works as intended. It is
-recommended to run the Testsuite if you want to contribute to the
-development of the AtChem2 model. Note that in order to run the Testsuite the \hyperref[subsec:optional-dependencies]{optional dependencies}
-have to be installed.
+AtChem2 has been installed correctly and works as intended. This step
+is not necessary but it is recommended especially for users who want
+to contribute to the development of the AtChem2 model.
+Note that, in order to run the Testsuite, the
+\hyperref[subsec:optional-dependencies]{optional dependencies} have to
+be installed.
 
 To run the Testsuite, open the terminal and execute one of the
 following commands from the \maindir:
@@ -347,7 +356,8 @@ following commands from the \maindir:
 \end{itemize}
 
 The command runs the requested tests, then prints the tests output and
-a summary of the results to the terminal.
+a summary of the results to the terminal. The tests logfiles can be
+found in the directory \texttt{tests/}.
 
 % -------------------------------------------------------------------- %
 \section{Model Structure} \label{sec:model-structure}
@@ -365,8 +375,7 @@ one.
 \begin{table}[htb]
   \centering \scriptsize
   \caption{Directory structure of AtChem2.\\
-    $(\dag)$ Not present in AtChem-online\\
-    $(\ddag)$ Called \texttt{travis/} in versions 1.1.* and 1.2.*}
+    $(\dag)$ Not present in AtChem-online $(\ddag)$ Called \texttt{travis/} before version 1.2.2}
   \label{tab:atchem-dirs}
   \begin{tabular}{llp{3.7cm}}
     Version 1.0 and earlier & Version 1.1 and later & Description\\
@@ -375,9 +384,11 @@ one.
     \hline
     --                               & \texttt{doc/}                           & user manual and other documents.\\
     \hline
-    --                               & \texttt{mcm/}                           & MCM data files and example \texttt{.fac} files.\\
+    --                               & \texttt{docker/}                        & Docker-related scripts.\\
     \hline
-    \texttt{modelConfiguration/}     & \texttt{model/configuration/}           & chemical mechanism files, shared library, model and solver configuration files.\\
+    --                               & \texttt{mcm/}                           & MCM data files and example chemical mechanisms.\\
+    \hline
+    \texttt{modelConfiguration/}     & \texttt{model/configuration/}           & mechanism files, shared library, model and solver configuration files.\\
     \hline
     \texttt{speciesConstraints/}     & \texttt{model/constraints/species/}     & model constraints: chemical species.\\
     \hline
@@ -393,41 +404,42 @@ one.
     \hline
     \texttt{src/}                    & \texttt{src/}                           & Fortran source files.\\
     \hline
-    \texttt{tools/}                  & \texttt{tools/}                         & various scripts and plotting tools.\\
-    \hline
     \texttt{travis/}~$(\dag)$        & \texttt{tests/}~$(\ddag)$               & scripts and files for the Testsuite.\\
+    \hline
+    \texttt{tools/}                  & \texttt{tools/}                         & various scripts and plotting tools.\\
   \end{tabular}
 \end{table}
 
-In AtChem2 version 1.1 (and later versions) the directories
-\texttt{build/}, \texttt{mcm/}, \texttt{obj/} and \texttt{src/}
-contain the build scripts, the MCM data files, the files generated by
-the compiler, the source code; the directory
-\texttt{tests/}~\footnote{Called \texttt{travis/} in version 1.2 and
-  earlier.} contains the files and the scripts necessary to run the
-\hyperref[sec:test-suite]{Testsuite}.
+In AtChem2 v1.1 (and later versions) the directories \texttt{build/},
+\texttt{mcm/}, \texttt{obj/} and \texttt{src/} contain the build
+scripts, the MCM data files, the files generated by the compiler, the
+source code; the directory \texttt{tests/} contains the files and the
+scripts necessary to run the \hyperref[sec:test-suite]{Testsuite}, and
+the directory \texttt{docker/} contains the scripts necessary to run
+AtChem2 as a Docker container.
 
 For the majority of the users, the most important directories are
-\texttt{doc/}, which contains the user manual and other documents,
-\texttt{tools/}, which contains the installation and plotting scripts
-(plus other utilities), and \texttt{model/}, which contains the model
-information (configuration, input, output and, usually, the chemical
-mechanism). Detailed information on these three directories can be
+\texttt{doc/} which contains the user manual and other documents,
+\texttt{tools/} which contains the installation and plotting scripts
+(plus other utilities), and \texttt{model/} which contains the model
+configuration, input, output and, usually, the chemical
+mechanism. Detailed information on these three directories can be
 found in the following sections.
 
 \subsection{The \texttt{doc/} and \texttt{tools/} directories} \label{subsec:doc-tools-directories}
 
 The \texttt{doc/} directory contains the pdf file of the AtChem2 user
-manual (this document: \texttt{AtChem2-Manual.pdf}), along with the
+manual (this document, \texttt{AtChem2-Manual.pdf}), along with the
 corresponding \LaTeX\ files and figures. An electronic copy of the
 poster presented at the 2018 Atmospheric Chemical Mechanisms
 Conference \citep{sommariva_2018} is also included
 (\texttt{AtChem\_poster\_ACM2018.pdf}).
 
-The \texttt{tools/} directory contains the script
-(\texttt{version.sh}, used to update the version number of AtChem2 in
-each \hyperref[ch:development]{development cycle}), two scripts to
-check and correct the Fortran code (\texttt{fix\_style.py} and
+The \texttt{tools/} directory contains the script used to update the
+version number of AtChem2 in each
+\hyperref[ch:development]{development cycle}
+(\texttt{update\_version\_number.sh}), two scripts to check the
+consistency of the Fortran code (\texttt{fix\_style.py} and
 \texttt{fix\_indent.py}, see Sect.~\ref{sec:style-guide}), and the
 following subdirectories:
 
@@ -441,55 +453,56 @@ following subdirectories:
 
 In earlier versions of AtChem2, the \texttt{tools/} directory also
 included the build scripts, which have been moved to the
-\texttt{build/} directory in AtChem2 version 1.2.
+\texttt{build/} directory in version 1.2.
 
 The plotting scripts in \texttt{tools/plot/} are very simple and
 produce identical outputs. They are only intended to give the user a
 quick overview of the model results for validation and diagnostic
 purposes. It is recommended to use a proper data analysis software
-package (e.g., IDL, Igor, MATLAB, Origin, R, etc\ldots) to process and
-analyze the model results.
+package (e.g., Python, R, IDL, Igor, MATLAB, Origin, etc\ldots) to
+process and analyze the model results.
 
 The plotting scripts are written in different programming languages:
-gnuplot, Octave~\footnote{GNU Octave is an open source implementation
-  of MATLAB. The script \texttt{plot-atchem2.m} works with both Octave
-  and MATLAB.}, Python, and R. One or more of these environments is
-probably already installed on your system: check the local
-documentation or ask the system administrator. All plotting scripts
-require one argument -- the directory containing the model output --
-and produce the same output~\footnote{See issue
-  \href{https://github.com/AtChem/AtChem2/issues/269}{\#269} for a
-  list of known problems of the plotting scripts.}: one file called
-\texttt{atchem2\_output.pdf} in the given directory.
+gnuplot, GNU Octave~\footnote{GNU Octave is an open source
+  implementation of MATLAB. The script \texttt{plot-atchem2.m} works
+  with both Octave and MATLAB.}, Python, and R. One or more of these
+environments is probably already installed on the operating system:
+check the local documentation or ask the system administrator. All
+plotting scripts require one argument -- the path of the directory
+containing the model output -- and produce the same output: one file
+called \texttt{atchem2\_output.pdf} in the model output directory.
 
 To run a plotting script, open the terminal and execute one of the
 following commands from the \maindir\ (change the path to the model
 output directory as needed):
 
 \begin{itemize}
-\item \verb|gnuplot -c tools/plot/plot-atchem2.gp model/output/|
-\item \verb|octave tools/plot/plot-atchem2.m model/output/|
-\item \verb|python tools/plot/plot-atchem2-numpy.py model/output/|
-\item \verb|python tools/plot/plot-atchem2-pandas.py model/output/|
-\item \verb|Rscript --vanilla tools/plot/plot-atchem2.r model/output/|
+\item \verb|gnuplot -c ./tools/plot/plot-atchem2.gp ./model/output/|
+\item \verb|octave ./tools/plot/plot-atchem2.m ./model/output/|
+\item \verb|python ./tools/plot/plot-atchem2-numpy.py ./model/output/|
+\item \verb|python ./tools/plot/plot-atchem2-pandas.py ./model/output/|
+\item \verb|Rscript --vanilla ./tools/plot/plot-atchem2.r ./model/output/|
 \end{itemize}
 
 \subsection{The \texttt{model/} directory} \label{subsec:model-directory}
 
 The \texttt{model/} directory is the most important from the point of
-view of the user: it includes the model configuration files, the model
-constraints and the model output. Basically, all the information
-required to set up and run a box-model with AtChem2, together with the
-model results, is contained in this directory. In principle, the
-chemical mechanism (\texttt{.fac} file) could be located in another
-directory but it is good practice to keep it together with the rest of
-the model configuration.
+view of the user. All the information required to set up and run a
+box-model with AtChem2, together with the results of the model run, is
+contained in this directory.
+
+The \texttt{model/} directory includes the model configuration files,
+the model constraints, and the model output. The chemical mechanism
+file can be located in any directory (as long as the correct path is
+passed to the build script); however, it is recommended to place the
+chemical mechanism file in the \texttt{model/} directory, so that it
+is kept together with the rest of the model configuration.
 
 The \texttt{model/} directory can be given any name and can even be
 located outside the \maindir. Moreover, there can be multiple
 \texttt{model/} directories (with different names) in the same
 location. The paths to the required \texttt{model/} directory and/or
-to the chemical mechanism file are given as an argument to the build
+to the chemical mechanism file are given as arguments to the build
 script (\texttt{build/build\_atchem2.sh}) and to the \texttt{atchem2}
 executable, as explained in Sect.~\ref{sec:build} and in
 Sect.~\ref{sec:execute}.
@@ -503,9 +516,68 @@ runs are therefore easy to do, since all the parts of the model that
 have to be modified are contained in the same directory. Further
 information can be found in Sect.~\ref{subsec:build-process}.\\
 
-\textbf{Important Note}: whenever the \texttt{model/} directory is
-mentioned in this manual, it is implied that its name and location may
-be different than the default name (\texttt{model/}) and location
-(\maindir). All scripts that require this information, as well as the
-\texttt{atchem2} executable, allow the user to specify the path to the
-\texttt{model/} directory and to its subdirectories, as needed.
+\textcolor{red}{\bf Important Note}: whenever the \texttt{model/}
+directory is mentioned in this manual, it is implied that its name and
+location may be different than the default name (\texttt{model/}) and
+location (\maindir). All scripts that require this information, as
+well as the \texttt{atchem2} executable, allow the user to specify the
+path to the \texttt{model/} directory and to its subdirectories, as
+needed.
+
+% -------------------------------------------------------------------- %
+\section{Docker} \label{sec:docker}
+
+A containerised version of AtChem2 is available. Currently this is
+built only for release 1.2.2. The container is built on Rocky Linux
+8.9 and pre-installs the CVODE and openlibm dependencies via the
+corresponding install scripts (see Sect.~\ref{subsec:required-dependencies}).
+
+The image can be downloaded via the command:
+%\verb|docker pull ghcr.io/wacl-york/atchem2:1.2.2|
+
+When running the container, changes to the model (e.g. those made to
+configurations, constraints and mechanisms) should be in a folder that
+matches the AtChem2 directory structure. This folder is then mounted
+as a volume to the container with the name \texttt{/data\_transfer/}.
+The chemical mechanism to use is provided as a positional argument to
+the image (e.g. \texttt{./model/my\_mech.fac}).
+
+Example host file structure:
+\begin{verbatim}
+my_model_run
+ |__ model
+     |__ configuration
+     |__ constraints
+     |__ my_mech.fac
+\end{verbatim}
+
+Example Docker run command:
+
+\begin{verbatim}
+docker run -it --rm -v /path/to/my_model_run:/data_transfer
+       ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
+\end{verbatim}
+
+Outputs will be copied to \texttt{my\_model\_run/model/output} on completion.
+
+Running on Singularity / Apptainer
+
+Some HPC systems use Singularity / Apptainer instead of Docker as
+their container engine. This image is compatible with those
+as well. The image can be converted to a \texttt{.sif} via the command:
+
+\begin{verbatim}
+apptainer pull path/to/image/atchem2.sif
+          docker://ghcr.io/wacl-york/atchem2:1.2.2
+\end{verbatim}
+
+Example Apptainer run command:
+
+\begin{verbatim}
+apptainer run --bind /path/to/my_model_run/:/data_transfer/
+          path/to/image/atchem2.sif ./model/my_mech.fac
+\end{verbatim}
+
+Note that the leading \verb|/| is important when mounting the volume for
+apptainer, as the container opens in the users \verb|~| directory whereas
+Docker opens at \verb|/|.

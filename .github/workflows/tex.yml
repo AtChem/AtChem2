@@ -1,0 +1,83 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
+# Workflow to generate automatically the pdf file of the AtChem2 manual
+# -------------------------------------------------------------------- #
+name: AtChem2 PDF
+
+# ------------------------------ EVENTS ------------------------------ #
+# Controls when the workflow is activated
+on:
+
+  # Triggers when a push is made to the master branch (either by
+  # merging a pull request, or by direct commit), and when any of the
+  # .tex/.svg files in `doc/` have been modified
+  push:
+    branches: [ master ]
+    paths:
+      - './doc/latex/*.tex'
+      - './doc/figures/*.svg'
+
+  # Run manually from the Actions tab
+  workflow_dispatch:
+
+# ------------------------------ JOBS ------------------------------ #
+# This workflow contains a single job called `pdf_manual` which runs
+# the script `make_manual_pdf.sh` to generate the pdf file of the
+# manual, and uploads it to the repo
+jobs:
+  pdf_manual:
+    # The job runs on the latest version of linux (ubuntu), and needs
+    # write permission to the repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+
+      # -------------------------------------------------------------
+      # 1. Checkout the repository from the branch associated with the current PR
+      - name: Checkout repo
+        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+        with:
+          ref: ${{ github.ref }}
+
+      # -------------------------------------------------------------
+      # 2. Setup TeXLive, install Inkscape (v1.x), and compile the pdf file
+      - name: Setup TexLive and compile the manual
+        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+        with:
+          scheme: full
+          run: |
+            apk add inkscape
+            ./tools/make_manual_pdf.sh
+
+      # # -------------------------------------------------------------
+      # # 3.
+      # - name: Upload pdf file as artifact
+      #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
+      #   with:
+      #     name: AtChem2-Manual.pdf
+      #     path: doc/AtChem2-Manual.pdf
+
+      # -------------------------------------------------------------
+      # 4.
+      - name: Add pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # configure git
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          # commit pdf file
+          git add doc/AtChem2-Manual.pdf
+          git commit -m "Update AtChem2-Manual.pdf"
+          #git push origin master

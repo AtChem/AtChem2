@@ -1,5 +1,5 @@
-48           number of steps
-900          step size (seconds)
+24000           number of steps
+1          step size (seconds)
 2            species interpolation method (pw constant = 1, pw linear = 2)
 2            conditions interpolation method (pw constant = 1, pw linear = 2)
 3600         rates output step size - ROPA/RODA (seconds)

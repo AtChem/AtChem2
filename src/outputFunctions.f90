@@ -183,10 +183,12 @@ contains
   ! reaction, a string representing that reaction.
   pure function getReaction( speciesNames, reactionNumber ) result ( reaction )
     use types_mod
-    use reaction_structure_mod, only : clhs, crhs
+    use reaction_structure_mod, only : clhs, crhs, clcoeff, crcoeff
     use storage_mod, only : maxSpecLength, maxReactionStringLength
 
     character(len=maxSpecLength) :: reactants(10), products(10)
+    character(len=4) :: reactCoeffs(10), prodCoeffs(10)
+    character(len=4) :: tmpCoeffStr
     character(len=maxSpecLength), intent(in) :: speciesNames(*)
     integer(kind=NPI) :: i, numReactants, numProducts
     integer(kind=NPI), intent(in) :: reactionNumber
@@ -200,12 +202,21 @@ contains
       if ( clhs(1, i) == reactionNumber ) then
         numReactants = numReactants + 1
         reactants(numReactants) = speciesNames(clhs(2, i))
+
+        !Store the reaction coefficient (stoichiometry) string for this reactant. If
+        !the coefficient is 1, then just use an empty string
+        if ( clcoeff(i) == 1.0 ) then
+          reactCoeffs(numReactants) = ''
+        else
+          write(tmpCoeffStr, '(F4.2)')clcoeff(i)
+          reactCoeffs(numReactants) = tmpCoeffStr
+        end if
       end if
     end do
 
     reactantStr = ' '
     do i = 1, numReactants
-      reactantStr = trim( adjustl( trim( reactantStr ) // trim( reactants(i) ) ) )
+      reactantStr = trim( adjustl( trim( reactantStr ) // trim( reactCoeffs(i) ) // trim( reactants(i) ) ) )
       if ( i < numReactants ) then
         reactantStr = trim( reactantStr ) // '+'
       end if
@@ -222,12 +233,21 @@ contains
       if ( crhs(1, i) == reactionNumber ) then
         numProducts = numProducts + 1
         products(numProducts) = speciesNames(crhs(2, i))
+
+        !Store the reaction coefficient (stoichiometry) string for this product. If
+        !the coefficient is 1, then just use an empty string
+        if ( crcoeff(i) == 1.0 ) then
+          prodCoeffs(numProducts) = ''
+        else
+          write(tmpCoeffStr, '(F4.2)')crcoeff(i)
+          prodCoeffs(numProducts) = tmpCoeffStr
+        end if
       end if
     end do
 
     productStr = ' '
     do i = 1, numProducts
-      productStr = trim( adjustl( trim( productStr ) // trim( products(i) ) ) )
+      productStr = trim( adjustl( trim( productStr ) // trim( prodCoeffs(i) ) //  trim( products(i) ) ) )
       if ( i < numProducts ) then
         productStr = trim( productStr ) // '+'
       end if
@@ -295,7 +315,7 @@ contains
           write (output_file_number, '(ES15.6E3, I14, A52, I15, ES15.6E3, A, A)') t, rSpecies(i), &
                                                                                   trim( speciesNames(rSpecies(i)) ), &
                                                                                   r(i, j)%reaction, &
-                                                                                  r(i, j)%frequency * p(r(i, j)%reaction), &
+                                                                                  r(i, j)%stoich * p(r(i, j)%reaction), &
                                                                                   '  ', trim( reaction )
         end if
       end do

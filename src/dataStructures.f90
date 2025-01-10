@@ -43,6 +43,7 @@ module types_mod
   type reaction_frequency_pair
     integer(kind=NPI) :: reaction
     integer(kind=NPI) :: frequency
+    real(kind=DP) :: stoich
   end type reaction_frequency_pair
 
   interface operator (==)

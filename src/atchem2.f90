@@ -225,7 +225,7 @@ PROGRAM ATCHEM2
   allocate (detailedRatesSpecies(size( detailedRatesSpeciesName )))
   allocate (reacDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( clhs, 2 )))
   allocate (prodDetailedRatesSpecies(size( detailedRatesSpeciesName ), size( crhs, 2 )))
-  invalid_reaction_frequency_pair = reaction_frequency_pair(-1_NPI, 0_NPI)
+  invalid_reaction_frequency_pair = reaction_frequency_pair(-1_NPI, 0_NPI, 0.0_DP)
   reacDetailedRatesSpecies(:,:) = invalid_reaction_frequency_pair
   prodDetailedRatesSpecies(:,:) = invalid_reaction_frequency_pair
   allocate (reacDetailedRatesSpeciesLengths(size( detailedRatesSpeciesName )))
@@ -243,8 +243,10 @@ PROGRAM ATCHEM2
   !
   ! Fill the remaining elements of each row of reac/prodDetailedRatesSpecies with the
   ! numbers of the reactions in which that species appears as a reactant/product respectively
-  call findReactionsWithProductOrReactant( detailedRatesSpecies, clhs, reacDetailedRatesSpecies, reacDetailedRatesSpeciesLengths )
-  call findReactionsWithProductOrReactant( detailedRatesSpecies, crhs, prodDetailedRatesSpecies, prodDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, clhs, clcoeff, reacDetailedRatesSpecies, &
+                                           reacDetailedRatesSpeciesLengths )
+  call findReactionsWithProductOrReactant( detailedRatesSpecies, crhs, crcoeff, prodDetailedRatesSpecies, &
+                                           prodDetailedRatesSpeciesLengths )
   write (*, '(A, I0)') ' Species requiring detailed rate output (number of species found): ', size( detailedRatesSpeciesName )
   write (*,*)
 

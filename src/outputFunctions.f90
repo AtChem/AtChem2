@@ -208,7 +208,7 @@ contains
         if ( clcoeff(i) == 1.0 ) then
           reactCoeffs(numReactants) = ''
         else
-          write(tmpCoeffStr, '(F4.2)')clcoeff(i)
+          write(tmpCoeffStr, '(F4.2)') clcoeff(i)
           reactCoeffs(numReactants) = tmpCoeffStr
         end if
       end if
@@ -239,7 +239,7 @@ contains
         if ( crcoeff(i) == 1.0 ) then
           prodCoeffs(numProducts) = ''
         else
-          write(tmpCoeffStr, '(F4.2)')crcoeff(i)
+          write(tmpCoeffStr, '(F4.2)') crcoeff(i)
           prodCoeffs(numProducts) = tmpCoeffStr
         end if
       end if

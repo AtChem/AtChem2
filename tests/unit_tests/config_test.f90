@@ -59,6 +59,7 @@ contains
     use config_functions_mod, only : findReactionsWithProductOrReactant
 
     integer(kind=NPI) :: speciesList(3), chs(2, 7), lens(3), i, j, lenAnswer(3)
+    real(kind=DP) :: ccoeff(7)
     type(reaction_frequency_pair) :: r(3, 10), rAnswer(3, 10)
 
     do i = 1, size( r, 1 )
@@ -95,7 +96,7 @@ contains
     rAnswer(3,1)%reaction = 2_NPI
     rAnswer(3,1)%frequency = 1_NPI
 
-    call findReactionsWithProductOrReactant(speciesList,chs,r,lens)
+    call findReactionsWithProductOrReactant(speciesList,chs,ccoeff,r,lens)
     do i = 1_NPI, size( lenAnswer )
       call assert_true( lenAnswer(i) == lens(i), "test_findReactionsWithProductOrReactant length" )
     enddo

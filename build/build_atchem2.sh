@@ -36,27 +36,30 @@
 # -----------------------------------------------------------------------------
 
 echo ""
-echo "* facsimile mechanism file:" $1
-echo "* fortran mechanism directory [ default = ./model/configuration/ ]:" $2
-echo "* mcm data files directory [ default = ./mcm/ ]:" $3
+echo "     AtChem2 v1.3-dev"
+echo ""
+
+echo "* Chemical mechanism file:" $1
+echo "* Fortran mechanism directory [ default = ./model/configuration/ ]:" $2
+echo "* MCM data files directory [ default = ./mcm/ ]:" $3
 
 echo ""
-echo "call mech_converter.py"
-python ./build/mech_converter.py $1 $2 $3
+echo "-> Call mech_converter.py"
+python3 ./build/mech_converter.py $1 $2 $3
 
 echo ""
+echo "-> Create shared library"
 if [ -z $2 ]; then
-  echo "make sharedlib"
   make sharedlib
-  echo "=> shared library directory: ./model/configuration/"
+  echo "=> shared library created in: ./model/configuration/"
 else
-  echo "make sharedlib" $2
   make sharedlib SHAREDLIBDIR=$2
-  echo "=> shared library directory:" $2
+  echo "=> shared library created in:" $2
 fi
 
 echo ""
-echo "make atchem2 executable"
+echo "-> Create atchem2 executable"
 make
+echo ""
 
 exit 0

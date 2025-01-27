@@ -27,7 +27,7 @@ following software tools:
 \item a text editor: Emacs, vim, Gedit, Kate, TextEdit, SublimeText,
   Atom, or similar.
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran}
-  (version 4.8 and above) and with Intel \texttt{ifort} (version 17.0 and above)\\
+  (version 4.8 and later) and with Intel \texttt{ifort} (version 17.0 and later)\\
   $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}.
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
     with Python v2 and v3. Support for Python v2 will be removed in
@@ -53,7 +53,7 @@ For detailed instructions on the installation and configuration of the
 dependencies, go to Sect.~\ref{sec:dependencies}.
 
 As an alternative, AtChem2 can be used as a \href{https://www.docker.com}{Docker}
-container. For details, see Sect.~\ref{sec:docker}.
+container. For details, go to Sect.~\ref{sec:docker}.
 
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
@@ -61,8 +61,8 @@ container. For details, see Sect.~\ref{sec:docker}.
 Two versions of AtChem2 are available for download: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the \emph{development version}, also known as \texttt{master\ branch}
-(see Sect.~\ref{sec:general-information} for details). The source code
-of AtChem2 can be obtained in two ways:
+(Sect.~\ref{sec:general-information} for details). The source code of
+AtChem2 can be obtained in two ways:
 
 \begin{enumerate}
 \item with \textbf{git} (this is the recommended method for users who
@@ -106,7 +106,7 @@ and path -- according to the user's preferences.
 AtChem2 has a number of dependencies (additional software tools and
 libraries): some are \emph{required}, and without them the model
 cannot be installed or used, others are \emph{optional}, and only
-needed to run the Testsuite (see Sect.~\ref{sec:test-suite}).  It is
+needed to run the Testsuite (Sect.~\ref{sec:test-suite}).  It is
 recommended to install all the AtChem2 dependencies into the same
 directory, called \depdir. In this manual, the \depdir\ is assumed to
 be \texttt{\$HOME/AtChem-lib/}, but it can be given any name and path
@@ -422,9 +422,9 @@ For the majority of the users, the most important directories are
 \texttt{doc/} which contains the user manual and other documents,
 \texttt{tools/} which contains the installation and plotting scripts
 (plus other utilities), and \texttt{model/} which contains the model
-configuration, input, output and, usually, the chemical
-mechanism. Detailed information on these three directories can be
-found in the following sections.
+configuration, input, output and, usually, the chemical mechanism.
+Detailed information on these three directories are in the following
+sections.
 
 \subsection{The \texttt{doc/} and \texttt{tools/} directories} \label{subsec:doc-tools-directories}
 
@@ -530,7 +530,7 @@ needed.
 A containerised version of AtChem2 is available. Currently this is
 built only for release 1.2.2. The container is built on Rocky Linux
 8.9 and pre-installs the CVODE and openlibm dependencies via the
-corresponding install scripts (see Sect.~\ref{subsec:required-dependencies}).
+corresponding install scripts (Sect.~\ref{subsec:required-dependencies}).
 
 The image can be downloaded via the command:
 %\verb|docker pull ghcr.io/wacl-york/atchem2:1.2.2|
@@ -578,6 +578,6 @@ apptainer run --bind /path/to/my_model_run/:/data_transfer/
           path/to/image/atchem2.sif ./model/my_mech.fac
 \end{verbatim}
 
-Note that the leading \verb|/| is important when mounting the volume for
-apptainer, as the container opens in the users \verb|~| directory whereas
-Docker opens at \verb|/|.
+Note that the leading \texttt{/} is important when mounting the volume
+for apptainer, as the container opens in the users \texttt{~}
+directory whereas Docker opens at \texttt{/}.

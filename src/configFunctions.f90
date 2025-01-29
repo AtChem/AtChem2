@@ -83,14 +83,16 @@ contains
   ! At the end of this function, each row of r is associated to one of
   ! the species in rSpecies. Each element of the row corresponds to a
   ! reaction in which this species appears as a product or reactant.
-  ! Each element consists of %reaction holding the reaction number, and
+  ! Each element consists of %reaction holding the reaction number,
   ! %frequency holding the number of occurences of that species in that
-  ! reaction. chs contains the product or reactant information, and
+  ! reaction, and %stoich holding the sum of the stoichiometric coefficients 
+  ! for that species in that reaction. chs contains the product or reactant information, and
   ! arrayLen is used to keep track of how many are present in each row.
-  subroutine findReactionsWithProductOrReactant( rSpecies, chs, r, arrayLen )
+  subroutine findReactionsWithProductOrReactant( rSpecies, chs, ccoeff, r, arrayLen )
     use types_mod
 
-    integer(kind=NPI), intent(in) :: rSpecies(:), chs(:,:)
+    integer(kind=NPI), intent(in) :: rSpecies(:), chs(:,:) 
+    real(kind=DP), intent(in) :: ccoeff(:)
     type(reaction_frequency_pair), intent(inout) :: r(:,:)
     integer(kind=NPI), intent(out) :: arrayLen(:)
     integer(kind=NPI) :: rCounter, i, j
@@ -125,6 +127,7 @@ contains
           end if
           r(i, rCounter)%reaction = chs(1, j)
           r(i, rCounter)%frequency = r(i, rCounter)%frequency + 1_NPI
+          r(i, rCounter)%stoich = r(i, rCounter)%stoich + ccoeff(j)
         end if
       end do
       arrayLen(i) = rCounter

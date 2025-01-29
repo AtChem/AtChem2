@@ -43,6 +43,9 @@ module types_mod
   type reaction_frequency_pair
     integer(kind=NPI) :: reaction
     integer(kind=NPI) :: frequency
+    ! stoich was added in Jan 2025 by Alfred Mayhew to allow proper output of rates for reactions
+    ! involving non-integer stoichiometry (instead of using frequency)
+    real(kind=DP) :: stoich
   end type reaction_frequency_pair
 
   interface operator (==)

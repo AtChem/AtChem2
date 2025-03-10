@@ -132,9 +132,9 @@ direct emission of a chemical species can be parametrized as:
 More sophisticated approaches to describe non-chemical processes can
 be implemented by defining complex mathematical expressions to
 calculate the corresponding ``rate coefficients'', as explained
-above. Alternatively, since version 1.2.3, Atchem2 allows the user to
-create custom Fortran functions -- go to Sect.~\ref{subsec:custom-functions}
-for details.
+above. Alternatively, since version 1.2.3, AtChem2 allows the user to
+create custom Fortran functions -- go to
+Sect.~\ref{subsec:custom-functions} for details.
 
 The chemical mechanism file (\texttt{.fac} or \texttt{.kpp}) has to be
 processed by the \texttt{mech\_converter.py} script, which is executed
@@ -209,9 +209,8 @@ the \texttt{mcm/} directory. By default, AtChem2 uses version 3.3.1 of
 the MCM; the corresponding list of organic peroxy radicals is in the
 \texttt{peroxy-radicals\_v3.3.1} file. Lists of organic peroxy
 radicals for other versions of the MCM are included in the
-\texttt{mcm/} directory. Instructions on how to set up AtChem2 to use
-previous versions of the MCM can be found in the \texttt{mcm/INFO.md}
-file.
+\texttt{mcm/} directory. Instructions on how to use previous versions
+of the MCM with AtChem2 can be found in the \texttt{mcm/INFO.md} file.
 
 If a chemical species is included in the \textbf{Peroxy radicals}
 section of the \texttt{.fac} file, but is not present in the list of
@@ -225,9 +224,10 @@ script prints a warning message to the terminal:
   Should they be included in the RO2 sum?
 \end{verbatim}
 
-The user should then check manually whether that species is an organic
-peroxy radical or not, amend the \texttt{.fac} file accordingly, and
-rerun the \texttt{build\_atchem2.sh} script.
+In this case, the user must check manually whether that species is an
+organic peroxy radical, amend the \textbf{Peroxy radicals} section of
+the \texttt{.fac} file accordingly, and rerun the \texttt{build\_atchem2.sh}
+script.
 
 It is important to ensure that the \cf{RO2} sum is accurate, because
 many reactions in the MCM depend on this parameter. This means that
@@ -237,62 +237,76 @@ only organic peroxy radicals~\footnote{The hydroperoxyl radical
   (\cf{HO2}) is a peroxy radical but is not an organic molecule, and
   therefore it \emph{must not} be included in the \cf{RO2} sum.}. The
 model calculates the \cf{RO2} sum at runtime and, by default, outputs
-the variable to the \texttt{environmentVariables.output} file
-(Sect.~\ref{sec:output}).
+the value of this variable to the \texttt{environmentVariables.output}
+file (Sect.~\ref{sec:output}).
 
 \subsection{MCM extraction} \label{subsec:mcm-extraction}
 
-The MCM website provides a convenient tool that can be used to
-download the whole Master Chemical Mechanism -- or subsets of it -- in
-FACSIMILE format. Only a brief overview of the process is given here:
-for more information, go to the \href{https://mcm.york.ac.uk/MCM/}{MCM website}.
+The \href{https://mcm.york.ac.uk/MCM/}{MCM website} provides a
+convenient tool that can be used to download the whole Master Chemical
+Mechanism, or subsets of it, in FACSIMILE format. Only a brief
+overview of the process is given here -- for more information, go to
+the MCM website.
 
 First, select the species of interest using the
-\href{https://mcm.york.ac.uk/MCM/browse}{MCM browser} and add the
-selection to the ``Mark List''. Then proceed to the
-\href{https://mcm.york.ac.uk/MCM/export}{MCM extraction tool} and
-select the option ``FACSIMILE input format, suitable for inserting
-into a FACSIMILE model''. Make sure that the following options are
-selected, so that all the required headers
-(Sect.~\ref{subsec:facsimile-format}) will be included in the
-generated \texttt{.fac} file: :
+\href{https://mcm.york.ac.uk/MCM/browse}{MCM browser} and add them to
+the ``Marklist''. Then proceed to the
+\href{https://mcm.york.ac.uk/MCM/export}{MCM export tool} and select
+the option ``FACSIMILE'' as output format. Make sure to also select
+the following options, so that all the required headers
+(Sect.~\ref{subsec:facsimile-format}) are included in the generated
+\texttt{.fac} file: :
 
 \begin{verbatim}
 [x] Include inorganic reactions?
 [x] Include generic rate coefficients?
 \end{verbatim}
 
-Click on the ``Extract'' button to download the \texttt{.fac} file
-into a directory of choice -- such as the \texttt{model/} directory,
-as discussed in Sect.~\ref{subsec:model-directory}. The downloaded
-\texttt{.fac} file is a simple text file and is ready to be used in
-AtChem2. If modifications are required (e.g., if some chemical
-reactions have to be added, deleted or modified) open the
-\texttt{.fac} file with a text editor and edit the chemical mechanism
-as needed.
+Click on the ``Download'' button and save the \texttt{.fac} file into
+a directory of choice -- such as the \texttt{model/} directory
+(Sect.~\ref{subsec:model-directory}). The procedure to generate the
+chemical mechanism file is identical if a \texttt{.kpp} file is
+desired (just select the option ``KPP'' instead of ``FACSIMILE'' as
+output format). The chemical mechanism file downloaded from the MCM
+website is a simple ASCII text file and is ready to be used in
+AtChem2. If modifications are required (e.g., chemical reactions to be
+added, deleted or modified), the user can open the file with the text
+editor of choice and edit the chemical mechanism as needed.
 
 \subsection{Custom Functions} \label{subsec:custom-functions}
 
-The file \texttt{model/configuration/customRateFuncs.f90} can be used
-to define Fortran functions that can be called from within the
-mechanism file. By default, this file defines an empty Fortran module
-which can be edited to add custom functions. This file is read by mech
-converter.py (Sect.~\ref{subsec:build-process}) to identify the names
-of user-defined functions in the mechanism file. As such, custom
-functions must be defined as functions using the term
-``function''. Below is an example of an edited `customRateFuncs.f90`
-file which defines a simple function to add two numbers:
+The Fortran file \texttt{customRateFuncs.f90} allows the user to
+define custom functions that can be called from within the chemical
+mechanism to enhance the capability of the model~\footnote{\emph{N.B.}:
+  this feature is available only in AtChem2 v1.2.3 and later.}.
+These may include parametrizations of heterogeneous reactions, aerosol
+formation, surface deposition, emissions and other non-chemical
+processes, as discussed in Sect.~\ref{subsec:facsimile-format}.
+
+By default, \texttt{customRateFuncs.f90} is located in
+\texttt{model/configuration/} and contains an empty Fortran module
+which can be modified by the user to add any number of custom
+functions. During the build process, the \texttt{mech\_converter.py}
+script identifies the names of all the custom functions added to the
+module and includes them into \texttt{mechanism.f90}
+(Sect.~\ref{subsec:build-process}). If there are no custom functions,
+the content of the module is ignored.
+
+Note that the custom functions must be defined as Fortran functions
+and not as subroutines, i.e. the Fortran keyword \textbf{function}
+must be used in the declaration. Environment variables
+(Sect.~\ref{sec:environment-variables}), such as temperature and
+pressure, can be used as arguments in a custom function. Below is an
+example of a modified \texttt{customRateFuncs.f90} file which defines
+a simple function to add two numbers:
 
 \begin{verbatim}
 module custom_functions_mod
-
   implicit none
 
 contains
 
-  ! -----------------------------------------------------------------
-  ! Multiply two numbers
-
+  ! Function to multiply two numbers
   pure function multiplyNumbers( inNum1, inNum2 ) result ( outNum )
     real, intent(in) :: inNum2, inNum1
     real :: outNum
@@ -300,45 +314,52 @@ contains
     outNum = inNum1 * inNum2
 
     return
-
   end function multiplyNumbers
 
 end module custom_functions_mod
 \end{verbatim}
 
-This function can then be referenced in the mechanism file reactions as follows:
+The ``multiplyNumbers()'' function can then be called in the
+\texttt{.fac} file, together with the regular FACSIMILE notation
+(Sect.~\ref{subsec:facsimile-format}). For example:
 
 \begin{verbatim}
 % multiplyNumbers(2.0, 0.5) : A = B ;
 \end{verbatim}
 
-Environmental variables (e.g., \texttt{TEMP}, \texttt{PRESS},
-etc\ldots) can also be passed as arguments to user-defined functions
-in the mechanism file.
+It is the user's responsibility to ensure that the custom Fortran code
+is correct. Optionally, but recommended, the Python scripts
+\texttt{fix\_style.py} and \texttt{fix\_indent.py} in the
+\texttt{tools/} directory can be used to check that the Fortran code
+follows the AtChem2 \hyperref[subsec:style-recommendations]{coding
+  guidelines}, as explained in Sect.~\ref{sec:style-guide}.
 
-\subsection{The build process} \label{subsec:build-process}
+\subsection{Build process} \label{subsec:build-process}
 
 AtChem2 is built using the scripts in the \texttt{build/}
 directory. Here, the build process is only outlined; detailed
 instructions on how to build the model can be found in
 Sect.~\ref{sec:build}.
 
-The Python script \texttt{mech\_converter.py} -- automatically called
-by the \texttt{build\_atchem2.sh} script -- converts the chemical
-mechanism from FACSIMILE format into a format that can be read by the
-Fortran code. In doing so, the Python script generates a number of
-files:
+The Python script \texttt{mech\_converter.py} -- called by the
+\texttt{build\_atchem2.sh} script -- converts the chemical mechanism
+from the FACSIMILE format into a Fortran-compatible
+format~\footnote{If the mechanism file is provided in KPP format, the
+  \texttt{mech\_converter.py} script first converts it into a
+  \texttt{.fac} file, which is then processed as described.}. In doing
+so, the build script generates a number of files:
 
 \begin{itemize}
-\item \texttt{mechanism.f90} contains the equations, in Fortran code,
-  to calculate the rate coefficients of each reaction of the chemical
+\item \texttt{mechanism.f90} contains the Fortran equations to
+  calculate the rate coefficients of each reaction in the chemical
   mechanism.
-\item \texttt{mechanism.so} is the \textbf{shared library}, i.e. the
-  pre-compiled version of the chemical mechanism.
-\item \texttt{mechanism.species} contains the list of chemical species
-  in the chemical mechanism. The file has no header. The first column
-  is the ID number of the species, the second column is the
-  name of the species:
+\item \texttt{mechanism.o} is the compiled Fortran code and
+  \texttt{mechanism.so} is the shared library, i.e. the pre-compiled
+  chemical mechanism.
+\item \texttt{mechanism.species} contains the chemical species in the
+  chemical mechanism. The file has no header. The first column is the
+  ID number of the species, the second column is the name of the
+  species:
   \begin{verbatim}
   1 O
   2 O3
@@ -346,27 +367,28 @@ files:
   4 NO2
   \end{verbatim}
 \item \texttt{mechanism.reac} and \texttt{mechanism.prod} contain the
-  reactants and the products (respectively) in each reaction of the
-  chemical mechanism. The files have a one line header showing the
-  number of species, the number of reactions and the number of
-  equations in the \textbf{Generic rate coefficients} and
-  \textbf{Complex reactions} sections (Sect.~\ref{subsec:facsimile-format}).
-  The first column is the ID number of the reaction, the second
-  column is the ID number of the chemical species (from
-  \texttt{mechanism.species}) which are reactants/products in that
-  reaction, and the third column indicates the stoichiometric coefficient of the species.
+  reactants and the products (respectively) of each reaction in the
+  chemical mechanism. The files have a one line header with the total
+  number of species and reactions in the mechanism, and the total
+  number of equations in the \textbf{Generic rate coefficients} and
+  \textbf{Complex reactions} sections of the \texttt{.fac} file
+  (Sect.~\ref{subsec:facsimile-format}). The first column is the ID
+  number of the reaction, the second column is the ID number of the
+  species (from \texttt{mechanism.species}) which is a
+  reactant/product in that reaction, the third column is the
+  stoichiometric coefficient of the reaction:
   \begin{verbatim}
   29 71 139 numberOfSpecies numberOfReactions numberOfGenericComplex
-  1 1
-  2 1
-  3 1
-  3 2
+  1 1 1.0
+  2 1 1.0
+  3 1 1.0
+  3 2 1.0
   \end{verbatim}
 \item \texttt{mechanism.ro2} contains the organic peroxy radicals
-  (\cf{RO2}). The file has a one line header formatted as a Fortran
-  comment. The first column is the ID number of the peroxy
-  radical (from \texttt{mechanism.species}), the second column is the
-  name of the peroxy radical as a Fortran comment:
+  (\cf{RO2}) in the chemical mechanism. The file has a one line header
+  as a Fortran comment. The first column is the ID number of the
+  peroxy radical (from \texttt{mechanism.species}), the second column
+  is the name of the peroxy radical as a Fortran comment:
   \begin{verbatim}
   ! Note that this file is automatically generated by
     build/mech_converter.py -- Any manual edits to this file
@@ -379,88 +401,88 @@ files:
 \end{itemize}
 
 The directory containing the files generated by the build script is,
-by default, \texttt{model/configuration/}, but its location can be
-changed using the second argument of the build script, as explained in
-Sect.~\ref{sec:build} (see also Sect.~\ref{subsec:model-directory}).
-The shared library \texttt{mechanism.so} is created in the \sharedir,
+by default, \texttt{model/configuration/} but its location can be changed
+using the second argument of \texttt{build\_atchem2.sh}, as explained
+in Sect.~\ref{sec:build} (see also Sect.~\ref{subsec:model-directory}).
+The shared library (\texttt{mechanism.so}) is created in the \sharedir,
 which usually is the same as the \texttt{model/configuration/}.
 
 % -------------------------------------------------------------------- %
 \section{Model Parameters} \label{sec:model-parameters}
 
-The model parameters control the general setup of the model; they are
-set in the \texttt{model.parameters} file which, by default, is
-in the \texttt{model/configuration/} directory.
+The model parameters control the general setup of the model, such as
+the runtime, the interpolation methods, the output frequencies,
+etc\ldots The model parameters, which are described below, are set in
+the \texttt{model.parameters} file (by default, located in the
+\texttt{model/configuration/} directory).
 
 \begin{itemize}
-\item \textbf{number of steps} and \textbf{step size}. The duration of
-  the model run is determined by the number of steps and by the step
-  size (in seconds). The step size controls the frequency of the model
+\item \textbf{number of steps} and \textbf{step size}. The model
+  runtime is determined by the number of steps and by the step size
+  (in seconds). The step size controls the frequency of the model
   output for the chemical species listed in \texttt{outputSpecies.config}
   (Sect.~\ref{subsec:outputspecies}), as well as for the environment
-  variables, the photolysis rates and the diagnostic variables. The
-  step size is \emph{not related} to the integration step which is
-  controlled by CVODE.
-
-  For example: a model run of 2 hours, with output every 5 minutes,
-  requires 24 steps with a step size of 300 seconds (24 x 300 = 7200
-  sec = 2 hours).
+  variables, the photolysis rates and the diagnostic variables. Note
+  that the step size is \emph{not related} to the integration step,
+  which is independently controlled by CVODE. \underline{For example},
+  a model run of 2 hours, with output every 5 minutes, requires 24
+  steps with a step size of 300 seconds:
+  $24 \times 300 = 7200~\mathrm{seconds} = 2~\mathrm{hours}$
 \item \textbf{species interpolation method} and
   \textbf{conditions interpolation method}. Interpolation method used
-  for the constrained chemical species, and for the constrained
-  environment variables and the photolysis rates, respectively. Two
-  interpolation methods are currently implemented in AtChem2:
-  piecewise constant and piecewise linear (Sect.~\ref{subsec:interpolation}).
-  The default option is \texttt{2} (piecewise linear interpolation).
+  for the constrained chemical species, and for the constrained environment
+  variables and the photolysis rates, respectively. Two interpolation
+  methods are currently implemented in AtChem2: piecewise constant and
+  piecewise linear (Sect.~\ref{subsec:interpolation}). The default
+  option is \texttt{2} (piecewise linear interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the
-  model output for the rate of the production and destruction analysis
-  (ROPA/RODA) of selected chemical species, i.e. those listed in
-  \texttt{outputRates.config} (Sect.~\ref{subsec:outputrates}).
+  model output for the rate of production and destruction analysis
+  (ROPA/RODA) of selected species, listed in \texttt{outputRates.config}
+  (Sect.~\ref{subsec:outputrates}).
 \item \textbf{model start time}. Start time of the model (in seconds)
   calculated from midnight of the \textbf{day}, \textbf{month},
-  \textbf{year} parameters -- see below. For example, a start time of
-  3600 means the model run starts at 1:00 in the morning and a start
-  time of 46800 means the model run starts at 1:00 in the afternoon
-  (13:00). The \textbf{model stop time} is automatically calculated by
-  the model as:
+  \textbf{year} parameters -- see below. \underline{For example}, a
+  start time of 3600 means the model run starts at 1:00 in the morning
+  and a start time of 46800 means the model run starts at 1:00 in the
+  afternoon (13:00). The \textbf{model stop time} does not need to be
+  specified. It is automatically calculated by the model as:
   \begin{center}
-  stop time = start time + (number of steps * step size)
+    stop time = start time + (number of steps * step size)
   \end{center}
-  \emph{N.B.}: when one or more variables are constrained, the time
-  interval between the model start time and the model stop time
-  \emph{must be} equal to or less than the time interval of the
-  constrained data -- go to Sect.~\ref{subsec:interpolation} for details.
+  When one or more variables are constrained, the time interval
+  between the model start time and the model stop time \emph{must be}
+  equal to, or less than, the time interval of the constrained data --
+  go to Sect.~\ref{subsec:interpolation} for more information.
 \item \textbf{jacobian output step size}. Frequency (in seconds) of
-  the model output of the Jacobian matrix. If this parameter is set to
-  \texttt{0} (default option), the Jacobian matrix is not output.
-
-  \emph{N.B.}: the \texttt{jacobian.output} file generated by the
-  model can be very large, especially if the chemical mechanism has
-  many reactions and/or the model runtime is long.
+  the model output for the Jacobian matrix. If this parameter is set
+  to \texttt{0} (default option), the Jacobian is not saved. The
+  \texttt{jacobian.output} file generated by the model can be very
+  large, especially if the chemical mechanism has many reactions
+  and/or the model runtime is long. Therefore it is recommended to
+  output the Jacobian matrix only if needed.
 \item \textbf{latitude} and \textbf{longitude}. Geographical
   coordinates (in degrees). Latitude North is positive and latitude
   South is negative; longitude East is negative and longitude West is
   positive~\footnote{The standard geographical convention is that
     longitude East is positive and longitude West is negative. AtChem2
-    uses the opposite convention for backward compatibility
-    reasons. This may change in future versions of AtChem2.}. Latitude
-  and longitude are used to calculate the solar angles, which are
-  needed for the calculation of the photolysis rates
+    uses the opposite convention for reasons of backward
+    compatibility. This may change in future versions of
+    AtChem2.}. Latitude and longitude are used to calculate the solar
+  angles, which are needed for the calculation of the photolysis rates
   (Sect.~\ref{subsec:calculated-photolysis-rates}).
 \item \textbf{day} and \textbf{month} and \textbf{year}. Start date of
-  the model simulation. The model time is in UTC (GMT timezone) and is
-  calculated in seconds since midnight of the start date.
+  the model simulation. The model time is in UTC (i.e. GMT timezone)
+  and is calculated in seconds since midnight of the start date.
 \item \textbf{reaction rates output step size}. Frequency (in seconds)
   of the model output for the reaction rates of every reaction in the
-  chemical mechanism. In previous versions of AtChem2, this output was
-  called \textbf{instantaneous rates}. By default, the reaction rates
-  are saved in the directory \texttt{model/output/reactionRates/} as
-  one file for each model step, with the name of the file
-  corresponding to the time in seconds. This parameter is different
-  from \textbf{rates output step size} (see above), which sets the
-  frequency of a formatted output of the production and loss rates for
-  a limited number of species of interest. For more information, go to
-  Sect.~\ref{sec:config-files}.
+  chemical mechanism. By default, the reaction rates are saved in a
+  sub-directory of \texttt{model/output} called
+  \texttt{reactionRates/} as one file for each model step, with the
+  name of the file corresponding to the time in seconds. Note that
+  this parameter is different from \textbf{rates output step size}
+  (see above), which sets the frequency of a formatted output for the
+  production and loss rates of a limited number of species of interest
+  (Sect.~\ref{sec:config-files}).
 \end{itemize}
 
 % -------------------------------------------------------------------- %
@@ -500,13 +522,14 @@ these parameters can be found in the documentation of
 
 The environment variables define the physical parameters of the model,
 such as temperature, pressure, humidity, solar angles, boundary layer
-height. These variables are set in the \texttt{environmentVariables.config}
-file which, by default, is in the \texttt{model/configuration/}
-directory.
+height, etc\ldots These variables are set in the
+\texttt{environmentVariables.config} file which, by default, is in the
+\texttt{model/configuration/} directory.
 
-The environment variables can have a fixed (constant) value or can be
-constrained to measured values (\texttt{CONSTRAINED}), in which case
-the corresponding data file must be present in the
+The environment variables can have a fixed value, i.e. a numerical or
+logical constant, or can be constrained to a timeseries of measured
+values (\texttt{CONSTRAINED}). If a variable is constrained, the
+corresponding data file must be present in the
 \texttt{model/constraints/environment/} directory
 (Sect.~\ref{subsec:constrained-variables}). Some environment variables
 can be calculated by the model (\texttt{CALC}) and some can be
@@ -522,22 +545,18 @@ default values.
 Ambient Temperature (K).
 
 \begin{itemize}
-\item fixed value
+\item fixed value\\$\hookrightarrow$ default: 288.15
 \item constrained
 \end{itemize}
-
-Default fixed value = 298.15
 
 \subsection{PRESS} \label{subsec:press}
 
 Ambient Pressure (mbar).
 
 \begin{itemize}
-\item fixed value
+\item fixed value\\$\hookrightarrow$ default: 1013.25
 \item constrained
 \end{itemize}
-
-Default fixed value = 1013.25
 
 \subsection{RH} \label{subsec:rh}
 
@@ -548,24 +567,20 @@ it must be set to \texttt{NOTUSED}.
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used
+\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
 \end{itemize}
-
-Default = NOTUSED (-1)
 
 \subsection{H2O} \label{subsec:h2o}
 
 Water Concentration (molecule cm$^{-3}$). If \texttt{H2O} is set to
 \texttt{CALC}, then \hyperref[subsec:rh]{\texttt{RH}} must be set to a
-fixed value or to \texttt{CONSTRAINED}.
+fixed value or \texttt{CONSTRAINED}.
 
 \begin{itemize}
-\item fixed value
+\item fixed value\\$\hookrightarrow$ default: 4.45e+17
 \item constrained
 \item calculated
 \end{itemize}
-
-Default fixed value = 3.91e+17
 
 \subsection{DEC} \label{subsec:dec}
 
@@ -575,59 +590,61 @@ and Earth's equatorial plane.
 \begin{itemize}
 \item fixed value
 \item constrained
-\item calculated
+\item calculated\\$\hookrightarrow$ default: \texttt{CALC}
 \end{itemize}
-
-Default fixed value = 0.41
 
 \subsection{BLHEIGHT} \label{subsec:blheight}
 
 Boundary Layer Height. It is required only if the model includes
-non-chemical processes, such as emission or deposition of chemical
-species. The unit is usually centimetre (cm) or metre (m), depending
-on how these processes are parametrized in the chemical mechanism --
-go to Sect.~\ref{subsec:facsimile-format} for details.
+non-chemical processes such as the emission or deposition of chemical
+species. The unit is centimetre (cm) or metre (m), depending on how
+these processes are parametrized in the chemical mechanism -- go to
+Sect.~\ref{subsec:facsimile-format} for details.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used
+\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
 \end{itemize}
-
-Default = NOTUSED (-1)
 
 \subsection{ASA} \label{subsec:asa}
 
 Aerosol Surface Area. It is required only if the model includes
-heterogeneous chemical reactions. The unit is area (cm$^2$, $\mu$m$^2$
-or nm$^2$) per cm$^3$, depending on how these reactions are
-implemented in the chemical mechanism.
+heterogeneous chemical reactions. The unit is area (e.g., cm$^2$,
+$\mu$m$^2$, nm$^2$) per volume (e.g., m$^3$, cm$^3$), depending on how
+these reactions are implemented in the chemical mechanism.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used
+\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
 \end{itemize}
-
-Default = NOTUSED (-1)
 
 \subsection{DILUTE} \label{subsec:dilute}
 
-Dilution rate (s$^{-1}$). It is required only if the model includes
-dilution of the chemical species. When \texttt{DILUTE} is set to a
-fixed value, the chemical mechanism is automatically modified during
-the \hyperref[subsec:build-process]{build process}: for each species
-in the chemical mechanism, a loss ``reaction'' is added to the
-mechanism with a ``rate coefficient'' equal to the dilution
-rate~\footnote{The behaviour of \texttt{DILUTE} was changed with the
-  release of version 1.2 (May 2020). In previous versions of AtChem2,
-  the user had to manually add to the chemical mechanism a
-  ``reaction'' using \texttt{DILUTE} for each species for which
-  dilution was required; in addition, \texttt{DILUTE} could be
-  constrained. The new approach makes the use of \texttt{DILUTE} both
-  more intuitive and more accurate.}. For example, the following
-``reactions'' are added to the ``Tropospheric O3-NOx cycle'' mechanism
-shown in Sect.~\ref{subsec:facsimile-format}:
+Dilution Rate (s$^{-1}$). It is required only if the model includes
+the dilution of chemical species.
+
+\begin{itemize}
+\item fixed value
+\item constrained
+\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
+\end{itemize}
+
+When \texttt{DILUTE} is set to a fixed value or constrained, the
+chemical mechanism is automatically modified during the
+\hyperref[subsec:build-process]{build process}: for each species in
+the chemical mechanism, a ``loss reaction'' is added to the mechanism
+with a ``rate coefficient'' equal to the dilution rate~\footnote{The
+  behaviour of \texttt{DILUTE} was changed with the release of version
+  1.2 (May 2020). In previous versions of AtChem2, the user had to
+  manually add to the chemical mechanism a ``reaction'' using
+  \texttt{DILUTE} for each species for which dilution was required; in
+  addition, \texttt{DILUTE} could be constrained. The new approach
+  makes the use of \texttt{DILUTE} both more intuitive and more
+  accurate.}. For example, the following ``reactions'' are added to
+the ``Tropospheric O3-NOx cycle'' mechanism shown in
+Sect.~\ref{subsec:facsimile-format}:
 
 \begin{verbatim}
 % DILUTE : NO2 = ;
@@ -636,37 +653,20 @@ shown in Sect.~\ref{subsec:facsimile-format}:
 % DILUTE : O3 = ;
 \end{verbatim}
 
-The new set of reactions~\footnote{AtChem2 treats molecular oxygen
-  (\cf{O2}) and nitrogen (\cf{N2}) as model parameters, not as
-  chemical species, and their concentrations are calculated by the
-  model as a function of temperature and pressure. Therefore,
-  \texttt{DILUTE} is not applied to \cf{O2} and \cf{N2}.} effectively
-emulates the dilution of the chemical system.
-
-\begin{itemize}
-\item fixed value
-\item constrained
-\item not used
-\end{itemize}
-
-Default = NOTUSED (-1)
-
 \subsection{JFAC} \label{subsec:jfac}
 
 Correction factor used to adjust the photolysis rates -- e.g., to
 account for the presence of clouds. \texttt{JFAC} can have a value
 between \texttt{0} (photolysis rates are set to zero) and \texttt{1}
-(photolysis rates are not corrected). JFAC is \emph{not applied} to
-constant or constrained photolysis rates (Fig.~\ref{fig:photol}). For
-more information, go to Sect.~\ref{subsec:jfac-calculation}.
+(photolysis rates are not corrected). JFAC is not applied to constant
+or constrained photolysis rates (Fig.~\ref{fig:photol}). For more
+information, go to Sect.~\ref{subsec:jfac-calculation}.
 
 \begin{itemize}
-\item fixed value
+\item fixed value\\$\hookrightarrow$ default: 1
 \item constrained
 \item calculated
 \end{itemize}
-
-Default = NOTUSED (1)
 
 \subsection{ROOF} \label{subsec:roof}
 
@@ -944,7 +944,11 @@ The constrained chemical species can be listed in
 debugging purposes. Note that the photolysis rates, the environment
 variables and the \cf{RO2} sum are always output by the model
 (Sect.~\ref{sec:output}) and therefore there is not an equivalent
-\texttt{.config} file for the output of these variables.
+\texttt{.config} file for the output of these variables.~\footnote{AtChem2 treats molecular oxygen
+  (\cf{O2}) and nitrogen (\cf{N2}) as model parameters, not as
+  chemical species, and their concentrations are calculated by the
+  model as a function of temperature and pressure. Therefore,
+  \texttt{DILUTE} is not applied to \cf{O2} and \cf{N2}.}
 
 \subsection{photolysisConstant.config} \label{subsec:photolysisconstant}
 

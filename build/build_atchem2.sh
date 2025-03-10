@@ -45,7 +45,7 @@ echo "* MCM data files directory [ default = ./mcm/ ]:" $3
 
 echo ""
 echo "-> Call mech_converter.py"
-python3 ./build/mech_converter.py $1 $2 $3
+python ./build/mech_converter.py $1 $2 $3
 
 echo ""
 echo "-> Create shared library"

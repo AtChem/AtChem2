@@ -23,16 +23,16 @@ following software tools:
 \begin{itemize}
 \item a terminal with bash or a bash-compatible shell (e.g., zsh is
   the default shell in macOS), and common utilities: \texttt{wget},
-  \texttt{tar}, \texttt{zip}, \texttt{make}.
+  \texttt{tar}, \texttt{zip}, \texttt{make}
 \item a text editor: Emacs, vim, Gedit, Kate, TextEdit, SublimeText,
-  Atom, or similar.
+  Atom, or similar
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran}
   (version 4.8 and later) and with Intel \texttt{ifort} (version 17.0 and later)\\
-  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}.
+  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}
 \item Python~\footnote{All Python scripts used in AtChem2 work equally
     with Python v2 and v3. Support for Python v2 will be removed in
     future versions of AtChem2.}
-\item Ruby, \texttt{rake} (both optional).
+\item Ruby, \texttt{rake} (both optional)
 \item git (optional)
 \end{itemize}
 
@@ -43,10 +43,10 @@ the local documentation or ask the system administrator. In addition,
 AtChem2 has the following dependencies:
 
 \begin{itemize}
-\item CVODE -- requires \texttt{gcc}, \texttt{cmake}. %BLAS, LAPACK
-\item openlibm.
-\item numdiff (optional).
-\item FRUIT (optional).
+\item CVODE -- requires \texttt{gcc}, \texttt{cmake} %BLAS, LAPACK
+\item openlibm
+\item numdiff (optional)
+\item FRUIT (optional)
 \end{itemize}
 
 For detailed instructions on the installation and configuration of the
@@ -61,8 +61,11 @@ container. For details, go to Sect.~\ref{sec:docker}.
 Two versions of AtChem2 are available for download: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the \emph{development version}, also known as \texttt{master\ branch}
-(Sect.~\ref{sec:general-information} for details). The source code of
-AtChem2 can be obtained in two ways:
+-- see Sect.~\ref{sec:general-information} for more information.
+Although the two versions are usually equivalent, it is recommended to use
+the stable version in publications because it can be easily referenced via
+the associated \href{https://www.doi.org/the-identifier/what-is-a-doi}{doi}
+and version number. The AtChem2 source code can be obtained in two ways:
 
 \begin{enumerate}
 \item with \textbf{git} (this is the recommended method for users who
@@ -70,7 +73,8 @@ AtChem2 can be obtained in two ways:
   \begin{itemize}
   \item Open the terminal. Move to the directory where AtChem2 will be
     installed.
-  \item Execute one of the following commands:
+  \item Execute one of the following commands to copy the
+    \texttt{master\ branch} to the local machine:
     \begin{itemize}
       \item if using HTTPS:\\
         \verb|git clone https://github.com/AtChem/AtChem2.git|
@@ -303,8 +307,8 @@ To install AtChem2:
   the \texttt{model/} directory.
 \item Execute \verb|./atchem2| from the \maindir. This command runs
   the model executable using the default configuration. If the model
-  run completes successfully, the following message (or similar) will
-  be printed to the terminal:
+  run completes successfully, the following message will be printed to
+  the terminal:
   \begin{verbatim}
   ------------------
    Final statistics

@@ -61,11 +61,10 @@ Two versions of the model are available for download: the
 \href{https://github.com/AtChem/AtChem2/releases}{stable version} and
 the \emph{development version}, also known as \texttt{master\ branch}
 -- see Sect.~\ref{sec:general-information} for more information.
-Although the two versions are usually equivalent, it is recommended to
-use the stable version in publications because it can be easily
-referenced via the associated
-\href{https://www.doi.org/the-identifier/what-is-a-doi}{doi} and
-version number. The AtChem2 source code can be obtained in two ways:
+Although the two versions are generally equivalent, it is recommended to
+use the stable version in publications because it can be easily referenced
+via the associated \href{https://www.doi.org/the-identifier/what-is-a-doi}{doi}
+and version number. The AtChem2 source code can be obtained in two ways:
 
 \begin{enumerate}
 \item with \textbf{git} (this is the recommended method for users who
@@ -91,7 +90,7 @@ version number. The AtChem2 source code can be obtained in two ways:
   \item Open the terminal. Move to the directory where the archive
     file was downloaded.
   \item Execute \verb|tar -zxfv *.tar.gz| or \verb|unzip -v *.zip|
-    (depending on which pf the archive files  was downloaded) to unpack
+    (depending on which of the archive files was downloaded) to unpack
     the archive file.
   \end{itemize}
 \end{enumerate}
@@ -141,7 +140,7 @@ AtChem2 uses the CVODE library, which is part of the open source
 \citep{hindmarsh_2005}, to solve the system of ordinary differential
 equations (ODE). The version of CVODE currently used in AtChem2 is
 v2.9.0 (part of SUNDIALS v2.7.0) and it can be installed using the
-\texttt{install\_cvode.sh} script in the \texttt{tools/install/}
+script \texttt{install\_cvode.sh} in the \texttt{tools/install/}
 directory.
 
 \begin{enumerate}
@@ -168,14 +167,13 @@ needed later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
 
-openlibm is a portable version of the open source
-\href{https://openlibm.org}{libm} mathematical library. Installing
-openlibm and linking against it, allows reproducible results by
-ensuring the same implementation of several mathematical functions
-across platforms.
+openlibm is a portable version of the open source \href{https://openlibm.org}{libm}
+mathematical library. Installing openlibm and linking against it,
+allows reproducible results by ensuring the same implementation of
+several mathematical functions across platforms.
 
 The current version of openlibm is 0.8.1 and it can be installed using
-the \texttt{install\_openlibm.sh} script in the \texttt{tools/install/}
+the script \texttt{install\_openlibm.sh} in the \texttt{tools/install/}
 directory.
 
 \begin{enumerate}
@@ -239,7 +237,7 @@ recommended for users who want to contribute to the development of
 AtChem2.
 
 The current version of FRUIT is 3.4.3 and it can be installed using
-the \texttt{install\_fruit.sh} script in the \texttt{tools/install/}
+the script \texttt{install\_fruit.sh} in the \texttt{tools/install/}
 directory.
 
 \begin{enumerate}
@@ -276,8 +274,8 @@ To install AtChem2:
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
   Install the \hyperref[sec:dependencies]{Dependencies} and take note
   of the names and paths of CVODE, openlibm and (if installed) FRUIT.
-\item Copy the example \texttt{Makefile} from the
-  \texttt{tools/install/} directory to the \maindir:
+\item Copy the example \texttt{Makefile} from the \texttt{tools/install/}
+  directory to the \maindir:
   \begin{verbatim}
   cp ./tools/install/Makefile.skel ./Makefile
   \end{verbatim}
@@ -364,9 +362,9 @@ can be found in the \texttt{tests/} directory.
 
 As an alternative to the installation of AtChem2 described above, a
 containerised version of the model is available. Currently this is
-built only for version 1.2.2. The container is built on Rocky Linux
-8.9 and pre-installs the CVODE and openlibm dependencies via the
-corresponding install scripts (Sect.~\ref{subsec:required-dependencies}).
+built only for version 1.2.2. The container is built on Rocky Linux 8.9
+and pre-installs the CVODE and openlibm dependencies via the corresponding
+install scripts (Sect.~\ref{subsec:required-dependencies}).
 The image can be downloaded via the command:
 
 \begin{verbatim}

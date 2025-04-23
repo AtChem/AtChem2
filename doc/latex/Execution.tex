@@ -239,13 +239,13 @@ time and a short period after the stop time.
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
 
-The script \texttt{build\_atchem2.sh} in the \texttt{build/}
-directory is used to process the chemical mechanism file
-(Sect.~\ref{subsec:mechanism-file}) and compile the model.
-The script generates five files which describe the chemical mechanism
-in Fortran-compatible format (\texttt{mechanism.*}), and one
-pre-compiled shared library (\texttt{mechanism.so}). The format and
-content of these files are described in Sect.~\ref{subsec:build-process}.
+The script \texttt{build\_atchem2.sh} in the \texttt{build/} directory is
+used to process the chemical mechanism file(Sect.~\ref{subsec:mechanism-file})
+and compile the model. The script generates five files which describe
+the chemical mechanism in Fortran-compatible format
+(\texttt{mechanism.*}), and one pre-compiled shared library
+(\texttt{mechanism.so}). The format and content of these files are
+described in Sect.~\ref{subsec:build-process}.
 
 The \texttt{build\_atchem2.sh} script must be run from the \maindir\
 and takes three arguments which must be provided in the exact order
@@ -266,11 +266,14 @@ three arguments, and their default values, are:
   \texttt{mcm/}.
 \end{enumerate}
 
-For example, if the chemical mechanism file is in the \texttt{model/}
-directory, the model is build using the command:
+Full or relative paths are acceptable for all three arguments,
+depending on the user's preference. For example, if the chemical
+mechanism file is in the \texttt{model/} directory, the model is build
+using the command:
 
 \begin{verbatim}
-./build/build_atchem2.sh model/mechanism.fac model/configuration/ mcm/
+./build/build_atchem2.sh ./model/mechanism.fac
+                         ./model/configuration/ ./mcm/
 \end{verbatim}
 
 An installation of AtChem2 can have multiple \texttt{model/}
@@ -298,19 +301,19 @@ separate model directories (\texttt{model\_1/} and
 \texttt{model\_2/}), each with their own chemical mechanism,
 configuration, constraints and output. The project directory may
 correspond, for example, to a field campaign or to a set of related
-experiments. In this case, the user can build each model with the
-following commands~\footnote{The third argument is not specified in
-  this example, so the default value (\texttt{./AtChem2/mcm/}) is
-  used.}:
+experiments. In this case, each model can be built from the \maindir\
+with the following commands~\footnote{The third argument is not
+  specified in this example, so the default value (\texttt{./mcm/}) is
+  implicitly used.}:
 
 \begin{verbatim}
-./build/build_atchem2.sh ~/Project_A/model_1/mechanism.fac
-                         ~/Project_A/model_1/configuration/
+./build/build_atchem2.sh ../Project_A/model_1/mechanism.fac
+                         ../Project_A/model_1/configuration/
 \end{verbatim}
 
 \begin{verbatim}
-./build/build_atchem2.sh ~/Project_A/model_2/mechanism.fac
-                         ~/Project_A/model_2/configuration/
+./build/build_atchem2.sh ../Project_A/model_2/mechanism.fac
+                         ../Project_A/model_2/configuration/
 \end{verbatim}
 
 There are many different ways in which the \texttt{model/} directory
@@ -322,20 +325,29 @@ preferences; as long as the correct paths are passed to the
 \texttt{build\_atchem2.sh} script (and to the executable, see
 Sect.~\ref{sec:execute}), the model will compile and run.
 
-Compilation is required only once for a given \texttt{.fac} file. If
-the user changes the configuration files, there is no need to
-recompile the model. Likewise, if the constraints files are changed,
+The model compilation is also controlled by the \texttt{build\_atchem2.sh}
+script. The Fortran code is compiled into the \texttt{atchem2} executable,
+which is dynamically linked to the shared chemical mechanism library
+(\texttt{mechanism.so}). If the Fortran code is not changed,
+compilation is required only once for a given \texttt{.fac} (or
+\texttt{.kpp}) file.
+
+Changes to the configuration files do not require recompiling the
+model. Likewise, if constraints files are added, removed or modified
 there is no need to recompile the model. This is because the model
 configuration and the model constraints are read by the executable at
-runtime. However, if the user changes the \texttt{.fac} file, then the
-shared library (\texttt{mechanism.so}) needs to be recompiled by
-running the \texttt{build\_atchem2.sh} script again. The user may also
-want, or need, to change the Fortran code (\texttt{src/*.f90}), in
-which case the model needs to be recompiled. If the \texttt{.fac} file
-has also been changed, the \texttt{build\_atchem2.sh} script must be
-used; otherwise -- if only the Fortran code has been changed --
-executing the command \verb|make| from the \maindir\ is enough to
-recompile the model.
+runtime. However, if the chemical mechanism is changed, then the
+shared library (\texttt{mechanism.so}) needs to be recompiled. If the
+user wants, or needs, to change the Fortran code (\texttt{src/*.f90}),
+then the executable needs to be recompiled.
+
+To recompile the model, the \texttt{build\_atchem2.sh} script needs to
+be executed again~\footnote{Sometimes .}. The script is able to detect
+whether the Fortran code, the chemical mechanism, or both have been
+modified, and runs the appropriate commands. This design approach
+reduces both the frequency and the duration of model compilations by
+requesting it only when strictly necessary, therefore facilitating
+running the model in batch mode -- e.g., for sensitivity studies.
 
 % -------------------------------------------------------------------- %
 \section{Execute} \label{sec:execute}

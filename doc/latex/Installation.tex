@@ -280,10 +280,10 @@ To install AtChem2:
   cp ./tools/install/Makefile.skel ./Makefile
   \end{verbatim}
 \item Open the \texttt{Makefile} with a text editor. Set the variables
-  \texttt{\$CVODELIBDIR}, \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR} to
-  the paths of CVODE, openlibm and FRUIT, as indicated in
-  Sect.~\ref{subsec:required-dependencies}. Use full paths, because
-  using relative paths may cause compilation errors~\footnote{See
+  \texttt{\$CVODELIBDIR}, \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR}
+  to the paths of CVODE, openlibm and FRUIT, as indicated in
+  Sect.~\ref{subsec:required-dependencies}. Use \emph{full paths},
+  because relative paths may cause compilation errors~\footnote{See
     issue \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}.
   For example (change the path to the \depdir\ as needed):
   \begin{verbatim}
@@ -301,12 +301,13 @@ To install AtChem2:
   This command creates an executable (called \texttt{atchem2}) using
   the example mechanism file \texttt{mechanism.fac} in the
   \texttt{model/} directory.
-\item Execute \verb|./atchem2| from the \maindir. The command runs
-  the model executable using the default settings, which are in the
+\item Execute \verb|./atchem2| from the \maindir. The command runs the
+  model executable using the default settings, which are in the
   \texttt{model/configuration} directory. The model prints information
   to the terminal while it is running, such as the model settings,
   warning messages (if any), and timesteps. If the model run completes
-  successfully, the following message is printed to the terminal:
+  successfully, the terminal will display a message similar to the
+  following:
   \begin{verbatim}
   ------------------
    Final statistics
@@ -566,10 +567,10 @@ This approach gives the user the flexibility to run different versions
 of the same model (in terms of configuration and/or chemical
 mechanism) or different models (e.g., for separate projects) at the
 same time, without having to recompile the source code and create a
-different executable every time. Sensitivity studies and batch model
-runs are therefore easy to do, since all the parts of the model that
-have to be modified are contained in the same directory. Further
-information can be found in Sect.~\ref{subsec:build-process}.\\
+different executable every time. Batch model runs are therefore easy
+to do, since all the components of the model that have to be modified
+are contained in the same directory. Further information can be found
+in Sect.~\ref{subsec:build-process}.\\
 
 \textcolor{red}{\bf Important Note}: whenever the \texttt{model/}
 directory is mentioned in this manual, it is implied that its name and

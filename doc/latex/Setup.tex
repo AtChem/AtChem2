@@ -204,18 +204,17 @@ file during the \hyperref[subsec:build-process]{build process}. The
 script \texttt{mech\_converter.py} compares the list of species in the
 \textbf{Peroxy radicals} section of the \texttt{.fac} file with the
 list of \cf{RO2} extracted from the MCM database, which is included in
-the \texttt{mcm/} directory. By default, AtChem2 uses version 3.3.1 of
-the MCM; the corresponding list of organic peroxy radicals is in the
+the \texttt{mcm/} directory. By default, AtChem2 uses the MCM v3.3.1;
+the corresponding list of organic peroxy radicals is in the
 \texttt{peroxy-radicals\_v3.3.1} file. Lists of organic peroxy
 radicals for other versions of the MCM are included in the
-\texttt{mcm/} directory. Instructions on how to use previous versions
-of the MCM with AtChem2 can be found in the \texttt{mcm/INFO.md} file.
+\texttt{mcm/} directory; instructions on how to change the MCM version
+can be found in the \texttt{mcm/INFO.md} file.
 
 If one or more chemical species are included in the \textbf{Peroxy radicals}
-section of the \texttt{.fac} file, but is not present in the
-list of \cf{RO2} extracted from the MCM database, the
-\texttt{mech\_converter.py} script prints a warning message to the
-terminal:
+section of the \texttt{.fac} file, but is not present in the list of \cf{RO2}
+extracted from the MCM database, the \texttt{mech\_converter.py} script
+prints a warning message to the terminal:
 
 \begin{verbatim}
         !!! WARNING !!!
@@ -432,10 +431,10 @@ the \texttt{model.parameters} file (by default, located in the
   piecewise linear (Sect.~\ref{subsec:interpolation}). The default
   option is \texttt{2} (piecewise linear interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the
-  model output for the production and loss rates of selected species
-  (listed in \texttt{outputRates.config}, Sect.~\ref{subsec:outputrates}),
-  which is used for rate of production and destruction analysis
-  (ROPA/RODA).
+  model output for the production and loss rates of selected species --
+  listed in \texttt{outputRates.config} (Sect.~\ref{subsec:outputrates}).
+  This is used for the rate of production and destruction analysis
+  (ROPA/RODA, Sect.~\ref{subsec:ropa-roda}).
 \item \textbf{model start time}. Start time of the model (in seconds)
   calculated from midnight of the \textbf{day}, \textbf{month},
   \textbf{year} parameters -- see below.\\
@@ -474,12 +473,11 @@ the \texttt{model.parameters} file (by default, located in the
 \item \textbf{reaction rates output step size}. Frequency (in seconds)
   of the model output for the reaction rates of every reaction in the
   chemical mechanism. By default, they are saved in the
-  \texttt{reactionRates/} sub-directory of \texttt{model/output} as
-  one file for each model step, with the name of the file
-  corresponding to the time in seconds. Note that this parameter is
-  different from \textbf{rates output step size} (see above), which
-  sets the output frequency for the production and loss rates of a
-  limited number of species of interest (Sect.~\ref{sec:config-files}).
+  \texttt{reactionRates/} sub-directory of \texttt{model/output}
+  (Sect.~\ref{sec:output}). Note that this parameter is different from
+  \textbf{rates output step size} (see above), which sets the output
+  frequency for the production and loss rates of a limited number of
+  species of interest.
 \end{itemize}
 
 % -------------------------------------------------------------------- %
@@ -633,14 +631,13 @@ chemical mechanism is automatically modified during the
 the chemical mechanism, a ``loss reaction'' is added to the mechanism
 with a ``rate coefficient'' equal to the dilution rate~\footnote{The
   behaviour of \texttt{DILUTE} was changed with the release of version
-  1.2 (May 2020). In previous versions of AtChem2, the user had to
-  manually add to the chemical mechanism a ``reaction'' using
-  \texttt{DILUTE} for each species for which dilution was required; in
-  addition, \texttt{DILUTE} could be constrained. The new approach
-  makes the use of \texttt{DILUTE} both more intuitive and more
-  accurate.}. For example, the following ``reactions'' are added to
-the ``Tropospheric O3-NOx cycle'' mechanism shown in
-Sect.~\ref{subsec:facsimile-format}:
+  1.2. Previously, the user had to manually add to the chemical
+  mechanism a ``reaction'' using \texttt{DILUTE} for each species for
+  which dilution was required; in addition, \texttt{DILUTE} could be
+  constrained. The new approach makes the use of \texttt{DILUTE} both
+  more intuitive and more accurate.}. For example, the following
+``reactions'' are added to the ``Tropospheric O3-NOx cycle'' mechanism
+shown in Sect.~\ref{subsec:facsimile-format}:
 
 \begin{verbatim}
 % DILUTE : NO2 = ;
@@ -717,7 +714,7 @@ the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.85\textwidth]{photolysis-rates.png}
-  \caption{Treatment of photolysis rates in AtChem2.}
+  \caption{Photolysis rates and \texttt{JFAC} in AtChem2.}
   \label{fig:photol}
 \end{figure}
 
@@ -776,8 +773,8 @@ on the MCM website.
 The empirical parameters are different for each version of the MCM: by
 default, AtChem2 uses the empirical parameters of the MCM v3.3.1
 (\texttt{mcm/photolysis-rates\_v3.3.1}), but it is possible to use the
-empirical parameters of other versions of the MCM and to change the
-value of $\tau$ -- see the file \texttt{mcm/INFO.md} for instructions.
+empirical parameters of other MCM versions and to change the value of
+$\tau$ -- see the file \texttt{mcm/INFO.md} for instructions.
 
 The solar zenith angle (SZA) is the angle between the local vertical
 (zenith) and the center of the sun. The SZA is measured in radians and
@@ -924,11 +921,11 @@ The frequency of this output is controlled by \textbf{rates output step size}
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
 The corresponding output files -- called \texttt{productionRates.output}
 and \texttt{lossRates.output} -- are formatted to facilitate the rate
-of production and destruction analysis (ROPA/RODA) of selected species.
-Given the potential size and complexity of these files, it is
-recommended to keep the list in \texttt{outputRates.config} limited
-to chemical species of special interest. For more information, go to
-Sect.~\ref{sec:output}.
+of production and destruction analysis of selected species
+(Sect.~\ref{subsec:ropa-roda}).  Given the potential size and
+complexity of these files, it is recommended to keep the list in
+\texttt{outputRates.config} limited to chemical species of special
+interest. For more information, go to Sect.~\ref{sec:output}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 

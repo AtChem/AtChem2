@@ -144,7 +144,7 @@ script \texttt{install\_cvode.sh} in the \texttt{tools/install/}
 directory.
 
 \begin{enumerate}
-\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
+\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Open the installation script (\texttt{tools/install/install\_cvode.sh})
   with the text editor:
   \begin{itemize}
@@ -167,22 +167,28 @@ needed later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{openlibm}
 
-openlibm is a portable version of the open source \href{https://openlibm.org}{libm}
-mathematical library. Installing openlibm and linking against it,
-allows reproducible results by ensuring the same implementation of
-several mathematical functions across platforms.
+openlibm is a portable implementation of the open source mathematical
+library \href{https://openlibm.org}{libm}. Installing openlibm and
+linking against it, allows reproducible results by ensuring the same
+implementation of several mathematical functions across platforms.
 
 The current version of openlibm is 0.8.1 and it can be installed using
 the script \texttt{install\_openlibm.sh} in the \texttt{tools/install/}
 directory.
 
 \begin{enumerate}
-\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
+\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the path to the \depdir\ as needed):
   \begin{verbatim}
   ./tools/install/install_openlibm.sh ~/AtChem-lib/
   \end{verbatim}
 \end{enumerate}
+
+\emph{Warning}: the compilation of openlibm on \textbf{macOS} may fail
+with a message concerning the \texttt{dyld} library. This is analogous
+to the error that may occur the first time that AtChem2 is run on
+macOS (see below, in Sect.~\ref{sec:install}) and can be resolved in a
+similar way.
 
 If the installation is successful, there is now a working openlibm
 installation at \texttt{\textasciitilde/AtChem-lib/openlibm-0.8.1/}.
@@ -193,8 +199,8 @@ complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
 \subsubsection{numdiff}
 
-numdiff is an open source \href{https://www.nongnu.org/numdiff}{file comparison tool}
-used to compare text files containing numerical fields. It is needed only
+numdiff is an open source \href{https://www.nongnu.org/numdiff}{tool}
+to compare text files containing numerical fields. It is needed only
 to run the \hyperref[sec:test-suite]{Testsuite}, a battery of tests
 used during the development of AtChem2 to ensure that the model works
 properly and that changes to the source code do not result in
@@ -209,7 +215,7 @@ using the script \texttt{install\_numdiff.sh} in the
 \texttt{tools/install/} directory.
 
 \begin{enumerate}
-\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
+\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
@@ -251,7 +257,7 @@ directory.
   export PATH=$PATH:$GEM_HOME/bin
   \end{verbatim}
 \item Close the terminal.
-\item Reopen the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
+\item Reopen the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the path to the \depdir\ as
   needed):
   \begin{verbatim}
@@ -271,7 +277,7 @@ complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 To install AtChem2:
 
 \begin{enumerate}
-\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2|).
+\item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
   Install the \hyperref[sec:dependencies]{Dependencies} and take note
   of the names and paths of CVODE, openlibm and (if installed) FRUIT.
 \item Copy the example \texttt{Makefile} from the \texttt{tools/install/}
@@ -302,12 +308,12 @@ To install AtChem2:
   the example mechanism file \texttt{mechanism.fac} in the
   \texttt{model/} directory.
 \item Execute \verb|./atchem2| from the \maindir. The command runs the
-  model executable using the default settings, which are in the
-  \texttt{model/configuration} directory. The model prints information
-  to the terminal while it is running, such as the model settings,
-  warning messages (if any), and timesteps. If the model run completes
-  successfully, the terminal will display a message similar to the
-  following:
+  model executable using the default chemical mechanism and settings,
+  which are in the \texttt{model/} directory. The executable prints
+  information to the terminal while it is running, such as the
+  model settings, warning messages (if any), and timesteps. If the
+  model run completes successfully, the terminal will display a
+  message like this:
   \begin{verbatim}
   ------------------
    Final statistics
@@ -322,9 +328,15 @@ To install AtChem2:
   \end{verbatim}
 \end{enumerate}
 
-When AtChem2 is run for the first time on \textbf{macOS}, it may abort
-with an error message concerning \texttt{rpath}: if this happens, a
-solution can be found on the Known Issues page of the
+\emph{Warning}: when AtChem2 is run for the first time on a
+\textbf{macOS} system, it may abort with the following message:
+
+\begin{verbatim}
+dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
+\end{verbatim}
+
+This error is related to the path of dynamic libraries on macOS:
+to resolve the issue, follow the suggestions on the
 \href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
 AtChem2 is now ready to be used. Optionally, the Testsuite can be run
@@ -560,8 +572,8 @@ located outside the \maindir. Moreover, there can be multiple
 location. The paths to the required \texttt{model/} directory and/or
 chemical mechanism file are given as arguments to the build script
 (\texttt{build/build\_atchem2.sh}) and to the \texttt{atchem2}
-executable, as explained in Sect.~\ref{sec:build} and in
-Sect.~\ref{sec:execute}.
+executable, as explained in Sect.~\ref{sec:build} and
+\ref{sec:execute}.
 
 This approach gives the user the flexibility to run different versions
 of the same model (in terms of configuration and/or chemical

@@ -177,7 +177,7 @@ $10^6$, which presents a significant computational challenge. The
 radicals permutation reactions. More information can be found in the
 MCM protocol papers \citep{jenkin_1997, saunders_2003}.
 
-AtChem2 is designed primarily to run box models based upon the Master
+AtChem2 is primarily designed to run box models based upon the Master
 Chemical Mechanism and, therefore, the \texttt{.fac} file must contain
 the \textbf{Peroxy radicals} section, as explained in
 Sect.~\ref{subsec:facsimile-format}. This section must have a header
@@ -897,9 +897,9 @@ CH4     4.938e+13
 
 Not all chemical species need to be initialized: those that are not
 listed in \texttt{initialConcentrations.config} are assumed to have an
-initial concentration of zero molecule cm$^{-3}$. It is also not necessary
-to initialize the chemical species that are set to constant values or
-constrained to measured concentrations, i.e. those listed in the files
+initial concentration of zero molecule cm$^{-3}$. It is also not
+necessary to initialize the chemical species that are set to constant
+values or constrained to measured concentrations, i.e. those listed in
 \texttt{speciesConstant.config} and/or \texttt{speciesConstrained.config}
 (see below).
 
@@ -921,11 +921,8 @@ The frequency of this output is controlled by \textbf{rates output step size}
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
 The corresponding output files -- called \texttt{productionRates.output}
 and \texttt{lossRates.output} -- are formatted to facilitate the rate
-of production and destruction analysis of selected species
-(Sect.~\ref{subsec:ropa-roda}).  Given the potential size and
-complexity of these files, it is recommended to keep the list in
-\texttt{outputRates.config} limited to chemical species of special
-interest. For more information, go to Sect.~\ref{sec:output}.
+of production and destruction analysis of selected species. For more
+information, go to Sect.~\ref{sec:ropa-roda}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 

@@ -25,10 +25,10 @@ constraint data files.
 
 \subsection{Mechanism file} \label{subsec:mechanism-file}
 
-AtChem2 is designed to use the \href{https://mcm.york.ac.uk/MCM}{MCM}
-as a chemical mechanism; however, any other chemical mechanism can be
-used, as long as it is in the correct format. The default format used
-in AtChem2 is the \hyperref[subsec:facsimile-format]{FACSIMILE format},
+AtChem2 is designed to use the Master Chemical Mechanism
+(\href{https://mcm.york.ac.uk/MCM}{MCM}). Other chemical mechanisms
+can be used, as long as they are in the right format. By default,
+AtChem2 uses the \hyperref[subsec:facsimile-format]{FACSIMILE format},
 which is described in Sect.~\ref{subsec:facsimile-format}: it must be
 provided by the user as a text file with the extension \texttt{.fac}.
 
@@ -127,7 +127,8 @@ file must be the same as the name of the photolysis rate -- e.g.,
 \texttt{J4}.\\
 
 \textcolor{red}{\bf Important Note}: the filenames of all constraint
-data files must be \emph{without extension}.
+data files must match the variable name (including capitalization),
+without any extension.
 
 \subsection{Constraint files} \label{subsec:constraint-files}
 
@@ -175,14 +176,13 @@ example, ozone (\cf{O3}) and nitrogen oxides (\cf{NO}, \cf{NO2}) can
 be measured once every minute, but most hydrocarbons can be measured
 only once every 30-60 minutes.
 
-The user can use the constraints with their original timescales, or
-average the constraints so that they are all on the same timescale.
-Both approaches have advantages and disadvantages in terms of how much
-pre-processing work is required to prepare the data files, and in
-terms of model accuracy and integration speed: for a discussion of
-these issues, see \citet{sommariva_2020}. The choice of approach
-depends on the specific modelling objectives, as well as the available
-computing resources.
+The constraints can be used with their original timescales, or can be
+averaged so that they are all on the same timescale. Both approaches
+have advantages and disadvantages in terms of how much pre-processing
+work is required to prepare the data files, and in terms of model
+accuracy and integration speed: for a discussion of these issues, see
+\citet{sommariva_2020}. The choice of approach depends on the specific
+modelling objectives, as well as the available computing resources.
 
 Whether all the constraints are on the same timescale or not, AtChem2
 interpolates between data points using the interpolation methods
@@ -200,7 +200,7 @@ for each of the constrained species in \texttt{FCVFUN()}, plus once
 when setting the initial conditions of each of the constrained
 species.
 
-The model start and stop times must be within the time range of all
+The model start and stop times must fall within the time range of all
 constrained data to prevent interpolation errors or model crashes, as
 mentioned in Sect.~\ref{subsec:constraint-files} and illustrated
 below:
@@ -240,7 +240,7 @@ time and a short period after the stop time.
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
 
-The script \texttt{build\_atchem2.sh} in the \texttt{build/} directory is
+The \texttt{build\_atchem2.sh} script in the \texttt{build/} directory is
 used to process the chemical mechanism file(Sect.~\ref{subsec:mechanism-file})
 and compile the model. The script generates five files which describe
 the chemical mechanism in Fortran-compatible format
@@ -259,8 +259,8 @@ three arguments, and their default values, are:
 \begin{enumerate}
 \item path to the chemical mechanism file -- there is no default, but
   it is suggested to keep the \texttt{.fac} (or \texttt{.kpp}) file
-  either in the \texttt{model/} or in the
-  \texttt{model/configuration/} directories.
+  either in the \texttt{model/} or in the \texttt{model/configuration/}
+  directories.
 \item path to the the directory for the Fortran mechanism files and to
   the \sharedir\ -- default: \texttt{model/configuration/}.
 \item path to the directory containing the MCM data files -- default:
@@ -268,7 +268,7 @@ three arguments, and their default values, are:
 \end{enumerate}
 
 Both full and relative paths are acceptable for all three arguments,
-depending on the user's preference. For example, if the chemical
+according to the user's preference. For example, if the chemical
 mechanism file is in the \texttt{model/} directory, the model is build
 using the command:
 
@@ -278,8 +278,8 @@ using the command:
 \end{verbatim}
 
 An installation of AtChem2 can have multiple \texttt{model/}
-directories, corresponding to different models or different projects;
-this allows the user to work with more than one model at the same time
+directories, each corresponding to a different model or project. This
+approach allows the user to work with multiple models at the same time
 and makes it easy to run batch simulations for sensitivity studies. As
 mentioned in Sect.~\ref{subsec:model-directory}, the \texttt{model/}
 directory can also be located outside the \maindir, which gives the
@@ -326,12 +326,12 @@ personal preferences; as long as the correct paths are passed to the
 \texttt{build\_atchem2.sh} script (and to the executable, see
 Sect.~\ref{sec:execute}), the model will compile and run.
 
-The \texttt{build\_atchem2.sh} script also controls the model
-compilation. The Fortran code is compiled into the \texttt{atchem2}
-executable, which is dynamically linked to the shared chemical
-mechanism library (\texttt{mechanism.so}). If the Fortran code is not
-changed, compilation is required only once for a given \texttt{.fac}
-(or \texttt{.kpp}) file.
+The \texttt{build\_atchem2.sh} script also handles model compilation,
+converting the Fortran code into the \texttt{atchem2} executable,
+which is dynamically linked to the shared chemical mechanism library
+(\texttt{mechanism.so}). If the Fortran code is not changed,
+compilation is required only once for a given \texttt{.fac} (or
+\texttt{.kpp}) file.
 
 Changes to the configuration files do not require recompiling the
 model. Likewise, if constraints files are added, removed or modified
@@ -420,8 +420,8 @@ input flags explicitily is:
 \end{verbatim}
 
 Not all flags have to be used, and the order in which they are used
-does not matter. If a flag is not used, the executable assumes the
-default value following a \emph{hierarchical directory structure}. For
+does not matter. If a flag is omitted, the executable assumes the
+default value, based on a \emph{hierarchical directory structure}. For
 example, the following command implies that a directory called
 \texttt{output/} is present inside the \texttt{model/} directory, and
 that three directories called \texttt{species/}, \texttt{environment/}
@@ -479,14 +479,14 @@ rates of \texttt{model\_2/}:
 
 While the model is running, diagnostic information is printed to the
 terminal. A successful model run completes with a message similar to
-the one shown in Sect.~\ref{sec:install}. If the users prefers, the
-terminal printout can be redirected to a log file using standard unix
+the one shown in Sect.~\ref{sec:install}. Users have the option to
+redirect the terminal printout to a log file, using standard unix
 commands.
 
 \subsection{HPC} \label{subsec:hpc}
 
-AtChem2 can be used installed and run on High Performance Computing
-(HPC) clusters, or supercomputers, which typically run some version of
+AtChem2 can be installed and run on High Performance Computing (HPC)
+clusters, or supercomputers, which typically run some version of
 Linux/Unix. This is recommended, especially for models with long
 runtimes and/or many constraints.
 
@@ -496,14 +496,14 @@ guidelines. Therefore, it is not possible to give specific advice, and
 users should check the local documentation or ask the system
 administrator.
 
-Execution of software on most HPC systems is usually controlled by a
-job scheduler, which requires a submission script. The script will
-allocate the requested resources~\footnote{AtChem2 does not support
-  parallelization at present; this may change in future versions.},
-alert the user that the model run is finished, and save the terminal
-printout and any other message to log files. The syntax and format of
-the submission script depend on the type of job scheduler
-installed. Examples of submission scripts can be found on the
+On most HPC systems, software execution is managed by a job scheduler,
+which requires a submission script. The script will allocate the
+requested resources~\footnote{AtChem2 does not support parallelization
+  at present; this may change in future versions.}, alert the user
+that the model run is finished, and save the terminal printout and any
+other message to log files. The syntax and format of the submission
+script depend on the type of job scheduler installed on the HPC
+system. Examples of submission scripts can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/Running-on-HPC}{wiki}.
 
 % -------------------------------------------------------------------- %
@@ -517,18 +517,18 @@ output is determined by the following model parameters, which are set
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}):
 
 \begin{itemize}
-\item \textbf{step size} for the chemical species, the environment
-  variables, the photolysis rates, the diagnostic variables.
+\item \textbf{step size} for the chemical species, environment
+  variables, photolysis rates and diagnostic variables.
 \item \textbf{rates output step size} for the rate of production and
   destruction analysis of selected species (Sect.~\ref{subsec:ropa-roda}).
 \item \textbf{reaction rates output step size} for the reaction rates
   of all chemical reactions.
 \end{itemize}
 
-All AtChem2 output files are space-delimited text files and have a one
-line header with the names of the variables. The first column of each
-file is the model time (\texttt{t}) in seconds since midnight of the
-\textbf{start date}~\footnote{Note that the \textbf{start date} is
+All AtChem2 output files are space-delimited text files with a one
+line header containing the names of the variables. The first column of
+each file is the model time (\texttt{t}) in seconds since midnight of
+the \textbf{start date}~\footnote{Note that the \textbf{start date} is
   different than the \textbf{model start time}. The model start time
   indicates when the model begins its run and is in seconds since the
   midnight of the start date (Sect.~\ref{sec:model-parameters}).}:
@@ -536,8 +536,8 @@ file is the model time (\texttt{t}) in seconds since midnight of the
 \begin{itemize}
 \item Environment variables and \cf{RO2} sum:\\
   \texttt{environmentVariables.output}
-\item Concentrations of selected chemical species, except the \cf{RO2}
-  sum -- see Sect.~\ref{subsec:outputspecies}:\\
+\item Concentrations of selected chemical species -- see
+  Sect.~\ref{subsec:outputspecies}:\\
   \texttt{speciesConcentrations.output}
 \item Photolysis rates:\\
   \texttt{photolysisRates.output}
@@ -556,23 +556,27 @@ file is the model time (\texttt{t}) in seconds since midnight of the
 \end{itemize}
 
 In addition to the \texttt{.output} files, the reaction rates of every
-reaction in the chemical mechanism are -- by default -- saved in the
+reaction in the chemical mechanism are saved, by default, in the
 \texttt{output/reactionRates/} directory~\footnote{Called
-  \texttt{instantaneousRates/} prior to version 1.1.}. as one file for
+  \texttt{instantaneousRates/} prior to version 1.1.}: one file for
 each model step, with the name of the file corresponding to the output
-time in seconds.
+time in seconds. The files have no header, and the order of reactionn
+is the same as in the chemical mechanism (under the ``Reaction
+definitions'' section -- see Sect.~\ref{subsec:facsimile-format}).
 
 \subsection{ROPA/RODA} \label{subsec:ropa-roda}
 
-The reaction rates files are useful for diagnostic purposes, but can
-be cumbersome to process and analyze. In order to make it easier to
-perform the rate of production and destruction analysis of chemical
-species of particular interest -- i.e. those listed in
-\texttt{outputRates.config} (Sect.~\ref{subsec:outputrates}) -- the
-model produces the output files \texttt{productionRates.output} and
-\texttt{lossRates.output}. These files contain the reaction rates of
-production and destruction of the selected species in a human readable
-format, illustrated in Fig.~\ref{fig:ropa}.
+The reaction rates files in the \texttt{output/reactionRates/}
+directory are useful to analyze the model results and understand the
+chemical system, as well as for diagnostic purposes. The format,
+however, may be cumbersome to process for some users. To simplify the
+rate of production and destruction analysis for specific chemical
+species (i.e. those listed in \texttt{outputRates.config},
+Sect.~\ref{subsec:outputrates}) AtChem2 creates the two files
+\texttt{productionRates.output} and \texttt{lossRates.output}.
+These files contain the reaction rates of production and destruction
+of the selected species in a human-readable format, shown in
+Fig.~\ref{fig:ropa}.
 
 \begin{figure}[htb]
   \centering
@@ -581,3 +585,20 @@ format, illustrated in Fig.~\ref{fig:ropa}.
     \texttt{lossRates.output} file has a similar format.}
   \label{fig:ropa}
 \end{figure}
+
+The frequency of the ROPA/RODA output is controlled by the
+parameter \textbf{rates output step size}, as explained in
+Sect.~\ref{sec:model-parameters} and \ref{subsec:outputrates}. The
+\texttt{productionRates.output} and \texttt{lossRates.output} files
+can be very large and complex, especially for species that are
+involved in many reactions and/or for long model runtimes. Therefore,
+it is recommended to limit the list of chemical species in
+\texttt{outputRates.config} to only those of special interest, and to
+keep the frequency of the output low (the default is 1 hour).\\
+
+\textcolor{red}{\bf Important Note}: although in principle the rate of
+production/destruction analysis for constrained chemical species can
+be done, the results should be interpreted with extreme caution. The
+user must be aware that the concentrations of these species are
+determined by the constraining data rather than by the chemical
+reactions.

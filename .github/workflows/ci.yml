@@ -103,7 +103,10 @@ jobs:
         run: ./tools/install/install_numdiff.sh $PWD
 
       - name: Install FRUIT
-        run: sudo ./tools/install/install_fruit.sh $PWD
+        run: |
+          ruby --version
+          rake --version
+          sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
       # (4) Build AtChem2 using the standard compilation flags
@@ -165,6 +168,6 @@ jobs:
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v3
         with:
           gcov: true

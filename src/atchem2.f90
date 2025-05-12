@@ -150,7 +150,7 @@ PROGRAM ATCHEM2
   rout(:) = -1.0_DP
   rpar(:) = -1.0_DP
 
-  write (*, '(A)') 'AtChem2 v1.3-dev'
+  write (*, '(A)') 'AtChem2 v1.2.3'
   write (*,*)
   write (*, '(A)') '-------------'
   write (*, '(A)') ' Directories'

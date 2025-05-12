@@ -11,11 +11,12 @@
 
 % -------------------- PREAMBLE -------------------- %
 \documentclass[11pt,a4paper]{report}
-\usepackage{helvet,graphicx,hyperref,color}
+\usepackage{helvet,graphicx,hyperref}
 \usepackage{fancyhdr,caption,natbib}
-\usepackage[nottoc]{tocbibind}
+\usepackage[dvipsnames]{xcolor}
 \usepackage[version=3]{mhchem}
 
+% page style
 \pagestyle{fancy}
 \setlength{\headheight}{13.6pt}
 \rhead{\leftmark}
@@ -24,11 +25,19 @@
 \renewcommand{\bibname}{References}
 \frenchspacing
 
+\renewcommand{\labelitemi}{$\diamond$}
+\renewcommand{\labelitemii}{$\circ$}
+
+% links
+\hypersetup{colorlinks=true,
+  linkcolor=BrickRed,
+  citecolor=ForestGreen,
+  urlcolor=NavyBlue}
+
 % shortcuts
 \newcommand{\maindir}{\texttt{\em Main Directory}}
-\newcommand{\depdir}{\texttt{\em Dependency Directory}}
+\newcommand{\depdir}{\texttt{\em Dependencies Directory}}
 \newcommand{\sharedir}{\texttt{\em Shared Library Directory}}
-
 \newcommand{\degc}{^\circ\mathrm{C}}
 
 % figures
@@ -45,6 +54,7 @@
 %
 % License: CC BY-NC-SA 3.0 (https://creativecommons.org/licenses/by-nc-sa/3.0/)
 
+\pagenumbering{alph}
 \begin{titlepage}
   \raggedleft   % Right align the title page
   \rule{1pt}{\textheight}  % Vertical line
@@ -62,6 +72,7 @@
 
 % -------------------------------- %
 
+\pagenumbering{arabic}
 \tableofcontents
 
 \include{Introduction}
@@ -73,5 +84,7 @@
 
 \bibliographystyle{abbrvnat}
 \bibliography{References}
+\addcontentsline{toc}{chapter}{References}
 
 \end{document}
+%    rates output and reaction rates output can't be zero in config

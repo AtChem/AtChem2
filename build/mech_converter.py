@@ -72,8 +72,8 @@ def tokenise_and_process(input_string, vars_dict):
         'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
 
     # Generate start and end points of sections of symbols and nonsymbols
-    symbol_regex = '[()\-+*@/, ]+'
-    nonsymbol_regex = '[^()\-+*@/, ]+'
+    symbol_regex = r'[()\-+*@/, ]+'
+    nonsymbol_regex = r'[^()\-+*@/, ]+'
 
     list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, input_string)]
     list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, input_string)]
@@ -124,33 +124,31 @@ def tokenise_and_process(input_string, vars_dict):
 
 def separate_stoichiometry(input_species):
     """
-    This function takes in a string of a species from the mechanism and 
+    This function takes in a string of a species from the mechanism and
     separates the species name from any preceeding stoichiometric coefficient.
     This assumes that no species names will begin with a number.
 
     Args:
         input_species(str): a string containing a species name with a possible
-                            preceeding coefficient (e.g. H2O2, 2H2O2, 2 H2O2, or 0.5H2O2)
+                            stoichiometric coefficient (e.g. H2O2, 2H2O2, 2 H2O2, or 0.5H2O2)
 
     Returns:
-        split_spec (tuple): a tuple of a float and a string. The first item 
-                            (float) is the stoichiometric coefficient and the 
-                            second (string) is the species name.
+        split_spec (tuple): a tuple of a float and a string. The first (float) is the stoichiometric
+                            coefficient, and the second (string) is the species name.
     """
-    
+
     #regex to match the potential coefficient and name sections of the input
-    in_pat = re.compile(r"^ *(\d*\.?\d*) *([a-zA-Z_].*) *$")
+    in_pat = re.compile(r'^ *(\d*\.?\d*) *([a-zA-Z_].*) *$')
     pat_match = in_pat.match(input_species)
     if pat_match:
-        if pat_match[1]: #if there is a coefficient passed 
+        if pat_match[1]: #if there is a coefficient passed
             return (float(pat_match[1]), pat_match[2])
         else: #if there is no coefficient then output an assumed coefficient of 1
             return (1.0, pat_match[2])
     else:
-        raise Exception(f"""Reaction species does not match the correct 
-                        format: '{input_species}'. Note that species names should 
+        raise Exception(f"""Reaction species does not match the correct
+                        format: '{input_species}'. Note that species names should
                         not begin with numerical characters.""")
-# ------------------------------------------------------------ #
 
 def convert_to_fortran(input_file, mech_dir, mcm_vers):
     """
@@ -200,24 +198,26 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # Get the directory and filename of input_file, and check that they exist.
     input_directory = os.path.dirname(os.path.abspath(input_file))
     input_filename = os.path.basename(input_file)
-    assert os.path.isfile(os.path.join(input_directory, input_filename)), \
-        'The input file ' + str(os.path.join(input_directory, input_filename)) + ' does not exist.'
-    print(input_directory)
+    input_path = os.path.join(input_directory, input_filename)
+
+    assert os.path.isfile(input_path), \
+        'The input file ' + str(input_path) + ' does not exist.'
+    print('Chemical mechanism file in:', input_directory)
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
     if input_filename.split('.')[-1] == 'kpp':
-        input_fac = kpp_conversion.write_fac_file(os.path.join(input_directory, input_filename))
+        input_fac = kpp_conversion.write_fac_file(input_path)
     else:
-        input_fac = input_filename
+        input_fac = input_path
 
     # Check and fix the .fac file of any errant newlines (see documentation
     # of `fix_mechanism_fac.py` for more info).
-    fix_mechanism_fac.fix_fac_full_file(os.path.join(input_directory, input_fac))
+    fix_mechanism_fac.fix_fac_full_file(input_fac)
 
     # Read in the input file.
     print('Reading input file')
-    with open(os.path.join(input_directory, input_fac), 'r') as input_mech:
+    with open(input_fac, 'r') as input_mech:
         mechList = input_mech.readlines()
 
     # Split the lines into the following sections:
@@ -267,9 +267,9 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # Read in the reference list of RO2 species from the MCM (peroxy-radicals_v*).
     #
-    # => the RO2 reference list is specific to each version of the MCM
-    # => RO2 lists for versions v3.1, v3.2, v3.3.1 of the MCM are available
-    # => change the filename if using a version of the MCM other than the default (v3.3.1)
+    # - the RO2 reference list is specific to each version of the MCM
+    # - RO2 lists for versions v3.1, v3.2, v3.3.1 of the MCM are available
+    # - change the filename if using a version of the MCM other than the default (v3.3.1)
     #
     # TODO: implement a different way to set the mcm version (see issue #297)
     with open(os.path.join(mcm_vers, 'peroxy-radicals_v3.3.1'), 'r') as RO2List_file:
@@ -278,17 +278,16 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # Check that each of the RO2s from 'Peroxy radicals' are present
     # in the RO2 reference list from the MCM. If not, print a warning
     # at the top of mechanism.f90 for each errant species.
-    #
-    # TODO: This will break the expected format when mechanism.f90 is
-    #       replaced by a parsable format
-    print('looping over inputted RO2s')
+    print('Looping over inputted RO2s')
 
     with open(os.path.join(mech_dir, 'mechanism.f90'), 'w') as mech_rates_file:
         mech_rates_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
 
         for ro2_species in [element for  element in ro2List if element not in RO2List_reference]:
-            print('****** Warning: ' + ro2_species + ' NOT found in the reference RO2 list ******')
-            mech_rates_file.write('! ' + ro2_species + ' is not in the MCM list of RO2 species. Should it be in the RO2 sum?\n')
+            print('\n\t!!! WARNING !!!')
+            print('  The following species are not present in the RO2 reference list:\n    ' + ro2_species)
+            print('  Should they be included in the RO2 sum?\n')
+            mech_rates_file.write('! ' + ro2_species + ' is not in the RO2 reference list for this version of the MCM\n')
 
     # Check the DILUTE environment variable to identify whether dilution should be applied.
     dilute = False
@@ -304,12 +303,12 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # -------------------------------------------------
     # Read in the names of user-defined custom rate functions and add them
-    # to the list of reserved names so that they will be carried through the 
+    # to the list of reserved names so that they will be carried through the
     # rate definitions (in a similar manner to LOG10)
     with open(mech_dir + '/customRateFuncs.f90') as custom_func_file:
-        func_def_pat = "function +([a-zA-Z0-9_]*) *\("
+        func_def_pat = r'function +([a-zA-Z0-9_]*) *\('
         custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
-        
+
         for n in custom_func_names:
             reservedOtherList.append(n)
 
@@ -437,7 +436,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
             # Ignore empty reactantsList.
             if not reactantsList.strip() == '':
-                # Compare each reactant against known species and note the 
+                # Compare each reactant against known species and note the
                 # stoichometric coefficients for each reactant.
                 reactantNums = []
                 reactantStoichs = []
@@ -456,12 +455,12 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
                         reactantNums.append(len(speciesList))
 
                 # Write the reactants to mech_reac_list.
-                mech_reac_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                mech_reac_list.extend([f'{reactionNumber} {z} {y}\n' for \
                                        y,z in zip(reactantStoichs, reactantNums)])
 
             # Ignore empty productsList.
             if not productsList.strip() == '':
-                # Compare each product against known species and note the 
+                # Compare each product against known species and note the
                 # stoichometric coefficients for each product.
                 productNums = []
                 productStoichs = []
@@ -481,7 +480,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
                         productNums.append(len(speciesList))
 
                 # Write the products to mech_prod_list.
-                mech_prod_list.extend([f"{reactionNumber} {z} {y}\n" for \
+                mech_prod_list.extend([f'{reactionNumber} {z} {y}\n' for \
                                        y,z in zip(productStoichs, productNums)])
 
     # -------------------------------------------------
@@ -582,9 +581,9 @@ end module mechanism_mod
     # -------------------------------------------------
 
     # Finally, now that we have the full list of species, we can output the RO2s to
-    # mechanism.ro2, loop over RO2 and write the necessary line to mechanism.ro2,
+    # mechanism.ro2: loop over RO2 and write the necessary line to mechanism.ro2,
     # using the species ID number of the RO2.
-    print('adding RO2 to ' + mech_dir + '/mechanism.ro2')
+    print('Adding RO2s to: ' + mech_dir + '/mechanism.ro2')
     with open(os.path.join(mech_dir, 'mechanism.ro2'), 'w') as ro2_file:
         ro2_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
 
@@ -611,8 +610,9 @@ end module mechanism_mod
 
 
 def main():
+    print('Processing chemical mechanism...')
     assert len(sys.argv) > 1, \
-        'Please enter the name of a chemical mechanism file (.fac) as argument:'
+        'Enter the filename of a chemical mechanism (.fac or .kpp) as argument:'
     mech_file = sys.argv[1]
     # config_dir defaults to model/configuration/, if not given as argument
     if len(sys.argv) <= 2:
@@ -632,6 +632,7 @@ def main():
 
     # Call the conversion to Fortran function
     convert_to_fortran(mech_file, config_dir, mcm_dir)
+    print('... chemical mechanism converted to Fortran.')
 
 # Call the main function if executed as script
 if __name__ == '__main__':

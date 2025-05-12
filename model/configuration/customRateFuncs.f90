@@ -13,6 +13,7 @@
 ! LICENSE.md at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
+
 ! ******************************************************************** !
 ! ATCHEM2 -- MODULE customRateFunctions
 !
@@ -24,6 +25,6 @@ module custom_functions_mod
 
 contains
 
-  !Define your functions here.
+  ! Define your functions here.
 
 end module custom_functions_mod

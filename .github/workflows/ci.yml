@@ -9,76 +9,87 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow for continuous integration (CI) of AtChem2,
-# using Github Actions and Codecov
+# Workflow for the continuous integration (CI) of AtChem2, using
+# Github Actions and Codecov
 #
 # Acknowledgements: J. Allsopp
-# ----------------------------------------------------- #
+# -------------------------------------------------------------------- #
 name: AtChem2 CI
 
 # ------------------------------ EVENTS ------------------------------ #
 # Controls when the workflow is activated
 on:
-  # Triggers when a pull request is created or updated (only on the
-  # master branch)
+
+  # Triggers when a pull request targeting the master branch is
+  # created or updated
   pull_request:
     branches: [ master ]
 
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit)
   push:
-    branches:
-      - master
+    branches: [ master ]
 
   # Run manually from the Actions tab
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `testing`, which compiles
-# the AtChem2 model, runs the Testsuite, and checks the Testsuite code
-# coverage using Codecov
+# This workflow contains a single job called `ci_testing` which
+# compiles the AtChem2 model, runs the Testsuite, and checks code
+# coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
-  testing:
-    # The job runs on both linux (ubuntu) and macos runner images,
-    # with three versions of gnu fortran -- the runner images are
-    # described here: https://github.com/actions/runner-images
+  ci_testing:
+    # The job runs on two versions of linux (ubuntu) and macos, with
+    # three versions of gnu fortran -- the runner images are described
+    # here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        os: [ubuntu-22.04, macos-12]
-        fortran: [9, 10, 11]
-        exclude: #TODO: fortran9 does not work on macos12
-        - os: macos-12
-          fortran: 9
+      matrix: # macos testing temporarily deactivated
+        os: [ubuntu-22.04] #, macos-12, macos-13]
+        fortran: [10, 11, 12]
+        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
+        - os: ubuntu-20.04
+          fortran: 11
+        - os: ubuntu-20.04
+          fortran: 12
       fail-fast: false
 
     # -------------------------------------------------------------
-    # Sequence of tasks to be executed as part of the `testing` job:
-    # 1. checkout the repository
-    # 2. install gfortran, AtChem2 dependencies
-    # 3. compile AtChem2
-    # 4. run all tests (indent, style, unit, model)
-    # 5. recompile AtChem2, run unit and model tests for Codecov
+    # Sequence of tasks to be executed as part of the `ci_testing` job:
+    # 1. Checkout the repository
+    # 2. Install gfortran, AtChem2 dependencies
+    # 3. Compile AtChem2
+    # 4. Run the Testsuite with default settings
+    # 5. Recompile AtChem2, run Testsuite for Codecov
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
-      - uses: actions/checkout@v4
+
+      - name: Checkout repo
+        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
         with:
           fetch-depth: 2
 
       # -------------------------------------------------------------
       # (2) Install gfortran, if not supplied with the runner image,
-      # and the AtChem2 dependencies (CVODE, openlibm, numdiff, FRUIT)
+      # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
 
-      # gfortran on macos-11
-      - name: Install gfortran-9 (macos-11)
-        if: matrix.os == 'macos-11' && matrix.fortran == 9
+      # gfortran on ubuntu
+      - name: Install gfortran-11 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+        run: sudo apt-get install gfortran-11
+      - name: Install gfortran-12 (ubuntu-20.04)
+        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 12
+        run: sudo apt-get install gfortran-12
+
+      # gfortran on macos
+      - name: Install gfortran-10 (macos-12)
+        if: matrix.os == 'macos-12' && (matrix.fortran == 10) # || matrix.fortran == 11)
         run: brew install gcc@${{ matrix.fortran }}
 
-      # gfortran on macos-12
-      - name: Install gfortran-9 and gfortran-10 (macos-12)
-        if: matrix.os == 'macos-12' && (matrix.fortran == 9 || matrix.fortran == 10)
+      - name: Install gfortran-10 and gfortran-11 (macos-13)
+        if: matrix.os == 'macos-13' && (matrix.fortran == 10 || matrix.fortran == 11)
         run: brew install gcc@${{ matrix.fortran }}
 
       # AtChem2 dependencies
@@ -96,14 +107,14 @@ jobs:
 
       # -------------------------------------------------------------
       # (3) Compile AtChem2 using the standard compilation flags
+
       - name: Build AtChem2
-        # Set $FORT_VERSION for use with the `Makefile`, called from
-        # the `build_atchem2.sh` script
+        # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
-          ./build/build_atchem2.sh ./model/mechanism.fac
+          ./build/build_atchem2.sh ./model/mechanism.fac ./model/configuration/ ./mcm/
 
           # macos only
           if [ $RUNNER_OS != "Linux" ] ; then
@@ -114,7 +125,8 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (4) Run all tests: indent, style, unit, model
+      # (4) Run the Testsuite using the standard compilation flags and default
+      # model settings: indent and style tests, unit and model tests
 
       - name: Indent and Style tests
         run: |
@@ -122,33 +134,35 @@ jobs:
           make styletest
 
       - name: Unit and Model tests
-        # Set $FORT_VERSION for use with the `Makefile`
+        # Set $FORT_VERSION for use with `Makefile`, then run tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests    # NB: oldtests will eventually be merged into modeltests
-          #make modeltests  # NB: modeltests are temporarily deactivated (pass on linux, fail on macos)
+          make modeltests
 
       # -------------------------------------------------------------
-      # (5) Recompile AtChem2 using the code coverage flags, then
+      # (5) Recompile AtChem2 using the code coverage compilation flags, then
       # upload the gcov files to Codecov
 
       - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
         # Set $FORT_VERSION for use with the `Makefile`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
+          # unit tests
           make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # Needed to deal with gcc11 changing the way it handles gcda and gcna files
-          make modeltests CCOV=true     # Run only the new model Testsuite
+          mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
+          # model tests
+          make modeltests CCOV=true     # run only the new Testsuite
 
-      - name: Upload coverage reports to Codecov
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 11
-        uses: codecov/codecov-action@v3
+      - name: Upload coverage reports to Codecov # TODO: update codecov action
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
+        uses: codecov/codecov-action@v3 # https://github.com/marketplace/actions/codecov
         with:
           gcov: true

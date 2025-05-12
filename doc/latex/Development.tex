@@ -14,130 +14,144 @@
 % -------------------------------------------------------------------- %
 \section{General Information} \label{sec:general-information}
 
-There are two versions of AtChem2 in the main
-\href{https://github.com/AtChem/AtChem2}{github repository}:
+AtChem2 is hosted on the \href{https://github.com}{GitHub} developer
+platform. Two versions of the model are available in the
+\href{https://github.com/AtChem/AtChem2}{repository} at any given
+time:
 
-\begin{enumerate}
-\item Stable version: is indicated by a version number (e.g.,
-  \textbf{v1.0}), and can be downloaded from the
+\begin{description}
+\item[Stable version]: is indicated by a version number
+  (e.g., \texttt{v1.0}) and can be downloaded from the
   \href{https://github.com/AtChem/AtChem2/releases}{Releases page}.
-\item Development version -- i.e. the \texttt{master\ branch}: is
-  indicated by a version number with the suffix \texttt{-dev} (e.g.,
-  \textbf{v1.1-dev}), and can be downloaded as an
-  \href{https://github.com/AtChem/AtChem2/archive/master.zip}{archive
-    file} or obtained via \textbf{git} (Sect.~\ref{sec:download}).
-\end{enumerate}
+  A \textbf{doi number} is assigned to each stable version via the
+  \href{https://zenodo.org}{zenodo service}.
+\item[Development version]: is the \texttt{master\ branch} of the git
+  repository and is indicated by a version number with the suffix
+  ``-dev'' (e.g., \texttt{v1.1-dev}). It can be downloaded as an
+  \href{https://github.com/AtChem/AtChem2/archive/master.zip}{archive file}
+  or obtained via \textbf{git} -- go to Sect.~\ref{sec:download} for
+  more information.
+\end{description}
 
 AtChem2 is under active development, which means that the
 \texttt{master\ branch} is sometimes a few steps ahead of the latest
-stable release. Any modification to the code is automatically run
-through the \hyperref[sec:test-suite]{Test Suite} before it is merged
-into the \texttt{master\ branch}. The Test Suite is designed to ensure
-that changes to the code do not cause unintended behaviour or
-unexplained differences in the model results, so the development
-version is normally safe to use. However, it is recommended to use the
-stable version for ``production runs'' and publications since it can
-be more easily referenced -- see the discussion about traceability and
-reproducibility of computational models in \citet{sommariva_2020}.
+stable release. However, any modification to the code is automatically
+run through the \hyperref[sec:test-suite]{Testsuite} before it is
+merged into the \texttt{master\ branch}. Since the Testsuite is
+designed to ensure that changes to the code do not cause unintended
+behaviour or unexplained differences in the model results, this
+ensures that even the development version of AtChem2 is reliable for
+most use cases. Nevertheless, it is strongly suggested to use the
+\textbf{stable version} for ``production runs'' and publications, as it
+can be easily referenced via the associated doi number -- see the
+discussion about traceability and reproducibility of computational
+models in \citet{sommariva_2020}.
 
-Feedback, bug reports, comments and suggestions are welcome: the list
-of open issues and known bugs can be found on the related
-\href{https://github.com/AtChem/AtChem2/issues}{github page}. The
-preferred way to contribute to the development of AtChem2 is to use
-\textbf{git}: instructions on how to set up git and submit
+Feedback, bug reports, comments, suggestions, and feature requests are
+welcome: the list of open issues, known bugs, etc\ldots can be found on
+the related \href{https://github.com/AtChem/AtChem2/issues}{GitHub page}.
+Please check this page before reporting new issues/bugs. Also note
+that the AtChem2 \href{https://github.com/AtChem/AtChem2/wiki}{wiki}
+contains suggestions to solve some common issues.
+
+The preferred way to contribute to the development of AtChem2 is to
+use the open source \href{https://git-scm.com}{git} version control
+tool: instructions on how to set up git, prepare and submit
 contributions to the AtChem2 repository can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki}.
-The coding guidelines for Fortran are detailed in Sect.\ref{sec:style-guide}.
+Contributors are strongly encouraged to follow the Fortran coding
+guidelines, as detailed in Sect.\ref{sec:style-guide}.
+
+
 
 % -------------------------------------------------------------------- %
-\section{Test Suite} \label{sec:test-suite}
+\section{Testsuite} \label{sec:test-suite}
 
-AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions} for
-\textbf{continuous integration} testing. This programming approach
-ensures that changes to the code do not modify the behaviour and the
-results of the software in an unintended fashion. The Test Suite is in
-the \texttt{tests/} directory and consists of a series of tests and
-short model runs that check the model functionality and calculations
-against known outputs. The \href{https://codecov.io}{Codecov} service
-is used to verify that the Test Suite covers a significant fraction of
-the codebase ($>$90\%) and a wide range of common configurations.
+AtChem2 uses \href{https://github.com/features/actions}{GitHub
+  Actions} for \underline{continuous integration} testing. This
+programming approach ensures that changes to the code do not
+unintentionally modify the behaviour and the results of a
+software. The Testsuite is located in the \texttt{tests/}
+directory~\footnote{Called \texttt{travis/} in versions 1.0-1.2.2,
+  when the TravisCI service was used to run the Testsuite.}  and
+consists of a series of tests and short model runs that check the
+model functionality and calculations against known outputs. In
+addition, the \href{https://codecov.io}{Codecov} service is used to
+ensure that the Testsuite covers a significant fraction of the
+codebase ($>$90\%) and a wide range of common configurations.
 
-There are four types of tests, which can be executed from the
-\maindir\ using the command \verb|make| (note that the
-\hyperref[subsec:optional-dependencies]{optional dependencies} need to
-be installed):
+There are four types of tests, executed from the \maindir\ with
+the \verb|make| command. Note that the \emph{optional dependencies}
+must be installed in order to run the Testsuite -- see
+Sect.~\ref{subsec:optional-dependencies} and \ref{subsec:tests-optional}
+for details.
 
 \begin{itemize}
-\item \textbf{Indent} and \textbf{Style} tests: check that the
+\item the \textbf{Indent} and \textbf{Style} tests check that the
   indentation and coding style of the Fortran code are consistent with
-  the guidelines -- \verb|make indenttest| and \verb|make styletest|.
-\item \textbf{Unit} tests: check that individual functions generate
-  the expected outputs -- \verb|make unittests|.
-\item \textbf{Behaviour} tests: build and run a number of models with
-  different configurations and check that they generate the expected
-  outputs -- \verb|make modeltests|.
+  the guidelines:\\
+  $\hookrightarrow$ \verb|make indenttest| and \verb|make styletest|
+\item the \textbf{Unit} tests check that individual Fortran functions
+  generate the expected outputs:\\
+  $\hookrightarrow$ \verb|make unittests|
+\item the \textbf{Model} tests run a number of models with different
+  configurations to check that they generate the expected outputs:\\
+  $\hookrightarrow$ \verb|make modeltests| and/or
+  \verb|make oldtests|~\footnote{At present these tests are split into
+    two groups, \texttt{modeltests} and \texttt{oldtests}, which will
+    eventually be merged. Both groups of tests pass on Linux, but
+    \texttt{modeltests} fail on macOS. See issue
+    \href{https://github.com/AtChem/AtChem2/issues/522}{\#522}.}
+\item The command \verb|make alltests| runs all the tests described
+  above in succession.
 \end{itemize}
 
-The command \verb|make alltests| runs all the tests in the Test Suite
-in succession. Each test outputs the results to the terminal and, in
-case of failure, a log file (\texttt{tests/testsuite.log}) is
-generated for the indent, style and behaviour tests. If all tests are
-successfully passed the following message is printed to the terminal:
+The Indent, Style and Model tests create \texttt{.log} files in the
+\texttt{tests/} directory and print a summary message to the terminal,
+while the Unit tests output the results directly to the terminal. If
+one or more tests fail, search the log files for detailed information.
 
-\begin{verbatim}
-Style test       PASSED
-Indent test      PASSED
-Tests            PASSED
-  (20/20 tests PASSED)
-Testsuite PASSED
-\end{verbatim}
-
-The Test Suite is automatically run every time a Pull Request (PR) is created
-or updated on the main github repository (\texttt{AtChem/AtChem2}).  The Pull
-Request triggers a build on GitHub Actions which runs the entire Test Suite on
-two architectures (Linux and macOS) using different versions of the GNU
-\texttt{gfortran} compiler. The CI tester performs the following tasks on each
-architecture:
+The Testsuite is automatically run every time a Pull Request (PR) is
+created or updated on the GitHub repository. The PR triggers a GitHub
+Actions workflow which runs the entire Testsuite on two architectures
+(Linux and macOS) using different versions of the GNU
+\texttt{gfortran} compiler. The workflow -- described in the
+\texttt{.github/workflows/ci.yml} file -- performs the following tasks
+on each architecture:
 
 \begin{itemize}
-\item Install \texttt{gfortran}, CVODE, and \texttt{numdiff}:
-  \begin{itemize}
-  \item Linux: use \texttt{apt-get} to install \texttt{gfortran}. Install
-    CVODE from source~\footnote{\texttt{apt-get} could also be used to install
-      SUNDIALS, but the repository does not currently hold CVODE v2.9.}.
-  \item macOS: use \texttt{Homebrew} to install \texttt{gfortran}. Install
-    CVODE from source.
-  \end{itemize}
-\item Install the other dependencies (\texttt{openlibm}, \texttt{numdiff} and
-  FRUIT) using the scripts in the \texttt{tools/install/} directory.
-\item Build and run the example AtChem2 model using the default
-  configuration. PASS if it exits with 0.
-\item Build and run the indent and style tests. PASS if all tests pass.
-\item Build and run the unit tests. PASS if all unit tests pass.
-\item Build and run the behaviour tests. PASS if no differences from
-  the reference output files are found, otherwise FAIL.
+\item Install \texttt{gfortran} and the AtChem2 dependencies using
+  \texttt{apt-get} (Linux) or \texttt{Homebrew} (macOS).
+\item Build and run a model using the example chemical mechanism and
+  default configuration: PASS if it exits with 0.
+\item Build and run the Indent and Style tests: PASS if all tests pass.
+\item Build and run the Unit tests: PASS if all Unit tests pass.
+\item Build and run the Model tests: PASS if there are no differences
+  from the reference output files (within tolerance), otherwise FAIL.
+\item Build and run the Unit and Model tests, and upload the overage
+  reports to the Codecov service.
 \end{itemize}
 
-Every test must pass to allow the full CI to pass. This is indicated
-by the message ``All checks have passed'' on the github PR page. Pull
-Requests should only be merged into the \texttt{master\ branch} once
-GitHub Actions has completed with passes on both architectures.
+The Testsuite is successful only if all tests pass successfully. This is
+indicated by the message ``All checks have passed'' on the GitHub PR page.
+Pull Requests should only be merged into the \texttt{master\ branch}
+once GitHub Actions has completed with passes on both architectures.
 
-\subsection{Adding new unit tests} \label{subsec:adding-new-unit-tests}
+\subsection{Adding new Unit tests} \label{subsec:adding-new-unit-tests}
 
-The unit tests are in the \texttt{tests/unit\_tests/} directory and
-require the FRUIT optional dependency (which requires Ruby,
-Sect.~\ref{subsec:optional-dependencies}). To add new unit tests,
-follow the procedure outlined below:
+The Unit tests are in the \texttt{tests/unit\_tests/} directory and
+require the FRUIT optional dependency (which requires Ruby and
+\texttt{rake}, Sect.~\ref{subsec:optional-dependencies}). To add new
+Unit tests, follow the procedure outlined below:
 
 \begin{itemize}
-\item The unit test files are called \texttt{*\_test.f90}. If the new
-  unit test to be added fits into an existing test file, edit that
+\item The Unit test files are called \texttt{*\_test.f90}. If the new
+  Unit test to be added fits into an existing test file, edit that
   file -- otherwise, create a new test file following the same naming
-  pattern. It is suggested that unit tests covering functions from the
+  pattern. It is suggested that Unit tests covering functions from the
   source file \texttt{xFunctions.f90} should be named
   \texttt{x\_test.f90}.
-\item The unit test file must contain a module with the same name as
+\item The Unit test file must contain a module with the same name as
   the file -- i.e. \texttt{x\_test} -- and it must include the
   statement \verb|use fruit|, plus any other required module.
 \item The module should contain a number of subroutines with the
@@ -148,9 +162,9 @@ follow the procedure outlined below:
 \item Each subroutine should call one or more assert functions:
   usually, these are \texttt{assert\_equals()}, \texttt{assert\_not\_equals()},
   \texttt{assert\_true()}, \texttt{assert\_false()}. The assert functions
-  act as the arbiters of pass or failure of the unit test -- each
+  act as the arbiters of pass or failure of the Unit test -- each
   assert must pass for the subroutine to pass, and each subroutine
-  must pass for the unit tests to pass.
+  must pass for the Unit tests to pass.
 \item The assert functions have the following syntax:
   \begin{verbatim}
   call assert_true( a == b , "Test that a and b are equal")
@@ -161,27 +175,28 @@ follow the procedure outlined below:
 \end{itemize}
 
 It is useful to use the last argument of the assert function as a
-\emph{unique} and \emph{descriptive} message. When a unit test fails,
+\emph{unique} and \emph{descriptive} message. When a Unit test fails,
 it is highlighted in the FRUIT output summary, and the message of the
 assert function is printed. Unique and descriptive messages thus
-enable faster and easier understanding of which test has failed, and
-perhaps why.
+enable faster and easier understanding of which test has failed,
+and perhaps why.
 
 If these steps are followed, calling \texttt{make\ unittests} is
-enough to run all the unit tests, including the new ones. To verify
+enough to run all the Unit tests, including the new ones. To verify
 that the new tests have indeed been run and passed, check the output
 summary -- there should be a line associated to each of the
 \texttt{test\_*} subroutines in each test file.
 
-\subsection{Adding new behaviour tests} \label{subsec:adding-new-behaviour-tests}
+\subsection{Adding new Model tests} \label{subsec:adding-new-model-tests}
 
-Each behaviour test (\texttt{\$TESTNAME}) is contained in its own
-subdirectory inside the \texttt{tests/tests/} directory. A behaviour
-test requires the following files and directory structure:
+Each Model test (\texttt{\$TESTNAME}) is contained in its own
+subdirectory inside the \texttt{tests/model\_tests/} directory. A
+Model test requires the following files and directory structure:
 
 \begin{verbatim}
 |- $TESTNAME
 |  |- configuration
+|  |  |- customRateFuncs.f90           [*]
 |  |  |- environmentVariables.config
 |  |  |- initialConcentrations.config
 |  |  |- mechanism.prod.cmp
@@ -212,31 +227,32 @@ test requires the following files and directory structure:
 |  |- photolysisRatesParameters.output.cmp
 |  |- productionRates.output.cmp
 |  |- speciesConcentrations.output.cmp
-|- $TESTNAME.fac
+|- $TESTNAME.{fac|kpp}
 |- $TESTNAME.out.cmp
 \end{verbatim}
 
 The files marked with \texttt{[*]} and the directories marked with
-\texttt{[**]} are optional -- depending on the configuration used in
-the test. If present, the directories marked with \texttt{[**]} should
-contain the relevant constraint files, according to the corresponding
-configuration files in \texttt{model/configuration/} (see
-Sect.~\ref{sec:constraints} for details).
+\texttt{[**]} are optional, depending on the model configuration used
+in the test. If present, the directories marked with \texttt{[**]}
+should contain the relevant constraint files, according to the
+corresponding configuration files in \texttt{model/configuration/}
+(see Sect.~\ref{sec:constraints} for details). The file
+\texttt{\$TESTNAME.out.cmp} should contain the exact copy of the
+expected terminal printout.
 
-The file \texttt{\$TESTNAME.out.cmp} should contain the exact copy of the
-expected terminal printout. Each behaviour test is briefly described in the
-\texttt{tests/tests/INFO.md} file, which should be updated after a new test is
-added. New tests added to the \texttt{tests/tests/} directory are
-automatically picked up by the \texttt{Makefile} when running
-\verb|make modeltests| or \verb|make alltests| from the \maindir.
+Each Model test is briefly described in the \texttt{tests/model\_tests/INFO.md}
+file, which should be updated after a new test is added. New tests added
+to the \texttt{tests/tests/} directory are automatically picked up when
+running the commands \verb|make modeltests| or \verb|make alltests| from
+the \maindir.
 
 % -------------------------------------------------------------------- %
 \section{Style Guide} \label{sec:style-guide}
 
 In order to make the AtChem2 code more readable and easier to
-maintain, the source code should follow a consistent style
-(Sect.~\ref{subsec:style-recommendations}). Two Python scripts are used
-to check and correct the Fortran code:
+maintain, the Fortran source code should follow a consistent style
+(Sect.~\ref{subsec:style-recommendations}). Two Python scripts are
+available to check and, if necessary, correct the Fortran code:
 
 \begin{itemize}
 \item \texttt{fix\_style.py} edits a Fortran file in-place to make the
@@ -245,7 +261,7 @@ to check and correct the Fortran code:
   at the indentation level of each line of code.
 \end{itemize}
 
-These scripts are in the \texttt{tools/} directory and can be invoked
+These scripts are in the \texttt{tools/} directory and are executed
 from the \maindir\ with the following commands:
 
 \begin{verbatim}
@@ -253,17 +269,17 @@ python tools/fix_style.py src/filename.f90
 python tools/fix_indent.py src/filename.f90
 \end{verbatim}
 
-It is important to keep in mind that these scripts are \emph{not
-  infallible} and, therefore, it is strongly recommended to always
-have a backup of the Fortran file to revert to, in case of wrong
-edits. This can be done by passing two arguments to the script instead
-of one: the second argument sends the script output to another file,
-leaving the original file untouched.
+It is important to keep in mind that these scripts are \emph{not infallible}
+and, therefore, it is strongly recommended to always have a backup of the
+original Fortran file to revert to, in case of wrong edits. This can be
+done by passing two arguments to the script instead of one: the second
+argument sends the script output to another file, leaving the original
+file untouched.
 
-Both scripts are also used in the Test Suite to run the style and
-indent tests (Sec.~\ref{sec:test-suite}): each script is run over each
-source file and the output is sent to a \texttt{.cmp} file. If the
-\texttt{.cmp} file matches the original file, the test passes.
+Both scripts are also used in the Testsuite to run the Style and
+Indent tests (Sect.~\ref{sec:test-suite}): each script is run over
+each source file and the output is sent to a \texttt{.cmp} file. If
+all \texttt{.cmp} files match the original files, the test passes.
 
 \subsection{Style recommendations} \label{subsec:style-recommendations}
 
@@ -271,47 +287,49 @@ source file and the output is sent to a \texttt{.cmp} file. If the
 
 \begin{itemize}
 \item All code should be organized in a \textbf{module structure},
-  except the main program. There is only one exception: due to a
-  complicating factor with linking to CVODE, the functions
-  \texttt{FCVFUN()} and \texttt{FCVJTIMES()} are placed within the
-  main file \texttt{atchem.f90}.
-\item All code should be written in free-form Fortran, and the source
-  files should have the extension \texttt{.f90}.
+  except the main program. There is only one exception: due to an
+  issue with linking to CVODE, the functions \texttt{FCVFUN()} and
+  \texttt{FCVJTIMES()} are placed within the main file
+  (\texttt{atchem.f90}).
+\item All code should be written in free-form Fortran, compliant with
+  the Fortran 90/95 standard; the source files should have the
+  extension \texttt{.f90}.
 \item Always use two spaces to indent blocks.
 \item At the top of each file there should be a header indicating the
-  author(s), date, and purpose of the code; if necessary,
+  author(s), date, and purpose of the code. If applicable,
   acknowledgements to other contributors should be added.
 \item Always comment a procedure with a high-level explanation of what
   that procedure does.
 \item There are no specific guidelines for comments, although common
-  sense applies and any code within the comments should broadly follow
-  the rules below.
+  sense applies, and any code within the comments should broadly
+  follow the rules below.
 \end{itemize}
 
 \subsubsection{Specific recommendations}
 
 \begin{itemize}
-\item All \textbf{keywords} should be lowercase, e.g., \texttt{if\
-    then}, \texttt{call}, \texttt{module}, \texttt{integer},
-  \texttt{real}, \texttt{only}, \texttt{intrinsic}. This includes the
+\item All \textbf{keywords} should be lowercase: e.g., \texttt{if\ then},
+  \texttt{call}, \texttt{module}, \texttt{integer}, \texttt{real},
+  \texttt{only}, \texttt{intrinsic}. This includes the
   \texttt{(kind=XX)} and \texttt{(len=XX)} statements.
-\item All \textbf{intrinsic} function names should be lowercase, e.g.,
+\item All \textbf{intrinsic} function names should be lowercase: e.g.,
   \texttt{trim}, \texttt{adjustl}, \texttt{adjustr}.
 \item The \textbf{relational operators} should use \texttt{$\geq$} and
-  \texttt{==} rather than \texttt{.GE.}, \texttt{.EQ.}, and should be
-  surrounded by a single space.
+  \texttt{==} rather than \texttt{.GE.}, \texttt{.EQ.} -- they should
+  be surrounded by a single space.
 \item The \texttt{=} operator should be surrounded by one space when
-  used as assignment -- except in the cases of the \texttt{(kind=XX)}
-  and \texttt{(len=XX)} statements, where no spaces should be used.
+  used as assignment, except in the cases of the \texttt{(kind=XX)}
+  and \texttt{(len=XX)} statements where no spaces should be used.
 \item The \textbf{mathematical operators} (\texttt{*}, \texttt{-},
   \texttt{+}, \texttt{**}) should be surrounded by one space.
 \item Numbers in scientific notation should have no spaces around the
-  \texttt{+} or \texttt{-}, e.g., \texttt{1.5e-9}.
-\item The names of \textbf{variables} should begin with lowercase,
-  while those of \textbf{procedures} (that is, subroutines and
-  functions) should begin with uppercase. An exception is
-  \textbf{third-party functions}, which should be uppercase. Use
-  either CamelCase or underscores to write multiple-word identifiers.
+  \texttt{+} or \texttt{-} signs: e.g., \texttt{1.5e-9}.
+\item The names of the \textbf{variables} should begin with lowercase,
+  while those of the \textbf{procedures} (subroutines and functions)
+  should begin with uppercase. An exception to this rule is
+  \textbf{third-party functions}, which should be uppercase. Both
+  CamelCase or underscores are acceptable for multiple-word
+  identifiers, but be consistent.
 \item All \textbf{modules} should include the \texttt{implicit none}
   statement.
 \item All \textbf{variable declarations} should include the

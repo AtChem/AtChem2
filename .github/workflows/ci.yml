@@ -38,18 +38,19 @@ on:
 # compiles the AtChem2 model, runs the Testsuite, and checks code
 # coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
+
   ci_testing:
     # The job runs on two versions of linux (ubuntu) and macos, with
-    # three versions of gnu fortran -- the runner images are described
-    # here: https://github.com/actions/runner-images
+    # three versions of gnu fortran -- Information on the runner
+    # images is here: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: # macos testing temporarily deactivated
+      matrix:  # macos testing temporarily deactivated
         os: [ubuntu-22.04, ubuntu-24.04] #, macos-12, macos-13]
         fortran: [11, 12, 13]
-        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
-        - os: ubuntu-20.04
-          fortran: 11
+        exclude:  # gfortran-13 not available for ubuntu-22.04
+        - os: ubuntu-22.04
+          fortran: 13
       fail-fast: false
 
     # -------------------------------------------------------------
@@ -57,14 +58,15 @@ jobs:
     # 1. Checkout the repository
     # 2. Install gfortran, if not available
     # 3. Install the AtChem2 dependencies
-    # 4. Compile AtChem2
+    # 4. Build AtChem2
     # 5. Run the Testsuite with default settings
     # 6. Recompile AtChem2, run Testsuite for Codecov
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
-      #     ACTION: https://github.com/marketplace/actions/checkout
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
 
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -75,9 +77,6 @@ jobs:
       # (2) Install gfortran, if not supplied with the runner image
 
       # gfortran on ubuntu
-      - name: Install gfortran-13 (ubuntu-22.04)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 13
-        run: sudo apt-get install gfortran-13
       - name: Install gfortran-11 (ubuntu-24.04)
         if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 11
         run: sudo apt-get install gfortran-11
@@ -107,7 +106,7 @@ jobs:
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
-      # (4) Compile AtChem2 using the standard compilation flags
+      # (4) Build AtChem2 using the standard compilation flags
 
       - name: Build AtChem2
         # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
@@ -126,8 +125,8 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (5) Run the Testsuite using the standard compilation flags and default
-      #     model settings: indent and style tests, unit and model tests
+      # (5) Run the Testsuite using the standard compilation flags and the
+      #     default model settings: indent/style and unit/model tests
 
       - name: Indent and Style tests
         run: |
@@ -147,7 +146,8 @@ jobs:
       # -------------------------------------------------------------
       # (6) Recompile AtChem2 using the code coverage compilation flags, then
       #     upload the gcov files to Codecov
-      #     ACTION: https://github.com/marketplace/actions/codecov
+      #
+      # ACTION: https://github.com/marketplace/actions/codecov
 
       - name: Unit and Model tests (x Codecov)
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
@@ -162,10 +162,9 @@ jobs:
           mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
           # model tests
           make modeltests CCOV=true    # run only the new Testsuite
-          which convert
 
       - name: Upload coverage reports to Codecov
-        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
-        uses: codecov/codecov-action@v3
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
+        uses: codecov/codecov-action@v4
         with:
           gcov: true

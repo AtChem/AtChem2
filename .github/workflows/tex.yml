@@ -34,6 +34,7 @@ on:
 # the script `make_manual_pdf.sh` to generate the pdf file of the
 # manual, and uploads it to the repo
 jobs:
+  
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu), and needs
     # write permission to the repository
@@ -44,16 +45,20 @@ jobs:
     steps:
 
       # -------------------------------------------------------------
-      # 1. Checkout the repository from the branch associated with the current PR
+      # 1. Checkout the branch associated with the current PR from the repository
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
       - name: Checkout repo
-        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
       # 2. Setup TeXLive, install Inkscape (v1.x), and compile the pdf file
+      #
+      # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
       - name: Setup TexLive and compile the manual
-        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+        uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
           run: |
@@ -69,7 +74,7 @@ jobs:
       #     path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
-      # 4.
+      # 3.
       - name: Add pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -80,4 +85,4 @@ jobs:
           # commit pdf file
           git add doc/AtChem2-Manual.pdf
           git commit -m "Update AtChem2-Manual.pdf"
-          #git push origin master
+          git push origin master

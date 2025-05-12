@@ -24,15 +24,16 @@ following software tools:
 \item a terminal with bash or a bash-compatible shell (e.g., zsh is
   the default shell in macOS), and common utilities: wget, tar, zip,
   make, etc\ldots
-\item a text editor: Emacs, vim, Gedit, Kate, TextEdit, Atom, or similar
-\item a Fortran compiler -- the model compiles with GNU \texttt{gfortran}
-  (version 4.8 and later) and with Intel \texttt{ifort} (version 17.0 and later)\\
-  $\hookrightarrow$ default Fortran compiler: \texttt{gfortran}
-\item Python~\footnote{All Python scripts used in AtChem2 work equally
-    with Python v2 and v3. Support for Python v2 will be removed in
-    future versions of AtChem2.}
-\item Ruby, rake (both optional)
-\item git (optional)
+\item a text editor: Emacs, vim, Gedit, Kate, TextEdit, Atom,
+  etc\ldots
+\item a Fortran compiler -- the model compiles with GNU
+  \texttt{gfortran} (version 4.8 and later) and with Intel
+  \texttt{ifort} (version 17.0 and later).\\
+  The default Fortran compiler is \texttt{gfortran}.
+\item a Python installation~\footnote{All Python scripts used in
+    AtChem2 work equally with Python v2 and v3. Support for Python v2
+    will be removed in future versions of AtChem2.}.
+\item a Ruby installation with \texttt{rake} (both optional).
 \end{itemize}
 
 Some or all of these tools may already be installed on the operating
@@ -56,19 +57,20 @@ container. For details, go to Sect.~\ref{sec:docker}.
 % -------------------------------------------------------------------- %
 \section{Download} \label{sec:download}
 
-AtChem2 is hosted at: \href{https://github.com/AtChem/AtChem2}{https://github.com/AtChem/AtChem2}.
-Two versions of the model are available for download: the
-\href{https://github.com/AtChem/AtChem2/releases}{stable version} and
-the \emph{development version}, also known as \texttt{master\ branch}
--- see Sect.~\ref{sec:general-information} for more information.
-Although the two versions are generally equivalent, it is recommended to
-use the stable version in publications because it can be easily referenced
-via the associated \href{https://www.doi.org/the-identifier/what-is-a-doi}{doi}
-and version number. The AtChem2 source code can be obtained in two ways:
+The primary repository for the AtChem2 code and documentation is:\\
+\href{https://github.com/AtChem/AtChem2}{https://github.com/AtChem/AtChem2}.
+
+Two versions of the model are available: the \emph{stable version} and the
+\emph{development version} -- i.e. the \texttt{master\ branch} of the git
+repository, see Sect.~\ref{sec:general-information}. Although the two
+versions are usually equivalent, it is recommended to use the stable
+version which can be easily referenced in publications using the version
+and \href{https://www.doi.org/the-identifier/what-is-a-doi}{doi} numbers.
+The AtChem2 source code can be obtained in two ways:
 
 \begin{enumerate}
-\item with \textbf{git} (this is the recommended method for users who
-  want to contribute to the model development):
+\item with \textbf{git} (this is the best method for users who want to
+  contribute to the model development, Sect.~\ref{ch:development}):
   \begin{itemize}
   \item Open the terminal. Move to the directory where AtChem2 will be
     installed.
@@ -83,15 +85,15 @@ and version number. The AtChem2 source code can be obtained in two ways:
   \end{itemize}
 \item with the \textbf{archive file}:
   \begin{itemize}
-  \item Download the archive file (\texttt{.tar.gz} or \texttt{.zip}) of the
-    \href{https://github.com/AtChem/AtChem2/releases}{stable} or of the
+  \item Download the archive file (\texttt{.tar.gz} or \texttt{.zip}) of
+    the \href{https://github.com/AtChem/AtChem2/releases}{stable} or the
     \href{https://github.com/AtChem/AtChem2/archive/master.zip}{development}
     version to the directory where AtChem2 will be installed.
   \item Open the terminal. Move to the directory where the archive
     file was downloaded.
   \item Execute \verb|tar -zxfv *.tar.gz| or \verb|unzip -v *.zip|
-    (depending on which of the archive files was downloaded) to unpack
-    the archive file.
+    (depending on which file was downloaded) to unpack the archive
+    file.
   \end{itemize}
 \end{enumerate}
 
@@ -354,16 +356,15 @@ AtChem2 has been installed correctly and works as intended. This step
 is not necessary, but it is recommended especially for users who want
 to contribute to the development of the AtChem2 model. Note that the
 \hyperref[subsec:optional-dependencies]{optional dependencies} have to
-be installed to run the Testsuite, .
+be installed to run the Testsuite.
 
-To run the Testsuite, open the terminal and execute one of the
-following commands from the \maindir:
+Open the terminal and execute one of the following commands from the
+\maindir:
 
 \begin{itemize}
 \item \verb|make alltests|: runs all the tests (requires numdiff and FRUIT).
-\item \verb|make modeltests|: runs only the build and behaviour tests
-  (requires numdiff).
-\item \verb|make unittests|: runs only the unit tests (requires FRUIT).
+\item \verb|make modeltests|: runs only the Model tests (requires numdiff).
+\item \verb|make unittests|: runs only the Unit tests (requires FRUIT).
 \end{itemize}
 
 The command runs the requested tests, then prints the tests output and

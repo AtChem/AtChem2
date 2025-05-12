@@ -41,20 +41,17 @@ application. \textbf{AtChem2} was developed from AtChem-online; the
 aim is to provide an \emph{offline} modelling tool capable of running
 long simulations of computationally intensive models, as well as batch
 simulations (e.g., for sensitivity studies). In addition, AtChem2
-implements a continuous integration workflow, along with a comprehensive
-Testsuite and version control (\href{https://git-scm.com}{git})
-which makes it robust, reliable and traceable.
+implements a continuous integration workflow, along with a
+comprehensive Testsuite and a version control workflow (with
+\href{https://git-scm.com}{git}), which makes it robust, reliable and
+traceable.
 
-The codebase of AtChem2 is structured into four components (or layers)
--- as illustrated in Fig.~\ref{fig:atchem-arch} -- and is written
-mostly in Fortran 90/95. Installation, compilation and execution of
-AtChem2 are semi-automated via a number of shell and Python scripts
-that require minimal input from the user. This document
-(\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual and contains
-all the information required to install, configure, and use the
-current version of AtChem2. A summary of these instructions with
-additional information, and a list of \underline{known issues} can be
-found on the \href{https://github.com/AtChem/AtChem2/wiki}{wiki}.
+The codebase of AtChem2 is structured into four components (or layers,
+see Fig.~\ref{fig:atchem-arch}) and is written in Fortran 90/95.
+Installation, compilation and execution of AtChem2 are semi-automated
+via a number of shell and Python scripts that require minimal input
+from the user. Model configuration and inputs consist of simple text
+files that can be easily modified with any text editor.
 
 \begin{figure}[htb]
   \centering
@@ -62,6 +59,15 @@ found on the \href{https://github.com/AtChem/AtChem2/wiki}{wiki}.
   \caption{Architecture of AtChem2.}
   \label{fig:atchem-arch}
 \end{figure}
+
+This document (\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual
+and contains all the information required to install, configure, and
+use the current version of the model. The AtChem2
+\href{https://github.com/AtChem/AtChem2/wiki}{wiki} contains summaries
+of these instructions for quick user reference; additional
+information, such as example submission scripts for HPC systems
+(Sect.~\ref{subsec:hpc}), and guidance for resolving some
+\underline{known issues} are also available on the wiki.
 
 % -------------------------------------------------------------------- %
 \section{Conventions} \label{sec:conventions}

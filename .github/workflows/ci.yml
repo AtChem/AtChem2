@@ -45,54 +45,55 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix: # macos testing temporarily deactivated
-        os: [ubuntu-22.04] #, macos-12, macos-13]
-        fortran: [10, 11, 12]
+        os: [ubuntu-22.04, ubuntu-24.04] #, macos-12, macos-13]
+        fortran: [11, 12, 13]
         exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
         - os: ubuntu-20.04
           fortran: 11
-        - os: ubuntu-20.04
-          fortran: 12
       fail-fast: false
 
     # -------------------------------------------------------------
     # Sequence of tasks to be executed as part of the `ci_testing` job:
     # 1. Checkout the repository
-    # 2. Install gfortran, AtChem2 dependencies
-    # 3. Compile AtChem2
-    # 4. Run the Testsuite with default settings
-    # 5. Recompile AtChem2, run Testsuite for Codecov
+    # 2. Install gfortran, if not available
+    # 3. Install the AtChem2 dependencies
+    # 4. Compile AtChem2
+    # 5. Run the Testsuite with default settings
+    # 6. Recompile AtChem2, run Testsuite for Codecov
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
+      #     ACTION: https://github.com/marketplace/actions/checkout
 
       - name: Checkout repo
-        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       # -------------------------------------------------------------
-      # (2) Install gfortran, if not supplied with the runner image,
-      # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
+      # (2) Install gfortran, if not supplied with the runner image
 
       # gfortran on ubuntu
-      - name: Install gfortran-11 (ubuntu-20.04)
-        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+      - name: Install gfortran-13 (ubuntu-22.04)
+        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 13
+        run: sudo apt-get install gfortran-13
+      - name: Install gfortran-11 (ubuntu-24.04)
+        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 11
         run: sudo apt-get install gfortran-11
-      - name: Install gfortran-12 (ubuntu-20.04)
-        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 12
-        run: sudo apt-get install gfortran-12
 
       # gfortran on macos
-      - name: Install gfortran-10 (macos-12)
-        if: matrix.os == 'macos-12' && (matrix.fortran == 10) # || matrix.fortran == 11)
-        run: brew install gcc@${{ matrix.fortran }}
+      # - name: Install gfortran-10 (macos-12)
+      #   if: matrix.os == 'macos-12' && (matrix.fortran == 10) # || matrix.fortran == 11)
+      #   run: brew install gcc@${{ matrix.fortran }}
 
-      - name: Install gfortran-10 and gfortran-11 (macos-13)
-        if: matrix.os == 'macos-13' && (matrix.fortran == 10 || matrix.fortran == 11)
-        run: brew install gcc@${{ matrix.fortran }}
+      # - name: Install gfortran-10 and gfortran-11 (macos-13)
+      #   if: matrix.os == 'macos-13' && (matrix.fortran == 10 || matrix.fortran == 11)
+      #   run: brew install gcc@${{ matrix.fortran }}
 
-      # AtChem2 dependencies
+      # -------------------------------------------------------------
+      # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
+
       - name: Install CVODE
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
@@ -106,7 +107,7 @@ jobs:
         run: sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
-      # (3) Compile AtChem2 using the standard compilation flags
+      # (4) Compile AtChem2 using the standard compilation flags
 
       - name: Build AtChem2
         # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
@@ -125,8 +126,8 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (4) Run the Testsuite using the standard compilation flags and default
-      # model settings: indent and style tests, unit and model tests
+      # (5) Run the Testsuite using the standard compilation flags and default
+      #     model settings: indent and style tests, unit and model tests
 
       - name: Indent and Style tests
         run: |
@@ -140,12 +141,13 @@ jobs:
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
-          make oldtests    # NB: oldtests will eventually be merged into modeltests
+          make oldtests  # NB: oldtests will eventually be merged into modeltests
           make modeltests
 
       # -------------------------------------------------------------
-      # (5) Recompile AtChem2 using the code coverage compilation flags, then
-      # upload the gcov files to Codecov
+      # (6) Recompile AtChem2 using the code coverage compilation flags, then
+      #     upload the gcov files to Codecov
+      #     ACTION: https://github.com/marketplace/actions/codecov
 
       - name: Unit and Model tests (x Codecov)
         if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
@@ -159,10 +161,11 @@ jobs:
           make unittests CCOV=true
           mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
           # model tests
-          make modeltests CCOV=true     # run only the new Testsuite
+          make modeltests CCOV=true    # run only the new Testsuite
+          which convert
 
-      - name: Upload coverage reports to Codecov # TODO: update codecov action
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        uses: codecov/codecov-action@v3 # https://github.com/marketplace/actions/codecov
+      - name: Upload coverage reports to Codecov
+        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
+        uses: codecov/codecov-action@v3
         with:
           gcov: true

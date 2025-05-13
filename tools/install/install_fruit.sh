@@ -47,8 +47,16 @@ if [ $? -ne 0 ] ; then
 fi
 rm fruit_3.4.3.zip
 
-# compile and install FRUIT
+# set up Ruby
 cd fruit_3.4.3/
+rbenv install 3.0.6
+rbenv local 3.0.6
+if [ $? -ne 0 ] ; then
+  echo "[fruit] rbenv setup --- failed"
+  exit 1
+fi
+
+# compile and install FRUIT
 gem install rake
 if [ $? -ne 0 ] ; then
   echo "[fruit] gem install rake --- failed"

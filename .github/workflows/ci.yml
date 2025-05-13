@@ -105,7 +105,7 @@ jobs:
       - name: Install FRUIT
         run: |
           sudo apt-get install rbenv
-          which rbenv
+          rbenv install --list
           sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------

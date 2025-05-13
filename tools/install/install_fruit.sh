@@ -50,16 +50,22 @@ rm fruit_3.4.3.zip
 # set up Ruby
 cd fruit_3.4.3/
 ruby_version=$(ruby -v | awk '{print $2}')
-if [[ ! $ruby_version =~ ^3\.0\. ]] ; then
-    rbenv install 3.0.4
-    rbenv local 3.0.4
-fi
+case "$ruby_version" in
+    2.*)
+        echo "Ruby version is 2.x"
+        ;;
+    3.0.*)
+        echo "Ruby version is 3.0.x"
+        ;;
+    *)
+        echo "Installing Ruby 3.0.4 ..."
+        rbenv install 3.0.4
+        rbenv local 3.0.4
+        ;;
+esac
 if [ $? -ne 0 ] ; then
   echo "[fruit] rbenv setup --- failed"
   exit 1
-else
-    rbenv versions
-    ruby -v
 fi
 
 # compile and install FRUIT

@@ -105,7 +105,7 @@ jobs:
       - name: Install FRUIT
         run: |
           sudo apt-get install rbenv
-          rbenv list
+          rbenv --list
           ruby --version
           apt list | grep ruby
 #          rbenv install --list

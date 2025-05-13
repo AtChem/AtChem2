@@ -104,7 +104,12 @@ jobs:
 
       - name: Install FRUIT
         run: |
-          sudo apt-get install rbenv libssl-dev
+          if [ $RUNNER_OS == "Linux" ] ; then
+            sudo apt-get install rbenv
+            openssl version
+            ls /usr/include/openssl
+            ruby -ropenssl -e 'outs OpenSSL::OPENSSL_VERSION'
+          fi
           sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------

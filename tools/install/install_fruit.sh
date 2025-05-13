@@ -68,6 +68,8 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
+ruby -ropenssl -e 'outs OpenSSL::OPENSSL_VERSION'
+
 # compile and install FRUIT
 gem install rake
 if [ $? -ne 0 ] ; then

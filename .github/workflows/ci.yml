@@ -105,11 +105,7 @@ jobs:
       - name: Install FRUIT
         run: |
           sudo apt-get install rbenv
-          rbenv install --list
-          ruby --version
-          apt list | grep ruby
-#          rbenv install --list
-      #     sudo ./tools/install/install_fruit.sh $PWD
+          sudo ./tools/install/install_fruit.sh $PWD
 
       # # -------------------------------------------------------------
       # # (4) Build AtChem2 using the standard compilation flags

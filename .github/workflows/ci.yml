@@ -104,8 +104,8 @@ jobs:
 
       - name: Install FRUIT
         run: |
-          sudo apt-get install rvm
-          rvm list
+          sudo apt-get install rbenv
+          rbenv versions
           ruby --version
 #          rbenv install --list
       #     sudo ./tools/install/install_fruit.sh $PWD

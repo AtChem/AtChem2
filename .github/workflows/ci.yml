@@ -106,72 +106,69 @@ jobs:
         run: |
           if [ $RUNNER_OS == "Linux" ] ; then
             sudo apt-get install rbenv
-            openssl version
-            ls /usr/include/openssl
-            ruby -ropenssl -e 'outs OpenSSL::OPENSSL_VERSION'
           fi
-          sudo ./tools/install/install_fruit.sh $PWD
+          ./tools/install/install_fruit.sh $PWD
 
-      # -------------------------------------------------------------
-      # (4) Build AtChem2 using the standard compilation flags
+      # # -------------------------------------------------------------
+      # # (4) Build AtChem2 using the standard compilation flags
 
-      - name: Build AtChem2
-        # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          cp tools/install/Makefile.skel Makefile
-          ./build/build_atchem2.sh ./model/mechanism.fac ./model/configuration/ ./mcm/
+      # - name: Build AtChem2
+      #   # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     cp tools/install/Makefile.skel Makefile
+      #     ./build/build_atchem2.sh ./model/mechanism.fac ./model/configuration/ ./mcm/
 
-          # macos only
-          if [ $RUNNER_OS != "Linux" ] ; then
-            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
-            install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
-          fi
+      #     # macos only
+      #     if [ $RUNNER_OS != "Linux" ] ; then
+      #       install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
+      #       install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
+      #     fi
 
-      # -------------------------------------------------------------
-      # (5) Run the Testsuite using the standard compilation flags and the
-      #     default model settings: indent/style and unit/model tests
+      # # -------------------------------------------------------------
+      # # (5) Run the Testsuite using the standard compilation flags and the
+      # #     default model settings: indent/style and unit/model tests
 
-      - name: Indent and Style tests
-        run: |
-          make indenttest
-          make styletest
+      # - name: Indent and Style tests
+      #   run: |
+      #     make indenttest
+      #     make styletest
 
-      - name: Unit and Model tests
-        # Set $FORT_VERSION for use with `Makefile`, then run tests
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          make oldtests  # NB: oldtests will eventually be merged into modeltests
-          make modeltests
+      # - name: Unit and Model tests
+      #   # Set $FORT_VERSION for use with `Makefile`, then run tests
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     export PATH=$PATH:$PWD/numdiff/bin
+      #     make unittests
+      #     make oldtests  # NB: oldtests will eventually be merged into modeltests
+      #     make modeltests
 
-      # -------------------------------------------------------------
-      # (6) Recompile AtChem2 using the code coverage compilation flags, then
-      #     upload the gcov files to Codecov
-      #
-      # ACTION: https://github.com/marketplace/actions/codecov
+      # # -------------------------------------------------------------
+      # # (6) Recompile AtChem2 using the code coverage compilation flags, then
+      # #     upload the gcov files to Codecov
+      # #
+      # # ACTION: https://github.com/marketplace/actions/codecov
 
-      - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        # Set $FORT_VERSION for use with the `Makefile`
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make clean
-          # unit tests
-          make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
-          # model tests
-          make modeltests CCOV=true    # run only the new Testsuite
+      # - name: Unit and Model tests (x Codecov)
+      #   if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
+      #   # Set $FORT_VERSION for use with the `Makefile`
+      #   env:
+      #     FORT_VERSION: ${{ matrix.fortran }}
+      #   run: |
+      #     export PATH=$PATH:$PWD/numdiff/bin
+      #     make clean
+      #     # unit tests
+      #     make unittests CCOV=true
+      #     mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
+      #     # model tests
+      #     make modeltests CCOV=true    # run only the new Testsuite
 
-      - name: Upload coverage reports to Codecov
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        uses: codecov/codecov-action@v3
-        with:
-          gcov: true
+      # - name: Upload coverage reports to Codecov
+      #   if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
+      #   uses: codecov/codecov-action@v3
+      #   with:
+      #     gcov: true

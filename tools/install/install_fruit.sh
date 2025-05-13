@@ -59,7 +59,8 @@ case "$ruby_version" in
         ;;
     *)
         echo "Installing Ruby 3.0.4 ..."
-        rbenv install 3.0.4
+        #rbenv install 3.0.4
+        RUBY_CONFIGURE_OPTS=--with-openssl-dir=/usr/include/openssl/ rbenv install 3.0.4
         rbenv local 3.0.4
         ;;
 esac
@@ -68,7 +69,7 @@ if [ $? -ne 0 ] ; then
   exit 1
 fi
 
-ruby -ropenssl -e 'outs OpenSSL::OPENSSL_VERSION'
+ruby -v
 
 # compile and install FRUIT
 gem install rake

@@ -104,8 +104,7 @@ jobs:
 
       - name: Install FRUIT
         run: |
-          ruby --version
-          rake --version
+          which rbenv
           sudo ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------

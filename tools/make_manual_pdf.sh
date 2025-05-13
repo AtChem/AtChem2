@@ -18,7 +18,6 @@
 cd doc/figures/
 for FIG in *.svg; do
     convert $FIG ${FIG%%.*}.png
-#    inkscape --export-type="png" --export-filename=${FIG%%.*}.png $FIG
 done
 
 # Compile LaTeX source files, generate pdf file

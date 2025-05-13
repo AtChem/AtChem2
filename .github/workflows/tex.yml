@@ -34,7 +34,7 @@ on:
 # the script `make_manual_pdf.sh` to generate the pdf file of the
 # manual, and uploads it to the repo
 jobs:
-  
+
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu), and needs
     # write permission to the repository
@@ -54,16 +54,14 @@ jobs:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
-      # 2. Setup TeXLive, install Inkscape (v1.x), and compile the pdf file
+      # 2. Setup TeXLive, then compile the pdf file
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
       - name: Setup TexLive and compile the manual
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: |
-            apk add inkscape
-            ./tools/make_manual_pdf.sh
+          run: ./tools/make_manual_pdf.sh
 
       # # -------------------------------------------------------------
       # # 3.

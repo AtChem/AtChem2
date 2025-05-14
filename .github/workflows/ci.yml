@@ -92,6 +92,8 @@ jobs:
 
       # -------------------------------------------------------------
       # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
+      #
+      # ACTION: 
 
       - name: Install CVODE
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
@@ -102,10 +104,12 @@ jobs:
       - name: Install numdiff
         run: ./tools/install/install_numdiff.sh $PWD
 
-      - name: Install FRUIT
+      - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
+
+      - name: Install FRUIT
         run: ./tools/install/install_fruit.sh $PWD
 
       # # -------------------------------------------------------------

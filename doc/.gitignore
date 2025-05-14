@@ -1,4 +1,4 @@
-# Ignore latex auxiliary files and png images in this directory
+# Ignore png images and latex auxiliary files in the doc/ directory
 figures/*.png
 latex/*.aux
 latex/*.bbl

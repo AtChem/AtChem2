@@ -88,7 +88,8 @@ jobs:
 
       # -------------------------------------------------------------
       # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
-      #     
+      #     Ruby v3.2 does not work with the current version of FRUIT, so v3.0
+      #     is used here as a temporary fix.
       #
       # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
@@ -99,9 +100,7 @@ jobs:
         run: ./tools/install/install_openlibm.sh $PWD
 
       - name: Install numdiff
-        run: |
-          ./tools/install/install_numdiff.sh $PWD
-          export PATH=$PATH:$PWD/numdiff/bin
+        run: ./tools/install/install_numdiff.sh $PWD
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -158,7 +157,7 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-#          export PATH=$PATH:$PWD/numdiff/bin
+          export PATH=$PATH:$PWD/numdiff/bin
           make clean
           # unit tests
           make unittests CCOV=true

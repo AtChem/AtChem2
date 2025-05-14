@@ -47,33 +47,10 @@ if [ $? -ne 0 ] ; then
 fi
 rm fruit_3.4.3.zip
 
-# set up Ruby
-cd fruit_3.4.3/
-# ruby_version=$(ruby -v | awk '{print $2}')
-# case "$ruby_version" in
-#     2.*)
-#         echo "Ruby version is 2.x"
-#         ;;
-#     3.0.*)
-#         echo "Ruby version is 3.0.x"
-#         ;;
-#     *)
-#         echo "Installing Ruby 3.0.4 ..."
-#         #rbenv install 3.0.4
-#         RUBY_CONFIGURE_OPTS=--with-openssl-dir=/usr/include/openssl/ rbenv install 3.0.4
-#         rbenv local 3.0.4
-#         ;;
-# esac
-# if [ $? -ne 0 ] ; then
-#   echo "[fruit] rbenv setup --- failed"
-#   exit 1
-# fi
-
-# ruby -v
-
 # compile and install FRUIT
+cd fruit_3.4.3/
 gem install rake
-#gem install file_exists
+#gem install file_exists  # fix for Ruby 3.2
 if [ $? -ne 0 ] ; then
   echo "[fruit] gem install rake --- failed"
   exit 1

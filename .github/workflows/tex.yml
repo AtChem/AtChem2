@@ -45,7 +45,7 @@ jobs:
     steps:
 
       # -------------------------------------------------------------
-      # 1. Checkout the branch associated with the current PR from the repository
+      # Checkout the branch associated with the current PR
       #
       # ACTION: https://github.com/marketplace/actions/checkout
       - name: Checkout repo
@@ -54,10 +54,10 @@ jobs:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
-      # 2. Setup TeXLive, then compile the pdf file
+      # Setup TeXLive, then generate the pdf file of the manual
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
-      - name: Setup TexLive and compile the manual
+      - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
@@ -72,7 +72,7 @@ jobs:
       #     path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
-      # 3.
+      # Push
       - name: Add pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

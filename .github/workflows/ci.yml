@@ -103,11 +103,10 @@ jobs:
         run: ./tools/install/install_numdiff.sh $PWD
 
       - name: Install FRUIT
-        run: |
-          #if [ $RUNNER_OS == "Linux" ] ; then
-          #  sudo apt-get install rbenv
-          #fi
-          ./tools/install/install_fruit.sh $PWD
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+        run: ./tools/install/install_fruit.sh $PWD
 
       # # -------------------------------------------------------------
       # # (4) Build AtChem2 using the standard compilation flags

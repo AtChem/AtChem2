@@ -72,8 +72,8 @@ cd fruit_3.4.3/
 # ruby -v
 
 # compile and install FRUIT
-gem install file_exists
 gem install rake
+#gem install file_exists
 if [ $? -ne 0 ] ; then
   echo "[fruit] gem install rake --- failed"
   exit 1

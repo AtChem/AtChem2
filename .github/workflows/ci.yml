@@ -142,7 +142,7 @@ jobs:
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
-#          export PATH=$PATH:$PWD/numdiff/bin
+          export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests   # NB: oldtests will eventually be merged into modeltests
           make modeltests

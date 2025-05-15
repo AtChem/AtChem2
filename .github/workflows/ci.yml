@@ -164,11 +164,11 @@ jobs:
           make clean
           # unit tests
           make unittests CCOV=true
-          ls obj/
           mv tests/unit_tests/*.gc* ./   # for gcc>=11 handling of *.gcda, *.gcna files
           # model tests
           make modeltests CCOV=true   # run only the new Testsuite
-
+          find ./ -name "*.gc*"
+          
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
         uses: codecov/codecov-action@v5

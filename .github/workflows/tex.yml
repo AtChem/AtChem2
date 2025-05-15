@@ -9,7 +9,8 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the pdf file of the AtChem2 manual
+# Workflow to generate automatically the PDF file of the AtChem2
+# manual, using Github Actions
 # -------------------------------------------------------------------- #
 name: AtChem2 PDF
 
@@ -31,8 +32,8 @@ on:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which runs
-# the script `make_manual_pdf.sh` to generate the pdf file of the
-# manual, and uploads it to the repo
+# the script `make_manual_pdf.sh` to generate the PDF file of the
+# manual, and uploads it to the repository
 jobs:
 
   pdf_manual:
@@ -54,7 +55,7 @@ jobs:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
-      # Setup TeXLive, then generate the pdf file of the manual
+      # Setup TeXLive, then generate the PDF file of the manual
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
       - name: Setup TexLive & compile pdf
@@ -63,8 +64,7 @@ jobs:
           scheme: full
           run: ./tools/make_manual_pdf.sh
 
-      # # -------------------------------------------------------------
-      # # 3.
+      # -------------------------------------------------------------
       # - name: Upload pdf file as artifact
       #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
       #   with:

@@ -2,7 +2,7 @@ AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=b
 =======
 
 
-**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM, https://mcm.york.ac.uk/MCM), a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere. AtChem2 can also be used with other chemical mechanisms, as well as any general set of chemical reactions, as long as they are provided in the correct format.
+**AtChem2** is a modelling tool for atmospheric chemistry. It is primarily designed to use the **Master Chemical Mechanism** (MCM, https://mcm.york.ac.uk/MCM), a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOC) in the lower atmosphere. AtChem2 can also be used with other chemical mechanisms, as well as any general set of chemical reactions, provided they are in the correct format.
 
 AtChem2 is _open source_, under the [MIT license](https://opensource.org/licenses/MIT).
 
@@ -25,18 +25,22 @@ Directory structure
 - `tools/` contains scripts to install AtChem2 and its dependencies, plotting tools in various programming languages, and other utilities.
 
 
-Installation
-------------
+Install
+-------
 
 AtChem2 compiles and runs both on Unix/Linux and macOS systems: it implements a continuous integration development workflow and an extensive Testsuite, in order to ensure reliable and reproducible results. A working knowledge of the **unix shell** is required to install and use AtChem2.
 
-AtChem2 requires a **Fortran** compiler (GNU `gfortran` or Intel `ifort`), the **CVODE** (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)) and **openlibm** libraries, **make**, and **Python**. Compilation of CVODE also requires **cmake** and **gcc**. Optionally, **numdiff**, **FRUIT**, and **Ruby** are required to run the Testsuite. The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a **doi number** for referencing in publications. After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the paths of CVODE, openlibm and (if installed) FRUIT.
+AtChem2 requires a **Fortran** compiler (GNU `gfortran` or Intel `ifort`), the **CVODE** (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)) and **openlibm** libraries, **make**, and **Python**. Compilation of CVODE also requires **cmake** and **gcc**. Optionally, **numdiff**, **FRUIT**, and **Ruby** (v3.0) are required to run the Testsuite.
+
+The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a **doi number** for referencing in publications.
+
+After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the full paths of CVODE, openlibm and (if installed) FRUIT.
 
 Alternatively, and optionally, AtChem2 can be run as a [Docker](https://www.docker.com/) container. Currently the containerized version is available only for AtChem2 v1.2.2, thanks to the [Uni York group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2).
 
 
-Setup and Execution
--------------------
+Build & Run
+-----------
 
 To build the AtChem2 model -- using the example chemical mechanism and default settings -- execute the following command from the _Main Directory_:
 
@@ -46,10 +50,10 @@ To build the AtChem2 model -- using the example chemical mechanism and default s
 
 The build script converts the chemical mechanism from the FACSIMILE format (`mechanism_test.fac`) to a Fortran-compatible format, and generates the pre-compiled shared library `mechanism.so` in the `model/configuration/` directory. After the build process is completed, an executable file called `atchem2` is created in the _Main Directory_.
 
-Set the model parameters, the initial conditions, and the required outputs by editing the files in the `model/configuration/` directory. If required, copy the constraint files to the relevant subdirectory in `model/constraints/`. To run the model with the default configuration, execute the command:
+Set the model parameters, the initial conditions, and the required outputs by editing the files in the `model/configuration/` directory. If needed, ensure that the constrained data files are in the relevant subdirectory in `model/constraints/`. To run the model with the default configuration, execute the command:
 
 ```./atchem2```
 
-The executable accepts several command line arguments to customize the location of the configuration, input and output directories, and of the shared library. More information on AtChem2, and detailed instructions on its installation, configuration and use can be found in the manual (`doc/AtChem2-Manual.pdf`) and in the GMD paper (see `CITATION.md`).
+The executable accepts several command line arguments to customize the location of the configuration, input and output directories, and of the shared library. More information on AtChem2, with detailed instructions on its installation, configuration and use can be found in the manual (`doc/AtChem2-Manual.pdf`) and in the GMD paper (see the file `CITATION.md`).
 
 The [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki) contains a summary of the instructions to install, compile, run, and contribute to the development of AtChem2, together with additional information, and a list of [known issues](https://github.com/AtChem/AtChem2/wiki/Known-Issues) with the suggested solutions or workarounds.

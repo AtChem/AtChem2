@@ -50,7 +50,6 @@ rm fruit_3.4.3.zip
 # compile and install FRUIT
 cd fruit_3.4.3/
 gem install rake
-#gem install file_exists  # fix for Ruby 3.2
 if [ $? -ne 0 ] ; then
   echo "[fruit] gem install rake --- failed"
   exit 1

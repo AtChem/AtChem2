@@ -66,13 +66,14 @@ jobs:
       # Setup TeXLive, then generate the PDF file of the manual
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
+      - name: Install convert (ImageMagick)
+        run: sudo apt-get install imagemagick
+
       - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: |
-            sudo apt-get install imagemagick
-            ./tools/make_manual_pdf.sh
+          run: ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------
       # - name: Upload pdf file as artifact

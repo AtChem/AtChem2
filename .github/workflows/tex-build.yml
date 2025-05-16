@@ -9,10 +9,11 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the PDF file of the AtChem2
-# manual, using Github Actions
-# -------------------------------------------------------------------- #
-name: AtChem2 PDF
+# Workflow to generate and upload automatically the PDF file of the
+# AtChem2 manual, using Github Actions
+# --------------------------------------------------------------------
+# #
+name: AtChem2 PDF build
 
 # ------------------------------ EVENTS ------------------------------ #
 # Controls when the workflow is activated
@@ -21,27 +22,24 @@ on:
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit), and when any of the
   # .tex/.svg files in `doc/` have been modified
-  push:
+  pull_request:
     branches: [ master ]
-    paths:
-      - './doc/latex/*.tex'
-      - './doc/figures/*.svg'
+#    paths:
+#      - './doc/latex/*.tex'
+#      - './doc/figures/*.svg'
 
   # Run manually from the Actions tab
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `pdf_manual` which runs
-# the script `make_manual_pdf.sh` to generate the PDF file of the
-# manual, and uploads it to the repository
+# This workflow contains a single job called `build_pdf_manual` which
+# runs the script `make_manual_pdf.sh` to generate the PDF file of the
+# user manual
 jobs:
 
-  pdf_manual:
-    # The job runs on the latest version of linux (ubuntu), and needs
-    # write permission to the repository
+  build_pdf_manual:
+    # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
 
     steps:
 
@@ -52,35 +50,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.head_ref }}
 
       # -------------------------------------------------------------
-      # Setup TeXLive, then generate the PDF file of the manual
+      # Setup TeXLive, then generate the PDF file of the manual using
+      # the script `make_manual_pdf.sh`
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
       - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: ./tools/make_manual_pdf.sh
+          run: |
+            apk add imagemagick librsvg
+            ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------
-      # - name: Upload pdf file as artifact
-      #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
-      #   with:
-      #     name: AtChem2-Manual.pdf
-      #     path: doc/AtChem2-Manual.pdf
-
-      # -------------------------------------------------------------
-      # Push
-      - name: Add pdf
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # configure git
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          # commit pdf file
-          git add doc/AtChem2-Manual.pdf
-          git commit -m "Update AtChem2-Manual.pdf"
-          git push origin master
+      # Upload the PDF file of the manual
+      #
+      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: AtChem2-Manual
+          path: doc/AtChem2-Manual.pdf

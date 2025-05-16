@@ -1,0 +1,76 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
+# Workflow to generate automatically the PDF file of the AtChem2
+# manual, using Github Actions
+# -------------------------------------------------------------------- #
+name: AtChem2 PDF
+
+# ------------------------------ EVENTS ------------------------------ #
+# Controls when the workflow is activated
+on:
+
+  # Triggers when a pull request targeting the master branch is
+  # created or updated
+  pull_request:
+    branches: [ master ]
+#    paths:
+#      - './doc/latex/*.tex'
+#      - './doc/figures/*.svg'
+
+  # Run manually from the Actions tab
+  workflow_dispatch:
+
+# ------------------------------ JOBS ------------------------------ #
+# This workflow contains a single job called `build_pdf_manual` which
+# runs the script `make_manual_pdf.sh` to generate the PDF file of the
+# manual, and uploads it to the repository
+jobs:
+
+  build_pdf_manual:
+    # The job runs on the latest version of linux (ubuntu), and needs
+    # write permission to the repository
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # -------------------------------------------------------------
+      # Checkout the branch associated with the current PR
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      # -------------------------------------------------------------
+      # Setup TeXLive, then generate the PDF file of the manual using
+      # the script `make_manual_pdf.sh`
+      #
+      # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
+
+      - name: Setup TexLive & compile pdf
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme: full
+          run: |
+            apk add imagemagick librsvg
+            ./tools/make_manual_pdf.sh
+
+      # -------------------------------------------------------------
+      # Push the PDF file of the manual to the current PR
+      #
+      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: AtChem2-Manual
+          path: doc/AtChem2-Manual.pdf

@@ -26,30 +26,19 @@ on:
 #      - './doc/latex/*.tex'
 #      - './doc/figures/*.svg'
 
-  # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit), and when any of the
-  # .tex/.svg files in `doc/` have been modified
-  # push:
-  #   branches: [ master ]
-  #   paths:
-  #     - './doc/latex/*.tex'
-  #     - './doc/figures/*.svg'
-
   # Run manually from the Actions tab
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `pdf_manual` which runs
-# the script `make_manual_pdf.sh` to generate the PDF file of the
+# This workflow contains a single job called `build_pdf_manual` which
+# runs the script `make_manual_pdf.sh` to generate the PDF file of the
 # manual, and uploads it to the repository
 jobs:
 
-  pdf_manual:
+  build_pdf_manual:
     # The job runs on the latest version of linux (ubuntu), and needs
     # write permission to the repository
     runs-on: ubuntu-latest
-#    permissions:
-#      contents: write
 
     steps:
 
@@ -61,7 +50,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT_TOKEN }}
 
       # -------------------------------------------------------------
       # Setup TeXLive, then generate the PDF file of the manual using
@@ -79,17 +67,10 @@ jobs:
 
       # -------------------------------------------------------------
       # Push the PDF file of the manual to the current PR
-      - name: Commit pdf to PR
-        run: |
-          # configure git
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          # commit pdf file
-          ls doc/
-          ls doc/figures
-          git add doc/AtChem2-Manual.pdf
-          git status
-          git commit -m "Update AtChem2-Manual.pdf"
-          git push origin HEAD:${{ github.head_ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      #
+      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: AtChem2-Manual
+          path: doc/AtChem2-Manual.pdf

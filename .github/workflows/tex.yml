@@ -81,6 +81,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           # commit pdf file
+          git status
           git add doc/AtChem2-Manual.pdf
+          git status
           git commit -m "Update AtChem2-Manual.pdf"
           git push origin master

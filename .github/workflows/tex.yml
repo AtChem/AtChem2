@@ -18,6 +18,14 @@ name: AtChem2 PDF
 # Controls when the workflow is activated
 on:
 
+  # Triggers when a pull request targeting the master branch is
+  # created or updated
+  pull_request:
+    branches: [ master ]
+    # paths:
+    #   - './doc/latex/*.tex'
+    #   - './doc/figures/*.svg'
+
   # Triggers when a push is made to the master branch (either by
   # merging a pull request, or by direct commit), and when any of the
   # .tex/.svg files in `doc/` have been modified
@@ -81,6 +89,8 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           # commit pdf file
+          git status
           git add doc/AtChem2-Manual.pdf
+          git status
           git commit -m "Update AtChem2-Manual.pdf"
           git push origin master

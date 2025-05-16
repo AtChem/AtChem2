@@ -17,7 +17,7 @@
 # Convert svg figures to png format using Inkscape (v1.x)
 cd doc/figures/
 for FIG in *.svg; do
-    magick convert $FIG ${FIG%%.*}.png
+    magick $FIG ${FIG%%.*}.png
 done
 
 # Compile LaTeX source files, generate pdf file

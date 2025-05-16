@@ -70,6 +70,7 @@ jobs:
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
+          sudo apt-get install imagemagick
           run: ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------

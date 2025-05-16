@@ -1,2 +1,2 @@
-# Ignore fortran module files in this directory
+# Ignore fortran module files in the obj/ directory
 *.mod

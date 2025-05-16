@@ -36,8 +36,8 @@ $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
 	@echo ""
 	@cp tests/fruit_generator.rb $(UNITTESTDIR)
 	@cd $(UNITTESTDIR); \
-         sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; \
-         ruby fruit_generator.rb
+	sed -i "18s,.*,load \"$(FRUITDIR)/rake_base.rb\"," fruit_generator.rb; \
+	ruby fruit_generator.rb
 
 # build `fruit_driver.exe` from the individual unit tests
 $(fruit_driver) : $(all_unittest_code)

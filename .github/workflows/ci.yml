@@ -38,61 +38,64 @@ on:
 # compiles the AtChem2 model, runs the Testsuite, and checks code
 # coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
 jobs:
+
   ci_testing:
     # The job runs on two versions of linux (ubuntu) and macos, with
-    # three versions of gnu fortran -- the runner images are described
-    # here: https://github.com/actions/runner-images
+    # three versions of gnu fortran
+    #
+    # RUNNERS: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix: # macos testing temporarily deactivated
-        os: [ubuntu-22.04] #, macos-12, macos-13]
-        fortran: [10, 11, 12]
-        exclude: # gfortran-11, gfortran-12 not available for ubuntu-20.04
-        - os: ubuntu-20.04
-          fortran: 11
-        - os: ubuntu-20.04
-          fortran: 12
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]   # NB: macos testing temporarily deactivated
+        fortran: [11, 12, 13]
+        # compiler versions  not available for specific runners
+        exclude:
+        - os: ubuntu-22.04
+          fortran: 13
       fail-fast: false
 
     # -------------------------------------------------------------
     # Sequence of tasks to be executed as part of the `ci_testing` job:
-    # 1. Checkout the repository
-    # 2. Install gfortran, AtChem2 dependencies
-    # 3. Compile AtChem2
-    # 4. Run the Testsuite with default settings
-    # 5. Recompile AtChem2, run Testsuite for Codecov
+    # 1. Checkout repository
+    # 2. Install gfortran, if not available
+    # 3. Install AtChem2 dependencies
+    # 4. Build AtChem2
+    # 5. Run Testsuite with default settings
+    # 6. Recompile AtChem2, run Testsuite for Codecov
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
 
       - name: Checkout repo
-        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       # -------------------------------------------------------------
-      # (2) Install gfortran, if not supplied with the runner image,
-      # and the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
+      # (2) Install gfortran, if not supplied with the runner
 
       # gfortran on ubuntu
-      - name: Install gfortran-11 (ubuntu-20.04)
-        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 11
+      - name: Install gfortran-11 (ubuntu-24.04)
+        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 11
         run: sudo apt-get install gfortran-11
-      - name: Install gfortran-12 (ubuntu-20.04)
-        if: matrix.os == 'ubuntu-20.04' && matrix.fortran == 12
-        run: sudo apt-get install gfortran-12
 
       # gfortran on macos
-      - name: Install gfortran-10 (macos-12)
-        if: matrix.os == 'macos-12' && (matrix.fortran == 10) # || matrix.fortran == 11)
-        run: brew install gcc@${{ matrix.fortran }}
-
       - name: Install gfortran-10 and gfortran-11 (macos-13)
         if: matrix.os == 'macos-13' && (matrix.fortran == 10 || matrix.fortran == 11)
         run: brew install gcc@${{ matrix.fortran }}
 
-      # AtChem2 dependencies
+      # -------------------------------------------------------------
+      # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
+      #
+      # NB: Ruby v3.2 does not work with the current version of FRUIT,
+      #     so v3.0 is used here as a temporary fix
+      #
+      # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
       - name: Install CVODE
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
 
@@ -102,14 +105,18 @@ jobs:
       - name: Install numdiff
         run: ./tools/install/install_numdiff.sh $PWD
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+
       - name: Install FRUIT
-        run: sudo ./tools/install/install_fruit.sh $PWD
+        run: ./tools/install/install_fruit.sh $PWD
 
       # -------------------------------------------------------------
-      # (3) Compile AtChem2 using the standard compilation flags
+      # (4) Build AtChem2 using the standard compilation flags
 
       - name: Build AtChem2
-        # Set $FORT_VERSION for use with `Makefile`, then run `build_atchem2.sh`
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
@@ -125,8 +132,8 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (4) Run the Testsuite using the standard compilation flags and default
-      # model settings: indent and style tests, unit and model tests
+      # (5) Run the Testsuite using the standard compilation flags and
+      #     the default model settings
 
       - name: Indent and Style tests
         run: |
@@ -134,22 +141,22 @@ jobs:
           make styletest
 
       - name: Unit and Model tests
-        # Set $FORT_VERSION for use with `Makefile`, then run tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
-          make oldtests    # NB: oldtests will eventually be merged into modeltests
+          make oldtests   # NB: oldtests will eventually be merged into modeltests
           make modeltests
 
       # -------------------------------------------------------------
-      # (5) Recompile AtChem2 using the code coverage compilation flags, then
-      # upload the gcov files to Codecov
+      # (6) Recompile AtChem2 using the code coverage compilation flags,
+      #     run the Testsuite and upload the gcov files to Codecov
+      #
+      # ACTION: https://github.com/marketplace/actions/codecov
 
       - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        # Set $FORT_VERSION for use with the `Makefile`
+        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
         env:
           FORT_VERSION: ${{ matrix.fortran }}
         run: |
@@ -157,12 +164,11 @@ jobs:
           make clean
           # unit tests
           make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
+          mv tests/unit_tests/*.gc* ./   # for gcc>=11 handling of *.gcda, *.gcna files
           # model tests
-          make modeltests CCOV=true     # run only the new Testsuite
-
-      - name: Upload coverage reports to Codecov # TODO: update codecov action
-        if: matrix.os == 'ubuntu-22.04' && matrix.fortran == 12
-        uses: codecov/codecov-action@v3 # https://github.com/marketplace/actions/codecov
-        with:
-          gcov: true
+          make modeltests CCOV=true   # run only the new Testsuite
+          find ./ -name "*.gc*"
+          
+      - name: Upload coverage reports to Codecov
+        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
+        uses: codecov/codecov-action@v5

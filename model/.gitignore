@@ -1,0 +1,5 @@
+# Ignore auto-generated mechanism files and output files in the model/ directory
+configuration/mechanism.*
+configuration/customRateFuncs.o
+output/*.output
+output/*.pdf

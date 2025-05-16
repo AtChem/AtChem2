@@ -24,7 +24,7 @@ time:
   (e.g., \texttt{v1.0}) and can be downloaded from the
   \href{https://github.com/AtChem/AtChem2/releases}{Releases page}.
   A \textbf{doi number} is assigned to each stable version via the
-  \href{https://zenodo.org}{zenodo service}.
+  \href{https://zenodo.org}{Zenodo service}.
 \item[Development version]: is the \texttt{master\ branch} of the git
   repository and is indicated by a version number with the suffix
   ``-dev'' (e.g., \texttt{v1.1-dev}). It can be downloaded as an
@@ -34,16 +34,16 @@ time:
 \end{description}
 
 AtChem2 is under active development, which means that the
-\texttt{master\ branch} is sometimes a few steps ahead of the latest
-stable release. However, any modification to the code is automatically
-run through the \hyperref[sec:test-suite]{Testsuite} before it is
-merged into the \texttt{master\ branch}. Since the Testsuite is
-designed to ensure that changes to the code do not cause unintended
-behaviour or unexplained differences in the model results, this
-ensures that even the development version of AtChem2 is reliable for
-most use cases. Nevertheless, it is strongly suggested to use the
-\textbf{stable version} for ``production runs'' and publications, as it
-can be easily referenced via the associated doi number -- see the
+\texttt{master\ branch} is sometimes a few commits ahead of the latest
+stable release. However, all code modifications are automatically run
+through the \hyperref[sec:test-suite]{Testsuite} before being merged
+into the \texttt{master\ branch}. Since the Testsuite is designed to
+ensure that changes to the code do not cause unintended behaviour or
+unexplained differences in the model results, this ensures that even
+the development version of AtChem2 is reliable for most use
+cases. Nevertheless, it is strongly suggested to use the
+\textbf{stable version} for ``production runs'' and publications, as
+it can be easily referenced via the associated doi number -- see the
 discussion about traceability and reproducibility of computational
 models in \citet{sommariva_2020}.
 

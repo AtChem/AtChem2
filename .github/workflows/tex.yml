@@ -9,7 +9,8 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the pdf file of the AtChem2 manual
+# Workflow to generate automatically the PDF file of the AtChem2
+# manual, using Github Actions
 # -------------------------------------------------------------------- #
 name: AtChem2 PDF
 
@@ -31,9 +32,10 @@ on:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `pdf_manual` which runs
-# the script `make_manual_pdf.sh` to generate the pdf file of the
-# manual, and uploads it to the repo
+# the script `make_manual_pdf.sh` to generate the PDF file of the
+# manual, and uploads it to the repository
 jobs:
+
   pdf_manual:
     # The job runs on the latest version of linux (ubuntu), and needs
     # write permission to the repository
@@ -44,24 +46,25 @@ jobs:
     steps:
 
       # -------------------------------------------------------------
-      # 1. Checkout the repository from the branch associated with the current PR
+      # Checkout the branch associated with the current PR
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
       - name: Checkout repo
-        uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
-      # 2. Setup TeXLive, install Inkscape (v1.x), and compile the pdf file
-      - name: Setup TexLive and compile the manual
-        uses: xu-cheng/texlive-action@v2 # https://github.com/marketplace/actions/github-action-with-texlive
+      # Setup TeXLive, then generate the PDF file of the manual
+      #
+      # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
+      - name: Setup TexLive & compile pdf
+        uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: |
-            apk add inkscape
-            ./tools/make_manual_pdf.sh
+          run: ./tools/make_manual_pdf.sh
 
-      # # -------------------------------------------------------------
-      # # 3.
+      # -------------------------------------------------------------
       # - name: Upload pdf file as artifact
       #   uses: actions/upload-artifact@v4 # https://github.com/marketplace/actions/upload-a-build-artifact
       #   with:
@@ -69,7 +72,7 @@ jobs:
       #     path: doc/AtChem2-Manual.pdf
 
       # -------------------------------------------------------------
-      # 4.
+      # Push
       - name: Add pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -80,4 +83,4 @@ jobs:
           # commit pdf file
           git add doc/AtChem2-Manual.pdf
           git commit -m "Update AtChem2-Manual.pdf"
-          #git push origin master
+          git push origin master

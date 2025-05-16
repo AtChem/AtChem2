@@ -168,7 +168,7 @@ jobs:
           # model tests
           make modeltests CCOV=true   # run only the new Testsuite
           find ./ -name "*.gc*"
-          
+
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
         uses: codecov/codecov-action@v5

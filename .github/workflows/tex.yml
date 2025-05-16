@@ -63,17 +63,18 @@ jobs:
           ref: ${{ github.ref }}
 
       # -------------------------------------------------------------
-      # Setup TeXLive, then generate the PDF file of the manual
+      # Setup TeXLive, then generate the PDF file of the manual using
+      # the script `make_manual_pdf.sh`
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
-      - name: Install convert (ImageMagick)
-        run: sudo apt-get install imagemagick
 
       - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v2
         with:
           scheme: full
-          run: ./tools/make_manual_pdf.sh
+          run: |
+            apk add imagemagick
+            ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------
       # - name: Upload pdf file as artifact

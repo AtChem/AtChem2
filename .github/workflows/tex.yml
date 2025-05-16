@@ -80,14 +80,13 @@ jobs:
       # -------------------------------------------------------------
       # Push the PDF file of the manual to the current PR
       - name: Commit pdf to PR
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # configure git
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           # commit pdf file
-          git status
+          ls doc/
+          ls doc/figures
           git add doc/AtChem2-Manual.pdf
           git status
           git commit -m "Update AtChem2-Manual.pdf"

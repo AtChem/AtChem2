@@ -73,7 +73,7 @@ jobs:
         with:
           scheme: full
           run: |
-            apk add imagemagick
+            apk add imagemagick librsvg
             ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------

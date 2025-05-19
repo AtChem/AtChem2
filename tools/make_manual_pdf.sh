@@ -10,24 +10,24 @@
 #
 # -----------------------------------------------------------------------------
 
-# Script to generate the pdf file of the AtChem2 manual.
+# Script to generate the PDF file of the AtChem2 manual.
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-# Convert svg figures to png format using Inkscape (v1.x)
+# Convert svg figures to png format using ImageMagick (v7.x)
 cd doc/figures/
 for FIG in *.svg; do
     magick $FIG ${FIG%%.*}.png
 done
 
-# Compile LaTeX source files, generate pdf file
+# Compile LaTeX source files, generate PDF file
 cd ../latex/
 pdflatex AtChem2-Manual.tex
 bibtex AtChem2-Manual.aux
 pdflatex AtChem2-Manual.tex
 pdflatex AtChem2-Manual.tex
 
-# Move pdf file to doc/ directory
+# Move PDF file to doc/ directory
 mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
 echo "||----------------------------------------||"

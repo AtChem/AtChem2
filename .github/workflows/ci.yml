@@ -25,8 +25,8 @@ on:
   pull_request:
     branches: [ master ]
 
-  # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit)
+  # Triggers when a push is made to the master branch by merging a
+  # pull request (direct commits are disabled)
   push:
     branches: [ master ]
 

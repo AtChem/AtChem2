@@ -19,22 +19,21 @@ name: AtChem2 PDF build
 # Controls when the workflow is activated
 on:
 
-  # Triggers when a push is made to the master branch (either by
-  # merging a pull request, or by direct commit), and when any of the
-  # .tex/.svg files in `doc/` have been modified
+  # Triggers when a pull request targeting the master branch is
+  # created or updated, and one of the .tex/.svg files in `doc/` have
+  # been modified
   pull_request:
     branches: [ master ]
-#    paths:
-#      - './doc/latex/*.tex'
-#      - './doc/figures/*.svg'
+    paths:
+      - './doc/latex/*.tex'
+      - './doc/figures/*.svg'
 
   # Run manually from the Actions tab
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `build_pdf_manual` which
-# runs the script `make_manual_pdf.sh` to generate the PDF file of the
-# user manual
+# generates the PDF file of the user manual
 jobs:
 
   build_pdf_manual:
@@ -67,10 +66,10 @@ jobs:
             ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------
-      # Upload the PDF file of the manual
+      # Upload the PDF file of the manual as artifact
       #
       # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
-      - name: Upload pdf
+      - name: Upload pdf as artifact
         uses: actions/upload-artifact@v4
         with:
           name: AtChem2-Manual

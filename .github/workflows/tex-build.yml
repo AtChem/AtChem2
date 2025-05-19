@@ -50,8 +50,8 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
 
       # -------------------------------------------------------------
-      # Setup TeXLive, then generate the PDF file of the manual using
-      # the script `make_manual_pdf.sh`
+      # Setup TeXLive and install ImageMagick; generate the PDF file
+      # using the script `make_manual_pdf.sh`
       #
       # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
       - name: Setup TexLive & compile pdf
@@ -63,10 +63,10 @@ jobs:
             ./tools/make_manual_pdf.sh
 
       # -------------------------------------------------------------
-      # Upload the PDF file of the manual as artifact
+      # Save PDF file of the manual as artifact
       #
       # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
-      - name: Upload pdf as artifact
+      - name: Save pdf as artifact
         uses: actions/upload-artifact@v4
         with:
           name: AtChem2-Manual

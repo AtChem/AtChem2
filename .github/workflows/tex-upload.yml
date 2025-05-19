@@ -36,6 +36,7 @@ on:
 # This workflow contains a single job called `upload_pdf_manual` which
 # uses git to commit the PDF file of the
 # manual to the  uploads it to the repository jobs:
+jobs:
 
   upload_pdf_manual:
     # The job runs on the latest version of linux (ubuntu), and needs

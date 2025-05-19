@@ -62,7 +62,8 @@ contributions to the AtChem2 repository can be found on the
 Contributors are strongly encouraged to follow the Fortran coding
 guidelines, as detailed in Sect.\ref{sec:style-guide}.
 
-
+The AtChem2 user manual is in \LaTeX\ format, with images in svg
+format. Contributors should edit
 
 % -------------------------------------------------------------------- %
 \section{Testsuite} \label{sec:test-suite}
@@ -140,9 +141,9 @@ once GitHub Actions has completed with passes on both architectures.
 \subsection{Adding new Unit tests} \label{subsec:adding-new-unit-tests}
 
 The Unit tests are in the \texttt{tests/unit\_tests/} directory and
-require the FRUIT optional dependency (which requires Ruby and
-\texttt{rake}, Sect.~\ref{subsec:optional-dependencies}). To add new
-Unit tests, follow the procedure outlined below:
+require the FRUIT optional dependency (which needs Ruby v3.0,
+Sect.~\ref{subsec:optional-dependencies}). To add new Unit tests,
+follow the procedure outlined below:
 
 \begin{itemize}
 \item The Unit test files are called \texttt{*\_test.f90}. If the new

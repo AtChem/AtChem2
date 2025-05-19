@@ -1,0 +1,73 @@
+# -----------------------------------------------------------------------------
+#
+# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+#
+# This file is part of the AtChem2 software package.
+#
+# This file is covered by the MIT license which can be found in the file
+# LICENSE.md at the top level of the AtChem2 distribution.
+#
+# -----------------------------------------------------------------------------
+
+# Workflow to generate automatically the PDF file of the AtChem2
+# manual, using Github Actions
+# -------------------------------------------------------------------- #
+
+name: AtChem2 PDF build
+
+# ------------------------------ EVENTS ------------------------------ #
+# Controls when the workflow is activated
+on:
+
+  # Triggers when a pull request targeting the master branch is
+  # created or updated, and any of the LaTeX source files in `doc/` have been
+  # modified
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'doc/latex/*.tex'
+      - 'doc/figures/*.svg'
+
+# ------------------------------ JOBS ------------------------------ #
+# This workflow contains a single job called `build_pdf_manual` which
+# generates the PDF file of the user manual
+jobs:
+
+  build_pdf_manual:
+    # The job runs on the latest version of linux (ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # -------------------------------------------------------------
+      # Checkout the branch associated with the current PR
+      #
+      # ACTION: https://github.com/marketplace/actions/checkout
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+      # -------------------------------------------------------------
+      # Setup TeXLive and install ImageMagick; generate the PDF file
+      # using the script `make_manual_pdf.sh`
+      #
+      # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
+      - name: Setup TexLive & compile pdf
+        uses: xu-cheng/texlive-action@v2
+        with:
+          scheme: full
+          run: |
+            apk add imagemagick librsvg
+            ./tools/make_manual_pdf.sh
+
+      # -------------------------------------------------------------
+      # Save PDF file of the manual as artifact
+      #
+      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Save pdf as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AtChem2-Manual
+          path: doc/AtChem2-Manual.pdf

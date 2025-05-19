@@ -20,16 +20,13 @@ name: AtChem2 PDF build
 on:
 
   # Triggers when a pull request targeting the master branch is
-  # created or updated, and one of the .tex/.svg files in `doc/` have
-  # been modified
+  # created or updated, and any of the LaTeX source files in `doc/` have been
+  # modified
   pull_request:
     branches: [ master ]
     paths:
       - 'doc/latex/*.tex'
       - 'doc/figures/*.svg'
-
-  # Run manually from the Actions tab
-  workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `build_pdf_manual` which

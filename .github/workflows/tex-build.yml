@@ -23,16 +23,14 @@ name: AtChem2 PDF upload
 # Controls when the workflow is activated
 on:
 
-  # Run manually from the Actions tab. Requires the name of the branch
-  # to update and the download URL of the PDF artifact
-  workflow_dispatch:
-    inputs:
-      pr_branch:
-        description: 'Branch name'
-        required: true
-      pdf_url:
-        description: 'Download URL'
-        required: true
+  # Triggers when a pull request targeting the master branch is
+  # created or updated, and any of the LaTeX source files in `doc/` have been
+  # modified
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'doc/latex/*.tex'
+      - 'doc/figures/*.svg'
 
 # ------------------------------ JOBS ------------------------------ #
 

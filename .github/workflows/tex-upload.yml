@@ -37,8 +37,8 @@ on:
 # ------------------------------ JOBS ------------------------------ #
 
 # This workflow contains a single job called `upload_pdf_manual` which
-# retrieves the PDF file of the manual and uses git to push it to the
-# relevant branch
+# retrieves the PDF file of the manual and pushes it to the relevant
+# branch using git
 jobs:
 
   upload_pdf_manual:

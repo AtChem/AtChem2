@@ -20,8 +20,8 @@ name: AtChem2 PDF build
 on:
 
   # Triggers when a pull request targeting the master branch is
-  # created or updated, and any of the LaTeX source files in `doc/` have been
-  # modified
+  # created or updated, and any of the LaTeX source files in `doc/`
+  # have been modified
   pull_request:
     branches: [ master ]
     paths:

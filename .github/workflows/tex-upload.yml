@@ -76,8 +76,9 @@ jobs:
             exit 1
           else
             file_type="$(file -b --mime-type doc/AtChem2-Manual.pdf)"
-            if [ file_type == "application/pdf ]; then
+            if [ "$file_type" != "application/pdf" ]; then
               echo "[!] Artifact not a pdf"
+              echo "$file_type"
               exit 1
             fi
           fi

@@ -34,7 +34,7 @@ on:
         description: 'Name of branch'
         required: true
       pdf_url:
-        description: 'PDF artifact URL'
+        description: 'Artifact URL'
         required: true
 
 # ------------------------------ JOBS ------------------------------ #

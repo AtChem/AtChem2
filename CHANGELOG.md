@@ -1,5 +1,5 @@
-AtChem2 - CHANGELOG
-===================
+AtChem2 -- CHANGELOG
+====================
 
 
 v1.2.3 (May 2025)

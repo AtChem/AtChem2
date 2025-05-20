@@ -14,21 +14,36 @@
 #
 # N.B.: the script MUST be run from the main directory of AtChem2.
 
-# Convert svg figures to png format using ImageMagick (v7.x)
+# ------------------------------------------------------------------ #
+# Function to run a command and check whether it is successful
+run() {
+    "$@"
+    status=$?
+    if [ "$status" -ne 0 ]; then
+        echo "=====> [FAIL] $*"
+        exit "$status"
+    else
+        echo "=====> [PASS] $*"
+    fi
+}
+
+# ------------------------------------------------------------------ #
+
+# Convert figures from `.svg` to `.png` format, using ImageMagick (v7.x)
 cd doc/figures/
 for FIG in *.svg; do
-    magick $FIG ${FIG%%.*}.png
+    run magick "$FIG" "${FIG%%.*}.png"
 done
 
-# Compile LaTeX source files, generate PDF file
+# Compile LaTeX source files and generate PDF file
 cd ../latex/
-pdflatex AtChem2-Manual.tex
-bibtex AtChem2-Manual.aux
-pdflatex AtChem2-Manual.tex
-pdflatex AtChem2-Manual.tex
+run pdflatex AtChem2-Manual.tex
+run bibtex AtChem2-Manual.aux
+run pdflatex AtChem2-Manual.tex
+run pdflatex AtChem2-Manual.tex
 
 # Move PDF file to doc/ directory
-mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
+run mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
 echo "||----------------------------------------||"
 echo "||    AtChem2-Manual.pdf saved to doc/    ||"

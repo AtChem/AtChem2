@@ -54,6 +54,17 @@ Please check this page before reporting new issues/bugs. Also note
 that the AtChem2 \href{https://github.com/AtChem/AtChem2/wiki}{wiki}
 contains suggestions to solve some common issues.
 
+Contributions and corrections to the user manual are also welcome. The
+manual is written in \LaTeX\ format, with figures in \texttt{.svg}
+format. The \texttt{.tex} files, located in the \texttt{doc/latex/}
+directory, can be opened and modified using any text editor. To
+compile the \texttt{.pdf} file of the manual, use the script
+\texttt{tools/make\_manual\_pdf.sh}, then commit it together with the
+other changes~\footnote{The script requires a \LaTeX\ installation and
+  ImageMagick (v7.x).}; alternatively, the \texttt{.pdf} file is
+automatically compiled via GitHub Actions when a Pull Request (PR) is
+opened.
+
 The preferred way to contribute to the development of AtChem2 is to
 use the open source \href{https://git-scm.com}{git} version control
 tool: instructions on how to set up git, prepare and submit
@@ -62,24 +73,21 @@ contributions to the AtChem2 repository can be found on the
 Contributors are strongly encouraged to follow the Fortran coding
 guidelines, as detailed in Sect.\ref{sec:style-guide}.
 
-The AtChem2 user manual is in \LaTeX\ format, with images in svg
-format. Contributors should edit
-
 % -------------------------------------------------------------------- %
 \section{Testsuite} \label{sec:test-suite}
 
-AtChem2 uses \href{https://github.com/features/actions}{GitHub
-  Actions} for \underline{continuous integration} testing. This
-programming approach ensures that changes to the code do not
-unintentionally modify the behaviour and the results of a
-software. The Testsuite is located in the \texttt{tests/}
-directory~\footnote{Called \texttt{travis/} in versions 1.0-1.2.2,
-  when the TravisCI service was used to run the Testsuite.}  and
-consists of a series of tests and short model runs that check the
-model functionality and calculations against known outputs. In
-addition, the \href{https://codecov.io}{Codecov} service is used to
-ensure that the Testsuite covers a significant fraction of the
-codebase ($>$90\%) and a wide range of common configurations.
+AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions}
+for \underline{continuous integration} testing. This programming
+approach ensures that changes to the code do not unintentionally
+modify the behaviour and the results of a software. The Testsuite is
+located in the \texttt{tests/} directory~\footnote{Called
+  \texttt{travis/} in versions 1.0-1.2.2, when the TravisCI service
+  was used to run the Testsuite.}  and consists of a series of tests
+and short model runs that check the model functionality and
+calculations against known outputs. In addition, the
+\href{https://codecov.io}{Codecov} service is used to ensure that the
+Testsuite covers a significant fraction of the codebase ($>$90\%) and
+a wide range of common configurations.
 
 There are four types of tests, executed from the \maindir\ with
 the \verb|make| command. Note that the \emph{optional dependencies}

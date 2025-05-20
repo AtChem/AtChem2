@@ -72,8 +72,14 @@ jobs:
         run: |
           curl -L ${{ github.event.inputs.pdf_url }} --output doc/AtChem2-Manual.pdf
           if [ ! -f doc/AtChem2-Manual.pdf ]; then
-            echo "[!] PDF artifact not found"
+            echo "[!] Artifact not found"
             exit 1
+          else
+            file_type="$(file -b --mime-type doc/AtChem2-Manual.pdf)"
+            if [ file_type == "application/pdf ]; then
+              echo "[!] Artifact not a pdf"
+              exit 1
+            fi
           fi
 
       # -------------------------------------------------------------

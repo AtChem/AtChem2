@@ -75,7 +75,7 @@ jobs:
 
       - name: Check pdf artifact
         run: |
-            unzip artifact.zip -d doc/
+            unzip -o artifact.zip -d doc/
             if [ ! -f doc/AtChem2-Manual.pdf ]; then
               echo "[!] Artifact not found"
               exit 1

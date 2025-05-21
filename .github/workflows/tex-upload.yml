@@ -72,6 +72,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v9
         with:
           repo: rs028/AtChem2
+          branch: fix_pdf_upload
           #pr: 528
           workflow: tex-build.yml
           name: AtChem2-Manual

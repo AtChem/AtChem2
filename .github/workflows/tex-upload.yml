@@ -71,7 +71,7 @@ jobs:
       - name: Retrieve pdf artifact
         uses: dawidd6/action-download-artifact@v9
         with:
-          repo: ${{ github.event.inputs.repo }}
+          repo: AtChem/AtChem2
           pr: ${{ github.event.inputs.pr_number }}
           workflow: tex-build.yml
           name: AtChem2-Manual

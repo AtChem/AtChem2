@@ -26,6 +26,13 @@ on:
   # Run manually from the Actions tab. Requires the name of the branch
   # to update and the download URL of the PDF artifact
   workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Name of repo'
+        required: true
+      pr_branch:
+        description: 'Name of branch'
+        required: true
 
 # ------------------------------ JOBS ------------------------------ #
 
@@ -61,15 +68,14 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          arti_id=$(curl -s -H "Authorization: token $PAT_TOKEN" \
-            "https://api.github.com/repos/AtChem/AtChem2/actions/artifacts" | \
-            jq -r '.artifacts[] | select(.name=="AtChem2-Manual") | .id' | head -n 1)
+          arti_id=$(curl -s -H "Authorization: token $PAT_TOKEN" "https://api.github.com/repos/AtChem/AtChem2/actions/artifacts" | \
+                    jq -r '.artifacts[] | select(.name=="AtChem2-Manual") | .id' | head -n 1)
           arti_url="https://api.github.com/repos/AtChem/AtChem2/actions/artifacts/${arti_id}/zip"
           curl -L -H "Authorization: token $PAT_TOKEN" "$arti_url" --output artifact.zip
 
       - name: Check pdf artifact
         run: |
-            unzip artifact.zip
+            unzip artifact.zip -d doc/
             if [ ! -f doc/AtChem2-Manual.pdf ]; then
               echo "[!] Artifact not found"
               exit 1

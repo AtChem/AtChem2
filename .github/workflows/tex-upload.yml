@@ -71,7 +71,7 @@ jobs:
       - name: Retrieve pdf artifact
         uses: dawidd6/action-download-artifact@v9
         with:
-          repo: rs028/AtChem2
+          repo: AtChem/AtChem2
           #branch: fix_pdf_upload
           search_artifacts: true
           workflow: tex-build.yml

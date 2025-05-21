@@ -74,7 +74,7 @@ jobs:
           repo: rs028/AtChem2
           branch: fix_pdf_upload
           #pr: 528
-          workflow: tex-build.yml
+          #workflow: tex-build.yml
           name: AtChem2-Manual
           path: doc
           github_token: ${{ secrets.GITHUB_TOKEN }}

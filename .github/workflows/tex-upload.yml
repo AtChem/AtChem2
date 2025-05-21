@@ -61,11 +61,11 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          firstid=$(curl -s -H "Authorization: token ${{ PAT_TOKEN }}" \
+          arti_id=$(curl -s -H "Authorization: token $PAT_TOKEN" \
             "https://api.github.com/repos/AtChem/AtChem2/actions/artifacts" | \
             jq -r '.artifacts[] | select(.name=="AtChem2-Manual") | .id' | head -n 1)
-          url="https://api.github.com/repos/AtChem/AtChem2/actions/artifacts/${firstid}/zip"
-          curl -L -H "Authorization: token ${{ PAT_TOKEN }}" "$url" --output artifact.zip
+          arti_url="https://api.github.com/repos/AtChem/AtChem2/actions/artifacts/${arti_id}/zip"
+          curl -L -H "Authorization: token $PAT_TOKEN" "$arti_url" --output artifact.zip
 
       - name: Check pdf artifact
         run: |

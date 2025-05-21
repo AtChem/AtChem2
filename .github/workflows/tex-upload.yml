@@ -28,13 +28,13 @@ on:
   workflow_dispatch:
     inputs:
       repo:
-        description: 'Name of repo'
+        description: 'Repository'
         required: true
       pr_branch:
-        description: 'Name of branch'
+        description: 'Branch'
         required: true
-      pdf_url:
-        description: 'Artifact URL'
+      pr_number:
+        description: 'PR number'
         required: true
 
 # ------------------------------ JOBS ------------------------------ #
@@ -72,7 +72,7 @@ jobs:
         uses: dawidd6/action-download-artifact@v9
         with:
           repo: ${{ github.event.inputs.repo }}
-          branch: ${{ github.event.inputs.pr_branch }}
+          pr: ${{ github.event.inputs.pr_number }}
           workflow: tex-build.yml
           name: AtChem2-Manual
           path: doc

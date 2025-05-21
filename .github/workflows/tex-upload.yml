@@ -26,16 +26,16 @@ on:
   # Run manually from the Actions tab. Requires the name of the branch
   # to update and the download URL of the PDF artifact
   workflow_dispatch:
-    inputs:
-      repo:
-        description: 'Repository'
-        required: true
-      pr_branch:
-        description: 'Branch'
-        required: true
-      pr_number:
-        description: 'PR number'
-        required: true
+    #inputs:
+    #  repo:
+    #    description: 'Repository'
+    #    required: true
+    #  pr_branch:
+    #    description: 'Branch'
+    #    required: true
+    #  pr_number:
+    #    description: 'PR number'
+    #    required: true
 
 # ------------------------------ JOBS ------------------------------ #
 
@@ -71,8 +71,8 @@ jobs:
       - name: Retrieve pdf artifact
         uses: dawidd6/action-download-artifact@v9
         with:
-          repo: AtChem/AtChem2
-          pr: ${{ github.event.inputs.pr_number }}
+          repo: rs028/AtChem2
+          pr: 528
           workflow: tex-build.yml
           name: AtChem2-Manual
           path: doc

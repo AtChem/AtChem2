@@ -73,7 +73,7 @@ jobs:
         with:
           repo: AtChem/AtChem2
           #branch: fix_pdf_upload
-          search_artifacts: true
+          #search_artifacts: true
           workflow: tex-build.yml
           name: AtChem2-Manual
           path: doc

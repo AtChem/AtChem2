@@ -54,6 +54,8 @@ jobs:
         - os: ubuntu-22.04
           fortran: 13
       fail-fast: false
+    permissions:
+      contents: read
 
     # -------------------------------------------------------------
     # Sequence of tasks to be executed as part of the `ci_testing` job:

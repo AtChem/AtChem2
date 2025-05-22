@@ -269,7 +269,7 @@
          height="148.81181"
          width="150.63922"
          id="rect3885"
-         style="fill:none;stroke:#000000;stroke-width:2.16034007;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="fill:none;stroke:#000000;stroke-width:2.135;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <text
        xml:space="preserve"
@@ -281,7 +281,7 @@
          x="412.02731"
          y="309.1431"
          id="tspan3055"
-         style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Oblique'">Set the specified photolysis rates</tspan><tspan
+         style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif">Set the specified photolysis rates</tspan><tspan
          sodipodi:role="line"
          x="412.02731"
          y="339.1431"
@@ -298,7 +298,7 @@
          style="font-size:24px;line-height:1.25;font-family:sans-serif"
          id="tspan4931">are set to zero.</tspan></text>
     <rect
-       style="fill:none;stroke:#000000;stroke-width:2.12219191;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:2.135;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect3979"
        width="418.81927"
        height="136.01793"
@@ -538,7 +538,7 @@
          height="155.18428"
          width="157.23666"
          id="rect3885-7"
-         style="fill:none;stroke:#000000;stroke-width:2.19250035;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="fill:none;stroke:#000000;stroke-width:2.135;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
        id="g4707"
@@ -571,7 +571,7 @@
          height="155.41933"
          width="157.4799"
          id="rect3885-7-4"
-         style="fill:none;stroke:#000000;stroke-width:2.19369769;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="fill:none;stroke:#000000;stroke-width:2.135;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     </g>
     <g
        id="g13140"
@@ -635,7 +635,7 @@
          x="382.29535"
          style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'Sans Oblique'"
+           style="font-style:normal;font-size:24px;line-height:1.25;font-family:sans-serif"
            id="tspan3055-6"
            y="764.10382"
            x="382.29535"

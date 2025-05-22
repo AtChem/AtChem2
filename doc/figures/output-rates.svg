@@ -160,60 +160,60 @@
        height="211.09045"
        width="516.50006" />
     <rect
-       style="opacity:0.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1.99995768;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect826"
        width="488.00009"
        height="32.00005"
        x="-272.19928"
        y="-1.1983593" />
     <rect
-       style="opacity:0.25;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:2.00013971;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.25;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect826-9"
        width="467.99988"
        height="31.999853"
        x="-272.19919"
        y="32.786182" />
     <rect
-       style="opacity:0.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1.99995768;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.25;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect826-3"
        width="488.00009"
        height="32.00005"
        x="-272.19928"
        y="66.206085" />
     <rect
-       style="opacity:0.25;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:2.00013971;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:0.25;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect826-9-6"
        width="467.99985"
        height="31.999853"
        x="-272.19919"
        y="100.19064" />
     <path
-       style="fill:none;stroke:#ff0000;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
+       style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow1Mend)"
        d="m -209.67226,-78.531261 41.9899,98.421227"
        id="path885"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#ff0000;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4295)"
+       style="fill:none;stroke:#ff0000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4295)"
        d="M -94.768976,-51.263447 -139.00299,85.781447"
        id="path885-8"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#0080ff;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4645)"
+       style="fill:none;stroke:#0080ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4645)"
        d="M 134.50339,-48.465202 9.6331758,117.77452"
        id="path885-4"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#0080ff;stroke-width:2.00000024;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4443)"
+       style="fill:none;stroke:#0080ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4443)"
        d="M 29.494878,-78.164901 -19.683118,49.812306"
        id="path885-4-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.265"
        x="-267.21945"
        y="-96.53595"
        id="text845"><tspan
@@ -221,15 +221,15 @@
          id="tspan843"
          x="-267.21945"
          y="-96.53595"
-         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583">OH production rate</tspan><tspan
+         style="font-size:11.3px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.265">OH production rate</tspan><tspan
          sodipodi:role="line"
          x="-267.21945"
          y="-82.424835"
-         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583"
+         style="font-size:11.3px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.265"
          id="tspan873">at 39600 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.265"
        x="-152.27776"
        y="-69.322746"
        id="text877"><tspan
@@ -237,15 +237,15 @@
          id="tspan875"
          x="-152.27776"
          y="-69.322746"
-         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583">OH production rate</tspan><tspan
+         style="font-size:11.3px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.265">OH production rate</tspan><tspan
          sodipodi:role="line"
          x="-152.27776"
          y="-55.211636"
-         style="font-size:11.2889px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.264583"
+         style="font-size:11.3px;line-height:1.25;fill:#ff0000;fill-opacity:1;stroke-width:0.265"
          id="tspan879">at 43200 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.265"
        x="-27.183983"
        y="-96.53595"
        id="text845-0"><tspan
@@ -253,17 +253,17 @@
          id="tspan843-9"
          x="-27.183983"
          y="-96.53595"
-         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583">HO<tspan
-   style="font-size:11.2889px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
+         style="font-size:11.3px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.265">HO<tspan
+   style="font-size:11.3px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
    id="tspan3256">2</tspan> production rate</tspan><tspan
          sodipodi:role="line"
          x="-27.183983"
          y="-82.424835"
-         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583"
+         style="font-size:11.3px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.265"
          id="tspan873-2">at 39600 seconds</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       style="font-style:normal;font-weight:normal;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:0.265"
        x="77.956612"
        y="-65.8591"
        id="text877-5"><tspan
@@ -271,13 +271,13 @@
          id="tspan875-4"
          x="77.956612"
          y="-65.8591"
-         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583">HO<tspan
-   style="font-size:11.2889px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
+         style="font-size:11.3px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.265">HO<tspan
+   style="font-size:11.3px;baseline-shift:sub;fill:#0080ff;fill-opacity:1"
    id="tspan3254">2</tspan> production rate</tspan><tspan
          sodipodi:role="line"
          x="77.956612"
          y="-51.74799"
-         style="font-size:11.2889px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.264583"
+         style="font-size:11.3px;line-height:1.25;fill:#0080ff;fill-opacity:1;stroke-width:0.265"
          id="tspan879-0">at 43200 seconds</tspan></text>
   </g>
 </svg>

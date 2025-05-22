@@ -1,4 +1,4 @@
-AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/blob/master/LICENSE) [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
+AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2?tab=MIT-1-ov-file) [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
 =======
 
 
@@ -36,7 +36,7 @@ The latest stable version of AtChem2 can be downloaded from the [Releases page](
 
 After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the full paths of CVODE, openlibm and (if installed) FRUIT.
 
-Alternatively, and optionally, AtChem2 can be run as a [Docker](https://www.docker.com/) container. Currently the containerized version is available only for AtChem2 v1.2.2, thanks to the [Uni York group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2).
+Alternatively, and _optionally_, AtChem2 can be run as a [Docker](https://www.docker.com/) container. Currently the containerized version is available only for AtChem2 v1.2.2, thanks to the [Uni York group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2).
 
 
 Build & Run
@@ -57,3 +57,5 @@ Set the model parameters, the initial conditions, and the required outputs by ed
 The executable accepts several command line arguments to customize the location of the configuration, input and output directories, and of the shared library. More information on AtChem2, with detailed instructions on its installation, configuration and use can be found in the manual (`doc/AtChem2-Manual.pdf`) and in the GMD paper (see the file `CITATION.md`).
 
 The [AtChem2 wiki](https://github.com/AtChem/AtChem2/wiki) contains a summary of the instructions to install, compile, run, and contribute to the development of AtChem2, together with additional information, and a list of [known issues](https://github.com/AtChem/AtChem2/wiki/Known-Issues) with the suggested solutions or workarounds.
+
+Python tools designed to help users run AtChem2 box-models and analyze their output are available at the associated repository: [AtChem-tools](https://github.com/AtChem/AtChem-tools).

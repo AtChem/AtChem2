@@ -412,10 +412,10 @@ the \texttt{model.parameters} file (by default, located in the
 \texttt{model/configuration/} directory).
 
 \begin{itemize}
-\item \textbf{number of steps} and \textbf{step size}. The model
-  runtime is determined by the number of steps and by the step size
-  (in seconds). The step size controls the frequency of the model
-  output for the chemical species listed in \texttt{outputSpecies.config}
+\item \textbf{number of steps}, \textbf{step size}. The model runtime
+  is determined by the number of steps and by the step size (in
+  seconds). The step size controls the frequency of the model output
+  for the chemical species listed in \texttt{outputSpecies.config}
   (Sect.~\ref{subsec:outputspecies}), as well as for the environment
   variables, the photolysis rates and the diagnostic variables. Note
   that the step size is \emph{distinct} from the integration step,
@@ -423,13 +423,13 @@ the \texttt{model.parameters} file (by default, located in the
   For example, a model run of 2 hours, with output every 5 minutes,
   requires 24 steps with a step size of 300 seconds:
   $24 \times 300 = 7200~\mathrm{seconds} = 2~\mathrm{hours}$
-\item \textbf{species interpolation method} and
-  \textbf{conditions interpolation method}. Interpolation method used
-  for the constrained chemical species, and for the constrained environment
-  variables and the photolysis rates, respectively. Two interpolation
-  methods are currently implemented in AtChem2: piecewise constant and
-  piecewise linear (Sect.~\ref{subsec:interpolation}). The default
-  option is \texttt{2} (piecewise linear interpolation).
+\item \textbf{species interpolation method}, \textbf{conditions interpolation method}.
+  Interpolation method used for the constrained chemical species, and
+  for the constrained environment variables and the photolysis rates,
+  respectively. Two interpolation methods are currently implemented in
+  AtChem2: piecewise constant and piecewise linear
+  (Sect.~\ref{subsec:interpolation}). The default option is \texttt{2}
+  (piecewise linear interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the
   model output for the production and loss rates of selected species --
   listed in \texttt{outputRates.config} (Sect.~\ref{subsec:outputrates}).

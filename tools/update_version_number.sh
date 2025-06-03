@@ -12,14 +12,17 @@
 
 # Script to change the version number of AtChem2.
 #
-# N.B.: the script MUST be run from the main directory of AtChem2.
+# NB: the script MUST be run from the Main Directory of AtChem2.
 
 VERS_OLD="v1.3-dev"
 VERS_NEW="v1.2.3"
 
-# Ignore the .git/ directory, exclude this script and the changelog file
-find ./ -not -path "./.git/*" -type f ! -name "update_version_number.sh" ! -name "CHANGELOG.md" -print | xargs perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
+# ignore the .git/ directory, exclude this script and the changelog file
+find ./ -not -path "./.git/*" -type f \
+     ! -name "update_version_number.sh" \
+     ! -name "CHANGELOG.md" \
+     -print0 | xargs -0 perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
-echo -e "\n==> AtChem2 version number changed to:" $VERS_NEW "\n"
+printf "\n===> AtChem2 version number changed to: %s\n" "$VERS_NEW"
 
 exit 0

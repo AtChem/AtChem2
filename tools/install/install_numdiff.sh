@@ -11,59 +11,75 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# This script downloads and installs numdiff into the directory given
-# by input argument $1.
+# This script downloads and installs numdiff into the Dependencies
+# Directory, specified by input argument `$1`.
 #
 # Website: https://www.nongnu.org/numdiff/
-# Version: 5.9.0
-# Requirements: GCC, make
+# Requirements: gcc, make
+#
+# NB: after running the script, ensure that the path to the numdiff
+#     executable is set in ~/.bash_profile (or ~/.profile):
+#       PATH=$PATH:$HOME/../numdiff/bin
 #
 # Usage:
-#   ./install_numdiff.sh /path/to/install/directory
+#   ./install_numdiff.sh ~/path/to/dependencies/directory
 # -----------------------------------------------------------------------------
 
-# download numdiff archive to given directory (argument $1)
+NUMDIFF_VERSION="5.9.0"
+
+# path to dependencies directory
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to ./install_numdiff.sh"
-  exit 1
+    printf "\n[numdiff] missing argument: path to dependencies directory\n"
+    exit 1
+else
+    DEP_DIR="$1"
+    if ! cd "$DEP_DIR"; then
+        printf "\n[numdiff] $DEP_DIR does not exist\n"
+        exit 1
+    fi
 fi
-cd $1
-wget https://savannah.nongnu.org/download/numdiff/numdiff-5.9.0.tar.gz
+
+# download archive
+NUMDIFF_DIR="numdiff-${NUMDIFF_VERSION}"
+NUMDIFF_ARCHIVE="${NUMDIFF_DIR}.tar.gz"
+wget "https://savannah.nongnu.org/download/numdiff/${NUMDIFF_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  echo "[numdiff] wget --- failed"
+  printf "\n[numdiff] wget --> FAIL\n"
   exit 1
 fi
 
-# unpack numdiff archive
-tar -zxf numdiff-5.9.0.tar.gz
+# unpack archive
+tar -zxf "$NUMDIFF_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  echo "[numdiff] untar --- failed"
+  printf "\n[numdiff] untar --> FAIL\n"
   exit 1
 fi
-rm numdiff-5.9.0.tar.gz
+rm -f "$NUMDIFF_ARCHIVE"
 
-# compile and install numdiff
-cd numdiff-5.9.0/
+# compile and install
+cd "${NUMDIFF_DIR}"
 if [ "$(uname -s)" = 'Darwin' ]; then
   ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
 else
   ./configure --prefix=$1/numdiff
 fi
 if [ $? -ne 0 ] ; then
-  echo "[numdiff] configure --- failed"
+  printf "\n[numdiff] configure --> FAIL\n"
   exit 1
 fi
 
 make
 if [ $? -ne 0 ] ; then
-  echo "[numdiff] make --- failed"
+  printf "\n[numdiff] make --> FAIL\n"
   exit 1
 fi
 
 make install
 if [ $? -ne 0 ] ; then
-  echo "[numdiff] make install --- failed"
+  printf "\n[numdiff] make install --> FAIL\n"
   exit 1
 fi
 
+# finish installation
+printf "\n[numdiff] version %s installed in %s\n" "$NUMDIFF_VERSION" "$DEP_DIR"
 exit 0

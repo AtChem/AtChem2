@@ -11,55 +11,67 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# This script downloads and installs FRUIT into the directory given by
-# input argument $1.
+# This script downloads and installs FRUIT into the Dependencies
+# Directory, specified by input argument `$1`.
 #
 # Website: https://sourceforge.net/projects/fortranxunit/
-# Version: 3.4.3
-# Requirements: Ruby
+# Requirements: ruby
 #
-# N.B.: before running the script, ensure that the RubyGems paths are
-# set in ~/.bash_profile (or ~/.profile):
-#   GEM_HOME=$HOME/.gem
-#   PATH=$PATH:$GEM_HOME/bin
+# NB: before running the script, ensure that the RubyGems paths are
+#     set in ~/.bash_profile (or ~/.profile):
+#       GEM_HOME=$HOME/.gem
+#       PATH=$PATH:$GEM_HOME/bin
 #
 # Usage:
-#   ./install_fruit.sh /path/to/install/directory
+#   ./install_fruit.sh ~/path/to/dependencies/directory
 # -----------------------------------------------------------------------------
 
-# download FRUIT archive to given directory (argument $1)
+FRUIT_VERSION="3.4.3"
+
+# path to dependencies directory
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to ./install_fruit.sh"
-  exit 1
+    printf "\n[fruit] missing argument: path to dependencies directory\n"
+    exit 1
+else
+    DEP_DIR="$1"
+    if ! cd "$DEP_DIR"; then
+        printf "\n[fruit] $DEP_DIR does not exist\n"
+        exit 1
+    fi
 fi
-cd $1
-wget https://downloads.sourceforge.net/project/fortranxunit/fruit_3.4.3/fruit_3.4.3.zip
+
+# download archive
+FRUIT_DIR="fruit_${FRUIT_VERSION}"
+FRUIT_ARCHIVE="${FRUIT_DIR}.zip"
+wget "https://downloads.sourceforge.net/project/fortranxunit/${FRUIT_DIR}/${FRUIT_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  echo "[fruit] wget --- failed"
+  printf "\n[fruit] wget --> FAIL\n"
   exit 1
 fi
 
-# unpack FRUIT archive
-unzip -q fruit_3.4.3.zip
+# unpack archive
+unzip -q "$FRUIT_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  echo "[fruit] unzip --- failed"
+  printf "\n[fruit] unzip --> FAIL\n"
   exit 1
 fi
-rm fruit_3.4.3.zip
+rm -f "$FRUIT_ARCHIVE"
 
-# compile and install FRUIT
-cd fruit_3.4.3/
+# compile and install
+cd "${FRUIT_DIR}"
 gem install rake
 if [ $? -ne 0 ] ; then
-  echo "[fruit] gem install rake --- failed"
+  printf "\n[fruit] gem install rake --> FAIL\n"
   exit 1
 fi
 
 cd fruit_processor_gem/
 rake install
 if [ $? -ne 0 ] ; then
-  echo "[fruit] rake install --- failed"
+  printf "\n[fruit] rake install --> FAIL\n"
   exit 1
 fi
 
+# finish installation
+printf "\n[fruit] version %s installed in %s\n" "$FRUIT_VERSION" "$DEP_DIR"
 exit 0

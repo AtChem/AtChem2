@@ -11,43 +11,55 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# This script downloads and installs openlibm into the directory
-# given by input argument $1.
+# This script downloads and installs openlibm into the Dependencies
+# Directory, specified by input argument `$1`.
 #
 # Website: https://openlibm.org/
-# Version: 0.8.1
-# Requirements: GCC, make
+# Requirements: gcc, make
 #
 # Usage:
-#   ./install_openlibm.sh /path/to/install/directory
+#   ./install_openlibm.sh ~/path/to/dependencies/directory
 # -----------------------------------------------------------------------------
 
-# download openlibm archive to given directory (argument $1)
+OPENLIBM_VERSION="0.8.6"
+
+# path to dependencies directory
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to ./install_openlibm.sh"
-  exit 1
+    printf "\n[openlibm] missing argument: path to dependencies directory\n"
+    exit 1
+else
+    DEP_DIR="$1"
+    if ! cd "$DEP_DIR"; then
+        printf "\n[openlibm] $DEP_DIR does not exist\n"
+        exit 1
+    fi
 fi
-cd $1
-wget https://github.com/JuliaMath/openlibm/archive/v0.8.1.tar.gz
+
+# download archive
+OPENLIBM_DIR="openlibm-${OPENLIBM_VERSION}"
+OPENLIBM_ARCHIVE="v${OPENLIBM_VERSION}.tar.gz"
+wget "https://github.com/JuliaMath/openlibm/archive/${OPENLIBM_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  echo "[openlibm] wget --- failed"
+  printf "\n[openlibm] wget --> FAIL\n"
   exit 1
 fi
 
-# unpack openlibm archive
-tar -zxf v0.8.1.tar.gz
+# unpack archive
+tar -zxf "$OPENLIBM_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  echo "[openlibm] untar --- failed"
+  printf "\n[openlibm] untar --> FAIL\n"
   exit 1
 fi
-rm v0.8.1.tar.gz
+rm -f "$OPENLIBM_ARCHIVE"
 
-# compile and install openlibm
-cd openlibm-0.8.1/
+# compile and install
+cd "${OPENLIBM_DIR}"
 make -j
 if [ $? -ne 0 ] ; then
-  echo "[openlibm] make --- failed"
+  printf "\n[openlibm] make --> FAIL\n"
   exit 1
 fi
 
+# finish installation
+printf "\n[openlibm] version %s installed in %s\n" "$OPENLIBM_VERSION" "$DEP_DIR"
 exit 0

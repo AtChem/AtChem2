@@ -10,20 +10,21 @@
 #
 # -----------------------------------------------------------------------------
 
+# ------------------------------------------------------------------ #
 # Script to generate the PDF file of the AtChem2 manual.
 #
 # NB: the script MUST be run from the Main Directory of AtChem2.
-
 # ------------------------------------------------------------------ #
+
 # Function to run a command and check whether it is successful
 run() {
     "$@"
     status=$?
     if [ "$status" -ne 0 ]; then
-        printf "\n===> [FAIL] $*\n"
+        printf "\n[FAIL] $*\n"
         exit "$status"
     else
-        printf "\n===> [PASS] $*\n"
+        printf "\n[PASS] $*\n"
     fi
 }
 

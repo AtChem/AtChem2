@@ -44,40 +44,40 @@ NUMDIFF_DIR="numdiff-${NUMDIFF_VERSION}"
 NUMDIFF_ARCHIVE="${NUMDIFF_DIR}.tar.gz"
 wget "https://savannah.nongnu.org/download/numdiff/${NUMDIFF_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  printf "\n[numdiff] wget --> FAIL\n"
-  exit 1
+    printf "\n[numdiff] wget --> FAIL\n"
+    exit 1
 fi
 
 # unpack archive
 tar -zxf "$NUMDIFF_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  printf "\n[numdiff] untar --> FAIL\n"
-  exit 1
+    printf "\n[numdiff] untar --> FAIL\n"
+    exit 1
 fi
 rm -f "$NUMDIFF_ARCHIVE"
 
 # compile and install
 cd "${NUMDIFF_DIR}"
 if [ "$(uname -s)" = 'Darwin' ]; then
-  ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
+    ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
 else
-  ./configure --prefix=$1/numdiff
+    ./configure --prefix=$1/numdiff
 fi
 if [ $? -ne 0 ] ; then
-  printf "\n[numdiff] configure --> FAIL\n"
-  exit 1
+    printf "\n[numdiff] configure --> FAIL\n"
+    exit 1
 fi
 
-make
+make -j4
 if [ $? -ne 0 ] ; then
-  printf "\n[numdiff] make --> FAIL\n"
-  exit 1
+    printf "\n[numdiff] make --> FAIL\n"
+    exit 1
 fi
 
 make install
 if [ $? -ne 0 ] ; then
-  printf "\n[numdiff] make install --> FAIL\n"
-  exit 1
+    printf "\n[numdiff] make install --> FAIL\n"
+    exit 1
 fi
 
 # finish installation

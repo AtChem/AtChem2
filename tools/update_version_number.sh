@@ -10,9 +10,11 @@
 #
 # -----------------------------------------------------------------------------
 
+# ------------------------------------------------------------------ #
 # Script to change the version number of AtChem2.
 #
 # NB: the script MUST be run from the Main Directory of AtChem2.
+# ------------------------------------------------------------------ #
 
 VERS_OLD="v1.3-dev"
 VERS_NEW="v1.2.3"
@@ -24,5 +26,4 @@ find ./ -not -path "./.git/*" -type f \
      -print0 | xargs -0 perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
 printf "\n===> AtChem2 version number changed to: %s\n" "$VERS_NEW"
-
 exit 0

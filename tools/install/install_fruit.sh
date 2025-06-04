@@ -45,15 +45,15 @@ FRUIT_DIR="fruit_${FRUIT_VERSION}"
 FRUIT_ARCHIVE="${FRUIT_DIR}.zip"
 wget "https://downloads.sourceforge.net/project/fortranxunit/${FRUIT_DIR}/${FRUIT_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  printf "\n[fruit] wget --> FAIL\n"
-  exit 1
+    printf "\n[fruit] wget --> FAIL\n"
+    exit 1
 fi
 
 # unpack archive
 unzip -q "$FRUIT_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  printf "\n[fruit] unzip --> FAIL\n"
-  exit 1
+    printf "\n[fruit] unzip --> FAIL\n"
+    exit 1
 fi
 rm -f "$FRUIT_ARCHIVE"
 
@@ -61,15 +61,15 @@ rm -f "$FRUIT_ARCHIVE"
 cd "${FRUIT_DIR}"
 gem install rake
 if [ $? -ne 0 ] ; then
-  printf "\n[fruit] gem install rake --> FAIL\n"
-  exit 1
+    printf "\n[fruit] gem install rake --> FAIL\n"
+    exit 1
 fi
 
 cd fruit_processor_gem/
 rake install
 if [ $? -ne 0 ] ; then
-  printf "\n[fruit] rake install --> FAIL\n"
-  exit 1
+    printf "\n[fruit] rake install --> FAIL\n"
+    exit 1
 fi
 
 # finish installation

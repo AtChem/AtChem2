@@ -40,24 +40,24 @@ OPENLIBM_DIR="openlibm-${OPENLIBM_VERSION}"
 OPENLIBM_ARCHIVE="v${OPENLIBM_VERSION}.tar.gz"
 wget "https://github.com/JuliaMath/openlibm/archive/${OPENLIBM_ARCHIVE}"
 if [ $? -ne 0 ] ; then
-  printf "\n[openlibm] wget --> FAIL\n"
-  exit 1
+    printf "\n[openlibm] wget --> FAIL\n"
+    exit 1
 fi
 
 # unpack archive
 tar -zxf "$OPENLIBM_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  printf "\n[openlibm] untar --> FAIL\n"
-  exit 1
+    printf "\n[openlibm] untar --> FAIL\n"
+    exit 1
 fi
 rm -f "$OPENLIBM_ARCHIVE"
 
 # compile and install
 cd "${OPENLIBM_DIR}"
-make -j
+make -j4
 if [ $? -ne 0 ] ; then
-  printf "\n[openlibm] make --> FAIL\n"
-  exit 1
+    printf "\n[openlibm] make --> FAIL\n"
+    exit 1
 fi
 
 # finish installation

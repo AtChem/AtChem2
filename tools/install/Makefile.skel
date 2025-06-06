@@ -44,7 +44,7 @@ OS := $(shell uname -s)
 # if on GitHub Actions
 ifeq ($(GITHUB_ACTIONS),true)
   ifeq ($(RUNNER_OS),Linux)
-    # if linux, pass gfortran
+    # if Linux, pass gfortran
     FORT_COMP    = gfortran-$(FORT_VERSION)
     FORT_LIB     = ""
   else
@@ -119,19 +119,24 @@ include tests/makefile.tests
 all: $(AOUT)
 
 sharedlib:
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/customRateFuncs.o -J$(OBJ)
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ)
-	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SHAREDLIBDIR)/mechanism.o $(SHAREDLIBDIR)/customRateFuncs.o
+	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(SRC)/dataStructures.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SRC)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
 
 clean:
 	rm -f $(AOUT)
 	rm -f $(OBJ)/*.mod
 	rm -rf build/__pycache__
 	rm -f *.gcda *.gcno *.xml build/*.pyc tests/*.log
-	rm -f doc/figures/*.png doc/latex/*.aux doc/latex/*.bbl doc/latex/*.blg doc/latex/*.log doc/latex/*.out doc/latex/*.toc
-	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} model/output/*.output model/output/reactionRates/*[0-9]
-	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
-	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
+	rm -f doc/figures/*.png doc/latex/*.aux doc/latex/*.bbl doc/latex/*.blg doc/latex/*.log \
+              doc/latex/*.out doc/latex/*.toc
+	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
+              model/output/*.output model/output/reactionRates/*[0-9]
+	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
+              tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
+	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
+              $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 
 # ==================== Dependencies ==================== #

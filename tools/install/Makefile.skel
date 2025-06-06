@@ -14,20 +14,20 @@
 
 # ==================== Makefile for AtChem2 ==================== #
 
-# choose the Fortran compiler
+# Choose the Fortran compiler
 # 1. "gnu" for gfortran (DEFAULT)
 # 2. "intel" for ifort
 FORTC = "gnu"
 
-# set the dependencies paths
-# N.B.: use the FULL PATHS, not the relative paths
+# Set the dependencies paths. Use full paths, not relative paths. For
+# example: `$(HOME)/path/to/dependencies/directory/cvode/lib`
 CVODELIBDIR = cvode/lib
 OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
-# default location of the chemical mechanism shared library (`mechanism.so`)
-# use the second argument of the build script (`build/build_atchem2.sh`) to
-# override $SHAREDLIBDIR
+# Set the default location of the chemical mechanism shared library
+# (`mechanism.so`). Use the second argument of the build script
+# (`build/build_atchem2.sh`) to override $SHAREDLIBDIR
 SHAREDLIBDIR = model/configuration
 
 # =========================================================================== #
@@ -99,12 +99,12 @@ SRC = src
 # executable
 AOUT = atchem2
 
-# source files
-UNITTEST_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 \
+# fortran source files
+CORE_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 \
                 $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 \
                 $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 \
                 $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
-SRCS = $(UNITTEST_SRCS) $(SRC)/atchem2.f90
+SRCS = $(CORE_SRCS) $(SRC)/atchem2.f90
 
 # prerequisite is $SRCS, so this will be rebuilt every time any source
 # file in $SRCS is changed

@@ -36,7 +36,6 @@ else
 fi
 
 # download archive
-OPENLIBM_DIR="openlibm-${OPENLIBM_VERSION}"
 OPENLIBM_ARCHIVE="v${OPENLIBM_VERSION}.tar.gz"
 wget "https://github.com/JuliaMath/openlibm/archive/${OPENLIBM_ARCHIVE}"
 if [ $? -ne 0 ] ; then
@@ -53,7 +52,8 @@ fi
 rm -f "$OPENLIBM_ARCHIVE"
 
 # compile and install
-cd "${OPENLIBM_DIR}"
+mv "openlibm-${OPENLIBM_VERSION}" openlibm
+cd openlibm
 make -j4
 if [ $? -ne 0 ] ; then
     printf "\n[openlibm] make --> FAIL\n"

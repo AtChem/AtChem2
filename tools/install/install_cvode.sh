@@ -12,75 +12,71 @@
 
 # -----------------------------------------------------------------------------
 # This script downloads and installs CVODE (part of SUNDIALS) into the
-# directory given by input argument $1.
+# Dependencies Directory, specified by input argument `$1`.
 #
-# The default Fortran compiler used by this script is gfortran. A
-# different compiler can be specified by optional input argument $2.
+# The default Fortran compiler is GNU gfortran. A different compiler
+# can be specified by optional input argument `$2`.
 #
 # Website: https://computing.llnl.gov/projects/sundials/
-# Version: 2.9.0 (SUNDIALS v2.7.0)
-# Requirements: Fortran compiler (gfortran), cmake, make
+# Requirements: fortran compiler (default: gfortran), cmake, make
 #
 # Usage:
-#   ./install_cvode.sh /path/to/install/directory
-#   ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler
+#   ./install_cvode.sh ~/path/to/dependencies/directory
+#     OR
+#   ./install_cvode.sh ~/path/to/dependencies/directory /path/to/fortran/compiler
 # -----------------------------------------------------------------------------
 
-# Ensure that the first argument (installation directory) is provided,
-# and that it is an existing directory
+SUNDIALS_VERSION="2.7.0"
+
+# path to dependencies directory
 if [ -z "$1" ] ; then
-  echo "Please provide an argument to ./install_cvode.sh"
-  echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
-  exit 1
-elif [ ! -d "$1" ]; then
-  echo "$1 is not a directory - please create it if you want to install CVODE there."
-  echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
-  exit 1
-fi
-cvode_dir="$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
-
-# Set the Fortran compiler. If the optional second argument is provided,
-# check that it points to an existing executable. Otherwise, set the compiler
-# to gfortran, and check that the executable exists.
-if [ -z "$2" ] ; then
-  if [ -f /usr/bin/gfortran ] ; then
-    echo "Default fortran compiler (/usr/bin/gfortran) selected. To choose another compiler, provide it as a second argument."
-    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
-  else
-    echo "Default fortran compiler (/usr/bin/gfortran) selected, but it does not exist on this system."
-    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
+    printf "\n[sundials] missing argument: path to dependencies directory\n"
     exit 1
-  fi
-  FORT_COMP=/usr/bin/gfortran
 else
-  FORT_COMP=$2
-  if [ ! -f "$2" ] ; then
-    echo $2 " selected as fortran compiler, but it is not a valid filename."
-    echo "Example usage: ./install_cvode.sh /path/to/install/directory /path/to/fortran/compiler"
+    DEP_DIR="$1"
+    if ! cd "$DEP_DIR"; then
+        printf "\n[sundials] $DEP_DIR does not exist\n"
+        exit 1
+    fi
+fi
+
+# set fortran compiler (default: /usr/bin/gfortran)
+if [ -z "$2" ] ; then
+    if [ ! -f /usr/bin/gfortran ] ; then
+        printf "\n[fortran] default compiler (/usr/bin/gfortran) does not exist\n"
+        exit 1
+    fi
+    FORT_COMP=/usr/bin/gfortran
+else
+    FORT_COMP=$2
+    if [ ! -f "$2" ] ; then
+        printf "\n[fortran] selected compiler (%s) does not exist" "$2"
+        exit 1
+    fi
+fi
+
+# download archive
+SUNDIALS_DIR="sundials-${SUNDIALS_VERSION}"
+SUNDIALS_ARCHIVE="v${SUNDIALS_VERSION}.tar.gz"
+wget "https://github.com/LLNL/sundials/archive/${SUNDIALS_ARCHIVE}"
+if [ $? -ne 0 ] ; then
+    printf "\n[sundials] wget --> FAIL\n"
     exit 1
-  fi
 fi
 
-# download SUNDIALS archive to given directory (argument $1)
-cd $cvode_dir
-wget -O sundials-2.7.0.tar.gz https://github.com/LLNL/sundials/archive/v2.7.0.tar.gz
+# unpack archive
+tar -zxf "$SUNDIALS_ARCHIVE"
 if [ $? -ne 0 ] ; then
-  echo "[sundials] wget --- failed"
-  exit 1
+    printf "\n[sundials] untar --> FAIL\n"
+    exit 1
 fi
-
-# unpack SUNDIALS archive
-tar -zxf sundials-2.7.0.tar.gz
-if [ $? -ne 0 ] ; then
-  echo "[sundials] untar --- failed"
-  exit 1
-fi
-rm sundials-2.7.0.tar.gz
+rm -f "$SUNDIALS_ARCHIVE"
 
 # compile and install CVODE
-cd sundials-2.7.0/
+cd "$SUNDIALS_DIR"
+CVODE_VERSION=$(grep cvodelib_VERSION CMakeLists.txt | cut -d '"' -f2)
 mkdir build/ && cd build/
-cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
+cmake -DCMAKE_INSTALL_PREFIX="$DEP_DIR/cvode" \
       -DCMAKE_C_COMPILER:FILEPATH=gcc \
       -DCMAKE_Fortran_COMPILER=$FORT_COMP \
       -DBUILD_ARKODE:BOOL=OFF \
@@ -95,20 +91,22 @@ cmake -DCMAKE_INSTALL_PREFIX=$cvode_dir/cvode \
       -DCMAKE_MACOSX_RPATH:BOOL=ON \
       ..
 if [ $? -ne 0 ] ; then
-  echo "[cvode] cmake --- failed"
-  exit 1
+    printf "\n[cvode] cmake --> FAIL\n"
+    exit 1
 fi
 
-make -j8
+make -j4
 if [ $? -ne 0 ] ; then
-  echo "[cvode] make --- failed"
-  exit 1
+    printf "\n[cvode] make --> FAIL\n"
+    exit 1
 fi
 
 make install
 if [ $? -ne 0 ] ; then
-  echo "[cvode] make install --- failed"
-  exit 1
+    printf "\n[cvode] make install --> FAIL\n"
+    exit 1
 fi
 
+# finish installation
+printf "\n[cvode] version %s installed in %s\n" "$CVODE_VERSION" "$DEP_DIR"
 exit 0

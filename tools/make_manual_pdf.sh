@@ -48,6 +48,5 @@ run mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
 printf "\n||----------------------------------------||"
 printf "\n||    AtChem2-Manual.pdf saved to doc/    ||"
-printf "\n||----------------------------------------||\n"
-
+printf "\n||----------------------------------------||\n\n"
 exit 0

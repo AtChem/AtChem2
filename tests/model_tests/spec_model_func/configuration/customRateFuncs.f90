@@ -26,13 +26,13 @@ contains
 
   ! -----------------------------------------------------------------
   ! Calculates the rate of KMT15
-  pure function calcKMT15( t, m ) result ( KMT15 )
-    real*8, intent(in) :: t, m
+  pure function calcKMT15( temp, m ) result ( KMT15 )
+    real*8, intent(in) :: temp, m
     real :: K150, K15I, KR15, FC15, NC15, F15
     real :: KMT15
 
-    K150 = 8.6E-29 * m * (t / 300)**(-3.1)
-    K15I = 9.0E-12 * (t / 300)**(-0.85)
+    K150 = 8.6E-29 * m * (temp / 300)**(-3.1)
+    K15I = 9.0E-12 * (temp / 300)**(-0.85)
     KR15 = K150 / K15I
     FC15 = 0.48
     NC15 = 0.75 - 1.27 * (LOG10(FC15))

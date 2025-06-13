@@ -40,7 +40,7 @@ import kpp_conversion
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC',
                        'DILUTE', 'ROOF', 'ASA', 'RO2']
-reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J', 't']
+reservedOtherList = ['EXP', 'LOG10', 'TEMP', 'PRESS', 'J', 't']
 
 # =========================== FUNCTIONS =========================== #
 

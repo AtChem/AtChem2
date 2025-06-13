@@ -10,20 +10,21 @@
 #
 # -----------------------------------------------------------------------------
 
+# ------------------------------------------------------------------ #
 # Script to generate the PDF file of the AtChem2 manual.
 #
-# N.B.: the script MUST be run from the main directory of AtChem2.
-
+# NB: the script MUST be run from the Main Directory of AtChem2.
 # ------------------------------------------------------------------ #
+
 # Function to run a command and check whether it is successful
 run() {
     "$@"
     status=$?
     if [ "$status" -ne 0 ]; then
-        echo "=====> [FAIL] $*"
+        printf "\n[FAIL] $*\n"
         exit "$status"
     else
-        echo "=====> [PASS] $*"
+        printf "\n[PASS] $*\n"
     fi
 }
 
@@ -45,8 +46,7 @@ run pdflatex AtChem2-Manual.tex
 # Move PDF file to doc/ directory
 run mv -f AtChem2-Manual.pdf ../AtChem2-Manual.pdf
 
-echo "||----------------------------------------||"
-echo "||    AtChem2-Manual.pdf saved to doc/    ||"
-echo "||----------------------------------------||"
-
+printf "\n||----------------------------------------||"
+printf "\n||    AtChem2-Manual.pdf saved to doc/    ||"
+printf "\n||----------------------------------------||\n\n"
 exit 0

@@ -22,7 +22,7 @@ FORTC = "gnu"
 # set the dependencies paths
 # N.B.: use the FULL PATHS, not the relative paths
 CVODELIBDIR = cvode/lib
-OPENLIBMDIR = openlibm-0.8.1
+OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
 # default location of the chemical mechanism shared library (`mechanism.so`)

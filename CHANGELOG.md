@@ -2,6 +2,13 @@ AtChem2 -- CHANGELOG
 ====================
 
 
+post v1.2.3
+-----------
+
+- make install scripts more robust, and update to **openlibm v0.8.6**
+- add option to use time in user-defined Fortran functions
+
+
 v1.2.3 (May 2025)
 -----------------
 

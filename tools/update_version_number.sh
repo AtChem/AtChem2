@@ -16,8 +16,8 @@
 # NB: the script MUST be run from the Main Directory of AtChem2.
 # ------------------------------------------------------------------ #
 
-VERS_OLD="v1.3-dev"
-VERS_NEW="v1.2.3"
+VERS_OLD="v1.2.3"
+VERS_NEW="v1.3-dev"
 
 # ignore the .git/ directory, exclude this script and the changelog file
 find ./ -not -path "./.git/*" -type f \
@@ -25,5 +25,5 @@ find ./ -not -path "./.git/*" -type f \
      ! -name "CHANGELOG.md" \
      -print0 | xargs -0 perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
-printf "\n===> AtChem2 version number changed to: %s\n" "$VERS_NEW"
+printf "\n===> AtChem2 version number changed to: %s\n\n" "$VERS_NEW"
 exit 0

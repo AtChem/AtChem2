@@ -36,7 +36,7 @@
 # -----------------------------------------------------------------------------
 
 echo ""
-echo "     AtChem2 v1.2.3"
+echo "     AtChem2 v1.3-dev"
 echo ""
 
 echo "* Chemical mechanism file:" $1

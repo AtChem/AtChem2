@@ -25,5 +25,5 @@ find ./ -not -path "./.git/*" -type f \
      ! -name "CHANGELOG.md" \
      -print0 | xargs -0 perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
 
-printf "\n===> AtChem2 version number changed to: %s\n" "$VERS_NEW"
+printf "\n===> AtChem2 version number changed to: %s\n\n" "$VERS_NEW"
 exit 0

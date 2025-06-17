@@ -40,8 +40,7 @@ import kpp_conversion
 
 reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC',
                        'DILUTE', 'ROOF', 'ASA', 'RO2']
-reservedOtherList = ['EXP', 'TEMP', 'PRESS', 'LOG10', 'T', 'J']
-
+reservedOtherList = ['EXP', 'LOG10', 'TEMP', 'PRESS', 'J', 't']
 
 # =========================== FUNCTIONS =========================== #
 
@@ -558,12 +557,12 @@ module mechanism_mod
 
 contains
 
-    subroutine update_p(p, q, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J, RO2) bind(c,name='update_p')
+    subroutine update_p(p, q, t, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J, RO2) bind(c,name='update_p')
 
         use custom_functions_mod
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
-           real(c_double), intent(inout) :: p(*), q(*)
-        real(c_double), intent(in) :: TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2
+        real(c_double), intent(inout) :: p(*), q(*)
+        real(c_double), intent(in) :: t, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2
         """)
 
         # Write out 'Generic Rate Coefficients' and 'Complex reactions'.

@@ -49,12 +49,11 @@ python ./build/mech_converter.py $1 $2 $3
 
 echo ""
 echo "-> Create shared library"
+make sharedlib
 if [ -z $2 ]; then
-  make sharedlib
-  echo "=> shared library created in: ./model/configuration/"
+  echo "=> shared library created in : ./model/configuration/"
 else
-  make sharedlib SHAREDLIBDIR=$2
-  echo "=> shared library created in:" $2
+  echo "=> shared library created in :" $2
 fi
 
 echo ""

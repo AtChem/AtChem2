@@ -119,10 +119,10 @@ include tests/makefile.tests
 all: $(AOUT)
 
 sharedlib:
-	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(SRC)/dataStructures.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(OBJ)/dataStructures.o -J$(OBJ) -I$(OBJ)
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(SRC)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
+	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(OBJ)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
 
 clean:
 	rm -f $(AOUT)

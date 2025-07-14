@@ -23,7 +23,7 @@ module argparse_mod
   end type flag
 
   ! Arguments for the atchem2 executable
-  type(flag), parameter :: valid_flags(9) = &
+  type(flag), parameter :: valid_flags(10) = &
               [ flag('--help', 'Displays the help message.'), &
                 flag('--model', 'The base directory of the model.'), &
                 flag('--output', 'The destination directory for the model output.' // &

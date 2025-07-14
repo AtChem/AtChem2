@@ -171,7 +171,6 @@ jobs:
         if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
         env:
           FORT_VERSION: ${{ matrix.fortran }}
-        continue-on-error: true
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make clean
@@ -181,12 +180,6 @@ jobs:
           # model tests
           make modeltests CCOV=true   # run only the new Testsuite
           find ./ -name "*.gc*"
-
-      - name: Save logfile as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: modeltests.log
-          path: tests/modeltests.log
 
       - name: Upload coverage reports to Codecov
         if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13

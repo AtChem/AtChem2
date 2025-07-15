@@ -15,16 +15,18 @@
 #
 # NB: the script MUST be run from the Main Directory of AtChem2.
 # ------------------------------------------------------------------ #
+set -eu
 
 # Function to run a command and check whether it is successful
 run() {
     "$@"
     status=$?
     if [ "$status" -ne 0 ]; then
+
         printf "\n[FAIL] $*\n"
         exit "$status"
     else
-        printf "\n[PASS] $*\n"
+        printf "\n[SUCCESS] $*\n"
     fi
 }
 

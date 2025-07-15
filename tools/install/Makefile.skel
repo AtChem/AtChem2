@@ -41,21 +41,18 @@ ifeq ($(GITHUB_ACTIONS),true)
   ifeq ($(RUNNER_OS),Linux)
     # on Linux, pass gfortran
     FORT_COMP    = gfortran-$(FORT_VERSION)
-    FORT_LIB     = ""
   else
     # on macOS, pass homebrew gfortran
     FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
-    FORT_LIB     = ""
   endif
 # if not on GitHub Actions, set the Fortran compiler
 else
   ifeq ($(FORTC),"gnu")
     FORT_COMP    = gfortran
-    FORT_LIB     = ""
-  endif
-  ifeq ($(FORTC),"intel")
+  else ifeq ($(FORTC),"intel")
     FORT_COMP    = ifort
-    FORT_LIB     = ""
+  else
+    $(error Invalid Fortran compiler. Set $FORTC to "gnu" or "intel".)
   endif
 endif
 
@@ -98,10 +95,12 @@ OBJ = obj
 AOUT = atchem2
 
 # fortran source files
-CORE_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 \
-            $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 \
-            $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 \
-            $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
+CORE_SRCS = $(SRC)/atmosphereFunctions.f90 $(SRC)/configFunctions.f90 \
+            $(SRC)/constraintFunctions.f90 $(SRC)/dataStructures.f90 \
+            $(SRC)/inputFunctions.f90 $(SRC)/interpolationFunctions.f90 \
+            $(SRC)/outputFunctions.f90 $(SRC)/parameterModules.f90 \
+            $(SRC)/solarFunctions.f90 $(SRC)/solverFunctions.f90 \
+            $(SRC)/argparse.f90
 SRCS = $(CORE_SRCS) $(SRC)/atchem2.f90
 
 # the executable is rebuilt every time a fortran source file in $SRCS
@@ -116,22 +115,25 @@ include tests/makefile.tests
 # SHARED LIBRARY setup
 
 # Default settings:
-# - the mechanism fortran files are created in the configuration directory: model/configuration
 # - the mechanism file is: model/mechanism.fac
-# - the shared library is: model/configuration/mechanism.so
-CONFIGDIR = model/configuration
+# - the mechanism fortran files are created in: model/configuration
+# - the mechanism shared library is: model/configuration/mechanism.so
+# - the MCM data files are in: mcm/
 MECHFILE = model/mechanism.fac
+CONFIGDIR = model/configuration
+SHAREDLIB = $(CONFIGDIR)/mechanism.so
+MCMDIR = mcm
+
+# mechanism conversion
 MECH_CONVERTER = build/mech_converter.py
 MECH_GEN = $(CONFIGDIR)/mechanism.f90 $(CONFIGDIR)/mechanism.species \
            $(CONFIGDIR)/mechanism.reac $(CONFIGDIR)/mechanism.prod \
            $(CONFIGDIR)/mechanism.ro2
 
-SHAREDLIB = $(CONFIGDIR)/mechanism.so
-
 # the mechanism conversion script is run if the mechanism file ($MECHFILE)
 # has been modified
 $(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
-	python $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) mcm
+	python $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(MCMDIR)
 
 # the shared library is rebuilt if the mechanism fortran files (`mechanism.*`)
 # or the `customRateFuncs.f90` file in $CONFIGDIR are modified

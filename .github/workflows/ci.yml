@@ -148,7 +148,7 @@ jobs:
       - name: Unit and Model tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
-        continue-on-error: true
+        # continue-on-error: true
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests

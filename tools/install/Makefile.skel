@@ -25,11 +25,6 @@ CVODELIBDIR = cvode/lib
 OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
-# Set the default location of the chemical mechanism shared library
-# (`mechanism.so`). Use the second argument of the build script
-# (`build/build_atchem2.sh`) to override $SHAREDLIBDIR
-SHAREDLIBDIR = model/configuration
-
 # =========================================================================== #
 # DO NOT MODIFY BELOW THIS LINE
 # =========================================================================== #
@@ -44,11 +39,11 @@ OS := $(shell uname -s)
 # if on GitHub Actions
 ifeq ($(GITHUB_ACTIONS),true)
   ifeq ($(RUNNER_OS),Linux)
-    # if Linux, pass gfortran
+    # on Linux, pass gfortran
     FORT_COMP    = gfortran-$(FORT_VERSION)
     FORT_LIB     = ""
   else
-    # if macOS, pass homebrew gfortran
+    # on macOS, pass homebrew gfortran
     FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
     FORT_LIB     = ""
   endif
@@ -92,47 +87,74 @@ endif
 LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIBDIR):$(OPENLIBMDIR) \
           -lopenlibm -lsundials_fcvode -lsundials_cvode -lsundials_fnvecserial -lsundials_nvecserial -ldl
 
-# object files and source files directories
-OBJ = obj
-SRC = src
+# ----------------------------------------------------
+# EXECUTABLE setup
 
-# executable
+# directories for the fortran source and object files
+SRC = src
+OBJ = obj
+
+# atchem executable
 AOUT = atchem2
 
 # fortran source files
 CORE_SRCS = $(SRC)/dataStructures.f90 $(SRC)/argparse.f90 $(SRC)/interpolationFunctions.f90 \
-                $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 \
-                $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 \
-                $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
+            $(SRC)/configFunctions.f90 $(SRC)/inputFunctions.f90 $(SRC)/outputFunctions.f90 \
+            $(SRC)/atmosphereFunctions.f90 $(SRC)/solarFunctions.f90 $(SRC)/constraintFunctions.f90 \
+            $(SRC)/solverFunctions.f90 $(SRC)/parameterModules.f90
 SRCS = $(CORE_SRCS) $(SRC)/atchem2.f90
 
-# prerequisite is $SRCS, so this will be rebuilt every time any source
-# file in $SRCS is changed
+# the executable is rebuilt every time a fortran source file in $SRCS
+# is modified
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # secondary makefile for the Testsuite
 include tests/makefile.tests
 
-# ==================== Makefile rules  ==================== #
+# ----------------------------------------------------
+# SHARED LIBRARY setup
+
+# Default settings:
+# - the mechanism fortran files are created in the configuration directory: model/configuration
+# - the mechanism file is: model/mechanism.fac
+# - the shared library is: model/configuration/mechanism.so
+CONFIGDIR = model/configuration
+MECHFILE = model/mechanism.fac
+MECH_CONVERTER = build/mech_converter.py
+MECH_GEN = $(CONFIGDIR)/mechanism.f90 $(CONFIGDIR)/mechanism.species \
+           $(CONFIGDIR)/mechanism.reac $(CONFIGDIR)/mechanism.prod \
+           $(CONFIGDIR)/mechanism.ro2
+
+SHAREDLIB = $(CONFIGDIR)/mechanism.so
+
+# the mechanism conversion script is run if the mechanism file ($MECHFILE)
+# has been modified
+$(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
+	python $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) mcm
+
+# the shared library is rebuilt if the mechanism fortran files (`mechanism.*`)
+# or the `customRateFuncs.f90` file in $CONFIGDIR are modified
+$(SHAREDLIB): $(MECH_GEN)
+	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(OBJ)/dataStructures.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(CONFIGDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(CONFIGDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(CONFIGDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -shared -o $(SHAREDLIB) $(OBJ)/dataStructures.o $(CONFIGDIR)/customRateFuncs.o $(CONFIGDIR)/mechanism.o
+
+# ====================== Makefile rules ====================== #
 
 all: $(AOUT)
 
-sharedlib:
-	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(OBJ)/dataStructures.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -shared -o $(SHAREDLIBDIR)/mechanism.so $(OBJ)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
+sharedlib: $(SHAREDLIB)
 
 clean:
-	rm -f $(AOUT)
-	rm -f $(OBJ)/*.mod
+	rm -f $(AOUT) $(SHAREDLIB)
+	rm -f $(OBJ)/*.o $(OBJ)/*.mod
 	rm -rf build/__pycache__
-	rm -f *.gcda *.gcno *.xml build/*.pyc tests/*.log
-	rm -f doc/figures/*.png doc/latex/*.aux doc/latex/*.bbl doc/latex/*.blg doc/latex/*.log \
-              doc/latex/*.out doc/latex/*.toc
-	rm -f model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
-              model/output/*.output model/output/reactionRates/*[0-9]
+	rm -f *.{gcda,gcno,xml} build/*.pyc tests/*.log
+	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
+	rm -f $(CONFIGDIR)/mechanism.{f90,o,prod,reac,ro2,species} $(CONFIGDIR)/customRateFuncs.o \
+              model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
 	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
               tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
 	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \

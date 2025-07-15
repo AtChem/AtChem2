@@ -148,18 +148,18 @@ jobs:
       - name: Unit and Model tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
-        continue-on-error: true
+        # continue-on-error: true
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests   # NB: oldtests will eventually be merged into modeltests
           make modeltests
 
-      - name: Save log files
-        uses: actions/upload-artifact@v4
-        with:
-          name: testsuite-${{ github.run_id }}.log
-          path: tests/*.log
+      # - name: Save log files
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: testsuite-${{ github.run_id }}.log
+      #     path: tests/*.log
 
       # -------------------------------------------------------------
       # (6) Recompile AtChem2 using the code coverage compilation flags,

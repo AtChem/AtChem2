@@ -18,11 +18,12 @@
 #    format. Argument $1 is NOT optional, and there is no default.
 #
 # $2 is the directory for the chemical mechanism in Fortran format:
+#    - mechanism.f90
 #    - mechanism.species
 #    - mechanism.reac
 #    - mechanism.prod
 #    - mechanism.ro2
-#    - mechanism.f90
+
 #    By default, argument $2 is: ./model/configuration/
 #
 # $3 is the directory of the MCM data files:
@@ -35,30 +36,23 @@
 #   ./build/build_atchem2.sh /path/to/mechanism/file /path/to/mechanism/directory
 # -----------------------------------------------------------------------------
 
-echo ""
-echo "     AtChem2 v1.3-dev"
-echo ""
+printf "\n     AtChem2 v1.3-dev\n"
+printf "\n* Chemical mechanism file: %s\n" $1
+printf "\n* Model configuration directory [ default = ./model/configuration/ ] %s\n:" $2
+printf "\n* MCM data files directory [ default = ./mcm/ ] %s\n:" $3
 
-echo "* Chemical mechanism file:" $1
-echo "* Fortran mechanism directory [ default = ./model/configuration/ ]:" $2
-echo "* MCM data files directory [ default = ./mcm/ ]:" $3
-
-echo ""
-echo "-> Call mech_converter.py"
-python ./build/mech_converter.py $1 $2 $3
-
-echo ""
-echo "-> Create shared library"
-make sharedlib
+printf "\n-> Create shared library\n"
 if [ -z $2 ]; then
-  echo "=> shared library created in : ./model/configuration/"
+    make sharedlib
+    printf "\n=> fortran mechanism created in: ./model/configuration/\n"
+    printf "\n=> shared library created in: ./model/\n"
 else
-  echo "=> shared library created in :" $2
+    make sharedlib MECHFILE=$1 CONFIGDIR=$2
+    printf "\n=> fortran mechanism created in %s\n:" $2
+    printf "\n=> shared library created in %s\n:" $1
 fi
 
-echo ""
-echo "-> Create atchem2 executable"
+printf "\n-> Create atchem2 executable\n"
 make
-echo ""
 
 exit 0

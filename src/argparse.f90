@@ -23,7 +23,7 @@ module argparse_mod
   end type flag
 
   ! Arguments for the atchem2 executable
-  type(flag), parameter :: valid_flags(10) = &
+  type(flag), parameter :: valid_flags(9) = &
               [ flag('--help', 'Displays the help message.'), &
                 flag('--model', 'The base directory of the model.'), &
                 flag('--output', 'The destination directory for the model output.' // &
@@ -265,10 +265,8 @@ contains
 
     ! set each of the directory locations from the command-line, following the
     ! defined logic for defaults if some are not supplied
-    model_dir             = read_value_or_default( valid_flags(2)%flag_switch, &
-                                                   'model', names, values )
-    output_dir            = read_value_or_default( valid_flags(3)%flag_switch, &
-                                                   trim(model_dir)//'/output', names, values )
+    model_dir             = read_value_or_default( valid_flags(2)%flag_switch, 'model', names, values )
+    output_dir            = read_value_or_default( valid_flags(3)%flag_switch, trim(model_dir)//'/output', names, values )
     reactionRates_dir     = trim(output_dir)//'/reactionRates'
     configuration_dir     = read_value_or_default( valid_flags(4)%flag_switch, &
                                                    trim(model_dir)//'/configuration', names, values )

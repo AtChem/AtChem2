@@ -28,7 +28,7 @@
 #
 # ARGUMENTS:
 #   1. path to the mechanism .fac file
-#   2. path to the model configuration directory [default: model/configuration/]
+#   2. path to the model configuration directory [default: model/include/]
 #   3. path to the MCM data files directory [default: mcm/]
 # -------------------------------------------------------------------- #
 from __future__ import print_function
@@ -188,7 +188,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
         mech_dir (str): relative or absolute reference to the directory where
                         the mechanism.* files will be created, and where
                         the environmentVariables.config file should be read from
-                        By default it is: model/configuration/
+                        By default it is: model/include/
         mcm_vers (str): relative or absolute reference to the directory containing
                         the reference list of RO2 species (peroxy-radicals_v*)
                         By default it is: mcm/
@@ -613,9 +613,9 @@ def main():
     assert len(sys.argv) > 1, \
         'Enter the filename of a chemical mechanism (.fac or .kpp) as argument:'
     mech_file = sys.argv[1]
-    # config_dir defaults to model/configuration/, if not given as argument
+    # config_dir defaults to model/include/, if not given as argument
     if len(sys.argv) <= 2:
-        config_dir = './model/configuration/'
+        config_dir = './model/include/'
     else:
         config_dir = sys.argv[2]
     # mcm_dir defaults to mcm/, if not given as argument

@@ -20,7 +20,7 @@
 #     Fortran format (mechanism.f90, mechanism.species,
 #     mechanism.reac, mechanism.prod, mechanism.ro2) and the chemical
 #     mechanism shared library (mechanism.so).
-#     By default, argument $2 is: ./model/configuration/
+#     By default, argument $2 is: ./model/include/
 #
 # $3 is the directory of the MCM data files, which contains:
 #    - list of organic peroxy radicals (RO2)
@@ -51,7 +51,7 @@ else
 fi
 
 # set model configuration directory (argument $2)
-CONFIGD="${2:-./model/configuration/}"
+CONFIGD="${2:-./model/include/}"
 printf "\n[*] Configuration directory: %s\n" "$CONFIGD"
 if [ ! -d "$CONFIGD" ]; then
     printf "\n[INPUT ERROR] The configuration directory does not exist.\n"

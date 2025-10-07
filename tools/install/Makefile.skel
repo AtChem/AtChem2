@@ -116,11 +116,11 @@ include tests/makefile.tests
 
 # Default settings:
 # - the mechanism file is: model/mechanism.fac
-# - the mechanism fortran files are created in: model/configuration
-# - the mechanism shared library is: model/configuration/mechanism.so
+# - the mechanism fortran files are created in: model/include
+# - the mechanism shared library is: model/include/mechanism.so
 # - the MCM data files are in: mcm/
 MECHFILE = model/mechanism.fac
-CONFIGDIR = model/configuration
+CONFIGDIR = model/include
 SHAREDLIB = $(CONFIGDIR)/mechanism.so
 MCMDIR = mcm
 
@@ -157,9 +157,9 @@ clean:
 	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
 	rm -f $(CONFIGDIR)/mechanism.{f90,o,prod,reac,ro2,species} $(CONFIGDIR)/customRateFuncs.o \
               model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
-	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
+	rm -f tests/tests/*/*.out tests/tests/*/model/include/mechanism.{f90,o,prod,reac,ro2,so,species} \
               tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
-	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/mechanism.{f90,o,prod,reac,ro2,so,species} \
+	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/include/mechanism.{f90,o,prod,reac,ro2,so,species} \
               $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 

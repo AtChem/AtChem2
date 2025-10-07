@@ -231,7 +231,6 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
                        where the `mechanism.*` and `photolysis-rates` files will
                        be created. By default, it is: model/configuration/include
         mcmV (str): version of the MCM to use. By default, it is: v3.3.1
-
     """
 
     # Get the directory and filename of mechFile, and check that they exist.

@@ -81,7 +81,6 @@ while [ "$#" -gt 0 ]; do
     shift
 done
 
-<<<<<<< HEAD
 # ============================================================ #
 
 # set the chemical mechanism file (`--mechanism=`)

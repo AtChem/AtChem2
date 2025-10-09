@@ -279,7 +279,7 @@ contains
     photo_constraints_dir = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/photolysis', names, values )
     spec_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/species', names, values )
     mcm_dir              = read_value_or_default( valid_flags(9)%flag_switch, 'mcm', names, values )
-    shared_library       = trim(configuration_dir)//'/mechanism.so'
+    shared_library       = trim(configuration_dir)//'/include/mechanism.so'
 
     write (*, '(2A)') ' Model directory is: ', trim( model_dir )
     write (*, '(2A)') ' Output directory is: ', trim( output_dir )

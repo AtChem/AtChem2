@@ -116,19 +116,21 @@ include tests/makefile.tests
 
 # Default settings:
 # - the mechanism file is: model/mechanism.fac
-# - the mechanism fortran files are created in: model/include
-# - the mechanism shared library is: model/include/mechanism.so
+# - the configuration files are in: model/configuration
+# - the mechanism fortran files are created in: model/configuration/include
+# - the mechanism shared library is: model/configuration/include/mechanism.so
 # - the MCM data files are in: mcm/
 MECHFILE = model/mechanism.fac
-CONFIGDIR = model/include
-SHAREDLIB = $(CONFIGDIR)/mechanism.so
+CONFIGDIR = model/configuration
+MECHDIR = $(CONFIGDIR)/include
+SHAREDLIB = $(MECHDIR)/mechanism.so
 MCMDIR = mcm
 
 # mechanism conversion
 MECH_CONVERTER = build/mech_converter.py
-MECH_GEN = $(CONFIGDIR)/mechanism.f90 $(CONFIGDIR)/mechanism.species \
-           $(CONFIGDIR)/mechanism.reac $(CONFIGDIR)/mechanism.prod \
-           $(CONFIGDIR)/mechanism.ro2
+MECH_GEN = $(MECHDIR)/mechanism.f90 $(MECHDIR)/mechanism.species \
+           $(MECHDIR)/mechanism.reac $(MECHDIR)/mechanism.prod \
+           $(MECHDIR)/mechanism.ro2
 
 # the mechanism conversion script is run if the mechanism file ($MECHFILE)
 # has been modified
@@ -136,12 +138,12 @@ $(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
 	python $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(MCMDIR)
 
 # the shared library is rebuilt if the mechanism fortran files (`mechanism.*`)
-# or the `customRateFuncs.f90` file in $CONFIGDIR are modified
+# in $MECHDIR or the `customRateFuncs.f90` file in $CONFIGDIR are modified
 $(SHAREDLIB): $(MECH_GEN)
-	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(OBJ)/dataStructures.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(CONFIGDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -c $(CONFIGDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(CONFIGDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -shared -o $(SHAREDLIB) $(OBJ)/dataStructures.o $(CONFIGDIR)/customRateFuncs.o $(CONFIGDIR)/mechanism.o
+	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/dataStructures.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(MECHDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -shared -o $(SHAREDLIB) $(MECHDIR)/dataStructures.o $(MECHDIR)/customRateFuncs.o $(MECHDIR)/mechanism.o
 
 # ====================== Makefile rules ====================== #
 
@@ -155,7 +157,7 @@ clean:
 	rm -rf build/__pycache__
 	rm -f *.{gcda,gcno,xml} build/*.pyc tests/*.log
 	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
-	rm -f $(CONFIGDIR)/mechanism.{f90,o,prod,reac,ro2,species} $(CONFIGDIR)/customRateFuncs.o \
+	rm -f $(MECHDIR)/mechanism.{f90,o,prod,reac,ro2,species} $(MECHDIR)/customRateFuncs.o \
               model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
 	rm -f tests/tests/*/*.out tests/tests/*/model/include/mechanism.{f90,o,prod,reac,ro2,so,species} \
               tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]

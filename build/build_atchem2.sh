@@ -16,11 +16,11 @@
 # $1 is the chemical mechanism file in FACSIMILE or KPP format.
 #    Argument $1 is NOT optional, and there is no default.
 #
-# $2 is the comfiguration directory for the chemical mechanism in
-#     Fortran format (mechanism.f90, mechanism.species,
-#     mechanism.reac, mechanism.prod, mechanism.ro2) and the chemical
-#     mechanism shared library (mechanism.so).
-#     By default, argument $2 is: ./model/include/
+# $2 is the model comfiguration directory: it contains the `include/` directory
+#    for the chemical mechanism files in Fortran format (`mechanism.f90`,
+#    `mechanism.species`, `mechanism.reac`, `mechanism.prod`, `mechanism.ro2`)
+#    and the chemical mechanism shared library (`mechanism.so`).
+#    By default, argument $2 is: ./model/configuration/
 #
 # $3 is the directory of the MCM data files, which contains:
 #    - list of organic peroxy radicals (RO2)
@@ -51,10 +51,10 @@ else
 fi
 
 # set model configuration directory (argument $2)
-CONFIGD="${2:-./model/include/}"
-printf "\n[*] Configuration directory: %s\n" "$CONFIGD"
+CONFIGD="${2:-./model/configuration/}"
+printf "\n[*] Model configuration directory: %s\n" "$CONFIGD"
 if [ ! -d "$CONFIGD" ]; then
-    printf "\n[INPUT ERROR] The configuration directory does not exist.\n"
+    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n"
     exit 1
 fi
 

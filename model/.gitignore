@@ -2,7 +2,7 @@
 constraints/environment/*
 constraints/photolysis/*
 constraints/species/*
-include/*
+configuration/include/*
 output/*.output
 output/*.pdf
 output/reactionRates/*

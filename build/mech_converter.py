@@ -16,7 +16,7 @@
 # This script converts a chemical mechanism file -- in FACSIMILE (.fac)
 # or KPP (.kpp) format -- into the Fortran-compatible format used by
 # AtChem2.  The script generates 5 files in the model configuration
-# directory:
+# `include/` directory:
 #
 # - mechanism.species
 # - mechanism.reac
@@ -28,7 +28,7 @@
 #
 # ARGUMENTS:
 #   1. path to the mechanism .fac file
-#   2. path to the model configuration directory [default: model/include/]
+#   2. path to the model configuration directory [default: model/configuration/]
 #   3. path to the MCM data files directory [default: mcm/]
 # -------------------------------------------------------------------- #
 from __future__ import print_function
@@ -149,7 +149,7 @@ def separate_stoichiometry(input_species):
                         format: '{input_species}'. Note that species names should
                         not begin with numerical characters.""")
 
-def convert_to_fortran(input_file, mech_dir, mcm_vers):
+def convert_to_fortran(input_file, conf_dir, mcm_vers):
     """
     This function converts a chemical mechanism file into the
     Fortran-compatible format used by the AtChem2 ODE solver. The
@@ -161,36 +161,37 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
       an ID number.
 
     * The equations defined in sections 'Generic Rate Coefficients'
-      and 'Complex reactions' go to the mechanism.f90 file with little
+      and 'Complex reactions' go to the `mechanism.f90` file with little
       more than formatting changes -- each line is replicated in full,
       with each named rate converted to an element in vector q.
 
     * The reaction rates defined in section 'Reaction definitions' go
-      to the mechanism.f90 file as elements of vector p.
+      to the `mechanism.f90` file as elements of vector p.
 
     * The species involved as reactants (respectively products) in the
       reactions in section 'Reaction definitions' are split up into
       individual species, and the species and reactions ID numbers go
-      to mechanism.reac (respectively mechanism.prod). Combining
-      mechanism.reac, mechanism.prod and the last section of
-      mechanism.f90 gives the original information contained in
+      to `mechanism.reac` (respectively `mechanism.prod`). Combining
+      `mechanism.reac`, `mechanism.prod` and the last section of
+      `mechanism.f90` gives the original information contained in
       section 'Reaction definitions' of the .fac file, but in a
       format that AtChem2 can parse.
 
     * The ID numbers and names of all species in the chemical
-      mechanism go to the mechanism.species file.
+      mechanism go to the `mechanism.species` file.
 
     * The ID numbers and names of all RO2 species in section 'Peroxy
-      radicals' go to the mechanism.ro2 file.
+      radicals' go to the `mechanism.ro2` file.
 
     Args:
         input_file (str): relative or absolute reference to the .fac file
-        mech_dir (str): relative or absolute reference to the directory where
-                        the mechanism.* files will be created, and where
-                        the environmentVariables.config file should be read from
-                        By default it is: model/include/
+        conf_dir (str): relative or absolute reference to the configuration
+                        directory where the mechanism.* files will be created
+                        (inside the `include/` sub-directory), and where the
+                        `environmentVariables.config` file should be read from
+                        By default it is: model/configuration/
         mcm_vers (str): relative or absolute reference to the directory containing
-                        the reference list of RO2 species (peroxy-radicals_v*)
+                        the reference list of RO2 species (`peroxy-radicals_v*`)
                         By default it is: mcm/
     """
 
@@ -202,6 +203,8 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     assert os.path.isfile(input_path), \
         'The input file ' + str(input_path) + ' does not exist.'
     print('Chemical mechanism file in:', input_directory)
+
+    mech_dir = os.path.join(conf_dir, 'include/')
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
@@ -290,7 +293,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
 
     # Check the DILUTE environment variable to identify whether dilution should be applied.
     dilute = False
-    with open(mech_dir + '/environmentVariables.config') as env_var_file:
+    with open(conf_dir + '/environmentVariables.config') as env_var_file:
         environmentVariables = env_var_file.readlines()
         for x in environmentVariables:
             x = x.split()
@@ -304,7 +307,7 @@ def convert_to_fortran(input_file, mech_dir, mcm_vers):
     # Read in the names of user-defined custom rate functions and add them
     # to the list of reserved names so that they will be carried through the
     # rate definitions (in a similar manner to LOG10)
-    with open(mech_dir + '/customRateFuncs.f90') as custom_func_file:
+    with open(conf_dir + '/customRateFuncs.f90') as custom_func_file:
         func_def_pat = r'function +([a-zA-Z0-9_]*) *\('
         custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
 
@@ -613,9 +616,9 @@ def main():
     assert len(sys.argv) > 1, \
         'Enter the filename of a chemical mechanism (.fac or .kpp) as argument:'
     mech_file = sys.argv[1]
-    # config_dir defaults to model/include/, if not given as argument
+    # config_dir defaults to model/configuration/, if not given as argument
     if len(sys.argv) <= 2:
-        config_dir = './model/include/'
+        config_dir = './model/configuration/'
     else:
         config_dir = sys.argv[2]
     # mcm_dir defaults to mcm/, if not given as argument

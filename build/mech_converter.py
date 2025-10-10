@@ -223,7 +223,6 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
       to the `photolysis-rates` file in sharedDir.
 
     Args:
-<<<<<<< HEAD
         mechFile (str): relative or absolute reference to the mechanism file
         configDir (str): relative or absolute reference to the configuration
                          directory where the `environmentVariables.config` file
@@ -232,17 +231,6 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
                        where the `mechanism.*` and `photolysis-rates` files will
                        be created. By default, it is: model/configuration/include
         mcmV (str): version of the MCM to use. By default, it is: v3.3.1
-=======
-        input_file (str): relative or absolute reference to the .fac file
-        conf_dir (str): relative or absolute reference to the configuration
-                        directory where the mechanism.* files will be created
-                        (inside the `include/` sub-directory), and where the
-                        `environmentVariables.config` file should be read from
-                        By default it is: model/configuration/
-        mcm_vers (str): relative or absolute reference to the directory containing
-                        the reference list of RO2 species (`peroxy-radicals_v*`)
-                        By default it is: mcm/
->>>>>>> Move include/ into configuration/
     """
 
     # Get the directory and filename of mechFile, and check that they exist.

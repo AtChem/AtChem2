@@ -279,7 +279,8 @@ contains
     photo_constraints_dir = read_value_or_default( valid_flags(7)%flag_switch, trim(constraints_dir)//'/photolysis', names, values )
     spec_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, trim(constraints_dir)//'/species', names, values )
     mcm_dir              = read_value_or_default( valid_flags(9)%flag_switch, 'mcm', names, values )
-    shared_library       = trim(configuration_dir)//'/include/mechanism.so'
+    mechanism_dir        = trim(configuration_dir)//'/include'
+    shared_library       = trim(mechanism_dir)//'/mechanism.so'
 
     write (*, '(2A)') ' Model directory is: ', trim( model_dir )
     write (*, '(2A)') ' Output directory is: ', trim( output_dir )
@@ -290,6 +291,7 @@ contains
     write (*, '(2A)') ' Photolysis Constraints directory is: ', trim( photo_constraints_dir )
     write (*, '(2A)') ' Species Constraints directory is: ', trim( spec_constraints_dir )
     write (*, '(2A)') ' MCM directory is: ', trim( mcm_dir )
+    write (*, '(2A)') ' Mechanism directory is: ', trim( mechanism_dir )
     write (*, '(2A)') ' Shared library is: ', trim( shared_library )
 
   end subroutine get_and_set_directories_from_command_arguments

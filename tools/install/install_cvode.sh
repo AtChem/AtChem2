@@ -18,7 +18,7 @@
 # can be specified by optional input argument `$2`.
 #
 # Website: https://computing.llnl.gov/projects/sundials/
-# Requirements: fortran compiler (default: gfortran), cmake, make
+# Requirements: gcc, fortran, cmake, make
 #
 # Usage:
 #   ./install_cvode.sh ~/path/to/dependencies/directory

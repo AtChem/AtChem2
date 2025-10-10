@@ -187,7 +187,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
         input_file (str): relative or absolute reference to the .fac file
         conf_dir (str): relative or absolute reference to the configuration
                         directory where the mechanism.* files will be created
-                        (inside the `include/` sub-directory), and where the
+                        (inside the `include/` subdirectory), and where the
                         `environmentVariables.config` file should be read from
                         By default it is: model/configuration/
         mcm_vers (str): relative or absolute reference to the directory containing

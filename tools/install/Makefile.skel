@@ -141,7 +141,7 @@ $(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
 # in $MECHDIR or the `customRateFuncs.f90` file in $CONFIGDIR are modified
 $(SHAREDLIB): $(MECH_GEN)
 	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/dataStructures.o -J$(OBJ) -I$(OBJ)
-	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/customRateFuncs.o -J$(OBJ) -I$(OBJ)
+	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/customRateFuncs.o -J$(MECHDIR) -I$(MECHDIR)
 	$(FORT_COMP) -c $(MECHDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(MECHDIR)/mechanism.o -J$(OBJ) -I$(OBJ)
 	$(FORT_COMP) -shared -o $(SHAREDLIB) $(MECHDIR)/dataStructures.o $(MECHDIR)/customRateFuncs.o $(MECHDIR)/mechanism.o
 

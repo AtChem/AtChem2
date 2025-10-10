@@ -11,58 +11,79 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# Script to build and compile AtChem2.
+# Script to build and compile the AtChem2 model. The script accepts four
+# arguments which are provided via script flags, as described below. Three of
+# the arguments are optional and, if not specified, assume the default values.
 #
-<<<<<<< HEAD
-# `$1` is the chemical mechanism file in FACSIMILE or KPP format.
-#      Argument `$1` is NOT optional, and there is no default.
+# `--chemfile` is the chemical mechanism file in FACSIMILE (`.fac`) or
+#    KPP (`.kpp`) format. This argument is not optional.
+#    Default value: NONE.
 #
-# `$2` is the model comfiguration directory, which contanins:
-#        - the model configuration files (`*.config` and `*.parameters`)
-#        - the subdirectory `include/` for the chemical mechanism in Fortran
-#          format (`mechanism.*`) and the pre-compiled mechanism shared
-#          library (`mechanism.so`).
-#      By default, argument `$2` is: ./model/configuration/
+# `--configuration` is the configuration directory, which contains
+#    the model configuration files (`*.config` and `*.parameters`) and
+#    the user-defined functions (`customRateFuncs.f90`).
+#    Default value: ./model/configuration
 #
-# `$3` is the directory of the MCM data files, which contains:
-#        - the reference list of organic peroxy radicals (RO2)
-#        - the empirical parameters to calculate photolysis rates
-#      By default, argument `$3` is: ./mcm/
-=======
-# $1 is the chemical mechanism file in FACSIMILE or KPP format.
-#    Argument $1 is NOT optional, and there is no default.
+# `--mechanism` is the mechanism directory, which contains
+#    the chemical mechanism in Fortran format (`mechanism.*`) and
+#    the mechanism shared library (`mechanism.so`).
+#    Default value: ./model/configuration/include
 #
-# $2 is the model comfiguration directory: it contains the `include/` directory
-#    for the chemical mechanism files in Fortran format (`mechanism.f90`,
-#    `mechanism.species`, `mechanism.reac`, `mechanism.prod`, `mechanism.ro2`)
-#    and the chemical mechanism shared library (`mechanism.so`).
-#    By default, argument $2 is: ./model/configuration/
+# `--mcm` is the MCM version of the chemical mechanism, which sets the
+#    reference list of organic peroxy radicals (RO2) and the empirical
+#    parameters used to calculate the photolysis rates. The corresponding
+#    data files (`peroxy-radicals_*` and `photolysis-rates_*`) are kept
+#    in the `mcm/` directory.
+#    Default value: `v3.3.1`
 #
-# $3 is the directory of the MCM data files, which contains:
-#    - list of organic peroxy radicals (RO2)
-#    - parameters to calculate photolysis rates
-#    By default, argument $3 is: ./mcm/
->>>>>>> 645b82b (Make build process more robust)
+# NB: the script must be run from the Main Directory of AtChem2.
 #
 # Usage:
-#   ./build/build_atchem2.sh /path/to/mechanism/file
-#   OR
-#   ./build/build_atchem2.sh /path/to/mechanism/file /path/to/mechanism/directory
+#   ./build/build_atchem2.sh --chemfile=/path/to/mechanism/file
+#     OR
+#   ./build/build_atchem2.sh --chemfile=/path/to/mechanism/file
+#                            --configuration=/path/to/configuration/directory
+#                            --mechanism=/path/to/mechanism/directory
+#                            --mcm=v3.3.1
 # -----------------------------------------------------------------------------
 set -eu
 
-printf "\n--> Building AtChem2...\n"
+# default values for the script flags
+MECHF=""
+CONFIGD="model/configuration"
+MECHD="model/configuration/include"
+MCMV="v3.3.1"
 
-<<<<<<< HEAD
-# set chemical mechanism file (argument `$1`)
-=======
-# set chemical mechanism file (argument $1)
->>>>>>> 645b82b (Make build process more robust)
-if [ -z "$1" ] ; then
-    printf "\n[INPUT ERROR] Missing argument: chemical mechanism file (.fac/.kpp).\n"
+# parse the script flags
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --chemfile=*)
+            MECHF="${1#*=}"
+            ;;
+        --configuration=*)
+            CONFIGD="${1#*=}"
+            ;;
+        --mechanism=*)
+            MECHD="${1#*=}"
+            ;;
+        --mcm=*)
+            MCMV="${1#*=}"
+            ;;
+        *)
+            printf "\n[INPUT ERROR] Invalid argument: %s\n" $1 >&2
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+# ============================================================ #
+
+# set the chemical mechanism file (`--chemfile=`)
+if [ -z "$MECHF" ] ; then
+    printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n"
     exit 1
 else
-    MECHF="$1"
     if [ ! -f "$MECHF" ]; then
         printf "\n[INPUT ERROR] The chemical mechanism file does not exist.\n"
         exit 1
@@ -71,53 +92,44 @@ else
     fi
 fi
 
-<<<<<<< HEAD
-# set model configuration directory (argument `$2`)
-CONFIGD="${2:-./model/configuration/}"
+# set the model configuration directory (`--configuration=`)
 printf "\n[*] Model configuration directory: %s\n" "$CONFIGD"
 if [ ! -d "$CONFIGD" ]; then
     printf "\n[INPUT ERROR] The model configuration directory does not exist.\n"
     exit 1
 fi
 
-# set MCM data directory (argument `$3`)
-=======
-# set model configuration directory (argument $2)
-CONFIGD="${2:-./model/configuration/}"
-printf "\n[*] Model configuration directory: %s\n" "$CONFIGD"
-if [ ! -d "$CONFIGD" ]; then
-    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n"
+# set the chemical mechanism directory (`--mechanism=`)
+printf "\n[*] Chemical mechanism directory: %s\n" "$MECHD"
+if [ ! -d "$MECHD" ]; then
+    printf "\n[INPUT ERROR] The chemical mechanism directory does not exist.\n"
     exit 1
 fi
 
-# set MCM data directory (argument $3)
->>>>>>> 645b82b (Make build process more robust)
-MCMV="${3:-./mcm/}"
-printf "\n[*] MCM data directory: %s\n" "$MCMV"
-if [ ! -d "$MCMV" ]; then
-    printf "\n[INPUT ERROR] The MCM data directory does not exist.\n"
+# set the MCM version (`--mcm=`)
+printf "\n[*] MCM version: %s\n" "$MCMV"
+if [ "$MCMV" != "v3.3.1" ] && [ "$MCMV" != "v3.2" ] && [ "$MCMV" != "v3.1" ]; then
+    printf "\n[INPUT ERROR] Invalid MCM version. Supported versions: v3.1, v3.2, v3.3.1\n"
     exit 1
 fi
 
-<<<<<<< HEAD
-# compile chemical mechanism shared library (`mechanism.so`)
-=======
-# compile chemical mechanism shared library
->>>>>>> 645b82b (Make build process more robust)
-printf "\n--> Compiling shared library...\n"
-make sharedlib MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MCMDIR="$MCMV"
+# ============================================================ #
+
+# compile the mechanism shared library (`mechanism.so`)
+printf "\n--> Compiling chemical mechanism shared library...\n\n"
+make sharedlib MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MECHDIR="$MECHD" MCMVERS="$MCMV"
 if [ $? -ne 0 ] ; then
-    printf "\n[FAIL] Check output above for details.\n"
+    printf "\n[FAIL] Check error message for details.\n"
     exit 1
 fi
 
-# compile atchem executable
-printf "\n--> Compiling atchem executable...\n"
+# compile the atchem executable
+printf "\n--> Compiling atchem2 executable...\n\n"
 make -j
 if [ $? -ne 0 ] ; then
-    printf "\n[FAIL] Check output above for details.\n"
+    printf "\n[FAIL] Check error message for details.\n"
     exit 1
 fi
 
-printf "\n--> AtChem2 build process successfully completed!\n"
+printf "\n--> AtChem2 build process successfully completed!\n\n"
 exit 0

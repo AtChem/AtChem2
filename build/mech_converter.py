@@ -13,23 +13,25 @@
 # -----------------------------------------------------------------------------
 
 # -------------------------------------------------------------------- #
-# This script converts a chemical mechanism file -- in FACSIMILE (.fac)
-# or KPP (.kpp) format -- into the Fortran-compatible format used by
-# AtChem2.  The script generates 5 files in the model configuration
-# `include/` directory:
-#
-# - mechanism.species
-# - mechanism.reac
-# - mechanism.prod
-# - mechanism.ro2
-# - mechanism.f90
+
+# Script to convert a chemical mechanism file -- in FACSIMILE (.fac) or KPP
+# (.kpp) format -- into the Fortran-compatible format used by AtChem2. The
+# script generates 5 files in the mechanism directory:
+# - `mechanism.species`
+# - `mechanism.reac`
+# - `mechanism.prod`
+# - `mechanism.ro2`
+# - `mechanism.f90`
+# then sets the photolysis rates parameters file (`photolysis-rates` in the
+# mechanism directory ) for the correct version of the MCM.
 #
 # Acknowledgements: B. Nelson, M. Newland, A. Mayhew
 #
 # ARGUMENTS:
-#   1. path to the mechanism .fac file
-#   2. path to the model configuration directory [default: model/configuration/]
-#   3. path to the MCM data files directory [default: mcm/]
+#   1. path to the chemical mechanism file (.fac/.kpp)
+#   2. path to the configuration directory [default: model/configuration]
+#   3. path to the mechanism directory [default: model/configuration/include]
+#   4. version of the  MCM [default: v3.3.1]
 # -------------------------------------------------------------------- #
 from __future__ import print_function
 import os
@@ -121,6 +123,8 @@ def tokenise_and_process(input_string, vars_dict):
     # Return the reconstructed string.
     return new_rhs
 
+# ======================================================
+
 def separate_stoichiometry(input_species):
     """
     This function takes in a string of a species from the mechanism and
@@ -136,82 +140,89 @@ def separate_stoichiometry(input_species):
                             coefficient, and the second (string) is the species name.
     """
 
-    #regex to match the potential coefficient and name sections of the input
+    # regex to match the potential coefficient and name sections of the input
     in_pat = re.compile(r'^ *(\d*\.?\d*) *([a-zA-Z_].*) *$')
     pat_match = in_pat.match(input_species)
     if pat_match:
         if pat_match[1]: #if there is a coefficient passed
             return (float(pat_match[1]), pat_match[2])
-        else: #if there is no coefficient then output an assumed coefficient of 1
+        else: # if there is no coefficient then output an assumed coefficient of 1
             return (1.0, pat_match[2])
     else:
         raise Exception(f"""Reaction species does not match the correct
                         format: '{input_species}'. Note that species names should
                         not begin with numerical characters.""")
 
-def convert_to_fortran(input_file, conf_dir, mcm_vers):
+# ======================================================
+
+def convert_to_fortran(mechFile, configDir, mechDir, mcmV):
     """
-    This function converts a chemical mechanism file into the
-    Fortran-compatible format used by the AtChem2 ODE solver. The
-    function takes as input a file with the chemical mechanism (either
-    a .fac or .kpp file), and generates 5 Fortran files (mechanism.*)
-    in a given directory (mech_dir):
+    This function converts a chemical mechanism file into the Fortran-compatible
+    format used by the AtChem2 ODE solver. The function takes as input a file
+    with the chemical mechanism (either `.fac` or `.kpp`), generates 5 Fortran
+    files (`mechanism.*`) and sets the `photolysis rates` file for the given MCM
+    version in the mechanism directory (mechDir).
 
-    * Each species and reaction in the chemical mechanism is assigned
-      an ID number.
+    * Each species and reaction in the chemical mechanism is assigned an ID
+      number.
 
-    * The equations defined in sections 'Generic Rate Coefficients'
-      and 'Complex reactions' go to the `mechanism.f90` file with little
-      more than formatting changes -- each line is replicated in full,
-      with each named rate converted to an element in vector q.
+    * The equations defined in sections 'Generic Rate Coefficients' and 'Complex
+      reactions' go to the `mechanism.f90` file with little more than formatting
+      changes -- each line is replicated in full, with each named rate converted
+      to an element in vector q.
 
-    * The reaction rates defined in section 'Reaction definitions' go
-      to the `mechanism.f90` file as elements of vector p.
+    * The reaction rates defined in section 'Reaction definitions' go to the
+      `mechanism.f90` file as elements of vector p.
 
-    * The species involved as reactants (respectively products) in the
-      reactions in section 'Reaction definitions' are split up into
-      individual species, and the species and reactions ID numbers go
-      to `mechanism.reac` (respectively `mechanism.prod`). Combining
-      `mechanism.reac`, `mechanism.prod` and the last section of
-      `mechanism.f90` gives the original information contained in
-      section 'Reaction definitions' of the .fac file, but in a
-      format that AtChem2 can parse.
+    * The species involved as reactants (respectively products) in the reactions
+      in section 'Reaction definitions' are split up into individual species,
+      and the species and reactions ID numbers go to `mechanism.reac` or
+      `mechanism.prod` (reactants and products, respectively). Combining
+      `mechanism.reac`, `mechanism.prod` and the last section of `mechanism.f90`
+      gives the original information contained in section 'Reaction definitions'
+      of the .fac file, but in a format that AtChem2 can parse.
 
-    * The ID numbers and names of all species in the chemical
-      mechanism go to the `mechanism.species` file.
+    * The ID numbers and names of all species in the chemical mechanism go to
+      the `mechanism.species` file.
 
-    * The ID numbers and names of all RO2 species in section 'Peroxy
-      radicals' go to the `mechanism.ro2` file.
+    * The ID numbers and names of all RO2 species in section 'Peroxy radicals'
+      go to the `mechanism.ro2` file.
+
+    * The empirical parameters used to calculate the photolysis rates are copied
+      from the reference file of the chosen MCM version (in the `mcm/` directory)
+      to the `photolysis-rates` file in mechDir.
 
     Args:
-        input_file (str): relative or absolute reference to the .fac file
-        conf_dir (str): relative or absolute reference to the configuration
-                        directory where the mechanism.* files will be created
-                        (inside the `include/` sub-directory), and where the
-                        `environmentVariables.config` file should be read from
-                        By default it is: model/configuration/
-        mcm_vers (str): relative or absolute reference to the directory containing
-                        the reference list of RO2 species (`peroxy-radicals_v*`)
-                        By default it is: mcm/
+        mechFile (str): relative or absolute reference to the mechanism file
+        configDir (str): relative or absolute reference to the configuration
+                         directory where the `environmentVariables.config` file
+                         is read from. By default, it is: model/configuration
+        mechDir (str): relative or absolute reference to the mechanism directory
+                       where the `mechanism.*` and `photolysis-rates` files will
+                       be created. By default, it is: model/configuration/include
+        mcmV (str): version of the MCM to use. By default, it is: v3.3.1
+
     """
 
-    # Get the directory and filename of input_file, and check that they exist.
-    input_directory = os.path.dirname(os.path.abspath(input_file))
-    input_filename = os.path.basename(input_file)
-    input_path = os.path.join(input_directory, input_filename)
+    # Get the directory and filename of mechFile, and check that they exist.
+    input_directory = os.path.dirname(os.path.abspath(mechFile))
+    input_filename = os.path.basename(mechFile)
+    input_file = os.path.join(input_directory, input_filename)
 
-    assert os.path.isfile(input_path), \
-        'The input file ' + str(input_path) + ' does not exist.'
+
+    # copy the photolysis parameters reference file to `photolysis-rates` in mechDir
+    os.system(f'cp -f mcm/photolysis-rates_{mcmV} {mechDir}/photolysis-rates')
+
+    assert os.path.isfile(input_file), \
+        'The input file ' + str(input_file) + ' does not exist.'
     print('Chemical mechanism file in:', input_directory)
-
-    mech_dir = os.path.join(conf_dir, 'include/')
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
     if input_filename.split('.')[-1] == 'kpp':
-        input_fac = kpp_conversion.write_fac_file(input_path)
+        input_fac = kpp_conversion.write_fac_file(input_file)
     else:
-        input_fac = input_path
+        input_fac = input_file
 
     # Check and fix the .fac file of any errant newlines (see documentation
     # of `fix_mechanism_fac.py` for more info).
@@ -268,13 +279,9 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
     ro2List = list(filter(None, ro2List))
 
     # Read in the reference list of RO2 species from the MCM (peroxy-radicals_v*).
-    #
     # - the RO2 reference list is specific to each version of the MCM
     # - RO2 lists for versions v3.1, v3.2, v3.3.1 of the MCM are available
-    # - change the filename if using a version of the MCM other than the default (v3.3.1)
-    #
-    # TODO: implement a different way to set the mcm version (see issue #297)
-    with open(os.path.join(mcm_vers, 'peroxy-radicals_v3.3.1'), 'r') as RO2List_file:
+    with open(os.path.join('mcm/peroxy-radicals_'+mcmV), 'r') as RO2List_file:
         RO2List_reference = [r.rstrip() for r in RO2List_file.readlines()]
 
     # Check that each of the RO2s from 'Peroxy radicals' are present
@@ -282,7 +289,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
     # at the top of mechanism.f90 for each errant species.
     print('Looping over inputted RO2s')
 
-    with open(os.path.join(mech_dir, 'mechanism.f90'), 'w') as mech_rates_file:
+    with open(os.path.join(mechDir, 'mechanism.f90'), 'w') as mech_rates_file:
         mech_rates_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
 
         for ro2_species in [element for  element in ro2List if element not in RO2List_reference]:
@@ -293,7 +300,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
 
     # Check the DILUTE environment variable to identify whether dilution should be applied.
     dilute = False
-    with open(conf_dir + '/environmentVariables.config') as env_var_file:
+    with open(os.path.join(configDir, 'environmentVariables.config'), 'r') as env_var_file:
         environmentVariables = env_var_file.readlines()
         for x in environmentVariables:
             x = x.split()
@@ -307,7 +314,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
     # Read in the names of user-defined custom rate functions and add them
     # to the list of reserved names so that they will be carried through the
     # rate definitions (in a similar manner to LOG10)
-    with open(conf_dir + '/customRateFuncs.f90') as custom_func_file:
+    with open(os.path.join(configDir, 'customRateFuncs.f90'), 'r') as custom_func_file:
         func_def_pat = r'function +([a-zA-Z0-9_]*) *\('
         custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
 
@@ -494,7 +501,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
             mech_reac_list.append(str(reactionNumber) + ' ' \
                                   + str(speciesList.index(spec) + 1) + ' 1.0\n')
 
-    with open(os.path.join(mech_dir, 'mechanism.prod'), 'w') as prod_file:
+    with open(os.path.join(mechDir, 'mechanism.prod'), 'w') as prod_file:
         # Output number of species and number of reactions.
         prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) \
                         + ' ' + str(numberOfGenericComplex) \
@@ -503,7 +510,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
         for line in mech_prod_list:
             prod_file.write(line)
 
-    with open(os.path.join(mech_dir, 'mechanism.reac'), 'w') as reac_file:
+    with open(os.path.join(mechDir, 'mechanism.reac'), 'w') as reac_file:
         # Output number of species and number of reactions.
         reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) \
                         + ' ' + str(numberOfGenericComplex) \
@@ -513,7 +520,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
             reac_file.write(line)
 
     # Write speciesList to mechanism.species, indexed by 1 to len(speciesList).
-    with open(os.path.join(mech_dir, 'mechanism.species'), 'w') as species_file:
+    with open(os.path.join(mechDir, 'mechanism.species'), 'w') as species_file:
         for i, x in zip(range(1, len(speciesList) + 1), speciesList):
             species_file.write(str(i) + ' ' + str(x) + '\n')
 
@@ -552,7 +559,7 @@ def convert_to_fortran(input_file, conf_dir, mcm_vers):
     # -------------------------------------------------
 
     # Combine mechanism rates and RO2 sum files.
-    with open(os.path.join(mech_dir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
+    with open(os.path.join(mechDir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
         mech_rates_coeff_file.write("""
 module mechanism_mod
     use, intrinsic :: iso_c_binding
@@ -585,8 +592,8 @@ end module mechanism_mod
     # Finally, now that we have the full list of species, we can output the RO2s to
     # mechanism.ro2: loop over RO2 and write the necessary line to mechanism.ro2,
     # using the species ID number of the RO2.
-    print('Adding RO2s to: ' + mech_dir + '/mechanism.ro2')
-    with open(os.path.join(mech_dir, 'mechanism.ro2'), 'w') as ro2_file:
+    print('Adding RO2s to: ' + mechDir + '/mechanism.ro2')
+    with open(os.path.join(mechDir, 'mechanism.ro2'), 'w') as ro2_file:
         ro2_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
 
         for ro2List_i in ro2List:
@@ -612,29 +619,38 @@ end module mechanism_mod
 
 
 def main():
-    print('Processing chemical mechanism...')
+    print('\t Processing chemical mechanism...')
     assert len(sys.argv) > 1, \
         'Enter the filename of a chemical mechanism (.fac or .kpp) as argument:'
     mech_file = sys.argv[1]
-    # config_dir defaults to model/configuration/, if not given as argument
+    # `config_dir` defaults to `model/configuration`, if not given as argument
     if len(sys.argv) <= 2:
-        config_dir = './model/configuration/'
+        config_dir = 'model/configuration'
     else:
         config_dir = sys.argv[2]
-    # mcm_dir defaults to mcm/, if not given as argument
+    # `mech_dir` defaults to `model/configuration/include`, if not given as argument
     if len(sys.argv) <= 3:
-        mcm_dir = './mcm/'
+        mech_dir = 'model/configuration/include'
     else:
-        mcm_dir = sys.argv[3]
+        mech_dir = sys.argv[3]
+    # `mcm_vers` defaults to `v3.3.1`, if not given as argument
+    if len(sys.argv) <= 4:
+        mcm_vers = 'v3.3.1'
+    else:
+        mcm_vers = sys.argv[4]
 
     # Check that the files and directories exist
     assert os.path.isfile(mech_file), 'Failed to find file ' + mech_file
     assert os.path.exists(config_dir), 'Failed to find directory ' + config_dir
-    assert os.path.exists(mcm_dir), 'Failed to find directory ' + mcm_dir
+    assert os.path.exists(mech_dir), 'Failed to find directory ' + mech_dir
+
+    # Check that the MCM version is supported
+    MCM_VERSIONS = ['v3.1', 'v3.2', 'v3.3.1']
+    assert mcm_vers in MCM_VERSIONS, 'Invalid or unsupported version of the MCM'
 
     # Call the conversion to Fortran function
-    convert_to_fortran(mech_file, config_dir, mcm_dir)
-    print('... chemical mechanism converted to Fortran.')
+    convert_to_fortran(mech_file, config_dir, mech_dir, mcm_vers)
+    print('\t... chemical mechanism converted to Fortran.\n')
 
 # Call the main function if executed as script
 if __name__ == '__main__':

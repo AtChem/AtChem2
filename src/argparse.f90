@@ -265,18 +265,22 @@ contains
 
     ! set each of the directory locations from the command-line, following the
     ! defined logic for defaults if some are not supplied
-    model_dir             = read_value_or_default( valid_flags(2)%flag_switch, 'model', names, values )
-    output_dir            = read_value_or_default( valid_flags(3)%flag_switch, trim(model_dir)//'/output', names, values )
+    model_dir             = read_value_or_default( valid_flags(2)%flag_switch, &
+                                                   'model', names, values )
+    output_dir            = read_value_or_default( valid_flags(3)%flag_switch, &
+                                                   trim(model_dir)//'/output', names, values )
     reactionRates_dir     = trim(output_dir)//'/reactionRates'
     configuration_dir     = read_value_or_default( valid_flags(4)%flag_switch, &
                                                    trim(model_dir)//'/configuration', names, values )
-    constraints_dir       = read_value_or_default( valid_flags(5)%flag_switch, &
+    mechanism_dir         = read_value_or_default( valid_flags(5)%flag_switch, &
+                                                   trim(model_dir)//'/configuration/include', names, values )
+    constraints_dir       = read_value_or_default( valid_flags(6)%flag_switch, &
                                                    trim(model_dir)//'/constraints', names, values )
-    env_constraints_dir   = read_value_or_default( valid_flags(6)%flag_switch, &
+    env_constraints_dir   = read_value_or_default( valid_flags(7)%flag_switch, &
                                                    trim(constraints_dir)//'/environment', names, values )
-    photo_constraints_dir = read_value_or_default( valid_flags(7)%flag_switch, &
+    photo_constraints_dir = read_value_or_default( valid_flags(8)%flag_switch, &
                                                    trim(constraints_dir)//'/photolysis', names, values )
-    spec_constraints_dir  = read_value_or_default( valid_flags(8)%flag_switch, &
+    spec_constraints_dir  = read_value_or_default( valid_flags(9)%flag_switch, &
                                                    trim(constraints_dir)//'/species', names, values )
     shared_lib_dir         = read_value_or_default( valid_flags(9)%flag_switch, &
                                                     trim(model_dir)//'/sharedlib', names, values )
@@ -286,6 +290,7 @@ contains
     write (*, '(2A)') ' Output directory is: ', trim( output_dir )
     write (*, '(2A)') ' Reaction Rates directory is: ', trim( reactionRates_dir )
     write (*, '(2A)') ' Configuration directory is: ', trim( configuration_dir )
+    write (*, '(2A)') ' Mechanism directory is: ', trim( mechanism_dir )
     write (*, '(2A)') ' Constraints directory is: ', trim( constraints_dir )
     write (*, '(2A)') ' Environment Constraints directory is: ', trim( env_constraints_dir )
     write (*, '(2A)') ' Photolysis Constraints directory is: ', trim( photo_constraints_dir )

@@ -297,7 +297,6 @@ contains
     write (*, '(2A)') ' Photolysis Constraints directory is: ', trim( photo_constraints_dir )
     write (*, '(2A)') ' Species Constraints directory is: ', trim( spec_constraints_dir )
     write (*, '(2A)') ' MCM directory is: ', trim( mcm_dir )
-    write (*, '(2A)') ' Mechanism directory is: ', trim( mechanism_dir )
     write (*, '(2A)') ' Shared library is: ', trim( shared_library )
 
   end subroutine get_and_set_directories_from_command_arguments

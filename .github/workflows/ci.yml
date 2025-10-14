@@ -155,11 +155,11 @@ jobs:
           make oldtests   # NB: oldtests will eventually be merged into modeltests
           make modeltests
 
-      # - name: Save log files
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: testsuite-${{ github.run_id }}.log
-      #     path: tests/*.log
+      - name: Save log files
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsuite-${{ github.run_number }}.log
+          path: tests/*.log
 
       # -------------------------------------------------------------
       # (6) Recompile AtChem2 using the code coverage compilation flags,

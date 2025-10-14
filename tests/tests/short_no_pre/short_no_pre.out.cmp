@@ -12,7 +12,7 @@ AtChem2 v1.3-dev
  Photolysis Constraints directory is: tests/tests/short_no_pre/model/constraints/photolysis
  Species Constraints directory is: tests/tests/short_no_pre/model/constraints/species
  MCM directory is: mcm
- Shared library is: tests/tests/short_no_pre/model/configuration/mechanism.so
+ Shared library is: tests/tests/short_no_pre/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

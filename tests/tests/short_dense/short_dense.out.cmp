@@ -12,7 +12,7 @@ AtChem2 v1.3-dev
  Photolysis Constraints directory is: tests/tests/short_dense/model/constraints/photolysis
  Species Constraints directory is: tests/tests/short_dense/model/constraints/species
  MCM directory is: mcm
- Shared library is: tests/tests/short_dense/model/configuration/mechanism.so
+ Shared library is: tests/tests/short_dense/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

@@ -29,14 +29,14 @@ contains
   ! and number of reactions in the system
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
-    use directories_mod, only : configuration_dir
+    use directories_mod, only : mechanism_dir
     use species_mod, only : setNumberOfSpecies, setNumberOfReactions, setNumberOfGenericComplex
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: numSpec, numReac, numGenericComplex
     character(len=maxFilepathLength) :: fileLocation
 
-    fileLocation = trim( configuration_dir ) // '/mechanism.reac'
+    fileLocation = trim( mechanism_dir ) // '/mechanism.reac'
     ! read in mechanism parameters
     call inquire_or_abort( fileLocation, 'readNumberOfSpeciesAndReactions()')
 
@@ -59,7 +59,7 @@ contains
   ! and last line
   subroutine readReactions()
     use types_mod
-    use directories_mod, only : configuration_dir
+    use directories_mod, only : mechanism_dir
     use reaction_structure_mod
 
     integer(kind=NPI) :: lhs_size, rhs_size
@@ -67,10 +67,10 @@ contains
     real(kind=DP) :: m
     integer(kind=IntErr) :: ierr
 
-    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
-    lhs_size = count_lines_in_file( trim( configuration_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
-    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
-    rhs_size = count_lines_in_file( trim( configuration_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
+    lhs_size = count_lines_in_file( trim( mechanism_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
+    rhs_size = count_lines_in_file( trim( mechanism_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
 
     allocate (clhs(2, lhs_size), crhs(2, rhs_size), clcoeff(lhs_size), crcoeff(rhs_size))
 
@@ -78,8 +78,8 @@ contains
     write (*, '(A, I0)') ' Size of rhs = ', rhs_size
     write (*,*)
     write (*, '(A)') ' Reading reactants (lhs) from mechanism.reac...'
-    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.reac', 'readReactions()')
-    open (10, file=trim( configuration_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
+    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.reac', 'readReactions()')
+    open (10, file=trim( mechanism_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
     ! lhs(1, i) contains the reaction number
     ! lhs(2, i) contains the species number of the reactant
@@ -97,8 +97,8 @@ contains
     close (10, status='keep')
 
     write (*, '(A)') ' Reading products (rhs) from mechanism.prod...'
-    call inquire_or_abort( trim( configuration_dir ) // '/mechanism.prod', 'readReactions()')
-    open (11, file=trim( configuration_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
+    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.prod', 'readReactions()')
+    open (11, file=trim( mechanism_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
     ! rhs(1, i) contains the reaction number
     ! rhs(2, i) contains the species number of the product
@@ -125,7 +125,7 @@ contains
   ! Read in all species names and numbers from mechanism.species
   function readSpecies() result ( speciesName )
     use types_mod
-    use directories_mod, only : configuration_dir
+    use directories_mod, only : mechanism_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use species_mod, only : getNumberOfSpecies
 
@@ -134,7 +134,7 @@ contains
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading species names from mechanism.species...'
-    fileLocation=trim( configuration_dir ) // '/mechanism.species'
+    fileLocation=trim( mechanism_dir ) // '/mechanism.species'
     ! Read in species number and name from model/configuration/mechanism.species
     ! to speciesName and sdummy (to be thrown).
     allocate (speciesName(getNumberOfSpecies()))
@@ -1247,13 +1247,13 @@ contains
     use types_mod
     use env_vars_mod, only : ro2Numbers
     use storage_mod, only : maxFilepathLength
-    use directories_mod, only : configuration_dir
+    use directories_mod, only : mechanism_dir
 
     integer(kind=NPI) :: j, numberOfRO2Species
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading ro2 numbers from mechanism.ro2...'
-    fileLocation=trim( configuration_dir ) // '/mechanism.ro2'
+    fileLocation=trim( mechanism_dir ) // '/mechanism.ro2'
 
     ! Read in ro2 species numbers from model/configuration/mechanism.ro2
     ! to ro2Numbers

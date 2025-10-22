@@ -26,5 +26,3 @@ They use a inorganic+ethene mechanism with a runtime of 7.5 hours (15 min timest
 - `spec_model_stoich` is the same as the base case, but the mechanism has been modified  to use stoichometric coefficients (e.g. 'NO + NO = NO2 + NO2' becomes '2 NO = 2 NO2').
 
 - `spec_model_func` is the same as the base case, but the KMT15 rate definition is defined in `customRateFuncs.f90` and not in the chemical mechanism file.
-
-- `spec_model_dilute` is the same as the base case, but applies a diluttion factor of 1e-5 s-1.

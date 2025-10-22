@@ -93,8 +93,9 @@ jobs:
       # -------------------------------------------------------------
       # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
       #
-      # NB: Ruby v3.2 does not work with the current version of FRUIT,
-      #     so v3.0 is used here as a temporary fix
+      # NB: the current version of FRUIT (v3.4.3) does not work with the most
+      #     recent versions of Ruby; as a temporary fix, Ruby v3.0 is used for
+      #     all unit tests in this workflow
       #
       # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
@@ -134,8 +135,10 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (5) Run the Testsuite using the standard compilation flags and
-      #     the default model settings
+      # (5) Run the Testsuite using the standard compilation flags and the
+      #     default model settings, then upload the log files as artifacts
+      #
+      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
 
       - name: Indent and Style tests
         run: |
@@ -145,11 +148,18 @@ jobs:
       - name: Unit and Model tests
         env:
           FORT_VERSION: ${{ matrix.fortran }}
+        # continue-on-error: true
         run: |
           export PATH=$PATH:$PWD/numdiff/bin
           make unittests
           make oldtests   # NB: oldtests will eventually be merged into modeltests
           make modeltests
+
+      - name: Save log files
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsuite_${{ matrix.os }}_fortran-${{ matrix.fortran }}.log
+          path: tests/*.log
 
       # -------------------------------------------------------------
       # (6) Recompile AtChem2 using the code coverage compilation flags,

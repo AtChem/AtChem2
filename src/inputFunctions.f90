@@ -611,7 +611,6 @@ contains
     use types_mod
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
                                      numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
-
     use directories_mod, only : shared_lib_dir
     use storage_mod, only : maxFilepathLength
 

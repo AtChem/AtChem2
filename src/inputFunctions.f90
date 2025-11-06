@@ -262,14 +262,14 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers
-  ! from the first column of mcm/photolysis-rates_v3.3.1 so that we know
+  ! from the first column of `model/configuration/include/photolysis-rates` so that we know
   ! the ID numbers of all photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, &
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : mechanism_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i
@@ -278,7 +278,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( mechanism_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading photolysis numbers from file...'
     call inquire_or_abort( filename, 'readPhotolysisNumbers()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -540,7 +540,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, totalNumPhotos, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotoNames, &
                                      allocate_unconstrained_photolysis_rates_variables
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : mechanism_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i, index, this_ck, this_ck_pos
@@ -548,7 +548,7 @@ contains
     character(len=maxFilepathLength) :: filename, line
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( mechanism_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
     call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -604,7 +604,7 @@ contains
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstant.config doesn't exist/is
   ! empty. It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and
-  ! transmissionFactor from mcm/photolysis-rates_v3.3.1. It uses
+  ! transmissionFactor from `model/configuration/include/photolysis-rates`. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -612,7 +612,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
                                      numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
 
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : mechanism_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i
@@ -620,7 +620,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( mechanism_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readAllPhotolysisRates()')
     numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
@@ -716,7 +716,7 @@ contains
   subroutine readJFacCalculationParameters()
     use types_mod
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : mechanism_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
 
@@ -727,7 +727,7 @@ contains
     !logical :: jFacSpeciesFound
 
     ! Read the config file, counting the lines
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( mechanism_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readJFacCalculationParameters()')
     totalLines = count_lines_in_file( filename, .true. )

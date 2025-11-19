@@ -95,7 +95,7 @@ for test in $1; do
   else   # by default, the chemical mechanism is in FACSIMILE format
       mechanism_file=$TESTS_DIR/$test/$test.fac
   fi
-  ./build/build_atchem2.sh $mechanism_file $TESTS_DIR/$test/configuration/ mcm/ &> /dev/null
+  ./build/build_atchem2.sh --chemfile=$mechanism_file --mechanism=$TESTS_DIR/$test/configuration/include --configuration=$TESTS_DIR/$test/configuration --mcm=v3.3.1 &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo "Building" $test "test failed with exit code" $exitcode >> $LOG_FILE
@@ -103,7 +103,7 @@ for test in $1; do
   fi
   # Run atchem2 with the argument pointing to the output directory
   echo "Running" $TESTS_DIR/$test "..." >> $LOG_FILE
-  ./atchem2 --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/constraints > $TESTS_DIR/$test/$test.out 2>&1
+  ./atchem2 --output=$TESTS_DIR/$test/output --mechanism=$TESTS_DIR/$test/configuration/include --configuration=$TESTS_DIR/$test/configuration --constraints=$TESTS_DIR/$test/constraints > $TESTS_DIR/$test/$test.out 2>&1
 
   # Now begin the process of diffing the screen output file
   echo "Comparing" $TESTS_DIR/$test "..." >> $LOG_FILE

@@ -7,13 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/model_tests/firstorder/output
  Reaction Rates directory is: tests/model_tests/firstorder/output/reactionRates
  Configuration directory is: tests/model_tests/firstorder/configuration
+ Mechanism directory is: tests/model_tests/firstorder/configuration/include
  Constraints directory is: tests/model_tests/firstorder/constraints
  Environment Constraints directory is: tests/model_tests/firstorder/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/firstorder/constraints/photolysis
  Species Constraints directory is: tests/model_tests/firstorder/constraints/species
- MCM directory is: mcm
- Mechanism directory is: tests/model_tests/firstorder/configuration/include
- Shared library is: tests/model_tests/firstorder/configuration/include/mechanism.so
+ Mechanism shared library is: tests/model_tests/firstorder/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

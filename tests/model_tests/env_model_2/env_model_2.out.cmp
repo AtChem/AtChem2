@@ -7,13 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/model_tests/env_model_2/output
  Reaction Rates directory is: tests/model_tests/env_model_2/output/reactionRates
  Configuration directory is: tests/model_tests/env_model_2/configuration
+ Mechanism directory is: tests/model_tests/env_model_2/configuration/include
  Constraints directory is: tests/model_tests/env_model_2/constraints
  Environment Constraints directory is: tests/model_tests/env_model_2/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/env_model_2/constraints/photolysis
  Species Constraints directory is: tests/model_tests/env_model_2/constraints/species
- MCM directory is: mcm
- Mechanism directory is: tests/model_tests/env_model_2/configuration/include
- Shared library is: tests/model_tests/env_model_2/configuration/include/mechanism.so
+ Mechanism shared library is: tests/model_tests/env_model_2/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions
@@ -130,7 +129,7 @@ AtChem2 v1.3-dev
  7      DILUTE                NOTUSED
  8      JFAC                        1
  Reading all photolysis rates from file...
- 1 not found in mcm/photolysis-rates_v3.3.1, so it will be treated as a constant.
+ 1 not found in tests/model_tests/env_model_2/configuration/include/photolysis-rates, so it will be treated as a constant.
  9      ROOF                     OPEN
  10     ASA                   NOTUSED
  Finished reading environment variables.

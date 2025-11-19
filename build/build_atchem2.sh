@@ -115,9 +115,18 @@ fi
 
 # ============================================================ #
 
+# check python version
+PY_LINK=`ls -l $(which python) | grep python2`
+if [ ! -z "$PY_LINK" ]; then
+    PY_BIN=python2
+else
+    PY_BIN=python3
+fi
+printf "\n--> Using %s\n" "$PY_BIN"
+
 # compile the mechanism shared library (`mechanism.so`)
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
-make sharedlib MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MECHDIR="$MECHD" MCMVERS="$MCMV"
+make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MECHDIR="$MECHD" MCMVERS="$MCMV"
 if [ $? -ne 0 ] ; then
     printf "\n[FAIL] Check error message for details.\n"
     exit 1

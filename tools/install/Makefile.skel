@@ -40,17 +40,17 @@ OS := $(shell uname -s)
 ifeq ($(GITHUB_ACTIONS),true)
   ifeq ($(RUNNER_OS),Linux)
     # on Linux, pass gfortran
-    FORT_COMP    = gfortran-$(FORT_VERSION)
+    FORT_COMP = gfortran-$(FORT_VERSION)
   else
     # on macOS, pass homebrew gfortran
-    FORT_COMP    = /usr/local/bin/gfortran-$(FORT_VERSION)
+    FORT_COMP = /usr/local/bin/gfortran-$(FORT_VERSION)
   endif
 # if not on GitHub Actions, set the Fortran compiler
 else
   ifeq ($(FORTC),"gnu")
-    FORT_COMP    = gfortran
+    FORT_COMP = gfortran
   else ifeq ($(FORTC),"intel")
-    FORT_COMP    = ifort
+    FORT_COMP = ifort
   else
     $(error Invalid Fortran compiler. Set $FORTC to "gnu" or "intel".)
   endif
@@ -105,8 +105,8 @@ CORE_SRCS = $(SRC)/dataStructures.f90 $(SRC)/configFunctions.f90 \
             $(SRC)/argparse.f90
 SRCS = $(CORE_SRCS) $(SRC)/atchem2.f90
 
-# the executable is rebuilt every time one of the fortran files (in $SRCS) is
-# modified
+# the executable is rebuilt every time one of the fortran files (in $SRCS)
+# is modified
 $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
@@ -134,10 +134,11 @@ MECH_GEN = $(MECHDIR)/mechanism.f90 $(MECHDIR)/mechanism.species \
            $(MECHDIR)/mechanism.reac $(MECHDIR)/mechanism.prod \
            $(MECHDIR)/mechanism.ro2
 
-# the mechanism conversion script is run if the mechanism file ($MECHFILE)
-# has been modified
+# the mechanism conversion script is run every time the mechanism file ($MECHFILE)
+# is modified
+PYTHON_BIN = python
 $(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
-	python $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(MECHDIR) $(MCMVERS)
+	$(PYTHON_BIN) $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(MECHDIR) $(MCMVERS)
 
 # the mechanism shared library is rebuilt if the fortran files (`mechanism.*`)
 # in $MECHDIR or the `customRateFuncs.f90` file in $CONFIGDIR are modified

@@ -2,6 +2,8 @@
 *.log
 *.out
 *.output
+*.mod
+*.o
 mechanism.f90
 mechanism.o
 mechanism.prod
@@ -10,6 +12,7 @@ mechanism.ro2
 mechanism.species
 mechanism.so
 customRateFuncs.o
+photolysis-rates
 tests/*/output/reactionRates/*
 model_tests/*/output/reactionRates/*
 

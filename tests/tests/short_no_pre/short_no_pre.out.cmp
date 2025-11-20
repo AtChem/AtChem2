@@ -7,13 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/tests/short_no_pre/output
  Reaction Rates directory is: tests/tests/short_no_pre/output/reactionRates
  Configuration directory is: tests/tests/short_no_pre/model/configuration
+ Mechanism directory is: tests/tests/short_no_pre/model/configuration/include
  Constraints directory is: tests/tests/short_no_pre/model/constraints
  Environment Constraints directory is: tests/tests/short_no_pre/model/constraints/environment
  Photolysis Constraints directory is: tests/tests/short_no_pre/model/constraints/photolysis
  Species Constraints directory is: tests/tests/short_no_pre/model/constraints/species
- MCM directory is: mcm
- Mechanism directory is: tests/tests/short_no_pre/model/configuration/include
- Shared library is: tests/tests/short_no_pre/model/configuration/include/mechanism.so
+ Mechanism shared library is: tests/tests/short_no_pre/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

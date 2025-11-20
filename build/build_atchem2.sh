@@ -70,7 +70,7 @@ while [ "$#" -gt 0 ]; do
             MCMV="${1#*=}"
             ;;
         *)
-            printf "\n[INPUT ERROR] Invalid argument: %s\n" $1 >&2
+            printf "\n[INPUT ERROR] Invalid argument: %s\n" "$1" >&2
             exit 1
             ;;
     esac
@@ -116,11 +116,13 @@ fi
 # ============================================================ #
 
 # check python version
-PY_LINK=`ls -l $(which python) | grep python2`
-if [ ! -z "$PY_LINK" ]; then
+if command -v python3 >/dev/null 2>&1; then
+    PY_BIN=python3
+elif command -v python2 >/dev/null 2>&1; then
     PY_BIN=python2
 else
-    PY_BIN=python3
+    printf "\n[ERROR] Neither 'python3' nor 'python2' executable found in PATH.\n" >&2
+    exit 1
 fi
 printf "\n--> Using %s\n" "$PY_BIN"
 

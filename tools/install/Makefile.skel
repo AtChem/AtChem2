@@ -155,16 +155,18 @@ all: $(AOUT)
 sharedlib: $(SHAREDLIB)
 
 clean:
-	rm -f $(AOUT) $(SHAREDLIB)
+	rm -f $(AOUT)
 	rm -f $(OBJ)/*.o $(OBJ)/*.mod
 	rm -rf build/__pycache__
 	rm -f *.{gcda,gcno,xml} build/*.pyc tests/*.log
 	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
-	rm -f $(MECHDIR)/mechanism.{f90,o,prod,reac,ro2,species} $(MECHDIR)/customRateFuncs.o \
+	rm -f $(MECHDIR)/mechanism.{f90,prod,reac,ro2,species} $(MECHDIR)/*.{o,mod,so} \
               model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
-	rm -f tests/tests/*/*.out tests/tests/*/model/include/mechanism.{f90,o,prod,reac,ro2,so,species} \
-              tests/tests/*/output/*.output tests/tests/*/output/reactionRates/*[0-9]
-	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/include/mechanism.{f90,o,prod,reac,ro2,so,species} \
+	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
+              tests/tests/*/model/configuration/include/*.{o,mod,so} \
+              tests/tests/*/output/*.output tests/testsc/*/output/reactionRates/*[0-9]
+	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
+              $(MODELTESTDIR)/*/configuration/include/*.{o,mod,so} \
               $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
 	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 

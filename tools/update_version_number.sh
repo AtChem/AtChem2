@@ -17,8 +17,8 @@
 # ------------------------------------------------------------------ #
 set -eu
 
-VERS_OLD="v1.2.3"
-VERS_NEW="v1.3-dev"
+VERS_OLD="v1.3-dev"
+VERS_NEW="v1.3"
 
 # ignore the .git/ directory, exclude this script and the changelog file
 find ./ -not -path "./.git/*" -type f \

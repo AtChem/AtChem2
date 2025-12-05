@@ -7,12 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/model_tests/spec_model_kpp/output
  Reaction Rates directory is: tests/model_tests/spec_model_kpp/output/reactionRates
  Configuration directory is: tests/model_tests/spec_model_kpp/configuration
- Mechanism directory is: tests/model_tests/spec_model_kpp/configuration/include
  Constraints directory is: tests/model_tests/spec_model_kpp/constraints
  Environment Constraints directory is: tests/model_tests/spec_model_kpp/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/spec_model_kpp/constraints/photolysis
  Species Constraints directory is: tests/model_tests/spec_model_kpp/constraints/species
- Mechanism shared library is: tests/model_tests/spec_model_kpp/configuration/include/mechanism.so
+ Shared Library directory is: tests/model_tests/spec_model_kpp/configuration/include
+ Shared Library is: tests/model_tests/spec_model_kpp/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

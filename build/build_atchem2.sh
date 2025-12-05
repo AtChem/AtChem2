@@ -15,7 +15,7 @@
 # arguments which are provided via script flags, as described below. Three of
 # the arguments are optional and, if not specified, assume the default values.
 #
-# `--chemfile` is the chemical mechanism file in FACSIMILE (`.fac`) or
+# `--mechanism` is the chemical mechanism file in FACSIMILE (`.fac`) or
 #    KPP (`.kpp`) format. This argument is not optional.
 #    Default value: NONE.
 #
@@ -24,9 +24,9 @@
 #    the user-defined functions (`customRateFuncs.f90`).
 #    Default value: ./model/configuration
 #
-# `--mechanism` is the mechanism directory, which contains
+# `--shared_lib` is the shared library directory, which contains
 #    the chemical mechanism in Fortran format (`mechanism.*`) and
-#    the mechanism shared library (`mechanism.so`).
+#    the pre-compiled mechanism shared library (`mechanism.so`).
 #    Default value: ./model/configuration/include
 #
 # `--mcm` is the MCM version of the chemical mechanism, which sets the
@@ -36,14 +36,14 @@
 #    in the `mcm/` directory.
 #    Default value: `v3.3.1`
 #
-# NB: the script must be run from the Main Directory of AtChem2.
+# NB: the script must be run from the *Main Directory* of AtChem2.
 #
 # Usage:
-#   ./build/build_atchem2.sh --chemfile=/path/to/mechanism/file
+#   ./build/build_atchem2.sh --mechanism=/path/to/mechanism/file
 #     OR
-#   ./build/build_atchem2.sh --chemfile=/path/to/mechanism/file
+#   ./build/build_atchem2.sh --mechanism=/path/to/mechanism/file
 #                            --configuration=/path/to/configuration/directory
-#                            --mechanism=/path/to/mechanism/directory
+#                            --shared_lib=/path/to/mechanism/directory
 #                            --mcm=v3.3.1
 # -----------------------------------------------------------------------------
 set -eu
@@ -57,13 +57,13 @@ MCMV="v3.3.1"
 # parse the script flags
 while [ "$#" -gt 0 ]; do
     case "$1" in
-        --chemfile=*)
+        --mechanism=*)
             MECHF="${1#*=}"
             ;;
         --configuration=*)
             CONFIGD="${1#*=}"
             ;;
-        --mechanism=*)
+        --shared_lib=*)
             MECHD="${1#*=}"
             ;;
         --mcm=*)
@@ -79,7 +79,7 @@ done
 
 # ============================================================ #
 
-# set the chemical mechanism file (`--chemfile=`)
+# set the chemical mechanism file (`--mechanism=`)
 if [ -z "$MECHF" ] ; then
     printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n"
     exit 1
@@ -99,10 +99,10 @@ if [ ! -d "$CONFIGD" ]; then
     exit 1
 fi
 
-# set the chemical mechanism directory (`--mechanism=`)
-printf "\n[*] Chemical mechanism directory: %s\n" "$MECHD"
+# set the shared library directory (`--shared_lib=`)
+printf "\n[*] Shared library directory: %s\n" "$MECHD"
 if [ ! -d "$MECHD" ]; then
-    printf "\n[INPUT ERROR] The chemical mechanism directory does not exist.\n"
+    printf "\n[INPUT ERROR] The shared library directory does not exist.\n"
     exit 1
 fi
 
@@ -126,7 +126,7 @@ else
 fi
 printf "\n--> Using %s\n" "$PY_BIN"
 
-# compile the mechanism shared library (`mechanism.so`)
+# compile the chemical mechanism shared library (`mechanism.so`)
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
 make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MECHDIR="$MECHD" MCMVERS="$MCMV"
 if [ $? -ne 0 ] ; then

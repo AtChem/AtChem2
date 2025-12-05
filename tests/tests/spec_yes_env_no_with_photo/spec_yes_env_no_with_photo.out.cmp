@@ -7,12 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/tests/spec_yes_env_no_with_photo/output
  Reaction Rates directory is: tests/tests/spec_yes_env_no_with_photo/output/reactionRates
  Configuration directory is: tests/tests/spec_yes_env_no_with_photo/model/configuration
- Mechanism directory is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include
  Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints
  Environment Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/environment
  Photolysis Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/photolysis
  Species Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/species
- Mechanism shared library is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include/mechanism.so
+ Shared Library directory is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include
+ Shared Library is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

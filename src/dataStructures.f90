@@ -93,10 +93,9 @@ module directories_mod
   save
 
   character(len=maxFilepathLength) :: model_dir, output_dir, reactionRates_dir, &
-                                      configuration_dir, mechanism_dir, &
+                                      configuration_dir, shared_lib_dir, shared_library, &
                                       constraints_dir, env_constraints_dir, &
-                                      photo_constraints_dir, spec_constraints_dir, &
-                                      shared_library
+                                      photo_constraints_dir, spec_constraints_dir
 
 end module directories_mod
 

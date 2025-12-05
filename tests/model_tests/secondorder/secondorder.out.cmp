@@ -7,12 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/model_tests/secondorder/output
  Reaction Rates directory is: tests/model_tests/secondorder/output/reactionRates
  Configuration directory is: tests/model_tests/secondorder/configuration
- Mechanism directory is: tests/model_tests/secondorder/configuration/include
  Constraints directory is: tests/model_tests/secondorder/constraints
  Environment Constraints directory is: tests/model_tests/secondorder/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/secondorder/constraints/photolysis
  Species Constraints directory is: tests/model_tests/secondorder/constraints/species
- Mechanism shared library is: tests/model_tests/secondorder/configuration/include/mechanism.so
+ Shared Library directory is: tests/model_tests/secondorder/configuration/include
+ Shared Library is: tests/model_tests/secondorder/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

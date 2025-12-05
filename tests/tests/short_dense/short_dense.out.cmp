@@ -7,12 +7,12 @@ AtChem2 v1.3-dev
  Output directory is: tests/tests/short_dense/output
  Reaction Rates directory is: tests/tests/short_dense/output/reactionRates
  Configuration directory is: tests/tests/short_dense/model/configuration
- Mechanism directory is: tests/tests/short_dense/model/configuration/include
  Constraints directory is: tests/tests/short_dense/model/constraints
  Environment Constraints directory is: tests/tests/short_dense/model/constraints/environment
  Photolysis Constraints directory is: tests/tests/short_dense/model/constraints/photolysis
  Species Constraints directory is: tests/tests/short_dense/model/constraints/species
- Mechanism shared library is: tests/tests/short_dense/model/configuration/include/mechanism.so
+ Shared Library directory is: tests/tests/short_dense/model/configuration/include
+ Shared Library is: tests/tests/short_dense/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

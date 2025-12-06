@@ -1,19 +1,19 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+# Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 # Peter Jimack, Mike Pilling
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, Beth Nelson,
+# Mike Newland, Alfred Mayhew
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
 # -------------------------------------------------------------------- #
-
 # Script to convert a chemical mechanism file -- in FACSIMILE (.fac) or KPP
 # (.kpp) format -- into the Fortran-compatible format used by AtChem2. The
 # script generates 5 files in the mechanism directory:
@@ -24,8 +24,6 @@
 # - `mechanism.f90`
 # then sets the photolysis rates parameters file (`photolysis-rates` in the
 # mechanism directory ) for the correct version of the MCM.
-#
-# Acknowledgements: B. Nelson, M. Newland, A. Mayhew
 #
 # ARGUMENTS:
 #   1. path to the chemical mechanism file (.fac/.kpp)

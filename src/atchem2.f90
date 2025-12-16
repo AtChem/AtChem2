@@ -41,6 +41,15 @@ PROGRAM ATCHEM2
   use output_functions_mod
   use constraint_functions_mod, only : addConstrainedSpeciesToProbSpec, removeConstrainedSpeciesFromProbSpec
   use solver_functions_mod, only : jfy, proc
+
+  ! Sundials module 
+  use fsundials_core_mod
+  use fnvector_serial_mod
+  use fcvode_mod
+  use fsunlinsol_spgmr_mod
+  use fsunlinsol_dense_mod
+  use fsunmatrix_dense_mod
+  use fsunmatrix_band_mod
   implicit none
 
   ! interface to linux API
@@ -109,6 +118,23 @@ PROGRAM ATCHEM2
   integer :: closure
   integer(c_int), parameter :: rtld_lazy=1 ! value extracted from the C header file
   integer(c_int), parameter :: rtld_now=2 ! value extracted from the C header file
+
+  !sundials declarations
+
+  type(c_ptr) :: sunctx
+  type(N_Vector) :: n_vector_z
+  type(c_ptr) :: cvode_mem
+  type(SUNLinearSolver) :: LS
+  type(SUNMatrix) :: A
+  real(c_double) :: t_arr(1)
+
+  type :: UserData
+    integer :: neq
+    integer :: numReac
+    real(DP) :: rpar
+  end type UserData
+
+  type(UserData), target :: udata
 
   ! *****************************************************************
   ! Explicit declaration of FCVFUN() interface, which is a
@@ -269,10 +295,8 @@ PROGRAM ATCHEM2
   t = modelStartTime
   call calcCurrentDateParameters( t )
   tout = timestepSize + t
-  ! Parameters for FCVMALLOC(). (Comments from cvode guide) meth
-  ! specifies the basic integration: 1 for Adams (nonstiff) or 2 for
-  ! BDF stiff)
-  meth = 2
+  ! Parameters for FCVodeCreate(). Adams (nonstiff) or BDF (stiff)
+  meth = CV_BDF
   ! itmeth specifies the nonlinear iteration method: 1 for functional
   ! iteration or 2 for Newton iteration.
   itmeth = 2
@@ -352,49 +376,73 @@ PROGRAM ATCHEM2
   ! CONFIGURE SOLVER
   ! *****************************************************************
 
+  
+  ier = FSUNContext_Create(0, sunctx)
+  if (ier /= 0) then
+    write(*,*) 'SUNContext creation failed, ier = ', ier
+    stop
+  end if
+
   ipar(1) = neq
   ipar(2) = numReac
 
-  call FNVINITS( 1, neq, ier )
-  if ( ier /= 0 ) then
-    write (stderr, 20) ier
-    20   format (///' SUNDIALS_ERROR: FNVINITS() returned ier = ', I5)
+  n_vector_z = FN_VNew_Serial(neq, sunctx)
+  if (.not. associated(FN_VGetArrayPointer(n_vector_z))) then
+    write(stderr,*) 'SUNDIALS_ERROR: FN_VNew_Serial failed'
     stop
   end if
+
+  ! Initialise the cvode
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   write (*,*)
-  call FCVMALLOC( t, z, meth, itmeth, iatol, rtol, atol, &
-                  iout, rout, ipar, rpar, ier )
-  if ( ier /= 0 ) then
-    write (stderr, 30) ier
-    30   format (///' SUNDIALS_ERROR: FCVMALLOC() returned ier = ', I5)
+  cvode_mem = FCVodeCreate(meth, sunctx)
+  !call FCVMALLOC( , itmeth, iatol,  &
+  !                iout, rout, ipar, rpar, ier )
+  if ( .not. c_associated(cvode_mem) ) then
+    write (stderr,*) 'SUNDIALS_ERROR: FCVodeCreate failed'
     stop
   end if
 
-  call FCVSETIIN( 'MAX_NSTEPS', maxNumInternalSteps, ier )
+  call CVodeInit(cvode_mem, f_rhs, t, n_vector_z, ier)
+  if (ier /= 0) stop 'CVodeInit failed'
+
+  call CVodeSStolerances(cvode_mem, rtol, atol, ier)
+  if (ier /= 0) stop 'Tolerance setup failed'
+
+ ier= FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
   write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
 
-  call FCVSETRIN( 'MAX_STEP', maxStep, ier )
+  ier= FCVodeSetMaxStep(cvode_mem, real(maxStep, kind=C_DOUBLE))
   write (*, '(A, I0)') ' setting maxstep ier = ', ier
   write (*,*)
+
+  udata%neq     = neq
+  udata%numReac = numReac
+  udata%rpar   = rpar(1)
+  call CVodeSetUserData(cvode_mem, c_loc(udata), ier)
+  if (ier /= 0) stop 'User data setup failed'
 
   ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   ! SPGMR SOLVER
   if ( solverType == 1 ) then
-    call FCVSPGMR( 0, 1, lookBack, deltaMain, ier )
+    LS = FSUNLinSol_SPGMR(n_vector_z, SUN_PREC_NONE, int(lookBack, kind=C_INT), sunctx)
+    call CVodeSetLinearSolver(cvode_mem, LS, ier)
     ! SPGMR SOLVER WITH BANDED PRECONDITIONER
   else if ( solverType == 2 ) then
-    call FCVSPGMR( 1, 1, lookBack, deltaMain, ier )
-    call FCVBPINIT( neq, preconBandUpper, preconBandLower, ier )
+    A  = FSUNBandMatrix(neq, preconBandUpper, preconBandLower, sunctx)
+    LS = FSUNLinSol_SPGMR(n_vector_z, SUN_PREC_LEFT, int(lookBack, kind=C_INT), sunctx)
+    call CVodeSetLinearSolver(cvode_mem, LS, ier)
     if ( ier /= 0 ) then
       write (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
-      call FCVFREE()
+      call CVodeFree(cvode_mem)
       stop
     end if
     ! DENSE SOLVER
   else if ( solverType == 3 ) then
-    call FCVDENSE( neq, ier )
+    A  = FSUNDenseMatrix(neq, neq, sunctx)
+    LS = FSUNLinSol_Dense(n_vector_z, A, sunctx)
+    call CVodeSetLinearSolver(cvode_mem, LS, ier)
     ! UNEXPECTED SOLVER TYPE
   else
     write (stderr,*) 'Error with solverType input, input = ', solverType
@@ -404,14 +452,14 @@ PROGRAM ATCHEM2
   ! ERROR HANDLING
   if ( ier /= 0 ) then
     write (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
-    call FCVFREE()
+    call CVodeFree(cvode_mem)
     stop
   end if
 
   if ( ier /= 0 ) then
     write (stderr, 40) ier
     40   format (///' SUNDIALS_ERROR: FCVDENSE() returned ier = ', I5)
-    call FCVFREE()
+    call CVodeFree(cvode_mem)
     stop
   end if
 
@@ -440,10 +488,12 @@ PROGRAM ATCHEM2
     end if
 
     ! Get concentrations for unconstrained species
-    call FCVODE( tout, t, z, itask, ier )
+    t_arr(1) =t
+    ier = FCVode(cvode_mem, tout, n_vector_z, t_arr, itask)
     if ( ier /= 0 ) then
       write (*, '(A, I0)') ' ier POST FCVODE()= ', ier
     end if
+    t = t_arr(1)
     flush(6)
 
     time = nint( t )
@@ -482,7 +532,7 @@ PROGRAM ATCHEM2
       fmt = "(///' SUNDIALS_ERROR: FCVODE() returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
       write (stderr, fmt) ier, iout (15)
       ! free memory
-      call FCVFREE()
+      call CVodeFree(cvode_mem)
       stop
     end if
 
@@ -521,7 +571,7 @@ PROGRAM ATCHEM2
   ! *****************************************************************
 
   ! deallocate CVODE internal data
-  call FCVFREE()
+  call CVodeFree(cvode_mem)
   deallocate (speciesConcs, z)
   deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
   deallocate (detailedRatesSpeciesName, speciesOfInterest)
@@ -626,3 +676,72 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
 end subroutine FCVFUN
 
 ! ******************************************************************** !
+integer(c_int) function f_rhs(t, y, ydot, user_data) bind(C)
+  use iso_c_binding
+  use fnvector_serial_mod
+  use types_mod
+  use constraints_mod, only : getNumberOfConstrainedSpecies, &
+                              numberOfVariableConstrainedSpecies, &
+                              dataFixedY, getConstrainedSpecies, &
+                              setConstrainedConcs
+  use reaction_structure_mod, only : clhs, clcoeff, crhs, crcoeff
+  use interpolation_method_mod, only : getSpeciesInterpMethod
+  use interpolation_functions_mod, only : &
+       getVariableConstrainedSpeciesConcentrationAtT, &
+       getConstrainedPhotoRatesAtT
+  use constraint_functions_mod, only : &
+       addConstrainedSpeciesToProbSpec, &
+       removeConstrainedSpeciesFromProbSpec
+  use solver_functions_mod, only : resid
+  implicit none
+
+  ! --- CVODE arguments ---
+  real(c_double), value, intent(in) :: t
+  type(N_Vector), intent(in)       :: y
+  type(N_Vector), intent(in)       :: ydot
+  type(c_ptr), value , intent(in)  :: user_data
+
+  ! --- local pointers ---
+  real(DP), pointer :: yv(:), ydv(:)
+  type(UserData), pointer :: udata
+
+  ! --- local variables ---
+  integer(NPI) :: numConSpec, np, numReac, i
+  real(DP), allocatable :: dy(:), z(:), constrainedConcs(:)
+
+  ! access user data
+  call c_f_pointer(user_data, udata)
+  numReac = udata%numReac
+
+  ! access N_Vector data
+  call N_VGetArrayPointer(y,    yv)
+  call N_VGetArrayPointer(ydot, ydv)
+
+  numConSpec = getNumberOfConstrainedSpecies()
+  np = size(yv) + numConSpec
+
+  allocate (dy(np), z(np), constrainedConcs(numConSpec))
+
+  ! for each constrained species
+  do i = 1, numConSpec
+    if (i <= numberOfVariableConstrainedSpecies) then
+      call getVariableConstrainedSpeciesConcentrationAtT(t, i, constrainedConcs(i))
+    else
+      constrainedConcs(i) = dataFixedY(i - numberOfVariableConstrainedSpecies)
+    end if
+  end do
+
+  call setConstrainedConcs(constrainedConcs)
+
+  call addConstrainedSpeciesToProbSpec(yv, constrainedConcs, &
+                                       getConstrainedSpecies(), z)
+
+  call resid(numReac, t, z, dy, clhs, clcoeff, crhs, crcoeff)
+
+  call removeConstrainedSpeciesFromProbSpec(dy, &
+                                            getConstrainedSpecies(), ydv)
+
+  deallocate(dy, z, constrainedConcs)
+
+  f_rhs = 0   ! success
+end function f_rhs

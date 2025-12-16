@@ -1,14 +1,11 @@
 ! -----------------------------------------------------------------------------
 !
-! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
-! Peter Jimack, Mike Pilling
-!
-! Copyright (c) 2017 - 2018 Sam Cox, Roberto Sommariva
+! Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 !
 ! This file is part of the AtChem2 software package.
 !
-! This file is covered by the MIT license which can be found in the file
-! LICENSE.md at the top level of the AtChem2 distribution.
+! This file is licensed under the MIT license, which can be found in the file
+! `LICENSE` at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
 
@@ -29,16 +26,15 @@ module argparse_mod
   type(flag), parameter :: valid_flags(9) = &
               [ flag('--help', 'Displays the help message.'), &
                 flag('--model', 'The base directory of the model.'), &
-                flag('--output', 'The destination directory for output. ' // &
+                flag('--output', 'The destination directory for the model output.' // &
                                  'Contains one subdirectory: reactionRates.'), &
-                flag('--configuration', 'The directory for the model configuration. ' // &
-                                        'Contains the shared library: mechanism.so.'), &
-                flag('--constraints', 'The base directory of the model constraints. ' // &
+                flag('--configuration', 'The directory for the model configuration.'), &
+                flag('--constraints', 'The base directory of the model constraints.' // &
                                       'Contains 3 subdirectories: environment, photolysis, and species.'), &
-                flag('--env_constraints', 'The directory containing the environment constraints data.'), &
-                flag('--photo_constraints', 'The directory containing the photolysis constraints data.'), &
-                flag('--spec_constraints', 'The directory containing the species constraints data.'), &
-                flag('--mcm', 'The directory containing the MCM data files.') ]
+                flag('--env_constraints', 'The subdirectory containing the environment constraints data.'), &
+                flag('--photo_constraints', 'The subdirectory containing the photolysis constraints data.'), &
+                flag('--spec_constraints', 'The subdirectory containing the species constraints data.'), &
+                flag('--shared_lib', 'The directory containing the chemical mechanism shared library: mechanism.so.')]
 
 contains
 
@@ -67,13 +63,12 @@ contains
     write(*,*) 'In essence, the directories default to sit in the following tree.'
     write(*,*) 'Modification via the input parameters cascades to lower directories, but is overwritten by explicit input.'
     write(*,*)
-    write(*,*) '                                      +--------------------+'
-    write(*,*) '                                      |                    |'
-    write(*,*) '                                  model_dir             mcm_dir'
-    write(*,*) '                                      | '
-    write(*,*) '     +--------------------------------+--------------------------------+'
-    write(*,*) '     |                                |                                |'
-    write(*,*) ' output_dir                    constraints_dir                 configuration_dir'
+    write(*,*) '                                  model_dir'
+    write(*,*) '                                      |'
+    write(*,*) '     +--------------------------------+-------------------------+--------------------+'
+    write(*,*) '     |                                |                         |                    |'
+    write(*,*) ' output_dir                    constraints_dir          configuration_dir      shared_lib_dir'
+    write(*,*) '                                      |'
     write(*,*) '                                      |'
     write(*,*) '             +------------------------+------------------------+'
     write(*,*) '             |                        |                        |'
@@ -285,10 +280,9 @@ contains
                                                    trim(constraints_dir)//'/photolysis', names, values )
     spec_constraints_dir  = read_value_or_default( valid_flags(8)%flag_switch, &
                                                    trim(constraints_dir)//'/species', names, values )
-    mcm_dir               = read_value_or_default( valid_flags(9)%flag_switch, &
-                                                   'mcm', names, values )
-    mechanism_dir         = trim(configuration_dir)//'/include'
-    shared_library        = trim(mechanism_dir)//'/mechanism.so'
+    shared_lib_dir         = read_value_or_default( valid_flags(9)%flag_switch, &
+                                                    trim(model_dir)//'/configuration/include', names, values )
+    shared_library        = trim(shared_lib_dir)//'/mechanism.so'
 
     write (*, '(2A)') ' Model directory is: ', trim( model_dir )
     write (*, '(2A)') ' Output directory is: ', trim( output_dir )
@@ -298,9 +292,8 @@ contains
     write (*, '(2A)') ' Environment Constraints directory is: ', trim( env_constraints_dir )
     write (*, '(2A)') ' Photolysis Constraints directory is: ', trim( photo_constraints_dir )
     write (*, '(2A)') ' Species Constraints directory is: ', trim( spec_constraints_dir )
-    write (*, '(2A)') ' MCM directory is: ', trim( mcm_dir )
-    write (*, '(2A)') ' Mechanism directory is: ', trim( mechanism_dir )
-    write (*, '(2A)') ' Shared library is: ', trim( shared_library )
+    write (*, '(2A)') ' Shared Library directory is: ', trim( shared_lib_dir )
+    write (*, '(2A)') ' Shared Library is: ', trim( shared_library )
 
   end subroutine get_and_set_directories_from_command_arguments
 

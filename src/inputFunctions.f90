@@ -1,14 +1,14 @@
 ! -----------------------------------------------------------------------------
 !
-! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+! Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 ! Peter Jimack, Mike Pilling
 !
-! Copyright (c) 2017 Sam Cox, Roberto Sommariva
+! Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 !
 ! This file is part of the AtChem2 software package.
 !
-! This file is covered by the MIT license which can be found in the file
-! LICENSE.md at the top level of the AtChem2 distribution.
+! This file is licensed under the MIT license, which can be found in the file
+! `LICENSE` at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
 
@@ -29,14 +29,14 @@ contains
   ! and number of reactions in the system
   subroutine readNumberOfSpeciesAndReactions()
     use types_mod
-    use directories_mod, only : mechanism_dir
+    use directories_mod, only : shared_lib_dir
     use species_mod, only : setNumberOfSpecies, setNumberOfReactions, setNumberOfGenericComplex
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: numSpec, numReac, numGenericComplex
     character(len=maxFilepathLength) :: fileLocation
 
-    fileLocation = trim( mechanism_dir ) // '/mechanism.reac'
+    fileLocation = trim( shared_lib_dir ) // '/mechanism.reac'
     ! read in mechanism parameters
     call inquire_or_abort( fileLocation, 'readNumberOfSpeciesAndReactions()')
 
@@ -59,7 +59,7 @@ contains
   ! and last line
   subroutine readReactions()
     use types_mod
-    use directories_mod, only : mechanism_dir
+    use directories_mod, only : shared_lib_dir
     use reaction_structure_mod
 
     integer(kind=NPI) :: lhs_size, rhs_size
@@ -67,10 +67,10 @@ contains
     real(kind=DP) :: m
     integer(kind=IntErr) :: ierr
 
-    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
-    lhs_size = count_lines_in_file( trim( mechanism_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
-    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
-    rhs_size = count_lines_in_file( trim( mechanism_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( shared_lib_dir ) // '/mechanism.reac', 'getReactantAndProductListSizes()')
+    lhs_size = count_lines_in_file( trim( shared_lib_dir ) // '/mechanism.reac', skip_first_line_in=.true. )
+    call inquire_or_abort( trim( shared_lib_dir ) // '/mechanism.prod', 'getReactantAndProductListSizes()')
+    rhs_size = count_lines_in_file( trim( shared_lib_dir ) // '/mechanism.prod', skip_first_line_in=.true. )
 
     allocate (clhs(2, lhs_size), crhs(2, rhs_size), clcoeff(lhs_size), crcoeff(rhs_size))
 
@@ -78,8 +78,8 @@ contains
     write (*, '(A, I0)') ' Size of rhs = ', rhs_size
     write (*,*)
     write (*, '(A)') ' Reading reactants (lhs) from mechanism.reac...'
-    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.reac', 'readReactions()')
-    open (10, file=trim( mechanism_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
+    call inquire_or_abort( trim( shared_lib_dir ) // '/mechanism.reac', 'readReactions()')
+    open (10, file=trim( shared_lib_dir ) // '/mechanism.reac', status='old') ! input file for lhs of equations
     ! read data for lhs of equations
     ! lhs(1, i) contains the reaction number
     ! lhs(2, i) contains the species number of the reactant
@@ -97,8 +97,8 @@ contains
     close (10, status='keep')
 
     write (*, '(A)') ' Reading products (rhs) from mechanism.prod...'
-    call inquire_or_abort( trim( mechanism_dir ) // '/mechanism.prod', 'readReactions()')
-    open (11, file=trim( mechanism_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
+    call inquire_or_abort( trim( shared_lib_dir ) // '/mechanism.prod', 'readReactions()')
+    open (11, file=trim( shared_lib_dir ) // '/mechanism.prod', status='old') ! input file for rhs of equations
     ! read data for rhs of equations
     ! rhs(1, i) contains the reaction number
     ! rhs(2, i) contains the species number of the product
@@ -125,7 +125,7 @@ contains
   ! Read in all species names and numbers from mechanism.species
   function readSpecies() result ( speciesName )
     use types_mod
-    use directories_mod, only : mechanism_dir
+    use directories_mod, only : shared_lib_dir
     use storage_mod, only : maxSpecLength, maxFilepathLength
     use species_mod, only : getNumberOfSpecies
 
@@ -134,7 +134,7 @@ contains
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading species names from mechanism.species...'
-    fileLocation=trim( mechanism_dir ) // '/mechanism.species'
+    fileLocation=trim( shared_lib_dir ) // '/mechanism.species'
     ! Read in species number and name from model/configuration/mechanism.species
     ! to speciesName and sdummy (to be thrown).
     allocate (speciesName(getNumberOfSpecies()))
@@ -262,14 +262,14 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers
-  ! from the first column of mcm/photolysis-rates_v3.3.1 so that we know
+  ! from the first column of `model/configuration/include/photolysis-rates` so that we know
   ! the ID numbers of all photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
     use types_mod
     use photolysis_rates_mod, only : totalNumPhotos, photoNumbers, &
                                      allocate_photolysis_numbers_variables, allocate_photolysis_j
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : shared_lib_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i
@@ -278,7 +278,7 @@ contains
     logical :: allocated = .false.
     logical :: allocated_j = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( shared_lib_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading photolysis numbers from file...'
     call inquire_or_abort( filename, 'readPhotolysisNumbers()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -540,7 +540,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, transmissionFactor, totalNumPhotos, &
                                      numUnconstrainedPhotoRates, unconstrainedPhotoNumbers, unconstrainedPhotoNames, &
                                      allocate_unconstrained_photolysis_rates_variables
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : shared_lib_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i, index, this_ck, this_ck_pos
@@ -548,7 +548,7 @@ contains
     character(len=maxFilepathLength) :: filename, line
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( shared_lib_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading unconstrained photolysis rates from file...'
     call inquire_or_abort( filename, 'readUnconstrainedPhotolysisRates()')
     totalNumPhotos = count_lines_in_file( filename, .true. )
@@ -604,7 +604,7 @@ contains
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstant.config doesn't exist/is
   ! empty. It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and
-  ! transmissionFactor from mcm/photolysis-rates_v3.3.1. It uses
+  ! transmissionFactor from `model/configuration/include/photolysis-rates`. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -612,7 +612,7 @@ contains
     use photolysis_rates_mod, only : ck, cl, cmm, cnn, unconstrainedPhotoNames, transmissionFactor, &
                                      numUnconstrainedPhotoRates, allocate_unconstrained_photolysis_rates_variables
 
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : shared_lib_dir
     use storage_mod, only : maxFilepathLength
 
     integer(kind=NPI) :: i
@@ -620,7 +620,7 @@ contains
     character(len=maxFilepathLength) :: filename
     logical :: allocated = .false.
 
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( shared_lib_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readAllPhotolysisRates()')
     numUnconstrainedPhotoRates = count_lines_in_file( filename, .true. )
@@ -716,7 +716,7 @@ contains
   subroutine readJFacCalculationParameters()
     use types_mod
     use storage_mod, only : maxFilepathLength, maxPhotoRateNameLength
-    use directories_mod, only : mcm_dir
+    use directories_mod, only : shared_lib_dir
     use photolysis_rates_mod, only : jFacSpecies, jFacSpeciesFound, &
                                      jFacL, jFacM, jFacN, jFacTransmissionFactor
 
@@ -727,7 +727,7 @@ contains
     !logical :: jFacSpeciesFound
 
     ! Read the config file, counting the lines
-    filename = trim( mcm_dir ) // '/photolysis-rates_v3.3.1'
+    filename = trim( shared_lib_dir ) // '/photolysis-rates'
     write (*, '(A)') ' Reading all photolysis rates from file...'
     call inquire_or_abort( filename, 'readJFacCalculationParameters()')
     totalLines = count_lines_in_file( filename, .true. )
@@ -1247,13 +1247,13 @@ contains
     use types_mod
     use env_vars_mod, only : ro2Numbers
     use storage_mod, only : maxFilepathLength
-    use directories_mod, only : mechanism_dir
+    use directories_mod, only : shared_lib_dir
 
     integer(kind=NPI) :: j, numberOfRO2Species
     character(len=maxFilepathLength) :: fileLocation
 
     write (*, '(A)') ' Reading ro2 numbers from mechanism.ro2...'
-    fileLocation=trim( mechanism_dir ) // '/mechanism.ro2'
+    fileLocation=trim( shared_lib_dir ) // '/mechanism.ro2'
 
     ! Read in ro2 species numbers from model/configuration/mechanism.ro2
     ! to ro2Numbers

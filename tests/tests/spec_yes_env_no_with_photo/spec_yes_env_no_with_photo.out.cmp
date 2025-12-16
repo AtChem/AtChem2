@@ -11,9 +11,8 @@ AtChem2 v1.3-dev
  Environment Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/environment
  Photolysis Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/photolysis
  Species Constraints directory is: tests/tests/spec_yes_env_no_with_photo/model/constraints/species
- MCM directory is: mcm
- Mechanism directory is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include
- Shared library is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include/mechanism.so
+ Shared Library directory is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include
+ Shared Library is: tests/tests/spec_yes_env_no_with_photo/model/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions

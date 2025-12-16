@@ -11,9 +11,8 @@ AtChem2 v1.3-dev
  Environment Constraints directory is: tests/model_tests/static/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/static/constraints/photolysis
  Species Constraints directory is: tests/model_tests/static/constraints/species
- MCM directory is: mcm
- Mechanism directory is: tests/model_tests/static/configuration/include
- Shared library is: tests/model_tests/static/configuration/include/mechanism.so
+ Shared Library directory is: tests/model_tests/static/configuration/include
+ Shared Library is: tests/model_tests/static/configuration/include/mechanism.so
 
 -----------------------
  Species and reactions
@@ -276,5 +275,5 @@ AtChem2 v1.3-dev
  No. nonlinear convergence failures = 0
  No. error test failures = 0
 
- Runtime = 1
+ Runtime = 0
  Deallocating memory.

@@ -1,12 +1,12 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ for test in $1; do
   test_counter=$((test_counter+1))
   echo "" >> $LOG_FILE
   echo "Set up and make" $TESTS_DIR/$test >> $LOG_FILE
-  ./build/build_atchem2.sh $TESTS_DIR/$test/model/configuration/$test.fac $TESTS_DIR/$test/model/configuration/ mcm/ &> /dev/null
+  ./build/build_atchem2.sh --mechanism=$TESTS_DIR/$test/model/configuration/$test.fac --shared_lib=$TESTS_DIR/$test/model/configuration/include --configuration=$TESTS_DIR/$test/model/configuration --mcm=v3.3.1 &> /dev/null
   exitcode=$?
   if [ $exitcode -ne 0 ]; then
     echo "Building" $test "test failed with exit code" $exitcode >> $LOG_FILE
@@ -98,7 +98,7 @@ for test in $1; do
   fi
   # Run atchem2 with the argument pointing to the output directory
   echo "Running" $TESTS_DIR/$test "..." >> $LOG_FILE
-  ./atchem2 --output=$TESTS_DIR/$test/output --configuration=$TESTS_DIR/$test/model/configuration --mcm=mcm --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out 2>&1
+  ./atchem2 --output=$TESTS_DIR/$test/output --shared_lib=$TESTS_DIR/$test/model/configuration/include --configuration=$TESTS_DIR/$test/model/configuration --constraints=$TESTS_DIR/$test/model/constraints > $TESTS_DIR/$test/$test.out 2>&1
 
   # Now begin the process of diffing the screen output file
   echo "Comparing" $TESTS_DIR/$test "..." >> $LOG_FILE

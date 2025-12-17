@@ -63,46 +63,91 @@ contains
     return
   end subroutine outputEnvVar
 
-  ! -----------------------------------------------------------------
-  ! Write parameters output by CVODE solver to file.
-  subroutine outputSolverParameters( t, prev, this, array, solver_type )
-    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
-    use types_mod
+  subroutine PrintFinalStats(cvode_mem)
 
-    real(kind=DP), intent(in) :: t, prev, this
-    integer(kind=NPI), intent(in) :: array(:)
-    integer(kind=SI), intent(in) :: solver_type
-    integer(kind=SI) :: i
-    logical :: first_time = .true.
+    !======= Inclusions ===========
+    use iso_c_binding
+    use fcvode_mod
 
-    if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
-      ! CVSPILS type solver
-      if ( first_time .eqv. .true. ) then
-        write (57, '(A9, 2A17, 20A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
-                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
-                                        'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
-        first_time = .false.
-      end if
-      write (57, '(1P e9.2, 2 (ES17.8E3), 20I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 21)
+    !======= Declarations =========
+    implicit none
 
-    else if ( solver_type == 3 ) then
-      ! CVDLS type solver
-      if ( first_time .eqv. .true. ) then
-        write (57, '(A9, 2A17, 16A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
-                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
-                                        'LS_FLAG', 'NFELS', 'NJE'
-        first_time = .false.
-      end if
-      write (57, '(1P e9.2, 2 (ES17.8E3), 16I9) ') t, prev, this, (array(i), i = 1, 11), (array(i), i = 13, 17)
+    type(c_ptr), intent(in) :: cvode_mem ! solver memory structure
 
-    else
-      write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
-      write (stderr,*) 'Available options are 1, 2, 3.'
-      stop
+    integer(c_int)  :: retval          ! error flag
+
+    integer(c_long) :: nsteps(1)     ! num steps
+    integer(c_long) :: nfe(1)        ! num function evals
+    integer(c_long) :: netfails(1)   ! num error test fails
+    integer(c_long) :: nniters(1)    ! nonlinear solver iterations
+    integer(c_long) :: nncfails(1)   ! nonlinear solver fails
+    integer(c_long) :: njacevals(1)  ! number of Jacobian evaluations
+    integer(c_long) :: nluevals(1)   ! number of LU evals
+    integer(c_long) :: ngevals(1)    ! number of root evals
+
+    !======= Internals ============
+
+    retval = FCVodeGetNumSteps(cvode_mem, nsteps)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumSteps, retval = ', retval, '; halting'
+      stop 1
     end if
 
+    retval = FCVodeGetNumRhsEvals(cvode_mem, nfe)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumRhsEvals, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumLinSolvSetups(cvode_mem, nluevals)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumLinSolvSetups, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumErrTestFails(cvode_mem, netfails)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumErrTestFails, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumNonlinSolvIters(cvode_mem, nniters)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumNonlinSolvIters, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumNonlinSolvConvFails(cvode_mem, nncfails)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumNonlinSolvConvFails, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumJacEvals(cvode_mem, njacevals)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumJacEvals, retval = ', retval, '; halting'
+      stop 1
+    end if
+
+    retval = FCVodeGetNumGEvals(cvode_mem, ngevals)
+    if (retval /= 0) then
+      print *, 'Error in FCVodeGetNumGEvals, retval = ', retval, '; halting'
+      stop 1
+    end if
+  
+    print '(4x,A,i9)', 'Total internal steps taken    =', nsteps
+    print '(4x,A,i9)', 'Total rhs function calls      =', nfe
+    print '(4x,A,i9)', 'Total Jacobian function calls =', njacevals
+    print '(4x,A,i9)', 'Total root function calls     =', ngevals
+    print '(4x,A,i9)', 'Total LU function calls       =', nluevals
+    print '(4x,A,i9)', 'Num error test failures       =', netfails
+    print '(4x,A,i9)', 'Num nonlinear solver iters    =', nniters
+    print '(4x,A,i9)', 'Num nonlinear solver fails    =', nncfails
+    print *, ' '
+
     return
-  end subroutine outputSolverParameters
+
+  end subroutine PrintFinalStats
 
   ! -----------------------------------------------------------------
   ! Write parameters used in calculation of photolysis rates to file.

@@ -62,6 +62,7 @@ PROGRAM ATCHEM2
   use fsunlinsol_dense_mod
   use fsunmatrix_dense_mod
   use fsunmatrix_band_mod
+  use fsunlinsol_band_mod  
   implicit none
 
   ! interface to linux API
@@ -98,10 +99,10 @@ PROGRAM ATCHEM2
   ! Declarations for solver parameters
   integer(kind=QI) :: ier
   integer :: meth, itmeth, iatol, itask, currentNumTimestep
-  integer(kind=NPI) :: iout(21), ipar(10)
+  integer(kind=NPI) :: ipar(10)
   integer(kind=NPI) :: neq
   real(kind=DP) :: t, tout
-  real(kind=DP) :: rout(6), rpar(1)
+  real(kind=DP) :: rpar(1)
 
   ! Walltime variables
   integer(kind=QI) :: runStart, runEnd, runTime, clockRate
@@ -133,11 +134,11 @@ PROGRAM ATCHEM2
 
   !sundials declarations
 
-  type(c_ptr) :: sunctx
-  type(N_Vector) :: n_vector_z
-  type(c_ptr) :: cvode_mem
-  type(SUNLinearSolver) :: LS
-  type(SUNMatrix), pointer :: A
+  type(c_ptr)     :: ctx        ! SUNDIALS context for the simulation
+  type(N_Vector), pointer :: sunvec_u      ! sundials vector
+  type(SUNLinearSolver), pointer :: sunls         ! sundials linear solver
+  type(SUNMatrix), pointer :: sunmat_A      ! sundials matrix (empty)
+  type(c_ptr)                    :: cvode_mem     ! CVODE memory
   real(c_double) :: t_arr(1)
 
   type(UserData), target :: udata
@@ -147,7 +148,7 @@ PROGRAM ATCHEM2
   ! user-supplied function to CVODE.
   interface
 
-    subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
+    subroutine FCVFUN(t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species_mod
       use constraints_mod
@@ -155,17 +156,12 @@ PROGRAM ATCHEM2
       use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
       use constraint_functions_mod
 
-      ! Fortran routine for right-hand side function.
-      real(kind=DP), intent(in) :: t, y(*)
-      real(kind=DP), intent(out) :: ydot(*)
+      real(kind=DP), intent(in) :: t
+      real(kind=DP), intent(inout) :: y(*)
+      real(kind=DP), intent(inout) :: ydot(*)
       integer(kind=NPI), intent(in) :: ipar(*)
       real(kind=DP), intent(in) :: rpar(*)
       integer(kind=NPI), intent(out) :: ier
-
-      integer(kind=NPI) :: nConSpec, np, numReac
-      real(kind=DP) :: concAtT, dummy
-      real(kind=DP), allocatable :: dy(:), z(:)
-      integer(kind=NPI) :: i
     end subroutine FCVFUN
 
   integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
@@ -175,12 +171,11 @@ PROGRAM ATCHEM2
 
     implicit none
 
-    real(c_double), value :: t
-    type(N_Vector)        :: y
-    type(N_Vector)        :: ydot
-    type(c_ptr), value    :: user_data
+    real(c_double), value, intent(in) :: t
+    type(N_Vector), intent(inout)        :: y
+    type(N_Vector), intent(inout)        :: ydot
+    type(c_ptr), value, intent(in)    :: user_data
   end function rhs_fn
-
 
   end interface
 
@@ -191,9 +186,7 @@ PROGRAM ATCHEM2
   call SYSTEM_CLOCK( runStart )
 
   ! Initialise some variables used by CVODE functions to invalid values
-  iout(:) = -1_NPI
   ipar(:) = -1_NPI
-  rout(:) = -1.0_DP
   rpar(:) = -1.0_DP
 
   write (*, '(A)') 'AtChem2 v1.3-dev'
@@ -397,12 +390,14 @@ PROGRAM ATCHEM2
   ! *****************************************************************
 
   
-  ier = FSUNContext_Create(0, sunctx)
-  if (ier /= 0) then
-    write(*,*) 'SUNContext creation failed, ier = ', ier
-    stop
-  end if
+  !ier = FSUNContext_Create(0, sunctx)
+  !if (ier /= 0) then
+  !  write(*,*) 'SUNContext creation failed, ier = ', ier
+  !  stop
+  !end if
 
+  ! create the SUNDIALS context
+  ier = FSUNContext_Create(SUN_COMM_NULL, ctx)
   ipar(1) = neq
   ipar(2) = numReac
 
@@ -412,77 +407,106 @@ PROGRAM ATCHEM2
   !  stop
   !end if
 
+  ! create SUNDIALS N_Vector
+  sunvec_u => FN_VMake_Serial(neq, z, ctx)
+  if (.not. associated(sunvec_u)) then
+    print *, 'ERROR: sunvec = NULL'
+    stop 1
+  end if
+
   ! Initialise the cvode
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   write (*,*)
-  cvode_mem = FCVodeCreate(meth, sunctx)
-  !call FCVMALLOC( , itmeth, iatol,  &
-  !                iout, rout, ipar, rpar, ier )
-  if ( .not. c_associated(cvode_mem) ) then
-    write (stderr,*) 'SUNDIALS_ERROR: FCVodeCreate failed'
-    stop
-  end if
+  !cvode_mem = FCVodeCreate(meth, sunctx)
+  !!call FCVMALLOC( , itmeth, iatol,  &
+  !!                 rout, ipar, rpar, ier )
+  !if ( .not. c_associated(cvode_mem) ) then
+  !  write (stderr,*) 'SUNDIALS_ERROR: FCVodeCreate failed'
+  !  stop
+  !end if
+  
+  ! create and initialize CVode memory
+  cvode_mem = FCVodeCreate(meth, ctx)
+  if (.not. c_associated(cvode_mem)) print *, 'ERROR: cvode_mem = NULL'
 
   !ier = FCVodeInit(cvode_mem, c_funloc(rhs_fn), t, n_vector_z)
   !if (ier /= 0) stop 'CVodeInit failed'
+  
+  ier = FCVodeInit(cvode_mem, c_funloc(rhs_fn), t, sunvec_u)
+  if (ier /= 0) then
+    print *, 'Error in FCVodeInit, ierr = ', ier, '; halting'
+    stop 1
+  end if
 !
   !ier = FCVodeSStolerances(cvode_mem, rtol, atol)
   !if (ier /= 0) stop 'Tolerance setup failed'
-!
+  
+  ier = FCVodeSStolerances(cvode_mem, rtol, atol)
+  if (ier /= 0) then
+    print *, 'Error in FCVodeSStolerances, ierr = ', ier, '; halting'
+    stop 1
+  end if
+
   !ier = FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
   !write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
-!
-  !ier = FCVodeSetMaxStep(cvode_mem, real(maxStep, kind=C_DOUBLE))
-  !write (*, '(A, I0)') ' setting maxstep ier = ', ier
-  !write (*,*)
-!
-  !udata%ipar   = ipar
-  !udata%rpar   = rpar
-!
-  !ier = FCVodeSetUserData(cvode_mem, c_loc(udata))
-  !if (ier /= 0) stop 'User data setup failed'
+  
+  ier = FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
+  if (ier /= 0) then
+    print *, 'Error in FCVodeSetMaxNumSteps, ierr = ', ier, '; halting'
+    stop 1
+  end if
+
+  ier = FCVodeSetMaxStep(cvode_mem, real(maxStep, kind=C_DOUBLE))
+  write (*, '(A, I0)') ' setting maxstep ier = ', ier
+  write (*,*)
+
+  udata%ipar   = ipar
+  udata%rpar   = rpar
+
+  ier = FCVodeSetUserData(cvode_mem, c_loc(udata))
+  if (ier /= 0) stop 'User data setup failed'
+
+
 
   ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   ! SPGMR SOLVER
-  !if ( solverType == 1 ) then
-  !  A => null()
-  !  LS = FSUNLinSol_SPGMR(n_vector_z, SUN_PREC_NONE, int(lookBack, kind=C_INT), sunctx)
-  !  ier = FCVodeSetLinearSolver(cvode_mem, LS, A)
-  !  ! SPGMR SOLVER WITH BANDED PRECONDITIONER
-  !else if ( solverType == 2 ) then
-  !  A  = FSUNBandMatrix(neq, preconBandUpper, preconBandLower, sunctx)
-  !  LS = FSUNLinSol_SPGMR(n_vector_z, SUN_PREC_LEFT, int(lookBack, kind=C_INT), sunctx)
-  !  ier =  FCVodeSetLinearSolver(cvode_mem, LS, A)
-  !  if ( ier /= 0 ) then
-  !    write (stderr,*) 'SUNDIALS_ERROR: preconditioner returned ier = ', ier ;
-  !    call FCVodeFree(cvode_mem)
-  !    stop
-  !  end if
-  !  ! DENSE SOLVER
-  !else if ( solverType == 3 ) then
-  !  A  = FSUNDenseMatrix(neq, neq, sunctx)
-  !  LS = FSUNLinSol_Dense(n_vector_z, A, sunctx)
-  !  ier = FCVodeSetLinearSolver(cvode_mem, LS, A)
-  !  ! UNEXPECTED SOLVER TYPE
-  !else
-  !  write (stderr,*) 'Error with solverType input, input = ', solverType
-  !  write (stderr,*) 'Available options are 1, 2, 3.'
-  !  stop
-  !end if
-  !! ERROR HANDLING
-  !if ( ier /= 0 ) then
-  !  write (stderr,*) ' SUNDIALS_ERROR: SOLVER returned ier = ', ier
-  !  call FCVodeFree(cvode_mem)
-  !  stop
-  !end if
-!
+  if ( solverType == 1 ) then
+    sunmat_A => null()
+    sunls => FSUNLinSol_SPGMR(sunvec_u, SUN_PREC_NONE, int(lookBack, kind=C_INT), ctx)
+  ! SPGMR SOLVER WITH BANDED PRECONDITIONER
+  else if ( solverType == 2 ) then
+    sunmat_A => FSUNBandMatrix(neq, preconBandUpper, preconBandLower, ctx)
+    sunls => FSUNLinSol_Band(sunvec_u, sunmat_A, ctx)
+  ! DENSE SOLVER
+  else if ( solverType == 3 ) then
+    ! Create dense SUNMatrix for use in linear solves
+    sunmat_A => FSUNDenseMatrix(neq, neq, ctx)
+    sunls => FSUNLinSol_Dense(sunvec_u, sunmat_A, ctx)
+  ! UNEXPECTED SOLVER TYPE
+  else
+    write (stderr,*) 'Error with solverType input, input = ', solverType
+    write (stderr,*) 'Available options are 1, 2, 3.'
+    stop
+  end if
+  ! ERROR HANDLING
+  
+
   !if ( ier /= 0 ) then
   !  write (stderr, 40) ier
   !  40   format (///' SUNDIALS_ERROR: FCVDENSE() returned ier = ', I5)
   !  call FCVodeFree(cvode_mem)
   !  stop
   !end if
+
+  
+  ! Attach the matrix and linear solver
+  ier = FCVodeSetLinearSolver(cvode_mem, sunls, sunmat_A); 
+  if ( ier /= 0 ) then
+    write (stderr,*) ' SUNDIALS_ERROR: FCVodeSetLinearSolver returned ier = ', ier
+    call FCVodeFree(cvode_mem)
+    stop
+  end if
 
   ! *****************************************************************
   ! RUN MODEL
@@ -510,7 +534,7 @@ PROGRAM ATCHEM2
 
     ! Get concentrations for unconstrained species
     t_arr(1) =t
-    ier = FCVode(cvode_mem, tout, n_vector_z, t_arr, itask)
+    ier = FCVode(cvode_mem, tout, sunvec_u, t_arr, itask)
     if ( ier /= 0 ) then
       write (*, '(A, I0)') ' ier POST FCVODE()= ', ier
     end if
@@ -541,9 +565,6 @@ PROGRAM ATCHEM2
       call outputreactionRates( time )
     end if
 
-    ! Output CVODE solver parameters and timestep sizes
-    call outputSolverParameters( t, rout(3), rout(2), iout, solverType )
-
     ! Output envVar values
     ro2 = ro2sum( speciesConcs )
     call outputEnvVar( t )
@@ -551,7 +572,6 @@ PROGRAM ATCHEM2
     ! Error handling
     if ( ier < 0 ) then
       fmt = "(///' SUNDIALS_ERROR: FCVODE() returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
-      write (stderr, fmt) ier, iout (15)
       ! free memory
       call FCVodeFree(cvode_mem)
       stop
@@ -566,21 +586,13 @@ PROGRAM ATCHEM2
   ! Output final model concentrations, in a usable format for model
   ! restart
   call outputFinalModelState( getSpeciesList(), speciesConcs )
-  write (*,*)
-
+  
   write (*, '(A)') '------------------'
   write (*, '(A)') ' Final statistics'
   write (*, '(A)') '------------------'
+  call PrintFinalStats(cvode_mem)
+  write (*,*)
 
-  ! Final on-screen output
-  fmt = "(' No. steps = ', I0, '   No. f-s = ', I0, " // &
-        "'   No. J-s = ', I0, '   No. LU-s = ', I0/" // &
-        "' No. nonlinear iterations = ', I0/" // &
-        "' No. nonlinear convergence failures = ', I0/" // &
-        "' No. error test failures = ', I0/) "
-
-  write (*, fmt) iout (3), iout (4), iout (17), iout (8), &
-                 iout (7), iout (6), iout (5)
 
   call SYSTEM_CLOCK( runEnd, clockRate )
   runTime = ( runEnd - runStart ) / clockRate
@@ -644,7 +656,7 @@ END PROGRAM ATCHEM2
 
 ! -------------------------------------------------------- !
 ! Fortran routine for right-hand side function.
-subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
+subroutine FCVFUN(t, y, ydot, ipar, rpar, ier )
   use types_mod
   use constraints_mod, only : getNumberOfConstrainedSpecies, numberOfVariableConstrainedSpecies, dataFixedY, &
                               getConstrainedSpecies, setConstrainedConcs
@@ -655,8 +667,9 @@ subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use solver_functions_mod, only : resid
   implicit none
 
-  real(kind=DP), intent(in) :: t, y(*)
-  real(kind=DP), intent(out) :: ydot(*)
+  real(kind=DP), intent(in) :: t
+  real(kind=DP), intent(inout) :: y(*)
+  real(kind=DP), intent(inout) :: ydot(*)
   integer(kind=NPI), intent(in) :: ipar(*)
   real(kind=DP), intent(in) :: rpar(*)
   integer(kind=NPI), intent(out) :: ier
@@ -703,13 +716,14 @@ integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
   use fsundials_core_mod
   use fnvector_serial_mod
   use cvode_rhs_mod, only : UserData
+  use types_mod
 
   implicit none
 
-  real(c_double), value :: t
-  type(N_Vector)        :: y
-  type(N_Vector)        :: ydot
-  type(c_ptr), value    :: user_data
+  real(c_double), value, intent(in) :: t
+  type(N_Vector), intent(inout)        :: y
+  type(N_Vector), intent(inout)        :: ydot
+  type(c_ptr), value, intent(in)    :: user_data
 
   ! Local pointers to vector data
   real(c_double), pointer :: ydata(:)
@@ -722,7 +736,6 @@ integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
   integer           :: i
   call c_f_pointer(user_data, ud)
   ipar_f = [(int(ud%ipar(i), kind=NPI), i=1, size(ud%ipar))]
-
 
   ! Get raw data arrays from N_Vector
   ydata     => FN_VGetArrayPointer(y)

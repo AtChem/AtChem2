@@ -62,7 +62,7 @@ PROGRAM ATCHEM2
   use fsunlinsol_dense_mod
   use fsunmatrix_dense_mod
   use fsunmatrix_band_mod
-  use fsunlinsol_band_mod  
+  use fsunlinsol_band_mod
   implicit none
 
   ! interface to linux API
@@ -389,23 +389,10 @@ PROGRAM ATCHEM2
   ! CONFIGURE SOLVER
   ! *****************************************************************
 
-  
-  !ier = FSUNContext_Create(0, sunctx)
-  !if (ier /= 0) then
-  !  write(*,*) 'SUNContext creation failed, ier = ', ier
-  !  stop
-  !end if
-
   ! create the SUNDIALS context
   ier = FSUNContext_Create(SUN_COMM_NULL, ctx)
   ipar(1) = neq
   ipar(2) = numReac
-
-  !n_vector_z = FN_VNew_Serial(neq, sunctx)
-  !if (.not. associated(FN_VGetArrayPointer(n_vector_z))) then
-  !  write(stderr,*) 'SUNDIALS_ERROR: FN_VNew_Serial failed'
-  !  stop
-  !end if
 
   ! create SUNDIALS N_Vector
   sunvec_u => FN_VMake_Serial(neq, z, ctx)
@@ -414,42 +401,26 @@ PROGRAM ATCHEM2
     stop 1
   end if
 
-  ! Initialise the cvode
+
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   write (*,*)
-  !cvode_mem = FCVodeCreate(meth, sunctx)
-  !!call FCVMALLOC( , itmeth, iatol,  &
-  !!                 rout, ipar, rpar, ier )
-  !if ( .not. c_associated(cvode_mem) ) then
-  !  write (stderr,*) 'SUNDIALS_ERROR: FCVodeCreate failed'
-  !  stop
-  !end if
   
   ! create and initialize CVode memory
   cvode_mem = FCVodeCreate(meth, ctx)
   if (.not. c_associated(cvode_mem)) print *, 'ERROR: cvode_mem = NULL'
-
-  !ier = FCVodeInit(cvode_mem, c_funloc(rhs_fn), t, n_vector_z)
-  !if (ier /= 0) stop 'CVodeInit failed'
   
   ier = FCVodeInit(cvode_mem, c_funloc(rhs_fn), t, sunvec_u)
   if (ier /= 0) then
     print *, 'Error in FCVodeInit, ierr = ', ier, '; halting'
     stop 1
   end if
-!
-  !ier = FCVodeSStolerances(cvode_mem, rtol, atol)
-  !if (ier /= 0) stop 'Tolerance setup failed'
   
   ier = FCVodeSStolerances(cvode_mem, rtol, atol)
   if (ier /= 0) then
     print *, 'Error in FCVodeSStolerances, ierr = ', ier, '; halting'
     stop 1
   end if
-
-  !ier = FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
-  !write (*, '(A, I0)') ' setting maxnumsteps ier = ', ier
   
   ier = FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
   if (ier /= 0) then
@@ -467,12 +438,9 @@ PROGRAM ATCHEM2
   ier = FCVodeSetUserData(cvode_mem, c_loc(udata))
   if (ier /= 0) stop 'User data setup failed'
 
-
-
   ! SELECT SOLVER TYPE ACCORDING TO FILE INPUT
   ! SPGMR SOLVER
   if ( solverType == 1 ) then
-    sunmat_A => null()
     sunls => FSUNLinSol_SPGMR(sunvec_u, SUN_PREC_NONE, int(lookBack, kind=C_INT), ctx)
   ! SPGMR SOLVER WITH BANDED PRECONDITIONER
   else if ( solverType == 2 ) then
@@ -489,19 +457,11 @@ PROGRAM ATCHEM2
     write (stderr,*) 'Available options are 1, 2, 3.'
     stop
   end if
-  ! ERROR HANDLING
-  
-
-  !if ( ier /= 0 ) then
-  !  write (stderr, 40) ier
-  !  40   format (///' SUNDIALS_ERROR: FCVDENSE() returned ier = ', I5)
-  !  call FCVodeFree(cvode_mem)
-  !  stop
-  !end if
 
   
   ! Attach the matrix and linear solver
   ier = FCVodeSetLinearSolver(cvode_mem, sunls, sunmat_A); 
+  ! ERROR HANDLING
   if ( ier /= 0 ) then
     write (stderr,*) ' SUNDIALS_ERROR: FCVodeSetLinearSolver returned ier = ', ier
     call FCVodeFree(cvode_mem)

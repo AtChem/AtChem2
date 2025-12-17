@@ -48,7 +48,7 @@ cd atchem
 
 # Change atchem dependancy paths and create Makefile from skeleton
 sed 's,cvode/lib,/atchem-lib/cvode/lib,g' tools/install/Makefile.skel > ./Makefile
-sed -i 's,openlibm/lib,/atchem-lib/openlibm/,g' ./Makefile
+sed -i 's,openlibm-0.8.1,/atchem-lib/openlibm-0.8.1,g' ./Makefile
 
 # Fix python command to match installed version
 sed -i "s/python/python3/g" ./build/build_atchem2.sh

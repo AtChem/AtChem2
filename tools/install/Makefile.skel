@@ -22,7 +22,7 @@ FORTC = "gnu"
 # Set the dependencies paths. Use full paths, not relative paths. For
 # example: `$(HOME)/path/to/dependencies/directory/cvode/lib`
 CVODELIBDIR = cvode/lib
-OPENLIBMDIR = openlibm/lib
+OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
 # =========================================================================== #
@@ -82,7 +82,17 @@ endif
 
 # set the CVODE and openlibm compilation flags
 LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) -Wl,$(RPATH_OPTION),/usr/lib/:$(CVODELIBDIR):$(OPENLIBMDIR) \
-          -lopenlibm -lsundials_fcvode_mod -lsundials_cvode -lsundials_fnvecserial_mod -lsundials_nvecserial -ldl
+          -lopenlibm \
+          -lsundials_fcvode_mod \
+          -lsundials_fnvecserial_mod \
+          -lsundials_fcore_mod \
+          -lsundials_fsunlinsolspgmr_mod \
+          -lsundials_fsunmatrixband_mod \
+          -lsundials_fsunlinsoldense_mod \
+          -lsundials_fsunmatrixdense_mod \
+          -lsundials_cvode \
+          -lsundials_nvecserial \
+          -ldl
 
 # ----------------------------------------------------
 # EXECUTABLE setup

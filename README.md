@@ -34,7 +34,7 @@ AtChem2 requires a **Fortran** compiler (GNU `gfortran` or Intel `ifort`), the *
 
 The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a **doi number** for referencing in publications.
 
-After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the full paths of CVODE, openlibm and (if installed) FRUIT.
+After installing the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `CVODEOBJDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the full paths of CVODE (libraries and fortran object files), openlibm and (if installed) FRUIT.
 
 Alternatively, and _optionally_, AtChem2 can be run as a [Docker](https://www.docker.com/) container. Currently the containerized version is available only for AtChem2 v1.2.2, thanks to the [Uni York group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2).
 

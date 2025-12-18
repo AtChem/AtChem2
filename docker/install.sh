@@ -47,7 +47,8 @@ cd atchem
 ./tools/install/install_openlibm.sh /atchem-lib/
 
 # Change atchem dependancy paths and create Makefile from skeleton
-sed 's,cvode/lib,/atchem-lib/cvode/lib,g' tools/install/Makefile.skel > ./Makefile
+sed 's,cvode/lib,/atchem-lib/cvode/lib64,g' tools/install/Makefile.skel > ./Makefile
+sed -i 's,cvode/fortran,/atchem-lib/cvode/fortran,g' ./Makefile
 sed -i 's,openlibm-0.8.1,/atchem-lib/openlibm-0.8.1,g' ./Makefile
 
 # Fix python command to match installed version

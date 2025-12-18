@@ -148,7 +148,7 @@ PROGRAM ATCHEM2
   ! user-supplied function to CVODE.
   interface
 
-    subroutine FCVFUN(t, y, ydot, ipar, rpar, ier )
+    subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
       use types_mod
       use species_mod
       use constraints_mod
@@ -156,12 +156,17 @@ PROGRAM ATCHEM2
       use interpolation_functions_mod, only : getVariableConstrainedSpeciesConcentrationAtT
       use constraint_functions_mod
 
-      real(kind=DP), intent(in) :: t
-      real(kind=DP), intent(inout) :: y(*)
-      real(kind=DP), intent(inout) :: ydot(*)
+      ! Fortran routine for right-hand side function.
+      real(kind=DP), intent(in) :: t, y(*)
+      real(kind=DP), intent(out) :: ydot(*)
       integer(kind=NPI), intent(in) :: ipar(*)
       real(kind=DP), intent(in) :: rpar(*)
       integer(kind=NPI), intent(out) :: ier
+
+      integer(kind=NPI) :: nConSpec, np, numReac
+      real(kind=DP) :: concAtT, dummy
+      real(kind=DP), allocatable :: dy(:), z(:)
+      integer(kind=NPI) :: i
     end subroutine FCVFUN
 
   integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
@@ -616,7 +621,7 @@ END PROGRAM ATCHEM2
 
 ! -------------------------------------------------------- !
 ! Fortran routine for right-hand side function.
-subroutine FCVFUN(t, y, ydot, ipar, rpar, ier )
+subroutine FCVFUN( t, y, ydot, ipar, rpar, ier )
   use types_mod
   use constraints_mod, only : getNumberOfConstrainedSpecies, numberOfVariableConstrainedSpecies, dataFixedY, &
                               getConstrainedSpecies, setConstrainedConcs
@@ -627,9 +632,8 @@ subroutine FCVFUN(t, y, ydot, ipar, rpar, ier )
   use solver_functions_mod, only : resid
   implicit none
 
-  real(kind=DP), intent(in) :: t
-  real(kind=DP), intent(inout) :: y(*)
-  real(kind=DP), intent(inout) :: ydot(*)
+  real(kind=DP), intent(in) :: t, y(*)
+  real(kind=DP), intent(out) :: ydot(*)
   integer(kind=NPI), intent(in) :: ipar(*)
   real(kind=DP), intent(in) :: rpar(*)
   integer(kind=NPI), intent(out) :: ier

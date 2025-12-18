@@ -22,6 +22,7 @@ FORTC = "gnu"
 # Set the dependencies paths. Use full paths, not relative paths. For
 # example: `$(HOME)/path/to/dependencies/directory/cvode/lib`
 CVODELIBDIR = cvode/lib
+CVODEOBJDIR = cvode/fortran
 OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
@@ -116,7 +117,7 @@ SRCS = $(CORE_SRCS) $(SRC)/atchem2.f90
 # the executable is rebuilt every time a fortran source file in $SRCS
 # is modified
 $(AOUT): $(SRCS)
-	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
+	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) -I$(CVODEOBJDIR) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # secondary makefile for the Testsuite
 include tests/makefile.tests

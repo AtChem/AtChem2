@@ -21,7 +21,7 @@
 #   ./install_openlibm.sh ~/path/to/dependencies/directory
 # -----------------------------------------------------------------------------
 
-OPENLIBM_VERSION="0.8.6"
+OPENLIBM_VERSION="0.8.7"
 
 # path to dependencies directory
 if [ -z "$1" ] ; then

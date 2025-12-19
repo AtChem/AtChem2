@@ -26,7 +26,7 @@
 #   ./install_cvode.sh ~/path/to/dependencies/directory /path/to/fortran/compiler
 # -----------------------------------------------------------------------------
 
-SUNDIALS_VERSION="2.7.0"
+SUNDIALS_VERSION="7.5.0"
 
 # path to dependencies directory
 if [ -z "$1" ] ; then
@@ -89,6 +89,7 @@ cmake -DCMAKE_INSTALL_PREFIX="$DEP_DIR/cvode" \
       -DFCMIX_ENABLE:BOOL=ON \
       -DEXAMPLES_ENABLE:BOOL=OFF \
       -DCMAKE_MACOSX_RPATH:BOOL=ON \
+      -DBUILD_FORTRAN_MODULE_INTERFACE:BOOL=ON \
       ..
 if [ $? -ne 0 ] ; then
     printf "\n[cvode] cmake --> FAIL\n"

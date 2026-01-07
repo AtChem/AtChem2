@@ -23,8 +23,8 @@ module cvode_rhs_mod
   implicit none
 
   type, bind(C) :: UserData
-    integer(c_int)   :: ipar(10)
-    real(c_double)   :: rpar(1)
+    integer(c_int) :: ipar(10)
+    real(c_double) :: rpar(1)
   end type UserData
 
 end module cvode_rhs_mod
@@ -54,7 +54,7 @@ PROGRAM ATCHEM2
   use solver_functions_mod, only : jfy, proc
   use cvode_rhs_mod, only : UserData
 
-  ! Sundials module 
+  ! SUNDIALS module
   use fsundials_core_mod
   use fnvector_serial_mod
   use fcvode_mod
@@ -132,13 +132,12 @@ PROGRAM ATCHEM2
   integer(c_int), parameter :: rtld_lazy=1 ! value extracted from the C header file
   integer(c_int), parameter :: rtld_now=2 ! value extracted from the C header file
 
-  !sundials declarations
-
-  type(c_ptr)     :: ctx        ! SUNDIALS context for the simulation
-  type(N_Vector), pointer :: sunvec_u      ! sundials vector
-  type(SUNLinearSolver), pointer :: sunls         ! sundials linear solver
-  type(SUNMatrix), pointer :: sunmat_A      ! sundials matrix (empty)
-  type(c_ptr)                    :: cvode_mem     ! CVODE memory
+  ! SUNDIALS declarations
+  type(c_ptr) :: ctx     ! SUNDIALS context for the simulation
+  type(N_Vector), pointer :: sunvec_u     ! sundials vector
+  type(SUNLinearSolver), pointer :: sunls     ! sundials linear solver
+  type(SUNMatrix), pointer :: sunmat_A     ! sundials matrix (empty)
+  type(c_ptr) :: cvode_mem     ! CVODE memory
   real(c_double) :: t_arr(1)
 
   type(UserData), target :: udata
@@ -177,9 +176,9 @@ PROGRAM ATCHEM2
     implicit none
 
     real(c_double), value, intent(in) :: t
-    type(N_Vector), intent(inout)        :: y
-    type(N_Vector), intent(inout)        :: ydot
-    type(c_ptr), value, intent(in)    :: user_data
+    type(N_Vector), intent(inout) :: y
+    type(N_Vector), intent(inout) :: ydot
+    type(c_ptr), value, intent(in) :: user_data
   end function rhs_fn
 
   end interface
@@ -410,23 +409,23 @@ PROGRAM ATCHEM2
 
   write (*, '(A30, 1P e15.3) ') ' t0 = ', t
   write (*,*)
-  
+
   ! create and initialize CVode memory
   cvode_mem = FCVodeCreate(meth, ctx)
   if (.not. c_associated(cvode_mem)) print *, 'ERROR: cvode_mem = NULL'
-  
+
   ier = FCVodeInit(cvode_mem, c_funloc(rhs_fn), t, sunvec_u)
   if (ier /= 0) then
     print *, 'Error in FCVodeInit, ierr = ', ier, '; halting'
     stop 1
   end if
-  
+
   ier = FCVodeSStolerances(cvode_mem, rtol, atol)
   if (ier /= 0) then
     print *, 'Error in FCVodeSStolerances, ierr = ', ier, '; halting'
     stop 1
   end if
-  
+
   ier = FCVodeSetMaxNumSteps(cvode_mem, int(maxNumInternalSteps, kind=C_LONG))
   if (ier /= 0) then
     print *, 'Error in FCVodeSetMaxNumSteps, ierr = ', ier, '; halting'
@@ -463,13 +462,13 @@ PROGRAM ATCHEM2
     stop
   end if
 
-  
+
   ! Attach the matrix and linear solver
-  ier = FCVodeSetLinearSolver(cvode_mem, sunls, sunmat_A); 
+  ier = FCVodeSetLinearSolver(cvode_mem, sunls, sunmat_A);
   ! ERROR HANDLING
   if ( ier /= 0 ) then
     write (stderr,*) ' SUNDIALS_ERROR: FCVodeSetLinearSolver returned ier = ', ier
-    call FCVodeFree(cvode_mem)
+    call FCVodeFree( cvode_mem )
     stop
   end if
 
@@ -538,7 +537,7 @@ PROGRAM ATCHEM2
     if ( ier < 0 ) then
       fmt = "(///' SUNDIALS_ERROR: FCVODE() returned ier = ', I5, /, 'Linear Solver returned ier = ', I5) "
       ! free memory
-      call FCVodeFree(cvode_mem)
+      call FCVodeFree( cvode_mem )
       stop
     end if
 
@@ -551,11 +550,11 @@ PROGRAM ATCHEM2
   ! Output final model concentrations, in a usable format for model
   ! restart
   call outputFinalModelState( getSpeciesList(), speciesConcs )
-  
+
   write (*, '(A)') '------------------'
   write (*, '(A)') ' Final statistics'
   write (*, '(A)') '------------------'
-  call PrintFinalStats(cvode_mem)
+  call PrintFinalStats( cvode_mem )
   write (*,*)
 
 
@@ -569,7 +568,7 @@ PROGRAM ATCHEM2
   ! *****************************************************************
 
   ! deallocate CVODE internal data
-  call FCVodeFree(cvode_mem)
+  call FCVodeFree( cvode_mem )
   deallocate (speciesConcs, z)
   deallocate (reacDetailedRatesSpecies, prodDetailedRatesSpecies)
   deallocate (detailedRatesSpeciesName, speciesOfInterest)
@@ -685,9 +684,9 @@ integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
   implicit none
 
   real(c_double), value, intent(in) :: t
-  type(N_Vector), intent(inout)        :: y
-  type(N_Vector), intent(inout)        :: ydot
-  type(c_ptr), value, intent(in)    :: user_data
+  type(N_Vector), intent(inout) :: y
+  type(N_Vector), intent(inout) :: ydot
+  type(c_ptr), value, intent(in) :: user_data
 
   ! Local pointers to vector data
   real(c_double), pointer :: ydata(:)
@@ -697,8 +696,8 @@ integer(c_int) function rhs_fn(t, y, ydot, user_data) bind(C)
   integer(kind=NPI) :: ier
 
   integer(kind=NPI) :: ipar_f(10)
-  integer           :: i
-  call c_f_pointer(user_data, ud)
+  integer :: i
+  call c_f_pointer( user_data, ud )
   ipar_f = [(int(ud%ipar(i), kind=NPI), i=1, size(ud%ipar))]
 
   ! Get raw data arrays from N_Vector

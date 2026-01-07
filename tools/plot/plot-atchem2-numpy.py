@@ -1,18 +1,16 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, Marios Panagi
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
 ## Plotting tool for the AtChem2 model output
 ## --> version for Python [requires numpy & matplotlib]
-##
-## Acknowledgements: M. Panagi
 ##
 ## ARGUMENT:
 ## - directory with the model output

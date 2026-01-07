@@ -63,7 +63,7 @@ contains
     return
   end subroutine outputEnvVar
 
-  subroutine PrintFinalStats(cvode_mem)
+  subroutine PrintFinalStats( cvode_mem )
 
     !======= Inclusions ===========
     use iso_c_binding
@@ -74,16 +74,16 @@ contains
 
     type(c_ptr), intent(in) :: cvode_mem ! solver memory structure
 
-    integer(c_int)  :: retval          ! error flag
+    integer(c_int) :: retval          ! error flag
 
-    integer(c_long) :: nsteps(1)     ! num steps
-    integer(c_long) :: nfe(1)        ! num function evals
-    integer(c_long) :: netfails(1)   ! num error test fails
-    integer(c_long) :: nniters(1)    ! nonlinear solver iterations
-    integer(c_long) :: nncfails(1)   ! nonlinear solver fails
-    integer(c_long) :: njacevals(1)  ! number of Jacobian evaluations
-    integer(c_long) :: nluevals(1)   ! number of LU evals
-    integer(c_long) :: ngevals(1)    ! number of root evals
+    integer(c_long) :: nsteps(1) ! num steps
+    integer(c_long) :: nfe(1) ! num function evals
+    integer(c_long) :: netfails(1) ! num error test fails
+    integer(c_long) :: nniters(1) ! nonlinear solver iterations
+    integer(c_long) :: nncfails(1) ! nonlinear solver fails
+    integer(c_long) :: njacevals(1) ! number of Jacobian evaluations
+    integer(c_long) :: nluevals(1) ! number of LU evals
+    integer(c_long) :: ngevals(1) ! number of root evals
 
     !======= Internals ============
 
@@ -134,15 +134,15 @@ contains
       print *, 'Error in FCVodeGetNumGEvals, retval = ', retval, '; halting'
       stop 1
     end if
-  
-    print '(4x,A,i9)', 'Total internal steps taken    =', nsteps
-    print '(4x,A,i9)', 'Total rhs function calls      =', nfe
-    print '(4x,A,i9)', 'Total Jacobian function calls =', njacevals
-    print '(4x,A,i9)', 'Total root function calls     =', ngevals
-    print '(4x,A,i9)', 'Total LU function calls       =', nluevals
-    print '(4x,A,i9)', 'Num error test failures       =', netfails
-    print '(4x,A,i9)', 'Num nonlinear solver iters    =', nniters
-    print '(4x,A,i9)', 'Num nonlinear solver fails    =', nncfails
+
+    print '(4x, A, i9)', 'Total internal steps taken    =', nsteps
+    print '(4x, A, i9)', 'Total rhs function calls      =', nfe
+    print '(4x, A, i9)', 'Total Jacobian function calls =', njacevals
+    print '(4x, A, i9)', 'Total root function calls     =', ngevals
+    print '(4x, A, i9)', 'Total LU function calls       =', nluevals
+    print '(4x, A, i9)', 'Num error test failures       =', netfails
+    print '(4x, A, i9)', 'Num nonlinear solver iters    =', nniters
+    print '(4x, A, i9)', 'Num nonlinear solver fails    =', nncfails
     print *, ' '
 
     return

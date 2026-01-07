@@ -1,12 +1,12 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -42,7 +42,7 @@ fi
 # download archive
 NUMDIFF_DIR="numdiff-${NUMDIFF_VERSION}"
 NUMDIFF_ARCHIVE="${NUMDIFF_DIR}.tar.gz"
-wget "https://savannah.nongnu.org/download/numdiff/${NUMDIFF_ARCHIVE}"
+wget "https://download.savannah.gnu.org/releases/numdiff/${NUMDIFF_ARCHIVE}"
 if [ $? -ne 0 ] ; then
     printf "\n[numdiff] wget --> FAIL\n"
     exit 1

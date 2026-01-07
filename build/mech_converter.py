@@ -38,9 +38,21 @@ import re
 import fix_mechanism_fac
 import kpp_conversion
 
-reservedSpeciesList = ['N2', 'O2', 'M', 'RH', 'H2O', 'BLHEIGHT', 'DEC', 'JFAC',
-                       'DILUTE', 'ROOF', 'ASA', 'RO2']
-reservedOtherList = ['EXP', 'LOG10', 'TEMP', 'PRESS', 'J', 't']
+reservedSpeciesList = [
+    "N2",
+    "O2",
+    "M",
+    "RH",
+    "H2O",
+    "BLHEIGHT",
+    "DEC",
+    "JFAC",
+    "DILUTE",
+    "ROOF",
+    "ASA",
+    "RO2",
+]
+reservedOtherList = ["EXP", "LOG10", "TEMP", "PRESS", "J", "t"]
 
 # =========================== FUNCTIONS =========================== #
 
@@ -65,20 +77,28 @@ def tokenise_and_process(input_string, vars_dict):
                        in vector q
     """
 
-    assert isinstance(input_string, str), \
-        'tokenise_and_process: input_string is not of type str: ' + str(input_string)
-    assert isinstance(vars_dict, dict), \
-        'tokenise_and_process: vars_dict is not of type dict: ' + str(vars_dict)
+    assert isinstance(
+        input_string, str
+    ), "tokenise_and_process: input_string is not of type str: " + str(input_string)
+    assert isinstance(
+        vars_dict, dict
+    ), "tokenise_and_process: vars_dict is not of type dict: " + str(vars_dict)
 
     # Generate start and end points of sections of symbols and nonsymbols
-    symbol_regex = r'[()\-+*@/, ]+'
-    nonsymbol_regex = r'[^()\-+*@/, ]+'
+    symbol_regex = r"[()\-+*@/, ]+"
+    nonsymbol_regex = r"[^()\-+*@/, ]+"
 
-    list_of_symbol_starts = [m.start(0) for m in re.finditer(symbol_regex, input_string)]
+    list_of_symbol_starts = [
+        m.start(0) for m in re.finditer(symbol_regex, input_string)
+    ]
     list_of_symbol_ends = [m.end(0) for m in re.finditer(symbol_regex, input_string)]
-    list_of_nonsymbol_starts = [m.start(0) for m in re.finditer(nonsymbol_regex, input_string)]
-    list_of_nonsymbol_ends = [m.end(0) for m in re.finditer(nonsymbol_regex, input_string)]
-    new_rhs = ''
+    list_of_nonsymbol_starts = [
+        m.start(0) for m in re.finditer(nonsymbol_regex, input_string)
+    ]
+    list_of_nonsymbol_ends = [
+        m.end(0) for m in re.finditer(nonsymbol_regex, input_string)
+    ]
+    new_rhs = ""
 
     # Now that the symbol/non-symbol sections are identified, we need to create
     # the new string by recombining the other sections in the right order, with
@@ -93,11 +113,12 @@ def tokenise_and_process(input_string, vars_dict):
         # We should use the next symbol if:
         #  1) both lists are non-empty and the symbols list has a lower first element, or
         #  2) only the symbols list has anything left in it.
-        if ((list_of_symbol_starts != [] and list_of_nonsymbol_starts != []) \
-            and list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]) \
-            or (list_of_symbol_starts != [] and list_of_nonsymbol_starts == []):
+        if (
+            (list_of_symbol_starts != [] and list_of_nonsymbol_starts != [])
+            and list_of_symbol_starts[0] < list_of_nonsymbol_starts[0]
+        ) or (list_of_symbol_starts != [] and list_of_nonsymbol_starts == []):
             # Add next symbol. Print the substring as-is.
-            new_rhs += input_string[list_of_symbol_starts[0]:list_of_symbol_ends[0]]
+            new_rhs += input_string[list_of_symbol_starts[0] : list_of_symbol_ends[0]]
             # Remove the indices of this substring from the lists.
             del list_of_symbol_starts[0]
             del list_of_symbol_ends[0]
@@ -105,15 +126,22 @@ def tokenise_and_process(input_string, vars_dict):
         # list has a lower first element.
         else:
             # Add next non-symbol. Get the substring of interest.
-            varname = input_string[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+            varname = input_string[
+                list_of_nonsymbol_starts[0] : list_of_nonsymbol_ends[0]
+            ]
             # If it's not a number or a reserved word, it must be a variable,
             # so substitute with the relevant element from q.
-            if not re.match(r'^[0-9]', varname) and varname not in reservedSpeciesList \
-               and varname not in reservedOtherList:
-                new_rhs += 'q(' + str(vars_dict[varname]) + ')'
+            if (
+                not re.match(r"^[0-9]", varname)
+                and varname not in reservedSpeciesList
+                and varname not in reservedOtherList
+            ):
+                new_rhs += "q(" + str(vars_dict[varname]) + ")"
             # Otherwise, just print the substring as-is.
             else:
-                new_rhs += input_string[list_of_nonsymbol_starts[0]:list_of_nonsymbol_ends[0]]
+                new_rhs += input_string[
+                    list_of_nonsymbol_starts[0] : list_of_nonsymbol_ends[0]
+                ]
             # Remove the indices of this substring from the lists.
             del list_of_nonsymbol_starts[0]
             del list_of_nonsymbol_ends[0]
@@ -121,7 +149,9 @@ def tokenise_and_process(input_string, vars_dict):
     # Return the reconstructed string.
     return new_rhs
 
+
 # ======================================================
+
 
 def separate_stoichiometry(input_species):
     """
@@ -139,19 +169,23 @@ def separate_stoichiometry(input_species):
     """
 
     # regex to match the potential coefficient and name sections of the input
-    in_pat = re.compile(r'^ *(\d*\.?\d*) *([a-zA-Z_].*) *$')
+    in_pat = re.compile(r"^ *(\d*\.?\d*) *([a-zA-Z_].*) *$")
     pat_match = in_pat.match(input_species)
     if pat_match:
-        if pat_match[1]: #if there is a coefficient passed
+        if pat_match[1]:  # if there is a coefficient passed
             return (float(pat_match[1]), pat_match[2])
-        else: # if there is no coefficient then output an assumed coefficient of 1
+        else:  # if there is no coefficient then output an assumed coefficient of 1
             return (1.0, pat_match[2])
     else:
-        raise Exception(f"""Reaction species does not match the correct
+        raise Exception(
+            f"""Reaction species does not match the correct
                         format: '{input_species}'. Note that species names should
-                        not begin with numerical characters.""")
+                        not begin with numerical characters."""
+        )
+
 
 # ======================================================
+
 
 def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     """
@@ -207,17 +241,17 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     input_filename = os.path.basename(mechFile)
     input_file = os.path.join(input_directory, input_filename)
 
-
     # copy the photolysis parameters reference file to `photolysis-rates` in sharedDir
-    os.system(f'cp -f mcm/photolysis-rates_{mcmV} {sharedDir}/photolysis-rates')
+    os.system(f"cp -f mcm/photolysis-rates_{mcmV} {sharedDir}/photolysis-rates")
 
-    assert os.path.isfile(input_file), \
-        'The input file ' + str(input_file) + ' does not exist.'
-    print('Chemical mechanism file in:', input_directory)
+    assert os.path.isfile(input_file), (
+        "The input file " + str(input_file) + " does not exist."
+    )
+    print("Chemical mechanism file in:", input_directory)
 
     # Check if the chemical mechanism file is in KPP format, in which case convert it
     # to FACSIMILE format (see documentation of `kpp_conversion.py` for more info)
-    if input_filename.split('.')[-1] == 'kpp':
+    if input_filename.split(".")[-1] == "kpp":
         input_fac = kpp_conversion.write_fac_file(input_file)
     else:
         input_fac = input_file
@@ -227,8 +261,8 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     fix_mechanism_fac.fix_fac_full_file(input_fac)
 
     # Read in the input file.
-    print('Reading input file')
-    with open(input_fac, 'r') as input_mech:
+    print("Reading input file")
+    with open(input_fac, "r") as input_mech:
         mechList = input_mech.readlines()
 
     # Split the lines into the following sections:
@@ -238,8 +272,12 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     # - Peroxy radicals
     # - Reaction definitions
     section_headers_indices = [0, 1, 2, 3]
-    section_headers = ['Generic Rate Coefficients', 'Complex reactions',
-                       'Peroxy radicals', 'Reaction definitions']
+    section_headers = [
+        "Generic Rate Coefficients",
+        "Complex reactions",
+        "Peroxy radicals",
+        "Reaction definitions",
+    ]
     generic_rate_coefficients = []
     complex_reactions = []
     peroxy_radicals = []
@@ -259,51 +297,68 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
         elif section == 4:
             reaction_definitions.append(line)
         else:
-            assert section == 0, 'Error, section is not in [0,4]'
+            assert section == 0, "Error, section is not in [0,4]"
 
     # Convert peroxy_radicals to a list of strings, with each of the RO2 species from the RO2 sum
     # in the 'Peroxy radicals' section.
     ro2List = []
     for item in peroxy_radicals:
-        if not re.match(r'\*', item):
+        if not re.match(r"\*", item):
             # We have an equals sign on the first line. Handle this by splitting against '=',
             # then taking the last element of the resulting list, which will either be the
             # right-hand side of the first line, or the whole of any other line. Similarly,
             # the final line will end with a colon. Handle in a similar way. Then split
             # by '+'. Append each item to ro2_input: multiple appends use 'extend'.
-            ro2List.extend([elem.strip() for elem in \
-                            item.split('=')[-1].split(';')[0].strip().split('+')])
+            ro2List.extend(
+                [
+                    elem.strip()
+                    for elem in item.split("=")[-1].split(";")[0].strip().split("+")
+                ]
+            )
     # Remove empty strings.
     ro2List = list(filter(None, ro2List))
 
     # Read in the reference list of RO2 species from the MCM (peroxy-radicals_v*).
     # - the RO2 reference list is specific to each version of the MCM
     # - RO2 lists for versions v3.1, v3.2, v3.3.1 of the MCM are available
-    with open(os.path.join('mcm/peroxy-radicals_'+mcmV), 'r') as RO2List_file:
+    with open(os.path.join("mcm/peroxy-radicals_" + mcmV), "r") as RO2List_file:
         RO2List_reference = [r.rstrip() for r in RO2List_file.readlines()]
 
     # Check that each of the RO2s from 'Peroxy radicals' are present
     # in the RO2 reference list from the MCM. If not, print a warning
     # at the top of mechanism.f90 for each errant species.
-    print('Looping over inputted RO2s')
+    print("Looping over inputted RO2s")
 
-    with open(os.path.join(sharedDir, 'mechanism.f90'), 'w') as mech_rates_file:
-        mech_rates_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
+    with open(os.path.join(sharedDir, "mechanism.f90"), "w") as mech_rates_file:
+        mech_rates_file.write(
+            "! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n"
+        )
 
-        for ro2_species in [element for  element in ro2List if element not in RO2List_reference]:
-            print('\n\t!!! WARNING !!!')
-            print('  The following species are not present in the RO2 reference list:\n    ' + ro2_species)
-            print('  Should they be included in the RO2 sum?\n')
-            mech_rates_file.write('! ' + ro2_species + ' is not in the RO2 reference list for this version of the MCM\n')
+        for ro2_species in [
+            element for element in ro2List if element not in RO2List_reference
+        ]:
+            print("\n\t!!! WARNING !!!")
+            print(
+                "  The following species are not present in the RO2 reference list:\n    "
+                + ro2_species
+            )
+            print("  Should they be included in the RO2 sum?\n")
+            mech_rates_file.write(
+                "! "
+                + ro2_species
+                + " is not in the RO2 reference list for this version of the MCM\n"
+            )
 
     # Check the DILUTE environment variable to identify whether dilution should be applied.
     dilute = False
-    with open(os.path.join(configDir, 'environmentVariables.config'), 'r') as env_var_file:
+    with open(
+        os.path.join(configDir, "environmentVariables.config"), "r"
+    ) as env_var_file:
         environmentVariables = env_var_file.readlines()
         for x in environmentVariables:
             x = x.split()
             try:
-                if x[1] == 'DILUTE' and x[2] != 'NOTUSED':
+                if x[1] == "DILUTE" and x[2] != "NOTUSED":
                     dilute = x[2]
             except IndexError:
                 continue
@@ -312,8 +367,8 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     # Read in the names of user-defined custom rate functions and add them
     # to the list of reserved names so that they will be carried through the
     # rate definitions (in a similar manner to LOG10)
-    with open(os.path.join(configDir, 'customRateFuncs.f90'), 'r') as custom_func_file:
-        func_def_pat = r'function +([a-zA-Z0-9_]*) *\('
+    with open(os.path.join(configDir, "customRateFuncs.f90"), "r") as custom_func_file:
+        func_def_pat = r"function +([a-zA-Z0-9_]*) *\("
         custom_func_names = re.findall(func_def_pat, custom_func_file.read(), re.I)
 
         for n in custom_func_names:
@@ -331,50 +386,51 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     for line in generic_rate_coefficients + complex_reactions:
 
         # Check for comments (beginning with a '!'), or blank lines.
-        if (re.match(r'!', line) is not None) or (line.isspace()):
+        if (re.match(r"!", line) is not None) or (line.isspace()):
             mechanism_rates_coeff_list.append(line)
         # Check for lines starting with either ';' or '*', and write these as comments.
-        elif (re.match(r';', line) is not None) or (re.match(r'[*]', line) is not None):
-            mechanism_rates_coeff_list.append('!' + line)
+        elif (re.match(r";", line) is not None) or (re.match(r"[*]", line) is not None):
+            mechanism_rates_coeff_list.append("!" + line)
         # Otherwise assume all remaining lines are in the correct format, and process them.
         else:
-            reactionNumber += 1   # keep track of the line we are processing
+            reactionNumber += 1  # keep track of the line we are processing
 
             # Match anything like '@-dd.d' and replaces with '**(-dd.d)'.
             # Use '(?<=@)' as a lookbehind assertion, then matches any combination
             # of digits and decimal points. Replace the negative number by its
             # bracketed version. Also convert all '@' to '**' etc...
-            line2 = re.sub(r'(?<=@)-[0-9.]*',
-                           r'(\g<0>)',
-                           line.replace(';', '').strip()
-                           ).replace('@', '**')
+            line2 = re.sub(
+                r"(?<=@)-[0-9.]*", r"(\g<0>)", line.replace(";", "").strip()
+            ).replace("@", "**")
             # Append `_DP` to the end of all digits that aren't followed
             # by more digits or letters (targets a few too many).
-            line2 = re.sub(r'[0-9]+(?![a-zA-Z0-9\.])',
-                           r'\g<0>_DP',
-                           line2)
+            line2 = re.sub(r"[0-9]+(?![a-zA-Z0-9\.])", r"\g<0>_DP", line2)
             # Undo the suffix `_DP` for any species names and for LOG10.
-            line2 = re.sub(r'\b(?P<speciesnames>[a-zA-Z][a-zA-Z0-9]*)_DP',
-                           r'\g<speciesnames>',
-                           line2)
+            line2 = re.sub(
+                r"\b(?P<speciesnames>[a-zA-Z][a-zA-Z0-9]*)_DP",
+                r"\g<speciesnames>",
+                line2,
+            )
             # Undo the suffix `_DP` for any numbers like 1D7 or 2.3D-8.
-            line2 = re.sub(r'\b(?P<doubles1>[0-9][0-9\.]*)[dDeE](?P<doubles2>[+-]*[0-9]+)_DP',
-                           r'\g<doubles1>e\g<doubles2>_DP',
-                           line2)
+            line2 = re.sub(
+                r"\b(?P<doubles1>[0-9][0-9\.]*)[dDeE](?P<doubles2>[+-]*[0-9]+)_DP",
+                r"\g<doubles1>e\g<doubles2>_DP",
+                line2,
+            )
             # Add .0 to any literals that don't have a decimal place. This is
             # necessary as it seems you can't use extended precision on such a
             # number -- gfortran complains about an unknown integer kind, when
             # it should really be a real kind.
-            line2 = re.sub(r'(?<![\.0-9+-dDeE])(?P<doubles>[0-9]+)_DP',
-                           r'\g<doubles>.0_DP',
-                           line2)
+            line2 = re.sub(
+                r"(?<![\.0-9+-dDeE])(?P<doubles>[0-9]+)_DP", r"\g<doubles>.0_DP", line2
+            )
 
             # Strip whitespace, ';' and '%'.
-            cleaned_line = line2.strip().strip('%;').strip()
+            cleaned_line = line2.strip().strip("%;").strip()
 
             # Process the assignment: split by '=' into variable names
             # and values, then strip each.
-            [lhs, rhs] = re.split(r'=', cleaned_line)
+            [lhs, rhs] = re.split(r"=", cleaned_line)
 
             variable_name = lhs.strip()
             value = rhs.strip()
@@ -387,8 +443,15 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
             new_rhs = tokenise_and_process(value, variablesDict)
 
             # Save the resulting string to mechanism_rates_coeff_list.
-            mechanism_rates_coeff_list.append('q('+str(variablesDict[variable_name]) + ') = ' \
-                                              + new_rhs + '  !' + cleaned_line + '\n')
+            mechanism_rates_coeff_list.append(
+                "q("
+                + str(variablesDict[variable_name])
+                + ") = "
+                + new_rhs
+                + "  !"
+                + cleaned_line
+                + "\n"
+            )
 
     # Save the number of such equations to be output to mechanism.{prod,reac}.
     numberOfGenericComplex = reactionNumber
@@ -415,46 +478,46 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     for line in reaction_definitions:
 
         # Check for comments (beginning with a '!'), or blank lines.
-        if (re.match(r'!', line) is not None) or (line.isspace()):
+        if (re.match(r"!", line) is not None) or (line.isspace()):
             rateConstants.append(line)
         # Check for lines starting with either ';' or '*', and write these as comments.
-        elif (re.match(r';', line) is not None) or (re.match(r'[*]', line) is not None):
-            rateConstants.append('!' + line)
+        elif (re.match(r";", line) is not None) or (re.match(r"[*]", line) is not None):
+            rateConstants.append("!" + line)
         # Otherwise assume all remaining lines are in the correct format, and process them.
         else:
-            reactionNumber += 1   # keep track of the line we are processing
+            reactionNumber += 1  # keep track of the line we are processing
 
             # Strip whitespace, ';' and '%'.
-            line = line.strip().strip('%;').strip()
+            line = line.strip().strip("%;").strip()
 
             # Split by ':' -- lhs is reaction rate, rhs is reaction equation.
-            [lhs, rhs] = re.split(r':', line)
+            [lhs, rhs] = re.split(r":", line)
 
             # Add reaction rate to rateConstants.
             rateConstants.append(lhs)
 
             # Process the reaction: split by '=' into reactants and products.
-            [reactantsList, productsList] = re.split(r'=', rhs)
+            [reactantsList, productsList] = re.split(r"=", rhs)
 
             # Process each of reactants and products by splitting by '+'.
             # Strip each at this stage.
-            reactants = [item.strip() for item in re.split(r'[+]', reactantsList)]
-            products = [item.strip() for item in re.split(r'[+]', productsList)]
+            reactants = [item.strip() for item in re.split(r"[+]", reactantsList)]
+            products = [item.strip() for item in re.split(r"[+]", productsList)]
 
             # Ignore empty reactantsList.
-            if not reactantsList.strip() == '':
+            if not reactantsList.strip() == "":
                 # Compare each reactant against known species and note the
                 # stoichometric coefficients for each reactant.
                 reactantNums = []
                 reactantStoichs = []
                 for x in reactants:
-                    #split the reactant into the species name and the stoichometric coefficient
+                    # split the reactant into the species name and the stoichometric coefficient
                     x_coeff, x_name = separate_stoichiometry(x)
                     # Add the stoichometric coefficient to reactantStoichs
                     reactantStoichs.append(x_coeff)
                     # If the reactant is a known species then add its number to reactantNums.
                     if x_name in speciesList:
-                        reactantNums.append(speciesList.index(x_name)+1)
+                        reactantNums.append(speciesList.index(x_name) + 1)
                     else:
                         # Reactant x is not a known species. Add reactant to speciesList,
                         # then add this number to reactantNums to record this reaction.
@@ -462,24 +525,28 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
                         reactantNums.append(len(speciesList))
 
                 # Write the reactants to mech_reac_list.
-                mech_reac_list.extend([f'{reactionNumber} {z} {y}\n' for \
-                                       y,z in zip(reactantStoichs, reactantNums)])
+                mech_reac_list.extend(
+                    [
+                        f"{reactionNumber} {z} {y}\n"
+                        for y, z in zip(reactantStoichs, reactantNums)
+                    ]
+                )
 
             # Ignore empty productsList.
-            if not productsList.strip() == '':
+            if not productsList.strip() == "":
                 # Compare each product against known species and note the
                 # stoichometric coefficients for each product.
                 productNums = []
                 productStoichs = []
                 for x in products:
-                    #split the product into the species name and the stoichometric coefficient
+                    # split the product into the species name and the stoichometric coefficient
                     x_coeff, x_name = separate_stoichiometry(x)
                     # Add the stoichometric coefficient to productStoichs
                     productStoichs.append(x_coeff)
 
                     # If the reactant is a known species then add its number to reactantNums.
                     if x_name in speciesList:
-                        productNums.append(speciesList.index(x_name)+1)
+                        productNums.append(speciesList.index(x_name) + 1)
                     else:
                         # Product x is not a known species. Add product to speciesList,
                         # then add this number to productNums to record this reaction.
@@ -487,8 +554,12 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
                         productNums.append(len(speciesList))
 
                 # Write the products to mech_prod_list.
-                mech_prod_list.extend([f'{reactionNumber} {z} {y}\n' for \
-                                       y,z in zip(productStoichs, productNums)])
+                mech_prod_list.extend(
+                    [
+                        f"{reactionNumber} {z} {y}\n"
+                        for y, z in zip(productStoichs, productNums)
+                    ]
+                )
 
     # -------------------------------------------------
 
@@ -496,37 +567,48 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     if dilute:
         for spec in speciesList:
             reactionNumber += 1
-            mech_reac_list.append(str(reactionNumber) + ' ' \
-                                  + str(speciesList.index(spec) + 1) + ' 1.0\n')
+            mech_reac_list.append(
+                str(reactionNumber) + " " + str(speciesList.index(spec) + 1) + " 1.0\n"
+            )
 
-    with open(os.path.join(sharedDir, 'mechanism.prod'), 'w') as prod_file:
+    with open(os.path.join(sharedDir, "mechanism.prod"), "w") as prod_file:
         # Output number of species and number of reactions.
-        prod_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) \
-                        + ' ' + str(numberOfGenericComplex) \
-                        + ' numberOfSpecies numberOfReactions numberOfGenericComplex\n')
+        prod_file.write(
+            str(len(speciesList))
+            + " "
+            + str(reactionNumber)
+            + " "
+            + str(numberOfGenericComplex)
+            + " numberOfSpecies numberOfReactions numberOfGenericComplex\n"
+        )
         # Write all other lines.
         for line in mech_prod_list:
             prod_file.write(line)
 
-    with open(os.path.join(sharedDir, 'mechanism.reac'), 'w') as reac_file:
+    with open(os.path.join(sharedDir, "mechanism.reac"), "w") as reac_file:
         # Output number of species and number of reactions.
-        reac_file.write(str(len(speciesList)) + ' ' + str(reactionNumber) \
-                        + ' ' + str(numberOfGenericComplex) \
-                        + ' numberOfSpecies numberOfReactions numberOfGenericComplex\n')
+        reac_file.write(
+            str(len(speciesList))
+            + " "
+            + str(reactionNumber)
+            + " "
+            + str(numberOfGenericComplex)
+            + " numberOfSpecies numberOfReactions numberOfGenericComplex\n"
+        )
         # Write all other lines.
         for line in mech_reac_list:
             reac_file.write(line)
 
     # Write speciesList to mechanism.species, indexed by 1 to len(speciesList).
-    with open(os.path.join(sharedDir, 'mechanism.species'), 'w') as species_file:
+    with open(os.path.join(sharedDir, "mechanism.species"), "w") as species_file:
         for i, x in zip(range(1, len(speciesList) + 1), speciesList):
-            species_file.write(str(i) + ' ' + str(x) + '\n')
+            species_file.write(str(i) + " " + str(x) + "\n")
 
     # Write out the rate coefficients.
     i = 0
     mech_rates_list = []
     for rate_counter, x in zip(range(len(mechList)), rateConstants):
-        if (re.match(r'!', x) is not None) | (x.isspace()):
+        if (re.match(r"!", x) is not None) | (x.isspace()):
             mech_rates_list.append(str(x))
         else:
             # Match anything like '@-dd.d' and replaces with '**(-dd.d)'.
@@ -534,31 +616,35 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
             # of digits and decimal points. Replace the negative number by its
             # bracketed version.
             i += 1
-            string = re.sub(r'(?<=@)-[0-9.]*', r'(\g<0>)', x)
+            string = re.sub(r"(?<=@)-[0-9.]*", r"(\g<0>)", x)
             # Now convert all '@' to '**' etc...
-            string = string.replace('@', '**')
-            string = string.replace('<', '(')
-            string = string.replace('>', ')')
+            string = string.replace("@", "**")
+            string = string.replace("<", "(")
+            string = string.replace(">", ")")
             # Replace any float-type numbers (xxx.xxxE+xx)
             # with a double-type number (xxx.xxxD+xx)
-            string = re.sub(r'(?P<single>[0-9]+\.[0-9]+)[eE]',
-                            r'\g<single>D',
-                           string)
-            mech_rates_list.append('p(' + str(i) + ') = ' \
-                                   + tokenise_and_process(string, variablesDict) \
-                                   + '  !' + reaction_definitions[rate_counter])
+            string = re.sub(r"(?P<single>[0-9]+\.[0-9]+)[eE]", r"\g<single>D", string)
+            mech_rates_list.append(
+                "p("
+                + str(i)
+                + ") = "
+                + tokenise_and_process(string, variablesDict)
+                + "  !"
+                + reaction_definitions[rate_counter]
+            )
 
     # Write out further reactions to implement the dilution factor.
     if dilute:
         for _ in speciesList:
             i += 1
-            mech_rates_list.append('p(' + str(i) + ') = DILUTE ! DILUTE\n')
+            mech_rates_list.append("p(" + str(i) + ") = DILUTE ! DILUTE\n")
 
     # -------------------------------------------------
 
     # Combine mechanism rates and RO2 sum files.
-    with open(os.path.join(sharedDir, 'mechanism.f90'), 'a') as mech_rates_coeff_file:
-        mech_rates_coeff_file.write("""
+    with open(os.path.join(sharedDir, "mechanism.f90"), "a") as mech_rates_coeff_file:
+        mech_rates_coeff_file.write(
+            """
 module mechanism_mod
     use, intrinsic :: iso_c_binding
     implicit none
@@ -571,7 +657,8 @@ contains
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
         real(c_double), intent(inout) :: p(*), q(*)
         real(c_double), intent(in) :: t, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2
-        """)
+        """
+        )
 
         # Write out 'Generic Rate Coefficients' and 'Complex reactions'.
         for item in mechanism_rates_coeff_list:
@@ -580,36 +667,43 @@ contains
         # Write out 'Reaction definitions'.
         for r in mech_rates_list:
             mech_rates_coeff_file.write(r)
-        mech_rates_coeff_file.write("""
+        mech_rates_coeff_file.write(
+            """
     end subroutine update_p
 end module mechanism_mod
-""")
+"""
+        )
 
     # -------------------------------------------------
 
     # Finally, now that we have the full list of species, we can output the RO2s to
     # mechanism.ro2: loop over RO2 and write the necessary line to mechanism.ro2,
     # using the species ID number of the RO2.
-    print('Adding RO2s to: ' + sharedDir + '/mechanism.ro2')
-    with open(os.path.join(sharedDir, 'mechanism.ro2'), 'w') as ro2_file:
-        ro2_file.write('! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n')
+    print("Adding RO2s to: " + sharedDir + "/mechanism.ro2")
+    with open(os.path.join(sharedDir, "mechanism.ro2"), "w") as ro2_file:
+        ro2_file.write(
+            "! Note that this file is automatically generated by build/mech_converter.py -- Any manual edits to this file will be overwritten when calling build/mech_converter.py\n"
+        )
 
         for ro2List_i in ro2List:
             for speciesNumber, y in zip(range(1, len(speciesList) + 1), speciesList):
                 if ro2List_i.strip() == y.strip():
-                    ro2_file.write(str(speciesNumber) + ' !' + ro2List_i.strip() + '\n')
+                    ro2_file.write(str(speciesNumber) + " !" + ro2List_i.strip() + "\n")
                     # Exit loop early if species found.
                     break
             # This code only executes if the break is NOT called, i.e. if the
             # loop runs to completion without the RO2 being found in the speciesList.
             else:
-                error_message = ''.join([
-                  ' ****** ',
-                  'Error: RO2 species "',
-                  str(ro2List_i.strip()),
-                  '" NOT found in the mechanism. Please check the RO2 section',
-                  ' of your mechanism file for incorrect species names!',
-                  ' ******'])
+                error_message = "".join(
+                    [
+                        " ****** ",
+                        'Error: RO2 species "',
+                        str(ro2List_i.strip()),
+                        '" NOT found in the mechanism. Please check the RO2 section',
+                        " of your mechanism file for incorrect species names!",
+                        " ******",
+                    ]
+                )
                 raise RuntimeError(error_message)
 
 
@@ -617,41 +711,43 @@ end module mechanism_mod
 
 
 def main():
-    print('\t Processing chemical mechanism...')
-    assert len(sys.argv) > 1, \
-        'Enter the filename of a chemical mechanism (.fac or .kpp) as argument:'
+    print("\t Processing chemical mechanism...")
+    assert (
+        len(sys.argv) > 1
+    ), "Enter the filename of a chemical mechanism (.fac or .kpp) as argument:"
     mech_file = sys.argv[1]
     # `config_dir` defaults to `model/configuration`, if not given as argument
     if len(sys.argv) <= 2:
-        config_dir = 'model/configuration'
+        config_dir = "model/configuration"
     else:
         config_dir = sys.argv[2]
     # `shared_dir` defaults to `model/configuration/include`, if not given as argument
     if len(sys.argv) <= 3:
-        shared_dir = 'model/configuration/include'
+        shared_dir = "model/configuration/include"
     else:
         shared_dir = sys.argv[3]
     # `mcm_vers` defaults to `v3.3.1`, if not given as argument
     if len(sys.argv) <= 4:
-        mcm_vers = 'v3.3.1'
+        mcm_vers = "v3.3.1"
     else:
         mcm_vers = sys.argv[4]
 
     # Check that the files and directories exist
-    assert os.path.isfile(mech_file), 'Failed to find file ' + mech_file
-    assert os.path.exists(config_dir), 'Failed to find directory ' + config_dir
-    assert os.path.exists(shared_dir), 'Failed to find directory ' + shared_dir
+    assert os.path.isfile(mech_file), "Failed to find file " + mech_file
+    assert os.path.exists(config_dir), "Failed to find directory " + config_dir
+    assert os.path.exists(shared_dir), "Failed to find directory " + shared_dir
 
     # Check that the MCM version is supported
-    MCM_VERSIONS = ['v3.1', 'v3.2', 'v3.3.1']
-    assert mcm_vers in MCM_VERSIONS, 'Invalid or unsupported version of the MCM'
+    MCM_VERSIONS = ["v3.1", "v3.2", "v3.3.1"]
+    assert mcm_vers in MCM_VERSIONS, "Invalid or unsupported version of the MCM"
 
     # Call the conversion to Fortran function
     convert_to_fortran(mech_file, config_dir, shared_dir, mcm_vers)
-    print('\t... chemical mechanism converted to Fortran.\n')
+    print("\t... chemical mechanism converted to Fortran.\n")
+
 
 # Call the main function if executed as script
-if __name__ == '__main__':
+if __name__ == "__main__":
     try:
         main()
     except RuntimeError as e:

@@ -62,12 +62,12 @@ def fix_fac_full_contents(input_file):
     # Using splitlines() rather than readlines(), we take out the
     # errant carriage returns, and, for any line with such on it, we
     # return it to the list.
-    with open(input_file, 'r') as file_open:
+    with open(input_file, "r") as file_open:
         contents = file_open.read().splitlines()
 
     # print contents
     orig_contents_len = len(contents)
-    print(str(input_file) + ': file read in ' + str(orig_contents_len) + ' items.')
+    print(str(input_file) + ": file read in " + str(orig_contents_len) + " items.")
     contents_count = 0
 
     # This variable will hold the indices to be deleted once their
@@ -82,43 +82,57 @@ def fix_fac_full_contents(input_file):
     for i, line in enumerate(contents):
         if not in_reaction_definition_section:
             # Check to see whether we are entering the 'Reaction definitions' section.
-            if 'Reaction definitions.' in line:
+            if "Reaction definitions." in line:
                 in_reaction_definition_section = True
         # Only do other checks if we've reached the 'Reaction definitions' section.
         else:
-            if re.match(r'\*', line):
+            if re.match(r"\*", line):
                 pass
-            elif not re.match(r'%', line):
+            elif not re.match(r"%", line):
                 # print 'fail'
                 # print contents[i-1], 'XX', contents[i], 'XX', contents[i+1]
-                contents[i-1] += ' ' + line
+                contents[i - 1] += " " + line
                 # print contents[i-1]
                 contents_count += 1
                 to_delete.append(i)
-    print(str(contents_count) + ' corrections made -- now removing old.')
+    print(str(contents_count) + " corrections made -- now removing old.")
 
     # Remove old elements which have now been concatenated onto previous.
     for i in reversed(to_delete):
         del contents[i]
-    assert orig_contents_len == contents_count + len(contents), str(input_file) \
-        + ': file is probably too messed up with carriage returns for this script to fix.'
+    assert orig_contents_len == contents_count + len(contents), (
+        str(input_file)
+        + ": file is probably too messed up with carriage returns for this script to fix."
+    )
 
     # If there are any lines that have now been doubled-stacked, break them into pieces.
     # Find the end of the header section, because we don't want to parse that section
     # anymore. It often contains semicolons within the lines as well as at the end,
     # which breaks all our logic.
-    end_of_header_index = [i for i, item in enumerate(contents) \
-                           if re.search(r'Generic Rate Coefficients', item)]
+    end_of_header_index = [
+        i
+        for i, item in enumerate(contents)
+        if re.search(r"Generic Rate Coefficients", item)
+    ]
     assert len(end_of_header_index) == 1
     end_of_header_index = end_of_header_index[0]
 
     # Split non-header lines by semicolons, but we keep the semicolons this way.
-    interim_contents = [reduce(lambda acc, elem: acc[:-1] + [acc[-1] + elem] \
-                               if elem == ';' else acc + [elem], re.split(r'(;)', element), []) \
-                        for element in contents[end_of_header_index:]]
+    interim_contents = [
+        reduce(
+            lambda acc, elem: (
+                acc[:-1] + [acc[-1] + elem] if elem == ";" else acc + [elem]
+            ),
+            re.split(r"(;)", element),
+            [],
+        )
+        for element in contents[end_of_header_index:]
+    ]
 
     # Remove empty sub-strings.
-    interim_contents = [[item for item in sublist if item] for sublist in interim_contents]
+    interim_contents = [
+        [item for item in sublist if item] for sublist in interim_contents
+    ]
 
     # Look for any lines containing more than 2 elements. These are lines where
     # more than one line is broken running together. At this point, the file is
@@ -127,18 +141,24 @@ def fix_fac_full_contents(input_file):
         # Get index of line with error
         line_lengths = [len(line) for line in interim_contents]
         error_line = line_lengths.index(max(line_lengths)) + end_of_header_index + 1
-        sys.exit('The inputted file is broken near line ' + str(error_line) \
-                 + ' in a way that this script cannot handle.' \
-                 + ' Please manually fix this error and re-run this script.')
+        sys.exit(
+            "The inputted file is broken near line "
+            + str(error_line)
+            + " in a way that this script cannot handle."
+            + " Please manually fix this error and re-run this script."
+        )
 
     # Reattach the header lines, and unwrap the list of lists in interim_contents.
-    fixed_file = contents[:end_of_header_index] \
-        + [item for sublist in interim_contents for item in sublist]
+    fixed_file = contents[:end_of_header_index] + [
+        item for sublist in interim_contents for item in sublist
+    ]
 
     # Return the corrected mechanism file
     return fixed_file
 
+
 # ------------------------------------------------------------ #
+
 
 def fix_fac_full_file(input_file):
     """
@@ -154,12 +174,12 @@ def fix_fac_full_file(input_file):
         input_file (str): name of the .fac file to be fixed
     """
 
-    print('Running fix_fac_full_file() on: ' + str(input_file))
+    print("Running fix_fac_full_file() on: " + str(input_file))
 
     contents = fix_fac_full_contents(input_file)
-    contents = [item + '\n' for item in contents]
+    contents = [item + "\n" for item in contents]
 
-    with open(input_file, 'w') as file_open:
+    with open(input_file, "w") as file_open:
         file_open.writelines(contents)
 
 
@@ -171,10 +191,11 @@ def main():
     if len(sys.argv) > 1:
         fix_fac_full_contents(sys.argv[1])
     else:
-        print('*****************************************************')
-        print('* Please pass a filename (.fac) as script argument. *')
-        print('*****************************************************')
+        print("*****************************************************")
+        print("* Please pass a filename (.fac) as script argument. *")
+        print("*****************************************************")
+
 
 # Call the main function if executed as script
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

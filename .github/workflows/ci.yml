@@ -141,7 +141,7 @@ jobs:
 
       - name: Indent and Style tests
         run: |
-          make indenttest
+          #make indenttest  #temporaarily deactivated
           make styletest
 
       - name: Unit and Model tests

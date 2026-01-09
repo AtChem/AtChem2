@@ -29,7 +29,7 @@ test_total=0
 test_pass=0
 test_fail=0
 
-find . -name "*.py" | {
+find build/ tools/ -name "*.py" | {
     while IFS= read -r file; do
         test_total=$((test_total + 1))
         black --check "$file" > /dev/null 2>&1

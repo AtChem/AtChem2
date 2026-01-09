@@ -124,7 +124,6 @@ jobs:
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh --mechanism=./model/mechanism.fac --shared_lib=./model/configuration/include --configuration=./model/configuration --mcm=v3.3.1
-          black --version
 
           # macos only
           if [ $RUNNER_OS != "Linux" ] ; then
@@ -144,6 +143,8 @@ jobs:
         run: |
           make indenttest
           make styletest
+          pip install black
+          make pythontest
 
       - name: Unit and Model tests
         env:

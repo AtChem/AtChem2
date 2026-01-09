@@ -66,6 +66,11 @@ styletest:
 	@echo "Make: Running the style test."
 	@./tests/run_style_test.sh
 
+pythontest:
+	@echo ""
+	@echo "Make: Running the python format test."
+	@./tests/python_format_test.sh
+
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR); $(fruit_driver)
 	@echo ""

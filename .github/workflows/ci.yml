@@ -115,6 +115,9 @@ jobs:
       - name: Install FRUIT
         run: ./tools/install/install_fruit.sh $PWD
 
+      - name: Install Python formatter
+        run: pip install black
+
       # -------------------------------------------------------------
       # (4) Build AtChem2 using the standard compilation flags
 
@@ -143,7 +146,6 @@ jobs:
         run: |
           make indenttest
           make styletest
-          pip install black
           make pythontest
 
       - name: Unit and Model tests

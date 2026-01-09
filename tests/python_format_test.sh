@@ -23,28 +23,33 @@ if [ $? -ne 0 ] ; then
     exit 1
 fi
 
-printf "\nChecking format of python scripts:"
+printf "\nExecuting Python format test:\n"
 
 test_total=0
+test_pass=0
 test_fail=0
 
-while IFS= read -r -d '' file; do
-    ((test_total++))
-    black --check "$file" &>/dev/null
-    if [ $? -eq 0 ] ; then
-        printf "\n[PASS] %s" "$file"
+find . -name "*.py" | {
+    while IFS= read -r file; do
+        test_total=$((test_total + 1))
+        black --check "$file" > /dev/null 2>&1
+        if [ $? -eq 0 ] ; then
+            printf "\n[PASS] %s" "$file"
+            test_pass=$((test_pass + 1))
+        else
+            printf "\n[FAIL] %s" "$file"
+            test_fail=$((test_fail + 1))
+        fi
+    done
+
+    printf "\n\n==> Python format test:\t"
+    if [ "$test_fail" -eq 0 ]; then
+        printf "PASSED [%s/%s]\n" "$test_pass" "$test_total"
+        test_pass=0
     else
-        printf "\n[FAIL] %s" "$file"
-        ((test_fail++))
+        printf "FAILED [%s/%s]\n" "$test_fail" "$test_total"
+        test_pass=1
     fi
-done < <(find . -name "*.py" -print0)
 
-if [ "$test_fail" -eq 0 ]; then
-  printf "\n==> Python format test PASSED [%s/%s]\n" "$test_fail" "$test_total"
-  test_pass=0
-else
-  printf "\n==> Python format test FAILED [%s/%s]\n" "$test_fail" "$test_total"
-  test_pass=1
-fi
-
-exit $test_pass
+    exit $test_pass
+}

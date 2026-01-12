@@ -10,23 +10,22 @@
 #
 # -----------------------------------------------------------------------------
 
-# This script checks the format of the python scripts using the tool `black`:
-# https://pypi.org/project/black/
+# This script checks the format of the python scripts using the code formatter
+# tool 'black': https://pypi.org/project/black/
 #
 # NB: the script must be run from the *Main Directory* of AtChem2.
 # -----------------------------------------------------------------------------
 
 python -c "import black"
 if [ $? -ne 0 ] ; then
-    printf "\n[ERROR] python formatter tool missing"
-    printf "r the command: pip install black\n"
+    printf "\n[ERROR] python formatter missing -- to install it, run the command:\n"
+    printf "pip install black\n"
     exit 1
 fi
 
 printf "\nExecuting Python format test:\n"
 
 test_total=0
-test_pass=0
 test_fail=0
 
 find build/ tools/ -name "*.py" | {
@@ -34,22 +33,21 @@ find build/ tools/ -name "*.py" | {
         test_total=$((test_total + 1))
         black --check "$file" > /dev/null 2>&1
         if [ $? -eq 0 ] ; then
-            printf "\n[PASS] %s" "$file"
-            test_pass=$((test_pass + 1))
+            printf "[PASS] %s\n" "$file"
         else
-            printf "\n[FAIL] %s" "$file"
+            printf "[FAIL] %s\n" "$file"
             test_fail=$((test_fail + 1))
         fi
     done
 
-    printf "\n\n==> Python format test:\t"
+    printf "==> Python format test:\t"
     if [ "$test_fail" -eq 0 ]; then
-        printf "PASSED [%s/%s]\n" "$test_pass" "$test_total"
-        test_pass=0
+        printf "PASSED [%s/%s scripts failed the test]\n" "$test_fail" "$test_total"
+        test_script_pass=0
     else
-        printf "FAILED [%s/%s]\n" "$test_fail" "$test_total"
-        test_pass=1
+        printf "FAILED [%s/%s scripts failed the test]\n" "$test_fail" "$test_total"
+        test_script_pass=1
     fi
 
-    exit $test_pass
+    exit $test_script_pass
 }

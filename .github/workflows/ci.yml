@@ -116,7 +116,9 @@ jobs:
         run: ./tools/install/install_fruit.sh $PWD
 
       - name: Install Python and Fortran formatters
-        run: pip install black fprettify
+        run: |
+          pip install black fprettify
+          black --version
 
       # -------------------------------------------------------------
       # (4) Build AtChem2 using the standard compilation flags

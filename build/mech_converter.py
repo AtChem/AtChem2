@@ -715,9 +715,9 @@ def main():
         config_dir = "model/configuration"
     else:
         config_dir = sys.argv[2]
-    # `shared_dir` defaults to `model/configuration/include`, if not given as argument
+    # `shared_dir` defaults to `model/sharedlib`, if not given as argument
     if len(sys.argv) <= 3:
-        shared_dir = "model/configuration/include"
+        shared_dir = "model/sharedlib"
     else:
         shared_dir = sys.argv[3]
     # `mcm_vers` defaults to `v3.3.1`, if not given as argument

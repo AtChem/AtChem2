@@ -281,7 +281,7 @@ contains
     spec_constraints_dir  = read_value_or_default( valid_flags(8)%flag_switch, &
                                                    trim(constraints_dir)//'/species', names, values )
     shared_lib_dir         = read_value_or_default( valid_flags(9)%flag_switch, &
-                                                    trim(model_dir)//'/configuration/include', names, values )
+                                                    trim(model_dir)//'/sharedlib', names, values )
     shared_library        = trim(shared_lib_dir)//'/mechanism.so'
 
     write (*, '(2A)') ' Model directory is: ', trim( model_dir )

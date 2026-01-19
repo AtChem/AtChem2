@@ -1,10 +1,10 @@
-# Ignore auto-generated mechanism files and output files in the model/ directory
+# Ignore constraint files, output files, auto-generated mechanism files in the model/ directory
 constraints/environment/*
 constraints/photolysis/*
 constraints/species/*
-configuration/include/*
 output/*.output
 output/*.pdf
 output/reactionRates/*
+sharedlib/*
 
 !.gitkeep

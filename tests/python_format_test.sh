@@ -16,7 +16,7 @@
 # NB: the script must be run from the *Main Directory* of AtChem2.
 # -----------------------------------------------------------------------------
 
-python -c "import black"
+python3 -c "import black"
 if [ $? -ne 0 ] ; then
     printf "\n[ERROR] python formatter missing -- to install it, run the command:\n"
     printf "pip install black\n"

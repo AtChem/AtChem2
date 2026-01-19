@@ -27,7 +27,7 @@
 # `--shared_lib` is the shared library directory, which contains
 #    the chemical mechanism in Fortran format (`mechanism.*`) and
 #    the pre-compiled mechanism shared library (`mechanism.so`).
-#    Default value: ./model/configuration/include
+#    Default value: ./model/sharedlib
 #
 # `--mcm` is the MCM version of the chemical mechanism, which sets the
 #    reference list of organic peroxy radicals (RO2) and the empirical
@@ -43,7 +43,7 @@
 #     OR
 #   ./build/build_atchem2.sh --mechanism=/path/to/mechanism/file
 #                            --configuration=/path/to/configuration/directory
-#                            --shared_lib=/path/to/mechanism/directory
+#                            --shared_lib=/path/to/shared_lib/directory
 #                            --mcm=v3.3.1
 # -----------------------------------------------------------------------------
 set -eu
@@ -51,7 +51,7 @@ set -eu
 # default values for the script flags
 MECHF=""
 CONFIGD="model/configuration"
-MECHD="model/configuration/include"
+SHAREDLIBD="model/sharedlib"
 MCMV="v3.3.1"
 
 # parse the script flags
@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
             CONFIGD="${1#*=}"
             ;;
         --shared_lib=*)
-            MECHD="${1#*=}"
+            SHAREDLIBD="${1#*=}"
             ;;
         --mcm=*)
             MCMV="${1#*=}"
@@ -100,8 +100,8 @@ if [ ! -d "$CONFIGD" ]; then
 fi
 
 # set the shared library directory (`--shared_lib=`)
-printf "\n[*] Shared library directory: %s\n" "$MECHD"
-if [ ! -d "$MECHD" ]; then
+printf "\n[*] Shared library directory: %s\n" "$SHAREDLIBD"
+if [ ! -d "$SHAREDLIBD" ]; then
     printf "\n[INPUT ERROR] The shared library directory does not exist.\n"
     exit 1
 fi
@@ -128,7 +128,7 @@ printf "\n--> Using %s\n" "$PY_BIN"
 
 # compile the chemical mechanism shared library (`mechanism.so`)
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
-make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" MECHDIR="$MECHD" MCMVERS="$MCMV"
+make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" SHAREDLIBDIR="$SHAREDLIBD" MCMVERS="$MCMV"
 if [ $? -ne 0 ] ; then
     printf "\n[FAIL] Check error message for details.\n"
     exit 1

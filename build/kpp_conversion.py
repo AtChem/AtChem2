@@ -24,6 +24,7 @@ import re
 
 # =========================== FUNCTIONS =========================== #
 
+
 def mechanism_section(input_lines, start_section, end_section):
     """
     Parse the content of a file, provided in the form of a list
@@ -58,7 +59,9 @@ def mechanism_section(input_lines, start_section, end_section):
     section_lines = input_lines[start_i:end_i]
     return section_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_ro2(kpp_lines):
     """
@@ -79,7 +82,9 @@ def convert_ro2(kpp_lines):
         fac_lines.append(new_line)
     return fac_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_rates(kpp_lines):
     """
@@ -124,7 +129,9 @@ def convert_rates(kpp_lines):
             fac_lines2.append(new_line)
     return fac_lines1, fac_lines2
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_reactions(kpp_lines):
     """
@@ -147,7 +154,9 @@ def convert_reactions(kpp_lines):
             fac_lines.append(new_line)
     return fac_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def kpp_to_facsimile(input_file):
     """Split a .kpp file into 4 sections: the summation of organic
@@ -195,7 +204,9 @@ def kpp_to_facsimile(input_file):
     # Sections of the mechanism file converted to KPP format
     return generic_rates, complex_reactions, peroxy_radicals, reaction_definitions
 
+
 # ------------------------------------------------------------ #
+
 
 def write_fac_file(input_file):
     """

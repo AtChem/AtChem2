@@ -56,6 +56,7 @@ reservedOtherList = ["EXP", "LOG10", "TEMP", "PRESS", "J", "t"]
 
 # =========================== FUNCTIONS =========================== #
 
+
 def tokenise_and_process(input_string, vars_dict):
     """
     This function takes in a single string, and a dictionary of known
@@ -148,7 +149,9 @@ def tokenise_and_process(input_string, vars_dict):
     # Return the reconstructed string.
     return new_rhs
 
+
 # ======================================================
+
 
 def separate_stoichiometry(input_species):
     """
@@ -178,7 +181,9 @@ def separate_stoichiometry(input_species):
                         format: '{input_species}'. Note that species names should
                         not begin with numerical characters.""")
 
+
 # ======================================================
+
 
 def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
     """

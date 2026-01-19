@@ -37,7 +37,6 @@ from functools import reduce
 import sys
 import re
 
-
 # =========================== FUNCTIONS =========================== #
 
 

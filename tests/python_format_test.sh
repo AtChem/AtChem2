@@ -23,19 +23,24 @@ if [ $? -ne 0 ] ; then
     exit 1
 fi
 
-printf "\nExecuting Python format test:\n"
+LOG_FILE=tests/pythontest.log
+
+printf "==> Executing Python format test...\n"
 
 test_total=0
 test_fail=0
 
+printf "Python format test\n\n" > "$LOG_FILE"
+
 find build/ tools/ -name "*.py" | {
     while IFS= read -r file; do
         test_total=$((test_total + 1))
-        black --check "$file" > /dev/null 2>&1
+        black -q --check "$file"
         if [ $? -eq 0 ] ; then
-            printf "[PASS] %s\n" "$file"
+            printf "[PASS] %s\n" "$file" >> "$LOG_FILE"
         else
-            printf "[FAIL] %s\n" "$file"
+            printf "[FAIL] %s\n" "$file" >> "$LOG_FILE"
+            black -q --diff "$file" >> $LOG_FILE
             test_fail=$((test_fail + 1))
         fi
     done
@@ -49,5 +54,6 @@ find build/ tools/ -name "*.py" | {
         test_script_pass=1
     fi
 
+    printf "==> Python format test logfile: %s\n" "$LOG_FILE"
     exit $test_script_pass
 }

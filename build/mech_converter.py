@@ -177,11 +177,9 @@ def separate_stoichiometry(input_species):
         else:  # if there is no coefficient then output an assumed coefficient of 1
             return (1.0, pat_match[2])
     else:
-        raise Exception(
-            f"""Reaction species does not match the correct
+        raise Exception(f"""Reaction species does not match the correct
                         format: '{input_species}'. Note that species names should
-                        not begin with numerical characters."""
-        )
+                        not begin with numerical characters.""")
 
 
 # ======================================================
@@ -643,8 +641,7 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
 
     # Combine mechanism rates and RO2 sum files.
     with open(os.path.join(sharedDir, "mechanism.f90"), "a") as mech_rates_coeff_file:
-        mech_rates_coeff_file.write(
-            """
+        mech_rates_coeff_file.write("""
 module mechanism_mod
     use, intrinsic :: iso_c_binding
     implicit none
@@ -657,8 +654,7 @@ contains
         integer, parameter :: DP = selected_real_kind( p = 15, r = 307 )
         real(c_double), intent(inout) :: p(*), q(*)
         real(c_double), intent(in) :: t, TEMP, N2, O2, M, RH, H2O, BLHEIGHT, DEC, JFAC, DILUTE, ROOFOPEN, ASA, J(*), RO2
-        """
-        )
+        """)
 
         # Write out 'Generic Rate Coefficients' and 'Complex reactions'.
         for item in mechanism_rates_coeff_list:
@@ -667,12 +663,10 @@ contains
         # Write out 'Reaction definitions'.
         for r in mech_rates_list:
             mech_rates_coeff_file.write(r)
-        mech_rates_coeff_file.write(
-            """
+        mech_rates_coeff_file.write("""
     end subroutine update_p
 end module mechanism_mod
-"""
-        )
+""")
 
     # -------------------------------------------------
 

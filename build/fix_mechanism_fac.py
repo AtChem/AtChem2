@@ -39,6 +39,7 @@ import re
 
 # =========================== FUNCTIONS =========================== #
 
+
 def fix_fac_full_contents(input_file):
     """
     Given a .fac file, return the contents of the file, but with
@@ -154,7 +155,9 @@ def fix_fac_full_contents(input_file):
     # Return the corrected mechanism file
     return fixed_file
 
+
 # ------------------------------------------------------------ #
+
 
 def fix_fac_full_file(input_file):
     """

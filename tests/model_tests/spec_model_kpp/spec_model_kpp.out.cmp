@@ -11,8 +11,8 @@ AtChem2 v1.3-dev
  Environment Constraints directory is: tests/model_tests/spec_model_kpp/constraints/environment
  Photolysis Constraints directory is: tests/model_tests/spec_model_kpp/constraints/photolysis
  Species Constraints directory is: tests/model_tests/spec_model_kpp/constraints/species
- Shared Library directory is: tests/model_tests/spec_model_kpp/configuration/include
- Shared Library is: tests/model_tests/spec_model_kpp/configuration/include/mechanism.so
+ Shared Library directory is: tests/model_tests/spec_model_kpp/sharedlib
+ Shared Library is: tests/model_tests/spec_model_kpp/sharedlib/mechanism.so
 
 -----------------------
  Species and reactions

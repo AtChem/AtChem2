@@ -11,8 +11,8 @@ AtChem2 v1.3-dev
  Environment Constraints directory is: tests/tests/short_ext2/model/constraints/environment
  Photolysis Constraints directory is: tests/tests/short_ext2/model/constraints/photolysis
  Species Constraints directory is: tests/tests/short_ext2/model/constraints/species
- Shared Library directory is: tests/tests/short_ext2/model/configuration/include
- Shared Library is: tests/tests/short_ext2/model/configuration/include/mechanism.so
+ Shared Library directory is: tests/tests/short_ext2/model/sharedlib
+ Shared Library is: tests/tests/short_ext2/model/sharedlib/mechanism.so
 
 -----------------------
  Species and reactions

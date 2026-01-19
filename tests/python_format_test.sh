@@ -31,10 +31,11 @@ test_fail=0
 find build/ tools/ -name "*.py" | {
     while IFS= read -r file; do
         test_total=$((test_total + 1))
-        black --diff "$file" #> /dev/null 2>&1
+        black --check "$file" > /dev/null 2>&1
         if [ $? -eq 0 ] ; then
             printf "[PASS] %s\n" "$file"
         else
+            black --diff "$file"
             printf "[FAIL] %s\n" "$file"
             test_fail=$((test_fail + 1))
         fi

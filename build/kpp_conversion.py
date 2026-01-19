@@ -1,11 +1,11 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ def mechanism_section(input_lines, start_section, end_section):
 
     end_i = nlines
     if end_section:
-        for i in range (start_i, nlines):
+        for i in range(start_i, nlines):
             if end_section in input_lines[i]:
                 end_i = i + 1
                 break
@@ -60,7 +60,9 @@ def mechanism_section(input_lines, start_section, end_section):
     section_lines = input_lines[start_i:end_i]
     return section_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_ro2(kpp_lines):
     """
@@ -76,12 +78,14 @@ def convert_ro2(kpp_lines):
 
     fac_lines = []
     for line in kpp_lines:
-        new_line = re.sub(r'C\(ind_([A-Z0-9_]+)\s*\)', r'\1', line)
-        new_line = re.sub(r'\s*&', r'', new_line.strip())
+        new_line = re.sub(r"C\(ind_([A-Z0-9_]+)\s*\)", r"\1", line)
+        new_line = re.sub(r"\s*&", r"", new_line.strip())
         fac_lines.append(new_line)
     return fac_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_rates(kpp_lines):
     """
@@ -99,22 +103,36 @@ def convert_rates(kpp_lines):
 
     # list of generic rate coefficients -- this list may change with
     # future updates of the MCM
-    simple_list = ['KRO2NO','KRO2HO2','KAPHO2','KAPNO','KRO2NO3','KNO3AL','KDEC',
-                   'KROPRIM','KROSEC','KCH3O2','K298CH3O2','K14ISOM1']
+    simple_list = [
+        "KRO2NO",
+        "KRO2HO2",
+        "KAPHO2",
+        "KAPNO",
+        "KRO2NO3",
+        "KNO3AL",
+        "KDEC",
+        "KROPRIM",
+        "KROSEC",
+        "KCH3O2",
+        "K298CH3O2",
+        "K14ISOM1",
+    ]
 
     fac_lines1 = []
     fac_lines2 = []
     for line in kpp_lines:
-        react_line = re.split(r'=', line)
-        react_line[1] = react_line[1].replace('**', '@')
-        new_line = react_line[0].strip() + ' = ' + react_line[1].strip() + ' ;\n'
+        react_line = re.split(r"=", line)
+        react_line[1] = react_line[1].replace("**", "@")
+        new_line = react_line[0].strip() + " = " + react_line[1].strip() + " ;\n"
         if react_line[0].strip() in simple_list:
             fac_lines1.append(new_line)
         else:
             fac_lines2.append(new_line)
     return fac_lines1, fac_lines2
 
+
 # ------------------------------------------------------------ #
+
 
 def convert_reactions(kpp_lines):
     """
@@ -129,15 +147,17 @@ def convert_reactions(kpp_lines):
 
     fac_lines = []
     for line in kpp_lines:
-        if re.match(r'{\d+\.}', line):
-            react_line = re.split(r'[}:;]', line)
-            rate_coeff = re.sub(r'J\((\d+)\)', r'J<\1>', react_line[2])
-            rate_coeff = rate_coeff.replace('**', '@')
-            new_line = '%' + rate_coeff + ':' + react_line[1] + ';\n'
+        if re.match(r"{\d+\.}", line):
+            react_line = re.split(r"[}:;]", line)
+            rate_coeff = re.sub(r"J\((\d+)\)", r"J<\1>", react_line[2])
+            rate_coeff = rate_coeff.replace("**", "@")
+            new_line = "%" + rate_coeff + ":" + react_line[1] + ";\n"
             fac_lines.append(new_line)
     return fac_lines
 
+
 # ------------------------------------------------------------ #
+
 
 def kpp_to_facsimile(input_file):
     """Split a .kpp file into 4 sections: the summation of organic
@@ -160,32 +180,34 @@ def kpp_to_facsimile(input_file):
     """
 
     # Read in the .kpp mechanism file
-    with open(input_file, 'r') as file_open:
+    with open(input_file, "r") as file_open:
         contents = file_open.readlines()
 
     # Peroxy radicals section
-    start_peroxy = 'RO2 = & '
-    end_peroxy = ') \n'
+    start_peroxy = "RO2 = & "
+    end_peroxy = ") \n"
     peroxy_lines = mechanism_section(contents, start_peroxy, end_peroxy)
     peroxy_radicals = convert_ro2(peroxy_lines)
 
     # Generic Rate Coefficients, Complex reactions sections
-    start_rates = ') \n'
-    end_rates = '#ENDINLINE'
+    start_rates = ") \n"
+    end_rates = "#ENDINLINE"
     rates_lines = mechanism_section(contents, start_rates, end_rates)
-    rates_lines = rates_lines[:-2]   # remove `CALL mcm_constants()` line
+    rates_lines = rates_lines[:-2]  # remove `CALL mcm_constants()` line
     generic_rates, complex_reactions = convert_rates(rates_lines)
 
     # Reaction definitions section
-    start_reactions = '#EQUATIONS'
-    end_reactions = ''   # file ends after list of reactions
+    start_reactions = "#EQUATIONS"
+    end_reactions = ""  # file ends after list of reactions
     reactions_lines = mechanism_section(contents, start_reactions, end_reactions)
     reaction_definitions = convert_reactions(reactions_lines)
 
     # Sections of the mechanism file converted to KPP format
     return generic_rates, complex_reactions, peroxy_radicals, reaction_definitions
 
+
 # ------------------------------------------------------------ #
+
 
 def write_fac_file(input_file):
     """
@@ -200,21 +222,21 @@ def write_fac_file(input_file):
         output_file (str): name of the converted .fac file
     """
 
-    print('Running write_fac_file() on: ' + str(input_file))
+    print("Running write_fac_file() on: " + str(input_file))
 
     contents1, contents2, contents3, contents4 = kpp_to_facsimile(input_file)
-    output_file = input_file.rsplit('.', 1)[0] + '.fac'
+    output_file = input_file.rsplit(".", 1)[0] + ".fac"
 
-    with open(output_file, 'w') as file_open:
-        file_open.write('\n* Generic Rate Coefficients ;\n')
+    with open(output_file, "w") as file_open:
+        file_open.write("\n* Generic Rate Coefficients ;\n")
         file_open.writelines(contents1)
-        file_open.write('\n* Complex reactions ;\n')
+        file_open.write("\n* Complex reactions ;\n")
         file_open.writelines(contents2)
-        file_open.write('\n* Peroxy radicals ;\n')
-        file_open.write('RO2 = ')
+        file_open.write("\n* Peroxy radicals ;\n")
+        file_open.write("RO2 = ")
         file_open.writelines(contents3)
-        file_open.write(';\n')
-        file_open.write('\n* Reaction definitions ;\n')
+        file_open.write(";\n")
+        file_open.write("\n* Reaction definitions ;\n")
         file_open.writelines(contents4)
 
     # Filename of the .fac file
@@ -229,10 +251,11 @@ def main():
     if len(sys.argv) > 1:
         write_fac_file(sys.argv[1])
     else:
-        print('*****************************************************')
-        print('* Please pass a filename (.kpp) as script argument. *')
-        print('*****************************************************')
+        print("*****************************************************")
+        print("* Please pass a filename (.kpp) as script argument. *")
+        print("*****************************************************")
+
 
 # Call the main function if executed as script
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

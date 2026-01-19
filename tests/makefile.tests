@@ -58,13 +58,18 @@ MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g'
 
 indenttest:
 	@echo ""
-	@echo "Make: Running the indent test."
+	@echo "Make: check the indentation of the Fortran source code."
 	@./tests/run_indent_test.sh
 
 styletest:
 	@echo ""
-	@echo "Make: Running the style test."
+	@echo "Make: check the style of the Fortran source code."
 	@./tests/run_style_test.sh
+
+pythontest:
+	@echo ""
+	@echo "Make: check the format of the Python scripts."
+	@./tests/python_format_test.sh
 
 unittests: $(fruit_driver)
 	@export DYLD_LIBRARY_PATH=$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR); $(fruit_driver)

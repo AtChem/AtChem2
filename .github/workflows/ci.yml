@@ -115,6 +115,9 @@ jobs:
       - name: Install FRUIT
         run: ./tools/install/install_fruit.sh $PWD
 
+      - name: Install Python and Fortran formatters
+        run: pip install black fprettify
+
       # -------------------------------------------------------------
       # (4) Build AtChem2 using the standard compilation flags
 
@@ -143,6 +146,7 @@ jobs:
         run: |
           make indenttest
           make styletest
+          make pythontest
 
       - name: Unit and Model tests
         env:

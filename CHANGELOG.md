@@ -5,8 +5,12 @@ AtChem2 -- CHANGELOG
 post v1.2.3
 -----------
 
-- make install scripts more robust, and update to **openlibm v0.8.6**
-- add option to use time in user-defined Fortran functions
+- implement named arguments (flags) for the `build_atchem2.sh` script
+- remove the `mcm` argument from the executable, and redefine it in the build script to indicate the version of the MCM used
+- make shell scripts more robust, and update to **openlibm v0.8.6**
+- reformat python scripts using **black**, and add a python format test to the Testsuite
+- add option to use time in user-defined custom Fortran functions
+- update copyright notes
 
 
 v1.2.3 (May 2025)

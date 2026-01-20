@@ -262,7 +262,7 @@ contains
 
   ! -----------------------------------------------------------------
   ! This is called from readPhotoRates(). It reads photolysisNumbers
-  ! from the first column of `model/configuration/include/photolysis-rates` so that we know
+  ! from the first column of `model/sharedlib/photolysis-rates` so that we know
   ! the ID numbers of all photolysis rates and how many there are.
   subroutine readPhotolysisNumbers()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit
@@ -604,7 +604,7 @@ contains
   ! This is called from readPhotoRates() if
   ! model/configuration/photolysisConstant.config doesn't exist/is
   ! empty. It reads ck, cl, cmm, cnn, unconstrainedPhotoNames and
-  ! transmissionFactor from `model/configuration/include/photolysis-rates`. It uses
+  ! transmissionFactor from `model/sharedlib/photolysis-rates`. It uses
   ! numUnconstrainedPhotoRates to allocate accordingly.
   subroutine readAllPhotolysisRates()
     use, intrinsic :: iso_fortran_env, only : stderr => error_unit

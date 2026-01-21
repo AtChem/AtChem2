@@ -1,14 +1,15 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+# Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 # Peter Jimack, Mike Pilling
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, James Allsopp,
+# Neil Butcher
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ $(UNITTESTDIR)/fruit_basket_gen.f90 : $(unittest_code)
 
 # build `fruit_driver.exe` from the individual unit tests
 $(fruit_driver) : $(all_unittest_code)
-	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
+	$(FORT_COMP) -o $(fruit_driver) -J$(OBJ) -I$(OBJ) -I$(CVODEOBJDIR) $(all_unittest_code) $(FFLAGS) $(LDFLAGS)
 
 # ==================== Model tests  ==================== #
 

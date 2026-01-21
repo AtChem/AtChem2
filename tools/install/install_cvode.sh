@@ -1,12 +1,12 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, Neil Butcher
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@
 #   ./install_cvode.sh ~/path/to/dependencies/directory /path/to/fortran/compiler
 # -----------------------------------------------------------------------------
 
-SUNDIALS_VERSION="2.7.0"
+SUNDIALS_VERSION="7.5.0"
 
 # path to dependencies directory
 if [ -z "$1" ] ; then
@@ -89,6 +89,7 @@ cmake -DCMAKE_INSTALL_PREFIX="$DEP_DIR/cvode" \
       -DFCMIX_ENABLE:BOOL=ON \
       -DEXAMPLES_ENABLE:BOOL=OFF \
       -DCMAKE_MACOSX_RPATH:BOOL=ON \
+      -DBUILD_FORTRAN_MODULE_INTERFACE:BOOL=ON \
       ..
 if [ $? -ne 0 ] ; then
     printf "\n[cvode] cmake --> FAIL\n"

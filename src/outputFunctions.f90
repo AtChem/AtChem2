@@ -63,6 +63,86 @@ contains
     return
   end subroutine outputEnvVar
 
+
+  ! -----------------------------------------------------------------
+  ! Write parameters output by CVODE solver to file.
+  subroutine outputSolverParameters( t, cvode_mem, solver_type )
+    use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+    use types_mod
+    use iso_c_binding
+    use fcvode_mod
+
+    real(kind=DP), intent(in) :: t
+    integer(c_int) :: retval          ! error flag
+    type(c_ptr), intent(in) :: cvode_mem ! solver memory structure
+    integer(kind=SI), intent(in) :: solver_type
+
+    integer(kind=SI) :: i
+    logical :: first_time = .true.
+
+    real*8 :: hcur(1), hlast(1)
+    integer(c_long) :: lenrw(1), leniw(1), nst(1), nfe(1), netf(1), nsetups(1), nje(1), nni(1), ncfn(1), nor(1)
+    integer(c_long) :: lenrwls(1), leniwls(1), lsflag(1), nfels(1), njtv(1), npe(1), nps(1), nli(1), ncfl(1), nfeDQ(1)
+    integer(c_int) :: qu(1), qcur(1)
+    retval = FCVodeGetWorkSpace(cvode_mem, lenrw, leniw)
+    retval = FCVodeGetCurrentStep(cvode_mem, hcur)
+    retval = FCVodeGetLastStep(cvode_mem, hlast)
+    retval = FCVodeGetNumSteps(cvode_mem, nst)
+    retval = FCVodeGetNumRhsEvals(cvode_mem, nfe)
+    retval = FCVodeGetNumErrTestFails(cvode_mem, netf)
+    retval = FCVodeGetNumLinSolvSetups(cvode_mem, nsetups)
+    retval = FCVodeGetNumNonlinSolvIters(cvode_mem, nni)
+    retval = FCVodeGetNumNonlinSolvConvFails(cvode_mem, ncfn)
+    retval = FCVodeGetNumStabLimOrderReds(cvode_mem, nor)
+    retval = FCVodeGetLastOrder(cvode_mem, qu)
+    retval = FCVodeGetCurrentOrder(cvode_mem, qcur)
+    retval = FCVodeGetLinWorkSpace(cvode_mem, lenrwls, leniwls)
+    retval = FCVodeGetNumLinRhsEvals(cvode_mem, nfels)
+
+    if ( ( solver_type == 1 ) .or. ( solver_type == 2 ) ) then
+      ! CVSPILS type solver
+      if ( first_time .eqv. .true. ) then
+        write (57, '(A9, 2A17, 20A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
+                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
+                                        'LS_FLAG', 'NFELS', 'NJTV', 'NPE', 'NPS', 'NLI', 'NCFL'
+        first_time = .false.
+      end if
+      retval = FCVodeGetNumLinIters(cvode_mem, nli)
+      retval = FCVodeGetNumLinConvFails(cvode_mem, ncfl)
+      retval = FCVodeGetNumPrecEvals(cvode_mem, npe)
+      retval = FCVodeGetNumPrecSolves(cvode_mem, nps)
+      retval = FCVodeGetNumJtimesEvals(cvode_mem, njtv)
+      retval = FCVodeGetLastLinFlag(cvode_mem, lsflag)
+
+      write (57, '(1P e9.2, 2 (ES17.8E3), 20I9) ') t, hcur, hlast, lenrw, leniw, nst, nfe, &
+                                        netf, ncfn, nni, nsetups, qu, qcur, nor, lenrwls, leniwls, &
+                                        lsflag, nfels, njtv, npe, nps, nli, ncfl
+
+    else if ( solver_type == 3 ) then
+      ! CVDLS type solver
+      if ( first_time .eqv. .true. ) then
+        write (57, '(A9, 2A17, 16A9) ') 't', 'currentStepSize', 'previousStepSize', 'LENRW', 'LENIW', 'NST', 'NFE', &
+                                        'NETF', 'NCFN', 'NNI', 'NSETUPS', 'QU', 'QCUR', 'NOR', 'LENRWLS', 'LENIWLS', &
+                                        'LS_FLAG', 'NFELS', 'NJE'
+        first_time = .false.
+      end if
+      retval = FCVodeGetNumJacEvals(cvode_mem, nje)
+      retval = FCVDiagGetNumRhsEvals(cvode_mem, nfeDQ)
+      retval = FCVDiagGetLastFlag(cvode_mem, lsflag)
+
+      write (57, '(1P e9.2, 2 (ES17.8E3), 16I9) ') t, hcur, hlast, lenrw, leniw, nst, nfe, &
+                                        netf, ncfn, nni, nsetups, qu, qcur, nor, lenrwls, leniwls, &
+                                        lsflag, nfels, nje
+
+    else
+      write (stderr,*) 'outputSolverParameters(): Error with solver_type = ', solver_type
+      write (stderr,*) 'Available options are 1, 2, 3.'
+      stop
+    end if
+
+    return
+  end subroutine outputSolverParameters
+
   subroutine PrintFinalStats( cvode_mem )
 
     !======= Inclusions ===========

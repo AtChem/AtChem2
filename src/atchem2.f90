@@ -529,6 +529,9 @@ PROGRAM ATCHEM2
       call outputreactionRates( time )
     end if
 
+! Output CVODE solver parameters and timestep sizes
+call outputSolverParameters( t, cvode_mem, solverType )
+
     ! Output envVar values
     ro2 = ro2sum( speciesConcs )
     call outputEnvVar( t )

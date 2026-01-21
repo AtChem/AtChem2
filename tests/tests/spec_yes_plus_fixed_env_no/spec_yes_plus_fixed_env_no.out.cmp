@@ -169,7 +169,6 @@ AtChem2 v1.3-dev
  numberOfConstrainedSpecies = 4
                          t0 =       0.000E+00
 
- setting maxnumsteps ier = 0
  setting maxstep ier = 0
 
 -----------
@@ -178,14 +177,18 @@ AtChem2 v1.3-dev
  time = 300
  time = 600
  time = 900
-
 ------------------
  Final statistics
 ------------------
- No. steps = 153   No. f-s = 185   No. J-s = 249   No. LU-s = 43
- No. nonlinear iterations = 184
- No. nonlinear convergence failures = 0
- No. error test failures = 6
+    Total internal steps taken    =      151
+    Total rhs function calls      =      186
+    Total Jacobian function calls =        3
+    Total root function calls     =        0
+    Total LU function calls       =       43
+    Num error test failures       =        6
+    Num nonlinear solver iters    =      185
+    Num nonlinear solver fails    =        0
+  
 
- Runtime = 0
+ Runtime = 1
  Deallocating memory.

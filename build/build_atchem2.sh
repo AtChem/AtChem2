@@ -69,9 +69,13 @@ while [ "$#" -gt 0 ]; do
         --mcm=*)
             MCMV="${1#*=}"
             ;;
-        *)
+        -*)
             printf "\n[INPUT ERROR] Invalid argument: %s\n" "$1" >&2
             exit 1
+            ;;
+        *) # if the script flag is not specified assume the argument is the
+           # chemical mechanism file (`$MECHF`)
+            MECHF="$1"
             ;;
     esac
     shift

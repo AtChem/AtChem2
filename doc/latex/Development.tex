@@ -36,7 +36,7 @@ time:
 AtChem2 is under active development, which means that the
 \texttt{master\ branch} is sometimes a few commits ahead of the latest
 stable release. However, all code modifications are automatically run
-through the \hyperref[sec:test-suite]{Testsuite} before being merged
+through the \hyperref[sec:testsuite]{Testsuite} before being merged
 into the \texttt{master\ branch}. Since the Testsuite is designed to
 ensure that changes to the code do not cause unintended behaviour or
 unexplained differences in the model results, this ensures that even
@@ -66,7 +66,7 @@ automatically compiled via GitHub Actions when a Pull Request (PR) is
 opened.
 
 The preferred way to contribute to the development of AtChem2 is to
-use the open source \href{https://git-scm.com}{git} version control
+use the open-source \href{https://git-scm.com}{git} version control
 tool: instructions on how to set up git, prepare and submit
 contributions to the AtChem2 repository can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki}.
@@ -74,7 +74,7 @@ Contributors are strongly encouraged to follow the Fortran coding
 guidelines, as detailed in Sect.\ref{sec:style-guide}.
 
 % -------------------------------------------------------------------- %
-\section{Testsuite} \label{sec:test-suite}
+\section{Testsuite} \label{sec:testsuite}
 
 AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions}
 for \underline{continuous integration} testing. This programming
@@ -131,8 +131,8 @@ on each architecture:
 \begin{itemize}
 \item Install \texttt{gfortran} and the AtChem2 dependencies using
   \texttt{apt-get} (Linux) or \texttt{Homebrew} (macOS).
-\item Build and run a model using the example chemical mechanism and
-  default configuration: PASS if it exits with 0.
+\item Build and run a model using the default chemical mechanism and
+  configuration: PASS if it exits with 0.
 \item Build and run the Indent and Style tests: PASS if all tests pass.
 \item Build and run the Unit tests: PASS if all Unit tests pass.
 \item Build and run the Model tests: PASS if there are no differences
@@ -162,7 +162,7 @@ follow the procedure outlined below:
   \texttt{x\_test.f90}.
 \item The Unit test file must contain a module with the same name as
   the file -- i.e. \texttt{x\_test} -- and it must include the
-  statement \verb|use fruit|, plus any other required module.
+  statement \texttt{use fruit}, plus any other required module.
 \item The module should contain a number of subroutines with the
   naming pattern \texttt{test\_*}. These subroutines must take no
   arguments and, importantly, must not have any brackets for arguments
@@ -175,12 +175,12 @@ follow the procedure outlined below:
   assert must pass for the subroutine to pass, and each subroutine
   must pass for the Unit tests to pass.
 \item The assert functions have the following syntax:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   call assert_true( a == b , "Test that a and b are equal")
   call assert_false( a == b , "Test that a and b are not equal")
   call assert_equals( a, b , "Test that a and b are equal")
   call assert_not_equals( a, b , "Test that a and b are not equal")
-  \end{verbatim}
+  \end{Verbatim}
 \end{itemize}
 
 It is useful to use the last argument of the assert function as a
@@ -202,43 +202,43 @@ Each Model test (\texttt{\$TESTNAME}) is contained in its own
 subdirectory inside the \texttt{tests/model\_tests/} directory. A
 Model test requires the following files and directory structure:
 
-\begin{verbatim}
-|- $TESTNAME
-|  |- configuration
-|  |  |- customRateFuncs.f90           [*]
-|  |  |- environmentVariables.config
-|  |  |- initialConcentrations.config
-|  |  |- mechanism.prod.cmp
-|  |  |- mechanism.reac.cmp
-|  |  |- mechanism.ro2.cmp
-|  |  |- mechanism.species.cmp
-|  |  |- model.parameters
-|  |  |- outputRates.config
-|  |  |- outputSpecies.config
-|  |  |- photolysisConstant.config     [*]
-|  |  |- photolysisConstrained.config  [*]
-|  |  |- solver.parameters
-|  |  |- speciesConstant.config        [*]
-|  |  |- speciesConstrained.config     [*]
-|  |- constraints      [**]
-|     |- environment/  [**]
-|     |- photolysis/   [**]
-|     |- species/      [**]
-|- output
-|  |- reactionRates/
-|  |- environmentVariables.output.cmp
-|  |- errors.output.cmp
-|  |- finalModelState.output.cmp
-|  |- jacobian.output.cmp
-|  |- lossRates.output.cmp
-|  |- mainSolverParameters.output.cmp
-|  |- photolysisRates.output.cmp
-|  |- photolysisRatesParameters.output.cmp
-|  |- productionRates.output.cmp
-|  |- speciesConcentrations.output.cmp
-|- $TESTNAME.{fac|kpp}
-|- $TESTNAME.out.cmp
-\end{verbatim}
+\begin{Verbatim}[fontsize=\small]
+  |- $TESTNAME
+  |  |- configuration
+  |  |  |- customRateFuncs.f90           [*]
+  |  |  |- environmentVariables.config
+  |  |  |- initialConcentrations.config
+  |  |  |- mechanism.prod.cmp
+  |  |  |- mechanism.reac.cmp
+  |  |  |- mechanism.ro2.cmp
+  |  |  |- mechanism.species.cmp
+  |  |  |- model.parameters
+  |  |  |- outputRates.config
+  |  |  |- outputSpecies.config
+  |  |  |- photolysisConstant.config     [*]
+  |  |  |- photolysisConstrained.config  [*]
+  |  |  |- solver.parameters
+  |  |  |- speciesConstant.config        [*]
+  |  |  |- speciesConstrained.config     [*]
+  |  |- constraints      [**]
+  |     |- environment/  [**]
+  |     |- photolysis/   [**]
+  |     |- species/      [**]
+  |- output
+  |  |- reactionRates/
+  |  |- environmentVariables.output.cmp
+  |  |- errors.output.cmp
+  |  |- finalModelState.output.cmp
+  |  |- jacobian.output.cmp
+  |  |- lossRates.output.cmp
+  |  |- mainSolverParameters.output.cmp
+  |  |- photolysisRates.output.cmp
+  |  |- photolysisRatesParameters.output.cmp
+  |  |- productionRates.output.cmp
+  |  |- speciesConcentrations.output.cmp
+  |- $TESTNAME.{fac|kpp}
+  |- $TESTNAME.out.cmp
+\end{Verbatim}
 
 The files marked with \texttt{[*]} and the directories marked with
 \texttt{[**]} are optional, depending on the model configuration used
@@ -273,10 +273,10 @@ available to check and, if necessary, correct the Fortran code:
 These scripts are in the \texttt{tools/} directory and are executed
 from the \maindir\ with the following commands:
 
-\begin{verbatim}
-python tools/fix_style.py src/filename.f90
-python tools/fix_indent.py src/filename.f90
-\end{verbatim}
+\begin{Verbatim}[fontsize=\small]
+  python tools/fix_style.py src/filename.f90
+  python tools/fix_indent.py src/filename.f90
+\end{Verbatim}
 
 It is important to keep in mind that these scripts are \emph{not infallible}
 and, therefore, it is strongly recommended to always have a backup of the
@@ -286,7 +286,7 @@ argument sends the script output to another file, leaving the original
 file untouched.
 
 Both scripts are also used in the Testsuite to run the Style and
-Indent tests (Sect.~\ref{sec:test-suite}): each script is run over
+Indent tests (Sect.~\ref{sec:testsuite}): each script is run over
 each source file and the output is sent to a \texttt{.cmp} file. If
 all \texttt{.cmp} files match the original files, the test passes.
 
@@ -353,10 +353,10 @@ all \texttt{.cmp} files match the original files, the test passes.
   \item All \texttt{call} statements and the definitions of all
     procedures should contain one space before the first argument and
     one after the last argument inside the brackets:
-    \begin{verbatim}
+    \begin{Verbatim}[fontsize=\small]
     call function_name( arg1, arg2 )
     subroutine subroutine_name( arg1 )
-    \end{verbatim}
+    \end{Verbatim}
   \item Functions calls and array indices should not have spaces
     before the first argument or after the last argument inside the
     brackets.

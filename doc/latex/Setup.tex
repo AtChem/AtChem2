@@ -34,9 +34,9 @@ build process (Sect.~\ref{subsec:mechanism-file}) .
 
 Chemical reactions are described in FACSIMILE format using the notation:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   % k : A + B = C + D ;
-\end{verbatim}
+\end{Verbatim}
 
 where \texttt{k} is the rate coefficient, \texttt{A} and \texttt{B} are the reactants,
 \texttt{C} and \texttt{D} are the products. The definition of a chemical reaction in FACSIMILE
@@ -48,14 +48,14 @@ coefficients must be written before a species name, with or without a white spac
 they can be expressed as integer or decimal values. For example, the following reaction
 definitions are all equivalent:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   % k : A + A = B + B + C ;
   % k : 2A = 2B + C ;
   % k : 2.0A = 2.0B + C ;
   % k : 2 A = 2 B + C ;
   % k : 2.0 A = 2.0 B + C ;
   % k : A + A = 2B + 1.0 C ;
-\end{verbatim}
+\end{Verbatim}
 
 Note that the names of the rate coefficients and of the chemical species (products and
 reactants) must begin with a letter and not with a numerical character, although numbers may
@@ -73,14 +73,14 @@ enclosed between the \texttt{*} and \texttt{;} characters, and are
 ignored by the build scripts. A basic chemical mechanism, with
 comments and calculated rate coefficients, has the following format:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   * Tropospheric O3-NOx cycle ;
   * Kinetic data from Atkinson et al., ACP, 2004 ;
   *;
   % J_NO2                      : NO2 = NO + O ;
   % 5.6D-34*M*(TEMP/300)@-2.6  : O + O2 = O3 ;
   % 1.4D-12*EXP(-1310/TEMP)    : NO + O3 = NO2 + O2 ;
-\end{verbatim}
+\end{Verbatim}
 
 In the example above, the photolysis rate of \cf{NO2}
 (\texttt{J\_NO2}) can be calculated by AtChem2 as function of
@@ -92,7 +92,7 @@ coefficients, in which case they have to be defined before the
 chemical reactions that use them (typically, these are combination
 or dissociation reactions). For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   * Formation of nitric acid (HNO3) in the gas-phase ;
   *;
   * Rate coefficient (Atkinson et al., ACP, 2004) ;
@@ -106,7 +106,7 @@ or dissociation reactions). For example:
   *;
   * Chemical Reaction ;
   % KMT08 : OH + NO2 = HNO3 ;
-\end{verbatim}
+\end{Verbatim}
 
 In FACSIMILE format chemical reactions can also be written without
 reactants or products. This feature can be used to implement simple
@@ -114,14 +114,14 @@ descriptions of non-chemical processes in a box-model. For example,
 dilution (Sect.~\ref{subsec:dilute}), surface deposition and direct
 emission of a chemical species can be parametrized as:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   * Deposition velocity of O3 = 1.4 cm s-1 ;
   * Boundary layer height (BLHEIGHT) in cm ;
   % 1.4/BLHEIGHT  :  O3 =  ;
   *;
   * Emission rate of NO2 = 1e8 molecule cm-3 s-1 ;
   % 1D+8  :  = NO2  ;
-\end{verbatim}
+\end{Verbatim}
 
 More sophisticated approaches to describe non-chemical processes can
 be implemented by defining complex mathematical expressions to
@@ -177,10 +177,10 @@ the \textbf{Peroxy radicals} section, as explained in
 Sect.~\ref{subsec:facsimile-format}. This section must have a header
 and has the following format:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   * Peroxy radicals. ;
   RO2 = RO2a + RO2b + RO2c + ... ;
-\end{verbatim}
+\end{Verbatim}
 
 where \texttt{RO2a}, \texttt{RO2b}, \texttt{RO2c}, are the organic
 peroxy radicals in the chemical mechanism. If there are no organic
@@ -188,10 +188,10 @@ peroxy radicals in the chemical mechanism (or if the mechanism is not
 based upon the MCM), the RO2 sum section must still be present in
 the \texttt{.fac} file, but it is left empty:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   * Peroxy radicals. ;
   RO2 = ;
-\end{verbatim}
+\end{Verbatim}
 
 The RO2 sum is automatically generated from the \texttt{.fac} file during the
 \hyperref[subsec:build-process]{build process}. The script \texttt{mech\_converter.py} compares
@@ -208,12 +208,12 @@ section of the \texttt{.fac} file, but is not present in the list of \cf{RO2}
 extracted from the MCM database, the \texttt{mech\_converter.py} script
 prints a warning message to the terminal:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
         !!! WARNING !!!
   The following species are not present in the RO2 reference list:
     speciesX speciesY
   Should they be included in the RO2 sum?
-\end{verbatim}
+\end{Verbatim}
 
 In this case, the user must check manually whether the species in
 question are organic peroxy radicals, amend the \textbf{Peroxy radicals}
@@ -244,10 +244,10 @@ the following options, so that all the required headers
 (Sect.~\ref{subsec:facsimile-format}) are included in the generated
 \texttt{.fac} file: :
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   [x] Include inorganic reactions?
   [x] Include generic rate coefficients?
-\end{verbatim}
+\end{Verbatim}
 
 Click on the ``Download'' button and save the \texttt{.fac} file into
 a directory of choice -- such as the \texttt{model/} directory
@@ -285,7 +285,7 @@ pressure, can be used as arguments in a custom function. Below is an
 example of a modified \texttt{customRateFuncs.f90} file which defines
 a basic function to add two numbers:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   module custom_functions_mod
     implicit none
 
@@ -302,15 +302,15 @@ a basic function to add two numbers:
     end function multiplyNumbers
 
   end module custom_functions_mod
-\end{verbatim}
+\end{Verbatim}
 
 The ``multiplyNumbers()'' function can then be called in the
 \texttt{.fac} file, together with the regular FACSIMILE notation
 (Sect.~\ref{subsec:facsimile-format}). For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   % multiplyNumbers(2.0, 0.5) : A = B ;
-\end{verbatim}
+\end{Verbatim}
 
 It is the user's responsibility to ensure that the custom Fortran code
 is correct. Optionally, but recommended, the Python scripts
@@ -336,12 +336,12 @@ number of files:
 \item \texttt{mechanism.species} contains the chemical species in the chemical mechanism. The
   file has no header. The first column is the ID number of the species, the second column is
   the name of the species:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   1 O
   2 O3
   3 NO
   4 NO2
-  \end{verbatim}
+  \end{Verbatim}
 \item \texttt{mechanism.reac} and \texttt{mechanism.prod} contain the reactants and the
   products (respectively) of each reaction in the chemical mechanism. The files have a one line
   header with the total number of species and reactions in the mechanism, and the total number
@@ -350,18 +350,18 @@ number of files:
   the ID number of the reaction, the second column is the ID number of the species (from
   \texttt{mechanism.species}) which is a reactant/product in that reaction, the third column is
   the stoichiometric coefficient of the reaction:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   29 71 139 numberOfSpecies numberOfReactions numberOfGenericComplex
   1 1 1.0
   2 1 1.0
   3 1 1.0
   3 2 1.0
-  \end{verbatim}
+  \end{Verbatim}
 \item \texttt{mechanism.ro2} contains the organic peroxy radicals (\cf{RO2}) in the chemical
   mechanism. The file has a one line header as a Fortran comment. The first column is the ID
   number of the peroxy radical (from \texttt{mechanism.species}), the second column is the name
   of the peroxy radical as a Fortran comment:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ! Note that this file is automatically generated by
     build/mech_converter.py -- Any manual edits to this file
     will be overwritten when calling build/mech_converter.py
@@ -369,7 +369,7 @@ number of files:
   26 !C2H5O2
   28 !IC3H7O2
   29 !NC3H7O2
-  \end{verbatim}
+  \end{Verbatim}
 \end{itemize}
 
 The files generated during the build process are saved in the \sharedir\ which, by default, is
@@ -591,12 +591,12 @@ coefficient'' equal to the dilution rate~\footnote{The behaviour of \texttt{DILU
 example, the following ``reactions'' are added to the ``Tropospheric O3-NOx cycle'' mechanism
 shown in Sect.~\ref{subsec:facsimile-format}:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   % DILUTE : NO2 = ;
   % DILUTE : NO = ;
   % DILUTE : O = ;
   % DILUTE : O3 = ;
-\end{verbatim}
+\end{Verbatim}
 
 Note that AtChem2 treats molecular oxygen (\cf{O2}) and nitrogen
 (\cf{N2}) as model parameters rather than chemical species. Their
@@ -722,10 +722,10 @@ chamber walls or windows. For more information see the
 on the MCM website.
 
 The empirical parameters are different for each version of the MCM: by default, AtChem2 uses
-the parameters of the MCM v3.3.1 (\texttt{mcm/photolysis-rates\_v3.3.1}), but it is possible to
-use the parameters of other MCM versions by using the build script flag \texttt{--mcm}, as
-explained in Sect.~\ref{sec:build}. The value of the transmission factor $\tau$ can also be
-changed: see the file \texttt{mcm/INFO.md} for instructions.
+the parameters of the MCM v3.3.1 (from file \texttt{mcm/photolysis-rates\_v3.3.1}), but it is
+possible to use the parameters of other MCM versions by using the build script flag
+\texttt{--mcm}, as explained in Sect.~\ref{sec:build}. The value of the transmission factor
+$\tau$ can also be changed: see the file \texttt{mcm/INFO.md} for instructions.
 
 The solar zenith angle (SZA) is the angle between the local vertical
 (zenith) and the center of the sun. The SZA is measured in radians and
@@ -756,7 +756,11 @@ where $j_{meas}$ and $j_{calc}$ are the measured and calculated (with
 the MCM parametrization, Sect.~\ref{subsec:calculated-photolysis-rates})
 photolysis rates of a reference species. \cf{NO2} is often used as
 reference because $j$(\cf{NO2}) is one of the most frequently measured
-photolysis rates, in which case: \verb|JFAC = j(NO2)/J4|.
+photolysis rates, in which case:
+
+\begin{equation}
+  \mathrm{JFAC} = \frac{j(\cf{NO2})}{\mathrm{J}4}
+\end{equation}
 
 The parameter \texttt{JFAC} is by default set to 1, which means that
 the calculated photolysis rates are not scaled; \texttt{JFAC} can be
@@ -766,18 +770,16 @@ only the photolysis rates calculated with the MCM parametrization are
 scaled by \texttt{JFAC}: the constrained and the constant photolysis
 rates are never scaled (Fig.~\ref{fig:photol}).
 
-AtChem2 can calculate \texttt{JFAC} automatically at runtime. To use
-this option, edit the \texttt{environmentVariables.config} file
-(Sect.~\ref{subsec:environmentvariables}) and set \texttt{JFAC} to the
-name of the photolysis rate used as reference (e.g., \texttt{J4}).
-The reference photolysis rate must also be constrained -- i.e. it must
-be listed in the \texttt{photolysisConstrained.config} file
-(Sect.~\ref{subsec:photolysisconstrained}) and the corresponding
-constraint file must be present in the \texttt{model/constraints/photolysis/}
+AtChem2 can calculate \texttt{JFAC} automatically at runtime. To use this option, edit the
+\texttt{environmentVariables.config} file (Sect.~\ref{subsec:environmentvariables}) and set
+\texttt{JFAC} to the name of the photolysis rate used as reference (e.g., \texttt{J4}).  The
+reference photolysis rate must also be constrained -- i.e. it must be listed in the
+\texttt{photolysisConstrained.config} file (Sect.~\ref{subsec:photolysisconstrained}) and the
+corresponding constraint file must be present in the \texttt{model/constraints/photolysis/}
 directory.\\
 
 \textcolor{red}{\bf Warning:} the calculation of \texttt{JFAC} at runtime does not
-work very well in the current version of AtChem2~\footnote{See issue
+work well in the current version of AtChem2~\footnote{See issue
   \href{https://github.com/AtChem/AtChem2/issues/16}{\#16}.}, especially in situations
 when the reference photolysis rate is highly variable and at sunrise/sunset. Therefore,
 it is recommended to calculate \texttt{JFAC} offline and then to constrain it (go to
@@ -809,7 +811,7 @@ user -- contains the corresponding value. The possible values of each
 environment variable are detailed in Sect.~\ref{sec:environment-variables}.
 For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   1   TEMP         293
   2   PRESS        1013
   3   RH           CONSTRAINED
@@ -820,7 +822,7 @@ For example:
   8   JFAC         CONSTRAINED
   9   ROOF         OPEN
   10  ASA          2e-5
-\end{verbatim}
+\end{Verbatim}
 
 If an environment variable is constrained, there must be a
 corresponding data file in the \texttt{model/constraints/environment/}
@@ -837,12 +839,12 @@ concentration at the \textbf{model start time}, which is defined
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
 For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   O3      1.213e+12
   NO      378473308.14
   NO2     86893908168.9
   CH4     4.938e+13
-\end{verbatim}
+\end{Verbatim}
 
 Not all chemical species need to be initialized: those that are not
 listed in \texttt{initialConcentrations.config} are assumed to have an
@@ -859,11 +861,11 @@ required~\footnote{In version 1.0 and earlier, these species were listed in two 
   \texttt{productionRatesOutput.config}, \texttt{lossRatesOutput.config}.}.  The file has one
 column, with one species per line. For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   OH
   HO2
   NO3
-\end{verbatim}
+\end{Verbatim}
 
 The frequency of this output is controlled by \textbf{rates output step size}
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
@@ -878,13 +880,13 @@ This file~\footnote{Called \texttt{concentrationOutput.config} in version 1.0 an
 lists the chemical species for which the calculated concentration (in molecule cm$^{-3}$) is
 required. The file has one column, with one species per line. For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   O3
   NO2
   CH4
   OH
   HO2
-\end{verbatim}
+\end{Verbatim}
 
 The frequency of this output is controlled by the \textbf{step size} parameter
 in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
@@ -907,11 +909,11 @@ the names of the photolysis rates follow the
 \href{https://mcm.york.ac.uk/MCM/rates/photolysis}{MCM designation}.
 For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   1     2.5e-5     J1
   4     8.7e-3     J4
   7     1.8e-3     J7
-\end{verbatim}
+\end{Verbatim}
 
 The photolysis rates that are not listed in \texttt{photolysisConstants.config}
 are automatically set to zero (Fig.~\ref{fig:photol}). If no photolysis rate
@@ -924,11 +926,11 @@ lists the photolysis rates that are constrained (Sect.~\ref{subsec:constrained-p
 The file has one column, with one photolysis rate per line. The names of the photolysis rates
 follow the \href{https://mcm.york.ac.uk/MCM/rates/photolysis}{MCM designation}. For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   J1
   J4
   J7
-\end{verbatim}
+\end{Verbatim}
 
 If a photolysis rate is constrained, there must be a corresponding
 constraint file in the \texttt{model/constraints/photolysis/}
@@ -944,11 +946,11 @@ lists the chemical species that are set to constant concentrations. The file has
 the first column is the list of constant species, the second column is the corresponding
 concentration (in molecule cm$^{-3}$). For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   CH4     4.4e+13
   CO      2.5e+12
   H2      1.2e+13
-\end{verbatim}
+\end{Verbatim}
 
 The chemical species that are set to a constant value do not need to
 be initialized: the values set in \texttt{speciesConstant.config}
@@ -963,11 +965,11 @@ line. If a chemical species is constrained, there must be a corresponding constr
 the \texttt{model/constraints/species/} directory (Sect.~\ref{subsec:constrained-variables}).
 For example:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   CH4
   CO
   H2
-\end{verbatim}
+\end{Verbatim}
 
 The chemical species that are constrained do not need to be initialized: the values set in
 \texttt{speciesConstrained.config} override those set in \texttt{initialConcentrations.config}.

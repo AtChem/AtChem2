@@ -32,7 +32,7 @@ software tools:
 \end{itemize}
 
 Some or all of these tools may already be installed on the operating system: use the
-\texttt{which} command to find out (e.g., \verb|which python|, \verb|which make|,
+\verb|which| command to find out (e.g., \verb|which python|, \verb|which make|,
 etc\ldots). Otherwise, check the local documentation or ask the system administrator. In
 addition, AtChem2 has the following dependencies:
 
@@ -150,9 +150,9 @@ v2.9.0 (part of SUNDIALS v2.7.0) and it can be installed using the script
     \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}
   \end{itemize}
 \item Run the installation script (change the \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ./tools/install/install_cvode.sh ~/AtChem-lib/
-  \end{verbatim}
+  \end{Verbatim}
 \end{enumerate}
 
 If the installation is successful, there is now a CVODE installation at
@@ -170,9 +170,9 @@ platforms. The current version of openlibm is 0.8.1 and it can be installed usin
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ./tools/install/install_openlibm.sh ~/AtChem-lib/
-  \end{verbatim}
+  \end{Verbatim}
 \end{enumerate}
 
 \textcolor{red}{\bf Warning:} the compilation of openlibm on \textbf{macOS} may fail with a
@@ -203,16 +203,16 @@ directory.
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ./tools/install/install_numdiff.sh ~/AtChem-lib/
-  \end{verbatim}
+  \end{Verbatim}
 \item Move to the \texttt{\$HOME} directory (\texttt{cd\ \textasciitilde}).  Open the
   \texttt{.bash\_profile} file (or the \texttt{.profile} file, depending on the system
   configuration) with a text editor. Add the following line to the bottom of the file (change
   the \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   export PATH=$PATH:$HOME/AtChem-lib/numdiff/bin
-  \end{verbatim}
+  \end{Verbatim}
 \item Close the terminal.
 \item Reopen the terminal. Execute \verb|which numdiff| to check that the program has been
   installed correctly.
@@ -234,16 +234,16 @@ The current version of FRUIT is 3.4.3 and it can be installed using the script
 \item Open the terminal. Move to the \texttt{\$HOME} directory (\texttt{cd\ \textasciitilde}).
   Open the \texttt{.bash\_profile} file (or the \texttt{.profile} file, depending on the system
   configuration) with a text editor. Add the following lines to the bottom of the file:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   export GEM_HOME=$HOME/.gem
   export PATH=$PATH:$GEM_HOME/bin
-  \end{verbatim}
+  \end{Verbatim}
 \item Close the terminal.
 \item Reopen the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Run the installation script (change the \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ./tools/install/install_fruit.sh ~/AtChem-lib/
-  \end{verbatim}
+  \end{Verbatim}
 \end{enumerate}
 
 If the installation is successful, there is now a FRUIT installation at
@@ -260,27 +260,27 @@ and configure AtChem2 is straightforward:
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
 \item Copy the template \texttt{Makefile} from the \texttt{tools/install/} directory to the
   \maindir:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   cp ./tools/install/Makefile.skel ./Makefile
-  \end{verbatim}
+  \end{Verbatim}
 \item Open the \texttt{Makefile} with a text editor. Set the variables \texttt{\$CVODELIBDIR},
   \texttt{\$OPENLIBMDIR}, \texttt{\$FRUITDIR} to the paths of the CVODE, openlibm and FRUIT
   libraries, as indicated in Sect.~\ref{sec:dependencies}. Use \emph{full paths}, because
   relative paths may cause compilation errors~\footnote{See issue
     \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}. For example (change the
   \depdir\ path as needed):
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   CVODELIBDIR = $(HOME)/AtChem-lib/cvode/lib
   OPENLIBMDIR = $(HOME)/AtChem-lib/openlibm-0.8.1
   FRUITDIR = $(HOME)/AtChem-lib/fruit_3.4.3
-  \end{verbatim}
+  \end{Verbatim}
   If FRUIT has not been installed (it is optional and needed only to run certain tests), leave
   the default value for \texttt{\$FRUITDIR}.
 \item Compile AtChem2 using the build script (\texttt{build\_atchem2.sh}) in the
   \texttt{build/} directory:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ./build/build_atchem2.sh --mechanism=model/mechanism.fac
-  \end{verbatim}
+  \end{Verbatim}
   The build script creates an executable called \texttt{atchem2} in the \maindir, using the
   default mechanism file \texttt{mechanism.fac} in the \texttt{model/} directory.
 \item Execute \verb|./atchem2| from the \maindir. The command runs the model executable using
@@ -288,7 +288,7 @@ and configure AtChem2 is straightforward:
   executable prints information to the terminal while it is running, such as the model
   settings, warning messages (if any), and timesteps. If the model run completes successfully,
   the terminal displays a message similar to the following:
-  \begin{verbatim}
+  \begin{Verbatim}[fontsize=\small]
   ------------------
    Final statistics
   ------------------
@@ -299,15 +299,15 @@ and configure AtChem2 is straightforward:
 
    Runtime = 0
    Deallocating memory.
-  \end{verbatim}
+  \end{Verbatim}
 \end{enumerate}
 
 \textcolor{red}{\bf Warning:} when AtChem2 is run for the first time on a \textbf{macOS}
 system, it may abort with the following message:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
-\end{verbatim}
+\end{Verbatim}
 
 This error is related to the path of dynamic libraries on macOS: to resolve the issue, follow
 the suggestions on the \href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
@@ -347,9 +347,9 @@ The container is built on Rocky Linux 8.9 and pre-installs the CVODE and openlib
 via the corresponding install scripts (Sect.~\ref{subsec:required-dependencies}). The image can
 be downloaded via the command:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   docker pull ghcr.io/wacl-york/atchem2:1.2.2
-\end{verbatim}
+\end{Verbatim}
 
 When running the container, changes to the model (e.g., those made to
 configurations, constraints and mechanisms) should be in a folder that
@@ -359,20 +359,20 @@ The chemical mechanism to use is provided as a positional argument to
 the image (e.g., \texttt{./model/my\_mech.fac}).
 
 Example host file structure:
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   my_model_run
     |__ model
        |__ configuration
        |__ constraints
        |__ my_mech.fac
-\end{verbatim}
+\end{Verbatim}
 
 Example Docker run command:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   docker run -it --rm -v /path/to/my_model_run:/data_transfer
          ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
-\end{verbatim}
+\end{Verbatim}
 
 Outputs will be copied to \texttt{my\_model\_run/model/output} on completion.
 
@@ -382,17 +382,17 @@ Some HPC systems use Singularity / Apptainer instead of Docker as
 their container engine. This image is compatible with those
 as well. The image can be converted to a \texttt{.sif} via the command:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   apptainer pull path/to/image/atchem2.sif
             docker://ghcr.io/wacl-york/atchem2:1.2.2
-\end{verbatim}
+\end{Verbatim}
 
 Example Apptainer run command:
 
-\begin{verbatim}
+\begin{Verbatim}[fontsize=\small]
   apptainer run --bind /path/to/my_model_run/:/data_transfer/
             path/to/image/atchem2.sif ./model/my_mech.fac
-\end{verbatim}
+\end{Verbatim}
 
 Note that the leading \texttt{/} is important when mounting the volume
 for apptainer, as the container opens in the users \texttt{~}

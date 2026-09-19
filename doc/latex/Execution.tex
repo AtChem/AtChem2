@@ -14,40 +14,33 @@
 % -------------------------------------------------------------------- %
 \section{Box-Model} \label{sec:box-model}
 
-AtChem2 is a modelling tool to build and run chemical box-models for
-atmospheric chemistry and air quality studies \citep{sommariva_2020}.
-An AtChem2 box-model requires two sets of inputs, which are provided
-by the user: the chemical mechanism file and the configuration files
--- both are described in the following sections. Additionally, AtChem2
-gives the option to constrain a box-model to observations (see
-Sect.~\ref{sec:constraints}), which requires the user to provide
-constraint data files.
+AtChem2 is a modelling tool to build and run chemical box-models for atmospheric chemistry and
+air quality studies \citep{sommariva_2020}.  An AtChem2 box-model requires two sets of inputs,
+which have to be provided by the user: the chemical mechanism file and the configuration files
+-- both are described in the following sections. Additionally, AtChem2 gives the option to
+constrain a box-model to observations (see Sect.~\ref{sec:constraints}), which requires the
+user to provide constraint data files.
 
 \subsection{Mechanism file} \label{subsec:mechanism-file}
 
 AtChem2 is designed to use the Master Chemical Mechanism
-(\href{https://mcm.york.ac.uk/MCM}{MCM}). Other chemical mechanisms
-can be used, as long as they are in the right format. By default,
-AtChem2 uses the \hyperref[subsec:facsimile-format]{FACSIMILE format},
-which is described in Sect.~\ref{subsec:facsimile-format}: it must be
-provided by the user as a text file with the extension \texttt{.fac}.
+(\href{https://mcm.york.ac.uk/MCM}{MCM}). Other chemical mechanisms can be used,
+as long as they are in the right format. By default, AtChem2 uses the
+\hyperref[subsec:facsimile-format]{FACSIMILE format}, which is described in
+Sect.~\ref{subsec:facsimile-format}: it must be provided by the user as a text
+file with the extension \texttt{.fac}.
 
-AtChem2 also accepts chemical mechanisms in KPP format -- since
-version 1.2.3: in this case, the \texttt{.kpp} file is automatically
-converted by the build scripts into a \texttt{.fac} file, which is
-then processed as any other FACSIMILE formatted file. The mechanism
-file (\texttt{.fac} or \texttt{.kpp}) can be downloaded from the MCM
-website, as explained in Sect.~\ref{subsec:mcm-extraction}, or it can
-be assembled manually. The user can modify the \texttt{.fac} file with
-a text editor, if needed.
+AtChem2 also accepts chemical mechanisms in KPP format -- since version 1.2.3: in this case,
+the \texttt{.kpp} file is automatically converted by the build scripts into a \texttt{.fac}
+file, which is then processed as any other FACSIMILE formatted file. The mechanism file
+(\texttt{.fac} or \texttt{.kpp}) can be downloaded from the MCM website, as explained in
+Sect.~\ref{subsec:mcm-extraction}, or it can be assembled manually. The user can modify the
+mechanism file with a text editor, if needed.
 
-During the \hyperref[subsec:build-process]{build process}, the
-\texttt{.fac} file is converted into a pre-compiled shared library
-(\texttt{mechanism.so}, in the \sharedir), plus several files in
-Fortran-compatible format (in the \texttt{model/configuration/}
-directory). Note that, by default, the \sharedir\ is the same as the
-model configuration directory, although this can be changed by the
-user.
+During the \hyperref[subsec:build-process]{build process}, the mechanism file is converted into
+a pre-compiled shared library (\texttt{mechanism.so}) and several files in Fortran-compatible
+format. These files are created in the \sharedir\ (by default, \texttt{model/sharedlib/}) and
+should not be modified by the user.
 
 \subsection{Configuration files} \label{subsec:configuration-files}
 
@@ -73,99 +66,95 @@ configuration files can be found in the corresponding section:
 An AtChem2 box-model can be set up in two modes:
 
 \begin{description}
-\item[Unconstrained]: all variables are calculated by the model from
-  the initial conditions, which are set in the
-  \hyperref[subsec:configuration-files]{configuration files}.
-\item[Constrained]: one or more variables are constrained, meaning
-  that the solver forces their value to a given value at each time
-  step. The variables that are not constrained are calculated by the
-  model from the initial conditions and from the constrained
-  variables.
+\item[Unconstrained]: all variables are calculated by the model from the initial conditions,
+  which are set in the \hyperref[subsec:configuration-files]{configuration files}.
+\item[Constrained]: one or more variables are constrained, meaning that the solver forces their
+  value to a given value at each time step. The variables that are not constrained are
+  calculated by the model from the initial conditions and from the constrained variables.
 \end{description}
 
-The constraint data must be provided as one text file for each
-constrained variable, with the format described below. By default, the
-constraint data files are located in \texttt{model/constraints/species/}
-for the chemical species, \texttt{model/constraints/environment/} for
-the environment variables, \texttt{model/constraints/photolysis/} for
-the photolysis rates. Note that, although \texttt{JFAC} is an
-environment variable (Sect.~\ref{sec:environment-variables}), its
-constraint file must be located in the same directory as the
-photolysis rates.
+The constraint data must be provided as one text file for each constrained variable, with the
+format described below. By default, the constraint data files are located in the \constrdir\
+which, by default, is \texttt{model/constraints/}. The \constrdir\ contains three
+subdirectories, one for each type of constraint:
 
-The default directories can be changed by the user, as explained in
-Sect.~\ref{sec:build} -- see also Sect.~\ref{subsec:model-directory}.
+\begin{itemize}
+\item \texttt{species/} for the chemical species,
+\item \texttt{environment/} for the environment variables
+\item \texttt{photolysis/} for the photolysis rates.
+\end{itemize}
+
+All the default directories can be changed, as explained in Sect.~\ref{sec:build} and
+\ref{sec:execute} (see also Sect.~\ref{subsec:model-directory}), so that the user can create
+flexible and customized workflows.
 
 \subsection{Constrained variables} \label{subsec:constrained-variables}
 
 \subsubsection{Environment variables}
 
-All environment variables, except \texttt{ROOF}, can be constrained. To do so,
-set the variable to \texttt{CONSTRAINED} in \texttt{environmentVariables.config}
-(Sect.~\ref{subsec:environmentvariables}) and create a file with the constraint
-data (Sect.~\ref{subsec:constraint-files}). The name of the file must be the
-same as the name of the variable -- e.g., \texttt{TEMP}.
+All environment variables, except \texttt{ROOF}, can be constrained. To do so, set the
+variable to \texttt{CONSTRAINED} in the file \texttt{environmentVariables.config}
+(Sect.~\ref{subsec:environmentvariables}) and create a file with the constraint data
+(Sect.~\ref{subsec:constraint-files}). The name of the file must be the same as the name
+of the constrained variable with no extension -- e.g., \texttt{TEMP}.
 
 \subsubsection{Chemical species}
 
-Any chemical species in the chemical mechanism can be constrained. To
-do so, add the name of the species to \texttt{speciesConstrained.config}
-(Sect.~\ref{subsec:speciesconstrained}) and create a file with the
-constraint data (Sect.~\ref{subsec:constraint-files}). The name of the file
-must be the same as the name of the chemical species -- e.g., \texttt{O3}.
+Any chemical species in the chemical mechanism can be constrained. To do so, add the name of
+the species to \texttt{speciesConstrained.config} (Sect.~\ref{subsec:speciesconstrained}) and
+create a file with the constraint data (Sect.~\ref{subsec:constraint-files}). The name of the
+file must be the same as the name of the constrained chemical species with no extension --
+e.g., \texttt{O3}.
 
 \subsubsection{Photolysis rates}
 
-Any photolysis rate in the chemical mechanism can be constrained. The
-photolysis rates are identified as \texttt{J<i>}, where \texttt{i} is
-the ID number assigned by the MCM to each photolysis reaction
-(Sect.~\ref{sec:photolysis-rates}). To constrain a photolysis rate add
-its name to \texttt{photolysisConstrained.config}
-(Sect.~\ref{subsec:photolysisconstrained}) and create a file with the
-constraint data (Sect.~\ref{subsec:constraint-files}). The name of the
-file must be the same as the name of the photolysis rate -- e.g.,
+Any photolysis rate in the chemical mechanism can be constrained. The photolysis rates are
+identified as \texttt{J<i>}, where \texttt{i} is the ID number assigned by the MCM to each
+photolysis reaction (Sect.~\ref{sec:photolysis-rates}). To constrain a photolysis rate add its
+name to \texttt{photolysisConstrained.config} (Sect.~\ref{subsec:photolysisconstrained}) and
+create a file with the constraint data (Sect.~\ref{subsec:constraint-files}). The name of the
+file must be the same as the name of the constrained photolysis rate with no extension -- e.g.,
 \texttt{J4}.\\
 
-\textcolor{red}{\bf Important Note}: the filenames of all constraint
-data files must match the variable name (including capitalization),
-without any extension.
+\textcolor{red}{\bf Important Note:} even though \texttt{JFAC} is an environment variable
+(Sect.~\ref{sec:environment-variables}), its constraint file must be located in the same
+directory as the photolysis rates.
 
 \subsection{Constraint files} \label{subsec:constraint-files}
 
-All constraint data files are text files with two columns and no
-header: the first column is the time in seconds from midnight of the
-start date (in UTC, Sect.~\ref{sec:model-parameters}), while the
-second column is the value of the variable in the appropriate unit.
-For chemical species the unit is molecule cm$^{-3}$, for photolysis
-rates the unit is s$^{-1}$; for the units of environment variables,
-see Sect.~\ref{sec:environment-variables}. For example:
+All constraint data files are text files with two columns and no header: the first column is
+the time in seconds from midnight of the start date (in UTC, Sect.~\ref{sec:model-parameters}),
+while the second column is the value of the variable in the appropriate unit.  For chemical
+species the unit is molecule cm$^{-3}$, for photolysis rates the unit is s$^{-1}$; for the
+units of environment variables, see Sect.~\ref{sec:environment-variables}. For example:
 
 \begin{verbatim}
--1800  71.48
--900   73.21
-0      74.393
-900    72.973
-1800   72.63
-2700   72.73
-3600   69.326
-4500   65.822
-5400   63.83
-6300   64.852
+  -1800  71.48
+  -900   73.21
+  0      74.393
+  900    72.973
+  1800   72.63
+  2700   72.73
+  3600   69.326
+  4500   65.822
+  5400   63.83
+  6300   64.852
 \end{verbatim}
 
-The time in the first column of a constraint file does not have to be
-at regular intervals and can be negative. AtChem2 interprets negative
-times as ``seconds before midnight of the start date''. Data points
-with negative time can be useful to ensure the correct interpolation of
-the variables at the beginning and at the end of the model run. This
-is because the constrained data must cover the same amount of time, and
-preferably more, as the intended model runtime to avoid interpolation
-errors. For details, go to Sect.~\ref{subsec:interpolation}.
+The time in the first column of a constraint file does not have to be at regular intervals and
+can be negative. AtChem2 interprets negative times as \emph{seconds before midnight of the
+  start date} (Sect.~\ref{sec:model-parameters}). Data points with negative time can be useful
+to ensure the correct interpolation of the variables at the beginning and at the end of the
+model run. This is because the constrained data must cover the same amount of time, and
+preferably more, as the intended model runtime in order to avoid interpolation errors: for
+details, go to Sect.~\ref{subsec:interpolation}.
 
-For example: if the model starts at 41400 seconds (day 1 at 11:30) and
-stops at 225900 seconds (day 3 at 14:45), then the first and the last
-data points of a constraint file must have a time of 41400 seconds (or
-lower) and 225900 seconds (or higher), respectively.
+For example: if the model starts at 41400 seconds (day 1 at 11:30) and stops at 225900 seconds
+(day 3 at 14:45), then the first and the last data points of a constraint file must have a time
+of 41400 seconds (or lower) and 225900 seconds (or higher), respectively.\\
+
+\textcolor{red}{\bf Important Note}: the filenames of all constraint data files must match
+exactly the name of the constrained variable (including capitalization), without any extension.
 
 \subsection{Interpolation} \label{subsec:interpolation}
 
@@ -180,7 +169,7 @@ The constraints can be used with their original timescales, or can be
 averaged so that they are all on the same timescale. Both approaches
 have advantages and disadvantages in terms of how much pre-processing
 work is required to prepare the data files, and in terms of model
-accuracy and integration speed: for a discussion of these issues, see
+accuracy and integration speed: for a discussion of these issues see
 \citet{sommariva_2020}. The choice of approach depends on the specific
 modelling objectives, as well as the available computing resources.
 
@@ -206,11 +195,11 @@ mentioned in Sect.~\ref{subsec:constraint-files} and illustrated
 below:
 
 \begin{verbatim}
-                  start            stop
-model run           |----------------|
-constraint 1    |---------------------------|
-constraint 2       |------------------|
-constraint 3     |-----------------------|
+                    start            stop
+  model run           |----------------|
+  constraint 1    |---------------------------|
+  constraint 2       |------------------|
+  constraint 3     |-----------------------|
 \end{verbatim}
 
 If constraint data are not supplied for the entire runtime interval,
@@ -221,100 +210,95 @@ terminal for all data evaluations outside of the supplied time
 interval. For example:
 
 \begin{verbatim}
- error in piecewise linear interpolation
-  4.3205895E+05 720  3.0000000E+04
- error in piecewise linear interpolation
-  4.3205895E+05 720  0.0000000E+00
+  error in piecewise linear interpolation
+   4.3205895E+05 720  3.0000000E+04
+  error in piecewise linear interpolation
+   4.3205895E+05 720  0.0000000E+00
 \end{verbatim}
 
-Adjusting the \textbf{model start time} and/or the \textbf{number of steps}
-in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters})
-usually resolve this issue~\footnote{This behaviour is likely to change
-  in future versions of AtChem2 to avoid the situation where
-  the last value is used for all times before the first data point
-  (see issue \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}.
-In any case, and to avoid errors, it is good practice to always
-provide constraint data that include a short period before the start
-time and a short period after the stop time.
+Adjusting the \textbf{model start time} and/or the \textbf{number of steps} in the
+\texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}) usually resolve this
+issue~\footnote{This behaviour is likely to change in future versions of AtChem2 to avoid the
+  situation where the last value is used for all times before the first data point (see issue
+  \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}.  In any case, and to avoid
+errors, it is good practice to always provide constraint data that include a short period
+before the start time and a short period after the stop time.
 
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
 
-The \texttt{build\_atchem2.sh} script in the \texttt{build/} directory is
-used to process the chemical mechanism file(Sect.~\ref{subsec:mechanism-file})
-and compile the model. The script generates five files which describe
-the chemical mechanism in Fortran-compatible format
-(\texttt{mechanism.*}), and one pre-compiled shared library
-(\texttt{mechanism.so}). The format and content of these files are
-described in Sect.~\ref{subsec:build-process}.
+The \texttt{build\_atchem2.sh} script in the \texttt{build/} directory is used to process the
+chemical mechanism file (Sect.~\ref{subsec:mechanism-file}) and compile the model. The script
+generates a number of files which describe the chemical mechanism in a Fortran-compatible
+format (\texttt{mechanism.*}), and the pre-compiled mechanism shared library
+(\texttt{mechanism.so}). These files are described in Sect.~\ref{subsec:build-process}.
 
-The \texttt{build\_atchem2.sh} script must be run from the \maindir\
-and takes three arguments which must be provided in the exact order
-indicated below. This means that if, for example, the second argument
-needs to be specified, it is also necessary to specify the first
-argument, even if it has the default value. To avoid potential
-mistakes, the user can choose to always specify all arguments. The
-three arguments, and their default values, are:
+The \texttt{build\_atchem2.sh} script must be run from the \maindir\ and takes four arguments
+which are provided via input flags~\footnote{Prior to version 1.3, the build script required
+  three positional arguments -- for details, see the documentation on the AtChem2
+  \href{https://github.com/AtChem/AtChem2/wiki/How-to-build-AtChem2}{wiki}.}, as described
+below:
 
 \begin{enumerate}
-\item path to the chemical mechanism file -- there is no default, but
-  it is suggested to keep the \texttt{.fac} (or \texttt{.kpp}) file
-  either in the \texttt{model/} or in the \texttt{model/configuration/}
-  directories.
-\item path to the the directory for the Fortran mechanism files and to
-  the \sharedir\ -- default: \texttt{model/configuration/}.
-\item path to the directory containing the MCM data files -- default:
-  \texttt{mcm/}.
+\item path to the chemical mechanism file (\texttt{.fac} or \texttt{.kpp}).\\
+  \textbf{flag:} \texttt{--mechanism=}\\
+  There is no default for this argument, which must always be specified. It is suggested to
+  keep the mechanism file either in the \modeldir\ or in the \configdir.
+\item path to the \configdir, for the model configuration files and the custom Fortran functions.\\
+  \textbf{flag:} \texttt{--configuration=}\\
+  The default is \texttt{configuration/} in the \modeldir.
+\item path to the \sharedir, for the Fortran mechanism files and the pre-compiled shared library.\\
+  \textbf{flag:} \texttt{--shared\_lib=}\\
+  The default is \texttt{sharedlib/} in the \modeldir.
+\item version of the MCM to be used.\\
+  \textbf{flag:} \texttt{--mcm=}\\
+  The default is \texttt{v3.3.1}; other accepted values are \texttt{v3.2} and \texttt{v3.1}.
 \end{enumerate}
 
-Both full and relative paths are acceptable for all three arguments,
-according to the user's preference. For example, if the chemical
-mechanism file is in the \texttt{model/} directory, the model is build
-using the command:
+Both full and relative paths are acceptable, depending on the user's preference. For example,
+if the chemical mechanism file is called \texttt{mechanism.fac} and is located in the
+\texttt{model/} directory, the build command (using the default settings for the configuration,
+the shared library and the MCM version) is:
 
 \begin{verbatim}
-./build/build_atchem2.sh ./model/mechanism.fac
-                         ./model/configuration/ ./mcm/
+  ./build/build_atchem2.sh --mechanism=model/mechanism.fac
 \end{verbatim}
 
-An installation of AtChem2 can have multiple \texttt{model/}
-directories, each corresponding to a different model or project. This
-approach allows the user to work with multiple models at the same time
-and makes it easy to run batch simulations for sensitivity studies. As
-mentioned in Sect.~\ref{subsec:model-directory}, the \texttt{model/}
-directory can also be located outside the \maindir, which gives the
-users great flexibility in the organization of their workflow.
+As mentioned in Sect.~\ref{subsec:model-directory}, an installation of AtChem2 can have
+multiple \modeldir, each corresponding to a different model or project. This approach allows
+the user to work with multiple box-models at the same time using a single installation of
+AtChem2, and makes it easy to run batch simulations for sensitivity studies. The \modeldir\ can
+also be located outside the \maindir, giving the users great flexibility in the organization of
+their workflow.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.85\textwidth]{model-setup.png}
-  \caption{Example of a modelling setup, with an AtChem2 installation
-    and a project directory containing two different box-models.}
+  \caption{Example of a modelling setup, with one AtChem2 installation and one project
+    directory containing two different box-models.}
   \label{fig:setup}
 \end{figure}
 
-Fig.~\ref{fig:setup} shows an example of a possible setup: a user
-directory contains an AtChem2 installation, consisting of the
-\maindir\ (\texttt{AtChem2/}, which includes the default
-\texttt{model/} directory) and the \depdir\ (\texttt{AtChem-lib/}). In
-addition, a project directory (\texttt{Project\_A/}) contains two
-separate model directories (\texttt{model\_1/} and
-\texttt{model\_2/}), each with their own chemical mechanism,
-configuration, constraints and output. The project directory may
-correspond, for example, to a field campaign or to a set of related
-experiments. In this case, each model can be built from the \maindir\
-with the following commands~\footnote{The third argument is not
-  specified in this example, so the default value (\texttt{./mcm/}) is
-  implicitly used.}:
+Fig.~\ref{fig:setup} shows the example of a possible setup: a user directory contains an
+AtChem2 installation, consisting of the \maindir\ (\texttt{AtChem2/}, which includes the
+default \texttt{model/} directory) and the \depdir\ (\texttt{AtChem-lib/}). In addition, a
+project directory (\texttt{Project\_A/}) contains two separate \modeldir\ (\texttt{model\_1/}
+and \texttt{model\_2/}), each with their own chemical mechanism, configuration, constraints and
+output. The project directory may correspond, for example, to a field campaign or to a set of
+related experiments. In this case, each model can be built indipendently from the \maindir\
+with the following commands:
 
 \begin{verbatim}
-./build/build_atchem2.sh ../Project_A/model_1/mechanism.fac
-                         ../Project_A/model_1/configuration/
+  ./build/build_atchem2.sh --mechanism=../Project_A/model_1/mechanism.fac
+                           --configuration=../Project_A/model_1/configuration/
+                           --shared_lib=../Project_A/model_1/sharedlib/
 \end{verbatim}
 
 \begin{verbatim}
-./build/build_atchem2.sh ../Project_A/model_2/mechanism.fac
-                         ../Project_A/model_2/configuration/
+  ./build/build_atchem2.sh --mechanism=../Project_A/model_2/mechanism.fac
+                           --configuration=../Project_A/model_2/configuration/
+                           --shared_lib=../Project_A/model_2/sharedlib/
+                           --mcm=v3.2
 \end{verbatim}
 
 There are many different ways in which the \texttt{model/} directory
@@ -334,7 +318,7 @@ compilation is required only once for a given \texttt{.fac} (or
 \texttt{.kpp}) file.
 
 Changes to the configuration files do not require recompiling the
-model. Likewise, if constraints files are added, removed or modified
+model. Likewise, if constraint files are added, removed or modified
 there is no need to recompile the model. This is because the model
 configuration and constraints are read by the executable at
 runtime. However, if the chemical mechanism is changed, then the
@@ -356,45 +340,43 @@ studies.
 % -------------------------------------------------------------------- %
 \section{Execute} \label{sec:execute}
 
-The build process -- described in Sect.~\ref{subsec:build-process} and
-Sect.~\ref{sec:build} -- creates an executable file called
-\texttt{atchem2} in the \maindir. The executable takes up to nine
-arguments, corresponding to the \emph{relative paths} (with respect to
-the \maindir) of the model configuration, the chemical mechanism
-shared library, the constraint data files, and the model output. The
-arguments are passed to the executable via a series of input
-flags~\footnote{Prior to version 1.2, AtChem2 used a system of
-  positional arguments instead of the input flags -- see the
-  \href{https://github.com/AtChem/AtChem2/wiki/How-to-run-AtChem2}{wiki}
-  for details.}, each with a default value as described below:
+The build process -- described in Sect.~\ref{subsec:build-process} and Sect.~\ref{sec:build} --
+creates an executable file called \texttt{atchem2} in the \maindir. The executable takes up to
+nine arguments, corresponding to the \emph{relative paths} (with respect to the \maindir) of
+the model configuration, the chemical mechanism shared library, the constraint data files, and
+the model output. The arguments are passed to the executable via a series of input
+flags~\footnote{Prior to version 1.2, the executable used a system of positional arguments
+  instead of the input flags -- for details, see the documentation on the AtChem2
+  \href{https://github.com/AtChem/AtChem2/wiki/How-to-run-AtChem2}{wiki}.}, each with a default
+value as described below:
 
 \begin{enumerate}
 \item path to the model directory\\
-  flag: \texttt{--model}\\
+  \textbf{flag:} \texttt{--model}\\
   default: \texttt{model/}
 \item path to the directory for the model output\\
- flag: \texttt{--output}\\
+ \textbf{flag:} \texttt{--output}\\
  default: \texttt{model/output/}
 \item path to the directory with the configuration files\\
-  flag: \texttt{--configuration}\\
+  \textbf{flag:} \texttt{--configuration}\\
   default: \texttt{model/configuration/}
 \item path to the directory with the model constraints\\
-  flag: \texttt{--constraints}\\
+  \textbf{flag:} \texttt{--constraints}\\
   default: \texttt{model/constraints/}
 \item path to the directory with the data files of constrained environment variables\\
-  flag: \texttt{--env\_constraints}\\
+  \textbf{flag:} \texttt{--env\_constraints}\\
   default: \texttt{model/constraints/environment/}
 \item path to the directory with the data files of constrained photolysis rates\\
-  flag: \texttt{--photo\_constraints}\\
+  \textbf{flag:} \texttt{--photo\_constraints}\\
   default: \texttt{model/constraints/photolysis/}
 \item path to the directory with the data files of constrained chemical species\\
-  flag: \texttt{--spec\_constraints}\\
+  \textbf{flag:} \texttt{--spec\_constraints}\\
   default: \texttt{model/constraints/species/}
 \item the path to the pre-compiled chemical mechanism shared library\\
-  flag: \texttt{--shared\_lib}\\
+  \textbf{flag:} \texttt{--shared\_lib}\\
   default: \texttt{model/configuration/mechanism.so}
 \item path to the directory with the MCM data files\\
-  flag: \texttt{--mcm}\\
+  \textbf{flag:} \texttt{--mcm}\\
   default: \texttt{mcm/}
 \end{enumerate}
 
@@ -525,16 +507,14 @@ in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}):
   of all chemical reactions.
 \end{itemize}
 
-All AtChem2 output files are space-delimited text files with a one
-line header containing the names of the variables. The first column of
-each file is the model time (\texttt{t}) in seconds since midnight of
-the \textbf{start date}~\footnote{Note that the \textbf{start date} is
-  different than the \textbf{model start time}. The model start time
-  indicates when the model begins its run and is in seconds since the
-  midnight of the start date (Sect.~\ref{sec:model-parameters}).}:
+All AtChem2 output files are space-delimited text files with a one line header containing the
+names of the variables. The first column of each file is the model time (\texttt{t}) in seconds
+since midnight of the \textbf{start date}~\footnote{The \textbf{start date} is different than
+  the \textbf{model start time}. The model start time indicates when the model begins its run
+  and is in seconds since the midnight of the start date (Sect.~\ref{sec:model-parameters}).}:
 
 \begin{itemize}
-\item Environment variables and \cf{RO2} sum:\\
+\item Environment variables and RO2 sum:\\
   \texttt{environmentVariables.output}
 \item Concentrations of selected chemical species -- see
   Sect.~\ref{subsec:outputspecies}:\\
@@ -546,7 +526,7 @@ the \textbf{start date}~\footnote{Note that the \textbf{start date} is
 \item Loss and production rates (ROPA/RODA) of selected chemical
   species -- see Sect.~\ref{subsec:outputrates}:\\
   \texttt{lossRates.output}, \texttt{productionRates.output}
-\item Concentrations of all chemical species, except the \cf{RO2} sum,
+\item Concentrations of all chemical species, except the RO2 sum,
   at the end of the model run (\textbf{model stop time}):\\
   \texttt{finalModelState.output}
 \item Jacobian matrix (optional, see Sect.~\ref{sec:model-parameters}):\\
@@ -555,14 +535,12 @@ the \textbf{start date}~\footnote{Note that the \textbf{start date} is
   \texttt{errors.output}, \texttt{mainSolverParameters.output}
 \end{itemize}
 
-In addition to the \texttt{.output} files, the reaction rates of every
-reaction in the chemical mechanism are saved, by default, in the
-\texttt{output/reactionRates/} directory~\footnote{Called
-  \texttt{instantaneousRates/} prior to version 1.1.}: one file for
-each model step, with the name of the file corresponding to the output
-time in seconds. The files have no header, and the order of reactionn
-is the same as in the chemical mechanism (under the ``Reaction
-definitions'' section -- see Sect.~\ref{subsec:facsimile-format}).
+In addition to the \texttt{.output} files, the reaction rates of every reaction in the chemical
+mechanism are saved, by default, in the \texttt{output/reactionRates/}
+directory~\footnote{Called \texttt{instantaneousRates/} prior to version 1.1.}: one file for
+each model step, with the name of the file corresponding to the output time in seconds. The
+files have no header, and the order of reactionn is the same as in the chemical mechanism
+(under the ``Reaction definitions'' section -- see Sect.~\ref{subsec:facsimile-format}).
 
 \subsection{ROPA/RODA} \label{subsec:ropa-roda}
 
@@ -596,9 +574,7 @@ it is recommended to limit the list of chemical species in
 \texttt{outputRates.config} to only those of special interest, and to
 keep the frequency of the output low (the default is 1 hour).\\
 
-\textcolor{red}{\bf Important Note}: although, in principle, a rate of
-production and destruction analysis for constrained chemical species
-can be done, the results should be interpreted with extreme
-caution. The user must be aware that the concentrations of these
-species are determined by the constraining data rather than by the
-chemical reactions.
+\textcolor{red}{\bf Important Note:} although, in principle, a rate of production and
+destruction analysis for constrained chemical species can be done, the results should be
+interpreted with extreme caution. The user must be aware that the concentrations of these
+species are determined by the constraining data rather than by the chemical reactions.

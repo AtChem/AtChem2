@@ -258,7 +258,7 @@ and configure AtChem2 is straightforward:
 
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
-\item Copy the default \texttt{Makefile} from the \texttt{tools/install/} directory to the
+\item Copy the template \texttt{Makefile} from the \texttt{tools/install/} directory to the
   \maindir:
   \begin{verbatim}
   cp ./tools/install/Makefile.skel ./Makefile
@@ -306,7 +306,7 @@ and configure AtChem2 is straightforward:
 system, it may abort with the following message:
 
 \begin{verbatim}
-dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
+  dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
 \end{verbatim}
 
 This error is related to the path of dynamic libraries on macOS: to resolve the issue, follow
@@ -348,7 +348,7 @@ via the corresponding install scripts (Sect.~\ref{subsec:required-dependencies})
 be downloaded via the command:
 
 \begin{verbatim}
-docker pull ghcr.io/wacl-york/atchem2:1.2.2
+  docker pull ghcr.io/wacl-york/atchem2:1.2.2
 \end{verbatim}
 
 When running the container, changes to the model (e.g., those made to
@@ -360,18 +360,18 @@ the image (e.g., \texttt{./model/my\_mech.fac}).
 
 Example host file structure:
 \begin{verbatim}
-my_model_run
- |__ model
-     |__ configuration
-     |__ constraints
-     |__ my_mech.fac
+  my_model_run
+    |__ model
+       |__ configuration
+       |__ constraints
+       |__ my_mech.fac
 \end{verbatim}
 
 Example Docker run command:
 
 \begin{verbatim}
-docker run -it --rm -v /path/to/my_model_run:/data_transfer
-       ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
+  docker run -it --rm -v /path/to/my_model_run:/data_transfer
+         ghcr.io/wacl-york/atchem2:1.2.2 ./model/my_mech.fac
 \end{verbatim}
 
 Outputs will be copied to \texttt{my\_model\_run/model/output} on completion.
@@ -383,15 +383,15 @@ their container engine. This image is compatible with those
 as well. The image can be converted to a \texttt{.sif} via the command:
 
 \begin{verbatim}
-apptainer pull path/to/image/atchem2.sif
-          docker://ghcr.io/wacl-york/atchem2:1.2.2
+  apptainer pull path/to/image/atchem2.sif
+            docker://ghcr.io/wacl-york/atchem2:1.2.2
 \end{verbatim}
 
 Example Apptainer run command:
 
 \begin{verbatim}
-apptainer run --bind /path/to/my_model_run/:/data_transfer/
-          path/to/image/atchem2.sif ./model/my_mech.fac
+  apptainer run --bind /path/to/my_model_run/:/data_transfer/
+            path/to/image/atchem2.sif ./model/my_mech.fac
 \end{verbatim}
 
 Note that the leading \texttt{/} is important when mounting the volume
@@ -478,7 +478,7 @@ scripts to check the consistency of the Fortran code (\texttt{fix\_style.py} and
 \texttt{fix\_indent.py}, see Sect.~\ref{sec:style-guide}), and the following subdirectories:
 
 \begin{itemize}
-\item \texttt{install/}: contains the default \texttt{Makefile} (\texttt{Makefile.skel}) and
+\item \texttt{install/}: contains the template \texttt{Makefile} (\texttt{Makefile.skel}) and
   the scripts to install the \hyperref[sec:dependencies]{Dependencies}.
 \item \texttt{plot/}: contains some basic scripts, in various programming languages, to plot
   the model output.
@@ -526,15 +526,17 @@ in Sect.~\ref{sec:build} and \ref{sec:execute}.
 
 The \modeldir\ contains a number of subdirectories:
 
-\begin{description}
-\item[\configdir] for the model configuration files. By default, it is
-  \texttt{model/configuration/}.
-\item[\constrdir] for the model constraint files. By default, it is
-  \texttt{model/constraints/}.
-\item[\sharedir] for the pre-compiled chemical mechanism shared library
-  (\texttt{mechanism.so}). By default, it is \texttt{model/sharedlib/}.
-\item[\outdir] for the model output. By default, it is \texttt{model/output/}.
-\end{description}
+\begin{itemize}
+\item \configdir\ for the model configuration files.\\
+  By default, it is \texttt{model/configuration/}.
+\item \constrdir\ for the model constraint files.\\
+  By default, it is \texttt{model/constraints/}.
+\item \sharedir\ for the pre-compiled chemical mechanism shared library
+  (\texttt{mechanism.so}).\\
+  By default, it is \texttt{model/sharedlib/}.
+\item \outdir\ for the model output.\\
+  By default, it is \texttt{model/output/}.
+\end{itemize}
 
 Note that, although the chemical mechanism file (\texttt{.fac} or \texttt{.kpp}) does not need
 to be located inside the \modeldir, it is good practice to do so in order to keep all the model

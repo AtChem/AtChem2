@@ -234,10 +234,9 @@ format (\texttt{mechanism.*}), and the pre-compiled mechanism shared library
 (\texttt{mechanism.so}). These files are described in Sect.~\ref{subsec:build-process}.
 
 The \texttt{build\_atchem2.sh} script must be run from the \maindir\ and takes four arguments
-which are provided via input flags~\footnote{Prior to version 1.3, the build script required
-  three positional arguments -- for details, see the documentation on the AtChem2
-  \href{https://github.com/AtChem/AtChem2/wiki/How-to-build-AtChem2}{wiki}.}, as described
-below:
+which are provided using the following input flags~\footnote{Prior to version 1.3, the build
+  script required three positional arguments -- for details, see the documentation on the
+  \href{https://github.com/AtChem/AtChem2/wiki/How-to-build-AtChem2}{wiki}.}:
 
 \begin{enumerate}
 \item path to the chemical mechanism file (\texttt{.fac} or \texttt{.kpp}).\\
@@ -255,10 +254,10 @@ below:
   The default is \texttt{v3.3.1}; other accepted values are \texttt{v3.2} and \texttt{v3.1}.
 \end{enumerate}
 
-Both full and relative paths are acceptable, depending on the user's preference. For example, a
-box-model with the default settings for the configuration, shared library and MCM version,
-using the chemical mechanism file \texttt{model/mechanism.fac} can be build with the following
-command:
+Both full and relative paths are acceptable, depending on the user's preference, and the order
+in which the flags are used does not matter. For example, a box-model with the default settings
+for the configuration, shared library and MCM version, using the chemical mechanism file
+\texttt{model/mechanism.fac} can be build with the following command:
 
 \begin{Verbatim}[fontsize=\small]
   ./build/build_atchem2.sh --mechanism=model/mechanism.fac
@@ -293,25 +292,24 @@ with the following commands:
   ./build/build_atchem2.sh --mechanism=../Project_A/model_1/mechanism.fac
                            --configuration=../Project_A/model_1/configuration/
                            --shared_lib=../Project_A/model_1/sharedlib/
-\end{Verbatim}
 
-\begin{Verbatim}[fontsize=\footnotesize]
   ./build/build_atchem2.sh --mechanism=../Project_A/model_2/mechanism.fac
                            --configuration=../Project_A/model_2/configuration/
                            --shared_lib=../Project_A/model_2/sharedlib/
                            --mcm=v3.2
 \end{Verbatim}
 
-Note that the second command in the example above changes the version of the MCM to v3.2: this
-only affects the RO2 sum and the photolysis rates. It is responsibility of the user to ensure
-that the chemistry in the \texttt{.fac} file corresponds to the correct version of the MCM.
+Note that the second command in the example above changes the version of the MCM to v3.2: the
+\texttt{--mcm} flag only affects the choice of the RO2 sum and of the photolysis rates. It is
+responsibility of the user to ensure that the chemistry in the \texttt{.fac} file corresponds
+to the correct version of the MCM.
 
-There are many different ways in which the \modeldir\ can be organized: for example, it is
-possible to keep all the constraint files related to a project in one directory, thus avoiding
-the need to have identical \texttt{constraints/} directories in each \modeldir. Each user has
-specific needs and personal preferences; as long as the correct paths are passed to the
-\texttt{build\_atchem2.sh} script (and to the executable, see Sect.~\ref{sec:execute}), the
-model will compile and run.
+There are many different ways in which the \modeldir\ can be organized, because each user has
+specific needs and personal preferences. For example, it is possible to keep all the constraint
+files related to a project in one directory, thus avoiding the need to have identical
+\texttt{constraints/} directories in each \modeldir. As long as the correct paths are passed to
+the \texttt{build\_atchem2.sh} script (and to the executable, see Sect.~\ref{sec:execute}), the
+model will compile and run with the correct inputs.
 
 The \texttt{build\_atchem2.sh} script also handles model compilation, converting the Fortran
 code into the \texttt{atchem2} executable, which is dynamically linked to the shared chemical
@@ -325,164 +323,143 @@ runtime. However, if the chemical mechanism file is changed, then the shared lib
 (\texttt{mechanism.so}) needs to be recompiled.
 
 If the user wants, or needs, to change the Fortran code (\texttt{src/*.f90}), then the
-executable needs to be recompiled. To recompile the model, the \texttt{build\_atchem2.sh}
-script needs to be executed again~\footnote{If the recompilation fails, it is sometimes useful
-  to run the command \verb|make clean| from the \maindir\ before rerunning the build
-  script.}. The build script is able to detect whether the Fortran code, the chemical
-mechanism, or both have been modified and runs the appropriate commands. This design approach
-reduces both the frequency and the duration of model compilations by requesting it only when
-strictly necessary, therefore facilitating running the model in batch mode -- e.g., for
-sensitivity studies.
+executable needs to be recompiled. To recompile the model, the build script needs to be
+executed again~\footnote{If the recompilation fails, it is sometimes useful to run the command
+  \verb|make clean| from the \maindir\ before rerunning the build script.}. The build script is
+able to detect whether the Fortran code, the chemical mechanism, or both have been modified and
+runs the appropriate commands. This design approach reduces both the frequency and the duration
+of model compilations by requesting it only when strictly necessary, therefore facilitating
+batch model runs for, e.g., sensitivity studies.
 
 % -------------------------------------------------------------------- %
 \section{Execute} \label{sec:execute}
 
 The build process -- described in Sect.~\ref{subsec:build-process} and Sect.~\ref{sec:build} --
 creates an executable file called \texttt{atchem2} in the \maindir. The executable takes up to
-nine arguments, corresponding to the \emph{relative paths} (with respect to the \maindir) of
-the model configuration, the chemical mechanism shared library, the constraint data files, and
-the model output. The arguments are passed to the executable via a series of input
-flags~\footnote{Prior to version 1.2, the executable used a system of positional arguments
-  instead of the input flags -- for details, see the documentation on the AtChem2
+eight arguments~\footnote{The \texttt{--mcm} flag which pointed to the directory with the MCM
+  data files was removed with version 1.3.}, corresponding to the \emph{relative paths} (with
+respect to the \maindir) of the model configuration, the chemical mechanism shared library, the
+constraint data files, and the model output. The arguments are passed to the executable via a
+series of input flags~\footnote{Prior to version 1.2, the executable used a system of
+  positional arguments instead of the input flags -- for details, see the documentation on the
   \href{https://github.com/AtChem/AtChem2/wiki/How-to-run-AtChem2}{wiki}.}, each with a default
 value as described below:
 
 \begin{enumerate}
-\item path to the model directory\\
+\item path to the \modeldir.\\
   \textbf{flag:} \texttt{--model}\\
-  default: \texttt{model/}
-\item path to the directory for the model output\\
+  $\hookrightarrow$ default: \texttt{model/}
+\item path to the \outdir.\\
  \textbf{flag:} \texttt{--output}\\
- default: \texttt{model/output/}
-\item path to the directory with the configuration files\\
+ $\hookrightarrow$ default: \texttt{model/output/}
+\item path to the \configdir.\\
   \textbf{flag:} \texttt{--configuration}\\
-  default: \texttt{model/configuration/}
-\item path to the directory with the model constraints\\
+  $\hookrightarrow$ default: \texttt{model/configuration/}
+\item path to the \constrdir.\\
   \textbf{flag:} \texttt{--constraints}\\
-  default: \texttt{model/constraints/}
+  $\hookrightarrow$ default: \texttt{model/constraints/}
 \item path to the directory with the data files of constrained environment variables\\
   \textbf{flag:} \texttt{--env\_constraints}\\
-  default: \texttt{model/constraints/environment/}
+  $\hookrightarrow$ default: \texttt{model/constraints/environment/}
 \item path to the directory with the data files of constrained photolysis rates\\
   \textbf{flag:} \texttt{--photo\_constraints}\\
-  default: \texttt{model/constraints/photolysis/}
+  $\hookrightarrow$ default: \texttt{model/constraints/photolysis/}
 \item path to the directory with the data files of constrained chemical species\\
   \textbf{flag:} \texttt{--spec\_constraints}\\
-  default: \texttt{model/constraints/species/}
-\item the path to the pre-compiled chemical mechanism shared library\\
+  $\hookrightarrow$ default: \texttt{model/constraints/species/}
+\item path to the \sharedir.\\
   \textbf{flag:} \texttt{--shared\_lib}\\
-  default: \texttt{model/configuration/mechanism.so}
-\item path to the directory with the MCM data files\\
-  \textbf{flag:} \texttt{--mcm}\\
-  default: \texttt{mcm/}
+  $\hookrightarrow$ default: \texttt{model/sharedlib/}
 \end{enumerate}
 
-In addition, the input flag \texttt{--help} displays an help message
-explaining the usage of the command line arguments and of the input
-flags.
+In addition, the input flag \texttt{--help} displays an help message explaining the usage of
+the command line arguments and of the input flags.
 
-AtChem2 can be run simply by executing the command \verb|./atchem2|
-from the \maindir, in which case the executable will assume that all
-arguments have the default values. The equivalent command using the
-input flags explicitily is:
+AtChem2 can be run simply by executing the command \verb|./atchem2| from the \maindir, in which
+case the executable will assume that all arguments have the default values. The equivalent
+command using the input flags explicitly is:
 
 \begin{Verbatim}[fontsize=\small]
-./atchem2 --model=model/
-          --output=model/output/
-          --configuration=model/configuration/
-          --constraints=model/constraints/
-          --spec_constraints=model/constraints/species/
-          --env_constraints=model/constraints/environment/
-          --photo_constraints=model/constraints/photolysis/
-          --shared_lib=model/configuration/mechanism.so
-          --mcm=mcm/
+  ./atchem2 --model=model/
+            --output=model/output/
+            --configuration=model/configuration/
+            --constraints=model/constraints/
+            --spec_constraints=model/constraints/species/
+            --env_constraints=model/constraints/environment/
+            --photo_constraints=model/constraints/photolysis/
+            --shared_lib=model/sharedlib/
 \end{Verbatim}
 
-Not all flags have to be used, and the order in which they are used
-does not matter. If a flag is omitted, the executable assumes the
-default value, based on a \emph{hierarchical directory structure}. For
-example, the following command implies that a directory called
-\texttt{output/} is present inside the \texttt{model/} directory, and
-that three directories called \texttt{species/}, \texttt{environment/}
-and \texttt{photolysis/} are present inside the
+Not all flags have to be used, and the order in which they are used does not matter. If a flag
+is omitted, the executable assumes the default value, based on a \emph{hierarchical directory
+  structure}. For example, the following command implies that a directory called
+\texttt{output/} is present inside the \texttt{model/} directory, and that three directories
+called \texttt{species/}, \texttt{environment/} and \texttt{photolysis/} are present inside the
 \texttt{model/constraints/} directory:
 
 \begin{Verbatim}[fontsize=\small]
 ./atchem2 --model=model/
           --configuration=model/configuration/
           --constraints=model/constraints/
-          --shared_lib=model/configuration/mechanism.so
+          --shared_lib=model/sharedlib/
 \end{Verbatim}
 
-This approach gives the the user a lot of flexibility in the
-organization of the modelling work and makes it possible to run
-several models using the same executable with different
-configurations, constraints and chemical mechanisms. For example, the
-following commands run two models with the same chemical mechanism and
-two different configurations, and save the corresponding outputs in
-separate directories:
+This approach gives the the user a lot of flexibility in the organization of the modelling work
+and makes it possible to run several models using the same executable with different
+configurations, constraints and chemical mechanisms. For example, the following commands run
+two models with the same chemical mechanism and two different configurations, and save the
+corresponding outputs in separate directories:
 
 \begin{Verbatim}[fontsize=\small]
-./atchem2 --configuration=model/configuration_1/
-          --output=model/output_1/
-          --shared_lib=model/mechanism.so
+  ./atchem2 --configuration=model/configuration_1/
+            --output=model/output_1/
+            --shared_lib=model/sharedlib/
+
+  ./atchem2 --configuration=model/configuration_2/
+            --output=model/output_2/
+            --shared_lib=model/sharedlib/
 \end{Verbatim}
 
-\begin{Verbatim}[fontsize=\small]
-./atchem2 --configuration=model/configuration_2/
-          --output=model/output_2/
-          --shared_lib=model/mechanism.so
-\end{Verbatim}
+Only three input flags are specified in the above commands, and therefore the executable
+assumes that the default values for the remaining input flags: i.e. the \modeldir is
+\texttt{model/} and the \constrdir is (\texttt{model/constraints/} for both model runs.
 
-Only three input flags are specified in the above commands, and
-therefore the executable assumes that the default values for the
-remaining input flags apply -- i.e. the model directory is
-\texttt{model/} and the constraints directory is the same for both
-model runs (\texttt{model/constraints/}.
-
-It is also possible to combine chemical mechanisms, configurations and
-constraints from different models: for example, based on the setup
-shown in Fig.~\ref{fig:setup}, the following command runs a model that
-has its own configuration, but is constrained to the chemical species
-and environment variables of \texttt{model\_1/} and to the photolysis
-rates of \texttt{model\_2/}:
+It is also possible to combine chemical mechanisms, configurations and constraints from
+different models: for example, based on the setup shown in Fig.~\ref{fig:setup}, the following
+command runs a model that has its own configuration, but is constrained to the chemical species
+and environment variables of \texttt{model\_1/} and to the photolysis rates of \texttt{model\_2/}:
 
 \begin{Verbatim}[fontsize=\small]
 ./atchem2 --configuration=model/configuration/
           --output=model/output/
-          --shared_lib=model/configuration/mechanism.so
+          --shared_lib=model/sharedlib/
           --spec_constraints=../Project_A/model_1/constraints/species/
           --env_constraints=../Project_A/model_1/constraints/environment/
           --photo_constraints=../Project_A/model_2/constraints/photolysis/
 \end{Verbatim}
 
-While the model is running, diagnostic information is printed to the
-terminal. A successful model run completes with a message similar to
-the one shown in Sect.~\ref{sec:install}. Users have the option to
-redirect the terminal printout to a log file, using standard unix
-commands.
+While the model is running, diagnostic information is printed to the terminal. A successful
+model run completes with a message similar to the one shown in Sect.~\ref{sec:install}. The
+user has the option to redirect the terminal printout to a log file, using standard
+\href{https://swcarpentry.github.io/shell-novice}{unix commands}.
 
 \subsection{HPC} \label{subsec:hpc}
 
-AtChem2 can be installed and run on High Performance Computing (HPC)
-clusters, or supercomputers, which typically run some version of
-Linux/Unix. This is recommended, especially for models with long
-runtimes and/or many constraints.
+AtChem2 can be installed and run on High Performance Computing (HPC) clusters, or
+supercomputers, which typically run some version of Linux/Unix. This is recommended, especially
+for models with long runtimes and/or many constraints.
 
-Installation and setup on an HPC system are exactly the same as on a
-regular workstation, but each system has its own rules and
-guidelines. Therefore, it is not possible to give specific advice, and
-users should check the local documentation or ask the system
-administrator.
+Installation and setup on an HPC system are exactly the same as on a regular workstation, but
+each system has its own rules and guidelines. Therefore, it is not possible to give specific
+advice, and users should check the local documentation or ask the system administrator.
 
-On most HPC systems, software execution is managed by a job scheduler,
-which requires a submission script. The script will allocate the
-requested resources~\footnote{AtChem2 does not support parallelization
-  at present; this may change in future versions.}, alert the user
-that the model run is finished, and save the terminal printout and any
-other message to log files. The syntax and format of the submission
-script depend on the type of job scheduler installed on the HPC
-system. Examples of submission scripts can be found on the
+On most HPC systems, software execution is managed by a job scheduler, which requires a
+submission script. The script will allocate the requested resources~\footnote{AtChem2 does not
+  support parallelization at present; this may change in future versions. See issue
+  \href{https://github.com/AtChem/AtChem2/issues/536}{\#536}.}, alert the user that the model
+run is finished, and save the terminal printout and any other message to log files. The syntax
+and format of the submission script depend on the type of job scheduler installed on the HPC
+system. A few examples of submission scripts can be found on the
 \href{https://github.com/AtChem/AtChem2/wiki/Running-on-HPC}{wiki}.
 
 % -------------------------------------------------------------------- %
@@ -507,8 +484,9 @@ in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}):
 All AtChem2 output files are space-delimited text files with a one line header containing the
 names of the variables. The first column of each file is the model time (\texttt{t}) in seconds
 since midnight of the \textbf{start date}~\footnote{The \textbf{start date} is different than
-  the \textbf{model start time}. The model start time indicates when the model begins its run
-  and is in seconds since the midnight of the start date (Sect.~\ref{sec:model-parameters}).}:
+  the \textbf{model start time}: the model start time indicates when the model begins its run
+  and is in seconds since the midnight of the start date. For more information go to
+  Sect.~\ref{sec:model-parameters}.}:
 
 \begin{itemize}
 \item Environment variables and RO2 sum:\\

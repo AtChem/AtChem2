@@ -11,24 +11,18 @@
 
 % -------------------- PREAMBLE -------------------- %
 \documentclass[11pt,a4paper]{report}
-\usepackage{helvet,graphicx,hyperref}
-\usepackage{fancyhdr,fancyvrb,caption,natbib}
+\usepackage{helvet,graphicx,natbib}
+\usepackage{fancyhdr,fancyvrb,caption}
 \usepackage[dvipsnames]{xcolor}
 \usepackage[version=3]{mhchem}
+\usepackage{hyperref}
 
-% page style
+% style
 \pagestyle{fancy}
 \setlength{\headheight}{13.6pt}
 \rhead{\leftmark}
 \lhead{}
-
-\renewcommand{\bibname}{References}
 \frenchspacing
-
-\renewcommand{\labelitemi}{$\diamond$}
-\renewcommand{\labelitemii}{$\circ$}
-
-\VerbatimFootnotes
 
 % links
 \hypersetup{colorlinks=true,
@@ -36,6 +30,12 @@
   citecolor=ForestGreen,
   urlcolor=NavyBlue
 }
+
+% customizations
+\renewcommand{\bibname}{References}
+\renewcommand{\labelitemi}{$\diamond$}
+\renewcommand{\labelitemii}{$\circ$}
+\VerbatimFootnotes
 
 % shortcuts
 \newcommand{\maindir}{\texttt{\em Main Directory}}

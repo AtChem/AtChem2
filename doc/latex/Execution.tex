@@ -15,7 +15,7 @@
 \section{Box-Model} \label{sec:box-model}
 
 AtChem2 is a modelling tool to build and run chemical box-models for atmospheric chemistry and
-air quality studies \citep{sommariva_2020}.  An AtChem2 box-model requires two sets of inputs,
+air quality studies \citep{sommariva_2020}. An AtChem2 box-model requires two sets of inputs,
 which have to be provided by the user: the chemical mechanism file and the configuration files
 -- both are described in the following sections. Additionally, AtChem2 gives the option to
 constrain a box-model to observations (see Sect.~\ref{sec:constraints}), which requires the
@@ -124,7 +124,7 @@ directory as the photolysis rates.
 
 All constraint data files are text files with two columns and no header: the first column is
 the time in seconds from midnight of the start date (in UTC, Sect.~\ref{sec:model-parameters}),
-while the second column is the value of the variable in the appropriate unit.  For chemical
+while the second column is the value of the variable in the appropriate unit. For chemical
 species the unit is molecule cm$^{-3}$, for photolysis rates the unit is s$^{-1}$; for the
 units of environment variables, see Sect.~\ref{sec:environment-variables}. For example:
 
@@ -220,7 +220,7 @@ Adjusting the \textbf{model start time} and/or the \textbf{number of steps} in t
 \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}) usually resolve this
 issue~\footnote{This behaviour is likely to change in future versions of AtChem2 to avoid the
   situation where the last value is used for all times before the first data point (see issue
-  \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}.  In any case, and to avoid
+  \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}. In any case, and to avoid
 errors, it is good practice to always provide constraint data that include a short period
 before the start time and a short period after the stop time.
 
@@ -421,8 +421,9 @@ corresponding outputs in separate directories:
 \end{Verbatim}
 
 Only three input flags are specified in the above commands, and therefore the executable
-assumes that the default values for the remaining input flags: i.e. the \modeldir is
-\texttt{model/} and the \constrdir is (\texttt{model/constraints/} for both model runs.
+assumes the default values for the remaining input flags: in the example, this means that the
+\modeldir is \texttt{model/} and the \constrdir is (\texttt{model/constraints/} for both model
+runs.
 
 It is also possible to combine chemical mechanisms, configurations and constraints from
 different models: for example, based on the setup shown in Fig.~\ref{fig:setup}, the following
@@ -510,44 +511,39 @@ since midnight of the \textbf{start date}~\footnote{The \textbf{start date} is d
   \texttt{errors.output}, \texttt{mainSolverParameters.output}
 \end{itemize}
 
-In addition to the \texttt{.output} files, the reaction rates of every reaction in the chemical
-mechanism are saved, by default, in the \texttt{output/reactionRates/}
-directory~\footnote{Called \texttt{instantaneousRates/} prior to version 1.1.}: one file for
-each model step, with the name of the file corresponding to the output time in seconds. The
-files have no header, and the order of reactionn is the same as in the chemical mechanism
-(under the ``Reaction definitions'' section -- see Sect.~\ref{subsec:facsimile-format}).
+In addition to the \texttt{.output} files listed above, the reaction rates (in molecule
+cm$^{-3}$ s$^{-1}$) of every reaction in the chemical mechanism are saved, by default, in the
+\texttt{output/reactionRates/} directory~\footnote{Called \texttt{instantaneousRates/} prior to
+  version 1.1.}: one file for each model step, with the name of the file corresponding to the
+output time in seconds. The files have no header, and the order of reactionn is the same as in
+the chemical mechanism (under the ``Reaction definitions'' section -- see
+Sect.~\ref{subsec:facsimile-format}).
 
 \subsection{ROPA/RODA} \label{subsec:ropa-roda}
 
-The reaction rates files in the \texttt{output/reactionRates/}
-directory are useful to analyze the model results and understand the
-chemical system, as well as for diagnostic purposes. The format,
-however, may be cumbersome to process for some users. To simplify the
-rate of production and destruction analysis for specific chemical
-species (i.e. those listed in \texttt{outputRates.config},
-Sect.~\ref{subsec:outputrates}) AtChem2 creates the two files
-\texttt{productionRates.output} and \texttt{lossRates.output}.
-These files contain the reaction rates of production and destruction
-of the selected species in a human-readable format, shown in
-Fig.~\ref{fig:ropa}.
+The reaction rates files in the \texttt{output/reactionRates/} directory are useful to analyze
+the model results and understand the chemical system, as well as for diagnostic purposes. The
+format, however, may be cumbersome to process. To simplify the analysis of the rates of
+production and destruction of specific chemical species (i.e. those listed in
+\texttt{outputRates.config}, see Sect.~\ref{subsec:outputrates}) AtChem2 also generates the two
+files \texttt{productionRates.output} and \texttt{lossRates.output}. These files contain the
+rates of the production and destruction reaction of the selected species in a human-readable
+format (in molecule cm$^{-3}$ s$^{-1}$). The format is shown in Fig.~\ref{fig:ropa}.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.95\textwidth]{output-rates.png}
-  \caption{Format of the \texttt{productionRates.output} file. The
-    \texttt{lossRates.output} file has a similar format.}
+  \caption{Format of the \texttt{productionRates.output} file. The \texttt{lossRates.output}
+    file has a similar format.}
   \label{fig:ropa}
 \end{figure}
 
-The frequency of the ROPA/RODA output is controlled by the
-parameter \textbf{rates output step size}, as explained in
-Sect.~\ref{sec:model-parameters} and \ref{subsec:outputrates}. The
-\texttt{productionRates.output} and \texttt{lossRates.output} files
-can be very large and complex, especially for species that are
-involved in many reactions and/or for long model runtimes. Therefore,
-it is recommended to limit the list of chemical species in
-\texttt{outputRates.config} to only those of special interest, and to
-keep the frequency of the output low (the default is 1 hour).\\
+The frequency of the ROPA/RODA output is controlled by the parameter \textbf{rates output step
+  size}, as explained in Sect.~\ref{sec:model-parameters}. The \texttt{productionRates.output}
+and \texttt{lossRates.output} files can be very large and complex, especially for species that
+are involved in many reactions and/or for long model runtimes. Therefore, it is recommended to
+limit the list of chemical species in \texttt{outputRates.config} to only those of special
+interest, and to keep the frequency of the output low (the default is 1 hour).\\
 
 \textcolor{red}{\bf Important Note:} although, in principle, a rate of production and
 destruction analysis for constrained chemical species can be done, the results should be

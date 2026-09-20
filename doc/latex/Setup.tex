@@ -405,7 +405,7 @@ described below, are set in the \texttt{model.parameters} file in the \configdir
   interpolation).
 \item \textbf{rates output step size}. Frequency (in seconds) of the model output for the
   production and loss rates of selected species -- listed in \texttt{outputRates.config}
-  (Sect.~\ref{subsec:outputrates}).  This is used for the rate of production and destruction
+  (Sect.~\ref{subsec:outputrates}). This is used for the rate of production and destruction
   analysis (ROPA/RODA, Sect.~\ref{subsec:ropa-roda}).
 \item \textbf{model start time}. Start time of the model (in seconds) calculated from midnight
   of the \textbf{day}, \textbf{month}, \textbf{year} parameters -- see below.\\
@@ -428,7 +428,7 @@ described below, are set in the \texttt{model.parameters} file in the \configdir
   North is positive and latitude South is negative; longitude East is negative and longitude
   West is positive~\footnote{The standard geographical convention is that longitude East is
     positive and longitude West is negative. AtChem2 uses the opposite convention for reasons
-    of backward compatibility. This behaviour may change in future versions.}.  Latitude and
+    of backward compatibility. This behaviour may change in future versions.}. Latitude and
   longitude are used to calculate the solar angles, which are needed for the calculation of the
   photolysis rates (Sect.~\ref{subsec:calculated-photolysis-rates}).
 \item \textbf{day} and \textbf{month} and \textbf{year}. Start date of the model
@@ -636,15 +636,13 @@ or \texttt{CLOSED} and cannot be constrained.
 % -------------------------------------------------------------------- %
 \section{Photolysis Rates} \label{sec:photolysis-rates}
 
-The photolysis rates are the rate coefficients of the photolysis reactions,
-and are indicated in \hyperref[subsec:facsimile-format]{FACSIMILE format}
-with the notation \texttt{J<i>} -- where \texttt{i} is the ID number
-assigned by the MCM to each photolysis reaction (or to a group of
-photolysis reactions, as per MCM protocol). AtChem2 implements the MCM
-parametrization (Sect.~\ref{subsec:calculated-photolysis-rates}) to
-calculate the photolysis rates; for a comparison between calculated
-and measured photolysis rates see \citet{sommariva_2020}.
-Alternatively, the photolysis rates can be set to a constant value or
+The photolysis rates are the rate coefficients (in s$^{-1}$) of the photolysis reactions; they
+are indicated in \hyperref[subsec:facsimile-format]{FACSIMILE format} with the notation
+\texttt{J<i>} -- where \texttt{i} is the ID number assigned by the MCM to each photolysis
+reaction (or to a group of photolysis reactions, as per MCM protocol). AtChem2 implements the
+MCM parametrization (Sect.~\ref{subsec:calculated-photolysis-rates}) to calculate the
+photolysis rates; for a comparison between calculated and measured photolysis rates see
+\citet{sommariva_2020}. Alternatively, the photolysis rates can be set to a constant value or
 constrained to measured data. The following rules apply:
 
 \begin{enumerate}
@@ -657,11 +655,10 @@ constrained to measured data. The following rules apply:
   model calculates all photolysis rates.
 \end{enumerate}
 
-Fig.~\ref{fig:photol} shows how AtChem2 combines constant, constrained
-and calculated photolysis rates, as well as the usage of the photolysis
-correction factor \texttt{JFAC} (Sect.~\ref{subsec:jfac-calculation}).
-In addition, the environment variable \texttt{ROOF} can be used to turn
-the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
+Fig.~\ref{fig:photol} shows how AtChem2 combines constant, constrained and calculated
+photolysis rates, as well as the usage of the photolysis correction factor \texttt{JFAC}
+(Sect.~\ref{subsec:jfac-calculation}). In addition, the environment variable \texttt{ROOF} can
+be used to turn the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 
 \begin{figure}[htb]
   \centering
@@ -672,18 +669,15 @@ the photolysis rates ON or OFF, as explained in Sect.~\ref{subsec:roof}.
 
 \subsection{Constant photolysis rates} \label{subsec:constant-photolysis-rates}
 
-The typical scenario for constant photolysis rates is a lamp or solar
-simulator in an environmental chamber. All the photolysis rates in the
-chemical mechanism must be given a fixed value (in s$^{-1}$) in the
-\texttt{photolysisConstant.config} file, otherwise they are
-automatically set to zero (Fig.~\ref{fig:photol}). This approach
-allows the user to model individual photolytic processes and/or to
-account for lamps that emit only in certain spectral windows.
+The typical scenario for constant photolysis rates is a lamp or solar simulator in an
+environmental chamber. All the photolysis rates in the chemical mechanism must be given a fixed
+value in the \texttt{photolysisConstant.config} file, otherwise they are automatically set to
+zero (Fig.~\ref{fig:photol}). This approach allows the user to model individual photolytic
+processes and/or to account for lamps that emit only in certain spectral windows.
 
 The format of \texttt{photolysisConstant.config} is described in
-Sect.~\ref{subsec:photolysisconstant}. If the file is empty, the
-photolysis rates are constrained or calculated by the model as
-explained below.
+Sect.~\ref{subsec:photolysisconstant}. If the file is empty, the photolysis rates are
+constrained or calculated by the model as explained below.
 
 \subsection{Constrained photolysis rates} \label{subsec:constrained-photolysis-rates}
 
@@ -701,40 +695,34 @@ parametrization, described in the next section.
 
 \subsection{Calculated photolysis rates} \label{subsec:calculated-photolysis-rates}
 
-AtChem2 implements the parametrization of photolysis rates used by the
-Master Chemical Mechanism, which is described in detail in the MCM
-protocol papers \citep{jenkin_1997, saunders_2003}. Briefly, the
-photolysis rate (\texttt{J}) is calculated as a function of the solar
-zenith angle according to the following equation:
+AtChem2 implements the parametrization of photolysis rates used by the Master Chemical
+Mechanism, which is described in detail in the MCM protocol papers \citep{jenkin_1997,
+  saunders_2003}. Briefly, the photolysis rate (\texttt{J}) is calculated as a function of the
+solar zenith angle according to the following equation:
 
 \begin{equation}
   J = l \times (cosX)^m \times e^{(-n \times secX)} \times \tau
 \end{equation}
 
-where $l$, $m$, $n$ are empirical parameters, $cosX$ is the cosine of
-the solar zenith angle, $secX$ is the inverse of $cosX$ (i.e.
-$secX\ =\ 1/cosX$) and $\tau$ is the transmission factor. The
-transmission factor accounts for the loss of natural or artificial
-light in some environmental chambers: the default value of $\tau$ is
-1, which means there is perfect transmittance of light through the
-chamber walls or windows. For more information see the
-\href{https://mcm.york.ac.uk/MCM/rates/photolysis}{photolysis page}
-on the MCM website.
+where $l$, $m$, $n$ are empirical parameters, $cosX$ is the cosine of the solar zenith angle,
+$secX$ is the inverse of $cosX$ (i.e. $secX\ =\ 1/cosX$) and $\tau$ is the transmission
+factor. The empirical parameters $l$, $m$, $n$ are different for each version of the MCM: by
+default, AtChem2 uses the set of parameters of version 3.3.1 (from file
+\texttt{mcm/photolysis-rates\_v3.3.1}), but it is possible to use the parameters of other
+versions via the build script flag \texttt{--mcm}, as explained in Sect.~\ref{sec:build}.
 
-The empirical parameters are different for each version of the MCM: by default, AtChem2 uses
-the parameters of the MCM v3.3.1 (from file \texttt{mcm/photolysis-rates\_v3.3.1}), but it is
-possible to use the parameters of other MCM versions by using the build script flag
-\texttt{--mcm}, as explained in Sect.~\ref{sec:build}. The value of the transmission factor
-$\tau$ can also be changed: see the file \texttt{mcm/INFO.md} for instructions.
+The transmission factor $\tau$ accounts for the loss of natural or artificial light in some
+environmental chambers: the default value of $\tau$ is 1, which means there is perfect
+transmittance of light through the chamber walls or windows. The value of $\tau$ can be
+changed: see the file \texttt{mcm/INFO.md} for instructions. More information can be found on
+the \href{https://mcm.york.ac.uk/MCM/rates/photolysis}{photolysis page} of the MCM website.
 
-The solar zenith angle (SZA) is the angle between the local vertical
-(zenith) and the center of the sun. The SZA is measured in radians and
-is calculated by the model from latitude, longitude, sun declination
-and time of the day. These variables are set by the user in the
-\texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}). The
-sun declination (\texttt{DEC}, Sect.~\ref{subsec:dec}) -- unless it is
-constrained or set to a constant value -- is calculated by the
-model. The calculations of the solar zenith angle and of the sun
+The solar zenith angle (SZA) is the angle between the local vertical (zenith) and the center of
+the sun. The SZA is measured in radians and is calculated by the model from latitude,
+longitude, sun declination and time of the day. These variables are set by the user in the
+\texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}). The sun declination
+(\texttt{DEC}, Sect.~\ref{subsec:dec}) -- unless it is constrained or set to a constant value
+-- is calculated by the model. The calculations of the solar zenith angle and of the sun
 declination are described in \citet{madronich_1993}.
 
 \subsection{JFAC calculation} \label{subsec:jfac-calculation}
@@ -772,7 +760,7 @@ rates are never scaled (Fig.~\ref{fig:photol}).
 
 AtChem2 can calculate \texttt{JFAC} automatically at runtime. To use this option, edit the
 \texttt{environmentVariables.config} file (Sect.~\ref{subsec:environmentvariables}) and set
-\texttt{JFAC} to the name of the photolysis rate used as reference (e.g., \texttt{J4}).  The
+\texttt{JFAC} to the name of the photolysis rate used as reference (e.g., \texttt{J4}). The
 reference photolysis rate must also be constrained -- i.e. it must be listed in the
 \texttt{photolysisConstrained.config} file (Sect.~\ref{subsec:photolysisconstrained}) and the
 corresponding constraint file must be present in the \texttt{model/constraints/photolysis/}
@@ -803,13 +791,11 @@ defined by the user (\texttt{customRateFuncs.f90}, see Sect.~\ref{subsec:custom-
 
 \subsection{environmentVariables.config} \label{subsec:environmentvariables}
 
-This file specifies the settings of the environment variables, i.e.
-the physical parameters of the model. The file has three columns: the
-first two are the ID number and the name of the environment variable.
-The third column -- the only one that should be modified by the
-user -- contains the corresponding value. The possible values of each
-environment variable are detailed in Sect.~\ref{sec:environment-variables}.
-For example:
+This file specifies the settings of the environment variables, i.e. the physical parameters of
+the model. The file has three columns: the first two are the ID number and the name of the
+environment variable. The third column -- the only one that should be modified by the user --
+contains the corresponding value. The valid settings and the units of each environment variable
+are detailed in Sect.~\ref{sec:environment-variables}. For example:
 
 \begin{Verbatim}[fontsize=\small]
   1   TEMP         293
@@ -856,10 +842,11 @@ values or constrained to measured concentrations, i.e. those listed in
 
 \subsection{outputRates.config} \label{subsec:outputrates}
 
-This file lists the chemical species for which detailed production/loss rates are
-required~\footnote{In version 1.0 and earlier, these species were listed in two separate files:
-  \texttt{productionRatesOutput.config}, \texttt{lossRatesOutput.config}.}.  The file has one
-column, with one species per line. For example:
+This file lists the chemical species for which detailed production/loss rates (in molecule
+cm$^{-3}$ s$^{-1}$) are required~\footnote{In version 1.0 and earlier, these species were
+  listed in two separate files: \texttt{productionRatesOutput.config},
+  \texttt{lossRatesOutput.config}.}. The file has one column, with one species per line. For
+example:
 
 \begin{Verbatim}[fontsize=\small]
   OH
@@ -867,12 +854,11 @@ column, with one species per line. For example:
   NO3
 \end{Verbatim}
 
-The frequency of this output is controlled by \textbf{rates output step size}
-in the \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}).
-The corresponding output files -- called \texttt{productionRates.output}
-and \texttt{lossRates.output} -- are formatted to facilitate the rate
-of production and destruction analysis of selected species. For more
-information, go to Sect.~\ref{subsec:ropa-roda}.
+The frequency of this output is controlled by \textbf{rates output step size} in the
+\texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}). The corresponding output
+files -- called \texttt{productionRates.output} and \texttt{lossRates.output} -- are formatted
+to facilitate the rate of production and destruction analysis (ROPA/RODA) of the selected
+species. For more information, go to Sect.~\ref{subsec:ropa-roda}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 

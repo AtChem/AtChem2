@@ -14,131 +14,110 @@
 % -------------------------------------------------------------------- %
 \section{General Information} \label{sec:general-information}
 
-AtChem2 is hosted on the \href{https://github.com}{GitHub} developer
-platform. Two versions of the model are available in the
-\href{https://github.com/AtChem/AtChem2}{repository} at any given
-time:
+AtChem2 is hosted on the \href{https://github.com}{GitHub} developer platform. Two versions of
+the model are available in the \href{https://github.com/AtChem/AtChem2}{repository} at any
+given time:
 
 \begin{description}
-\item[Stable version]: is indicated by a version number
-  (e.g., \texttt{v1.0}) and can be downloaded from the
-  \href{https://github.com/AtChem/AtChem2/releases}{Releases page}.
+\item[Stable version]: is indicated by a version number (e.g., \texttt{v1.0}) and can be
+  downloaded from the \href{https://github.com/AtChem/AtChem2/releases}{Releases page}.
   A \textbf{doi number} is assigned to each stable version via the
   \href{https://zenodo.org}{Zenodo service}.
-\item[Development version]: is the \texttt{master\ branch} of the git
-  repository and is indicated by a version number with the suffix
-  ``-dev'' (e.g., \texttt{v1.1-dev}). It can be downloaded as an
-  \href{https://github.com/AtChem/AtChem2/archive/master.zip}{archive file}
-  or obtained via \textbf{git} -- go to Sect.~\ref{sec:download} for
-  more information.
+\item[Development version]: is the \texttt{master\ branch} of the git repository and is
+  indicated by a version number with the suffix ``-dev'' (e.g., \texttt{v1.1-dev}). It can be
+  downloaded as an \href{https://github.com/AtChem/AtChem2/archive/master.zip}{archive file} or
+  obtained via git -- go to Sect.~\ref{sec:download} for more information.
 \end{description}
 
-AtChem2 is under active development, which means that the
-\texttt{master\ branch} is sometimes a few commits ahead of the latest
-stable release. However, all code modifications are automatically run
-through the \hyperref[sec:testsuite]{Testsuite} before being merged
-into the \texttt{master\ branch}. Since the Testsuite is designed to
-ensure that changes to the code do not cause unintended behaviour or
-unexplained differences in the model results, this ensures that even
-the development version of AtChem2 is reliable for most use
-cases. Nevertheless, it is strongly suggested to use the
-\textbf{stable version} for ``production runs'' and publications, as
-it can be easily referenced via the associated doi number -- see the
-discussion about traceability and reproducibility of computational
-models in \citet{sommariva_2020}.
+AtChem2 is under active development, which means that the \texttt{master\ branch} is sometimes
+a few commits ahead of the latest stable release. However, all code modifications are
+automatically run through the \hyperref[sec:testsuite]{Testsuite} before being merged into the
+\texttt{master\ branch}. Since the Testsuite is designed to ensure that changes to the code do
+not cause unintended behaviour or unexplained differences in the model results, this ensures
+that even the development version of AtChem2 is reliable for most use cases. Nevertheless, it
+is strongly suggested to use the \textbf{stable version} for ``production runs'' and
+publications, as it can be easily referenced via the associated doi number -- see the
+discussion about traceability and reproducibility of computational models in
+\citet{sommariva_2020}.
 
-Feedback, bug reports, comments, suggestions, and feature requests are
-welcome: the list of open issues, known bugs, etc\ldots can be found on
-the related \href{https://github.com/AtChem/AtChem2/issues}{GitHub page}.
-Please check this page before reporting new issues/bugs. Also note
-that the AtChem2 \href{https://github.com/AtChem/AtChem2/wiki}{wiki}
-contains suggestions to solve some common issues.
+Feedback, bug reports, comments, suggestions, and feature requests are welcome. A list of open issues,
+known bugs, etc\ldots can be found on the \href{https://github.com/AtChem/AtChem2/issues}{Issues page}.
+Please check this page before reporting new issues/bugs; also note that the AtChem2
+\href{https://github.com/AtChem/AtChem2/wiki}{wiki} lists some common known issues and contains
+suggestions on how to solve them.
 
-Contributions and corrections to the user manual are also welcome. The
-manual is written in \LaTeX\ format, with figures in \texttt{.svg}
-format. The \texttt{.tex} files, located in the \texttt{doc/latex/}
-directory, can be opened and modified using any text editor. To
-compile the \texttt{.pdf} file of the manual, use the script
-\texttt{tools/make\_manual\_pdf.sh}, then commit it together with the
-other changes~\footnote{The script requires a \LaTeX\ installation and
-  ImageMagick (v7.x).}; alternatively, the \texttt{.pdf} file is
-automatically compiled via GitHub Actions when a Pull Request (PR) is
-opened.
+Contributions and corrections to the user manual are also welcome. The manual is written in
+\LaTeX\ format, with figures in \texttt{.svg} format. The \texttt{.tex} files, located in the
+\texttt{doc/latex/} directory, can be opened and modified using any text editor. To compile the
+\texttt{.pdf} file of the manual, use the script \texttt{tools/make\_manual\_pdf.sh}, then
+commit it together with the other changes~\footnote{The script requires a \LaTeX\ installation
+  and ImageMagick (v7.x).}. Alternatively, the \texttt{.pdf} file is automatically compiled via
+GitHub Actions when a Pull Request (PR) that modifies one of the \texttt{.tex} or \texttt{.svg}
+files is opened.
 
-The preferred way to contribute to the development of AtChem2 is to
-use the open-source \href{https://git-scm.com}{git} version control
-tool: instructions on how to set up git, prepare and submit
-contributions to the AtChem2 repository can be found on the
-\href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki}.
-Contributors are strongly encouraged to follow the Fortran coding
-guidelines, as detailed in Sect.\ref{sec:style-guide}.
+The preferred way to contribute to the development of AtChem2 is to use the open-source
+\href{https://swcarpentry.github.io/git-novice}{git} version control tool: instructions on how
+to set up git, prepare and submit contributions to the AtChem2 repository can be found on the
+\href{https://github.com/AtChem/AtChem2/wiki/How-to-contribute}{wiki}. Contributors are
+strongly encouraged to follow the coding guidelines detailed in Sect.\ref{sec:style-guide}.
 
 % -------------------------------------------------------------------- %
 \section{Testsuite} \label{sec:testsuite}
 
-AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions}
-for \underline{continuous integration} testing. This programming
-approach ensures that changes to the code do not unintentionally
-modify the behaviour and the results of a software. The Testsuite is
-located in the \texttt{tests/} directory~\footnote{Called
-  \texttt{travis/} in versions 1.0-1.2.2, when the TravisCI service
-  was used to run the Testsuite.}  and consists of a series of tests
-and short model runs that check the model functionality and
-calculations against known outputs. In addition, the
-\href{https://codecov.io}{Codecov} service is used to ensure that the
-Testsuite covers a significant fraction of the codebase ($>$90\%) and
-a wide range of common configurations.
+AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions} for
+\underline{continuous integration} testing. This programming approach ensures that changes to
+the code do not unintentionally modify the behaviour and the results of a software. The
+Testsuite is located in the \texttt{tests/} directory~\footnote{Called \texttt{travis/} in
+  versions 1.0-1.2.2, when the TravisCI service was used to run the Testsuite.} and consists of
+a series of tests and short model runs that check the model functionality and calculations
+against known outputs. In addition, the \href{https://codecov.io}{Codecov} service is used to
+ensure that the Testsuite covers a significant fraction of the codebase (aiming for $>$90\%
+coverage) and a wide range of common configurations.
 
-There are four types of tests, executed from the \maindir\ with
-the \verb|make| command. Note that the \emph{optional dependencies}
-must be installed in order to run the Testsuite -- see
-Sect.~\ref{subsec:optional-dependencies} and \ref{subsec:tests-optional}
-for details.
+There are five types of tests, which are executed from the \maindir\ with the \verb|make|
+command. Note that the \emph{optional dependencies} must be installed in order to run the
+Testsuite -- see Sect.~\ref{subsec:optional-dependencies} and \ref{subsec:tests-optional} for
+details.
 
 \begin{itemize}
-\item the \textbf{Indent} and \textbf{Style} tests check that the
-  indentation and coding style of the Fortran code are consistent with
-  the guidelines:\\
-  $\hookrightarrow$ \verb|make indenttest| and \verb|make styletest|
-\item the \textbf{Unit} tests check that individual Fortran functions
-  generate the expected outputs:\\
+\item the \textbf{Indent}, \textbf{Style} and \textbf{Pyhton} tests check that the indentation
+  and coding style of the Fortran and Python code are consistent with the guidelines:\\
+  $\hookrightarrow$ \verb|make indenttest|\\
+  $\hookrightarrow$ \verb|make styletest|\\
+  $\hookrightarrow$ \verb|make pythontest|
+\item the \textbf{Unit} tests check that individual Fortran functions generate the expected
+  outputs:\\
   $\hookrightarrow$ \verb|make unittests|
-\item the \textbf{Model} tests run a number of models with different
-  configurations to check that they generate the expected outputs:\\
-  $\hookrightarrow$ \verb|make modeltests| and/or
-  \verb|make oldtests|~\footnote{At present these tests are split into
-    two groups, \texttt{modeltests} and \texttt{oldtests}, which will
-    eventually be merged. Both groups of tests pass on Linux, but
-    \texttt{modeltests} fail on macOS. See issue
-    \href{https://github.com/AtChem/AtChem2/issues/522}{\#522}.}
-\item The command \verb|make alltests| runs all the tests described
-  above in succession.
+\item the \textbf{Model} tests run a number of models with different configurations to check
+  that they generate the expected outputs:\\
+  $\hookrightarrow$ \verb|make modeltests| and/or \verb|make oldtests|~\footnote{At present
+    these tests are split into two groups, \texttt{modeltests} and \texttt{oldtests}, which
+    will eventually be merged. Both groups of tests pass on Linux, but \texttt{modeltests} fail
+    on macOS. See issue \href{https://github.com/AtChem/AtChem2/issues/522}{\#522}.}
+\item The command \verb|make alltests| runs all the tests described above in succession.
 \end{itemize}
 
-The Indent, Style and Model tests create \texttt{.log} files in the
-\texttt{tests/} directory and print a summary message to the terminal,
-while the Unit tests output the results directly to the terminal. If
+The tests create \texttt{.log} files in the \texttt{tests/} directory and print a summary
+message to the terminal, while the Unit tests output the results directly to the terminal. If
 one or more tests fail, search the log files for detailed information.
 
-The Testsuite is automatically run every time a Pull Request (PR) is
-created or updated on the GitHub repository. The PR triggers a GitHub
-Actions workflow which runs the entire Testsuite on two architectures
-(Linux and macOS) using different versions of the GNU
-\texttt{gfortran} compiler. The workflow -- described in the
-\texttt{.github/workflows/ci.yml} file -- performs the following tasks
-on each architecture:
+The Testsuite is automatically run every time a Pull Request (PR) is created or updated on the
+GitHub repository. The PR triggers a GitHub Actions workflow which runs the entire Testsuite on
+two architectures (Linux and macOS) using different versions of the GNU \texttt{gfortran}
+compiler. The workflow -- described in the \texttt{.github/workflows/ci.yml} file -- performs
+the following tasks on each architecture:
 
 \begin{itemize}
 \item Install \texttt{gfortran} and the AtChem2 dependencies using
   \texttt{apt-get} (Linux) or \texttt{Homebrew} (macOS).
-\item Build and run a model using the default chemical mechanism and
-  configuration: PASS if it exits with 0.
-\item Build and run the Indent and Style tests: PASS if all tests pass.
+\item Build and run a model using the default chemical mechanism and configuration: PASS if it
+  exits with 0.
+\item Build and run the Indent, Style, Python tests: PASS if all tests pass.
 \item Build and run the Unit tests: PASS if all Unit tests pass.
-\item Build and run the Model tests: PASS if there are no differences
-  from the reference output files (within tolerance), otherwise FAIL.
-\item Build and run the Unit and Model tests, and upload the overage
-  reports to the Codecov service.
+\item Build and run the Model tests: PASS if there are no differences from the reference output
+  files (within tolerance).
+\item Build and run the Unit and Model tests, and upload the overage reports to the Codecov
+  service.
 \end{itemize}
 
 The Testsuite is successful only if all tests pass successfully. This is
@@ -291,6 +270,14 @@ each source file and the output is sent to a \texttt{.cmp} file. If
 all \texttt{.cmp} files match the original files, the test passes.
 
 \subsection{Style recommendations} \label{subsec:style-recommendations}
+
+The following guidelines apply to the Fortran code only. For Python, AtChem2 adopts the
+recommendations of the \href{https://pypi.org/project/black}{black} formatter (v26). Adherence
+to the Python code guidelines can be checked by executing the command \verb|make pythontest|
+from the \maindir\ (see Sect.~\ref{sec:testsuite} for details). There are no style guidelines
+for the AtChem2 shell scripts; the only requirement is that the code has to be sh-compliant,
+which can be verified with the shellcheck utility -- installed locally or online at
+\href{https://shellcheck.net}{https://shellcheck.net}.
 
 \subsubsection{General principles}
 

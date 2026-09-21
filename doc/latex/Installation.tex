@@ -20,7 +20,7 @@ of the \textbf{unix shell} and its \href{https://swcarpentry.github.io/shell-nov
 software tools:
 
 \begin{itemize}
-\item a terminal with a bash or a bash-compatible shell (e.g., zsh which is the default shell
+\item a terminal with bash or another sh-compatible shell (e.g., zsh which is the default shell
   in macOS), and common unix utilities: wget, tar, zip, make, etc\ldots
 \item a text editor, such as Emacs, vim, Gedit, Kate, TextEdit, etc\ldots
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran} (version 4.8 and
@@ -114,8 +114,8 @@ any name and it can be located anywhere on the operating system according to the
 preferences.
 
 Before installing the dependencies, make sure that the requirements listed in
-Sect.~\ref{sec:requirements} are met, and that the unix shell is bash or bash-compatible
-(type \verb|echo $SHELL| at the terminal to check the shell type).
+Sect.~\ref{sec:requirements} are met, and that the unix shell is \emph{sh}-compatible (type
+\verb|echo $SHELL| at the terminal to check the shell type).
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
@@ -473,8 +473,8 @@ includes the poster presented at the 2018 Atmospheric Chemical Mechanisms Confer
 (\texttt{AtChem\_poster\_ACM2018.pdf}).
 
 The \texttt{tools/} directory contains the script used to update the version number of AtChem2
-in each \hyperref[ch:development]{development cycle} (\texttt{update\_version\_number.sh}), two
-scripts to check the consistency of the Fortran code (\texttt{fix\_style.py} and %% TODO: check this
+in each \hyperref[ch:development]{development cycle} (\texttt{update\_version\_number.sh}),
+two scripts to check the consistency of the Fortran code (\texttt{fix\_style.py} and
 \texttt{fix\_indent.py}, see Sect.~\ref{sec:style-guide}), and the following subdirectories:
 
 \begin{itemize}

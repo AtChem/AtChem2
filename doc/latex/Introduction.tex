@@ -15,7 +15,7 @@
 build and run zero-dimensional box-models using the Master Chemical Mechanism
 (\href{https://mcm.york.ac.uk/MCM}{MCM}). The \textbf{MCM} is a near-explicit chemical
 mechanism which describes the gas-phase oxidation of primary emitted Volatile Organic Compounds
-(VOC) to carbon dioxide (\cf{CO2}) and water (\cf{H2O}). The MCM protocol is detailed in
+(VOCs) to carbon dioxide (\cf{CO2}) and water (\cf{H2O}). The MCM protocol is detailed in
 \citet{jenkin_1997} and subsequent updates \citep{saunders_2003, jenkin_2003, bloss_2005,
   jenkin_2012, jenkin_2015}. AtChem2 is designed for use with the MCM, but it can use any
 other chemical mechanism, as long as it is provided in the correct format
@@ -25,14 +25,14 @@ AtChem2 is a development of \textbf{AtChem-online}, a modelling web tool created
 University of Leeds to facilitate the use of the MCM in the simulation of laboratory and
 environmental chamber experiments within the \href{https://www.eurochamp.org}{EUROCHAMP}
 community \citep{martin_2009}. AtChem-online runs as a \href{https://atchem.york.ac.uk}{web
-  service}, provided by the University of York: in order to use AtChem-online, the user needs
-only a text editor, a file compression tool, a web browser, and an internet connection. A
-tutorial -- with examples and exercises -- is available on the
+  service}, provided by the University of York; to use AtChem-online, the user needs only a
+text editor, a file compression tool, a web browser, and an internet connection. A tutorial --
+with examples and exercises -- is available on the
 \href{https://mcm.york.ac.uk/MCM/atchemonline/intro}{MCM website}.
 
 AtChem-online is easy to use even for inexperienced users but has a number of limitations,
 mostly related to its nature as a web application. \textbf{AtChem2} has been developed from the
-AtChem-online codebase with the aim to provide an \emph{offline} modelling tool capable of
+AtChem-online codebase with the aim of providing an \emph{offline} modelling tool capable of
 running long simulations of computationally intensive models, as well as batch simulations
 (e.g., for sensitivity studies). In addition, AtChem2 implements a continuous integration
 workflow, along with version control (using \href{https://git-scm.com}{git}) and a
@@ -53,16 +53,16 @@ can be easily modified with any text editor.
 
 This document (\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual and contains all the
 information required to install, configure, and use the current version of the model. The
-AtChem2 \href{https://github.com/AtChem/AtChem2/wiki}{wiki} contains summaries of these
-instructions for quick user reference; additional information, such as example submission
-scripts for HPC systems (Sect.~\ref{subsec:hpc}), and guidance for resolving some
+\href{https://github.com/AtChem/AtChem2/wiki}{AtChem2 wiki} contains summaries of these
+instructions for quick user reference. Additional information, such as example submission
+scripts for High-Performance Computing (HPC) systems, and guidance for resolving some
 \underline{known issues} are also available on the wiki.
 
 \textbf{AtChem-tools} is a set of tools designed for AtChem2, available at:
 \href{https://github.com/AtChem/AtChem-tools}{https://github.com/AtChem/AtChem-tools}.
 The tools are written in Python and include scripts to help with the model setup and
-configuration, to run the model, and to analyze the model outputs. For information and
-instructions see the \textbf{AtChem-tools} documentation.
+configuration, to run the model, and to analyze the model outputs. For instructions, see
+the \textbf{AtChem-tools} documentation.
 
 % -------------------------------------------------------------------- %
 \section{Conventions} \label{sec:conventions}
@@ -81,9 +81,10 @@ The following conventions are adopted in the AtChem2 user manual and documentati
 \end{description}
 
 The user can change the locations and names of these directories according to their setup,
-workflow, personal preferences, etc\ldots As long as the correct paths to the libraries and
-directories needed by AtChem2 are specified, the model will compile and run.\\
+workflow, personal preferences, etc. As long as the correct paths to the libraries and
+directories needed by AtChem2 are specified, the model will compile and run.
 
+\medskip
 \textcolor{red}{\bf Important Note:} AtChem2 runs in \textbf{Coordinated Universal Time (UTC)},
 with no daylight saving. This is to simplify the calculation of the solar angles and,
 therefore, of the photolysis rates (Sect.~\ref{sec:photolysis-rates}). The user must ensure
@@ -95,11 +96,11 @@ convert the output to Local Time, if needed.
 
 AtChem2 is open-source and free to use, under the terms of the \textbf{MIT license}. A copy of
 the license can be found in the \texttt{LICENSE} file. If used in a publication, please cite
-the GMD paper \citep{sommariva_2020}:\\
+the GMD paper \citep{sommariva_2020}:
 
+\medskip \noindent
 R.~Sommariva, S.~Cox, C.~Martin, K.~Boro{\'n}ska, J.~Young, P.~K. Jimack, M.~J. Pilling,
 V.~N. Matthaios, B.~S. Nelson, M.~J. Newland, M.~Panagi, W.~J. Bloss, P.~S. Monks, and
-A.~R. Rickard.\\
-\textbf{AtChem (version 1), an open-source box model for the Master Chemical Mechanism}.
-\textit{Geoscientific Model Development}, 13, 1, 169--183, 2020.
-doi: \href{https://doi.org/10.5194/gmd-13-169-2020}{10.5194/gmd-13-169-2020}.
+A.~R. Rickard. \textbf{AtChem (version 1), an open-source box model for the Master Chemical
+  Mechanism}. \textit{Geoscientific Model Development}, 13, 1, 169--183, 2020. DOI:
+\href{https://doi.org/10.5194/gmd-13-169-2020}{10.5194/gmd-13-169-2020}.

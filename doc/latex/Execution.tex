@@ -38,9 +38,9 @@ Sect.~\ref{subsec:mcm-extraction}, or it can be assembled manually. The user can
 mechanism file with a text editor, if needed.
 
 During the \hyperref[subsec:build-process]{build process}, the mechanism file is converted into
-a pre-compiled shared library (\texttt{mechanism.so}) and several files in Fortran-compatible
-format. These files are created in the \sharedir\ (by default, \texttt{model/sharedlib/}) and
-should not be modified by the user.
+a number of files in Fortran-compatible format and a pre-compiled shared library
+(\texttt{mechanism.so}). These files are created in the \sharedir\ (by default,
+\texttt{model/sharedlib/}) and should not be modified by the user.
 
 \subsection{Configuration files} \label{subsec:configuration-files}
 
@@ -54,7 +54,7 @@ corresponding sections:
 \item Environment variables settings -- go to \hyperref[sec:environment-variables]{Environment
     Variables}.
 \item Photolysis rates settings -- go to \hyperref[sec:photolysis-rates]{Photolysis Rates}.
-\item Model initialization, input and output -- go to \hyperref[sec:config-files]{Config
+\item Model initialization, input and output -- go to \hyperref[sec:configuration-files]{Config
     Files}.
 \end{itemize}
 
@@ -67,14 +67,14 @@ An AtChem2 box-model can be set up in two modes:
 \item[Unconstrained]: all variables are calculated by the model from the initial conditions,
   which are set in the \hyperref[subsec:configuration-files]{configuration files}.
 \item[Constrained]: one or more variables are constrained, meaning that the solver forces them
-  to given values at each time step. The variables that are not constrained are calculated by
+  to given values at each timestep. The variables that are not constrained are calculated by
   the model from the initial conditions and from the constrained variables.
 \end{description}
 
 The constraint data must be provided as one text file for each constrained variable, with the
-format described below. The constraint data files are located in the \constrdir\ which, by
-default, is \texttt{model/constraints/}. The \constrdir\ contains three subdirectories, one for
-each type of constraint:
+format described below. The constraint data files are located in the \constrdir\ (by default,
+\texttt{model/constraints/}). The \constrdir\ contains three subdirectories, one for each type
+of constraint:
 
 \begin{itemize}
 \item \texttt{species/} for the chemical species.
@@ -218,11 +218,11 @@ terminal for all data evaluations outside of the supplied time interval. For exa
 
 Adjusting the \textbf{model start time} and/or the \textbf{number of steps} in the
 \texttt{model.parameters} file (Sect.~\ref{sec:model-parameters}) usually resolves this
-issue~\footnote{This behaviour is not desired and likely to change in future versions of
-  AtChem2 to avoid the situation where the last value is used for all times before the first
-  data point (see issue \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}. In any
-case, to avoid errors, it is good practice to always provide constraint data that include a
-short period before the start time and a short period after the stop time.
+issue\footnote{This behaviour is not desired and likely to change in future versions to avoid
+  the situation where the last value is used for all times before the first data point -- see
+  issue \href{https://github.com/AtChem/AtChem2/issues/294}{\#294}).}. In any case, to avoid
+errors, it is good practice to always provide constraint data that include a short period
+before the start time and a short period after the stop time.
 
 % -------------------------------------------------------------------- %
 \section{Build} \label{sec:build}
@@ -234,7 +234,7 @@ generates a number of files describing the chemical mechanism in a Fortran-compa
 (\texttt{mechanism.so}). These files are described in Sect.~\ref{subsec:build-process}.
 
 The \texttt{build\_atchem2.sh} script must be run from the \maindir\ and takes four arguments,
-which are provided using the following input flags~\footnote{Prior to version 1.3, the build
+which are provided using the following input flags\footnote{Prior to version 1.3, the build
   script required three positional arguments -- for details, see the documentation on the
   \href{https://github.com/AtChem/AtChem2/wiki/How-to-build-AtChem2}{wiki}.}:
 
@@ -256,11 +256,11 @@ which are provided using the following input flags~\footnote{Prior to version 1.
 
 Both full and relative paths are acceptable, depending on the user's preference, and the order
 in which the flags are used does not matter. For example, a box-model with the default settings
-for the configuration, shared library and MCM version, using the chemical mechanism file
-\texttt{model/mechanism.fac} can be built with the following command:
+for the configuration, shared library and MCM version, using the example chemical mechanism
+file (\texttt{model/mechanism.fac}) can be built with the following command:
 
 \begin{Verbatim}[fontsize=\small]
-  ./build/build_atchem2.sh --mechanism=model/mechanism.fac
+  ./build/build_atchem2.sh --mechanism=./model/mechanism.fac
 \end{Verbatim}
 
 As mentioned in Sect.~\ref{subsec:model-directory}, an installation of AtChem2 can have
@@ -324,7 +324,7 @@ runtime. However, if the chemical mechanism file is changed, then the shared lib
 
 If the user wants, or needs, to change the Fortran code (\texttt{src/*.f90}), then the
 executable needs to be recompiled. To recompile the model, the build script needs to be
-executed again~\footnote{If the recompilation fails, it is sometimes useful to run the command
+executed again\footnote{If the recompilation fails, it is sometimes useful to run the command
   \verb|make clean| from the \maindir\ before rerunning the build script.}. The build script is
 able to detect whether the Fortran code, the chemical mechanism, or both have been modified and
 runs the appropriate commands. By compiling only when strictly necessary, this design reduces
@@ -336,11 +336,11 @@ sensitivity studies).
 
 The build process -- described in Sects.~\ref{subsec:build-process} and \ref{sec:build} --
 creates an executable file called \texttt{atchem2} in the \maindir. The executable takes up to
-eight arguments~\footnote{The \texttt{--mcm} flag, which pointed to the directory with the MCM
+eight arguments\footnote{The \texttt{--mcm} flag, which pointed to the directory with the MCM
   data files, was removed with version 1.3.}, corresponding to the \emph{relative paths} (with
 respect to the \maindir) of the model configuration, the chemical mechanism shared library, the
 constraint data files, and the model output. The arguments are passed to the executable via a
-series of input flags~\footnote{Prior to version 1.2, the executable used a system of
+series of input flags\footnote{Prior to version 1.2, the executable used a system of
   positional arguments instead of the input flags -- for details, see the documentation on the
   \href{https://github.com/AtChem/AtChem2/wiki/How-to-run-AtChem2}{wiki}.}, each with a default
 value as described below:
@@ -444,9 +444,9 @@ model run completes with a message similar to the one shown in Sect.~\ref{sec:in
 user has the option to redirect the terminal printout to a log file, using standard
 \href{https://swcarpentry.github.io/shell-novice}{unix commands}.
 
-\subsection{HPC} \label{subsec:hpc}
+\subsection{Execution on HPC} \label{subsec:execution-hpc}
 
-AtChem2 can be installed and run on High Performance Computing (HPC) clusters, or
+AtChem2 can be installed and run on high-performance computing (HPC) clusters, or
 supercomputers, which typically run some version of Linux/Unix. This is recommended, especially
 for models with long runtimes and/or many constraints.
 
@@ -455,7 +455,7 @@ each system has its own rules and guidelines. Therefore, it is not possible to g
 advice, and users should check the local documentation or ask the system administrator.
 
 On most HPC systems, software execution is managed by a job scheduler, which requires a
-submission script. The script will allocate the requested resources~\footnote{AtChem2 does not
+submission script. The script will allocate the requested resources\footnote{AtChem2 does not
   support parallelization at present; this may change in future versions. See issue
   \href{https://github.com/AtChem/AtChem2/issues/536}{\#536}.}, alert the user that the model
 run is finished, and save the terminal printout and any other message to log files. The syntax
@@ -483,7 +483,7 @@ model output is determined by the following model parameters, which are set in t
 
 All AtChem2 output files are space-delimited text files with a one-line header containing the
 names of the variables. The first column of each file is the model time (\texttt{t}) in seconds
-since midnight of the \textbf{start date}~\footnote{Note that the \textbf{start date} is
+since midnight of the \textbf{start date}\footnote{Note that the \textbf{start date} is
   different from the \textbf{model start time}: the model start time indicates when the model
   begins its run and is in seconds since the midnight of the start date. For more information,
   go to Sect.~\ref{sec:model-parameters}.}. The output files are:
@@ -512,7 +512,7 @@ since midnight of the \textbf{start date}~\footnote{Note that the \textbf{start 
 
 In addition to the \texttt{.output} files listed above, the reaction rates (in molecule
 cm$^{-3}$ s$^{-1}$) of every reaction in the chemical mechanism are saved, by default, in the
-\texttt{output/reactionRates/} directory~\footnote{Called \texttt{instantaneousRates/} prior to
+\texttt{output/reactionRates/} directory\footnote{Called \texttt{instantaneousRates/} prior to
   version 1.1.}: one file for each model step, with the name of the file corresponding to the
 output time in seconds. The files have no header, and the order of reactions is the same as in
 the chemical mechanism (under the ``Reaction definitions'' section -- see
@@ -532,17 +532,17 @@ format (in molecule cm$^{-3}$ s$^{-1}$). The format is shown in Fig.~\ref{fig:ro
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.95\textwidth]{output-rates.png}
-  \caption{Format of the \texttt{productionRates.output} file. The \texttt{lossRates.output}
-    file has a similar format.}
+  \caption{Format of the \texttt{productionRates.output} output file. The
+    \texttt{lossRates.output} file has a similar format.}
   \label{fig:ropa}
 \end{figure}
 
 The frequency of the ROPA/RODA output is controlled by the parameter \textbf{rates output step
-  size}, as explained in Sect.~\ref{sec:model-parameters}. The \texttt{productionRates.output}
-and \texttt{lossRates.output} files can be very large and complex, especially for species that
-are involved in many reactions and/or for long model runtimes. Therefore, it is recommended to
-limit the list of chemical species in \texttt{outputRates.config} only to those of special
-interest, and to keep the frequency of the output low (the default is 1 hour).
+  size}, as explained in Sect.~\ref{sec:model-parameters}. Note that the output files
+\texttt{productionRates.output} and \texttt{lossRates.output} can be very large and complex,
+especially for species that are involved in many reactions and/or for long model runs. Therefore,
+it is recommended to limit the list of chemical species in \texttt{outputRates.config} only to
+those of special interest, and to keep the frequency of the output low (the default is 1 hour).
 
 \medskip \noindent
 \textcolor{red}{\bf Important Note:} although, in principle, a rate of production and

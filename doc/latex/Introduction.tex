@@ -14,11 +14,11 @@
 \textbf{AtChem2} is an open-source modelling tool for atmospheric chemistry. It is designed to
 build and run zero-dimensional box-models using the Master Chemical Mechanism
 (\href{https://mcm.york.ac.uk/MCM}{MCM}). The \textbf{MCM} is a near-explicit chemical
-mechanism which describes the gas-phase oxidation of primary emitted Volatile Organic Compounds
-(VOCs) to carbon dioxide (\cf{CO2}) and water (\cf{H2O}). The MCM protocol is detailed in
+mechanism which describes the gas-phase oxidation of primary emitted volatile organic compounds
+(VOC) to carbon dioxide (\cf{CO2}) and water (\cf{H2O}). The MCM protocol is detailed in
 \citet{jenkin_1997} and subsequent updates \citep{saunders_2003, jenkin_2003, bloss_2005,
-  jenkin_2012, jenkin_2015}. AtChem2 is designed for use with the MCM, but it can use any
-other chemical mechanism, as long as it is provided in the correct format
+  jenkin_2012, jenkin_2015}. AtChem2 is designed for use with the MCM, but it can use any other
+chemical mechanism, as long as it is provided in the correct format
 (Sect.~\ref{sec:chemical-mechanism}).
 
 AtChem2 is a development of \textbf{AtChem-online}, a modelling web tool created at the
@@ -55,7 +55,7 @@ This document (\texttt{AtChem2-Manual.pdf}) is the AtChem2 user manual and conta
 information required to install, configure, and use the current version of the model. The
 \href{https://github.com/AtChem/AtChem2/wiki}{AtChem2 wiki} contains summaries of these
 instructions for quick user reference. Additional information, such as example submission
-scripts for High-Performance Computing (HPC) systems, and guidance for resolving some
+scripts for high-performance computing (HPC) systems, and guidance for resolving some
 \underline{known issues} are also available on the wiki.
 
 \textbf{AtChem-tools} is a set of tools designed for AtChem2, available at:
@@ -84,7 +84,7 @@ The user can change the locations and names of these directories according to th
 workflow, personal preferences, etc. As long as the correct paths to the libraries and
 directories needed by AtChem2 are specified, the model will compile and run.
 
-\medskip
+\medskip \noindent
 \textcolor{red}{\bf Important Note:} AtChem2 runs in \textbf{Coordinated Universal Time (UTC)},
 with no daylight saving. This is to simplify the calculation of the solar angles and,
 therefore, of the photolysis rates (Sect.~\ref{sec:photolysis-rates}). The user must ensure
@@ -92,7 +92,7 @@ that the input data and the model constraints are provided in UTC (i.e. GMT time
 convert the output to Local Time, if needed.
 
 % -------------------------------------------------------------------- %
-\section{License and citation} \label{sec:license-citation}
+\section{License and Citation} \label{sec:license-citation}
 
 AtChem2 is open-source and free to use, under the terms of the \textbf{MIT license}. A copy of
 the license can be found in the \texttt{LICENSE} file. If used in a publication, please cite

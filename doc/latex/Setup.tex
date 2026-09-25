@@ -201,7 +201,7 @@ rerun the \texttt{build\_atchem2.sh} script.
 It is important to ensure that the RO2 sum is accurate, because many reactions in the MCM
 depend on this parameter. This means that all the organic peroxy radicals in the chemical
 mechanism must be included in the RO2 sum, and that the RO2 sum must include only organic
-peroxy radicals~\footnote{The hydroperoxyl radical (\cf{HO2}) is a peroxy radical but is not an
+peroxy radicals\footnote{The hydroperoxyl radical (\cf{HO2}) is a peroxy radical but is not an
   organic molecule, and therefore it \emph{must not} be included in the RO2 sum.}. The model
 calculates the RO2 sum at runtime and, by default, outputs the value of this variable to the
 \texttt{environmentVariables.output} file (Sect.~\ref{sec:output}).
@@ -242,13 +242,13 @@ editor and modify the chemical mechanism as needed.
 
 The Fortran file \texttt{customRateFuncs.f90} allows the user to define custom functions that
 can be called from within the chemical mechanism to enhance the capability of the
-model~\footnote{This feature is available only in AtChem2 v1.2.3 and later versions.}. These
+model\footnote{This feature is available only in version 1.2.3 or later.}. These
 functions can be used to parametrize heterogeneous reactions, aerosol formation, surface
 deposition, emissions and other non-chemical processes, as discussed in
 Sect.~\ref{subsec:facsimile-format}.
 
 The Fortran file \texttt{customRateFuncs.f90} is located in the \configdir\ (by default,
-\texttt{model/configuration/}, see Sect.~\ref{sec:config-files}) and contains an empty Fortran
+\texttt{model/configuration/}, see Sect.~\ref{sec:configuration-files}) and contains an empty Fortran
 module which can be modified by the user to add any number of custom functions. During the
 build process, the \texttt{mech\_converter.py} script identifies the names of all the custom
 functions in the module and includes them into the file \texttt{mechanism.f90}
@@ -401,7 +401,7 @@ described below, are set in the \texttt{model.parameters} file in the \configdir
   is recommended to output the Jacobian matrix only if needed.
 \item \textbf{latitude} and \textbf{longitude}. Geographical coordinates (in degrees). Latitude
   North is positive and latitude South is negative; longitude East is negative and longitude
-  West is positive~\footnote{The standard geographical convention is that longitude East is
+  West is positive\footnote{The standard geographical convention is that longitude East is
     positive and longitude West is negative. AtChem2 uses the opposite convention for reasons
     of backward compatibility. This behaviour may change in future versions.}. Latitude and
   longitude are used to calculate the solar angles, which are needed for the calculation of the
@@ -467,59 +467,64 @@ possible settings, units, and default values.
 
 \subsection{TEMP} \label{subsec:temp}
 
-Ambient Temperature (K).
+Ambient temperature (in K).
 
 \begin{itemize}
-\item fixed value\\$\hookrightarrow$ default: 288.15
+\item fixed value\\
+  $\hookrightarrow$ default: 288.15
 \item constrained
 \end{itemize}
 
 \subsection{PRESS} \label{subsec:press}
 
-Ambient Pressure (mbar).
+Ambient pressure (in mbar).
 
 \begin{itemize}
-\item fixed value\\$\hookrightarrow$ default: 1013.25
+\item fixed value\\
+  $\hookrightarrow$ default: 1013.25
 \item constrained
 \end{itemize}
 
 \subsection{RH} \label{subsec:rh}
 
-Relative Humidity (\%). It is required only if \hyperref[subsec:h2o]{\texttt{H2O}} (see below)
-is set to \texttt{CALC}, otherwise it must be set to \texttt{NOTUSED}.
+Relative humidity (in \%). It is required only if \hyperref[subsec:h2o]{\texttt{H2O}} (see
+below) is set to \texttt{CALC}, otherwise it must be set to \texttt{NOTUSED}.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
+\item not used\\
+  $\hookrightarrow$ default: \texttt{NOTUSED} ($-1$)
 \end{itemize}
 
 \subsection{H2O} \label{subsec:h2o}
 
-Water Concentration (molecule cm$^{-3}$). If \texttt{H2O} is set to \texttt{CALC}, then
+Water concentration (in molecule cm$^{-3}$). If \texttt{H2O} is set to \texttt{CALC}, then
 \hyperref[subsec:rh]{\texttt{RH}} (see above) must be set to a fixed value or
 \texttt{CONSTRAINED}.
 
 \begin{itemize}
-\item fixed value\\$\hookrightarrow$ default: 4.45e+17
+\item fixed value\\
+  $\hookrightarrow$ default: 4.45e+17
 \item constrained
 \item calculated
 \end{itemize}
 
 \subsection{DEC} \label{subsec:dec}
 
-Sun Declination (radians) is the angle between the center of the sun and Earth's equatorial
+Sun declination (in radians) is the angle between the center of the Sun and Earth's equatorial
 plane.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item calculated\\$\hookrightarrow$ default: \texttt{CALC}
+\item calculated\\
+  $\hookrightarrow$ default: \texttt{CALC}
 \end{itemize}
 
 \subsection{BLHEIGHT} \label{subsec:blheight}
 
-Boundary Layer Height. It is required only if the model includes non-chemical processes such as
+Boundary layer height. It is required only if the model includes non-chemical processes such as
 the emission or deposition of chemical species. The unit is centimetre (cm) or metre (m),
 depending on how these processes are parametrized in the chemical mechanism -- go to
 Sect.~\ref{subsec:facsimile-format} for details.
@@ -527,37 +532,40 @@ Sect.~\ref{subsec:facsimile-format} for details.
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
+\item not used\\
+  $\hookrightarrow$ default: \texttt{NOTUSED} ($-1$)
 \end{itemize}
 
 \subsection{ASA} \label{subsec:asa}
 
-Aerosol Surface Area. It is required only if the model includes heterogeneous chemical
+Aerosol surface area. It is required only if the model includes heterogeneous chemical
 reactions. The unit is area (e.g., cm$^2$, $\mu$m$^2$, nm$^2$) per volume (e.g., m$^3$,
 cm$^3$), depending on how these reactions are implemented in the chemical mechanism.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
+\item not used\\
+  $\hookrightarrow$ default: \texttt{NOTUSED} ($-1$)
 \end{itemize}
 
 \subsection{DILUTE} \label{subsec:dilute}
 
-Dilution Rate (s$^{-1}$). It is required only if the model includes the dilution of chemical
+Dilution rate (in s$^{-1}$). It is required only if the model includes the dilution of chemical
 species.
 
 \begin{itemize}
 \item fixed value
 \item constrained
-\item not used\\$\hookrightarrow$ default: \texttt{NOTUSED} (-1)
+\item not used\\
+  $\hookrightarrow$ default: \texttt{NOTUSED} ($-1$)
 \end{itemize}
 
 When \texttt{DILUTE} is set to a fixed value or constrained, the chemical mechanism is
 automatically modified during the \hyperref[subsec:build-process]{build process}: for each
 species in the chemical mechanism, a ``loss reaction'' is added to the mechanism with a ``rate
-coefficient'' equal to the dilution rate~\footnote{The behaviour of \texttt{DILUTE} was changed
-  with AtChem2 v1.2. Previously, the user had to add manually to the chemical mechanism a
+coefficient'' equal to the dilution rate\footnote{The behaviour of \texttt{DILUTE} was changed
+  with version 1.2. Previously, the user had to add manually to the chemical mechanism a
   ``reaction'' using \texttt{DILUTE} for each species for which dilution was required. The new
   approach makes the use of \texttt{DILUTE} both more intuitive and more accurate.}. For
 example, the following ``reactions'' are added to the ``Tropospheric O3-NOx cycle'' mechanism
@@ -583,7 +591,8 @@ or constrained photolysis rates (Fig.~\ref{fig:photol}). For detailed informatio
 parameter, go to Sect.~\ref{subsec:jfac-calculation}.
 
 \begin{itemize}
-\item fixed value\\$\hookrightarrow$ default: 1
+\item fixed value\\
+  $\hookrightarrow$ default: 1
 \item constrained
 \item calculated
 \end{itemize}
@@ -593,7 +602,7 @@ parameter, go to Sect.~\ref{subsec:jfac-calculation}.
 Flag to switch the photolysis rates on/off. It is needed mostly for simulations of some
 environmental chamber experiments, where the roof of the chamber can be opened/closed or the
 lamps can be turned on/off.  When \texttt{ROOF} is set to \texttt{CLOSED}, all the photolysis
-rates are set to zero, including those that are constant or constrained. This is different than
+rates are set to zero, including those that are constant or constrained. This is different from
 setting \texttt{JFAC} to \texttt{0}, which only applies to the calculated photolysis rates
 (Fig.~\ref{fig:photol}).
 
@@ -685,12 +694,12 @@ changed: see the file \texttt{mcm/INFO.md} for instructions. More information ca
 the \href{https://mcm.york.ac.uk/MCM/rates/photolysis}{photolysis page} of the MCM website.
 
 The solar zenith angle (SZA) is the angle between the local vertical (zenith) and the center of
-the sun. The SZA is measured in radians and is calculated by the model from the following
+the Sun. The SZA is measured in radians and is calculated by the model from the following
 variables: latitude and longitude (both set in the \texttt{model.parameters} file,
-Sect.~\ref{sec:model-parameters}); sun declination (\texttt{DEC}, Sect.~\ref{subsec:dec}) -- an
+Sect.~\ref{sec:model-parameters}); Sun declination (\texttt{DEC}, Sect.~\ref{subsec:dec}) -- an
 environment variable which can be constrained, set to a constant value or calculated by the
 model; time of the day, which is calculated based on the start date and the model time. The
-equations to calculate the solar zenith angle and the sun declination are described in
+equations to calculate the solar zenith angle and the Sun declination are described in
 \citet{madronich_1993}.
 
 \subsection{JFAC calculation} \label{subsec:jfac-calculation}
@@ -732,13 +741,13 @@ directory.
 
 \medskip \noindent
 \textcolor{red}{\bf Warning:} currently, the calculation of \texttt{JFAC} at runtime does not
-work well~\footnote{See issue \href{https://github.com/AtChem/AtChem2/issues/16}{\#16}.},
+work well\footnote{See issue \href{https://github.com/AtChem/AtChem2/issues/16}{\#16}.},
 especially in situations when the reference photolysis rate is highly variable, and at
 sunrise/sunset. Therefore, it is recommended to calculate \texttt{JFAC} offline and then to
 constrain it (go to Sect.~\ref{sec:constraints} for details).
 
 % -------------------------------------------------------------------- %
-\section{Config Files} \label{sec:config-files}
+\section{Configuration Files} \label{sec:configuration-files}
 
 The configuration files contain the settings of the environment variables, the chemical
 species, the photolysis rates, as well as the model constraints and the model output. All the
@@ -802,7 +811,7 @@ constant values or constrained to measured concentrations, i.e. those listed in
 \subsection{outputRates.config} \label{subsec:outputrates}
 
 This file lists the chemical species for which detailed production/loss rates (in molecule
-cm$^{-3}$ s$^{-1}$) are required~\footnote{In version 1.0 and earlier, these species were
+cm$^{-3}$ s$^{-1}$) are required\footnote{In version 1.0 and earlier, these species were
   listed in two separate files: \texttt{productionRatesOutput.config} and
   \texttt{lossRatesOutput.config}.}. The file has one column, with one species per line. For
 example:
@@ -821,7 +830,7 @@ species. For more information, go to Sect.~\ref{subsec:ropa-roda}.
 
 \subsection{outputSpecies.config} \label{subsec:outputspecies}
 
-This file~\footnote{Called \texttt{concentrationOutput.config} in version 1.0 and earlier.}
+This file\footnote{Called \texttt{concentrationOutput.config} in version 1.0 and earlier.}
 lists the chemical species for which the calculated concentration (in molecule cm$^{-3}$) is
 required. The file has one column, with one species per line. For example:
 
@@ -862,7 +871,7 @@ the file should be empty.
 
 \subsection{photolysisConstrained.config} \label{subsec:photolysisconstrained}
 
-This file~\footnote{Called \texttt{constrainedPhotoRates.config} in version 1.0 and earlier.}
+This file\footnote{Called \texttt{constrainedPhotoRates.config} in version 1.0 and earlier.}
 lists the photolysis rates that are constrained (Sect.~\ref{subsec:constrained-photolysis-rates}).
 The file has one column, with one photolysis rate per line. The names of the photolysis rates
 follow the \href{https://mcm.york.ac.uk/MCM/rates/photolysis}{MCM designation}. For example:
@@ -881,7 +890,7 @@ constrained, the file should be empty.
 
 \subsection{speciesConstant.config} \label{subsec:speciesconstant}
 
-This file~\footnote{Called \texttt{constrainedFixedSpecies.config} in version 1.0 and earlier.}
+This file\footnote{Called \texttt{constrainedFixedSpecies.config} in version 1.0 and earlier.}
 lists the chemical species that are set to constant concentrations. The file has two columns:
 the first column is the list of constant species, the second column is the corresponding
 concentration (in molecule cm$^{-3}$). For example:
@@ -898,7 +907,7 @@ If no chemical species is set to constant, the file should be empty.
 
 \subsection{speciesConstrained.config} \label{subsec:speciesconstrained}
 
-This file~\footnote{Called \texttt{constrainedSpecies.config} in version 1.0 and earlier.}
+This file\footnote{Called \texttt{constrainedSpecies.config} in version 1.0 and earlier.}
 lists the chemical species that are constrained. The file has one column, with one species per
 line. If a chemical species is constrained, there must be a corresponding constraint file in
 the \texttt{model/constraints/species/} directory (Sect.~\ref{subsec:constrained-variables}).

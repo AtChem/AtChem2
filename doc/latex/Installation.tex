@@ -26,15 +26,15 @@ software tools:
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran} (version 4.8 or
   later) and with Intel \texttt{ifort} (version 17.0 or later).\\
   The default Fortran compiler is \texttt{gfortran}.
-\item a Python installation~\footnote{Python v3 is recommended, but all the scripts used in
-    AtChem2 also work with Python v2. Support for Python v2 will be removed in future versions
-    of AtChem2.}.
+\item a Python installation\footnote{Python v3 is recommended, but all the scripts used in
+    AtChem2 also work with Python v2. Support for Python v2 will be removed in future
+    versions.}.
 \end{itemize}
 
 Some or all of these tools may already be installed on the operating system: use the
-\verb|which| command to find out (e.g., \verb|which python|, \verb|which make|,
-etc\ldots). Otherwise, check the local documentation or ask the system administrator. In
-addition, AtChem2 has the following dependencies:
+\verb|which| command to find out (e.g., \verb|which python|, \verb|which make|). Otherwise,
+check the local documentation or ask the system administrator. In addition, AtChem2 has the
+following dependencies:
 
 \begin{itemize}
 \item CVODE -- requires gcc, cmake %BLAS, LAPACK
@@ -72,7 +72,7 @@ The AtChem2 source code can be obtained in two ways:
 
 \begin{enumerate}
 \item with \textbf{git} (this is the best method for users who want to contribute to the model
-  development, Sect.~\ref{ch:development}):
+  development, Chapt.~\ref{ch:development}):
   \begin{itemize}
   \item Open the terminal. Move to the directory where AtChem2 will be installed.
   \item Execute one of the following commands to copy the \texttt{master\ branch} to the local
@@ -119,16 +119,6 @@ Sect.~\ref{sec:requirements} are met, and that the unix shell is \emph{sh}-compa
 
 \subsection{Required dependencies} \label{subsec:required-dependencies}
 
-% \subsubsection{BLAS and LAPACK}
-
-% BLAS and LAPACK are standard Fortran libraries for linear
-% algebra. Together with \texttt{cmake}, they are needed only to compile
-% the CVODE library -- see below. Usually they are located in the
-% \texttt{/usr/lib/} directory (e.g., \texttt{/usr/lib/libblas/} and
-% \texttt{/usr/lib/lapack/}). The location may be different,
-% especially on a High Performance Computing (HPC) system: check the
-% local documentation or ask the system administrator.
-
 \subsubsection{CVODE}
 
 AtChem2 uses the CVODE library, which is part of the open-source
@@ -140,15 +130,11 @@ v2.9.0 (part of SUNDIALS v2.7.0) and it can be installed using the script
 
 \begin{enumerate}
 \item Open the terminal. Move to the \maindir\ (\verb|cd ~/AtChem2/|).
-\item Open the installation script (\texttt{tools/install/install\_cvode.sh})
-  with a text editor:
-  \begin{itemize}
-  % \item If LAPACK and BLAS are not in the default location (see
-  %   above), change the \texttt{LAPACK\_LIBS} variable for your
-  %   architecture (Linux or macOS) as appropriate.
-  \item If using a compiler other than \texttt{gcc}, change the line:\\
-    \texttt{-DCMAKE\_C\_COMPILER:FILEPATH=gcc \textbackslash}
-  \end{itemize}
+\item If using a compiler other than \texttt{gcc}, open the \texttt{install\_cvode.sh}
+  script with a text editor and change the following line:
+  \begin{Verbatim}[fontsize=\small]
+  -DCMAKE\_C\_COMPILER:FILEPATH=gcc \
+  \end{Verbatim}
 \item Run the installation script (change the \depdir\ path as needed):
   \begin{Verbatim}[fontsize=\small]
   ./tools/install/install_cvode.sh ~/AtChem-lib/
@@ -222,9 +208,9 @@ system. If not, ask the system administrator. Alternatively, numdiff can be inst
 \subsubsection{FRUIT}
 
 FRUIT (FORTRAN Unit Test Framework) is an open-source testing library for Fortran. It requires
-a Ruby installation~\footnote{The current version of FRUIT does not compile with Ruby v3.2 due
-  to some deprecated syntax. Version 3.0 or earlier must be used until the FRUIT developers
-  release an update.} and it is needed only to run the unit tests, which are a subset of the
+a Ruby installation\footnote{The current version of FRUIT does not compile with Ruby v3.2 due
+  to some deprecated syntax. Ruby v3.0 or earlier must be used until the FRUIT developers
+  release an update.} and it is needed only to run the Unit tests, which are a subset of the
 Testsuite (Sect.~\ref{sec:testsuite}). Installation of FRUIT is recommended only for users who
 want to contribute to the development of AtChem2.
 
@@ -267,9 +253,8 @@ and configure AtChem2 is straightforward:
 \item Open the \texttt{Makefile} with a text editor. Set the variables \texttt{CVODELIBDIR},
   \texttt{OPENLIBMDIR} and \texttt{FRUITDIR} to the paths of the CVODE, openlibm and FRUIT
   libraries, as indicated in Sect.~\ref{sec:dependencies}. Use \emph{full paths}, because
-  relative paths may cause compilation errors~\footnote{See issue
-    \href{https://github.com/AtChem/AtChem2/issues/364}{\#364}.}. For example (change the
-  \depdir\ path as needed):
+  relative paths may cause compilation errors. For example (change the \depdir\ path as
+  needed):
   \begin{Verbatim}[fontsize=\small]
   CVODELIBDIR = $(HOME)/AtChem-lib/cvode/lib
   OPENLIBMDIR = $(HOME)/AtChem-lib/openlibm
@@ -317,7 +302,7 @@ AtChem2 is now ready to be used. Optionally, the Testsuite can be run to check t
 installation: go to Sect.~\ref{subsec:tests-optional} for more information. The directory
 structure of AtChem2 is described in Sect.~\ref{sec:model-structure} (see also
 Fig.~\ref{fig:atchem-arch}). For detailed instructions on how to set up, configure, build and
-run the AtChem2 model, go to Chapt.~\ref{ch:setup} and Chapt.~\ref{ch:execution}.
+run the AtChem2 model, go to Chapts.~\ref{ch:setup} and \ref{ch:execution}.
 
 \subsection{Tests (optional)} \label{subsec:tests-optional}
 
@@ -335,12 +320,12 @@ Open the terminal and execute one of the following commands from the \maindir:
 \end{itemize}
 
 The command runs the requested tests, then prints the test output and a summary of the results
-to the terminal. The logfiles of the test runs can be found in the \texttt{tests/} directory.
+to the terminal. The log files of the test runs can be found in the \texttt{tests/} directory.
 
 % -------------------------------------------------------------------- %
 \section{Docker} \label{sec:docker}
 
-As an alternative to the installation of AtChem2 described above, a containerised version of
+As an alternative to the installation of AtChem2 described above, a containerized version of
 the model is available. Currently this is built only for AtChem2 v1.2.2 and is experimental;
 the following instructions are for guidance only.
 
@@ -352,7 +337,7 @@ be downloaded with the command:
   docker pull ghcr.io/wacl-york/atchem2:1.2.2
 \end{Verbatim}
 
-When running the container, place the model files (e.g. configuration, constraints and
+When running the container, place the model files (e.g., configuration, constraints and
 mechanism files) in a folder that matches the AtChem2 directory structure. This folder is then
 mounted in the container with the name \texttt{/data\_transfer/}. The chemical mechanism to be
 used is provided as a positional argument to the image (e.g., \texttt{./model/my\_mech.fac}).
@@ -377,7 +362,7 @@ Output files will be copied to \texttt{my\_model\_run/model/output} on completio
 
 \subsection{Running on Singularity/Apptainer}
 
-Some HPC systems use Singularity / Apptainer instead of Docker as their container engine. This
+Some high-performance computing (HPC) systems use Singularity / Apptainer instead of Docker as their container engine. This
 image is compatible with those as well. The image can be converted to a \texttt{.sif} file via
 the command:
 
@@ -460,7 +445,7 @@ For the majority of the users, the most important directories are \texttt{doc/},
 contains the user manual; \texttt{tools/}, which contains the installation and plotting
 scripts; \texttt{model/}, which contains the model configuration, input, output and (usually)
 the chemical mechanism. Detailed information on these three directories can be found in
-Sect.~\ref{subsec:doc-tools-directories} and \ref{subsec:model-directory}, respectively.
+Sects.~\ref{subsec:doc-tools-directories} and \ref{subsec:model-directory}, respectively.
 
 \subsection{The \texttt{doc/} and \texttt{tools/} directories} \label{subsec:doc-tools-directories}
 
@@ -491,7 +476,7 @@ validation and diagnostic purposes. It is recommended to use a proper data analy
 package (e.g., R, Python, Igor, Origin, etc.) to process and analyze the model results.
 
 The plotting scripts are written in different programming languages: gnuplot,
-Octave~\footnote{GNU Octave is an open-source implementation of MATLAB. The script
+Octave\footnote{GNU Octave is an open-source implementation of MATLAB. The script
   \texttt{plot-atchem2.m} works with both Octave and MATLAB.}, Python, R. One or more of these
 environments is probably already installed on the operating system: check the local
 documentation or ask the system administrator. All plotting scripts require one argument -- the
@@ -520,7 +505,7 @@ different names). Second, although by default the \modeldir\ is located inside t
 and is called \texttt{model/}, it can be located anywhere the user wants and it can be given
 any name. The user only needs to provide the path of the \modeldir\ as an argument to the build
 script (\texttt{build/build\_atchem2.sh}) and to the \texttt{atchem2} executable, as explained
-in Sect.~\ref{sec:build} and \ref{sec:execute}.
+in Sects.~\ref{sec:build} and \ref{sec:execute}.
 
 The \modeldir\ contains a number of subdirectories:
 

@@ -20,9 +20,9 @@ given time:
 
 \begin{description}
 \item[Stable version]: is indicated by a version number (e.g., \texttt{v1.0}) and can be
-  downloaded from the \href{https://github.com/AtChem/AtChem2/releases}{Releases page}.
-  A \textbf{DOI number} is assigned to each stable version via the
-  \href{https://zenodo.org}{Zenodo service}.
+  downloaded from the \href{https://github.com/AtChem/AtChem2/releases}{Releases page}. A
+  \textbf{DOI} is assigned to each stable version via the \href{https://zenodo.org}{Zenodo
+    service}.
 \item[Development version]: is the \texttt{master\ branch} of the git repository and is
   indicated by a version number with the suffix ``-dev'' (e.g., \texttt{v1.1-dev}). It can be
   downloaded as an \href{https://github.com/AtChem/AtChem2/archive/master.zip}{archive file} or
@@ -36,9 +36,8 @@ automatically run through the \hyperref[sec:testsuite]{Testsuite} before being m
 not cause unintended behaviour or unexplained differences in the model results, even the
 development version of AtChem2 can be considered reliable for most use cases. Nevertheless, it
 is strongly suggested to use the \textbf{stable version} for ``production runs'' and
-publications, as it can easily be referenced via the associated doi number -- see the
-discussion about traceability and reproducibility of computational models in
-\citet{sommariva_2020}.
+publications, as it can easily be referenced via the associated DOI -- see the discussion about
+traceability and reproducibility of computational models in \citet{sommariva_2020}.
 
 Feedback, bug reports, comments, suggestions, and feature requests are welcome. A list of open
 issues, known bugs and desired features can be found on the
@@ -51,7 +50,7 @@ Contributions and corrections to the user manual are also welcome. The manual is
 \LaTeX, with figures in \texttt{.svg} format. The \texttt{.tex} files, located in the
 \texttt{doc/latex/} directory, can be opened and modified using any text editor. To compile the
 \texttt{.pdf} file of the manual, use the script \texttt{tools/make\_manual\_pdf.sh}, then
-commit it together with the other changes~\footnote{The script requires a \LaTeX\ installation
+commit it together with the other changes\footnote{The script requires a \LaTeX\ installation
   and ImageMagick (v7.x).}. Alternatively, the \texttt{.pdf} file is automatically compiled via
 GitHub Actions when a Pull Request (PR) that modifies one of the \texttt{.tex} or \texttt{.svg}
 files is opened.
@@ -68,16 +67,16 @@ strongly encouraged to follow the coding guidelines detailed in Sect.~\ref{sec:s
 AtChem2 uses \href{https://github.com/features/actions}{GitHub Actions} for
 \underline{continuous integration} testing. This programming approach ensures that changes to
 the code do not unintentionally modify the behaviour and the results of the software. The
-Testsuite is located in the \texttt{tests/} directory~\footnote{Called \texttt{travis/} in
-  versions 1.0--1.2.2, when the TravisCI service was used to run the Testsuite.} and consists of
-a series of tests and short model runs that check the model functionality and calculations
+Testsuite is located in the \texttt{tests/} directory\footnote{Called \texttt{travis/} in
+  versions 1.0--1.2.2, when the TravisCI service was used to run the Testsuite.} and consists
+of a series of tests and short model runs that check the model functionality and calculations
 against known outputs. In addition, the \href{https://codecov.io}{Codecov} service is used to
 ensure that the Testsuite covers a significant fraction of the codebase (aiming for $>$90\%
 coverage) and a wide range of common configurations.
 
-There are five types of tests, which are executed from the \maindir\ with the \verb|make|
+There are five types of tests, which can be executed from the \maindir\ with the \verb|make|
 command. Note that the \emph{optional dependencies} must be installed in order to run the
-Testsuite -- see Sect.~\ref{subsec:optional-dependencies} and \ref{subsec:tests-optional} for
+Testsuite -- see Sects.~\ref{subsec:optional-dependencies} and \ref{subsec:tests-optional} for
 details.
 
 \begin{itemize}
@@ -91,7 +90,7 @@ details.
   $\hookrightarrow$ \verb|make unittests|
 \item The \textbf{Model} tests run a number of models with different configurations to check
   that they generate the expected outputs:\\
-  $\hookrightarrow$ \verb|make modeltests| and/or \verb|make oldtests|~\footnote{At present
+  $\hookrightarrow$ \verb|make modeltests| and/or \verb|make oldtests|\footnote{At present
     these tests are split into two groups, \texttt{modeltests} and \texttt{oldtests}, which
     will eventually be merged. Both groups of tests pass on Linux, but \texttt{modeltests} fail
     on macOS. See issue \href{https://github.com/AtChem/AtChem2/issues/522}{\#522}.}
@@ -102,9 +101,9 @@ The tests create \texttt{.log} files in the \texttt{tests/} directory and print 
 message to the terminal, while the Unit tests output the results directly to the terminal. If
 one or more tests fail, search the log files for detailed information.
 
-The Testsuite is automatically run every time a Pull Request (PR) is created or updated on the
-GitHub repository. The PR triggers a GitHub Actions workflow that runs the entire Testsuite on
-two architectures (Linux and macOS) using different versions of the GNU \texttt{gfortran}
+The Testsuite is automatically run every time a PR is created or updated on the GitHub
+repository. The PR triggers a GitHub Actions workflow that runs the entire Testsuite on two
+architectures (Linux and macOS) using different versions of the GNU \texttt{gfortran}
 compiler. The workflow -- described in the \texttt{.github/workflows/ci.yml} file -- performs
 the following tasks on each architecture:
 
@@ -139,7 +138,7 @@ new Unit tests, follow the procedure outlined below:
   source file \texttt{xFunctions.f90} be named \texttt{x\_test.f90}.
 \item The Unit test file must contain a module with the same name as
   the file -- i.e. \texttt{x\_test} -- and it must include the
-  statement \texttt{use fruit}, plus any other required module.
+  statement ``use fruit'', plus any other required module.
 \item The module should contain a number of subroutines with the
   naming pattern \texttt{test\_*}. These subroutines must take no
   arguments and, importantly, must not have any brackets for arguments
@@ -297,9 +296,9 @@ which can be verified with the shellcheck utility -- installed locally or online
 \subsubsection{Specific recommendations}
 
 \begin{itemize}
-\item All \textbf{keywords} should be lowercase (e.g., \texttt{if\ then}, \texttt{call},
-  \texttt{module}, \texttt{integer}, \texttt{real}, \texttt{only}, \texttt{intrinsic}). This
-  includes the \texttt{(kind=XX)} and \texttt{(len=XX)} statements.
+\item All \textbf{keywords} should be lowercase -- for example: \texttt{if\ then},
+  \texttt{call}, \texttt{module}, \texttt{integer}, \texttt{real}, \texttt{only},
+  \texttt{intrinsic}. This includes the \texttt{(kind=XX)} and \texttt{(len=XX)} statements.
 \item All \textbf{intrinsic} function names should be lowercase: e.g., \texttt{trim},
   \texttt{adjustl}, \texttt{adjustr}.
 \item The \textbf{relational operators} should use \texttt{>=} and \texttt{==} rather than

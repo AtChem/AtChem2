@@ -278,15 +278,16 @@ workflow.
   \label{fig:setup}
 \end{figure}
 
-Fig.~\ref{fig:setup} shows an example of a possible setup: a \texttt{Modelling/} directory
-within the user's \texttt{\$HOME} contains an AtChem2 installation, which consists of the
-\maindir\ (\texttt{\$HOME/Modelling/AtChem2/}, which also includes the default \texttt{model/}
-directory) and the \depdir\ (\texttt{\$HOME/Modelling/AtChem-lib/}). A project directory
-(\texttt{Project\_A/}) contains two separate \modeldir\ (\texttt{model\_1/} and
-\texttt{model\_2/}), each with their own chemical mechanism, configuration, constraints and
-output. The project directory may correspond, for example, to a field campaign or to a set of
-related experiments. In this case, each model can be built independently from the \maindir\
-with the following commands:
+Fig.~\ref{fig:setup} shows an example of a possible setup. A \texttt{Modelling/} directory
+within the user's home directory is designated for the modelling work: it contains an AtChem2
+installation consisting of two directories: the \maindir\
+(\texttt{\textasciitilde/Modelling/AtChem2/}), which includes the default \texttt{model/}
+directory, and the \depdir\ (\texttt{\textasciitilde/Modelling/AtChem-lib/}). It also contains
+a project directory (\texttt{\textasciitilde/Modelling/Project\_A/}) with two separate
+\modeldir\ (\texttt{model\_1/} and \texttt{model\_2/}), each with their own chemical mechanism,
+configuration, constraints and output. The project directory may correspond, for example, to a
+field campaign or to a set of related experiments. In this case, each model can be built
+independently from the \maindir\ with the following commands:
 
 \begin{Verbatim}[fontsize=\footnotesize]
   ./build/build_atchem2.sh --mechanism=../Project_A/model_1/mechanism.fac

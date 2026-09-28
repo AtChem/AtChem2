@@ -59,7 +59,7 @@ jobs:
       - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v3
         with:
-          scheme: full
+          scheme: small
           run: |
             apk add imagemagick librsvg
             ./doc/make_manual_pdf.sh

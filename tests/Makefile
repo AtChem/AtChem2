@@ -1,24 +1,32 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+# Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 # Peter Jimack, Mike Pilling
 #
-# Copyright (c) 2017 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva, James Allsopp
 #
 # This file is part of the AtChem2 software package.
 #
-# This file is covered by the MIT license which can be found in the file
-# LICENSE.md at the top level of the AtChem2 distribution.
+# This file is licensed under the MIT license, which can be found in the file
+# `LICENSE` at the top level of the AtChem2 distribution.
 #
 # -----------------------------------------------------------------------------
 
-# This is a secondary makefile, included in the main Makefile. It contains
-# the information needed to set up and run the AtChem2 Testsuite.
+# This is a secondary Makefile, which defines the rules for the AtChem2
+# Testsuite.
+#
+# This Makefile should not be run directly with `make -f`, as it is
+# included by the main Makefile.
 #
 # The following variables are defined in the main Makefile:
-# - $FRUITDIR is the path to FRUIT, the FORTRAN Unit Test Framework
-# - $CORE_SRCS are the Fortran source files needed for the unit tests
-# - $FORT_COMP is the Fortran compiler
+# - $FRUITDIR: path to FRUIT, the FORTRAN Unit Test Framework
+# - $CORE_SRCS: Fortran source files needed for the unit tests
+# - $FORT_COMP: Fortran compiler
+# - $CVODELIBDIR, $OPENLIBMDIR: paths to dependencies (CVODE, openlibm)
+
+ifndef FORT_COMP
+  $(error )
+endif
 
 # ==================== Unit tests ==================== #
 
@@ -54,7 +62,7 @@ MODELTESTS := $(shell ls -d tests/model_tests/*/ | sed 's,tests/model_tests/,,g'
 
 # ==================== Makefile rules  ==================== #
 
-.PHONY: indenttest styletest unittests oldtests modeltests alltests
+.PHONY: indenttest styletest pythontest unittests oldtests modeltests alltests cleantests
 
 indenttest:
 	@echo ""
@@ -85,4 +93,13 @@ modeltests:
 	@echo "Make: Running the model tests:" $(MODELTESTS)
 	@./tests/run_model_tests.sh "$(MODELTESTS)" "$(FORT_LIB):$(CVODELIBDIR):$(OPENLIBMDIR)"
 
-alltests: indenttest styletest oldtests modeltests unittests
+alltests: indenttest styletest pythontest unittests oldtests modeltests
+
+cleantests:
+	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
+              tests/tests/*/model/configuration/include/*.{o,mod,so} \
+              tests/tests/*/output/*.output tests/testsc/*/output/reactionRates/*[0-9]
+	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
+              $(MODELTESTDIR)/*/configuration/include/*.{o,mod,so} \
+              $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
+	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)

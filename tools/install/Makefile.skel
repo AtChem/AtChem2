@@ -1,9 +1,10 @@
+# -*- mode: makefile-gmake -*-
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 # Peter Jimack, Mike Pilling
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva, James Allsopp
 #
 # This file is part of the AtChem2 software package.
 #
@@ -111,7 +112,7 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # secondary makefile for the Testsuite
-include tests/makefile.tests
+include tests/Makefile
 
 # ----------------------------------------------------
 # MECHANISM SHARED LIBRARY setup
@@ -162,13 +163,6 @@ clean:
 	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
 	rm -f $(SHAREDLIBDIR)/mechanism.{f90,prod,reac,ro2,species} $(SHAREDLIBDIR)/*.{o,mod,so} \
               model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
-	rm -f tests/tests/*/*.out tests/tests/*/model/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
-              tests/tests/*/model/configuration/include/*.{o,mod,so} \
-              tests/tests/*/output/*.output tests/testsc/*/output/reactionRates/*[0-9]
-	rm -f $(MODELTESTDIR)/*/*.out $(MODELTESTDIR)/*/configuration/include/mechanism.{f90,prod,reac,ro2,species} \
-              $(MODELTESTDIR)/*/configuration/include/*.{o,mod,so} \
-              $(MODELTESTDIR)/*/output/*.output $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
-	rm -f $(UNITTESTDIR)/fruit_*_gen.f90 $(UNITTESTDIR)/fruit_generator.rb $(fruit_driver)
 
 # ==================== Dependencies ==================== #
 

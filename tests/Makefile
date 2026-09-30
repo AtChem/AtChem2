@@ -25,7 +25,8 @@
 # - $CVODELIBDIR, $OPENLIBMDIR: paths to dependencies (CVODE, openlibm)
 
 ifndef FORT_COMP
-  $(error )
+  $(error WARNING: this Makefile is included by the main Makefile and \
+          must not be run directly.)
 endif
 
 # ==================== Unit tests ==================== #

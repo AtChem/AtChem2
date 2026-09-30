@@ -58,7 +58,7 @@ jobs:
           - { os: ubuntu-24.04, fortran: 12 }
           - { os: ubuntu-24.04, fortran: 13, coverage: true }
           # macos-15   # NB: macos testing temporarily deactivated
-          # - { os: macos-15-intel, fortran: 12 }
+          - { os: macos-15-intel, fortran: 12 }
           # - { os: macos-15-intel, fortran: 13 }
     permissions:
       contents: read
@@ -181,7 +181,7 @@ jobs:
       - name: Unit and Model tests (x Codecov)
         if: matrix.coverage
         run: |
-          make clean
+          make clean cleantests
           # unit tests
           make unittests CCOV=true
           find ./ -name "*.gc*"

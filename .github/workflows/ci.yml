@@ -109,6 +109,8 @@ jobs:
       # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
       - name: Install CVODE
+        env: # temporary fix until cvode is updated
+          CMAKE_POLICY_VERSION_MINIMUM: "3.5"
         run: ./tools/install/install_cvode.sh $PWD $(which gfortran-$FORT_VERSION)
 
       - name: Install openlibm
@@ -162,7 +164,7 @@ jobs:
 
       - name: Model tests
         run: |
-          make oldtests  # NB: oldtests and modeltests will eventually be merged
+          make oldtests  # oldtests and modeltests will eventually be merged
           make modeltests
 
       - name: Save log files
@@ -184,10 +186,9 @@ jobs:
           make clean cleantests
           # unit tests
           make unittests CCOV=true
-          find ./ -name "*.gc*"
-          mv tests/unit_tests/*.gc* ./  # for gcc>=11 handling of *.gcda, *.gcna files
+          mv tests/unit_tests/*.gc* ./  # needed for gcc>=11
           # model tests
-          make modeltests CCOV=true  # run only the new Testsuite
+          make modeltests CCOV=true  # run only the modeltests
 
       - name: Upload coverage reports to Codecov
         if: matrix.coverage

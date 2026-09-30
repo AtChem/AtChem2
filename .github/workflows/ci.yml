@@ -59,7 +59,6 @@ jobs:
           - { os: ubuntu-24.04, fortran: 13, coverage: true }
           # macos-15  # NB: macos testing temporarily limited
           - { os: macos-15-intel, fortran: 12 }
-          - { os: macos-15, fortran: 12 }
     permissions:
       contents: read
     env:

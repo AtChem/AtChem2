@@ -1,4 +1,4 @@
-AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/LICENSE) [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
+AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue)] [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
 =======
 
 
@@ -44,7 +44,7 @@ Optionally, **numdiff**, **FRUIT**, and **Ruby** (v3.0 or earlier) need to be in
 
 The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a [DOI](https://www.doi.org/the-identifier/what-is-a-doi) for referencing in publications.
 
-After installation of the required dependencies using the scripts in the `tools/install/` directory, copy the file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Set the variables `CVODELIBDIR`, `OPENLIBMDIR` and `FRUITDIR` in the `Makefile` to the full paths of CVODE, openlibm and (if installed) FRUIT.
+After installation of the required dependencies using the scripts in the `tools/install/` directory, copy the template file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Edit the `Makefile` to set the variables `CVODELIBDIR` and `OPENLIBMDIR` to the full paths of the CVODE and openlibm libraries. If FRUIT is installed (needed only to run the unit tests), also set the variable `FRUITDIR` to the full path of the FRUIT library.
 
 Alternatively, AtChem2 can be run as a [Docker](https://www.docker.com/) container: at the moment, this is only available for AtChem2 version 1.2.2 thanks to the support of the [Uni. York (WACL) group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2). Note that this option is currently experimental and not supported.
 

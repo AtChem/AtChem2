@@ -1,14 +1,14 @@
 ! -----------------------------------------------------------------------------
 !
-! Copyright (c) 2009 - 2012 Chris Martin, Kasia Boronska, Jenny Young,
+! Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 ! Peter Jimack, Mike Pilling
 !
-! Copyright (c) 2017 - 2018 Sam Cox, Roberto Sommariva
+! Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
 !
 ! This file is part of the AtChem2 software package.
 !
-! This file is covered by the MIT license which can be found in the file
-! LICENSE.md at the top level of the AtChem2 distribution.
+! This file is licensed under the MIT license, which can be found in the file
+! `LICENSE` at the top level of the AtChem2 distribution.
 !
 ! -----------------------------------------------------------------------------
 
@@ -150,7 +150,7 @@ PROGRAM ATCHEM2
   rout(:) = -1.0_DP
   rpar(:) = -1.0_DP
 
-  write (*, '(A)') 'AtChem2 v1.3-dev'
+  write (*, '(A)') 'AtChem2 v1.3'
   write (*,*)
   write (*, '(A)') '-------------'
   write (*, '(A)') ' Directories'

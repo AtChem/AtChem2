@@ -132,6 +132,12 @@ jobs:
       - name: Install Python and Fortran formatters
         run: pip install black fprettify
 
+      - name: Debug python
+        run: |
+          which -a python python3 pip black
+          pip --version
+          python3 -m black --version || true
+          python -m black --version || true
       # -------------------------------------------------------------
       # (4) Build AtChem2 with the standard compilation flags
 

@@ -169,7 +169,6 @@ STOP 2
  numberOfConstrainedSpecies = 2
                          t0 =       3.600E+04
 
- setting maxnumsteps ier = 0
  setting maxstep ier = 0
 
 -----------

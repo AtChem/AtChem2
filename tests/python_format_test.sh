@@ -1,7 +1,7 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -16,8 +16,7 @@
 # NB: the script must be run from the *Main Directory* of AtChem2.
 # -----------------------------------------------------------------------------
 
-python3 -c "import black"
-if [ $? -ne 0 ] ; then
+if ! command -v black >/dev/null 2>&1 ; then
     printf "\n[ERROR] python formatter missing -- to install it, run the command:\n"
     printf "pip install black\n"
     exit 1
@@ -40,7 +39,7 @@ find build/ tools/ -name "*.py" | {
             printf "[PASS] %s\n" "$file" >> "$LOG_FILE"
         else
             printf "[FAIL] %s\n" "$file" >> "$LOG_FILE"
-            black -q --diff "$file" >> $LOG_FILE
+            black -q --diff "$file" >> "$LOG_FILE"
             test_fail=$((test_fail + 1))
         fi
     done

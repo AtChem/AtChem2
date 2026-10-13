@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, James Allsopp
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva, James Allsopp
 #
 # This file is part of the AtChem2 software package.
 #
@@ -10,8 +10,8 @@
 # -----------------------------------------------------------------------------
 
 # -------------------------------------------------------------------- #
-# Workflow for the continuous integration (CI) of AtChem2, using
-# Github Actions and Codecov
+# Workflow for the continuous integration (CI) testing of AtChem2,
+# using Github Actions and Codecov
 # -------------------------------------------------------------------- #
 name: AtChem2 CI
 
@@ -39,22 +39,30 @@ on:
 jobs:
 
   ci_testing:
-    # The job runs on two versions of linux (ubuntu) and macos, with
-    # three versions of gnu fortran
+    # The job runs on:
+    # - two versions of linux (ubuntu) and macos
+    # - three versions of the gnu fortran compiler
     #
     # RUNNERS: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]   # NB: macos testing temporarily deactivated
-        fortran: [11, 12, 13]
-        # compiler versions  not available for specific runners
-        exclude:
-        - os: ubuntu-22.04
-          fortran: 13
       fail-fast: false
+      matrix:
+        include:
+          # ubuntu-22
+          - { os: ubuntu-22.04, fortran: 10 }
+          - { os: ubuntu-22.04, fortran: 11 }
+          - { os: ubuntu-22.04, fortran: 12 }
+          # ubuntu-24
+          - { os: ubuntu-24.04, fortran: 11 }
+          - { os: ubuntu-24.04, fortran: 12 }
+          - { os: ubuntu-24.04, fortran: 13, coverage: true }
+          # macos-15  # NB: macos testing temporarily limited
+          - { os: macos-15-intel, fortran: 12 }
     permissions:
       contents: read
+    env:
+      FORT_VERSION: ${{ matrix.fortran }}
 
     # -------------------------------------------------------------
     # Sequence of tasks to be executed as part of the `ci_testing` job:
@@ -72,22 +80,23 @@ jobs:
       # ACTION: https://github.com/marketplace/actions/checkout
 
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 2
 
       # -------------------------------------------------------------
       # (2) Install gfortran, if not supplied with the runner
 
-      # gfortran on ubuntu
-      - name: Install gfortran-11 (ubuntu-24.04)
-        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 11
-        run: sudo apt-get install gfortran-11
+      - name: Setup gfortran-${{ matrix.fortran }} on ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran-$FORT_VERSION
 
-      # gfortran on macos
-      - name: Install gfortran-10 and gfortran-11 (macos-13)
-        if: matrix.os == 'macos-13' && (matrix.fortran == 10 || matrix.fortran == 11)
-        run: brew install gcc@${{ matrix.fortran }}
+      - name: Setup gfortran-${{ matrix.fortran }} on macos
+        if: runner.os == 'macOS'
+        run: |
+          brew install gcc@$FORT_VERSION
 
       # -------------------------------------------------------------
       # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
@@ -99,13 +108,17 @@ jobs:
       # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
       - name: Install CVODE
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-${{ matrix.fortran }})
+        env: # temporary fix until cvode is updated
+          CMAKE_POLICY_VERSION_MINIMUM: "3.5"
+        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-$FORT_VERSION)
 
       - name: Install openlibm
         run: ./tools/install/install_openlibm.sh $PWD
 
       - name: Install numdiff
-        run: ./tools/install/install_numdiff.sh $PWD
+        run: |
+          ./tools/install/install_numdiff.sh $PWD
+          echo "$PWD/numdiff/bin" >> $GITHUB_PATH
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -119,17 +132,14 @@ jobs:
         run: pip install black fprettify
 
       # -------------------------------------------------------------
-      # (4) Build AtChem2 using the standard compilation flags
+      # (4) Build AtChem2 with the standard compilation flags
 
       - name: Build AtChem2
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh --mechanism=./model/mechanism.fac --shared_lib=./model/sharedlib --configuration=./model/configuration --mcm=v3.3.1
-
           # macos only
-          if [ $RUNNER_OS != "Linux" ] ; then
+          if [ "$RUNNER_OS" == "macOS" ] ; then
             install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
@@ -137,31 +147,29 @@ jobs:
           fi
 
       # -------------------------------------------------------------
-      # (5) Run the Testsuite using the standard compilation flags and the
+      # (5) Run the Testsuite with the standard compilation flags and the
       #     default model settings, then upload the log files as artifacts
       #
       # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
 
       - name: Indent and Style tests
-        run: |
-          make indenttest
-          make styletest
-          make pythontest
+        run: make indenttest styletest pythontest
 
-      - name: Unit and Model tests
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
-        # continue-on-error: true
-        run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make unittests
-          make oldtests   # NB: oldtests will eventually be merged into modeltests
-          make modeltests
+      - name: Unit tests
+        run: make unittests
+
+      - name: Model tests
+        run: |  # oldtests and modeltests will eventually be merged
+          make oldtests
+          if [ "$RUNNER_OS" != "macOS" ] ; then
+            make modeltests  # temporarily only on Linux
+          fi
 
       - name: Save log files
-        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
         with:
-          name: testsuite_${{ matrix.os }}_fortran-${{ matrix.fortran }}.log
+          name: testsuite_${{ matrix.os }}_fortran-${{ matrix.fortran }}
           path: tests/*.log
 
       # -------------------------------------------------------------
@@ -171,19 +179,15 @@ jobs:
       # ACTION: https://github.com/marketplace/actions/codecov
 
       - name: Unit and Model tests (x Codecov)
-        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
-        env:
-          FORT_VERSION: ${{ matrix.fortran }}
+        if: matrix.coverage
         run: |
-          export PATH=$PATH:$PWD/numdiff/bin
-          make clean
+          make clean cleantests
           # unit tests
           make unittests CCOV=true
-          mv tests/unit_tests/*.gc* ./   # for gcc>=11 handling of *.gcda, *.gcna files
+          mv tests/unit_tests/*.gc* ./  # needed for gcc>=11
           # model tests
-          make modeltests CCOV=true   # run only the new Testsuite
-          find ./ -name "*.gc*"
+          make modeltests CCOV=true  # run only the modeltests
 
       - name: Upload coverage reports to Codecov
-        if: matrix.os == 'ubuntu-24.04' && matrix.fortran == 13
-        uses: codecov/codecov-action@v5
+        if: matrix.coverage
+        uses: codecov/codecov-action@v7

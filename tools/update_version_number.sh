@@ -1,7 +1,7 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -17,14 +17,19 @@
 # ------------------------------------------------------------------ #
 set -eu
 
-VERS_OLD="v1.2.3"
-VERS_NEW="v1.3-dev"
+VERS_OLD="v1.3-dev"
+VERS_NEW="v1.3"
 
-# ignore the .git/ directory, exclude this script and the changelog file
+export VERS_OLD VERS_NEW
+
+# change the version number only in the files that include it; ignore the .git/
+# directory, binaries, this script (update_version_number.sh) and the changelog
+# file
 find ./ -not -path "./.git/*" -type f \
      ! -name "update_version_number.sh" \
      ! -name "CHANGELOG.md" \
-     -print0 | xargs -0 perl -pi -e "s/$VERS_OLD/$VERS_NEW/g"
+     -exec grep -lIF --null -- "$VERS_OLD" {} + |
+    xargs -0 -r perl -pi -e 's/\Q$ENV{VERS_OLD}\E/$ENV{VERS_NEW}/g'
 
 printf "\n--> AtChem2 version number changed to: %s\n" "$VERS_NEW"
 exit 0

@@ -32,7 +32,7 @@ v1.2.3 (May 2025)
 - change some default values in `environmentVariables.config`
 - implement use of stoichiometric coefficients in chemical mechanisms
 - implement user-defined custom Fortran functions
-- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (experimental)
+- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (**experimental**)
 - major revision of the AtChem2 manual
 - minor changes (mostly cosmetic) to various scripts, and consolidation of `.gitignore` files
 - implement new workflows to automatically compile and upload the pdf of the user manual via GitHub Actions

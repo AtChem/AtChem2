@@ -2,15 +2,24 @@ AtChem2 -- CHANGELOG
 ====================
 
 
-post v1.2.3
------------
+v1.2.3 (October 2026)
+---------------------
 
-- implement named arguments (flags) for the `build_atchem2.sh` script
-- remove the `mcm` argument from the executable, and redefine it in the build script to indicate the version of the MCM used
-- make shell scripts more robust, and update to **openlibm v0.8.6**
-- reformat python scripts using **black**, and add a python format test to the Testsuite
-- add option to use time in user-defined custom Fortran functions
-- update copyright notes
+- implement named arguments for the `build_atchem2.sh` script
+- add a new argument (`--mcm`) to the `build_atchem2.sh` script to set the MCM version during the build process
+- remove the `--mcm` argument from the executable (no need to change the MCM data files directory `mcm/`)
+- move auto-generated mechanism files (`mechanism.*`) and the pre-compiled mechanism shared library (`mechanism..so`) from `model/configuration/` to `model/sharedlib/`
+- restructure the `Makefile` and fix a bug that prevented recompilation when the chemical mechanism file was modified
+- rename `tests/makefile.tests` to `tests/Makefile`
+- make the shell scripts more robust, and update to **openlibm v0.8.8**
+- allow use of the time variable `t` in custom Fortran functions
+- consolidate `.gitignore` files, and use `.gitkeep` where appropriate
+- reformat Python scripts using the [black](https://pypi.org/project/black) tool, and add a Python format test to the Testsuite
+- nudge migration to Python v3
+- streamline the Github Actions workflows, and make them more robust
+- move the script to generate the user manual (`make_manual_pdf.sh`) from `tools/` to `doc/`
+- full revision of the documentation (user manual, readme file, wiki)
+- update Copyright notes in all modified files
 
 
 v1.2.3 (May 2025)
@@ -23,7 +32,7 @@ v1.2.3 (May 2025)
 - change some default values in `environmentVariables.config`
 - implement use of stoichiometric coefficients in chemical mechanisms
 - implement user-defined custom Fortran functions
-- add option to run AtChem2 in a [Docker](https://www.docker.com/) container
+- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (experimental)
 - major revision of the AtChem2 manual
 - minor changes (mostly cosmetic) to various scripts, and consolidation of `.gitignore` files
 - implement new workflows to automatically compile and upload the pdf of the user manual via GitHub Actions

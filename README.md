@@ -46,7 +46,7 @@ The latest stable version of AtChem2 can be downloaded from the [Releases page](
 
 After installation of the required dependencies using the scripts in the `tools/install/` directory, copy the template file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Edit the `Makefile` to set the variables `CVODELIBDIR` and `OPENLIBMDIR` to the full paths of the CVODE and openlibm libraries. If FRUIT is installed (needed only to run the unit tests), also set the variable `FRUITDIR` to the full path of the FRUIT library.
 
-Alternatively, AtChem2 can be run as a [Docker](https://www.docker.com/) container: at the moment, this is only available for AtChem2 version 1.2.2 thanks to the support of the [Uni. York (WACL) group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2). Note that this option is currently experimental and not supported.
+Alternatively, AtChem2 can be run as a [Docker](https://www.docker.com/) container: at the moment, this is only available for AtChem2 version 1.2.2 thanks to the support of the [Uni. York (WACL) group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2). Note that this option is currently __experimental__ and not supported.
 
 
 Build & Run

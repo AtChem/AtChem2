@@ -1,4 +1,4 @@
-AtChem2 [![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue)] [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
+AtChem2 ![license](https://img.shields.io/github/license/AtChem/AtChem2?color=blue) [![release](https://img.shields.io/github/v/release/AtChem/AtChem2?color=blue)](https://github.com/AtChem/AtChem2/releases) [![AtChem2 CI](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml/badge.svg)](https://github.com/AtChem/AtChem2/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/AtChem/AtChem2/graph/badge.svg)](https://codecov.io/gh/AtChem/AtChem2)
 =======
 
 

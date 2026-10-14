@@ -273,18 +273,22 @@ and configure AtChem2 is straightforward:
   the default chemical mechanism and settings, which are in the \texttt{model/} directory. The
   executable prints information to the terminal while it is running, such as the model
   settings, warning messages (if any), and timesteps. If the model run completes successfully,
-  the terminal displays a message similar to the following:
-   %% TODO: check that the message is correct
+  the terminal displays a message similar to this:
   \begin{Verbatim}[fontsize=\small]
   ------------------
    Final statistics
   ------------------
-   No. steps = 546   No. f-s = 584   No. J-s = 912   No. LU-s = 56
-   No. nonlinear iterations = 581
-   No. nonlinear convergence failures = 0
-   No. error test failures = 4
+      Total internal steps taken    =      667
+      Total rhs function calls      =      879
+      Total Jacobian function calls =       14
+      Total root function calls     =        0
+      Total LU function calls       =      110
+      Num error test failures       =       32
+      Num nonlinear solver iters    =      877
+      Num nonlinear solver fails    =        5
 
-   Runtime = 0
+
+   Runtime = 2
    Deallocating memory.
   \end{Verbatim}
 \end{enumerate}

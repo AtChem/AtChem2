@@ -1,3 +1,4 @@
+# -*- mode: makefile-gmake -*-
 # -----------------------------------------------------------------------------
 #
 # Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,

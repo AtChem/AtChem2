@@ -3,7 +3,7 @@
 # Copyright (c) 2009-2012 Chris Martin, Kasia Boronska, Jenny Young,
 # Peter Jimack, Mike Pilling
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva, Beth Nelson,
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva, Beth Nelson,
 # Mike Newland, Alfred Mayhew
 #
 # This file is part of the AtChem2 software package.
@@ -28,7 +28,7 @@
 # ARGUMENTS:
 #   1. path to the chemical mechanism file (.fac/.kpp)
 #   2. path to the configuration directory [default: model/configuration]
-#   3. path to the shared library directory [default: model/configuration/include]
+#   3. path to the shared library directory [default: model/sharedlib]
 #   4. version of the  MCM [default: v3.3.1]
 # -------------------------------------------------------------------- #
 from __future__ import print_function
@@ -229,7 +229,7 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
                          is read from. By default, it is: model/configuration
         sharedDir (str): relative or absolute reference to the mechanism directory
                        where the `mechanism.*` and `photolysis-rates` files will
-                       be created. By default, it is: model/configuration/include
+                       be created. By default, it is: model/sharedlib
         mcmV (str): version of the MCM to use. By default, it is: v3.3.1
 
     """

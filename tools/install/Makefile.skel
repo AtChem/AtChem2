@@ -120,8 +120,8 @@ include tests/Makefile
 # Default settings:
 # - the chemical mechanism file is: model/mechanism.fac
 # - the configuration files are in: model/configuration
-# - the mechanism fortran files are in: model/configuration/include
-# - the mechanism shared library is: model/configuration/include/mechanism.so
+# - the mechanism fortran files are in: model/sharedlib
+# - the mechanism shared library is: model/sharedlib/mechanism.so
 # - the MCM version is: v3.3.1
 MECHFILE = model/mechanism.fac
 CONFIGDIR = model/configuration

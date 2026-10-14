@@ -1,7 +1,7 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -20,8 +20,8 @@
 #    Default value: NONE.
 #
 # `--configuration` is the configuration directory, which contains
-#    the model configuration files (`*.config` and `*.parameters`) and
-#    the user-defined functions (`customRateFuncs.f90`).
+#    the model configuration files (`*.config` and `*.parameters`)
+#    and the user-defined functions (`customRateFuncs.f90`).
 #    Default value: ./model/configuration
 #
 # `--shared_lib` is the shared library directory, which contains
@@ -32,8 +32,8 @@
 # `--mcm` is the MCM version of the chemical mechanism, which sets the
 #    reference list of organic peroxy radicals (RO2) and the empirical
 #    parameters used to calculate the photolysis rates. The corresponding
-#    data files (`peroxy-radicals_*` and `photolysis-rates_*`) are kept
-#    in the `mcm/` directory.
+#    data files (`peroxy-radicals_*` and `photolysis-rates_*`) are in
+#    the `mcm/` directory.
 #    Default value: `v3.3.1`
 #
 # NB: the script must be run from the *Main Directory* of AtChem2.

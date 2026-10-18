@@ -48,6 +48,12 @@
 # -----------------------------------------------------------------------------
 set -eu
 
+# check that the script is run from the main directory
+if [ ! -f build/build_atchem2.sh ]; then
+    printf "\n[ERROR] Run this script from the AtChem2 Main Directory.\n" >&2
+    exit 1
+fi
+
 # default values for the script flags
 MECHF=""
 CONFIGD="model/configuration"
@@ -119,6 +125,18 @@ fi
 
 # ============================================================ #
 
+# check that the makefile exists
+if [ ! -f Makefile ]; then
+    printf "\n[ERROR] Makefile not found: copy/edit the template ('tools/install/Makefile.skel').\n" >&2
+    exit 1
+fi
+
+# check that the dependencies can be found
+if make -n check >/dev/null 2>&1 && ! make check; then
+    printf "\n[FAIL] Dependencies not found: check the paths in the Makefile.\n" >&2
+    exit 1
+fi
+
 # check python version
 if command -v python3 >/dev/null 2>&1; then
     PY_BIN=python3
@@ -132,16 +150,15 @@ printf "\n--> Using %s\n" "$PY_BIN"
 
 # compile the chemical mechanism shared library (`mechanism.so`)
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
-make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" SHAREDLIBDIR="$SHAREDLIBD" MCMVERS="$MCMV"
-if [ $? -ne 0 ] ; then
+if ! make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" \
+                    SHAREDLIBDIR="$SHAREDLIBD" MCM_VERS="$MCMV"; then
     printf "\n[FAIL] Check error message for details.\n"
     exit 1
 fi
 
 # compile the atchem executable
 printf "\n--> Compiling atchem2 executable...\n\n"
-make -j
-if [ $? -ne 0 ] ; then
+if ! make -j; then
     printf "\n[FAIL] Check error message for details.\n"
     exit 1
 fi

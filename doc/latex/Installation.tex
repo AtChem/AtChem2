@@ -24,14 +24,14 @@ software tools:
   in macOS), and common unix utilities: wget, tar, zip, make, etc.
 \item a text editor, such as Emacs, vim, Gedit, Kate, TextEdit, etc.
 \item a Fortran compiler -- the model compiles with GNU \texttt{gfortran} (version 4.8 or
-  later) and with Intel \texttt{ifort} (version 17.0 or later).\\
-  The default Fortran compiler is \texttt{gfortran}.
+  later) and with Intel \texttt{ifx} or \texttt{ifort} (\texttt{ifort} version 17.0 or later).\\
+  The default compiler is \texttt{gfortran}.
 \item a Python installation\footnote{Python v3 is recommended, but all the scripts used in
-    AtChem2 also work with Python v2. Support for Python v2 will be removed in future
+    AtChem2 should also work with Python v2. Support for Python v2 will be removed in future
     versions.}.
 \end{itemize}
 
-Some or all of these tools may already be installed on the operating system: use the
+Some or all of these tools are likely already installed on the operating system: use the
 \verb|which| command to find out (e.g., \verb|which python|, \verb|which make|). Otherwise,
 check the local documentation or ask the system administrator. In addition, AtChem2 has the
 following dependencies:
@@ -165,11 +165,10 @@ If the installation is successful, there is now an openlibm installation at
 \texttt{\textasciitilde/AtChem-lib/openlibm/}. Take note of the openlibm library path, as it
 will be needed later to complete the configuration of AtChem2 (Sect.~\ref{sec:install}).
 
-\medskip \noindent
-\textcolor{red}{\bf Warning:} the compilation of openlibm on \textbf{macOS} may fail with a
-message concerning the \texttt{dyld} library. This is analogous to the error that may occur the
-first time that AtChem2 is run on macOS and can be resolved in a similar way. See
-Sect.~\ref{sec:install} for details.
+The compilation of openlibm on \textbf{macOS} may fail with an error message related to the
+\texttt{dyld} library. This is analogous to an error that may occur when AtChem2 is run for the
+first time on macOS and it can be resolved in a similar way, as outlined in the
+\href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
 \subsection{Optional dependencies} \label{subsec:optional-dependencies}
 
@@ -294,14 +293,14 @@ and configure AtChem2 is straightforward:
 \end{enumerate}
 
 When AtChem2 is run for the first time on a \textbf{macOS} system, it may abort with the
-following message:
+following error message:
 
 \begin{Verbatim}[fontsize=\small]
   dyld: Library not loaded: @rpath/libsundials_cvode.2.dylib
 \end{Verbatim}
 
-This error is related to the path of dynamic libraries on macOS: to resolve the issue, follow
-the suggestions on the \href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
+This error is related to the dynamic library paths on macOS. To resolve the issue, follow the
+instructions on the \href{https://github.com/AtChem/AtChem2/wiki/Known-Issues}{wiki}.
 
 AtChem2 is now ready to be used. Optionally, the Testsuite can be run to check the model
 installation: go to Sect.~\ref{subsec:tests-optional} for more information. The directory

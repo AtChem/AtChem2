@@ -32,15 +32,15 @@ Install
 
 AtChem2 compiles and runs on both Linux/Unix and macOS: it implements a continuous integration development workflow (via GitHub Actions) and an extensive Testsuite, to ensure reliable and reproducible results. A working knowledge of the **unix shell** is required to install and use AtChem2.
 
-AtChem2 requires a number of dependencies:
+AtChem2 requires a number of tools and dependencies:
 
-- a **Fortran** compiler: GNU `gfortran` (default) or Intel `ifort`.
-- the **CVODE** library (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)): compilation of CVODE also requires **cmake** and **gcc**.
+- an **sh**-compatible shell (e.g., bash, zsh) with **make**, and standard unix utilities.
+- a **Fortran** compiler: GNU `gfortran` (default) or Intel `ifort`/`ifx`.
+- the **CVODE** library (part of [SUNDIALS](https://computing.llnl.gov/projects/sundials)); compilation of CVODE also requires **cmake** and **gcc**.
 - the **openlibm** library.
 - **Python** (v3 recommended, but works with v2).
-- **make**
 
-Optionally, **numdiff**, **FRUIT**, and **Ruby** (v3.0 or earlier) need to be installed in order to run the Testsuite.
+Optionally, **numdiff**, **FRUIT** (which requires **Ruby** v3.0 or earlier) need to be installed in order to run the Testsuite.
 
 The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a [DOI](https://www.doi.org/the-identifier/what-is-a-doi) for referencing in publications.
 

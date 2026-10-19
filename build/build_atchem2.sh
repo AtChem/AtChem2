@@ -91,11 +91,11 @@ done
 
 # set the chemical mechanism file (`--mechanism=`)
 if [ -z "$MECHF" ] ; then
-    printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n"
+    printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n" >&2
     exit 1
 else
     if [ ! -f "$MECHF" ]; then
-        printf "\n[INPUT ERROR] The chemical mechanism file does not exist.\n"
+        printf "\n[INPUT ERROR] The chemical mechanism file does not exist.\n" >&2
         exit 1
     else
         printf "\n[*] Chemical mechanism file: %s\n" "$MECHF"
@@ -105,21 +105,21 @@ fi
 # set the model configuration directory (`--configuration=`)
 printf "\n[*] Model configuration directory: %s\n" "$CONFIGD"
 if [ ! -d "$CONFIGD" ]; then
-    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n"
+    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n" >&2
     exit 1
 fi
 
 # set the shared library directory (`--shared_lib=`)
 printf "\n[*] Shared library directory: %s\n" "$SHAREDLIBD"
 if [ ! -d "$SHAREDLIBD" ]; then
-    printf "\n[INPUT ERROR] The shared library directory does not exist.\n"
+    printf "\n[INPUT ERROR] The shared library directory does not exist.\n" >&2
     exit 1
 fi
 
 # set the MCM version (`--mcm=`)
 printf "\n[*] MCM version: %s\n" "$MCMV"
 if [ "$MCMV" != "v3.3.1" ] && [ "$MCMV" != "v3.2" ] && [ "$MCMV" != "v3.1" ]; then
-    printf "\n[INPUT ERROR] Invalid MCM version. Supported versions: v3.1, v3.2, v3.3.1\n"
+    printf "\n[INPUT ERROR] Invalid MCM version. Supported versions: v3.1, v3.2, v3.3.1\n" >&2
     exit 1
 fi
 
@@ -152,14 +152,14 @@ printf "\n--> Using %s\n" "$PY_BIN"
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
 if ! make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" \
                     SHAREDLIBDIR="$SHAREDLIBD" MCM_VERS="$MCMV"; then
-    printf "\n[FAIL] Check error message for details.\n"
+    printf "\n[FAIL] Check error message for details.\n" >&2
     exit 1
 fi
 
 # compile the atchem executable
 printf "\n--> Compiling atchem2 executable...\n\n"
 if ! make -j; then
-    printf "\n[FAIL] Check error message for details.\n"
+    printf "\n[FAIL] Check error message for details.\n" >&2
     exit 1
 fi
 

@@ -32,7 +32,7 @@ OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
 # =========================================================================== #
-# DO NOT MODIFY BELOW THIS LINE
+#                       DO NOT MODIFY BELOW THIS LINE
 # =========================================================================== #
 
 .SUFFIXES:
@@ -65,7 +65,7 @@ else
   endif
 endif
 
-# set the compilation flags for each compiler
+# set the compilation flags for each compiler:
 #
 # - FF_SOURCE: free-form source, no implicit typing
 # - FF_WARN: compiler warnings, including a check for non-standard fortran
@@ -128,7 +128,7 @@ LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) \
 # ----------------------------------------------------
 # EXECUTABLE setup
 
-# directories for the fortran source and object files
+# directories for the fortran source and object/module files
 SRC = src
 OBJ = obj
 
@@ -184,6 +184,17 @@ $(SHAREDLIB): $(MECHFILE) $(CONFIGDIR)/customRateFuncs.f90 $(SRC)/dataStructures
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(SHAREDLIBDIR) -I$(SHAREDLIBDIR)
 	$(FORT_COMP) -shared -o $(SHAREDLIB) $(SHAREDLIBDIR)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
 
+# ----------------------------------------------------
+# CLEANUP list
+
+CLEAN_EXEC  = $(AOUT)
+CLEAN_BUILD = $(addprefix *, .gcda .gcno .xml) $(OBJ)/*
+CLEAN_MECH  = $(SHAREDLIBDIR)/*
+CLEAN_PY    = build/*.pyc
+CLEAN_DOC   = $(addprefix doc/latex/*, .aux .bbl .blg .log .out .toc) \
+              $(addprefix doc/figures/*, .png)
+CLEAN_OUT   = $(addprefix model/output/*, .output .pdf) model/output/reactionRates/*[0-9]
+
 # ====================== Makefile rules ====================== #
 
 all: $(AOUT)
@@ -201,13 +212,8 @@ check:
 	exit $$status
 
 clean:
-	rm -f $(AOUT)
-	rm -f $(OBJ)/*.o $(OBJ)/*.mod
+	rm -f $(CLEAN_EXEC) $(CLEAN_BUILD) $(CLEAN_MECH) $(CLEAN_PY) $(CLEAN_DOC) $(CLEAN_OUT)
 	rm -rf build/__pycache__
-	rm -f *.{gcda,gcno,xml} build/*.pyc tests/*.log
-	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
-	rm -f $(SHAREDLIBDIR)/mechanism.{f90,prod,reac,ro2,species} $(SHAREDLIBDIR)/*.{o,mod,so} \
-              model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
 
 # ==================== Dependencies ==================== #
 

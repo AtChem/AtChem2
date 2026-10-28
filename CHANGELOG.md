@@ -1,9 +1,17 @@
-AtChem2 -- CHANGELOG
-====================
+AtChem2 &mdash; CHANGELOG
+=========================
 
 
-v1.2.3 (October 2026)
----------------------
+post v1.3
+---------
+
+- fix minor recompilation issues during the build process
+- tidy makefiles and `build_atchem2.sh`
+- add support for Intel ifx, rationalize compilation flags
+
+
+v1.3 (October 2026)
+-------------------
 
 - implement named arguments for the `build_atchem2.sh` script
 - add a new argument (`--mcm`) to the `build_atchem2.sh` script to set the MCM version during the build process
@@ -32,7 +40,7 @@ v1.2.3 (May 2025)
 - change some default values in `environmentVariables.config`
 - implement use of stoichiometric coefficients in chemical mechanisms
 - implement user-defined custom Fortran functions
-- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (**experimental**)
+- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (_experimental_)
 - major revision of the AtChem2 manual
 - minor changes (mostly cosmetic) to various scripts, and consolidation of `.gitignore` files
 - implement new workflows to automatically compile and upload the pdf of the user manual via GitHub Actions

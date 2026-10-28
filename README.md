@@ -4,11 +4,9 @@ AtChem2 ![license](https://img.shields.io/github/license/AtChem/AtChem2?color=bl
 
 **AtChem2** is a modelling tool for atmospheric chemistry. It is designed to build chemical box-models primarily using the [Master Chemical Mechanism](https://mcm.york.ac.uk/MCM) (MCM), a near-explicit chemical mechanism which describes the gas-phase oxidation of volatile organic compounds (VOCs) in the lower atmosphere. AtChem2 can also be used with other chemical mechanisms, as well as any general set of chemical reactions, provided they are in the correct format.
 
-AtChem2 is _open source_ under the terms of the [MIT license](https://opensource.org/licenses/MIT).
+AtChem2 is _open source_ under the terms of the [MIT license](https://opensource.org/licenses/MIT). Please see the file `CITATION.md` for information on how to cite the model in publications.
 
-**_Please see the file `CITATION.md` for information on how to cite the model in publications._**
-
-<a href='https://ko-fi.com/I3I1JSFJF' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<a href='https://ko-fi.com/I3I1JSFJF'><img src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' height='36' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 
 Directory structure
@@ -46,7 +44,7 @@ The latest stable version of AtChem2 can be downloaded from the [Releases page](
 
 After installation of the required dependencies using the scripts in the `tools/install/` directory, copy the template file `tools/install/Makefile.skel` to the _Main Directory_ and rename it `Makefile`. Edit the `Makefile` to set the variables `CVODELIBDIR` and `OPENLIBMDIR` to the full paths of the CVODE and openlibm libraries. If FRUIT is installed (needed only to run the unit tests), also set the variable `FRUITDIR` to the full path of the FRUIT library.
 
-Alternatively, AtChem2 can be run as a [Docker](https://www.docker.com/) container: at the moment, this is only available for AtChem2 version 1.2.2 thanks to the support of the [Uni. York (WACL) group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2). Note that this option is currently __experimental__ and not supported.
+Alternatively, AtChem2 can be run as a [Docker](https://www.docker.com/) container: at the moment, this is only available for AtChem2 version 1.2.2 thanks to the support of the [Uni. York (WACL) group](https://github.com/wacl-york/AtChem2/pkgs/container/atchem2). Note that this option is currently _experimental_ and not supported.
 
 
 Build & Run

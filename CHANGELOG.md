@@ -72,7 +72,7 @@ v1.2.1 (January 2021)
 ---------------------
 
 - implement a new environment variable: `ASA` (aerosol surface area)
-- fix a bug in the C-binding for `gfortran` version 9 and above
+- fix a bug in the C-binding for `gfortran` version 9 and later
 - remove tabs from all configuration files
 - update the configuration file for TravisCI
 - tidy the comments and printout messages of various source files

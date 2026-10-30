@@ -15,7 +15,7 @@
 # Directory, specified by input argument `$1`.
 #
 # Website: https://sourceforge.net/projects/fortranxunit/
-# Requirements: wget, unzip, Ruby (v3.0 or earlier)
+# Requirements: wget, unzip, Ruby (v3.1 or earlier)
 #
 # BEFORE running the script, ensure that the RubyGems path is set by adding the
 # following lines to `~/.bash_profile` (or `~/.profile`):

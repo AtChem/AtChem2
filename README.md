@@ -38,7 +38,7 @@ AtChem2 requires a number of tools and dependencies:
 - the **openlibm** library.
 - **Python** (v3 recommended, but works with v2).
 
-Optionally, **numdiff**, **FRUIT** (which requires **Ruby** v3.0 or earlier) need to be installed in order to run the Testsuite.
+Optionally, **numdiff**, **FRUIT** (which requires **Ruby** v3.1 or earlier) need to be installed in order to run the Testsuite.
 
 The latest stable version of AtChem2 can be downloaded from the [Releases page](https://github.com/AtChem/AtChem2/releases), and is associated with a [DOI](https://www.doi.org/the-identifier/what-is-a-doi) for referencing in publications.
 

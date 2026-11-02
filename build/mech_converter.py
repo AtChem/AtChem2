@@ -336,7 +336,8 @@ def convert_to_fortran(mechFile, configDir, sharedDir, mcmV):
             element for element in ro2List if element not in RO2List_reference
         ]:
             print("\n\t!!! WARNING !!!")
-            print("  The following species is not present in the RO2 reference list:\n    "
+            print(
+                "  The following species is not present in the RO2 reference list:\n    "
                 + ro2_species
             )
             print("  Should it be included in the RO2 sum?\n")

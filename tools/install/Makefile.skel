@@ -15,10 +15,15 @@
 
 # ==================== Makefile for AtChem2 ==================== #
 
-# Choose the Fortran compiler
-# 1. "gnu" for gfortran (DEFAULT)
-# 2. "intel" for ifort
-FORTC = "gnu"
+# Choose fortran compiler:
+# 1. 'gnu' for gfortran (DEFAULT)
+# 2. 'intel' for ifx or ifort
+FORTC = gnu
+
+# Choose intel compiler, if not using GNU:
+# 1. ifort (DEPRECATED)
+# 2. ifx
+INTELC = ifx
 
 # Set the dependencies paths. Use full paths, not relative paths.
 # For example: $(HOME)/path/to/dependencies/directory/cvode/lib
@@ -27,17 +32,20 @@ OPENLIBMDIR = openlibm
 FRUITDIR    = fruit_3.4.3
 
 # =========================================================================== #
-# DO NOT MODIFY BELOW THIS LINE
+#                       DO NOT MODIFY BELOW THIS LINE
 # =========================================================================== #
 
 .SUFFIXES:
-.SUFFIXES: .f90 .o
-.PHONY: all sharedlib clean
+.SUFFIXES: .f90 .o # TODO: is this needed?
+.PHONY: all sharedlib check clean
+
+# remove a target if its recipe fails
+.DELETE_ON_ERROR:
 
 # detect operating system
 OS := $(shell uname -s)
 
-# if on GitHub Actions
+# on GitHub Actions, set the fortran compiler
 ifeq ($(GITHUB_ACTIONS),true)
   ifeq ($(RUNNER_OS),Linux)
     # on Linux, pass gfortran
@@ -46,33 +54,63 @@ ifeq ($(GITHUB_ACTIONS),true)
     # on macOS, pass homebrew gfortran
     FORT_COMP = /usr/local/bin/gfortran-$(FORT_VERSION)
   endif
-# if not on GitHub Actions, set the Fortran compiler
+# set the fortran compiler
 else
-  ifeq ($(FORTC),"gnu")
+  ifeq ($(FORTC),gnu)
     FORT_COMP = gfortran
-  else ifeq ($(FORTC),"intel")
-    FORT_COMP = ifort
+  else ifeq ($(FORTC),intel)
+    FORT_COMP = $(INTELC)
   else
-    $(error Invalid Fortran compiler. Set $FORTC to "gnu" or "intel".)
+    $(error Invalid fortran compiler. Set FORTC to 'gnu' or 'intel'.)
   endif
 endif
 
-# set the main compilation flags for each compiler
+# set the compilation flags for each compiler:
+#
+# - FF_SOURCE: free-form source, no implicit typing
+# - FF_WARN: compiler warnings, including a check for non-standard fortran
+# - FF_CHECK: run-time checks
+# - FF_PIC: position-independent code (needed by the shared library)
+# - FF_OPT: optimization (executable and shared library)
+# - FF_SHARED: build a shared library with additional flags (no limit to the length
+#              of the source line; suppress warning for unused dummy arguments)
+# - FF_COV: code coverage testing (gnu only)
 CCOV = false
-ifeq ($(FORTC),"gnu")
-  FFLAGS = -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
-  ifeq ($(CCOV),true)    # add gcov flags for code coverage testing
-    FFLAGS += -fprofile-arcs -ftest-coverage
-  else    # add optimization flag for normal usage
-    FFLAGS += -O2
+ifeq ($(FORTC),gnu)
+  FF_SOURCE   = -ffree-form -fimplicit-none
+  FF_WARN     = -Wall -Wpedantic
+  FF_CHECK    = -fcheck=all
+  FF_PIC      = -fPIC
+  FF_OPT      = -O2
+  FF_SHARED   = -shared -ffree-line-length-none -Wno-unused-dummy-argument
+  FF_COV      = -fprofile-arcs -ftest-coverage
+endif
+ifeq ($(FORTC),intel)
+  FF_SOURCE   = -free -implicitnone
+  FF_WARN     = -warn all -stand
+  FF_CHECK    = -check all
+  FF_PIC      = -fpic
+  FF_OPT      = -O2
+  FF_SHARED   = -shared
+  FF_COV      =
+endif
+
+# flags for the executable: add `gcov` flags for code coverage testing, otherwise
+# add the optimization flag for normal usage
+FFLAGS = $(FF_SOURCE) $(FF_WARN) $(FF_CHECK) $(FF_PIC)
+ifeq ($(CCOV),true)
+  ifeq ($(FORTC),gnu)
+    FFLAGS += $(FF_COV)
+  else
+    FFLAGS += $(FF_OPT)
+    $(warning Code coverage testing is only available for the 'gnu' compiler.)
   endif
-  FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic \
-                 -Wno-unused-dummy-argument -fcheck=all -fPIC -shared
+else
+  FFLAGS += $(FF_OPT)
 endif
-ifeq ($(FORTC),"intel")
-  FFLAGS       = -free -implicitnone -warn all -check all -fpic -O2
-  FSHAREDFLAGS = -free -implicitnone -warn all -check all -fpic -shared
-endif
+
+# flags for the chemical mechanism shared library
+FSHAREDFLAGS = $(FF_SOURCE) $(FF_WARN) $(FF_CHECK) $(FF_PIC) $(FF_OPT) $(FF_SHARED)
 
 # set the rpath flag
 ifeq ($(OS),Linux)
@@ -90,7 +128,7 @@ LDFLAGS = -L$(CVODELIBDIR) -L$(OPENLIBMDIR) \
 # ----------------------------------------------------
 # EXECUTABLE setup
 
-# directories for the fortran source and object files
+# directories for the fortran source and object/module files
 SRC = src
 OBJ = obj
 
@@ -112,7 +150,7 @@ $(AOUT): $(SRCS)
 	$(FORT_COMP) -o $(AOUT) -J$(OBJ) -I$(OBJ) $(SRCS) $(FFLAGS) $(LDFLAGS)
 
 # secondary makefile for the Testsuite
-include tests/Makefile
+-include tests/Makefile
 
 # ----------------------------------------------------
 # MECHANISM SHARED LIBRARY setup
@@ -120,34 +158,42 @@ include tests/Makefile
 # Default settings:
 # - the chemical mechanism file is: model/mechanism.fac
 # - the configuration files are in: model/configuration
-# - the mechanism fortran files are in: model/configuration/include
-# - the mechanism shared library is: model/configuration/include/mechanism.so
+# - the mechanism fortran files are in: model/sharedlib
+# - the mechanism shared library is: model/sharedlib/mechanism.so
 # - the MCM version is: v3.3.1
 MECHFILE = model/mechanism.fac
 CONFIGDIR = model/configuration
 SHAREDLIBDIR = model/sharedlib
 SHAREDLIB = $(SHAREDLIBDIR)/mechanism.so
-MCMVERS = v3.3.1
+MCM_VERS = v3.3.1
 
-# mechanism conversion
+# mechanism conversion script
 MECH_CONVERTER = build/mech_converter.py
-MECH_GEN = $(SHAREDLIBDIR)/mechanism.f90 $(SHAREDLIBDIR)/mechanism.species \
-           $(SHAREDLIBDIR)/mechanism.reac $(SHAREDLIBDIR)/mechanism.prod \
-           $(SHAREDLIBDIR)/mechanism.ro2
 
-# the mechanism conversion script is run every time the mechanism file ($MECHFILE)
-# is modified
-PYTHON_BIN = python
-$(MECH_GEN): $(MECHFILE) $(MECH_CONVERTER)
-	$(PYTHON_BIN) $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(SHAREDLIBDIR) $(MCMVERS)
+# use Python v3 unless overridden by the build script
+PYTHON_BIN = python3
 
-# the mechanism shared library is rebuilt if the fortran files (`mechanism.*`)
-# in $SHAREDLIBDIR or the `customRateFuncs.f90` file in $CONFIGDIR are modified
-$(SHAREDLIB): $(MECH_GEN)
+# the mechanism shared library is rebuilt every time the chemical mechanism file
+# ($MECHFILE), `customRateFuncs.f90` (in $CONFIGDIR) or `dataStructures.f90` are
+# modified. The conversion script generates the fortran files `mechanism.*` in
+# $SHAREDLIBDIR, which are then compiled into the mechanism shared library `mechanism.so`
+$(SHAREDLIB): $(MECHFILE) $(CONFIGDIR)/customRateFuncs.f90 $(SRC)/dataStructures.f90
+	$(PYTHON_BIN) $(MECH_CONVERTER) $(MECHFILE) $(CONFIGDIR) $(SHAREDLIBDIR) $(MCM_VERS)
 	$(FORT_COMP) -c $(SRC)/dataStructures.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/dataStructures.o -J$(SHAREDLIBDIR) -I$(SHAREDLIBDIR)
 	$(FORT_COMP) -c $(CONFIGDIR)/customRateFuncs.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/customRateFuncs.o -J$(SHAREDLIBDIR) -I$(SHAREDLIBDIR)
 	$(FORT_COMP) -c $(SHAREDLIBDIR)/mechanism.f90 $(FSHAREDFLAGS) -o $(SHAREDLIBDIR)/mechanism.o -J$(SHAREDLIBDIR) -I$(SHAREDLIBDIR)
 	$(FORT_COMP) -shared -o $(SHAREDLIB) $(SHAREDLIBDIR)/dataStructures.o $(SHAREDLIBDIR)/customRateFuncs.o $(SHAREDLIBDIR)/mechanism.o
+
+# ----------------------------------------------------
+# CLEANUP list
+
+CLEAN_EXEC  = $(AOUT)
+CLEAN_BUILD = $(addprefix *, .gcda .gcno .xml) $(OBJ)/*
+CLEAN_MECH  = $(SHAREDLIBDIR)/*
+CLEAN_PY    = build/*.pyc
+CLEAN_DOC   = $(addprefix doc/latex/*, .aux .bbl .blg .log .out .toc) \
+              $(addprefix doc/figures/*, .png)
+CLEAN_OUT   = $(addprefix model/output/*, .output .pdf) model/output/reactionRates/*[0-9]
 
 # ====================== Makefile rules ====================== #
 
@@ -155,14 +201,19 @@ all: $(AOUT)
 
 sharedlib: $(SHAREDLIB)
 
+check:
+	@status=0; \
+	for lib in "$(CVODELIBDIR)/libsundials_cvode" "$(OPENLIBMDIR)/libopenlibm"; do \
+	  if ! ls "$$lib".* >/dev/null 2>&1; then \
+	    echo "[error] library not found: $$lib.* (set CVODELIBDIR and OPENLIBMDIR in the Makefile)"; \
+	    status=1; \
+	  fi; \
+	done; \
+	exit $$status
+
 clean:
-	rm -f $(AOUT)
-	rm -f $(OBJ)/*.o $(OBJ)/*.mod
+	rm -f $(CLEAN_EXEC) $(CLEAN_BUILD) $(CLEAN_MECH) $(CLEAN_PY) $(CLEAN_DOC) $(CLEAN_OUT)
 	rm -rf build/__pycache__
-	rm -f *.{gcda,gcno,xml} build/*.pyc tests/*.log
-	rm -f doc/figures/*.png doc/latex/*.{aux,bbl,blg,log,out,toc}
-	rm -f $(SHAREDLIBDIR)/mechanism.{f90,prod,reac,ro2,species} $(SHAREDLIBDIR)/*.{o,mod,so} \
-              model/output/*.{output,pdf} model/output/reactionRates/*[0-9]
 
 # ==================== Dependencies ==================== #
 

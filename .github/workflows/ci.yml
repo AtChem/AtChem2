@@ -140,7 +140,7 @@ jobs:
           ./build/build_atchem2.sh --mechanism=./model/mechanism.fac --shared_lib=./model/sharedlib --configuration=./model/configuration --mcm=v3.3.1
           # macos only
           if [ "$RUNNER_OS" == "macOS" ] ; then
-            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;

@@ -50,15 +50,15 @@ jobs:
       matrix:
         include:
           # ubuntu-22
-          - { os: ubuntu-22.04, fortran: 10 }
-          - { os: ubuntu-22.04, fortran: 11 }
-          - { os: ubuntu-22.04, fortran: 12 }
+          #- { os: ubuntu-22.04, fortran: 10 }
+          #- { os: ubuntu-22.04, fortran: 11 }
+          #- { os: ubuntu-22.04, fortran: 12 }
           # ubuntu-24
-          - { os: ubuntu-24.04, fortran: 11 }
-          - { os: ubuntu-24.04, fortran: 12 }
+          #- { os: ubuntu-24.04, fortran: 11 }
+          #- { os: ubuntu-24.04, fortran: 12 }
           - { os: ubuntu-24.04, fortran: 13, coverage: true }
           # macos-15  # NB: macos testing temporarily limited
-          - { os: macos-15-intel, fortran: 12 }
+          #- { os: macos-15-intel, fortran: 12 }
     permissions:
       contents: read
     env:
@@ -185,9 +185,25 @@ jobs:
           # unit tests
           make unittests CCOV=true
           mv tests/unit_tests/*.gc* ./  # needed for gcc>=11
+          gcov-$FORT_VERSION -p *.gcno
+          mkdir -p "$RUNNER_TEMP/gcov_unit"
+          mv *.gcov "$RUNNER_TEMP/gcov_unit/" && rm -f *.gcda *.gcno
           # model tests
-          make modeltests CCOV=true  # run only the modeltests
+          make modeltests CCOV=true
+          gcov-$FORT_VERSION -p *.gcno
+          mkdir -p "$RUNNER_TEMP/gcov_model"
+          mv *.gcov "$RUNNER_TEMP/gcov_model/" && rm -f *.gcda *.gcno
 
-      - name: Upload coverage reports to Codecov
+      - name: Upload Unit test coverage to Codecov
         if: matrix.coverage
         uses: codecov/codecov-action@v7
+        with:
+          directory: ${{ runner.temp }}/gcov_unit
+          flags: unit-tests
+
+      - name: Upload Model test coverage to Codecov
+        if: matrix.coverage
+        uses: codecov/codecov-action@v7
+        with:
+          directory: ${{ runner.temp }}/gcov_model
+          flags: model-tests

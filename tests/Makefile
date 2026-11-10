@@ -73,8 +73,8 @@ CLEAN_OLD  = $(addprefix tests/tests/*/*, .out) \
              tests/tests/*/output/reactionRates/*[0-9]
 
 CLEAN_MODELT = $(addprefix $(MODELTESTDIR)/*/*, .out) \
-               $(addprefix $(MODELTESTDIR)/*/configuration/include/mechanism, .f90 .prod .reac .ro2 .species) \
-               $(addprefix $(MODELTESTDIR)/*/configuration/include/*, .o .mod .so) \
+               $(addprefix $(MODELTESTDIR)/*/sharedlib/mechanism, .f90 .prod .reac .ro2 .species) \
+               $(addprefix $(MODELTESTDIR)/*/sharedlib/*, .o .mod .so) \
                $(addprefix $(MODELTESTDIR)/*/output/*, .output) \
                $(MODELTESTDIR)/*/output/reactionRates/*[0-9]
 

@@ -186,13 +186,13 @@ jobs:
           make unittests CCOV=true
           mv tests/unit_tests/*.gc* ./  # needed for gcc>=11
           gcov-$FORT_VERSION -p *.gcno
-          mkdir -p "$RUNNER_TEMP/gcov_unit"
-          mv *.gcov "$RUNNER_TEMP/gcov_unit/" && rm -f *.gcda *.gcno
+          mkdir -p "$RUNNER_TEMP/gcov_unit" && mv *.gcov "$RUNNER_TEMP/gcov_unit/"
+          rm -f *.gcda *.gcno
           # model tests
           make modeltests CCOV=true
           gcov-$FORT_VERSION -p *.gcno
-          mkdir -p "$RUNNER_TEMP/gcov_model"
-          mv *.gcov "$RUNNER_TEMP/gcov_model/" && rm -f *.gcda *.gcno
+          mkdir -p "$RUNNER_TEMP/gcov_model" && mv *.gcov "$RUNNER_TEMP/gcov_model/"
+          rm -f *.gcda *.gcno
 
       - name: Upload Unit test coverage to Codecov
         if: matrix.coverage

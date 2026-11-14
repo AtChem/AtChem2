@@ -58,15 +58,15 @@ jobs:
       matrix:
         include:
           # ubuntu-22
-          #- { os: ubuntu-22.04, fortran: 10 }
-          #- { os: ubuntu-22.04, fortran: 11 }
-          #- { os: ubuntu-22.04, fortran: 12 }
+          - { os: ubuntu-22.04, fortran: 10 }
+          - { os: ubuntu-22.04, fortran: 11 }
+          - { os: ubuntu-22.04, fortran: 12 }
           # ubuntu-24
-          #- { os: ubuntu-24.04, fortran: 11 }
-          #- { os: ubuntu-24.04, fortran: 12 }
+          - { os: ubuntu-24.04, fortran: 11 }
+          - { os: ubuntu-24.04, fortran: 12 }
           - { os: ubuntu-24.04, fortran: 13, coverage: true }
           # macos-15  # NB: macos testing temporarily limited
-          #- { os: macos-15-intel, fortran: 12 }
+          - { os: macos-15-intel, fortran: 12 }
     permissions:
       contents: read
     env:
@@ -198,9 +198,7 @@ jobs:
 
   # =============================================================== #
   upload_gcov:
-    # JOB 2 runs on:
-    # - ubuntu
-    # - after Job 1 has successfully completed
+    # JOB 2 runs on ubuntu, after Job 1 has successfully completed
     needs: ci_testing
     runs-on: ubuntu-slim
     permissions:
@@ -211,7 +209,7 @@ jobs:
     # Sequence of tasks to be executed as part of the `gcov_upload` job:
     # 1. Checkout repository
     # 2. Download coverage files created by Job 1 (`ci_testing`)
-    # 3. Upload coverage files to Codecov, using OIDC authentication
+    # 3. Upload coverage files to Codecov
     steps:
 
       # -------------------------------------------------------------
@@ -230,7 +228,7 @@ jobs:
           path: ${{ runner.temp }}
 
       # -------------------------------------------------------------
-      # (3) Upload coverage files to Codecov
+      # (3) Upload coverage files to Codecov, using OIDC authentication
       - name: Upload Unit test coverage to Codecov
         uses: codecov/codecov-action@v7
         with:

@@ -60,11 +60,11 @@ endif
 # set the main compilation flags for each compiler
 CCOV = false
 ifeq ($(FORTC),"gnu")
-  FFLAGS = -ffree-form -fimplicit-none -Wall -Wpedantic -fcheck=all -fPIC
+  FFLAGS = -ffree-form -fimplicit-none -Wall -Wpedantic -fPIC
   ifeq ($(CCOV),true)    # add gcov flags for code coverage testing
     FFLAGS += -fprofile-arcs -ftest-coverage
-  else    # add optimization flag for normal usage
-    FFLAGS += -O2
+  else    # add optimization flag  and run-time checks for normal usage
+    FFLAGS += -O2 -fcheck=all
   endif
   FSHAREDFLAGS = -ffree-line-length-none -ffree-form -fimplicit-none -Wall -Wpedantic \
                  -Wno-unused-dummy-argument -fcheck=all -fPIC -shared

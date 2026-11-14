@@ -11,8 +11,17 @@
 
 # -------------------------------------------------------------------- #
 # Workflow for the continuous integration (CI) testing of AtChem2,
-# using Github Actions and Codecov
+# using GitHub Actions and Codecov
+#
+# ACTIONS:
+# [*] https://github.com/actions/runner-images
+# [*] https://github.com/marketplace/actions/checkout
+# [*] https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+# [*] https://github.com/marketplace/actions/upload-a-build-artifact
+# [*] https://github.com/marketplace/actions/download-a-build-artifact
+# [*] https://github.com/marketplace/actions/codecov
 # -------------------------------------------------------------------- #
+
 name: AtChem2 CI
 
 # ------------------------------ EVENTS ------------------------------ #
@@ -33,17 +42,16 @@ on:
   workflow_dispatch:
 
 # ------------------------------ JOBS ------------------------------ #
-# This workflow contains a single job called `ci_testing` which
-# compiles the AtChem2 model, runs the Testsuite, and checks code
-# coverage using Codecov (https://app.codecov.io/gh/AtChem/AtChem2)
+# This workflow contains two jobs (`ci_testing` and `upload_gcov`) which
+# install and compile the AtChem2 model, run the Testsuite, and check the
+# code coverage using Codecov: https://app.codecov.io/gh/AtChem/AtChem2
 jobs:
 
+  # =============================================================== #
   ci_testing:
-    # The job runs on:
+    # JOB 1 runs on:
     # - two versions of linux (ubuntu) and macos
     # - three versions of the gnu fortran compiler
-    #
-    # RUNNERS: https://github.com/actions/runner-images
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -66,27 +74,23 @@ jobs:
 
     # -------------------------------------------------------------
     # Sequence of tasks to be executed as part of the `ci_testing` job:
-    # 1. Checkout repository
+    # 1. Checkout AtChem2 repository
     # 2. Install gfortran, if not available
     # 3. Install AtChem2 dependencies
     # 4. Build AtChem2
     # 5. Run Testsuite with default settings
-    # 6. Recompile AtChem2, run Testsuite for Codecov
+    # 6. Recompile AtChem2 with code coverage flags, run Testsuite
     steps:
 
       # -------------------------------------------------------------
       # (1) Checkout the repository under $GITHUB_WORKSPACE
-      #
-      # ACTION: https://github.com/marketplace/actions/checkout
-
       - name: Checkout repo
         uses: actions/checkout@v7
         with:
-          fetch-depth: 2
+          persist-credentials: false
 
       # -------------------------------------------------------------
       # (2) Install gfortran, if not supplied with the runner
-
       - name: Setup gfortran-${{ matrix.fortran }} on ubuntu
         if: runner.os == 'Linux'
         run: |
@@ -100,58 +104,49 @@ jobs:
 
       # -------------------------------------------------------------
       # (3) Install the AtChem2 dependencies: CVODE, openlibm, numdiff, FRUIT
-      #
-      # NB: the current version of FRUIT (v3.4.3) does not work with the most
-      #     recent versions of Ruby; as a temporary fix, Ruby v3.0 is used for
-      #     all unit tests in this workflow
-      #
-      # ACTION: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-
       - name: Install CVODE
         env: # temporary fix until cvode is updated
           CMAKE_POLICY_VERSION_MINIMUM: "3.5"
-        run: ./tools/install/install_cvode.sh $PWD $(which gfortran-$FORT_VERSION)
+        run: ./tools/install/install_cvode.sh "$PWD" "$(command -v gfortran-$FORT_VERSION)"
 
       - name: Install openlibm
-        run: ./tools/install/install_openlibm.sh $PWD
+        run: ./tools/install/install_openlibm.sh "$PWD"
 
       - name: Install numdiff
         run: |
-          ./tools/install/install_numdiff.sh $PWD
-          echo "$PWD/numdiff/bin" >> $GITHUB_PATH
+          ./tools/install/install_numdiff.sh "$PWD"
+          echo "$PWD/numdiff/bin" >> "$GITHUB_PATH"
 
+      # the current version of FRUIT (v3.4.3) does not work with the most recent versions of
+      # Ruby; as a temporary fix, Ruby v3.0 is used in this workflow
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0'
 
       - name: Install FRUIT
-        run: ./tools/install/install_fruit.sh $PWD
+        run: ./tools/install/install_fruit.sh "$PWD"
 
       - name: Install Python and Fortran formatters
         run: pip install black fprettify
 
       # -------------------------------------------------------------
-      # (4) Build AtChem2 with the standard compilation flags
-
+      # (4) Build AtChem2 with standard compilation flags
       - name: Build AtChem2
         run: |
           cp tools/install/Makefile.skel Makefile
           ./build/build_atchem2.sh --mechanism=./model/mechanism.fac --shared_lib=./model/sharedlib --configuration=./model/configuration --mcm=v3.3.1
           # macos only
           if [ "$RUNNER_OS" == "macOS" ] ; then
-            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm-0.8.1/libopenlibm.4.dylib atchem2 ;
+            install_name_tool -change libopenlibm.4.dylib $PWD/openlibm/libopenlibm.4.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_cvode.2.dylib $PWD/cvode/lib/libsundials_cvode.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_fnvecserial.2.dylib $PWD/cvode/lib/libsundials_fnvecserial.dylib atchem2 ;
             install_name_tool -change @rpath/libsundials_nvecserial.2.dylib $PWD/cvode/lib/libsundials_nvecserial.dylib atchem2 ;
           fi
 
       # -------------------------------------------------------------
-      # (5) Run the Testsuite with the standard compilation flags and the
-      #     default model settings, then upload the log files as artifacts
-      #
-      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
-
+      # (5) Run the Testsuite with standard compilation flags and default
+      # model settings, then upload the log files as artifacts
       - name: Indent and Style tests
         run: make indenttest styletest pythontest
 
@@ -169,15 +164,12 @@ jobs:
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v7
         with:
-          name: testsuite_${{ matrix.os }}_fortran-${{ matrix.fortran }}
+          name: testsuite_${{ matrix.os }}_fortran${{ matrix.fortran }}
           path: tests/*.log
 
       # -------------------------------------------------------------
-      # (6) Recompile AtChem2 using the code coverage compilation flags,
-      #     run the Testsuite and upload the gcov files to Codecov
-      #
-      # ACTION: https://github.com/marketplace/actions/codecov
-
+      # (6) Recompile AtChem2 with code coverage compilation flags,
+      # run the Testsuite, then upload the gcov files as artifacts
       - name: Unit and Model tests (x Codecov)
         if: matrix.coverage
         run: |
@@ -194,16 +186,63 @@ jobs:
           mkdir -p "$RUNNER_TEMP/gcov_model" && mv *.gcov "$RUNNER_TEMP/gcov_model/"
           rm -f *.gcda *.gcno
 
-      - name: Upload Unit test coverage to Codecov
+      - name: Save coverage files
         if: matrix.coverage
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage_files
+          path: |
+            ${{ runner.temp }}/gcov_unit
+            ${{ runner.temp }}/gcov_model
+          if-no-files-found: error
+
+  # =============================================================== #
+  upload_gcov:
+    # JOB 2 runs on:
+    # - ubuntu
+    # - after Job 1 has successfully completed
+    needs: ci_testing
+    runs-on: ubuntu-slim
+    permissions:
+      contents: read
+      id-token: write
+
+    # -------------------------------------------------------------
+    # Sequence of tasks to be executed as part of the `gcov_upload` job:
+    # 1. Checkout repository
+    # 2. Download coverage files created by Job 1 (`ci_testing`)
+    # 3. Upload coverage files to Codecov, using OIDC authentication
+    steps:
+
+      # -------------------------------------------------------------
+      # (1) Checkout the repository under $GITHUB_WORKSPACE
+      - name: Checkout repo
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # -------------------------------------------------------------
+      # (2) Download coverage files
+      - name: Download coverage files
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage_files
+          path: ${{ runner.temp }}
+
+      # -------------------------------------------------------------
+      # (3) Upload coverage files to Codecov
+      - name: Upload Unit test coverage to Codecov
         uses: codecov/codecov-action@v7
         with:
           directory: ${{ runner.temp }}/gcov_unit
           flags: unit-tests
+          use_oidc: true
+          fail_ci_if_error: true
 
       - name: Upload Model test coverage to Codecov
-        if: matrix.coverage
         uses: codecov/codecov-action@v7
         with:
           directory: ${{ runner.temp }}/gcov_model
           flags: model-tests
+          use_oidc: true
+          fail_ci_if_error: true

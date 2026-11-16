@@ -321,17 +321,31 @@ required only once for a given mechanism file.
 Changes to the configuration files do not require recompiling the model. Likewise, if
 constraint files are added, removed or modified, there is no need to recompile the model. This
 is because the model configuration and constraints are read by the executable at
-runtime. However, if the chemical mechanism file is changed, then the shared library
-(\texttt{mechanism.so}) needs to be recompiled.
+runtime. However, if the chemical mechanism is changed -- either because the \texttt{.fac} file
+or the user-defined functions in \texttt{customRateFuncs.f90} have been changed -- then the
+shared library (\texttt{mechanism.so}) needs to be recompiled.
 
-If the user wants, or needs, to change the Fortran code (\texttt{src/*.f90}), then the
-executable needs to be recompiled. To recompile the model, the build script needs to be
-executed again\footnote{If the recompilation fails, it is sometimes useful to run the command
-  \verb|make clean| from the \maindir\ before rerunning the build script.}. The build script is
-able to detect whether the Fortran code, the chemical mechanism, or both have been modified and
-runs the appropriate commands. By compiling only when strictly necessary, this design reduces
-the frequency and duration of model compilations, facilitating batch model runs (e.g., for
+If the user wants, or needs, to modify the Fortran code (\texttt{src/*.f90}), then the
+executable needs to be recompiled by executing again the build script. The build script is able
+to detect whether the Fortran code, the chemical mechanism, or both have been modified and runs
+the appropriate commands. By compiling only when strictly necessary, this design reduces the
+frequency and duration of model compilations, facilitating batch model runs (e.g., for
 sensitivity studies).
+
+It may sometimes be necessary to force a recompilation of the executable and/or the shared
+library, even if neither the source files nor the mechanism files have been changed. Forcing a
+recompilation may also help to resolve problems when the build process fails for unknown
+reasons. This can be done in the following ways:
+
+\begin{enumerate}
+\item change the timestamp of a Fortran file (in the \texttt{src/} directory) using the
+  \verb|touch| command, then run the build script to recompile the executable.
+\item change the timestamp (with the \verb|touch| command) or delete the \texttt{mechanism.so}
+  file, then run the build script to recompile the shared library.
+\item run the command \verb|make clean| from the \maindir\ to delete all the compilation files,
+  then run the build script to recompile both the executable and the shared library. Note that
+  this will also delete the existing model output, if any.
+\end{enumerate}
 
 % -------------------------------------------------------------------- %
 \section{Execute} \label{sec:execute}

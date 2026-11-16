@@ -1,7 +1,7 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -15,11 +15,11 @@
 # Directory, specified by input argument `$1`.
 #
 # Website: https://www.nongnu.org/numdiff/
-# Requirements: gcc, make
+# Requirements: wget, gcc, make
 #
-# NB: after running the script, ensure that the path to the numdiff
-#     executable is set in ~/.bash_profile (or ~/.profile):
-#       PATH=$PATH:$HOME/../numdiff/bin
+# AFTER running the script, ensure that the numdiff binary path is set by adding
+# the following line to `~/.bash_profile` (or `~/.profile`):
+#   export PATH=$PATH:$HOME/path/to/dependencies/directory/numdiff/bin
 #
 # Usage:
 #   ./install_numdiff.sh ~/path/to/dependencies/directory
@@ -27,59 +27,55 @@
 
 NUMDIFF_VERSION="5.9.0"
 
-# path to dependencies directory
+# set path to the dependencies directory
 if [ -z "$1" ] ; then
     printf "\n[numdiff] missing argument: path to dependencies directory\n"
     exit 1
-else
-    DEP_DIR="$1"
-    if ! cd "$DEP_DIR"; then
-        printf "\n[numdiff] $DEP_DIR does not exist\n"
+else # convert to absolute path and check that directory exists
+    DEP_DIR=$(cd "$1" 2>/dev/null && pwd)
+    if [ -z "$DEP_DIR" ] ; then
+        printf "\n[numdiff] %s does not exist\n" "$1"
         exit 1
     fi
+    cd "$DEP_DIR" || exit 1
 fi
 
 # download archive
-NUMDIFF_DIR="numdiff-${NUMDIFF_VERSION}"
-NUMDIFF_ARCHIVE="${NUMDIFF_DIR}.tar.gz"
-wget "https://download.savannah.gnu.org/releases/numdiff/${NUMDIFF_ARCHIVE}"
-if [ $? -ne 0 ] ; then
+NUMDIFF_RELEASE="numdiff-${NUMDIFF_VERSION}"
+NUMDIFF_ARCHIVE="${NUMDIFF_RELEASE}.tar.gz"
+if ! wget "https://download.savannah.gnu.org/releases/numdiff/${NUMDIFF_ARCHIVE}" ; then
     printf "\n[numdiff] wget --> FAIL\n"
     exit 1
 fi
 
 # unpack archive
-tar -zxf "$NUMDIFF_ARCHIVE"
-if [ $? -ne 0 ] ; then
+if ! tar -zxf "$NUMDIFF_ARCHIVE" ; then
     printf "\n[numdiff] untar --> FAIL\n"
     exit 1
 fi
 rm -f "$NUMDIFF_ARCHIVE"
 
 # compile and install
-cd "${NUMDIFF_DIR}"
+cd "${NUMDIFF_RELEASE}" || exit 1
 if [ "$(uname -s)" = 'Darwin' ]; then
-    ./configure --prefix=$1/numdiff CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
+    ./configure --prefix="$DEP_DIR/numdiff" CPPFLAGS=-I/usr/local/Cellar/gettext/0.20.1/include/ LDFLAGS=-L/usr/local/Cellar/gettext/0.20.1/lib
 else
-    ./configure --prefix=$1/numdiff
+    ./configure --prefix="$DEP_DIR/numdiff"
 fi
 if [ $? -ne 0 ] ; then
     printf "\n[numdiff] configure --> FAIL\n"
     exit 1
 fi
 
-make -j4
-if [ $? -ne 0 ] ; then
+if ! make -j4 CFLAGS="-g -O2 -std=gnu11" ; then # force newer compilers to use C11 standard 
     printf "\n[numdiff] make --> FAIL\n"
     exit 1
 fi
 
-make install
-if [ $? -ne 0 ] ; then
+if ! make install ; then
     printf "\n[numdiff] make install --> FAIL\n"
     exit 1
 fi
 
-# finish installation
-printf "\n[numdiff] version %s installed in %s\n" "$NUMDIFF_VERSION" "$DEP_DIR"
+printf "\n[numdiff] version %s installed in %s\n\n" "$NUMDIFF_VERSION" "$DEP_DIR"
 exit 0

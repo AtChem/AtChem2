@@ -1,14 +1,22 @@
-AtChem2 -- CHANGELOG
-====================
+AtChem2 &mdash; CHANGELOG
+=========================
 
 
-v1.2.3 (October 2026)
----------------------
+post v1.3
+---------
+
+- fix minor recompilation issues during the build process
+- tidy makefiles and `build_atchem2.sh`
+- add support for Intel ifx, rationalize compilation flags
+
+
+v1.3 (October 2026)
+-------------------
 
 - implement named arguments for the `build_atchem2.sh` script
 - add a new argument (`--mcm`) to the `build_atchem2.sh` script to set the MCM version during the build process
 - remove the `--mcm` argument from the executable (no need to change the MCM data files directory `mcm/`)
-- move auto-generated mechanism files (`mechanism.*`) and the pre-compiled mechanism shared library (`mechanism..so`) from `model/configuration/` to `model/sharedlib/`
+- move the auto-generated Fortran mechanism files (`mechanism.*`) and the pre-compiled mechanism shared library (`mechanism.so`) from `model/configuration/` to `model/sharedlib/`
 - restructure the `Makefile` and fix a bug that prevented recompilation when the chemical mechanism file was modified
 - rename `tests/makefile.tests` to `tests/Makefile`
 - make the shell scripts more robust, and update to **openlibm v0.8.8**
@@ -32,7 +40,7 @@ v1.2.3 (May 2025)
 - change some default values in `environmentVariables.config`
 - implement use of stoichiometric coefficients in chemical mechanisms
 - implement user-defined custom Fortran functions
-- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (**experimental**)
+- add option to run AtChem2 in a [Docker](https://www.docker.com/) container (_experimental_)
 - major revision of the AtChem2 manual
 - minor changes (mostly cosmetic) to various scripts, and consolidation of `.gitignore` files
 - implement new workflows to automatically compile and upload the pdf of the user manual via GitHub Actions
@@ -64,7 +72,7 @@ v1.2.1 (January 2021)
 ---------------------
 
 - implement a new environment variable: `ASA` (aerosol surface area)
-- fix a bug in the C-binding for `gfortran` version 9 and above
+- fix a bug in the C-binding for `gfortran` version 9 and later
 - remove tabs from all configuration files
 - update the configuration file for TravisCI
 - tidy the comments and printout messages of various source files

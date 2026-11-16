@@ -1,7 +1,7 @@
 #!/bin/sh
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -20,8 +20,8 @@
 #    Default value: NONE.
 #
 # `--configuration` is the configuration directory, which contains
-#    the model configuration files (`*.config` and `*.parameters`) and
-#    the user-defined functions (`customRateFuncs.f90`).
+#    the model configuration files (`*.config` and `*.parameters`)
+#    and the user-defined functions (`customRateFuncs.f90`).
 #    Default value: ./model/configuration
 #
 # `--shared_lib` is the shared library directory, which contains
@@ -32,8 +32,8 @@
 # `--mcm` is the MCM version of the chemical mechanism, which sets the
 #    reference list of organic peroxy radicals (RO2) and the empirical
 #    parameters used to calculate the photolysis rates. The corresponding
-#    data files (`peroxy-radicals_*` and `photolysis-rates_*`) are kept
-#    in the `mcm/` directory.
+#    data files (`peroxy-radicals_*` and `photolysis-rates_*`) are in
+#    the `mcm/` directory.
 #    Default value: `v3.3.1`
 #
 # NB: the script must be run from the *Main Directory* of AtChem2.
@@ -47,6 +47,12 @@
 #                            --mcm=v3.3.1
 # -----------------------------------------------------------------------------
 set -eu
+
+# check that the script is run from the main directory
+if [ ! -f build/build_atchem2.sh ]; then
+    printf "\n[ERROR] Run this script from the AtChem2 Main Directory.\n" >&2
+    exit 1
+fi
 
 # default values for the script flags
 MECHF=""
@@ -85,11 +91,11 @@ done
 
 # set the chemical mechanism file (`--mechanism=`)
 if [ -z "$MECHF" ] ; then
-    printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n"
+    printf "\n[INPUT ERROR] The chemical mechanism file (.fac/.kpp) must be provided.\n" >&2
     exit 1
 else
     if [ ! -f "$MECHF" ]; then
-        printf "\n[INPUT ERROR] The chemical mechanism file does not exist.\n"
+        printf "\n[INPUT ERROR] The chemical mechanism file does not exist.\n" >&2
         exit 1
     else
         printf "\n[*] Chemical mechanism file: %s\n" "$MECHF"
@@ -99,25 +105,37 @@ fi
 # set the model configuration directory (`--configuration=`)
 printf "\n[*] Model configuration directory: %s\n" "$CONFIGD"
 if [ ! -d "$CONFIGD" ]; then
-    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n"
+    printf "\n[INPUT ERROR] The model configuration directory does not exist.\n" >&2
     exit 1
 fi
 
 # set the shared library directory (`--shared_lib=`)
 printf "\n[*] Shared library directory: %s\n" "$SHAREDLIBD"
 if [ ! -d "$SHAREDLIBD" ]; then
-    printf "\n[INPUT ERROR] The shared library directory does not exist.\n"
+    printf "\n[INPUT ERROR] The shared library directory does not exist.\n" >&2
     exit 1
 fi
 
 # set the MCM version (`--mcm=`)
 printf "\n[*] MCM version: %s\n" "$MCMV"
 if [ "$MCMV" != "v3.3.1" ] && [ "$MCMV" != "v3.2" ] && [ "$MCMV" != "v3.1" ]; then
-    printf "\n[INPUT ERROR] Invalid MCM version. Supported versions: v3.1, v3.2, v3.3.1\n"
+    printf "\n[INPUT ERROR] Invalid MCM version. Supported versions: v3.1, v3.2, v3.3.1\n" >&2
     exit 1
 fi
 
 # ============================================================ #
+
+# check that the makefile exists
+if [ ! -f Makefile ]; then
+    printf "\n[ERROR] Makefile not found: copy/edit the template ('tools/install/Makefile.skel').\n" >&2
+    exit 1
+fi
+
+# check that the dependencies can be found
+if make -n check >/dev/null 2>&1 && ! make check; then
+    printf "\n[FAIL] Dependencies not found: check the paths in the Makefile.\n" >&2
+    exit 1
+fi
 
 # check python version
 if command -v python3 >/dev/null 2>&1; then
@@ -132,17 +150,16 @@ printf "\n--> Using %s\n" "$PY_BIN"
 
 # compile the chemical mechanism shared library (`mechanism.so`)
 printf "\n--> Compiling chemical mechanism shared library...\n\n"
-make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" SHAREDLIBDIR="$SHAREDLIBD" MCMVERS="$MCMV"
-if [ $? -ne 0 ] ; then
-    printf "\n[FAIL] Check error message for details.\n"
+if ! make sharedlib PYTHON_BIN="$PY_BIN" MECHFILE="$MECHF" CONFIGDIR="$CONFIGD" \
+                    SHAREDLIBDIR="$SHAREDLIBD" MCM_VERS="$MCMV"; then
+    printf "\n[FAIL] Check error message for details.\n" >&2
     exit 1
 fi
 
 # compile the atchem executable
 printf "\n--> Compiling atchem2 executable...\n\n"
-make -j
-if [ $? -ne 0 ] ; then
-    printf "\n[FAIL] Check error message for details.\n"
+if ! make -j; then
+    printf "\n[FAIL] Check error message for details.\n" >&2
     exit 1
 fi
 

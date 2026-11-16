@@ -1,7 +1,7 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 #
-# Copyright (c) 2017-2025 Sam Cox, Roberto Sommariva
+# Copyright (c) 2017-2027 Sam Cox, Roberto Sommariva
 #
 # This file is part of the AtChem2 software package.
 #
@@ -30,7 +30,7 @@ function test_output_text {
   # Save output of test_output_file
   temp_internal=$(test_output_file $file1 $file2)
   exitcode=$?
-  echo $temp_internal
+  printf "%s\n" "$temp_internal"
   # Clean up
   rm $file1 $file2
   return $exitcode
@@ -212,7 +212,7 @@ $this_file_failures"
     fail_counter=$((fail_counter+1))
   fi
 
-  echo $this_test_failures >> $LOG_FILE
+  printf "%s\n" "$this_test_failures" >> $LOG_FILE
 done
 
 # After all tests are run, exit with a FAIL if $fail_counter>0, otherwise PASS.

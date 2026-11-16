@@ -9,8 +9,13 @@
 #
 # -----------------------------------------------------------------------------
 
-# Workflow to generate automatically the PDF file of the AtChem2
-# manual, using Github Actions
+# Workflow to generate the PDF file of the AtChem2 user manual,
+# using GitHub Actions
+#
+# ACTIONS:
+# [*] https://github.com/marketplace/actions/checkout
+# [*] https://github.com/marketplace/actions/github-action-with-texlive
+# [*] https://github.com/marketplace/actions/upload-a-build-artifact
 # -------------------------------------------------------------------- #
 
 name: AtChem2 PDF build
@@ -19,9 +24,8 @@ name: AtChem2 PDF build
 # Controls when the workflow is activated
 on:
 
-  # Triggers when a pull request targeting the master branch is
-  # created or updated, and any of the source files in `doc/`
-  # have been modified
+  # Triggers when a pull request targeting the master branch is created
+  # or updated, and any of the source files in `doc/` have been modified
   pull_request:
     branches: [ master ]
     paths:
@@ -30,11 +34,10 @@ on:
 
 # ------------------------------ JOBS ------------------------------ #
 # This workflow contains a single job called `build_pdf_manual` which
-# generates the PDF file of the user manual
+# generates and saves the PDF file of the user manual
 jobs:
 
   build_pdf_manual:
-    # The job runs on the latest version of linux (ubuntu)
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -43,33 +46,29 @@ jobs:
 
       # -------------------------------------------------------------
       # Checkout the branch associated with the current PR
-      #
-      # ACTION: https://github.com/marketplace/actions/checkout
       - name: Checkout repo
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+          persist-credentials: false
 
       # -------------------------------------------------------------
-      # Setup TeXLive and install ImageMagick; generate the PDF file
-      # using the script `make_manual_pdf.sh`
-      #
-      # ACTION: https://github.com/marketplace/actions/github-action-with-texlive
+      # Setup TeXLive, install ImageMagick (requires `librsvg`), and
+      # generate the PDF file using the script `make_manual_pdf.sh`
       - name: Setup TexLive & compile pdf
         uses: xu-cheng/texlive-action@v3
         with:
           scheme: full
-          run: |
+          run: |  # action runs in a docker container (alpine linux)
             apk add imagemagick librsvg
             ./doc/make_manual_pdf.sh
 
       # -------------------------------------------------------------
       # Save PDF file as artifact
-      #
-      # ACTION: https://github.com/marketplace/actions/upload-a-build-artifact
-      - name: Save pdf as artifact
+      - name: Save pdf file
         uses: actions/upload-artifact@v7
         with:
-          name: AtChem2-Manual
           path: doc/AtChem2-Manual.pdf
+          if-no-files-found: error
+          archive: false

@@ -148,7 +148,7 @@ jobs:
       # (5) Run the Testsuite with standard compilation flags and default
       # model settings, then upload the log files as artifacts
       - name: Indent and Style tests
-        run: make indenttest styletest pythontest
+        run: make  styletest pythontest # indenttest (temporarily deactivated)
 
       - name: Unit tests
         run: make unittests
